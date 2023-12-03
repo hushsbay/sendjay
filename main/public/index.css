@@ -11,8 +11,7 @@ body {
     height: 100%;
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 50px 100%;
-    /* calc(100% - 50px); */
+    grid-template-rows: 50px calc(100% - 50px);
     grid-gap: 10px;
     grid-template-areas: 'top' 'main'
 }
