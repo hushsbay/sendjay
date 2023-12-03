@@ -3,7 +3,7 @@
     height: 100%;
     display: grid;
     grid-template-rows: 60px auto 10px;      
-    grid-template-areas: 'top' 'main'
+    grid-template-areas: 'top' 'main' 'bottom'
 }
 
 .top {
@@ -21,6 +21,10 @@
     background-size: cover;
     display: flex;
     justify-content: center;
+}
+
+.bottom {
+    background-color: red;
 }
 
 .topLeft {
