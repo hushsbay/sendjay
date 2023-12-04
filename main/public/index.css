@@ -4,7 +4,7 @@
     height: -webkit-fill-available; /* 여기 2행은 주소창 고정 */
     height: fill-available;
     display: grid;
-    grid-template-rows: 60px 100vh;  
+    grid-template-rows: 60px calc(100vh - 60px);  
     grid-template-areas: 'top' 'main'
 }
 
