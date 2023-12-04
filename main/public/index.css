@@ -4,8 +4,8 @@
     height: -webkit-fill-available; /* 여기 2행은 주소창 고정 */
     height: fill-available;
     display: grid;
-    grid-template-rows: 60px auto;  
-    grid-template-areas: 'top' 'main'
+    grid-template-rows: 60px auto 60px;  
+    grid-template-areas: 'top' 'main' 'bottom'
 }
 
 .top {
@@ -23,6 +23,10 @@
     background-size: cover;
     display: flex;
     justify-content: center;
+}
+
+.bottom {
+    background-color: red;
 }
 
 .topLeft {
