@@ -1,10 +1,10 @@
 .container {
     width: 100dvw;
     height: 100dvh;
-    height: -webkit-fill-available;
+    height: -webkit-fill-available; /* 여기 2행은 주소창 고정 */
     height: fill-available;
     display: grid;
-    grid-template-rows: 60px calc(100dvh - 60px);  
+    grid-template-rows: 60px calc(100dvh - 30px);  
     grid-template-areas: 'top' 'main'
 }
 
