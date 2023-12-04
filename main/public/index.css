@@ -26,6 +26,7 @@
 }
 
 .bottom {
+    grid-area: bottom;
     background-color: red;
 }
 
