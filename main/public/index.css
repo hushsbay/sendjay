@@ -1,8 +1,9 @@
 .container {
     width: 100dvw;
     /* height: 100dvh; */
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
+    height: 100vh;
+height: -webkit-fill-available;
+height: fill-available;
     display: grid;
     grid-template-rows: 60px auto;  
     grid-template-areas: 'top' 'main'
