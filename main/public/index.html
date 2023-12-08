@@ -3,39 +3,33 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-        <title>Hushsbay</title>
-        <link rel="stylesheet" href="./common/common.css">
+        <title>WiSE설문</title>
         <link rel="stylesheet" href="./index.css">
     </head>
     <body> 
-        <div class="container">
-            <div class="top">
-                <div class="topLeft">
-                    <img class="coImg32" src="./img/hushsbay.png"/>
-                    <div class="topLeftText">Hushsbay</div>
-                </div>
-                <div class="topRight">
-                    <div class="topRightItem">안내</div>
-                    <div class="topRightItem">간편가입</div>
-                    <div class="topRightItem">로그인</div>
-                </div>
+        <div id=main_pg class=coMainPage>
+            <div id=fr_header_tab style="height:40px;display:flex;justify-content:center;margin:5px">
+                <div id=btn_answer class=coNav><span id=spn_answer class=mq_title style="border-bottom:2px solid white;padding-bottom:2px">응답목록</span></div>
+                <div id=btn_manage class=coNav><span id=spn_manage class=mq_title style="border-bottom:2px solid white;padding-bottom:2px">설문관리</span></div>
             </div>
-            <div class="main">
-                <div class="menu">
-                    <div class="menuItem">
-                        <img class="coImg32" src="./img/white_survey.png"/>
-                        <div class="menuItemText">설문</div>
-                    </div>
-                    <div class="menuItem">
-                        <img class="coImg32" src="./img/white_chat.png"/>
-                        <div class="menuItemText">웹메신저</div>
-                    </div>
-                    <div class="menuItem">
-                        <img class="coImg32" src="./img/white_company.png"/>
-                        <div class="menuItemText">조직도</div>
-                    </div>                    
-                </div>
+            <div id=fr_menu_top class=coMenuTop>
+				<input id=in_fr readonly class=query style="width:52px;height:24px;cursor:pointer" />
+				<span class="mq_text query" style="margin:0px 2px">~</span>
+				<input id=in_to readonly class=query style="width:52px;height:24px;cursor:pointer" />
+				<img id=btn_minus src="/wise/wise/msngr/images/minus.png" class="coImg20 query" style="margin-left:3px" />
+				<img id=btn_plus src="/wise/wise/msngr/images/plus.png" class="coImg20 query" style="margin-left:3px"/>
+                <div id=btn_qry class="coMenuBtn query"><img src="/wise/wise/msngr/images/btn_search.png" class=coImgMenu /><span class=mq_text>조회</span></div>
+                <input id=in_search type=search spellcheck=false class=search style="display:none;width:100px;height:24px" /> <!-- onsearch="OnSearch(this)"  -->
+				<div id=btn_search class=coMenuBtn><img src="/wise/wise/msngr/images/white_search.png" class=coImgMenu /><span class=mq_text>검색</span></div>
+				<div id=btn_search_close class="coMenuBtn search" style="display:none"><img src="/wise/wise/msngr/images/white_no.png" class=coImgMenu /><span class=mq_text>닫기</span></div>
             </div>
-        </div>  
+            <div id=fr_main class=coFrList >
+                <div id=list_main class=coList style="width:100%"></div> <!-- 위 coFrList가 그 안에 row direction으로 더 있을 수 있다는 가정하에 만들어진 것임. 그래서 width를 여기 따로 뺀 것임 -->
+            </div>
+            <div class=coMenuBottom>
+                <div id=btn_new class=coMenuBtn ><img src="/wise/wise/msngr/images/btn_new.png" class=coImgMenu /><span class=mq_text>새설문</span></div>
+                <div id=btn_new_simple class=coMenuBtn ><img src="/wise/wise/msngr/images/btn_new.png" class=coImgMenu /><span class=mq_text>새설문(간편)</span></div>
+            </div>
+        </div>
     </body>
-</html>        
+</html>
