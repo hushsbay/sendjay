@@ -1,4 +1,4 @@
-body { background: black; }
+body { padding: 20px 0; background: black; }
 
 .mainPage { 
     max-width: 600px; width: 100%; height: 100%; margin:0px auto; 
