@@ -2,5 +2,8 @@
 
 html, body { width: 100%; height: 100%; margin: 0; }
 
-
-
+.coImg12 { width:12px;height:12px;vertical-align:middle;cursor:pointer }
+.coImg16 { width:16px;height:16px;vertical-align:middle;cursor:pointer }
+.coImg20 { width:20px;height:20px;vertical-align:middle;cursor:pointer }
+.coImg24 { width:24px;height:24px;vertical-align:middle;cursor:pointer }
+.coImg32 { width:32px;height:32px;vertical-align:middle;cursor:pointer }
