@@ -9,12 +9,10 @@
         <link rel="stylesheet" href="/index.css">
         <script src="/plugin/jquery-3.4.1.min.js"></script>
         <script>
-            //document.oncontextmenu = new Function("return false;")
+            document.oncontextmenu = new Function("return false;")
             $.when($.ready).done(function() {
                 try {
-                    $("#xxx").off('click').on('click', function() { 
-                        alert("666777")
-                    })
+                    
                 } catch (ex) {
                     alert("ready: " + ex.message)
                 }          
@@ -33,7 +31,7 @@
                 <div class=topRight>
                     <div class=topRightItem>안내</div>
                     <div class=topRightItem>간편가입</div>
-                    <div class=topRightItem id=xxx>로그인</div>
+                    <div class=topRightItem>로그인</div>
                 </div>
             </div>
             <div class=main>

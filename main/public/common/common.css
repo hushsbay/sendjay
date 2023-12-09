@@ -9,7 +9,9 @@ html, body {
     overscroll-behavior: contain /* 화면 끌어 내리면 새로고침되는 것 막음. iOS는 안됨. 크롬/삼성브라우저 OK */
 }
 
-div, span, img { /* 1) 모바일 크롬에서 탭하면 하단에 '검색결과를 보려면 탭하세요'라고 뜨는 것 방지 2) */
+/* 1) 모바일 크롬에서 탭하면 하단에 '검색결과를 보려면 탭하세요'라고 뜨는 것 방지 
+   2) 텍스트 long hold (복사 메뉴 등) 방지 : 이미지는 js로 load시 막아야 하는 부분 있음 (크롬, 사파리 모두 테스트 필요) */
+div, span, img {
     -moz-user-select: none;
     -webkit-user-select: none; /* Safari */    
     -ms-user-select: none; /* IE 10 and IE 11 */
