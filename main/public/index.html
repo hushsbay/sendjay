@@ -11,8 +11,8 @@
         <script>
             $.when($.ready).done(function() {
                 try {
-                    $("#xxx").click(function() { 
-                        alert("11111")
+                    $("#xxx").off('click').on('click', function() { 
+                        alert("11111222")
                     })
                 } catch (ex) {
                     alert("ready: " + ex.message)
