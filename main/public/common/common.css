@@ -1,16 +1,19 @@
-* { box-sizing: border-box; font-family:malgun gothic; font-size:14px; }
-
-.prevent-select {
-    /* -ms-user-select: none; IE 10 and IE 11 */
-    -webkit-user-select: none; /* Safari */    
-    -moz-user-select: none;
-    user-select: none; /* Standard syntax */
+* { 
+    box-sizing: border-box; 
+    font-family:malgun gothic; font-size:14px; 
 }
 
 html, body { 
     width: 100%; height: 100%; margin: 0; 
     background: black; 
     overscroll-behavior: contain /* 화면 끌어 내리면 새로고침되는 것 막음. iOS는 안됨. 크롬/삼성브라우저 OK */
+}
+
+.coSelNone { /* 1) 모바일 크롬에서 탭하면 하단에 '검색결과를 보려면 탭하세요'라고 뜨는 것 방지 2) */
+    -moz-user-select: none;
+    -webkit-user-select: none; /* Safari */    
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
 }
 
 .coImg12 { width:12px;height:12px;vertical-align:middle;cursor:pointer }

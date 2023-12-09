@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="/index.css">
         <script src="/plugin/jquery-3.4.1.min.js"></script>
         <script>
-            document.oncontextmenu = new Function("return false;");
+            //document.oncontextmenu = new Function("return false;");
             $.when($.ready).done(function() {
                 try {
                     $("#xxx").off('click').on('click', function() { 
@@ -28,27 +28,27 @@
             <div class="top">
                 <div class="topLeft">
                     <img class="coImg32" src="./img/hushsbay.png"/>
-                    <div class="topLeftText">Hushsbay</div>
+                    <div class="topLeftText coSelNone">Hushsbay</div>
                 </div>
                 <div class="topRight">
-                    <div class="topRightItem">안내</div>
-                    <div class="topRightItem prevent-select">간편가입</div>
-                    <div class="topRightItem prevent-select"><span id="xxx">로그인</span></div>
+                    <div class="topRightItem coSelNone">안내</div>
+                    <div class="topRightItem coSelNone">간편가입</div>
+                    <div class="topRightItem coSelNone"><span id="xxx">로그인</span></div>
                 </div>
             </div>
             <div class="main">
                 <div class="menu">
                     <div class="menuItem">
                         <img class="coImg32" src="./img/white_survey.png"/>
-                        <div class="menuItemText">설문</div>
+                        <div class="menuItemText coSelNone">설문</div>
                     </div>
                     <div class="menuItem">
                         <img class="coImg32" src="./img/white_chat.png"/>
-                        <div class="menuItemText">웹메신저</div>
+                        <div class="menuItemText coSelNone">웹메신저</div>
                     </div>
                     <div class="menuItem">
                         <img class="coImg32" src="./img/white_company.png"/>
-                        <div class="menuItemText">조직도</div>
+                        <div class="menuItemText coSelNone">조직도</div>
                     </div>                    
                 </div>
             </div>
