@@ -12,7 +12,7 @@
             $.when($.ready).done(function() {
                 try {
                     $("#xxx").off('click').on('click', function() { 
-                        alert("11111222")
+                        alert("111112223333")
                     })
                 } catch (ex) {
                     alert("ready: " + ex.message)
@@ -31,8 +31,8 @@
                 </div>
                 <div class="topRight">
                     <div class="topRightItem">안내</div>
-                    <div class="topRightItem">간편가입</div>
-                    <div class="topRightItem"><span id="xxx">로그인</span></div>
+                    <div class="topRightItem" class="prevent-select">간편가입</div>
+                    <div class="topRightItem"><span id="xxx" class="prevent-select">로그인</span></div>
                 </div>
             </div>
             <div class="main">
