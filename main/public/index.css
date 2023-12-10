@@ -76,6 +76,6 @@
     transition: all ease 2s 0s;
 } */
 
-.menuItemText:hover {
+.menuItemText:click {
     opacity: 0.2;
 }
