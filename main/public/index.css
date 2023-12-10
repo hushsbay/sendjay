@@ -48,7 +48,9 @@
     cursor: pointer; background-color: transparent;
 }
 
-div {
+.menuItemText {
+    margin-top: 5px;
+    color: white;
     /* 전이가 일어날 속성값을 정의 */
     transition-property: background-color;
 
@@ -60,11 +62,6 @@ div {
     transition-delay: 0.5s; /* 500밀리초 */
 }
 
-.menuItemText {
-    margin-top: 5px;
-    color: white;
-}
-
-div:active {
+.menuItemText:active {
     background-color: red;
 }
