@@ -56,14 +56,9 @@
 .menuItemText {
     margin-top: 5px;
     color: white;
-    
 }
 
 .menuItem:hover {
-    
-}
-
-.menuItem:active {
     opacity: 0.2;
 }
 
