@@ -79,6 +79,6 @@
     opacity: 0.2;
 }
 
-.menuItem:focus {
+.menuItem:hover {
     opacity: 0.5;
 }
