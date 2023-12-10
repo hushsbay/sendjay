@@ -75,6 +75,6 @@
     transition: all ease 2s 0s;
 } */
 
-.menuItemText:click ~ .menuItemText {
+.menuItemText:active ~ .menuItemText {
     background-color: red;
 }
