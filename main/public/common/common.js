@@ -49,17 +49,17 @@
                         resolve(true)
                     }, function() {
                         resolve(false)
-                }) //}, true)
+                })
                 } else { //window.alert()와 유사
                     hush.msg.alert(text, function() {
                         resolve(true)
-                    }) //}, null, true)
+                    })
                 }
             }),
             toastTextArr : [],
             toastSecArr : [],
             toastProcessing : false,
-            toast : (_text, _sec) => {
+            toast : (_text, _sec) => { //비동기이므로 루틴내에서는 1개만 또는 alertWait 다음에만 1개 사용 가능 
                 hush.msg.toastTextArr.push(_text)
                 hush.msg.toastSecArr.push(_sec)
                 hush.msg.toastLoop()
