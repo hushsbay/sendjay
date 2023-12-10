@@ -62,7 +62,7 @@
 .menuItemText {
     margin-top: 5px;
     color: white;
-    transition: all ease 2s 0s;
+    /* transition: all ease 2s 0s; */
 }
 
 /* .jb {
@@ -75,6 +75,6 @@
     transition: all ease 2s 0s;
 } */
 
-.menuItemText:active ~ .menuItemText {
+.menuItemText:active {
     background-color: red;
 }
