@@ -1,4 +1,5 @@
 (function($) {
+    //기본적으로 jQuery를 전제로 구성된 것이므로 vue, react 등으로 코딩시 일부 모듈은 별도 공통으로 빼야 함
     window.hush = {
         http : {
             handleNoCache: (url) => {

@@ -17,7 +17,6 @@
                     alert("ready: " + ex.message)
                 }
                 $("#btn_orgtree").on("click", function() {
-                    debugger
                     hush.util.openWinPop("/app/orgtree/orgtree.html")
                 })
             }).fail(function(ex) {
@@ -48,11 +47,10 @@
                         <img class=coImg32 src="./img/white_chat.png"/>
                         <div class=menuItemText>웹메신저</div>
                     </div>
-                    <div class=menuItem>
+                    <div class=menuItem id=btn_orgtree>
                         <img class=coImg32 src="./img/white_company.png"/>
-                        <div class=menuItemText id=btn_orgtree>조직도</div>
-                    </div>                    
-                </div>
+                        <div class=menuItemText>조직도</div>
+                    </div>
             </div>
         </div>
     </body>
