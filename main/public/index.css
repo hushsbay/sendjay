@@ -69,10 +69,10 @@
     transition: all ease 2s 0s;
 } */
 
-/* .menuItem:active {
+.menuItem:active {
     opacity: 0.2;
-} */
-
-.menuItem:hover {
-    opacity: 0.5;
 }
+
+/* .menuItem:hover {
+    opacity: 0.5;
+} */
