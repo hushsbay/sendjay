@@ -52,11 +52,11 @@
     transition-property: opacity;
 
     
-    transition-duration: 1s; 
+    transition-duration: 1000ms; 
    
-    transition-timing-function: linear;
+    /* transition-timing-function: linear; */
    
-    transition-delay: 0.5s;
+    transition-delay: 500ms;
 }
 
 .menuItemText {
