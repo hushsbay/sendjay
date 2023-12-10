@@ -13,11 +13,11 @@
             $.when($.ready).done(async function() {
                 try { //By default, $.getScript() sets the cache setting to false. You can override this with $.ajaxSetup({ cache: true })
                     await $.getScript("/common/common.js")
-                    alert1("ddd")                    
                 } catch (ex) {
-                    //alert("ready: " + ex.message)
-                    hush.util.showEx(ex, null, true)
+                    hush.util.showEx(ex)
+                    return
                 }
+                alert1("ddd")
                 $("#btn_orgtree").on("click", async function() {
                     //hush.util.openWinPop("/app/orgtree/orgtree.html")
                     hush.util.showEx("111", "하하하", true)
@@ -38,7 +38,7 @@
                     // hush.msg.toast("fdfgfgf111111")
                 })
             }).fail(function(ex) {
-                alert("ready.fail: " + ex.message)
+                hush.util.showEx(ex, hush.cons.failOnLoad)
             })
         </script>
     </head>

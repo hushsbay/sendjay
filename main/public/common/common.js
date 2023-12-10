@@ -1,5 +1,8 @@
 (function() { //jQuery 없음
     window.hush = {
+        cons : {
+            failOnLoad : "failOnLoad"
+        },
         http : {
             handleNoCache: (url) => {
                 let _url = url
