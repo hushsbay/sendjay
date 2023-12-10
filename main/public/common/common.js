@@ -13,7 +13,7 @@
                 const maxHeight = _height ? _height : 600
                 const backColor = _backColor ? _backColor : "beige"
                 let _html = "<div id=hushPopup style='z-index:9999;position:fixed;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent'>"
-                _html += "	<div id=hushPopupMain style='min-width:180px;min-height:100px;max-width:" + maxWidth + "px;max-height:" + maxHeight + "px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:" + backColor + ";border:1px solid darkgray;border-radius:5px;box-shadow:5px 5px 5px grey;padding:10px'>"
+                _html += "	<div id=hushPopupMain style='min-width:180px;min-height:100px;max-width:" + maxWidth + "px;max-height:" + maxHeight + "px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:" + backColor + ";border:1px solid darkgray;border-radius:5px;box-shadow:3px 3px 3px grey;padding:10px'>"
                 _html += "		<div style='width:100%;height:calc(100% - 45px);overflow:auto'>" + _text + "</div>"
                 _html += "		<div id=hushBtn style='width:100%;height:45px;display:flex;align-items:center;justify-content:flex-end;border-top:1px solid darkgray;padding-top:10px;margin-top:10px'>"
                 _html += "			<div id=hushPopupOk style='cursor:pointer;font-weight:bold;color:black;border-radius:5px;background:#0082AD;color:white;padding:10px 15px;margin:0px 0px 0px 10px'>확인</div>"
