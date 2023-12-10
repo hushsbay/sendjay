@@ -38,50 +38,21 @@
                     if (callbackCancel) callbackCancel()
                 })
             },
-            alert : (_text, callbackOk, callbackCancel) => {
+            alert : (_text, callbackOk, callbackCancel) => { //비동기콜백이며 유사한 alertWait(text)는 async/await 방식임 
                 hush.msg.addHtml(_text)
                 hush.msg.handleEvent(callbackOk, callbackCancel)
             },
-            alertWait : (text, OKCancel) => new Promise((resolve) => { //async/await으로 복수개의 alert를 의도하는 순서대로 처리가능하게 함
-                if (OKCancel) {
+            alertWait : (text, OKCancel) => new Promise((resolve) => { //async/await으로 복수개의 alert를 동기화시킴
+                if (OKCancel) { //window.prompt()와 유사
                     hush.msg.alert(text, function() {
                         resolve(true)
                     }, function() {
                         resolve(false)
-                    }, true)
-                } else {
+                }) //}, true)
+                } else { //window.alert()와 유사
                     hush.msg.alert(text, function() {
                         resolve(true)
-                    }, null, true)
-                }               
-            }),
-            popup : (_obj, callbackOk, callbackCancel) => { //간단한 html 팝업 - alert로도 가능하나 Size/backColor 정도 추가한 것임
-                if (typeof _obj == "string") {
-                    alert("hush.msg.popup의 첫번째 인수는 string이 아닌 object가 필요합니다.")
-                    return
-                }
-                const _html = _obj.html
-                if (!_html) {
-                    alert("hush.msg.popup의 object내에 html이 필요합니다.")
-                    return
-                }
-                const _width = 800 //maxWidth
-                const _height = 900 //maxHeight
-                const _backColor = _obj.backColor
-                hush.msg.addHtml(_html, _width, _height, _backColor)
-                hush.msg.handleEvent(callbackOk, callbackCancel)
-            },
-            popupWait : (_obj, OKCancel) => new Promise((resolve) => { //async/await으로 복수개의 popup을 의도하는 순서대로 처리가능하게 함
-                if (OKCancel) {
-                    hush.msg.popup(_obj, function() {
-                        resolve(true)
-                    }, function() {
-                        resolve(false)
-                    }, true)
-                } else {
-                    hush.msg.popup(_obj, function() {
-                        resolve(true)
-                    }, null, true)
+                    }) //}, null, true)
                 }               
             }),
             toastTextArr : [],
