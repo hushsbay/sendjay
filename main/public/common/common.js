@@ -39,7 +39,7 @@
                     if (callbackCancel) callbackCancel()
                 })
             },
-            alert : (_text, callbackOk, callbackCancel) => { //비동기콜백이며 이와 유사한 alertWait(text)는 async/await 방식임 
+            alert : (_text, callbackOk, callbackCancel) => { //비동기콜백이므로 루틴내에서는 1개만 또는 alertWait 다음에만 1개 사용 가능 
                 hush.msg.addHtml(_text)
                 hush.msg.handleEvent(callbackOk, callbackCancel)
             },
