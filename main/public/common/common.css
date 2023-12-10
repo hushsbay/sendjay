@@ -1,7 +1,7 @@
 * { 
     box-sizing: border-box; 
     font-family:malgun gothic; font-size:14px; 
-    -webkit-tap-highlight-color : transparent;
+    -webkit-tap-highlight-color : transparent; /* 모바일에서 터치시 기본 파란색 효과 제거 */
 }
 
 html, body { 
