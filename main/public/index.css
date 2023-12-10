@@ -46,6 +46,7 @@
     width: 100px;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     cursor: pointer; background-color: transparent;
+    
 /* 
     
     transition-property: background-color;
@@ -61,9 +62,10 @@
 .menuItemText {
     margin-top: 5px;
     color: white;
+    transition: all ease 2s 0s;
 }
 
-.jb {
+/* .jb {
     box-sizing: border-box;
     width: 64px;
     height: 64px;
@@ -71,7 +73,7 @@
     background-color: orange;
     border-radius: 100%;
     transition: all ease 2s 0s;
-}
+} */
 
 .menuItemText:active ~ .jb{
     background-color: red;
