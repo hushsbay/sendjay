@@ -55,5 +55,5 @@
 
 .menuItem:active {
     background-color: red;
-    transition: 3s;
+    transition: 0.9s;
 }
