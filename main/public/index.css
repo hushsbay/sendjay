@@ -46,9 +46,23 @@
     width: 100px;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     cursor: pointer; background-color: transparent;
+
+    /* 전이가 일어날 속성값을 정의 */
+    transition-property: background-color;
+
+    /* 전이가 발생되는 시간 명시 */
+    transition-duration: 1s; /* 1000밀리초와 같다 */
+   
+    transition-timing-function: linear; /* 등속도 */
+   
+    transition-delay: 0.5s; /* 500밀리초 */
 }
 
-
+.menuItemText {
+    margin-top: 5px;
+    color: white;
+    
+}
 
 .menuItem:active {
     background-color: red;
