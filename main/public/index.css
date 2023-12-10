@@ -63,7 +63,7 @@
     margin-top: 5px;
     color: white;
     background-color: green;
-    transition: all ease 2s 0s;
+    transition: background-color ease 2s 0s;
 }
 
 /* .jb {
