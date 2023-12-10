@@ -59,7 +59,6 @@
 }
 
 .menuItem:active {
-    padding: 10px;
     background-color: red; opacity: 0.5; border-radius: 100%;
 }
 
