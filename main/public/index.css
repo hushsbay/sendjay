@@ -46,24 +46,33 @@
     width: 100px;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     cursor: pointer; background-color: transparent;
-
-    /* 전이가 일어날 속성값을 정의 */
+/* 
+    
     transition-property: background-color;
 
-    /* 전이가 발생되는 시간 명시 */
-    transition-duration: 1s; /* 1000밀리초와 같다 */
+    
+    transition-duration: 1s; 
    
-    transition-timing-function: linear; /* 등속도 */
+    transition-timing-function: linear;
    
-    transition-delay: 0.5s; /* 500밀리초 */
+    transition-delay: 0.5s; */
 }
 
 .menuItemText {
     margin-top: 5px;
     color: white;
-    
 }
 
-.menuItem:active {
+.jb {
+    box-sizing: border-box;
+    width: 64px;
+    height: 64px;
+    margin: 10px 0px;
+    background-color: orange;
+    border-radius: 100%;
+    transition: all ease 2s 0s;
+}
+
+.menuItem:active ~ .jb{
     background-color: red;
 }
