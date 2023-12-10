@@ -7,19 +7,20 @@
                 return _url
             },
         },
-        msg : { //1. alert/alertWait 2. popup/popupWait 3. toast : window.alert처럼 여러개의 메시지를 순서대로 처리하는 기능 지원 
-            addHtml : (_text, _width, _height, _backColor) => {
+        msg : { //1. alert 2. alertWait(text) 3. alertWait(text, boolean) 4. toast (여러개의 메시지를 순서대로 처리하는 기능도 지원)
+            addHtml : (_text, _width, _height, _backColor, _color) => {
                 const maxWidth = _width ? _width : 400
                 const maxHeight = _height ? _height : 600
                 const backColor = _backColor ? _backColor : "beige"
+                const color = _color ? _color : "black"
                 let _html = "<div id=hushPopup style='z-index:9999;position:fixed;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent'>"
-                _html += "	<div id=hushPopupMain style='min-width:180px;min-height:100px;max-width:" + maxWidth + "px;max-height:" + maxHeight + "px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:" + backColor + ";border:1px solid darkgray;border-radius:5px;box-shadow:3px 3px 3px grey;padding:10px'>"
-                _html += "		<div style='width:100%;height:calc(100% - 45px);overflow:auto'>" + _text + "</div>"
-                _html += "		<div id=hushBtn style='width:100%;height:45px;display:flex;align-items:center;justify-content:flex-end;border-top:1px solid darkgray;padding-top:10px;margin-top:10px'>"
-                _html += "			<div id=hushPopupOk style='cursor:pointer;font-weight:bold;color:black;border-radius:5px;background:#0082AD;color:white;padding:10px 15px;margin:0px 0px 0px 10px'>확인</div>"
-                _html += "			<div id=hushPopupCancel style='display:none;cursor:pointer;font-weight:bold;color:black;border-radius:5px;background:#0082AD;color:white;padding:10px 15px;margin:0px 0px 0px 10px'>취소</div>"
-                _html += "		</div>"				
-                _html += "	</div>"
+                _html += "	    <div id=hushPopupMain style='min-width:180px;min-height:100px;max-width:" + maxWidth + "px;max-height:" + maxHeight + "px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:" + backColor + ";color:" + color + ";border:1px solid darkgray;border-radius:5px;box-shadow:3px 3px 3px grey;padding:10px'>"
+                _html += "		    <div style='width:100%;height:calc(100% - 45px);overflow:auto'>" + _text + "</div>"
+                _html += "		    <div id=hushBtn style='width:100%;height:45px;display:flex;align-items:center;justify-content:flex-end;border-top:1px solid darkgray;padding-top:10px;margin-top:10px'>"
+                _html += "			    <div id=hushPopupOk style='cursor:pointer;font-weight:bold;color:black;border-radius:5px;background:#0082AD;color:white;padding:10px 15px;margin:0px 0px 0px 10px'>확인</div>"
+                _html += "			    <div id=hushPopupCancel style='display:none;cursor:pointer;font-weight:bold;color:black;border-radius:5px;background:#0082AD;color:white;padding:10px 15px;margin:0px 0px 0px 10px'>취소</div>"
+                _html += "		    </div>"				
+                _html += "	    </div>"
                 _html += "</div>"
                 const _body = document.querySelector("body")
                 _body.insertAdjacentHTML('beforeend', _html)
@@ -38,11 +39,11 @@
                     if (callbackCancel) callbackCancel()
                 })
             },
-            alert : (_text, callbackOk, callbackCancel) => { //비동기콜백이며 유사한 alertWait(text)는 async/await 방식임 
+            alert : (_text, callbackOk, callbackCancel) => { //비동기콜백이며 이와 유사한 alertWait(text)는 async/await 방식임 
                 hush.msg.addHtml(_text)
                 hush.msg.handleEvent(callbackOk, callbackCancel)
             },
-            alertWait : (text, OKCancel) => new Promise((resolve) => { //async/await으로 복수개의 alert를 동기화시킴
+            alertWait : (text, OKCancel) => new Promise((resolve) => {
                 if (OKCancel) { //window.prompt()와 유사
                     hush.msg.alert(text, function() {
                         resolve(true)
@@ -53,7 +54,7 @@
                     hush.msg.alert(text, function() {
                         resolve(true)
                     }) //}, null, true)
-                }               
+                }
             }),
             toastTextArr : [],
             toastSecArr : [],
