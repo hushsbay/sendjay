@@ -59,7 +59,7 @@
             toastTextArr : [],
             toastSecArr : [],
             toastProcessing : false,
-            toast : (_text, _sec) => { //비동기이므로 루틴내에서는 1개만 또는 alertWait 다음에만 1개 사용 가능 
+            toast : (_text, _sec) => { //alertWait 다음에도 여러 개 사용 가능 
                 hush.msg.toastTextArr.push(_text)
                 hush.msg.toastSecArr.push(_sec)
                 hush.msg.toastLoop()
@@ -109,6 +109,41 @@
             isvoid : (obj) => {
                 if (typeof obj == "undefined" || obj == null) return true
                 return false
+            },
+            showEx : (ex, title, showToast) => {
+                const _title = title ? "[" + title + "]<br><br>" : ""
+                let _msg
+                if (typeof ex == "string") {
+                    // if (showToast) {
+                    //     hush.msg.toast(_title + ex)
+                    // } else {
+                    //     hush.msg.alert(_title + ex)
+                    // }
+                    _msg = _title + ex
+                } else if (typeof ex == "object" && ex.stack) {
+                    const arr = ex.stack.split("\n")
+                    arr.splice(0, 1) //첫번째 아이템 제거
+                    const strAt = arr.join("\n")
+                    console.log(ex.stack)
+                    // if (showToast) {
+                    //     hush.msg.toast(_title + ex.message + "<br><br>" + strAt)
+                    // } else {
+                    //     hush.msg.alert(_title + ex.message + "<br><br>" + strAt)
+                    // }
+                    _msg = _title + ex.message + "<br><br>" + strAt
+                } else {
+                    // if (showToast) {
+                    //     hush.msg.toast(_title + ex.toString())
+                    // } else {
+                    //     hush.msg.alert(_title + ex.toString())
+                    // }
+                    _msg = _title + ex.toString()
+                }
+                if (showToast) {
+                    hush.msg.toast(_msg)
+                } else {
+                    hush.msg.alert(_msg)
+                }
             },
             getRnd : (_min, _max) => {
                 const min = (!_min && _min != 0) ? 100000 : _min
