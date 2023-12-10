@@ -45,8 +45,7 @@
 .menuItem {
     width: 100px;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
-    cursor: pointer; background-color: transparent;
-    
+    cursor: pointer; opacity: 1;   
 /* 
     
     transition-property: background-color;
@@ -62,7 +61,6 @@
 .menuItemText {
     margin-top: 5px;
     color: white;
-    opacity: 1;
     transition: opacity ease 2s 0s;
 }
 
@@ -76,6 +74,6 @@
     transition: all ease 2s 0s;
 } */
 
-.menuItemText:click {
+.menuItem:active {
     opacity: 0.2;
 }
