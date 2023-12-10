@@ -59,20 +59,11 @@
     
 }
 
-/* .jb {
-    box-sizing: border-box;
-    width: 64px;
-    height: 64px;
-    margin: 10px 0px;
-    background-color: orange;
-    border-radius: 100%;
-    transition: all ease 2s 0s;
-} */
+.menuItem:hover {
+    
+}
 
 .menuItem:active {
     opacity: 0.2;
 }
 
-/* .menuItem:hover {
-    opacity: 0.5;
-} */
