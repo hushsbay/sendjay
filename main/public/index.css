@@ -44,7 +44,7 @@
 
 .menuItem {
     width: 100px;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    display: flex; flex-direction: column; justify-content: center; align-items: center; flex-grow: 1;
     cursor: pointer; opacity: 1;  
     transition: opacity ease 2000ms 1000ms; 
     /* transition-property: opacity;    
