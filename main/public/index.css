@@ -46,6 +46,9 @@
     width: 100px;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     cursor: pointer; background-color: transparent;
+}
+
+div {
     /* 전이가 일어날 속성값을 정의 */
     transition-property: background-color;
 
@@ -62,6 +65,6 @@
     color: white;
 }
 
-.menuItem:active {
+.div:active {
     background-color: red;
 }
