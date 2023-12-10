@@ -54,7 +54,7 @@
    
     transition-timing-function: linear; /* 등속도 */
    
-    transition-delay: 2.5s; /* 500밀리초 */
+    transition-delay: .5s; /* 500밀리초 */
 }
 
 .menuItemText {
