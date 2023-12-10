@@ -12,9 +12,10 @@
             document.oncontextmenu = new Function("return false;")
             $.when($.ready).done(async function() {
                 try { //By default, $.getScript() sets the cache setting to false. You can override this with $.ajaxSetup({ cache: true })
-                    await $.getScript("/common/common.js")                    
+                    await $.getScript0("/common/common.js")                    
                 } catch (ex) {
-                    alert("ready: " + ex.message)
+                    //alert("ready: " + ex.message)
+                    hush.util.showEx(ex)
                 }
                 $("#btn_orgtree").on("click", async function() {
                     //hush.util.openWinPop("/app/orgtree/orgtree.html")

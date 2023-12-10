@@ -111,7 +111,7 @@
                 return false
             },
             showEx : (ex, title, showToast) => {
-                const _title = title ? "[" + title + "]<br><br>" : ""
+                const _title = title ? "[" + title + "]<br>" : ""
                 let _msg
                 if (typeof ex == "string") {
                     // if (showToast) {
