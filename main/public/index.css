@@ -75,6 +75,6 @@
     transition: all ease 2s 0s;
 } */
 
-.menuItemText:active ~ .jb{
+.menuItemText:click ~ .jb{
     background-color: red;
 }
