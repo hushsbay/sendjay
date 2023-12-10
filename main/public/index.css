@@ -53,6 +53,6 @@
     color: white;    
 }
 
-.menuItem:active {
-    color: red;
+.menuItemText:active {
+    background-color: red;
 }
