@@ -46,11 +46,11 @@
     width: 100px;
     display: flex; flex-direction: column; justify-content: center; align-items: center; /*flex-grow: 1;*/
     cursor: pointer; opacity: 1;  
-    /* transition: opacity ease 2000ms 1000ms;  */
-    transition-property: opacity;    
+    transition: opacity 2000ms ease 1000ms; 
+    /* transition-property: opacity;    
     transition-duration: 1000ms;    
     transition-timing-function: linear;   
-    transition-delay: 500ms;
+    transition-delay: 500ms; */
 }
 
 .menuItemText {
@@ -58,7 +58,7 @@
     color: white;
 }
 
-.menuItem:hover {
+.menuItem:active {
     opacity: 0.2;
 }
 
