@@ -51,7 +51,6 @@
     transition-duration: 1000ms;    
     transition-timing-function: linear;   
     transition-delay: 500ms; */
-    transition-delay: 500ms;
 }
 
 .menuItemText {
@@ -60,6 +59,7 @@
 }
 
 .menuItem:active {
-    opacity: 0.2;
+    padding: 10px;
+    background-color: red; opacity: 0.5; border-radius: 100%;
 }
 
