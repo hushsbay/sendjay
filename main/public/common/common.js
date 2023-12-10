@@ -117,29 +117,14 @@
                 const _title = title ? "[" + title + "]<br>" : ""
                 let _msg
                 if (typeof ex == "string") {
-                    // if (showToast) {
-                    //     hush.msg.toast(_title + ex)
-                    // } else {
-                    //     hush.msg.alert(_title + ex)
-                    // }
                     _msg = _title + ex
                 } else if (typeof ex == "object" && ex.stack) {
                     const arr = ex.stack.split("\n")
                     arr.splice(0, 1) //첫번째 아이템 제거
                     const strAt = arr.join("\n")
                     console.log(ex.stack)
-                    // if (showToast) {
-                    //     hush.msg.toast(_title + ex.message + "<br><br>" + strAt)
-                    // } else {
-                    //     hush.msg.alert(_title + ex.message + "<br><br>" + strAt)
-                    // }
                     _msg = _title + ex.message + "<br><br>" + strAt
                 } else {
-                    // if (showToast) {
-                    //     hush.msg.toast(_title + ex.toString())
-                    // } else {
-                    //     hush.msg.alert(_title + ex.toString())
-                    // }
                     _msg = _title + ex.toString()
                 }
                 if (showToast) {

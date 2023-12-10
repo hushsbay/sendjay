@@ -17,25 +17,8 @@
                     hush.util.showEx(ex)
                     return
                 }
-                alert1("ddd")
                 $("#btn_orgtree").on("click", async function() {
-                    //hush.util.openWinPop("/app/orgtree/orgtree.html")
-                    hush.util.showEx("111", "하하하", true)
-                    
-                    // await hush.msg.alertWait("00000000")
-                    // console.log("0000000")
-                    // const ret = await hush.msg.alertWait("22222222222", true)
-                    // if (ret) {
-                    //     console.log("22222222222")
-                    // } else {
-                    //     console.log("222222222223333333333333")
-                    //     return
-                    // }
-                    // //hush.msg.alert("111<br>222바사가나다라마바사 가나다라마바사 가나다라마바사")
-                    // //console.log("1111111111111")
-                    // hush.msg.toast("fdfgfgf")
-                    // hush.msg.toast("fdfgfgf00000")
-                    // hush.msg.toast("fdfgfgf111111")
+                    hush.util.openWinPop("/app/orgtree/orgtree.html")
                 })
             }).fail(function(ex) {
                 hush.util.showEx(ex, hush.cons.failOnLoad)
@@ -43,31 +26,31 @@
         </script>
     </head>
     <body> 
-        <div class=container>
-            <div class=top>
-                <div class=topLeft>
-                    <img class=coImg32 src="./img/hushsbay.png"/>
-                    <div class=topLeftText>Hushsbay</div>
+        <div class="container">
+            <div class="top">
+                <div class="topLeft">
+                    <img class="coImg32" src="./img/hushsbay.png"/>
+                    <div class="topLeftText">Hushsbay</div>
                 </div>
-                <div class=topRight>
-                    <div class=topRightItem>안내</div>
-                    <div class=topRightItem>간편가입</div>
-                    <div class=topRightItem>로그인</div>
+                <div class="topRight">
+                    <div class="topRightItem">안내</div>
+                    <div class="topRightItem">간편가입</div>
+                    <div class="topRightItem">로그인</div>
                 </div>
             </div>
-            <div class=main>
-                <div class=menu>
-                    <div class=menuItem>
-                        <img class=coImg32 src="./img/white_survey.png"/>
-                        <div class=menuItemText>설문</div>
+            <div class="main">
+                <div class="menu">
+                    <div class="menuItem">
+                        <img class="coImg32" src="./img/white_survey.png"/>
+                        <div class="menuItemText">설문</div>
                     </div>
-                    <div class=menuItem>
-                        <img class=coImg32 src="./img/white_chat.png"/>
-                        <div class=menuItemText>웹메신저</div>
+                    <div class="menuItem">
+                        <img class="coImg32" src="./img/white_chat.png"/>
+                        <div class="menuItemText">웹메신저</div>
                     </div>
-                    <div class=menuItem id=btn_orgtree>
-                        <img class=coImg32 src="./img/white_company.png"/>
-                        <div class=menuItemText>조직도</div>
+                    <div class="menuItem" id="btn_orgtree">
+                        <img class="coImg32" src="./img/white_company.png"/>
+                        <div class="menuItemText">조직도</div>
                     </div>
             </div>
         </div>
