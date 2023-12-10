@@ -19,6 +19,7 @@
                 $("#btn_orgtree").on("click", async function() {
                     //hush.util.openWinPop("/app/orgtree/orgtree.html")
                     
+                    hush.msg.toast("fdfgfgf")
                     await hush.msg.alertWait("00000000")
                     console.log("0000000")
                     const ret = await hush.msg.alertWait("22222222222", true)
@@ -30,7 +31,7 @@
                     }
                     //hush.msg.alert("111<br>222바사가나다라마바사 가나다라마바사 가나다라마바사")
                     //console.log("1111111111111")
-                    hush.msg.toast("fdfgfgf")
+                    
                 })
             }).fail(function(ex) {
                 alert("ready.fail: " + ex.message)
