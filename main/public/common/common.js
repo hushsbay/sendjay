@@ -52,7 +52,7 @@
                         resolve(true)
                     }, function() {
                         resolve(false)
-                })
+                    })
                 } else { //window.alert()와 유사
                     hush.msg.alert(text, function() {
                         resolve(true)
