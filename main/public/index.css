@@ -50,6 +50,6 @@
 
 
 
-.menuItemText:active {
+.menuItem:active {
     background-color: red;
 }
