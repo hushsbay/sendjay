@@ -65,6 +65,6 @@ div {
     color: white;
 }
 
-.div:active {
+div:active {
     background-color: red;
 }
