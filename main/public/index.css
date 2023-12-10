@@ -34,7 +34,7 @@
 .topRightItem {
     margin: 0 10px;
     cursor: pointer;    
-    transition-property: opacity; transition-duration: 1000ms; transition-timing-function: linear; transition-delay: 500ms; 
+    /* transition-property: opacity; transition-duration: 1000ms; transition-timing-function: linear; transition-delay: 500ms; 안됨 */
 }
 
 .topRightItem:active {
@@ -51,7 +51,7 @@
     width: 100px;
     display: flex; flex-direction: column; justify-content: center; align-items: center; /*flex-grow: 1;*/
     cursor: pointer; 
-    /* transition-property: opacity; transition-duration: 1000ms; transition-timing-function: linear; transition-delay: 500ms; */
+    /* transition-property: opacity; transition-duration: 1000ms; transition-timing-function: linear; transition-delay: 500ms; 안됨 */
 }
 
 .menuItem:active {

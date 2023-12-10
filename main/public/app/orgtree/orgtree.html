@@ -4,21 +4,18 @@
         <meta charset="UTF-8" />
         <link id=favicon href="./img/hushsbay.png" rel="shortcut icon" type="image/x-icon"/>
         <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-        <title>Hushsbay</title>
+        <title>조직도</title>
         <link rel="stylesheet" href="/common/common.css">
         <link rel="stylesheet" href="/index.css">
         <script src="/plugin/jquery-3.4.1.min.js"></script>
         <script>
             document.oncontextmenu = new Function("return false;")
             $.when($.ready).done(async function() {
-                try { //By default, $.getScript() sets the cache setting to false. You can override this with $.ajaxSetup({ cache: true })
+                try {
                     await $.getScript("/common/common.js")                    
                 } catch (ex) {
                     alert("ready: " + ex.message)
                 }
-                $("#btn_orgtree").on("click", function() {
-                    hush.util.openWinPop("/app/orgtree/orgtree.html")
-                })
             }).fail(function(ex) {
                 alert("ready.fail: " + ex.message)
             })
