@@ -12,7 +12,8 @@
             document.oncontextmenu = new Function("return false;")
             $.when($.ready).done(async function() {
                 try { //By default, $.getScript() sets the cache setting to false. You can override this with $.ajaxSetup({ cache: true })
-                    await $.getScript0("/common/common.js")                    
+                    await $.getScript("/common/common.js")
+                    alert1("ddd")                    
                 } catch (ex) {
                     //alert("ready: " + ex.message)
                     hush.util.showEx(ex)
