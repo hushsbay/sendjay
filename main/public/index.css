@@ -46,7 +46,7 @@
     width: 100px;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     cursor: pointer; opacity: 1;  
-    transition: opacity ease 2s 0s; 
+    /* transition: opacity ease 2s 0s;  */
 /* 
     
     transition-property: background-color;
