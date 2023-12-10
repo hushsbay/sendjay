@@ -51,6 +51,7 @@
     transition-duration: 1000ms;    
     transition-timing-function: linear;   
     transition-delay: 500ms; */
+    transition-delay: 500ms;
 }
 
 .menuItemText {
