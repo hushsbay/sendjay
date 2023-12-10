@@ -1,6 +1,7 @@
 * { 
     box-sizing: border-box; 
     font-family:malgun gothic; font-size:14px; 
+    -webkit-tap-highlight-color : transparent;
 }
 
 html, body { 
