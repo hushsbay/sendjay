@@ -42,5 +42,5 @@ div, span, img {
 
 @media screen and (min-device-width: 501px) { }
 @media screen and (max-device-width: 500px) { 
-    .coMenuBtn > img { display: none } /* 모바일중에 가로가 작은 것은 이미지 제외하고 표시 */
+    .coMenuBtn>img { display: none } /* 모바일중에 가로가 작은 것은 이미지 제외하고 표시 */
 }
