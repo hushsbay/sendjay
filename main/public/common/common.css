@@ -18,6 +18,7 @@ div, span, img {
     user-select: none; /* Standard syntax */
 }
 
+/* 해당 tag id에 transition 적용시 안됨 (transition-property: opacity; transition-duration: 1000ms; transition-timing-function: linear; transition-delay: 500ms) */
 .coActive:active {
     opacity: 0.5;
 }
