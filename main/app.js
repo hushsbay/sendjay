@@ -1,4 +1,4 @@
-const config = require('/config')
+const config = require('./config')
 //const nodeConfig = require(config.app.nodeConfig)
 const ws = require(config.app.ws)
 
