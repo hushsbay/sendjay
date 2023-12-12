@@ -56,7 +56,7 @@
                 } else { //window.alert()와 유사
                     hush.msg.alert("alert", _text, function() {
                         resolve(true)
-                    }, _obj)
+                    }, null, _obj)
                 }
             }),
             toastTextArr : [],
