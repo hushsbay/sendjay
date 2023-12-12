@@ -46,22 +46,37 @@
                     if (_callbackCancel) _callbackCancel()
                 })
             },
-            alert : (_text, _callbackOk, _callbackCancel, _obj) => { //비동기콜백이므로 루틴내에서는 1개만 또는 alertWait 다음에만 1개 사용 가능 
-                hush.msg.addHtml("alert", _text, _callbackOk, _callbackCancel, _obj)
+            // alert : (_text, _callbackOk, _callbackCancel, _obj) => { //비동기콜백이므로 루틴내에서는 1개만 또는 alertWait 다음에만 1개 사용 가능 
+            //     hush.msg.addHtml("alert", _text, _callbackOk, _callbackCancel, _obj)
+            // },
+            // alertWait : (_text, OKCancel, _obj) => new Promise((resolve) => {
+            //     if (OKCancel) { //window.prompt()와 유사
+            //         hush.msg.alert(_text, function() {
+            //             resolve(true)
+            //         }, function() {
+            //             resolve(false)
+            //         }, _obj)
+            //     } else { //window.alert()와 유사
+            //         hush.msg.alert(_text, function() {
+            //             resolve(true)
+            //         }, null, _obj)
+            //     }
+            // }),
+            msg : (_text, _callbackOk, _callbackCancel, _obj) => { //비동기콜백이므로 루틴내에서는 1개만 또는 alertWait 다음에만 1개 사용 가능 
+                hush.msg.addHtml("", _text, _callbackOk, _callbackCancel, _obj)
             },
-            alertWait : (_text, OKCancel, _obj) => new Promise((resolve) => {
-                if (OKCancel) { //window.prompt()와 유사
-                    hush.msg.alert(_text, function() {
-                        resolve(true)
-                    }, function() {
-                        resolve(false)
-                    }, _obj)
-                } else { //window.alert()와 유사
-                    hush.msg.alert(_text, function() {
-                        resolve(true)
-                    }, null, _obj)
-                }
-            }),            
+            alert : (_text, _obj) => new Promise((resolve) => {
+                hush.msg.msg(_text, function() {
+                    resolve(true)
+                }, null, _obj)
+            }),
+            confirm : (_text, _obj) => new Promise((resolve) => {
+                hush.msg.msg(_text, function() {
+                    resolve(true)
+                }, function() {
+                    resolve(false)
+                }, _obj)
+            }),
             toast : (_text, _sec) => { //alertWait 다음에도 여러 개 사용 가능 
                 hush.msg.toastTextArr.push(_text)
                 hush.msg.toastSecArr.push(_sec)
@@ -78,10 +93,10 @@
             toastLoop : () => {
                 const _len = hush.msg.toastTextArr.length
                 if (_len == 0) return 
-                if (hush.msg.toastTextArr.length > 5) {
+                if (hush.msg.toastTextArr.length > 10) {
                     hush.msg.toastTextArr = []
                     hush.msg.toastSecArr = []
-                    alert("토스트 메시지는 한번에 5개까지만 가능합니다.") 
+                    alert("토스트 메시지는 한번에 10개까지만 지원합니다.") 
                     return
                 }
                 if (hush.msg.toastProcessing) {

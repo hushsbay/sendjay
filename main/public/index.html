@@ -22,11 +22,11 @@
                     hush.msg.toast("111")
                     hush.msg.toast("111222")
                     hush.msg.toast("111333")
-                    hush.msg.alert("ggggg00000000")
-                    await hush.msg.alertWait("ㅋㅋㅋ", null, {color : "red" })
-                    const ret = await hush.msg.alertWait("000", true)
+                    hush.msg.msg("ggggg00000000")
+                    await hush.msg.alert("ㅋㅋㅋ", {color : "red" })
+                    const ret = await hush.msg.confirm("000")
                     if (!ret) return
-                    hush.msg.alert("ggggg")
+                    hush.msg.msg("ggggg33333333333333333333333333")
                 })
             }).fail(function(ex) {
                 hush.util.showEx(ex, hush.cons.failOnLoad)
