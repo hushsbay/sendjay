@@ -6,14 +6,27 @@
         <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
         <title>조직도</title>
         <link rel="stylesheet" href="/common/common.css">
-        <link rel="stylesheet" href="/index.css">
         <style>
+            .container { 
+                max-width: 800px; width: 100%; height: 100%; margin:0px auto; 
+                display: flex; flex-direction:column; background: white;
+            }
+
+            .top {
+                height:50px;
+                display: flex; justify-content: space-between; align-items: center;
+            }
+
+            .main {
+                height: 100%; 
+                display: flex; flex: 1;
+            }
+
             .bottom {
                 height:50px;
                 display: flex; justify-content: space-between; align-items: center;
                 background-color: beige;
-            }
-            
+            }            
         </style>
         <script src="/plugin/jquery-3.4.1.min.js"></script>
         <script>
