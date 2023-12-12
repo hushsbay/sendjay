@@ -10,7 +10,8 @@ router.post('/', async function(req, res, next) {
 	let conn, sql, data, len
 	const rs = ws.http.resInit()
 	try {
-		global.logger.info(logTitle, { message: '하하하하oops'})
+		global.logger.info(logTitle+"=============")
+		//global.logger.info(logTitle, { message: '하하하하oops'})
 		res00.json(rs)
 	} catch (ex) {
 		//ws.log.ex(req, ex, logTitle)

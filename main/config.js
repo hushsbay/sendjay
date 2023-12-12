@@ -6,5 +6,6 @@ module.exports = {
 	app : {
 		nodeConfig : process.env.NODE_CONFIG,
 		ws : process.env.MODULE_COMMON,
+		logPath : process.env.LOG_PATH,
 	}
 }

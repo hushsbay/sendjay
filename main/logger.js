@@ -1,10 +1,11 @@
+const config = require('./config')
 const winston = require('winston')
 const winstonDaily = require('winston-daily-rotate-file')
 const process = require('process')
 
 const { combine, timestamp, label, printf } = winston.format
 
-const logDir = `${process.cwd()}/logs` //로그 파일 저장 경로 → 루트 경로/logs 폴더
+const logDir = config.app.logPath //`${process.cwd()}/logs` //로그 파일 저장 경로 → 루트 경로/logs 폴더
 const logFormat = printf(({ level, message, label, timestamp }) => { //로그 출력 포맷 정의 함수
    return `${timestamp} [${label}] ${level}: ${message}`; // 날짜 [시스템이름] 로그레벨 메세지
 })
