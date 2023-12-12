@@ -64,7 +64,7 @@
 						debugger
 						if (hush.util.isvoid(obj.nodeToGet)) obj.nodeToGet = "U"
 						if (hush.util.isvoid(obj.comp)) obj.comp = "ALL"
-						if ($hush.util.isvoid(obj.expandTo) || obj.expandTo < 0) obj.expandTo = 0
+						if (hush.util.isvoid(obj.expandTo) || obj.expandTo < 0) obj.expandTo = 0
 						if (hush.util.isvoid(obj.expandAllDept)) obj.expandAllDept = ""			
 						g_list.empty()
                         const data = { token : token, user : g_user, obj : obj }
