@@ -19,7 +19,8 @@ module.exports = (function() {
 		cons : {
 			 CODE_OK : '0',
 			 CODE_ERR : '-1',
-			 CODE_NOT_EXIST : '-100',
+			 CODE_NO_DATA : '-100',
+			 MSG_NO_DATA : 'no data.',
 			 CODE_PASSWORD_NEEDED : '-76',
 			 CODE_PASSKEY_NEEDED : '-77',
 			 CODE_PASSWORD_NOT_MATCHED : '-78',
@@ -29,10 +30,19 @@ module.exports = (function() {
 			 CODE_USERID_MISMATCH : '-83',
 			 CODE_TOKEN_EXPIRED : '-84',
 			 CODE_USE_YOUR_OWN_USERID : '-85',
-			 MSG_NOT_EXIST : ' not exists.',
-			 MSG_NO_DATA : 'no data.',
+			 
 		},
 
+		http : {
+			resInit : () => {
+				return { code : ws.cons.CODE_OK, msg : '', list : [ ] }
+			},
+			resJson : (res, code, msg, title) => {
+				res.type('application/json')
+				const _msg = (title) ? title + "\n" + msg : msg
+				res.json({ code : code, msg : _msg })
+			},
+		},
 
 		util : {
 			initExpressApp : (public) => {
@@ -55,6 +65,15 @@ module.exports = (function() {
 				server.keepAliveTimeout = 120000
 				return server
 			},
+			// watchProcessError : () => {
+			// 	process.on('error', e => {
+			// 		global.log.error('process.on error..', e.stack)
+			// 	}).on('uncaughtException', e => { //##4 가끔 Error:read ECONNRESET => events.js:183 throw er; //Unhandled 'error' event~ 에 걸려 서버다운되는데 여기에 걸려 해결됨
+			// 		global.log.error('process.on uncaughtException..', e.stack)
+			// 	}).on('unhandledRejection', (reason, p) => {
+			// 		global.log.error(reason, 'process.on Unhandled Rejection at Promise..', p)
+			// 	})
+			// }
 		}
 
 	}

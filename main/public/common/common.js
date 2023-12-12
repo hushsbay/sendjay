@@ -1,7 +1,8 @@
 (function() { //jQuery 없음
     window.hush = {
         cons : {
-            failOnLoad : "failOnLoad"
+            failOnLoad : "failOnLoad",
+            restful_timeout : 10000,
         },
         http : {
             handleNoCache: (url) => {
@@ -9,6 +10,61 @@
                 if (!_url.includes("nocache=")) _url += (_url.includes("?") ? "&" : "?") + "nocache=" + hush.util.getRnd()
                 return _url
             },
+            ajaxCall : (url, data, callback, failCallback, method) => {
+                $.ajax({dataType : "json", //response data type
+                    contentType : "application/json; charset=utf-8", //request mime type
+                    url : url,
+                    data: (method && method.toLowerCase() == "get") ? data : JSON.stringify(data),
+                    cache : false,
+                    async : true,
+                    type : (method) ? method : "gepostt",
+                    timeout : hush.cons.restful_timeout,
+                    success : function(rs) {
+                        if (callback) callback(rs)
+                    },
+                    error : function(xhr, status, error) {
+                        const msg = (typeof error == "string") ? error : error.toString()
+                        if (failCallback == false) {
+                            //skip (like getting image)
+                        } else if (failCallback) {
+                            failCallback(msg)
+                        } else {
+                            hush.msg.showEx(msg)
+                        }
+                    }
+                })
+            },
+            ajax : async (url, data, method, withToast) => {
+                try {
+                    if (withToast) hush.msg.toast("waiting..", -1)
+                    const rs = await hush.http.ajaxPromise(url, data, method)               
+                    if (withToast) hush.msg.toastEnd()                    
+                    return rs
+                } catch (ex) {
+                    if (withToast) hush.msg.toastEnd()
+                    throw ex //new Error(ex.message)
+                }
+            },
+            ajaxPromise : (url, data, method) => new Promise((resolve, reject) => { //ajaxPromise()는 hush.http.ajax를 통해서만 사용하기
+                $.ajax({dataType : "json", //response data type
+                    contentType : "application/json; charset=utf-8", //request mime type
+                    url : url,
+                    data: (method && method.toLowerCase() == "get") ? data : JSON.stringify(data),
+                    cache : false,
+                    async : true,
+                    type : (method) ? method : "post",
+                    timeout : hush.cons.restful_timeout,
+                    success : function(rs) {
+                        resolve(rs)
+                    },
+                    error : function(xhr, status, error) {
+                        //"Uncaught (in promise) Error" => status=error, error=""
+                        //When done().fail(), "Uncaught (in promise) Error: error" returned
+                        const msg = (typeof error == "string") ? error : error.toString()
+                        reject(new Error(msg))
+                    }
+                }
+            )}),
         },
         msg : { //1. msg(비동기콜백) 2. alert(=window.alert) 3. confirm(=window.confirm) 4. toast(복수메시지 순서대로 표시 지원)
             //아래 실행후 육안으로 먼저 보이는 순서는 = 1 > 2 > 3 > 5 > 6 > 7 > 4 
