@@ -72,7 +72,7 @@
                 try { //By default, $.getScript() sets the cache setting to false. You can override this with $.ajaxSetup({ cache: true })
                     await $.getScript("/common/common.js")
                     $("#btn_orgtree").on("click", async function() {
-                        hush.util.openWinPop("/app/orgtree/orgtree.html")
+                        hush.util.openWinPop("/app/org/orgtree.html")
                     })
                 } catch (ex) {
                     hush.util.showEx(ex)
