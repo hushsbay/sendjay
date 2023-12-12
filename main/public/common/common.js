@@ -48,13 +48,13 @@
             },
             alertWait : (_text, OKCancel, _obj) => new Promise((resolve) => {
                 if (OKCancel) { //window.prompt()와 유사
-                    hush.msg.alert("alert", _text, function() {
+                    hush.msg.alert(_text, function() {
                         resolve(true)
                     }, function() {
                         resolve(false)
                     }, _obj)
                 } else { //window.alert()와 유사
-                    hush.msg.alert("alert", _text, function() {
+                    hush.msg.alert(_text, function() {
                         resolve(true)
                     }, null, _obj)
                 }
