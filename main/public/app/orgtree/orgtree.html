@@ -9,7 +9,16 @@
         <link rel="stylesheet" href="/index.css">
         <script src="/plugin/jquery-3.4.1.min.js"></script>
         <script>
-            
+            document.oncontextmenu = new Function("return false;")
+            $.when($.ready).done(async function() {
+                try {
+                    await $.getScript("/common/common.js")
+                } catch (ex) {
+                    hush.util.showEx(ex)
+                }                
+            }).fail(function(ex) {
+                hush.util.showEx(ex, hush.cons.failOnLoad)
+            })
         </script>
     </head>
     <body> 
