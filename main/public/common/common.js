@@ -32,6 +32,17 @@
             if (callbackCancel) callbackCancel()
         })
     }
+
+    const aaa = "aaa";
+    var bbb = "bbb";
+
+    function xxx() {
+        return aaa + "/" + bbb
+    }
+
+    function zzz() {
+        return hush.con.failOnLoad
+    }
     
     window.hush = {
         cons : {
@@ -45,6 +56,13 @@
             },
         },
         msg : { //1. alert 2. alertWait(text) 3. alertWait(text, boolean) 4. toast (여러개의 메시지를 순서대로 처리하는 기능도 지원)
+            test : () => {
+                const yyy = xxx()
+                alert(yyy)
+                alert(zzz())
+                hush.con.failOnLoad = "ㅋㅋㅋ==" + aaa
+                alert(zzz())
+            },
             alert : (_text, _callbackOk, _callbackCancel, _obj) => { //비동기콜백이므로 루틴내에서는 1개만 또는 alertWait 다음에만 1개 사용 가능 
                 addHtml("alert", _text, _obj)
                 handleEvent(_callbackOk, _callbackCancel)
