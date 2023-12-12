@@ -1,4 +1,4 @@
-const config = require('./config')
+const config = require('../main/config')
 const winston = require('winston')
 const winstonDaily = require('winston-daily-rotate-file')
 

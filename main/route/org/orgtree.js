@@ -10,13 +10,12 @@ router.post('/', async function(req1, res, next) {
 	let conn, sql, data, len
 	const rs = ws.http.resInit()
 	try {
+		global.logger.info(logTitle+"=============111")
 		global.logger.info(logTitle+"=============", { message:'0000하하하'})
-		//global.logger.info(logTitle, { message: '하하하하oops'})
 		res00.json(rs)
 	} catch (ex) {
 		//ws.log.ex(req, ex, logTitle)
 		global.logger.error(ex.message + '======')
-		//console.log(logTitle, ex.message)
 		ws.http.resJson(res, '-1', ex.message, logTitle)
 	} finally {
 		//try { conn.release() } catch (ex) { console.log(ws.cons.mysql_close_error) }
@@ -24,8 +23,6 @@ router.post('/', async function(req1, res, next) {
 })
 
 router.use(function(err, req, res, next) {
-	//global.log.error(logTitle, err.message)
-	//console.log(logTitle, err.message)
 	global.logger.error(err.message + '####')
 	ws.http.resJson(res, '-1', err.message, logTitle)
 })
