@@ -10,7 +10,7 @@ router.post('/', async function(req, res, next) {
 	let conn, sql, data, len
 	const rs = ws.http.resInit()
 	try {
-		console.log(req.path, "=======")
+		console.log(router.path, "=======")
 		res.json(rs)
 	} catch (ex) {
 		//ws.log.ex(req, ex, logTitle)
