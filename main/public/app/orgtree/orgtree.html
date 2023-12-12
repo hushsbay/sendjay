@@ -6,10 +6,7 @@
         <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
         <title>조직도</title>
         <link rel="stylesheet" href="/common/common.css">
-        <style> /* media query는 .css에서 처리가 안되어 각 페이지에 두기로 함 */          
-			/* @media screen and (max-device-width: 500px) { .coMenuBtn>img { display: none } }
-            @media screen and (min-device-width: 501px) { } */
-
+        <style>
             .container { 
                 width: 100%; height: 100%;
                 display: flex; flex-direction: column; 
@@ -65,15 +62,15 @@
     <body> 
         <div class="container">
             <div class="top">
-                <input id=select_all type=checkbox style="margin-left: 8px"/>
-                <input id=in_search type=search spellcheck=false autocomplete=off style="width: 80px; height: 28px; margin-left: 8px" />                
-				<div id=btn_search class="coMenuBtn coActive"><img src="/img/white_search.png" class=coImg16 /><span class="coSpanWithImg">검색</span></div>
-				<div id=btn_team class="coMenuBtn coActive"><img src="/img/white_team.png" class=coImg16 /><span class="coSpanWithImg">내팀</span></div>
-				<div id=btn_jojik class="coMenuBtn coActive"><img src="/img/white_company.png" class=coImg16 /><span class="coSpanWithImg">조직도</span></div>
-				<div id=div_depth style="display: flex; align-items: center">
-					<span id=spn_depth style="border:1px solid darkgray; padding: 3px; margin-left: 3px">1</span>
-					<img id=btn_minus src="/img/minus.png" class="coImg20 coActive" style="margin-left: 3px"/>
-					<img id=btn_plus src="/img/plus.png" class="coImg20 coActive" style="margin-left: 3px"/>
+                <input id="select_all" type=checkbox style="margin-left: 8px"/>
+                <input id="in_search" type=search spellcheck=false autocomplete=off style="width: 80px; height: 28px; margin-left: 8px"/>                
+				<div id="btn_search" class="coMenuBtn coActive"><img src="/img/white_search.png" class="coImg16"/><span class="coSpanWithImg">검색</span></div>
+				<div id="btn_team" class="coMenuBtn coActive"><img src="/img/white_team.png" class="coImg16"/><span class="coSpanWithImg">내팀</span></div>
+				<div id="btn_jojik" class="coMenuBtn coActive"><img src="/img/white_company.png" class="coImg16"/><span class="coSpanWithImg">조직도</span></div>
+				<div id="div_depth" style="display: flex; align-items: center">
+					<span id="spn_depth" style="border:1px solid darkgray; padding: 3px; margin-left: 3px">1</span>
+					<img id="btn_minus" src="/img/minus.png" class="coImg20 coActive" style="margin-left: 3px"/>
+					<img id="btn_plus" src="/img/plus.png" class="coImg20 coActive" style="margin-left: 3px"/>
 				</div>
             </div>
             <div class="main">
@@ -81,18 +78,18 @@
                 <div id="panSel">
                     <div id="panSelTop">
                         <div style="color: red; margin-left: 3px">선택 : <span id=cntSel>0</span></div>
-                        <img id="removeSel" src="/img/close.png" class="coImg16 coActive" style="margin-right: 3px" />
+                        <img id="removeSel" src="/img/close.png" class="coImg16 coActive" style="margin-right: 3px"/>
                     </div>
                     <div id="listSel" style="overflow: auto"></div>
                 </div>
             </div>
             <div class="bottom" style="padding: 0 8px">
                 <div style="display: flex; align-items: center">
-	                <input id=chk_mycomp type=checkbox /><label id=lbl_mycomp for=chk_mycomp style="cursor: pointer; margin-left: 3px">소속회사</label>
+	                <input id="chk_mycomp" type=checkbox /><label id="lbl_mycomp" for="chk_mycomp" style="cursor: pointer; margin-left: 3px">소속회사</label>
 	        	</div>
 	        	<div style="display: flex; align-items: center">
-	                <div id=btn_ok class="coMenuBtn coActive" ><img src="/img/white_yes.png" class=coImg16 /><span class=coSpanWithImg>확인</span></div>
-	                <div id=btn_cancel class="coMenuBtn coActive" ><img src="/img/white_no.png" class=coImg16 /><span class=coSpanWithImg>취소</span></div>
+	                <div id="btn_ok" class="coMenuBtn coActive"><img src="/img/white_yes.png" class="coImg16"/><span class="coSpanWithImg">확인</span></div>
+	                <div id="btn_cancel" class="coMenuBtn coActive"><img src="/img/white_no.png" class="coImg16"/><span class="coSpanWithImg">취소</span></div>
 	        	</div>
             </div>
         </div>
