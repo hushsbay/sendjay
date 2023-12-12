@@ -20,7 +20,7 @@
                 const maxHeight = (_obj && _obj.height) ? _obj.height : 600
                 const backColor = (_obj && _obj.backColor) ? _obj.backColor : "beige"
                 const color = (_obj && _obj.color) ? _obj.color : "black"
-                const _seq = (_type == "toast") ? "" : (hush.msg.alertSeq++).toString()
+                const _seq = (_type == "toast") ? "" : (++hush.msg.alertSeq).toString()
                 let _html = "<div id=hushPopup" + _seq + " style='z-index:9999;position:fixed;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent'>"
                 _html += "	    <div id=hushPopupMain" + _seq + " style='min-width:180px;min-height:120px;max-width:" + maxWidth + "px;max-height:" + maxHeight + "px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:" + backColor + ";color:" + color + ";border:1px solid darkgray;border-radius:5px;box-shadow:3px 3px 3px grey;padding:10px'>"
                 _html += "		    <div style='width:100%;height:calc(100% - 45px);overflow:auto'>" + _text + "</div>"
