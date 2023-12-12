@@ -54,7 +54,7 @@ module.exports = function(logPath, title) {
             format: winston.format.combine( //json, label, timestamp, printf, simple, combine
                winston.format.colorize(), // 색깔 넣어서 출력
                //winston.format.simple() // `${info.level}: ${info.message} JSON.stringify({ ...rest })` 포맷으로 출력
-               winston.format.json()
+               winston.format.printf()
             ),
          }),
       )
