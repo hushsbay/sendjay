@@ -11,40 +11,43 @@
             },
         },
         msg : { //1. alert 2. alertWait(text) 3. alertWait(text, boolean) 4. toast (여러개의 메시지를 순서대로 처리하는 기능도 지원)
-            addHtml : (_type, _text, _obj) => { //_obj (alert에만 사용하고 toast에는 미사용) : width, height, backColor, color
+            alertSeq : -1,
+            toastTextArr : [],
+            toastSecArr : [],
+            toastProcessing : false,
+            addHtml : (_type, _text, _callbackOk, _callbackCancel, _obj) => { //_obj (alert에만 사용하고 toast에는 미사용) : width, height, backColor, color
                 const maxWidth = (_obj && _obj.width) ? _obj.width : 400
                 const maxHeight = (_obj && _obj.height) ? _obj.height : 600
                 const backColor = (_obj && _obj.backColor) ? _obj.backColor : "beige"
                 const color = (_obj && _obj.color) ? _obj.color : "black"
-                let _html = "<div id=hushPopup style='z-index:9999;position:fixed;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent'>"
-                _html += "	    <div id=hushPopupMain style='min-width:180px;min-height:120px;max-width:" + maxWidth + "px;max-height:" + maxHeight + "px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:" + backColor + ";color:" + color + ";border:1px solid darkgray;border-radius:5px;box-shadow:3px 3px 3px grey;padding:10px'>"
+                const _seq = (_type == "toast") ? "" : (hush.msg.alertSeq++).toString()
+                let _html = "<div id=hushPopup" + _seq + " style='z-index:9999;position:fixed;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent'>"
+                _html += "	    <div id=hushPopupMain" + _seq + " style='min-width:180px;min-height:120px;max-width:" + maxWidth + "px;max-height:" + maxHeight + "px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:" + backColor + ";color:" + color + ";border:1px solid darkgray;border-radius:5px;box-shadow:3px 3px 3px grey;padding:10px'>"
                 _html += "		    <div style='width:100%;height:calc(100% - 45px);overflow:auto'>" + _text + "</div>"
-                _html += "		    <div id=hushBtn style='width:100%;height:45px;display:flex;align-items:center;justify-content:flex-end;border-top:1px solid darkgray;padding-top:10px;margin-top:10px'>"
-                _html += "			    <div id=hushPopupOk style='cursor:pointer;font-weight:bold;color:black;border-radius:5px;background:#0082AD;color:white;padding:10px 15px;margin:0px 0px 0px 10px'>확인</div>"
-                _html += "			    <div id=hushPopupCancel style='display:none;cursor:pointer;font-weight:bold;color:black;border-radius:5px;background:#0082AD;color:white;padding:10px 15px;margin:0px 0px 0px 10px'>취소</div>"
+                _html += "		    <div id=hushBtn" + _seq + " style='width:100%;height:45px;display:flex;align-items:center;justify-content:flex-end;border-top:1px solid darkgray;padding-top:10px;margin-top:10px'>"
+                _html += "			    <div id=hushPopupOk" + _seq + " style='cursor:pointer;font-weight:bold;color:black;border-radius:5px;background:#0082AD;color:white;padding:10px 15px;margin:0px 0px 0px 10px'>확인</div>"
+                _html += "			    <div id=hushPopupCancel" + _seq + " style='display:none;cursor:pointer;font-weight:bold;color:black;border-radius:5px;background:#0082AD;color:white;padding:10px 15px;margin:0px 0px 0px 10px'>취소</div>"
                 _html += "		    </div>"				
                 _html += "	    </div>"
                 _html += "</div>"
                 const _body = document.querySelector("body")
                 _body.insertAdjacentHTML('beforeend', _html)
-            },        
-            handleEvent : (callbackOk, callbackCancel) => {
-                const _div = document.getElementById("hushPopup")
-                const _divOk = document.getElementById("hushPopupOk")
-                const _divCancel = document.getElementById("hushPopupCancel")
-                if (callbackCancel) _divCancel.style.display = "block"
+                if (_type == "toast") return
+                const _div = document.getElementById("hushPopup" + _seq)
+                const _divOk = document.getElementById("hushPopupOk" + _seq)
+                const _divCancel = document.getElementById("hushPopupCancel" + _seq)
+                if (_callbackCancel) _divCancel.style.display = "block"
                 _divOk.addEventListener("click", function() { //onclick=xxx()로는 promise resolve 처리못함
                     _div.remove()
-                    if (callbackOk) callbackOk()
+                    if (_callbackOk) _callbackOk()
                 })
                 _divCancel.addEventListener("click", function() {
                     _div.remove()
-                    if (callbackCancel) callbackCancel()
+                    if (_callbackCancel) _callbackCancel()
                 })
             },
             alert : (_text, _callbackOk, _callbackCancel, _obj) => { //비동기콜백이므로 루틴내에서는 1개만 또는 alertWait 다음에만 1개 사용 가능 
-                hush.msg.addHtml("alert", _text, _obj)
-                hush.msg.handleEvent(_callbackOk, _callbackCancel)
+                hush.msg.addHtml("alert", _text, _callbackOk, _callbackCancel, _obj)
             },
             alertWait : (_text, OKCancel, _obj) => new Promise((resolve) => {
                 if (OKCancel) { //window.prompt()와 유사
@@ -58,10 +61,7 @@
                         resolve(true)
                     }, null, _obj)
                 }
-            }),
-            toastTextArr : [],
-            toastSecArr : [],
-            toastProcessing : false,
+            }),            
             toast : (_text, _sec) => { //alertWait 다음에도 여러 개 사용 가능 
                 hush.msg.toastTextArr.push(_text)
                 hush.msg.toastSecArr.push(_sec)
