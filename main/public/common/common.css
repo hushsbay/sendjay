@@ -38,3 +38,6 @@ div, span, img {
 .coSpanWithImg {
     margin-left: 3px
 }
+
+@media screen and (max-device-width: 500px) { .coMenuBtn>img { display: none } }
+            @media screen and (min-device-width: 501px) { }
