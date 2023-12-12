@@ -2,11 +2,11 @@ const config = require('./config')
 const winston = require('winston')
 const winstonDaily = require('winston-daily-rotate-file')
 
-module.exports = function(logPath) {
-console.log("==="+logPath)
+module.exports = function(logPath, label) {
+
    const { combine, timestamp, label, printf } = winston.format
 
-   const logDir = config.app.logPath //`${process.cwd()}/logs` //로그 파일 저장 경로 → 루트 경로/logs 폴더
+   const logDir = logPath //`${process.cwd()}/logs` //로그 파일 저장 경로 → 루트 경로/logs 폴더
    const logFormat = printf(({ level, message, label, timestamp }) => { //로그 출력 포맷 정의 함수
       return `${timestamp} [${label}] ${level}: ${message}`; // 날짜 [시스템이름] 로그레벨 메세지
    })
@@ -15,7 +15,7 @@ console.log("==="+logPath)
    const logger = winston.createLogger({
       format: combine( //로그 출력 형식 정의
          timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-         label({ label: 'Winston 연습 어플리케이션' }),
+         label({ label: label }),
          logFormat, //? format: combine() 에서 정의한 timestamp와 label 형식값이 logFormat에 들어가서 정의되게 된다. level이나 message는 콘솔에서 자동 정의
       ),
       transports: [ //실제 로그를 어떻게 기록을 한 것인가 정의
@@ -62,4 +62,3 @@ console.log("==="+logPath)
    return logger
 
 }
-
