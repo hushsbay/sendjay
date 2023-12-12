@@ -29,3 +29,7 @@ div, span, img {
     display: flex; align-items: center; 
     background-color: #0082AD; color: white; border-radius: 4px; cursor: pointer; 
 }
+
+.coSpanWithImg {
+    margin-left: 2px
+}
