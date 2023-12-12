@@ -62,10 +62,10 @@
 				//$wise.onceJwtCall(g_payload, false, async function(token) {
 					try {
 						debugger
-						if (hush.util.isVoid(obj.nodeToGet)) obj.nodeToGet = "U"
-						if (hush.util.isVoid(obj.comp)) obj.comp = "ALL"
-						if ($hush.util.isVoid(obj.expandTo) || obj.expandTo < 0) obj.expandTo = 0
-						if (hush.util.isVoid(obj.expandAllDept)) obj.expandAllDept = ""			
+						if (hush.util.isvoid(obj.nodeToGet)) obj.nodeToGet = "U"
+						if (hush.util.isvoid(obj.comp)) obj.comp = "ALL"
+						if ($hush.util.isvoid(obj.expandTo) || obj.expandTo < 0) obj.expandTo = 0
+						if (hush.util.isvoid(obj.expandAllDept)) obj.expandAllDept = ""			
 						g_list.empty()
                         const data = { token : token, user : g_user, obj : obj }
                         const rs = await hush.http.ajax("/org/orgtree", data, null, true)
