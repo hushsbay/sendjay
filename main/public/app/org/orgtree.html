@@ -61,6 +61,7 @@
 	            //expandAllDept=Y이면 임직원만 안보이게 접고 회사/부서 노드는 모두 보이게 펼치기 (expandTo가 반드시 있어야 함)
 				//$wise.onceJwtCall(g_payload, false, async function(token) {
 					try {
+						debugger
 						if (hush.util.isVoid(obj.nodeToGet)) obj.nodeToGet = "U"
 						if (hush.util.isVoid(obj.comp)) obj.comp = "ALL"
 						if ($hush.util.isVoid(obj.expandTo) || obj.expandTo < 0) obj.expandTo = 0
@@ -237,8 +238,9 @@
 				     		$("#lbl_comp").hide()
 				     	}
 				    } catch (ex) {
-				        $wise.toastEnd()
-				        alert(survey.util.getErrorMsg(ex.message))
+						debugger
+				        //$wise.toastEnd()
+				        //alert(survey.util.getErrorMsg(ex.message))
 				    }
 				// }, function(ex1) {
 				// 	alert(survey.util.getErrorMsg(ex1.message, survey.cons.jwt))
