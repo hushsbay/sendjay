@@ -52,9 +52,13 @@ module.exports = function(logPath, title) {
       logger.add(
          new winston.transports.Console({
             format: winston.format.combine( //json, label, timestamp, printf, simple, combine
-               winston.format.colorize(), // 색깔 넣어서 출력
+               //winston.format.colorize(), // 색깔 넣어서 출력
                //winston.format.simple() // `${info.level}: ${info.message} JSON.stringify({ ...rest })` 포맷으로 출력
-               winston.format.printf()
+               winston.format.timestamp({ format: ' YYYY-MM-DD HH:MM:SS ||' }),
+               winston.format.colorize({ all: true }),
+               winston.format.printf(
+                  (info) => `${info.timestamp} ${info.message}`
+               )
             ),
          }),
       )
