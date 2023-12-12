@@ -2,8 +2,8 @@ const config = require('./config')
 const winston = require('winston')
 const winstonDaily = require('winston-daily-rotate-file')
 
-module.exports = function(options) {
-console.log(options.logPath)
+module.exports = function(logPath) {
+console.log("==="+logPath)
    const { combine, timestamp, label, printf } = winston.format
 
    const logDir = config.app.logPath //`${process.cwd()}/logs` //로그 파일 저장 경로 → 루트 경로/logs 폴더
