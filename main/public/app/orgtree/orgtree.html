@@ -50,13 +50,13 @@
                 
             </div>
             <div class="main">
-                <div id=listMain style="flex-grow:1;background-color:white;border:1px solid darkgray;overflow-y:auto"></div>
-                <div id=listRight style="display:flex;flex-direction:column;min-width:100px;max-width:250px;overflow:hidden;background-color:white;border:1px solid darkgray;border-left:0px;margin-left:auto">
-                    <div style="height:24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid darkgray">
-                        <div style="color:red;margin-left:3px">선택 : <span id=selected_people_cnt>0</span></div>
-                        <img id=remove_selected_people src="/img/close1.png" style="margin-right:3px" class=coImg16 />
+                <div id="listMain" style="display: flex; flex: 1;border: 1px solid darkgray; overflow-y:auto"></div>
+                <div id="panSel" style="display: flex; flex-direction: column; min-width:100px; max-width:250px; overflow:hidden; border:1px solid darkgray; border-left:0px; margin-left: auto">
+                    <div style="height: 24px; display: flex; align-items: center; justify-content:space-between; border-bottom: 1px solid darkgray">
+                        <div style="color: red; margin-left: 3px">선택 : <span id=cntSel>0</span></div>
+                        <img id="removeSel" src="/img/close.png" class=coImg16 style="margin-right: 3px" />
                     </div>
-                    <div id=select_people_sub style="overflow:auto;border:`px solid green"></div>
+                    <div id="listSel" style="overflow: auto; border: 1px solid green"></div>
                 </div>
             </div>
             <div class="bottom">
