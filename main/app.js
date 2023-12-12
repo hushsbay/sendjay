@@ -3,7 +3,7 @@ const config = require('./config')
 const ws = require(config.app.ws)
 const logger = require('./logger')
 
-global.logger = logger
+global.logger = logger(config.app.logPath)
 const app = ws.util.initExpressApp('public')
 const wasServer = ws.util.createWas(app, config.http.method) //not https (because of aws load balancer)
 wasServer.listen(config.http.port, () => { console.log('wasServer listening on ' + config.http.port) })
