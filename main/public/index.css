@@ -41,9 +41,9 @@ body {
     cursor: pointer;    
 }
 
-.topRightItem:active {
+/* .topRightItem:active {
     opacity: 0.3;
-}
+} */
 
 .menu {
     width: 100%; margin-top: auto; margin-bottom: 40px;
@@ -57,9 +57,9 @@ body {
     cursor: pointer; 
 }
 
-.menuItem:active {
+/* .menuItem:active {
     opacity: 0.3;
-}
+} */
 
 .menuItemText {
     margin-top: 5px;
