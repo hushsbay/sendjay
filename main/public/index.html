@@ -18,15 +18,7 @@
                     return
                 }
                 $("#btn_orgtree").on("click", async function() {
-                    //hush.util.openWinPop("/app/orgtree/orgtree.html")
-                    hush.msg.toast("111")
-                    hush.msg.toast("111222")
-                    hush.msg.toast("111333")
-                    hush.msg.msg("ggggg00000000")
-                    await hush.msg.alert("ㅋㅋㅋ", {color : "red" })
-                    const ret = await hush.msg.confirm("000")
-                    if (!ret) return
-                    hush.msg.msg("ggggg33333333333333333333333333")
+                    hush.util.openWinPop("/app/orgtree/orgtree.html")
                 })
             }).fail(function(ex) {
                 hush.util.showEx(ex, hush.cons.failOnLoad)

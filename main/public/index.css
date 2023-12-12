@@ -31,10 +31,9 @@
     display: flex; justify-content: flex-end;
 }
 
-.topRightItem {
+.topRightItem { /* transition-property: opacity; transition-duration: 1000ms; transition-timing-function: linear; transition-delay: 500ms; 안됨 */
     margin: 0 10px;
     cursor: pointer;    
-    /* transition-property: opacity; transition-duration: 1000ms; transition-timing-function: linear; transition-delay: 500ms; 안됨 */
 }
 
 .topRightItem:active {
@@ -47,11 +46,10 @@
     background-color: transparent;
 }
 
-.menuItem {
+.menuItem { /* transition-property: opacity; transition-duration: 1000ms; transition-timing-function: linear; transition-delay: 500ms; 안됨 */
     width: 100px;
     display: flex; flex-direction: column; justify-content: center; align-items: center; /*flex-grow: 1;*/
     cursor: pointer; 
-    /* transition-property: opacity; transition-duration: 1000ms; transition-timing-function: linear; transition-delay: 500ms; 안됨 */
 }
 
 .menuItem:active {
@@ -62,5 +60,3 @@
     margin-top: 5px;
     color: white;
 }
-
-

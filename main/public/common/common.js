@@ -10,12 +10,21 @@
                 return _url
             },
         },
-        msg : { //1. alert 2. alertWait(text) 3. alertWait(text, boolean) 4. toast (여러개의 메시지를 순서대로 처리하는 기능도 지원)
+        msg : { //1. msg(비동기콜백) 2. alert(=window.alert) 3. confirm(=window.confirm) 4. toast(복수메시지 순서대로 표시 지원)
+            //아래 실행후 육안으로 먼저 보이는 순서는 = 1 > 2 > 3 > 5 > 6 > 7 > 4 
+            // hush.msg.toast("1")
+            // hush.msg.toast("2")
+            // hush.msg.toast("3")
+            // hush.msg.msg("4")
+            // await hush.msg.alert("5", {color : "red" })
+            // const ret = await hush.msg.confirm("6")
+            // if (!ret) return
+            // hush.msg.msg("7")
             alertSeq : -1,
             toastTextArr : [],
             toastSecArr : [],
             toastProcessing : false,
-            addHtml : (_type, _text, _callbackOk, _callbackCancel, _obj) => { //_obj (alert에만 사용하고 toast에는 미사용) : width, height, backColor, color
+            addHtml : (_type, _text, _callbackOk, _callbackCancel, _obj) => { //_obj (toast에는 미사용) : width, height, backColor, color
                 const maxWidth = (_obj && _obj.width) ? _obj.width : 400
                 const maxHeight = (_obj && _obj.height) ? _obj.height : 600
                 const backColor = (_obj && _obj.backColor) ? _obj.backColor : "beige"
@@ -47,23 +56,7 @@
                     if (_callbackCancel) _callbackCancel()
                 })
             },
-            // alert : (_text, _callbackOk, _callbackCancel, _obj) => { //비동기콜백이므로 루틴내에서는 1개만 또는 alertWait 다음에만 1개 사용 가능 
-            //     hush.msg.addHtml("alert", _text, _callbackOk, _callbackCancel, _obj)
-            // },
-            // alertWait : (_text, OKCancel, _obj) => new Promise((resolve) => {
-            //     if (OKCancel) { //window.prompt()와 유사
-            //         hush.msg.alert(_text, function() {
-            //             resolve(true)
-            //         }, function() {
-            //             resolve(false)
-            //         }, _obj)
-            //     } else { //window.alert()와 유사
-            //         hush.msg.alert(_text, function() {
-            //             resolve(true)
-            //         }, null, _obj)
-            //     }
-            // }),
-            msg : (_text, _callbackOk, _callbackCancel, _obj) => { //비동기콜백이므로 루틴내에서는 1개만 또는 alertWait 다음에만 1개 사용 가능 
+            msg : (_text, _callbackOk, _callbackCancel, _obj) => { //비동기콜백
                 hush.msg.addHtml("", _text, _callbackOk, _callbackCancel, _obj)
             },
             alert : (_text, _obj) => new Promise((resolve) => {
@@ -78,7 +71,7 @@
                     resolve(false)
                 }, _obj)
             }),
-            toast : (_text, _sec) => { //alertWait 다음에도 여러 개 사용 가능 
+            toast : (_text, _sec) => {
                 hush.msg.toastTextArr.push(_text)
                 hush.msg.toastSecArr.push(_sec)
                 hush.msg.toastLoop()
@@ -115,7 +108,7 @@
                 _divPopupMain.style.minHeight = "0px"
                 const _sec = hush.msg.toastSecArr[0]
                 if (_sec == -1) { 
-                    //endless toast (예: 서버호출) : 사용자가 toastEnd()를 이용해 종료
+                    //endless toast (예: 서버호출) : 사용자가 hush.msg.toastEnd()를 이용해 종료해야 함
                 } else {
                     const sec = (!_sec ? 3 : _sec) * 1000
                     setTimeout(function() {
@@ -129,7 +122,7 @@
                 if (typeof obj == "undefined" || obj == null) return true
                 return false
             },
-            showEx : (ex, title, showToast) => {
+            showEx : (ex, title, _msgType, _sec) => {
                 const _title = title ? "[" + title + "]<br>" : ""
                 let _msg
                 if (typeof ex == "string") {
@@ -143,10 +136,12 @@
                 } else {
                     _msg = _title + ex.toString()
                 }
-                if (showToast) {
-                    hush.msg.toast(_msg)
-                } else {
+                if (_msgType == "toast") {
+                    hush.msg.toast(_msg, _sec)
+                } else if (_msgType == "alert") {
                     hush.msg.alert(_msg)
+                } else {
+                    hush.msg.msg(_msg) //기본은 비동기콜백 처리
                 }
             },
             getRnd : (_min, _max) => {

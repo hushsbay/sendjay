@@ -11,7 +11,7 @@ html, body {
 }
 
 /* 1) 모바일 크롬에서 탭하면 하단에 '검색결과를 보려면 탭하세요'라고 뜨는 것 방지 
-   2) 텍스트 long hold (복사 메뉴 등) 방지 : 이미지는 js로 load시 막아야 하는 부분 있음 (크롬, 사파리 모두 테스트 필요) */
+   2) 텍스트 long hold (복사 메뉴 등) 방지 : 이미지는 js로 load시 막아야 하는 부분 있을 것이므로 크롬, 사파리 테스트 필요 */
 div, span, img {
     -moz-user-select: none;
     -webkit-user-select: none; /* Safari */    
