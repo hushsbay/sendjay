@@ -81,11 +81,11 @@ module.exports = (function() {
 				return _msg
 			},
 			logi : (ex, title) => {
-				const _msg = hush.util.getLogMsg(ex, title)
+				const _msg = ws.util.getLogMsg(ex, title)
 				global.logger.info(_msg)
 			},
 			loge : (ex, title) => {
-				const _msg = hush.util.getLogMsg(ex, title)
+				const _msg = ws.util.getLogMsg(ex, title)
 				global.logger.error(_msg)
 			},
 			watchProcessError : () => {
