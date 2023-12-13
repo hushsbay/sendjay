@@ -7,12 +7,12 @@ const router = express.Router()
 const logtitle = "orgtree"
 
 router.use(async function(req, res, next) {
-	try {
-		throw new Error("4444")
-		next()
-	} catch (ex) {
-		ws.util.loge(ex, "#####")
-	}
+	//try {
+		throw new Error00("4444")
+	//	next()
+	//} catch (ex) {
+	//	ws.util.logi(ex, "#####")
+	//}
 })
 
 router.post('/', async function(req, res, next) {
