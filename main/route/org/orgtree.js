@@ -13,7 +13,7 @@ router.post('/', async function(req, res, next) {
 		//global.logger.info(logTitle+"=============111")
 		//global.logger.info(logTitle+"=============", { message:'0000하하하'})
 		ws.util.logi('후후후')
-		ws.http.resWarn(res, "가나다", -100)
+		ws.http.resWarn(res, '가나다', true)
 		return
 		console.log("안찍혀야 함...")
 		res.json(rs)

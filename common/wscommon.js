@@ -42,8 +42,8 @@ module.exports = (function() {
 				const _msg = ws.util.getLogMsg(ex, title)
 				res.json({ code : code, msg : _msg })
 			},
-			resWarn : (res, msg, code, logtitle) => {
-				const _msg = '##$$' + msg
+			resWarn : (res, msg, withToast, code, logtitle) => {
+				const _msg = (withToast ? '##$$' : '' ) + msg
 				const _code = ws.util.isvoid(code) ? "-1" : code.toString()
 				ws.http.resJson(res, _code, _msg, logtitle)
 			},
