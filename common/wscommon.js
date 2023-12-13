@@ -86,11 +86,11 @@ module.exports = (function() {
 			},
 			loge : (ex, title) => {
 				const _msg = ws.util.getLogMsg(ex, title)
-				if (_msg.startsWith('Error: ##')) return //throw new Error()로 넘어 오면 ex.stack에 걸릴 것임 (Error:로 시작) => 데이터가 없습니다 등 warning에만 사용하므로 로깅하지 않음
+				if (_msg.includes('##$$')) return //throw new Error()로 넘어 오면 ex.stack에 걸릴 것임 => 데이터가 없습니다 등 warning에만 사용하므로 로깅하지 않음
 				global.logger.error(_msg)
 			},
 			warnError : (msg) => {
-				throw new Error("##" + msg)
+				throw new Error("##$$" + msg)
 			},
 			watchProcessError : () => {
 				process.on('error', e => {
