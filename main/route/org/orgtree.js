@@ -6,6 +6,15 @@ const router = express.Router()
 
 const logtitle = "orgtree"
 
+router.use(async function(req, res, next) {
+	try {
+		throw new Error("4444")
+		next()
+	} catch (ex) {
+		ws.util.loge(ex, "#####")
+	}
+})
+
 router.post('/', async function(req, res, next) {
 	let conn, sql, data, len
 	const rs = ws.http.resInit()
@@ -19,7 +28,8 @@ router.post('/', async function(req, res, next) {
 		ws.util.loge(ex, logtitle)
 		ws.http.resJson(res, '-1', ex, logtitle)
 	} finally {
-		try { conn.release() } catch (ex) { console.log(ws.cons.mysql_close_error) }
+		//try { conn.release() } catch (ex) { ws.util.loge(ws.cons.mysql_close_error, logtitle) }
+		ws.util.mysqlDisconnect(conn, logtitle)
 	}
 })
 

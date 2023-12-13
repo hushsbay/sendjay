@@ -106,6 +106,9 @@ module.exports = (function() {
 				}).on('unhandledRejection', (reason, p) => {
 					global.logger.error(reason, 'process.on Unhandled Rejection at Promise.. ' + p)
 				})
+			},
+			mysqlDisconnect : (conn, logtitle) => {
+				try { conn.release() } catch (ex) { ws.util.loge(ws.cons.mysql_close_error, logtitle) }	
 			}
 		}
 
