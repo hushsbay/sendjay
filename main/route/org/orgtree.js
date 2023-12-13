@@ -8,7 +8,9 @@ const logtitle = "orgtree"
 
 router.use(async function(req, res, next) {
 	//try {
-		console.log(aaaa)
+		console.log("1111")
+		next("error..")
+		console.log("2222")
 	//	next()
 	//} catch (ex) {
 	//	ws.util.logi(ex, "#####")
