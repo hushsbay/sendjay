@@ -13,7 +13,8 @@ router.post('/', async function(req, res, next) {
 		//global.logger.info(logTitle+"=============111")
 		//global.logger.info(logTitle+"=============", { message:'0000하하하'})
 		ws.util.logi('후후후')
-		ws.util.warnError("없음..!!!!")
+		ws.http.resWarn("가나다", -100)
+		return
 		console.log("안찍혀야 함...")
 		res.json(rs)
 	} catch (ex) {
@@ -22,6 +23,7 @@ router.post('/', async function(req, res, next) {
 		ws.http.resJson(res, '-1', ex, logtitle)
 	} finally {
 		//try { conn.release() } catch (ex) { console.log(ws.cons.mysql_close_error) }
+		console.log("final~~~~~~~~~~~~~~~~~~~~")
 	}
 })
 
