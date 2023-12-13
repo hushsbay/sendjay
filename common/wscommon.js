@@ -90,11 +90,11 @@ module.exports = (function() {
 			},
 			watchProcessError : () => {
 				process.on('error', e => {
-					global.log.error('process.on error.. ' + e.stack)
+					global.logger.error('process.on error.. ' + e.stack)
 				}).on('uncaughtException', e => { //##4 가끔 Error:read ECONNRESET => events.js:183 throw er; //Unhandled 'error' event~ 에 걸려 서버다운되는데 여기에 걸려 해결됨
-					global.log.error('process.on uncaughtException.. ' + e.stack)
+					global.logger.error('process.on uncaughtException.. ' + e.stack)
 				}).on('unhandledRejection', (reason, p) => {
-					global.log.error(reason, 'process.on Unhandled Rejection at Promise.. ' + p)
+					global.logger.error(reason, 'process.on Unhandled Rejection at Promise.. ' + p)
 				})
 			}
 		}
