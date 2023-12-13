@@ -106,7 +106,7 @@ module.exports = (function() {
 					global.logger.error(reason, 'process.on Unhandled Rejection at Promise.. ' + p)
 				})
 			},
-			watchRouterError : (router) => {
+			watchRouterError : (router, logtitle) => {
 				router.use(function(err, req, res, next) {
 					console.log("@@@@@" + err.toString())
 					ws.util.loge(err, logtitle)
