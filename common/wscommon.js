@@ -3,7 +3,6 @@ const path = require('path')
 const http = require('http')
 const https = require('https')
 //const crypto = require('crypto')
-//const tracer = require('tracer')
 const url = require('url')
 const express = require('express')
 const requestIp = require('request-ip')
@@ -30,7 +29,8 @@ module.exports = (function() {
 			 CODE_USERID_MISMATCH : '-83',
 			 CODE_TOKEN_EXPIRED : '-84',
 			 CODE_USE_YOUR_OWN_USERID : '-85',
-			 
+			 mysql_close_error : 'mysql_close_error',
+			 toast_prefix : '##$$',
 		},
 
 		http : {
@@ -38,14 +38,15 @@ module.exports = (function() {
 				return { code : ws.cons.CODE_OK, msg : '', list : [ ] }
 			},
 			resJson : (res, code, ex, title) => {
-				res.type('application/json')
+				//res.type('application/json')
 				const _msg = ws.util.getLogMsg(ex, title)
 				res.json({ code : code, msg : _msg })
 			},
-			resWarn : (res, msg, withToast, code, logtitle) => {
-				const _msg = (withToast ? '##$$' : '' ) + msg
+			resWarn : (res, msg, withToast, code, title) => { 
+				//'데이터가 없습니다' 처럼 catch로 넘기지 말고 try 안에서 체크해서 return으로 마쳐야 할 때만 사용함 (return되어도 finally 사용해 db 등 해제할 건 해제해야 함)
+				const _msg = (withToast ? ws.cons.toast_prefix : '' ) + msg
 				const _code = ws.util.isvoid(code) ? "-1" : code.toString()
-				ws.http.resJson(res, _code, _msg, logtitle)
+				ws.http.resJson(res, _code, _msg, title)
 			},
 		},
 
@@ -93,14 +94,10 @@ module.exports = (function() {
 				const _msg = ws.util.getLogMsg(ex, title)
 				global.logger.info(_msg)
 			},
-			loge : (ex, title) => {
+			loge : (ex, title) => { //ex가 catch되는 곳에서 사용하기
 				const _msg = ws.util.getLogMsg(ex, title)
-				//if (_msg.includes('##$$')) return //throw new Error()로 넘어 오면 ex.stack에 걸릴 것임 => 데이터가 없습니다 등 warning에만 사용하므로 로깅하지 않음
 				global.logger.error(_msg)
 			},
-			// errWarn : (msg) => {
-			// 	throw new Error('##$$' + msg)
-			// },
 			watchProcessError : () => {
 				process.on('error', e => {
 					global.logger.error('process.on error.. ' + e.stack)
