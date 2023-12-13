@@ -106,14 +106,18 @@ module.exports = (function() {
 					global.logger.error(reason, 'process.on Unhandled Rejection at Promise.. ' + p)
 				})
 			},
-			watchRouterError : (router, logtitle) => { //router.use(function(req, res, next) {에서 next("오류내용")으로 router.use(function(err, req, res, next) { 으로 전달됨
+			watchRouterError : (router, title) => { //router.use(function(req, res, next) {에서 next("오류내용")으로 router.use(function(err, req, res, next) { 으로 전달됨
 				router.use(function(err, req, res, next) {
-					ws.util.loge(err, logtitle)
-					ws.http.resJson(res, '-1', err, logtitle)
+					ws.util.loge(err, title)
+					ws.http.resJson(res, '-1', err, title)
 				})
 			},			
-			mysqlDisconnect : (conn, logtitle) => {
-				try { conn.release() } catch (ex) { ws.util.loge(ws.cons.mysql_close_error, logtitle) }	
+			mysqlDisconnect : (conn, title) => {
+				try { 
+					if (conn) conn.release() 
+				} catch (ex) { 
+					ws.util.loge(ws.cons.mysql_close_error, title) 
+				}	
 			}
 		}
 
