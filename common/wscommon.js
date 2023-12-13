@@ -50,6 +50,13 @@ module.exports = (function() {
 		},
 
 		util : {
+			addToGlobal : (wslogger, _obj, nodeConfig) => {
+				if (nodeConfig) global.nodeConfig = nodeConfig
+				global.logger = wslogger
+				global.projDir = ws.util.getLastItemFromStr(_obj.dirName, path.sep)
+				console.log('version', process.version)
+				console.log('projDir', global.projDir, _obj.dirName)
+			},
 			initExpressApp : (public) => {
 				const _app = express()
 				_app.use(requestIp.mw()) //req.clientIp => X-Forwarded-For header info in AWS checked (req.headers['x-forwarded-for'] || req.connection.remoteAddress)
@@ -118,7 +125,12 @@ module.exports = (function() {
 				} catch (ex) { 
 					ws.util.loge(ws.cons.mysql_close_error, title) 
 				}	
-			}
+			},
+			getLastItemFromStr : (_arg, _deli) => {
+				if (typeof _arg != 'string') return null
+				const _items = _arg.split(_deli)
+				return _items[_items.length - 1]
+			},
 		}
 
 	}
