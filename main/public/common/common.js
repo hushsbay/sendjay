@@ -3,6 +3,7 @@
         cons : {
             failOnLoad : "failOnLoad",
             restful_timeout : 10000,
+            toast_prefix : "##$$", //서버와 동일
         },
         http : {
             handleNoCache: (url) => {
@@ -170,6 +171,19 @@
                     setTimeout(function() {
                         hush.msg.toastEnd()
                     }, sec)
+                }
+            },
+            showMsg : (_msg, _sec) => { //서버의 ws.http.resWarn()의 토스트 메시지와 관련
+                if (_msg.includes(hush.cons.toast_prefix)) {
+                    const sec = (_sec ? _sec : 3) * 1000
+                    const _arr = _msg.split(hush.cons.toast_prefix)
+                    if (_arr.length >= 2) {
+                        hush.msg.toast(_arr[1], sec)	
+                    } else {
+                        hush.msg.toast(_arr[0], sec)
+                    }                            	
+                } else {
+                    hush.msg.msg(_msg)
                 }
             }
         },
