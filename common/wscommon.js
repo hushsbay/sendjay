@@ -38,12 +38,11 @@ module.exports = (function() {
 				return { code : ws.cons.CODE_OK, msg : '', list : [ ] }
 			},
 			resJson : (res, code, ex, title) => {
-				//res.type('application/json')
+				res.type('application/json')
 				const _msg = ws.util.getLogMsg(ex, title)
 				res.json({ code : code, msg : _msg })
 			},
-			resWarn : (res, msg, withToast, code, title) => { 
-				//'데이터가 없습니다' 처럼 catch로 넘기지 말고 try 안에서 체크해서 return으로 마쳐야 할 때만 사용함 (return되어도 finally 사용해 db 등 해제할 건 해제해야 함)
+			resWarn : (res, msg, withToast, code, title) => { //'데이터가 없습니다' 처럼 catch로 넘기지 말고 try 안에서 체크해 return으로 마쳐야 할 때만 사용 (return되어도 finally 사용해 db 등 해제할 건 해제해야 함)
 				const _msg = (withToast ? ws.cons.toast_prefix : '' ) + msg
 				const _code = ws.util.isvoid(code) ? "-1" : code.toString()
 				ws.http.resJson(res, _code, _msg, title)
@@ -76,7 +75,7 @@ module.exports = (function() {
                 return false
             },
 			getLogMsg : (ex, title) => {
-				let _msg = (title) ? title + ': ' : ''
+				let _msg = (title) ? '[' + title + '] ' : ''
 				if (typeof ex == 'string') {
 					_msg += ex
 				} else {
@@ -107,6 +106,13 @@ module.exports = (function() {
 					global.logger.error(reason, 'process.on Unhandled Rejection at Promise.. ' + p)
 				})
 			},
+			watchRouterError : (router) => {
+				router.use(function(err, req, res, next) {
+					console.log("@@@@@" + err.toString())
+					ws.util.loge(err, logtitle)
+					ws.http.resJson(res, '-1', err, logtitle)
+				})
+			},			
 			mysqlDisconnect : (conn, logtitle) => {
 				try { conn.release() } catch (ex) { ws.util.loge(ws.cons.mysql_close_error, logtitle) }	
 			}

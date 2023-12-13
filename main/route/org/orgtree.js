@@ -9,7 +9,7 @@ const logtitle = "orgtree"
 router.use(async function(req, res, next) {
 	//try {
 		console.log("1111")
-		next("error..")
+		next("error..!!")
 		console.log("2222")
 	//	next()
 	//} catch (ex) {
@@ -35,10 +35,12 @@ router.post('/', async function(req, res, next) {
 	}
 })
 
-router.use(function(err, req, res, next) {
-	console.log("!!!!!!" + err.toString())
-	ws.util.loge(err, logtitle)
-	ws.http.resJson(res, '-1', err, logtitle)
-})
+ws.util.watchRouterError()
+
+// router.use(function(err, req, res, next) {
+// 	console.log("!!!!!!" + err.toString())
+// 	ws.util.loge(err, logtitle)
+// 	ws.http.resJson(res, '-1', err, logtitle)
+// })
 
 module.exports = router
