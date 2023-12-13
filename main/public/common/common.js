@@ -175,13 +175,9 @@
             },
             showMsg : (_msg, _sec) => { //서버의 ws.http.resWarn()의 토스트 메시지와 관련
                 if (_msg.includes(hush.cons.toast_prefix)) {
-                    const sec = (_sec ? _sec : 3) * 1000
                     const _arr = _msg.split(hush.cons.toast_prefix)
-                    if (_arr.length >= 2) {
-                        hush.msg.toast(_arr[1], sec)	
-                    } else {
-                        hush.msg.toast(_arr[0], sec)
-                    }                            	
+                    const _strMsg = (_arr.length >= 2) ? _arr[1] : _arr[0]
+                    hush.msg.toast(_strMsg, _sec)	
                 } else {
                     hush.msg.msg(_msg)
                 }
