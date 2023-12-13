@@ -6,14 +6,15 @@ const router = express.Router()
 
 const logtitle = "orgtree"
 
-router.post('/', async function(req1, res, next) {
+router.post('/', async function(req, res, next) {
 	let conn, sql, data, len
 	const rs = ws.http.resInit()
 	try {
 		//global.logger.info(logTitle+"=============111")
 		//global.logger.info(logTitle+"=============", { message:'0000하하하'})
 		ws.util.logi('후후후')
-		res00.json(rs)
+		ws.util.warn("없음..")
+		res.json(rs)
 	} catch (ex) {
 		//global.logger.error(ex.message + '======')
 		ws.util.loge(ex, logtitle)

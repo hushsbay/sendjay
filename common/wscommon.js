@@ -88,6 +88,9 @@ module.exports = (function() {
 				const _msg = ws.util.getLogMsg(ex, title)
 				global.logger.error(_msg)
 			},
+			warn : (msg) => {
+				throw new Error("##" + msg)
+			},
 			watchProcessError : () => {
 				process.on('error', e => {
 					global.logger.error('process.on error.. ' + e.stack)
