@@ -30,7 +30,7 @@ module.exports = (function() {
 			 CODE_TOKEN_EXPIRED : '-84',
 			 CODE_USE_YOUR_OWN_USERID : '-85',
 			 mysql_close_error : 'mysql_close_error',
-			 toast_prefix : '##$$',
+			 toast_prefix : '##$$', //클라이언트와 동일
 		},
 
 		http : {
@@ -106,9 +106,8 @@ module.exports = (function() {
 					global.logger.error(reason, 'process.on Unhandled Rejection at Promise.. ' + p)
 				})
 			},
-			watchRouterError : (router, logtitle) => {
+			watchRouterError : (router, logtitle) => { //router.use(function(req, res, next) {에서 next("오류내용")으로 router.use(function(err, req, res, next) { 으로 전달됨
 				router.use(function(err, req, res, next) {
-					console.log("@@@@@" + err.toString())
 					ws.util.loge(err, logtitle)
 					ws.http.resJson(res, '-1', err, logtitle)
 				})

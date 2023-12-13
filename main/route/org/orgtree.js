@@ -4,43 +4,28 @@ const ws = require(config.app.ws)
 const express = require('express')
 const router = express.Router()
 
-const logtitle = "orgtree"
+const title = 'orgtree'
 
-router.use(async function(req, res, next) {
-	//try {
-		console.log("1111")
-		next("error..!!")
-		console.log("2222")
-	//	next()
-	//} catch (ex) {
-	//	ws.util.logi(ex, "#####")
-	//}
+router.use(function(req, res, next) { //필요시 next("오류내용")으로 오류 watchRouterError(아래)로 전달
+	next()
 })
 
 router.post('/', async function(req, res, next) {
 	let conn, sql, data, len
 	const rs = ws.http.resInit()
 	try {
-		ws.util.logi('후후후000')
-		ws.http.resWarn(res, '가나다000')
+		//ws.util.logi('111')
+		ws.http.resWarn(res, '222', true)
 		return
-		console.log("안찍혀야 함...")
-		res.json(rs)
+		//res.json(rs)
 	} catch (ex) {
-		ws.util.loge(ex, logtitle)
-		ws.http.resJson(res, '-1', ex, logtitle)
+		ws.util.loge(ex, title)
+		ws.http.resJson(res, '-1', ex, title)
 	} finally {
-		//try { conn.release() } catch (ex) { ws.util.loge(ws.cons.mysql_close_error, logtitle) }
-		ws.util.mysqlDisconnect(conn, logtitle)
+		ws.util.mysqlDisconnect(conn, title)
 	}
 })
 
-ws.util.watchRouterError(router, logtitle)
-
-// router.use(function(err, req, res, next) {
-// 	console.log("!!!!!!" + err.toString())
-// 	ws.util.loge(err, logtitle)
-// 	ws.http.resJson(res, '-1', err, logtitle)
-// })
+ws.util.watchRouterError(router, title)
 
 module.exports = router
