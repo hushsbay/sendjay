@@ -37,9 +37,9 @@ module.exports = (function() {
 			resInit : () => {
 				return { code : ws.cons.CODE_OK, msg : '', list : [ ] }
 			},
-			resJson : (res, code, msg, title) => {
+			resJson : (res, code, ex, title) => {
 				res.type('application/json')
-				const _msg = (title) ? title + "\n" + msg : msg
+				const _msg = ws.util.getLogMsg(ex, title)
 				res.json({ code : code, msg : _msg })
 			},
 		},
