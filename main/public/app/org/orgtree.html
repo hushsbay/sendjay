@@ -68,8 +68,8 @@
 						g_list.empty()
                         const data = { } //{ token : token, user : g_user, obj : obj }
                         const rs = await hush.http.ajax("/org/orgtree", data, null, true)
-                        if (rs.code != "0") { //not found는 여기서는 확률적으로 없을 것이므로 굳이 100을 toast로 하지 않음
-                        	hush.msg.showMsg(rs.msg, 8)
+                        if (rs.code != "0") {
+                        	hush.msg.showMsg(rs.msg)
                             return
 						}						
 						g_rs = rs
