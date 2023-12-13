@@ -44,7 +44,8 @@ module.exports = (function() {
 			},
 			resWarn : (res, msg, code, logtitle) => {
 				const _msg = '##$$' + msg
-				ws.http.resJson(res, code.toString(), _msg, logtitle)
+				const _code = ws.util.isvoid(code) ? "-1" : code.toString()
+				ws.http.resJson(res, _code, _msg, logtitle)
 			},
 		},
 
@@ -69,6 +70,10 @@ module.exports = (function() {
 				server.keepAliveTimeout = 120000
 				return server
 			},
+			isvoid : (obj) => {
+                if (typeof obj == "undefined" || obj == null) return true
+                return false
+            },
 			getLogMsg : (ex, title) => {
 				let _msg = (title) ? title + ': ' : ''
 				if (typeof ex == 'string') {
