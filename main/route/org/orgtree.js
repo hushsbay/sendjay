@@ -35,7 +35,7 @@ router.post('/', async function(req, res, next) {
 	}
 })
 
-ws.util.watchRouterError()
+ws.util.watchRouterError(router)
 
 // router.use(function(err, req, res, next) {
 // 	console.log("!!!!!!" + err.toString())
