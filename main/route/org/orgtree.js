@@ -13,7 +13,8 @@ router.post('/', async function(req, res, next) {
 		//global.logger.info(logTitle+"=============111")
 		//global.logger.info(logTitle+"=============", { message:'0000하하하'})
 		ws.util.logi('후후후')
-		ws.util.warn("없음..")
+		ws.util.warnError("없음..!!!!")
+		console.log("안찍혀야 함...")
 		res.json(rs)
 	} catch (ex) {
 		//global.logger.error(ex.message + '======')
