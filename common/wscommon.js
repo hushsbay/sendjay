@@ -65,15 +65,38 @@ module.exports = (function() {
 				server.keepAliveTimeout = 120000
 				return server
 			},
-			// watchProcessError : () => {
-			// 	process.on('error', e => {
-			// 		global.log.error('process.on error..', e.stack)
-			// 	}).on('uncaughtException', e => { //##4 가끔 Error:read ECONNRESET => events.js:183 throw er; //Unhandled 'error' event~ 에 걸려 서버다운되는데 여기에 걸려 해결됨
-			// 		global.log.error('process.on uncaughtException..', e.stack)
-			// 	}).on('unhandledRejection', (reason, p) => {
-			// 		global.log.error(reason, 'process.on Unhandled Rejection at Promise..', p)
-			// 	})
-			// }
+			getLogMsg : (ex, title) => {
+				let _msg = (title) ? title + ': ' : ''
+				if (typeof ex == 'string') {
+					_msg += ex
+				} else {
+					if (ex.stack) {
+						_msg += ex.stack	
+					} else if (ex.message) {
+						_msg += ex.message
+					} else {
+						_msg += ex.toString()
+					}
+				}
+				return _msg
+			},
+			logi : (ex, title) => {
+				const _msg = hush.util.getLogMsg(ex, title)
+				global.logger.info(_msg)
+			},
+			loge : (ex, title) => {
+				const _msg = hush.util.getLogMsg(ex, title)
+				global.logger.error(_msg)
+			},
+			watchProcessError : () => {
+				process.on('error', e => {
+					global.log.error('process.on error.. ' + e.stack)
+				}).on('uncaughtException', e => { //##4 가끔 Error:read ECONNRESET => events.js:183 throw er; //Unhandled 'error' event~ 에 걸려 서버다운되는데 여기에 걸려 해결됨
+					global.log.error('process.on uncaughtException.. ' + e.stack)
+				}).on('unhandledRejection', (reason, p) => {
+					global.log.error(reason, 'process.on Unhandled Rejection at Promise.. ' + p)
+				})
+			}
 		}
 
 	}
