@@ -6,7 +6,7 @@ const router = express.Router()
 
 const logtitle = "orgtree"
 
-router0.post('/', async function(req1, res, next) {
+router.post('/', async function(req1, res, next) {
 	let conn, sql, data, len
 	const rs = ws.http.resInit()
 	try {
