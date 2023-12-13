@@ -11,6 +11,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 //const jwt = require('jsonwebtoken')
 //const os = require('os-utils')
+const process = require('process')
 
 module.exports = (function() {
 	
