@@ -50,7 +50,7 @@
         </style>
         <script src="/plugin/jquery-3.4.1.min.js"></script>
         <script>
-			let g_nodeToGet
+			let g_nodeToGet, g_expandAllDept
 			let g_nodeIndent = 24
             let g_rs, g_list
 
@@ -60,7 +60,7 @@
 	        	//nodeToGet = C(회사), D(부서), U(사용자)
 				//comp = ALL 또는 회사코드(델리미터는 콤마(,)) / Default는 ALL
 				//expandTo (클라이언트에서만 사용) = 0,1,2.. (0 : all collapsed (회사만 보임) / 99 : all expanded)
-				//expandAllDept (클라이언트에서만 사용) = Y이면 임직원만 안보이게 접고 회사/부서는 모두 펼치기 (expandTo는 무시됨)
+				//expandAllDept (클라이언트에서만 사용) = Y이면 임직원만 안보이게 접고 회사/부서는 모두 펼치기 (expandTo는 무시됨. nodeToGet=U일 경우만 의미있음)
 				//$wise.onceJwtCall(g_payload, false, async function(token) {
 					try {
 						if (hush.util.isvoid(obj.nodeToGet)) obj.nodeToGet = "U"
@@ -242,9 +242,30 @@
                 try {
                     await $.getScript("/common/common.js")
                     g_list = $("#listMain")
-					g_nodeToGet = "C"
-                    $("#btn_orgtree").on("click", async function() {
-	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : "Company_A,Company_B", expandTo : 99 })
+					g_nodeToGet = "U"
+					g_expandAllDept = "Y"
+                    $("#btn_orgtree").click(function() {
+	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : "Company_A,Company_B", expandAllDept : g_expandAllDept })
+                    })
+					$("#btn_minus,btn_plus").click(function() {
+	            		const _id = this.id
+						g_expandAllDept = ""
+                    	let _num = parseInt($("#spn_depth").html())
+						if (_id == "btn_minus") {
+							if (_num <= 1) {
+								_num = 1
+							} else {
+								_num -= 1
+							}
+						} else {
+							if (_num >= 9) {
+								_num = 9
+							} else {
+								_num += 1
+							}	
+						}
+                    	$("#spn_depth").html(_num)
+                    	$("#btn_jojik").click()
                     })
                 } catch (ex) {
                     hush.util.showEx(ex)
