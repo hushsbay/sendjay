@@ -187,7 +187,7 @@
 				                          	}
 				                          	_nextTag.hide()
 				                      	} else { //펼쳐야 함
-				                          	if (levelNext == _level + 1) {
+				                          	if (levelNext == _level + 1 || levelNext == 99) {
 				                              	_nextTag.css("display", "flex")
 				                              	row1.dispstate = "flex"
 				                          	} else {
@@ -234,10 +234,10 @@
             	if (_tagExpcol.css("display") == "none") _tagExpcol.show()
             	if (_expanded) { //펼쳐져 있으면 접기 표시
                 	g_rs.list[_idx].expanded = false //_tag.attr("expanded", "N")
-                	_tagExpcol.attr("src", "/img/plus.png")
+                	_tagExpcol.attr("src", "/img/plus_1.png")
             	} else {
             		g_rs.list[_idx].expanded = true //_tag.attr("expanded", "Y")
-                	_tagExpcol.attr("src", "/img/minus.png")
+                	_tagExpcol.attr("src", "/img/minus_1.png")
             	}
         	}
 
