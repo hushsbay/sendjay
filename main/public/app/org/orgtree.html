@@ -60,9 +60,8 @@
 	        	//nodeToGet = C(회사), D(부서), U(사용자)
 				//expandTo (클라이언트에서만 사용) = 0,1,2.. (0 : all collapsed (회사만 보임) / 99 : all expanded)
 				//expandAllDept (클라이언트에서만 사용) = Y이면 임직원만 안보이게 접고 회사/부서는 모두 펼치기 (expandTo는 무시됨)
-
 	        	//comp = ALL 또는 회사코드(델리미터는 콤마(,)) / Default는 ALL
-	        	//위는 서버에서 데이터 가져올 때 필요한 옵션이며 아래는 클라이언트 옵션임
+
 	            
 	            
 				//$wise.onceJwtCall(g_payload, false, async function(token) {
@@ -251,7 +250,7 @@
                     g_list = $("#listMain")
 					g_nodeToGet = "U"
                     $("#btn_orgtree").on("click", async function() {
-	            		getOrgTree({ nodeToGet : g_nodeToGet, expandTo : 1, expandAllDept : "Y" })
+	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : "Company_A,Company_B", expandTo : 99 })
 						//getOrgTree({ nodeToGet : g_nodeToGet, comp : _comp, expandTo : parseInt($('#spn_depth').html()) - 1, expandAllDept : g_expandAllDept })
                     })
                 } catch (ex) {
