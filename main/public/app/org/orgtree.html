@@ -94,7 +94,8 @@
 							//const tel_no = row.TEL_NO
 							//const ab_cd = row.AB_CD
 							//const ab_nm = row.AB_NM
-							const nodekind = (lvl == 0) ? "C" : (lvl == 99 ? "U" : "D") //회사(C) : 0, 사용자(U) : 99, 나머지는 부서(D)
+							//const nodekind = (lvl == 0) ? "C" : (lvl == 99 ? "U" : "D") //회사(C) : 0, 사용자(U) : 99, 나머지는 부서(D)
+							const nodekind = (lvl == 0) ? "C" : (user_id ? "U" : "D") //회사(C) / 사용자(U)레벨은 소속 부서 레벨+1 /부서(D)
 				          	let nodeStr, disp, hasChild = true, expanded, parentIdx = -1, _code
 				          	if (i == _len - 1 || nodekind == "U" || parseInt(rs.list[i + 1].LVL) <= lvl) hasChild = false
 				          	if (obj.expandAllDept == "Y") { //이 경우 obj.expandTo 무시됨
@@ -187,7 +188,7 @@
 				                          	}
 				                          	_nextTag.hide()
 				                      	} else { //펼쳐야 함
-				                          	if (levelNext == _level + 1 || levelNext == 99) {
+				                          	if (levelNext == _level + 1) { //사용자(U)레벨은 소속 부서 레벨+1
 				                              	_nextTag.css("display", "flex")
 				                              	row1.dispstate = "flex"
 				                          	} else {
