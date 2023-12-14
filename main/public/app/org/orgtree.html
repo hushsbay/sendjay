@@ -247,7 +247,8 @@
                     $("#btn_orgtree").click(function() {
 	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : "Company_A,Company_B", expandAllDept : g_expandAllDept })
                     })
-					$("#btn_minus,btn_plus").click(function() {
+					$("#btn_minus,#btn_plus").click(function() {
+						debugger
 	            		const _id = this.id
 						g_expandAllDept = ""
                     	let _num = parseInt($("#spn_depth").html())
