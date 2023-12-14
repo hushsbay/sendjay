@@ -80,26 +80,6 @@
 				      	const _objUpperLevel = { } //used for deciding child node's parent tag idx
 				      	for (let i = 0; i < _len; i++) {
 				        	const row = rs.list[i]
-				        	// const c_cd = row.CD
-				        	// const c_nm = row.CD_NM
-				        	// const d_cnt = row.CNT
-				        	// const d_cocd = row.COCD
-				        	// const d_deptcd = row.DEPT_CD
-				        	// const d_deptnm = row.DEPT_NM
-				        	// const d_level = row.LVL
-				        	// const u_userid = row.USER_ID
-				        	// const u_usernm = row.USER_NM
-				        	// const u_sabun = row.USER_NO
-				        	// const u_cocd = row.CO_CD
-				        	// const u_conm = row.CO_NM
-				        	// const u_deptcd = row.DEPT_CD1 //바로 위 부서정보(row.DEPT_CD)가 선점해서 1을 붙인 것임 
-				        	// const u_deptnm = row.DEPT_NM1 //바로 위 부서정보(row.DEPT_NM)가 선점해서 1을 붙인 것임 
-				        	// const u_email = row.E_MAIL
-				        	// const u_phone = row.HAND_PHON
-				        	// const u_job = row.JOB
-				        	// const u_idtype = row.ID_TYPE				        	
-				        	// const u_perseq = row.PER_SEQ
-				        	// const codpseq = row.CODP_SEQ
 							const seq = row.SEQ
 							const lvl = parseInt(row.LVL)
 							const org_cd = row.ORG_CD
@@ -135,7 +115,7 @@
 								nodeStr = usernm + "/" + org_nm + "/" + top_org_nm
 				          		_code = userid
 							} else {
-				          		nodeStr = org_nm
+				          		nodeStr = org_nm + (nodekind == "D" && mem_cnt > 0 ? " (" + mem_cnt + ")" : "")
 				          		_code = org_cd
 				          	}
 				        	row.nodekind = nodekind
@@ -162,6 +142,7 @@
 				          	_objUpperLevel[lvl] = i
 				      	}				      	
 				      	$(".sel").off("change").on("change", function(e) {  
+							debugger
 				        	const _self = $(this)
 				          	const _id = this.id //sel_2
 				          	const _idx = parseInt(_id.substring(4)) //2
@@ -179,6 +160,7 @@
 				      	})
 				      	$(".row").off("click").on("click", async function(e) {
 				          	if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 checkbox event만 먹히도록 함
+							debugger
 				          	const _id = this.id //row_2
 				          	const _idx = parseInt(_id.substring(4)) //2
 				          	const row = g_rs.list[_idx]
