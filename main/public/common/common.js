@@ -150,7 +150,7 @@
             toastEnd : () => {
                 const _div = document.getElementById("hushPopup")
                 if (_div) _div.remove()
-                if (hush.msg.toastTextArr.length > 1) {
+                if (hush.msg.toastTextArr.length > 0) {
                     hush.msg.toastTextArr.splice(0, 1) //첫번째 아이템 제거
                     hush.msg.toastSecArr.splice(0, 1) //첫번째 아이템 제거
                 }
