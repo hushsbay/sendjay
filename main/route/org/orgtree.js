@@ -15,12 +15,13 @@ router.post('/', async function(req, res, next) {
 	const rs = ws.http.resInit()
 	try {
 		conn = await wsmysql.getConnFromPool(global.pool)
-		sql =  "SELECT A.SEQ, A.LVL, A.ORG_CD, A.ORG_NM, B.ORG_CD TOP_ORG_CD, B.ORG_NM TOP_ORG_NM, '' USER_ID, '' USER_NM, '' NICK_NM, '' JOB, '' TEL_NO, '' AB_CD, '' AB_NM "
+		sql =  "SELECT A.SEQ, A.LVL, A.ORG_CD, A.ORG_NM, B.ORG_CD TOP_ORG_CD, B.ORG_NM TOP_ORG_NM, '' USER_ID, '' USER_NM, '' NICK_NM, '' JOB, '' TEL_NO, '' AB_CD, '' AB_NM, "
+		sql += "       (SELECT COUNT(*) FROM JAY.Z_USER_TBL WHERE ORG_CD = A.ORG_CD) MEM_CNT "
 		sql += "  FROM JAY.Z_ORG_TBL A "
 		sql += "  LEFT OUTER JOIN JAY.Z_ORG_TBL B ON B.SEQ = CONCAT(LEFT(A.SEQ, 1), '00') "
 		sql += " WHERE B.ORG_CD IS NOT NULL " //나중에 테이블 가비지 정리후엔 제거
 		sql += " UNION ALL "
-		sql += "SELECT B.SEQ, 9 LVL, A.ORG_CD, A.ORG_NM, A.TOP_ORG_CD, A.TOP_ORG_NM, A.USER_ID, A.USER_NM, A.NICK_NM, A.JOB, A.TEL_NO, A.AB_CD, A.AB_NM "
+		sql += "SELECT B.SEQ, 9 LVL, A.ORG_CD, A.ORG_NM, A.TOP_ORG_CD, A.TOP_ORG_NM, A.USER_ID, A.USER_NM, A.NICK_NM, A.JOB, A.TEL_NO, A.AB_CD, A.AB_NM, '' MEM_CNT "
 		sql += "  FROM JAY.Z_USER_TBL A "
 		sql += "  LEFT OUTER JOIN JAY.Z_ORG_TBL B ON A.ORG_CD = B.ORG_CD "
 		sql += " ORDER BY SEQ, LVL, USER_NM "

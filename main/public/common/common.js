@@ -149,9 +149,11 @@
             },
             toastEnd : () => {
                 const _div = document.getElementById("hushPopup")
-                _div.remove()
-                hush.msg.toastTextArr.splice(0, 1) //첫번째 아이템 제거
-                hush.msg.toastSecArr.splice(0, 1) //첫번째 아이템 제거
+                if (_div) _div.remove()
+                if (hush.msg.toastTextArr.length > 1) {
+                    hush.msg.toastTextArr.splice(0, 1) //첫번째 아이템 제거
+                    hush.msg.toastSecArr.splice(0, 1) //첫번째 아이템 제거
+                }
                 hush.msg.toastProcessing = false
                 hush.msg.toastLoop()
             },
@@ -203,6 +205,7 @@
                 return false
             },
             showEx : (ex, title, _msgType, _sec) => {
+                hush.msg.toastEnd() //예외 발생시므로 혹시나 모를 토스트 메시지 제거
                 const _title = title ? "[" + title + "]<br>" : ""
                 let _msg
                 if (typeof ex == "string") {
