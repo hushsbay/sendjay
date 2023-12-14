@@ -101,13 +101,12 @@
         	            const _idTag = $("#add_" + _id)
         	            _idTag.effect("highlight", { color: hush.cons.color_fadein }, 100)
         	            _idTag.off("click").on("click", function() {
-							$("#add_" + _id).effect("highlight", { color: hush.cons.color_fadein }, 500)
-        	            	//survey.util.animAction(_idTag, () => { 
+        	            	hush.util.animAction(_idTag, () => { 
         	            		const _tag = $(".sel[code='" + _id + "']") //$("#sel_" + _id).prop("checked", false)
         	            		_tag[0].checked = false      
         	            		$(this).remove()
         	                    procMemPanel()
-        	                //})                            
+        	                })                            
         	            })
         	            _idTag.off("mouseover").on("mouseover", function() { $(this).addClass("memSel") })
         	            _idTag.off("mouseleave").on("mouseleave", function() { $(this).removeClass("memSel") })
@@ -115,10 +114,10 @@
         	        } else {
         	            const _idTag = $("#add_" + _id)
 						$("#add_" + _id).effect("highlight", { color: hush.cons.color_fadein }, 500)
-        	            //survey.util.animAction(_idTag, () => { 
+        	            hush.util.animAction(_idTag, () => { 
         	            	_idTag.remove()
         	                procMemPanel()
-        	            //})
+        	            })
         	        }
         	    } catch (ex) {
         	    	hush.util.showEx(ex)

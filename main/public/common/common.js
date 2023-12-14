@@ -257,6 +257,14 @@
                 const _url = hush.http.handleNoCache(url)
                 return window.open(_url, "", _bar)
             },
+            animAction : (tag, callback) => { //jqueryui
+                const _prevBackcolor = tag.css("background-color")
+                if (callback) {
+                	tag.animate({ backgroundColor : hush.cons.color_fadein }, 50).animate({ backgroundColor : _prevBackcolor }, 100, null, callback)
+                } else {
+                	tag.animate({ backgroundColor : hush.cons.color_fadein }, 50) //50 and 100이 적당히 빠른 느낌임
+                }                
+            },
         }
     }
 })()
