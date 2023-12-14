@@ -68,7 +68,7 @@
 						if (hush.util.isvoid(obj.expandTo) || obj.expandTo < 0) obj.expandTo = 0
 						if (hush.util.isvoid(obj.expandAllDept)) obj.expandAllDept = ""			
 						g_list.empty()
-                        const rs = await hush.http.ajax("/org/orgtree", { }) //{ token : token, user : g_user, obj : obj }
+                        const rs = await hush.http.ajax("/org/orgtree", { obj : obj }) //{ token : token, user : g_user, obj : obj }
                         if (rs.code != hush.cons.CODE_OK) {
                         	hush.msg.showMsg(rs.msg)
                             return
