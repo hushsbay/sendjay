@@ -75,7 +75,7 @@
 	        			hush.msg.msg("조직도 팝업으로부터 선택한 값이 없습니다.")
 	        			return
 	        		}
-                    hush.msg.msg(arr.toString())
+                    hush.msg.msg(JSON.stringify(arr))
         		} catch (ex) {
                 	hush.util.showEx(ex)
                 }
