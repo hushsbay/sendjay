@@ -44,8 +44,12 @@ module.exports = (function() {
 			},
 			resWarn : (res, msg, withToast, code, title) => { //'데이터가 없습니다' 처럼 catch로 넘기지 말고 try 안에서 체크해 return으로 마쳐야 할 때만 사용 (return되어도 finally 사용해 db 등 해제할 건 해제해야 함)
 				const _msg = (withToast ? ws.cons.toast_prefix : '' ) + msg
-				const _code = ws.util.isvoid(code) ? "-1" : code.toString()
+				const _code = ws.util.isvoid(code) ? ws.cons.CODE_ERR : code.toString()
 				ws.http.resJson(res, _code, _msg, title)
+			},
+			resException : (res, ex, title) => {
+				ws.util.loge(ex, title)
+				ws.http.resJson(res, ws.cons.CODE_ERR, ex, title)
 			},
 		},
 
@@ -78,7 +82,7 @@ module.exports = (function() {
 				return server
 			},
 			isvoid : (obj) => {
-                if (typeof obj == "undefined" || obj == null) return true
+                if (typeof obj == 'undefined' || obj == null) return true
                 return false
             },
 			getLogMsg : (ex, title) => {
@@ -115,8 +119,7 @@ module.exports = (function() {
 			},
 			watchRouterError : (router, title) => { //router.use(function(req, res, next) {에서 next("오류내용")으로 router.use(function(err, req, res, next) { 으로 전달됨
 				router.use(function(err, req, res, next) {
-					ws.util.loge(err, title)
-					ws.http.resJson(res, '-1', err, title)
+					ws.http.resException(res, err, title)
 				})
 			},			
 			mysqlDisconnect : (conn, title) => {

@@ -1,9 +1,23 @@
 (function() { //jQuery 없음
     window.hush = {
         cons : {
+            CODE_OK : '0',
+            CODE_ERR : '-1',
+            CODE_NO_DATA : '-100',
+            MSG_NO_DATA : 'no data.',
+            CODE_PASSWORD_NEEDED : '-76',
+            CODE_PASSKEY_NEEDED : '-77',
+            CODE_PASSWORD_NOT_MATCHED : '-78',
+            CODE_PASSKEY_NOT_MATCHED : '-79',
+            CODE_TOKEN_NEEDED : '-81', //jwt 
+            CODE_TOKEN_MISMATCH : '-82', //jwt payload not equal to decoded
+            CODE_USERID_MISMATCH : '-83',
+            CODE_TOKEN_EXPIRED : '-84',
+            CODE_USE_YOUR_OWN_USERID : '-85',
+            toast_prefix : "##$$", 
+            ///////////////////////////////////위는 서버와 동일
             failOnLoad : "failOnLoad",
-            restful_timeout : 10000,
-            toast_prefix : "##$$", //서버와 동일
+            restful_timeout : 10000,            
         },
         http : {
             handleNoCache: (url) => {
@@ -18,7 +32,7 @@
                     data: (method && method.toLowerCase() == "get") ? data : JSON.stringify(data),
                     cache : false,
                     async : true,
-                    type : (method) ? method : "gepostt",
+                    type : (method) ? method : "post",
                     timeout : hush.cons.restful_timeout,
                     success : function(rs) {
                         if (callback) callback(rs)
@@ -35,14 +49,14 @@
                     }
                 })
             },
-            ajax : async (url, data, method, withToast) => {
+            ajax : async (url, data, noToast, method) => {
                 try {
-                    if (withToast) hush.msg.toast("waiting..", -1)
+                    if (!noToast) hush.msg.toast("waiting..", -1)
                     const rs = await hush.http.ajaxPromise(url, data, method)               
-                    if (withToast) hush.msg.toastEnd()                    
+                    if (!noToast) hush.msg.toastEnd()                    
                     return rs
                 } catch (ex) {
-                    if (withToast) hush.msg.toastEnd()
+                    if (!noToast) hush.msg.toastEnd()
                     throw ex //new Error(ex.message)
                 }
             },
