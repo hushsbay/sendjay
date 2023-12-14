@@ -248,7 +248,8 @@
                     g_list = $("#listMain")
 					g_nodeToGet = "U"
                     $("#btn_orgtree").on("click", async function() {
-	            		getOrgTree({ nodeToGet : g_nodeToGet })
+	            		getOrgTree({ nodeToGet : g_nodeToGet, expandTo : 1 })
+						//getOrgTree({ nodeToGet : g_nodeToGet, comp : _comp, expandTo : parseInt($('#spn_depth').html()) - 1, expandAllDept : g_expandAllDept })
                     })
                 } catch (ex) {
                     hush.util.showEx(ex)
