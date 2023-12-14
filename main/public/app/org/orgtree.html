@@ -244,8 +244,9 @@
                     g_list = $("#listMain")
 					g_nodeToGet = "U"
 					g_expandAllDept = "Y"
+					$("#spn_depth").html("2") //if (urlObj.expandTo) $("#spn_depth").html(urlObj.expandTo) 구현 필요
                     $("#btn_orgtree").click(function() {
-	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : "Company_A,Company_B", expandAllDept : g_expandAllDept })
+	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : "Company_A,Company_B", expandTo : parseInt($('#spn_depth').html()) - 1 })
                     })
 					$("#btn_minus,#btn_plus").click(function() {
 						debugger
