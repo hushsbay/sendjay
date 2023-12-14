@@ -68,6 +68,19 @@
         <script src="/plugin/jquery-3.4.1.min.js"></script>
         <script>
             document.oncontextmenu = new Function("return false;")
+
+            function procFromOrgTree(from, nodeToGet, arr) {
+        		try {
+	        		if (!$.isArray(arr) || arr.length == 0) {
+	        			hush.msg.msg("조직도 팝업으로부터 선택한 값이 없습니다.")
+	        			return
+	        		}
+                    hush.msg.msg(arr.toString())
+        		} catch (ex) {
+                	hush.util.showEx(ex)
+                }
+        	}
+
             $.when($.ready).done(async function() {
                 try { //By default, $.getScript() sets the cache setting to false. You can override this with $.ajaxSetup({ cache: true })
                     await $.getScript("/common/common.js")

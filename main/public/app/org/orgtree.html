@@ -321,6 +321,7 @@
                     await $.getScript("/common/common.js")
                     g_list = $("#listMain")
 					g_listSel = $("#listSel")
+					g_from = "~~"
 					g_nodeToGet = "U"
 					g_expandAllDept = "Y"
 					$("#spn_depth").html(4) //if (urlObj.expandTo) $("#spn_depth").html(urlObj.expandTo) 구현 필요 - max_level 체크
@@ -367,25 +368,11 @@
                     		hush.msg.msg("opener가 존재하지 않습니다.") //개발자오류 chk
                     		return
                     	}
-                    	if (g_nodeToGet == "C") {
-                    		if (!opener.procCompFromOrgTree) {
-                        		hush.msg.msg("opener에 procCompFromOrgTree() 함수가 존재하지 않습니다.") //개발자오류 chk
-                        		return
-                        	}
-                    		opener.procCompFromOrgTree(g_from, arr)
-                    	} else if (g_nodeToGet == "D") {
-                    		if (!opener.procDeptFromOrgTree) {
-                        		hush.msg.msg("opener에 procDeptFromOrgTree() 함수가 존재하지 않습니다.") //개발자오류 chk
-                        		return
-                        	}
-                    		opener.procDeptFromOrgTree(g_from, arr)
-                    	} else {
-                    		if (!opener.procUserFromOrgTree) {
-                        		hush.msg.msg("opener에 procUserFromOrgTree() 함수가 존재하지 않습니다.") //개발자오류 chk
-                        		return
-                        	}
-                    		opener.procUserFromOrgTree(g_from, arr)
-                    	}
+						if (!opener.procFromOrgTree) {
+							hush.msg.msg("opener에 procFromOrgTree() 함수가 존재하지 않습니다.") //개발자오류 chk
+							return
+						}
+						opener.procFromOrgTree(g_from, g_nodeToGet, arr)
 						window.close()
                     })
 					$("#btn_cancel").on("click", function() { 
