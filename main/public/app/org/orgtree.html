@@ -32,7 +32,8 @@
             }
 
             #listMain { 
-                display: flex; flex: 1; border: 1px solid darkgray; overflow-y: auto;
+                display: flex; flex-direction: column; flex: 1; 
+				border: 1px solid darkgray; overflow-y: auto;
             }
 
             #panSel { 
@@ -154,7 +155,7 @@
 				          	_html += "      </div>"				          	
 				          	_html += "      <div style='width:100px;display:flex;align-items:center;justify-content:flex-end;margin-right:5px'>"
 					        const dispImg = (hasChild) ? "" : " style='display:none'"
-					        _html += "          <img id=expcol_" + i + " src='/wise/wise/merp/images/" + expcolImg + "' class=coImg32" + dispImg + " />"
+					        _html += "          <img id=expcol_" + i + " src='/img/" + expcolImg + "' class=coImg32" + dispImg + " />"
 					        _html += "      </div>"
 				          	_html += "  </div>"
 				          	g_list.append(_html)
