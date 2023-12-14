@@ -242,7 +242,7 @@
                 try {
                     await $.getScript("/common/common.js")
                     g_list = $("#listMain")
-					g_nodeToGet = "U"
+					g_nodeToGet = "D"
                     $("#btn_orgtree").on("click", async function() {
 	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : "Company_A,Company_B", expandTo : 99 })
                     })
