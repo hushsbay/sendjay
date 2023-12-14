@@ -27,7 +27,7 @@ router.post('/', async function(req, res, next) {
 		if (comp != 'all') sql += " AND B.ORG_CD IN ('" + comp + "') "
 		if (nodeToGet == 'U') { 
 			sql += " UNION ALL "
-			sql += "SELECT B.SEQ, (B.LVL + 1) LVL, A.ORG_CD, A.ORG_NM, A.TOP_ORG_CD, A.TOP_ORG_NM, A.USER_ID, A.USER_NM, A.NICK_NM, A.JOB, A.TEL_NO, A.AB_CD, A.AB_NM, '' MEM_CNT "
+			sql += "SELECT B.SEQ, (B.LVL + 1) LVL, A.ORG_CD, A.ORG_NM, A.TOP_ORG_CD, A.TOP_ORG_NM, A.USER_ID, A.USER_NM, A.NICK_NM, A.JOB, A.TEL_NO, A.AB_CD, A.AB_NM, 0 MEM_CNT "
 			sql += "  FROM JAY.Z_USER_TBL A "
 			sql += "  LEFT OUTER JOIN JAY.Z_ORG_TBL B ON A.ORG_CD = B.ORG_CD "
 			if (comp != 'all') sql += " WHERE A.TOP_ORG_CD IN ('" + comp + "') "
