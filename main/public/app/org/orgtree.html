@@ -115,7 +115,7 @@
 								nodeStr = usernm + "/" + org_nm + "/" + top_org_nm
 				          		_code = userid
 							} else {
-				          		nodeStr = org_nm + (nodekind == "D" && mem_cnt > 0 ? " (" + mem_cnt + ")" : "")
+				          		nodeStr = org_nm + (nodekind == "D" && mem_cnt > 0 ? " <span style='font-size: 12px; color: dimgray'>(" + mem_cnt + ")</span>" : "")
 				          		_code = org_cd
 				          	}
 				        	row.nodekind = nodekind
