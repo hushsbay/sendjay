@@ -17,7 +17,8 @@
             toast_prefix : "##$$", 
             ///////////////////////////////////위는 서버와 동일
             failOnLoad : "failOnLoad",
-            restful_timeout : 10000,            
+            restful_timeout : 10000,
+            max_level : 6, //조직도에서 펼칠 수 있는 최대 레벨(depth) - 각 조직에 따라 변경 가능            
         },
         http : {
             handleNoCache: (url) => {
