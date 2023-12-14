@@ -322,7 +322,7 @@
 					g_listSel = $("#listSel")
 					g_nodeToGet = "U"
 					g_expandAllDept = "Y"
-					$("#spn_depth").html(2) //if (urlObj.expandTo) $("#spn_depth").html(urlObj.expandTo) 구현 필요 - max_level 체크
+					$("#spn_depth").html(4) //if (urlObj.expandTo) $("#spn_depth").html(urlObj.expandTo) 구현 필요 - max_level 체크
                     $("#btn_orgtree").click(function() {
 	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : "Company_A,Company_B", expandTo : parseInt($('#spn_depth').html()) - 1 })
                     })
