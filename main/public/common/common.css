@@ -36,7 +36,12 @@ div, span, img {
 }
 
 .coSpanWithImg { /* 이미지와 span사이의 간격 지원 */
-    margin-left: 3px
+    margin-left: 3px;
+}
+
+.coDotDot { 
+    overflow: hidden;
+    white-space: nowrap; text-overflow: ellipsis;
 }
 
 @media screen and (min-device-width: 501px) { }
