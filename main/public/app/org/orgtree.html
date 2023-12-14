@@ -127,7 +127,7 @@
 				        	row.haschild = hasChild
 				        	row.expanded = expanded
 				        	row.parentIdx = parentIdx
-				          	let _html = "<div id=row_" + i.toString() + " class=row style='height:40px;display:" + disp + ";flex-direction:row;align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid lightgray;padding-left:" + paddingLeft + "px'>"
+				          	let _html = "<div id=row_" + i.toString() + " class=row style='min-height:40px;display:" + disp + ";flex-direction:row;align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid lightgray;padding-left:" + paddingLeft + "px'>"
 				          	_html += "		<div style='display:flex;flex-direction:row;align-items:center;justify-content:flex-start;margin-right:5px'>"
 				          	_html += "   		<input type=checkbox id=sel_" + i + " code=" + _code + " class=sel />"
 				          	if (nodekind == "U") {
