@@ -249,7 +249,6 @@
 	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : "Company_A,Company_B", expandTo : parseInt($('#spn_depth').html()) - 1 })
                     })
 					$("#btn_minus,#btn_plus").click(function() {
-						debugger
 	            		const _id = this.id
 						g_expandAllDept = ""
                     	let _num = parseInt($("#spn_depth").html())
@@ -267,7 +266,7 @@
 							}	
 						}
                     	$("#spn_depth").html(_num)
-                    	$("#btn_jojik").click()
+                    	$("#btn_orgtree").click()
                     })
                 } catch (ex) {
                     hush.util.showEx(ex)
