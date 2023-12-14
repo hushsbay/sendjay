@@ -49,6 +49,7 @@
         </style>
         <script src="/plugin/jquery-3.4.1.min.js"></script>
         <script>
+			let g_nodeToGet
 			let g_nodeIndent = 24
             let g_rs, g_list
 
@@ -261,9 +262,9 @@
                 try {
                     await $.getScript("/common/common.js")
                     g_list = $("#listMain")
-
+					g_nodeToGet = "U"
                     $("#btn_orgtree").on("click", async function() {
-	            		getOrgTree({ nodeToGet : "U" })
+	            		getOrgTree({ nodeToGet : g_nodeToGet })
                     })
                 } catch (ex) {
                     hush.util.showEx(ex)
