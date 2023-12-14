@@ -352,6 +352,45 @@
                         $(".sel").prop("checked", false)
                         procMemPanel()
                     })
+					$("#btn_ok").on("click", function() {
+                    	const arr = [ ]
+                    	$(".members").each(function() {
+                            const idx = parseInt($(this).attr("idx"))
+                    		const row = g_rs.list[idx]
+                            arr.push(row)
+                        })
+                        if (arr.length == 0) {
+                        	hush.msg.toast("선택한 행이 없습니다.")
+                        	return
+                        }
+                    	if (!opener) {
+                    		hush.msg.msg("opener가 존재하지 않습니다.") //개발자오류 chk
+                    		return
+                    	}
+                    	if (g_nodeToGet == "C") {
+                    		if (!opener.procCompFromOrgTree) {
+                        		hush.msg.msg("opener에 procCompFromOrgTree() 함수가 존재하지 않습니다.") //개발자오류 chk
+                        		return
+                        	}
+                    		opener.procCompFromOrgTree(g_from, arr)
+                    	} else if (g_nodeToGet == "D") {
+                    		if (!opener.procDeptFromOrgTree) {
+                        		hush.msg.msg("opener에 procDeptFromOrgTree() 함수가 존재하지 않습니다.") //개발자오류 chk
+                        		return
+                        	}
+                    		opener.procDeptFromOrgTree(g_from, arr)
+                    	} else {
+                    		if (!opener.procUserFromOrgTree) {
+                        		hush.msg.msg("opener에 procUserFromOrgTree() 함수가 존재하지 않습니다.") //개발자오류 chk
+                        		return
+                        	}
+                    		opener.procUserFromOrgTree(g_from, arr)
+                    	}
+						window.close()
+                    })
+					$("#btn_cancel").on("click", function() { 
+						window.close() 
+					})
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }                
