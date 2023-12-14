@@ -134,6 +134,19 @@ module.exports = (function() {
 				const _items = _arg.split(_deli)
 				return _items[_items.length - 1]
 			},
+			toStringForInClause : (target) => { //"where cocd in ('" + _ret + "')"에 들어갈 _ret을 반환
+				let _ret = '', arr
+				if (typeof target == 'string') {
+					arr = target.split(',') //A,B,C..
+					if (arr.length == 1) return target
+				} else { //나머지 경우는 모두 배열로 가정하고 처리함 //if (Array.isArray(target)) {
+					arr = target
+				}
+				_ret = arr.map(item => "'" + item + "'").toString()
+				_ret = _ret.substring(1)
+				_ret = _ret.substr(0, _ret.length - 1)
+				return _ret
+			}
 		}
 
 	}

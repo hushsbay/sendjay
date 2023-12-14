@@ -58,12 +58,9 @@
 
             const getOrgTree = async (obj) => {
 	        	//nodeToGet = C(회사), D(부서), U(사용자)
+				//comp = ALL 또는 회사코드(델리미터는 콤마(,)) / Default는 ALL
 				//expandTo (클라이언트에서만 사용) = 0,1,2.. (0 : all collapsed (회사만 보임) / 99 : all expanded)
 				//expandAllDept (클라이언트에서만 사용) = Y이면 임직원만 안보이게 접고 회사/부서는 모두 펼치기 (expandTo는 무시됨)
-	        	//comp = ALL 또는 회사코드(델리미터는 콤마(,)) / Default는 ALL
-
-	            
-	            
 				//$wise.onceJwtCall(g_payload, false, async function(token) {
 					try {
 						if (hush.util.isvoid(obj.nodeToGet)) obj.nodeToGet = "U"
@@ -145,7 +142,6 @@
 				          	_objUpperLevel[lvl] = i
 				      	}				      	
 				      	$(".sel").off("change").on("change", function(e) {  
-							debugger
 				        	const _self = $(this)
 				          	const _id = this.id //sel_2
 				          	const _idx = parseInt(_id.substring(4)) //2
@@ -163,7 +159,6 @@
 				      	})
 				      	$(".row").off("click").on("click", async function(e) {
 				          	if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 checkbox event만 먹히도록 함
-							debugger
 				          	const _id = this.id //row_2
 				          	const _idx = parseInt(_id.substring(4)) //2
 				          	const row = g_rs.list[_idx]
@@ -224,7 +219,6 @@
 				     		$("#lbl_mycomp").hide()
 				     	}
 				    } catch (ex) {
-						debugger
 				        hush.util.showEx(ex)
 				    }
 				// }, function(ex1) {
@@ -251,7 +245,6 @@
 					g_nodeToGet = "U"
                     $("#btn_orgtree").on("click", async function() {
 	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : "Company_A,Company_B", expandTo : 99 })
-						//getOrgTree({ nodeToGet : g_nodeToGet, comp : _comp, expandTo : parseInt($('#spn_depth').html()) - 1, expandAllDept : g_expandAllDept })
                     })
                 } catch (ex) {
                     hush.util.showEx(ex)
