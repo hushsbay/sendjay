@@ -55,7 +55,7 @@
 			.mem {
 				height: 40px; padding-top: 4px; margin: 4px 4px 0px 4px;
 				display: flex; flex-direction: column; flex: none; overflow: auto; 
-				background-color: #0086cd; /*border: 1px solid lightgray; /*#fdf5f6*/  
+				background-color: #0086cd; opacity: 0.2; /*border: 1px solid lightgray; /*#fdf5f6*/  
 			}
 
             .memNm { 
@@ -103,7 +103,7 @@
         	            g_listSel.scrollTop(g_listSel.prop("scrollHeight"))
         	            const _idTag = $("#add_" + _id)
         	            //_idTag.effect("highlight", { color: hush.cons.color_fadein }, 100)
-						hush.util.anim(_idTag)
+						hush.util.fadein(_idTag)
         	            _idTag.off("click").on("click", function() {
         	            	hush.util.fadeout(_idTag, () => { 
         	            		const _tag = $(".sel[code='" + _id + "']")

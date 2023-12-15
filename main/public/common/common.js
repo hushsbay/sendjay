@@ -292,18 +292,18 @@
                 	tag.animate({ backgroundColor : hush.cons.color_fadein }, 40) //40 and 80이 적당히 빠른 느낌임
                 }                
             },
-            anim : (tag, callback) => { //jqueryui
+            fadein : (tag, callback) => { //jqueryui
                 if (callback) {
-                	tag.animate({ opacity : 0.2 }, 50).animate({ opacity : 1 }, 100, null, callback)
+                	tag.animate({ opacity : 1 }, 200, null, callback)
                 } else {
-                	tag.animate({ opacity : 0.2 }, 50).animate({ opacity : 1 }, 500)
+                	tag.animate({ opacity : 1 }, 200)
                 }                
             },
             fadeout : (tag, callback) => { //jqueryui
                 if (callback) {
-                	tag.animate({ opacity : 0.2 }, 500, null, callback)
+                	tag.animate({ opacity : 0.2 }, 200, null, callback)
                 } else {
-                	tag.animate({ opacity : 0.2 }, 500)
+                	tag.animate({ opacity : 0.2 }, 200)
                 }                
             },
         }
