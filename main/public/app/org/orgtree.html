@@ -67,7 +67,7 @@
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
         <script>
 			let g_user, g_rs, g_list, g_listSel
-			let g_from, g_nodeToGet, g_comp, g_expandTo, g_expandAllDept, g_singleSelect
+			let g_from, g_nodeToGet, g_comp, g_expandTo, g_expandAllDept, g_singleSelect, g_selectOnlyChildDept
 			let g_nodeIndent = 24, g_max_level = 4 //조직도에서 펼칠 수 있는 최대 레벨(depth) - 각 조직에 따라 변경 가능
 
 			const procSelect = (nodekind, idx) => {
@@ -87,10 +87,11 @@
         	    		_nm = row1.USER_NM + "/" + row1.ORG_NM
         	    	}
         	        if (_chk) {
+						if (nodekind == "D" && g_selectOnlyChildDept == "Y" && row1.hasChild) return
         	            if ($("#add_" + _id).length > 0) {
         	                $("#add_" + _id).effect("highlight", { color: hush.cons.color_fadein }, 500)
         	                return
-        	            }
+        	            }						
         	            let _html = "<div id=add_" + _id + " class=mem>"
         	            _html += "      <div id=addnm_" + _id + " idx=" + idx + " class='coDotDot memNm members'>" + _nm + "</div>"
           	            _html += "   </div>"
@@ -418,6 +419,7 @@
 					if (g_expandTo < 0 || g_expandTo > g_max_level) g_expandTo = g_max_level
 					g_expandAllDept = param.get("expandAllDept")
 					g_singleSelect = param.get("singleSelect")
+					g_selectOnlyChildDept = param.get("selectOnlyChildDept")
 					$("#chk_selectall").on("change", function() { 
 	                	$(".sel").prop("checked", $(this).is(":checked"))
 	                	$(".sel").each(function(idx, item) {                                
