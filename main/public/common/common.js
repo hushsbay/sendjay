@@ -20,6 +20,21 @@
             restful_timeout : 10000,
             color_fadein : "#b2e2f8",
         },
+        auth : {
+            setUser : () => {                
+                const _id = "oldclock" //hush.http.getCookie("userid")
+                const _nm = "이상순" //hush.http.getCookie("usernm")
+                const _orgcd = "Dept_A11" //hush.http.getCookie("orgcd")
+                const _orgnm = "팀_A11"
+                const _toporgcd = "Company_A"
+                const _toporgnm = "삼성전자"
+                //const _token = hushj.http.getCookie("token")
+                //const _key = hush.http.getCookie("userkey") //hushj.cons.w_key + _id //for socket
+                //const _role = hush.http.getCookie("role") //'role' check in browser is just for convenience. Keep in mind that you should check this on server.
+                //return { key : _key, id : _id, nm : _nm, orgcd : _orgcd, token : _token, role : _role }
+                return { id : _id, nm : _nm, orgcd : _orgcd, orgnm : _orgnm, toporgcd : _toporgcd, toporgnm : _toporgnm }
+            }, 
+        },
         http : {
             handleNoCache: (url) => {
                 let _url = url
@@ -81,6 +96,19 @@
                     }
                 }
             )}),
+            getCookie : (name) => { //cookie 처리는 jquery.cookie.js 참조
+                return $.cookie(name)
+            },
+            setCookie : (name, value, persist) => {
+                if (persist) { //expires value should be same as server's global.nodeConfig.jwt.expiry
+                    $.cookie(name, value, { expires: 365, path: '/' })
+                } else {
+                    $.cookie(name, value, { path: '/' }) //session cookie
+                }
+            },
+            deleteCookie : (name) => { //actually 'return' needed
+                $.removeCookie(name, { path: '/' })
+            },            
         },
         msg : { //1. msg(비동기콜백) 2. alert(=window.alert) 3. confirm(=window.confirm) 4. toast(복수메시지 순서대로 표시 지원)
             //아래 실행후 육안으로 먼저 보이는 순서는 = 1 > 2 > 3 > 5 > 6 > 7 > 4 
