@@ -39,7 +39,7 @@
             #panSel { 
                 width: 120px; margin-left: auto;
                 display: none; flex-direction: column;  
-                overflow: hidden; border:1px solid darkgray; border-left: 0;
+                border:1px solid darkgray; border-left: 0;
             }
 
             #panSelTop { 
@@ -49,17 +49,17 @@
             }
 
 			#listSel {
-				
+				display: flex; flex-direction: column; overflow: auto; 
 			}
 
 			.mem {
-				padding-top: 4px; margin: 4px 4px 0px 4px;
+				height: 40px; padding-top: 4px; margin: 4px 4px 0px 4px;
 				display: flex; flex-direction: column; overflow: auto; 
 				background-color: #fdf5f6; border: 1px solid lightgray;  
 			}
 
             .memNm { 
-				height: 20px; margin-left: 3px;
+				margin-left: 3px;
 				font-size: 12px; color: #005192; cursor: pointer;  
 			}
 
