@@ -226,10 +226,6 @@
 				          	const _idx = parseInt(_id.substring(4)) //2
 				          	const row = g_rs.list[_idx]
 				          	const _bool = _self.prop("checked")
-							if (g_singleSelect == "Y" && _bool && $(".sel:checked").length > 1) {
-								hush.msg.msg("하나의 행만 선택 가능합니다.")
-								return
-							}
 				          	if (row.nodekind == obj.nodeToGet) procSelect(row.nodekind, _idx)
 				      		const _lenA = g_rs.list.length
 				      		for (let i = _idx + 1; i < _lenA; i++) {
@@ -239,6 +235,10 @@
 				      			_tag.prop("checked", _bool)
 				      			if (row1.nodekind == obj.nodeToGet) setTimeout(() => { procSelect(row1.nodekind, i) }, 1)
 				      		}							
+							if (g_singleSelect == "Y" && _bool && $(".sel:checked").length > 1) {
+								hush.msg.msg("하나의 행만 선택 가능합니다.")
+								return
+							}
 						})
 				      	$(".row").off("click").on("click", async function(e) {
 				          	if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 checkbox event만 먹히도록 함
