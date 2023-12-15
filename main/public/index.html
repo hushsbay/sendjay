@@ -84,8 +84,14 @@
             $.when($.ready).done(async function() {
                 try { //By default, $.getScript() sets the cache setting to false. You can override this with $.ajaxSetup({ cache: true })
                     await $.getScript("/common/common.js")
-                    $("#btn_orgtree").on("click", async function() {
-                        hush.util.openWinPop("/app/org/orgtree.html")
+                    $("#btn_orgtree").on("click", function() {
+                        //from = 호출자 식별을 위한 참고용
+                        //nodeToGet = C(회사), D(부서), U(사용자)
+                        //comp = ALL 또는 회사코드(콤마(,)델리미터) / Default는 ALL
+        				//expandTo = 0 : all collapsed (회사만 보임) / 99 : all expanded)
+				        //expandAllDept = Y이면 임직원만 안보이게 접고 회사/부서는 모두 펼치기 (이 경우 expandTo는 무시됨. nodeToGet=U일 경우만 의미있음)
+                        const obj = { from : this.id, nodeToGet : "U", comp : "Company_A,Company_B", expandTo : 99, expandAllDept : "Y" }
+                        hush.util.openWinPop("/app/org/orgtree.html?" + $.param(obj))
                     })
                 } catch (ex) {
                     hush.util.showEx(ex)
