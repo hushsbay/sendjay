@@ -333,7 +333,13 @@
 					g_expandTo = param.get("expandTo")
 					if (g_expandTo < 0 || g_expandTo > g_max_level) g_expandTo = g_max_level
 					g_expandAllDept = param.get("expandAllDept")
-					g_singleSelect = param.get("singleSelect")	
+					g_singleSelect = param.get("singleSelect")
+					$("#select_all").on("change", function() { 
+	                	$(".sel").prop("checked", $(this).is(":checked"))
+	                	$(".sel").each(function(idx, item) {                                
+				          	procSelect(g_nodeToGet, idx)
+                        })
+                    })
 					$("#btn_team").click(function() {
 	            		alert("team")
                     })					
@@ -406,6 +412,7 @@
                     		$("#btn_orgtree").click()
 						}
                     } else {
+						$("#chk_mycomp").prop("disabled", true)
                    		$("#in_search").hide()
                    		$("#btn_search").hide()
                    		$("#btn_team").hide()
