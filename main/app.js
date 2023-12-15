@@ -12,5 +12,6 @@ const wasServer = ws.util.createWas(app, config.http.method) //not https (becaus
 wasServer.listen(config.http.port, () => { console.log('wasServer listening on ' + config.http.port) })
 
 app.use('/org/orgtree', require('./route/org/orgtree')) 
+app.use('/org/empsearch', require('./route/org/empsearch')) 
 
 ws.util.watchProcessError()
