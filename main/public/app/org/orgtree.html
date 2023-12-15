@@ -55,17 +55,13 @@
 			.mem {
 				height: 40px; padding-top: 4px; margin: 4px 4px 0px 4px;
 				display: flex; flex-direction: column; flex: none; overflow: auto; 
-				background-color: #0086cd; opacity: 0.2; /*border: 1px solid lightgray; /*#fdf5f6*/  
+				background-color: #0086cd; opacity: 0.2;
 			}
 
             .memNm { 
 				margin-left: 3px;
 				font-size: 12px; color: white; cursor: pointer;  /*#005192*/
 			}
-
-            /* .memSel { 
-				background:#b2e2f8 
-			} */
         </style>
         <script src="/plugin/jquery-3.4.1.min.js"></script>
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
@@ -90,10 +86,11 @@
         	    		_id = row1.USER_ID
         	    		_nm = row1.USER_NM + "/" + row1.ORG_NM + "<br>" + row1.TOP_ORG_NM
         	    	}
+					const _idTag = $("#add_" + _id)
         	        if (_chk) {
 						if (nodekind == "D" && g_selectOnlyChildDept == "Y" && row1.haschild) return
-        	            if ($("#add_" + _id).length > 0) {
-        	                //$("#add_" + _id).effect("highlight", { color: hush.cons.color_fadein }, 500)
+        	            if (_idTag.length > 0) {
+        	                hush.util.anim(_idTag)
         	                return
         	            }						
         	            let _html = "<div id=add_" + _id + " class=mem>"
@@ -101,8 +98,6 @@
           	            _html += "   </div>"
         	            g_listSel.append(_html)
         	            g_listSel.scrollTop(g_listSel.prop("scrollHeight"))
-        	            const _idTag = $("#add_" + _id)
-        	            //_idTag.effect("highlight", { color: hush.cons.color_fadein }, 100)
 						hush.util.fadein(_idTag)
         	            _idTag.off("click").on("click", function() {
         	            	hush.util.fadeout(_idTag, () => { 
@@ -112,12 +107,8 @@
         	                    procMemPanel()
         	                })
         	            })
-        	            //_idTag.off("mouseover").on("mouseover", function() { $(this).addClass("memSel") })
-        	            //_idTag.off("mouseleave").on("mouseleave", function() { $(this).removeClass("memSel") })
         	            procMemPanel()
         	        } else {
-        	            const _idTag = $("#add_" + _id)
-						//$("#add_" + _id).effect("highlight", { color: hush.cons.color_fadein }, 500)
         	            hush.util.fadeout(_idTag, () => { 
         	            	_idTag.remove()
         	                procMemPanel()
