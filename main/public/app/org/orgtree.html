@@ -103,6 +103,7 @@
         	            g_listSel.scrollTop(g_listSel.prop("scrollHeight"))
         	            const _idTag = $("#add_" + _id)
         	            //_idTag.effect("highlight", { color: hush.cons.color_fadein }, 100)
+						_idTag.effect("highlight", { opacity: 0.2 }, 100)
         	            _idTag.off("click").on("click", function() {
         	            	hush.util.animOpacity(_idTag, () => { 
         	            		const _tag = $(".sel[code='" + _id + "']")
