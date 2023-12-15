@@ -129,6 +129,10 @@
         	    $("#cntSel").html(_cnt)
         	    if (_cnt > 0) {
         	        $("#panSel").css("display", "flex")
+					if (g_singleSelect == "Y" && _cnt > 1) {
+						hush.msg.toast("하나의 행만 선택 가능합니다.")
+						return
+					}
         	    } else {
         	        $("#panSel").hide()
         	        $("#select_all").prop("checked", false)
@@ -226,11 +230,6 @@
 				          	const _idx = parseInt(_id.substring(4)) //2
 				          	const row = g_rs.list[_idx]
 				          	const _bool = _self.prop("checked")
-							debugger
-							if (g_singleSelect == "Y" && _bool && $(".members").length > 1) {
-								hush.msg.msg("하나의 행만 선택 가능합니다.")
-								return
-							}
 				          	if (row.nodekind == obj.nodeToGet) procSelect(row.nodekind, _idx)
 				      		const _lenA = g_rs.list.length
 				      		for (let i = _idx + 1; i < _lenA; i++) {
