@@ -55,12 +55,12 @@
 			.mem {
 				height: 40px; padding-top: 4px; margin: 4px 4px 0px 4px;
 				display: flex; flex-direction: column; flex: none; overflow: auto; 
-				background-color: #0086cd; color: white; /*border: 1px solid lightgray; /*#fdf5f6*/  
+				background-color: #0086cd; /*border: 1px solid lightgray; /*#fdf5f6*/  
 			}
 
             .memNm { 
 				margin-left: 3px;
-				font-size: 12px; color: #005192; cursor: pointer;  
+				font-size: 12px; color: white; cursor: pointer;  /*#005192*/
 			}
 
             /* .memSel { 
@@ -97,7 +97,7 @@
         	                return
         	            }						
         	            let _html = "<div id=add_" + _id + " class=mem>"
-        	            _html += "      <div id=addnm_" + _id + " idx=" + idx + " class='coDotDot memNm members'>" + _nm + "</div>"
+        	            _html += "      <div id=addnm_" + _id + " idx=" + idx + " class='coDotDot memNm'>" + _nm + "</div>"
           	            _html += "   </div>"
         	            g_listSel.append(_html)
         	            g_listSel.scrollTop(g_listSel.prop("scrollHeight"))
@@ -476,7 +476,7 @@
                     })
 					$("#btn_ok").on("click", function() {
                     	const arr = [ ]
-                    	$(".members").each(function() {
+                    	$(".memNm").each(function() {
                             const idx = parseInt($(this).attr("idx"))
                     		const row = g_rs.list[idx]
                             arr.push(row)
