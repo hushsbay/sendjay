@@ -129,7 +129,7 @@
         	        $("#panSel").css("display", "flex")
         	    } else {
         	        $("#panSel").hide()
-        	        $("#select_all").prop("checked", false)
+        	        //$("#select_all").prop("checked", false)
         	    }            
         	}
 
@@ -282,23 +282,7 @@
 				                  	if (j > 0) procExpCol(_expanded, _tag, _idx)
 				              	}
 				          	}
-				      	})
-				     	if (g_nodeToGet == "U") {
-				     		$("#select_all").prop("disabled", false)
-				     		$("#div_depth").css("display", "flex")
-				     		$("#chk_mycomp").show()
-				     		$("#lbl_mycomp").show()
-				     	} else if (g_nodeToGet == "D") {
-				     		$("#select_all").prop("disabled", true)
-				     		$("#div_depth").css("display", "flex")
-				     		$("#chk_mycomp").show() 
-				     		$("#lbl_mycomp").show()
-				     	} else {
-				     		$("#select_all").prop("disabled", false)
-				     		$("#div_depth").hide()
-				     		$("#chk_mycomp").hide()
-				     		$("#lbl_mycomp").hide()
-				     	}
+				      	})				     	
 				    } catch (ex) {
 				        hush.util.showEx(ex)
 				    }
@@ -412,12 +396,12 @@
                     		$("#btn_orgtree").click()
 						}
                     } else {
-						$("#chk_mycomp").prop("disabled", true)
                    		$("#in_search").hide()
                    		$("#btn_search").hide()
                    		$("#btn_team").hide()
                    		$("#btn_orgtree").hide()
-                   		$("#lbl_comp_guide").show()
+						$("#div_depth").hide()
+						$("#chk_mycomp").prop("disabled", true)
                     	$("#btn_orgtree").click()
                     }
                 } catch (ex) {
