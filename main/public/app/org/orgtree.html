@@ -67,7 +67,7 @@
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
         <script>
 			let g_from, g_nodeToGet, g_comp, g_expandTo, g_expandAllDept, g_singleSelect
-			let g_nodeIndent = 24, g_max_level = 6 //조직도에서 펼칠 수 있는 최대 레벨(depth) - 각 조직에 따라 변경 가능   
+			let g_nodeIndent = 24, g_max_level = 4 //조직도에서 펼칠 수 있는 최대 레벨(depth) - 각 조직에 따라 변경 가능   
             let g_rs, g_list, g_listSel
 
             document.oncontextmenu = new Function("return false;")
@@ -341,8 +341,8 @@
 	            		const _id = this.id
 						g_expandAllDept = ""
 						if (_id == "btn_minus") {
-							if (g_expandTo <= 1) {
-								g_expandTo = 1
+							if (g_expandTo <= 0) {
+								g_expandTo = 0
 							} else {
 								g_expandTo -= 1
 							}
