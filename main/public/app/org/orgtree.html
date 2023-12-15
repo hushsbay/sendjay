@@ -26,7 +26,7 @@
             }
 
             .bottom {
-                height: 50px;
+                height: 50px; padding: 0 5px;
                 display: flex; justify-content: space-between; align-items: center;
                 background-color: transparent; /*border:1px solid darkgray; border-top: 0;*/
             }
@@ -37,7 +37,7 @@
             }
 
             #panSel { 
-                min-width: 100px; max-width: 250px; margin-left: auto;
+                width: 120px; margin-left: auto;
                 display: none; flex-direction: column;  
                 overflow: hidden; border:1px solid darkgray; border-left: 0;
             }
@@ -47,6 +47,10 @@
                 display: flex; align-items: center; justify-content: space-between; 
                 border-bottom: 1px solid darkgray;
             }
+
+			#listSel {
+				
+			}
 
 			.mem {
 				padding-top: 4px; margin: 4px 4px 0px 4px;
@@ -552,10 +556,10 @@
                         <div style="color: red; margin-left: 3px">선택 : <span id=cntSel>0</span></div>
                         <img id="removeSel" src="/img/close.png" class="coImg16 coActive" style="margin-right: 3px"/>
                     </div>
-                    <div id="listSel" style="overflow: auto"></div>
+                    <div id="listSel"></div>
                 </div>
             </div>
-            <div class="bottom" style="padding: 0 5px">
+            <div class="bottom">
                 <div style="display: flex; align-items: center">
 	                <input id="chk_mycomp" type=checkbox /><label id="lbl_mycomp" for="chk_mycomp" style="cursor: pointer; margin-left: 3px">소속회사</label>
 	        	</div>
