@@ -16,7 +16,7 @@
             .top {
                 height:50px;
                 display: flex; align-items: center;
-                background-color: transparent; /*border:1px solid darkgray; border-bottom: 0;*/
+                background-color: transparent;
             }
 
             .main {
@@ -28,7 +28,7 @@
             .bottom {
                 height: 50px; padding: 0 5px;
                 display: flex; justify-content: space-between; align-items: center;
-                background-color: transparent; /*border:1px solid darkgray; border-top: 0;*/
+                background-color: transparent;
             }
 
             #listMain { 
@@ -88,7 +88,7 @@
         	    		_nm = row1.ORG_NM + "<br>" + row1.TOP_ORG_NM
         	    	} else {
         	    		_id = row1.USER_ID
-        	    		_nm = row1.USER_NM + "/" + row1.ORG_NM + "dkjsfhdsfkjhsdf" + "<br>" + row1.TOP_ORG_NM
+        	    		_nm = row1.USER_NM + "/" + row1.ORG_NM + "<br>" + row1.TOP_ORG_NM
         	    	}
         	        if (_chk) {
 						if (nodekind == "D" && g_selectOnlyChildDept == "Y" && row1.haschild) return
@@ -105,7 +105,7 @@
         	            _idTag.effect("highlight", { color: hush.cons.color_fadein }, 100)
         	            _idTag.off("click").on("click", function() {
         	            	hush.util.animAction(_idTag, () => { 
-        	            		const _tag = $(".sel[code='" + _id + "']") //$("#sel_" + _id).prop("checked", false)
+        	            		const _tag = $(".sel[code='" + _id + "']")
         	            		_tag[0].checked = false      
         	            		$(this).remove()
         	                    procMemPanel()
@@ -161,7 +161,7 @@
 							const nodeStr = user_nm + "/" + org_nm + "/" + top_org_nm
 							let _html = "<div id=row_" + i.toString() + " class=row style='width:100%;height:40px;display:flex;align-items:center;cursor:pointer;border-bottom:1px solid lightgray;padding-left:3px'>"
 				          	_html += "   	<input type=checkbox id=sel_" + i + " code=" + user_id + " class=sel />"
-				          	_html += "		<img src='/img/ico_per.png' class=coImg16 style='margin-left:5px' />"
+				          	_html += "		<img src='/img/ico_user.png' class=coImg16 style='margin-left:5px' />"
 				          	_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
 				          	_html += "  </div>"
                             g_list.append(_html)
@@ -208,7 +208,7 @@
 							const nodeStr = org_nm + "/" + top_org_nm
 							let _html = "<div id=row_" + i.toString() + " class=row style='width:100%;height:40px;display:flex;align-items:center;cursor:pointer;border-bottom:1px solid lightgray;padding-left:3px'>"
 				          	_html += "   	<input type=checkbox id=sel_" + i + " code=" + org_cd + " class=sel />"
-				          	_html += "		<img src='/img/ico_per.png' class=coImg16 style='margin-left:5px' />"
+				          	_html += "		<img src='/img/ico_user.png' class=coImg16 style='margin-left:5px' />"
 				          	_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
 				          	_html += "  </div>"
                             g_list.append(_html)
@@ -301,11 +301,8 @@
 				          	let _html = "<div id=row_" + i.toString() + " class=row style='width:100%;min-height:40px;display:" + disp + ";align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid lightgray;padding-left:" + paddingLeft + "px'>"
 				          	_html += "		<div style='width:calc(100% - 45px);display:flex;align-items:center;justify-content:flex-start;margin-right:5px'>"
 				          	_html += "   		<input type=checkbox id=sel_" + i + " code=" + _code + " class=sel />"
-				          	if (nodekind == "U") {
-				          		_html += "		<img src='/img/ico_per.png' class=coImg16 style='margin-left:5px' />"
-				          	} else {
-				          		_html += "		<img src='/img/ico_dept.png' class=coImg16 style='margin-left:5px' />"
-				          	}
+				          	const _ico = (nodekind == "U") ? "user" : "dept"
+							_html += "			<img src='/img/ico_" + _ico + ".png' class=coImg16 style='margin-left:5px' />"
 			          		_html += "			<span class=coDotDot style='margin-left:5px' title='" + title + "'>" + nodeStr + "</span>"
 				          	_html += "      </div>"				          	
 				          	_html += "      <div style='width:40px;display:flex;align-items:center;justify-content:flex-end;margin-right:5px'>"
@@ -451,7 +448,7 @@
                     })					
                     $("#btn_orgtree").click(function() {
 						$("#in_search").val("")
-	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : g_comp, expandTo : g_expandTo, expandAllDept : g_expandAllDept, singleSelect : g_singleSelect })
+	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : g_comp, expandTo : g_expandTo, expandAllDept : g_expandAllDept })
                     })					
 					$("#btn_minus,#btn_plus").click(function() {
 	            		const _id = this.id
