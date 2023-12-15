@@ -93,7 +93,7 @@
         	        if (_chk) {
 						if (nodekind == "D" && g_selectOnlyChildDept == "Y" && row1.haschild) return
         	            if ($("#add_" + _id).length > 0) {
-        	                $("#add_" + _id).effect("highlight", { color: hush.cons.color_fadein }, 500)
+        	                //$("#add_" + _id).effect("highlight", { color: hush.cons.color_fadein }, 500)
         	                return
         	            }						
         	            let _html = "<div id=add_" + _id + " class=mem>"
@@ -102,7 +102,7 @@
         	            g_listSel.append(_html)
         	            g_listSel.scrollTop(g_listSel.prop("scrollHeight"))
         	            const _idTag = $("#add_" + _id)
-        	            _idTag.effect("highlight", { color: hush.cons.color_fadein }, 100)
+        	            //_idTag.effect("highlight", { color: hush.cons.color_fadein }, 100)
         	            _idTag.off("click").on("click", function() {
         	            	hush.util.animOpacity(_idTag, () => { 
         	            		const _tag = $(".sel[code='" + _id + "']")
