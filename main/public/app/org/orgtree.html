@@ -111,8 +111,8 @@
         	                    procMemPanel()
         	                })
         	            })
-        	            _idTag.off("mouseover").on("mouseover", function() { $(this).addClass("memSel") })
-        	            _idTag.off("mouseleave").on("mouseleave", function() { $(this).removeClass("memSel") })
+        	            //_idTag.off("mouseover").on("mouseover", function() { $(this).addClass("memSel") })
+        	            //_idTag.off("mouseleave").on("mouseleave", function() { $(this).removeClass("memSel") })
         	            procMemPanel()
         	        } else {
         	            const _idTag = $("#add_" + _id)
@@ -550,7 +550,7 @@
                 <div id="listMain"></div>
                 <div id="panSel">
                     <div id="panSelTop">
-                        <div style="color: red; margin-left: 3px">선택 : <span id=cntSel>0</span></div>
+                        <div style="color: red; margin-left: 3px">선1택 : <span id=cntSel>0</span></div>
                         <img id="removeSel" src="/img/close.png" class="coImg16 coActive" style="margin-right: 3px"/>
                     </div>
                     <div id="listSel"></div>
