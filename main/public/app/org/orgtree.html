@@ -102,6 +102,7 @@
 						debugger
 						hush.util.fadein(_idTag)
         	            _idTag.off("click").on("click", function() {
+							debugger
         	            	hush.util.fadeout(_idTag, () => { 
         	            		const _tag = $(".sel[code='" + _id + "']")
         	            		_tag[0].checked = false      
