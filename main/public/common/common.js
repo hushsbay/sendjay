@@ -286,23 +286,23 @@
             },
             fadein : (tag, callback) => { //jqueryui
                 if (callback) {
-                	tag.animate({ opacity : 1 }, 200, null, callback)
+                	tag.animate({ opacity : 1 }, 100, null, callback)
                 } else {
-                	tag.animate({ opacity : 1 }, 200)
+                	tag.animate({ opacity : 1 }, 100)
                 }                
             },
             fadeout : (tag, callback) => { //jqueryui
                 if (callback) {
-                	tag.animate({ opacity : 0.2 }, 200, null, callback)
+                	tag.animate({ opacity : 0.2 }, 100, null, callback)
                 } else {
-                	tag.animate({ opacity : 0.2 }, 200)
+                	tag.animate({ opacity : 0.2 }, 100)
                 }                
             },
             anim : (tag, callback) => { //jqueryui
                 if (callback) {
-                	tag.animate({ opacity : 0.2 }, 200).animate({ opacity : 1 }, 500, null, callback)
+                	tag.animate({ opacity : 0.2 }, 100).animate({ opacity : 1 }, 200, null, callback)
                 } else {
-                	tag.animate({ opacity : 1 }, 200).animate({ opacity : 1 }, 500)
+                	tag.animate({ opacity : 1 }, 100).animate({ opacity : 1 }, 200)
                 }                
             },
         }
