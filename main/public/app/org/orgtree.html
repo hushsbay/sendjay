@@ -98,6 +98,7 @@
           	            _html += "   </div>"
         	            g_listSel.append(_html)
         	            g_listSel.scrollTop(g_listSel.prop("scrollHeight"))
+						debugger
 						hush.util.fadein(_idTag)
         	            _idTag.off("click").on("click", function() {
         	            	hush.util.fadeout(_idTag, () => { 
