@@ -296,7 +296,7 @@
                 if (callback) {
                 	tag.animate({ opacity : 0.2 }, 50).animate({ opacity : 1 }, 100, null, callback)
                 } else {
-                	tag.animate({ opacity : 0.2 }, 50).animate({ opacity : 1 }, 100)
+                	tag.animate({ opacity : 0.2 }, 50)
                 }                
             },
         }
