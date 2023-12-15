@@ -165,7 +165,7 @@
 							let _html = "<div id=row_" + i.toString() + " class=row style='height:40px;display:flex;align-items:center;cursor:pointer;border-bottom:1px solid lightgray;padding-left:3px'>"
 				          	_html += "   	<input type=checkbox id=sel_" + i + " code=" + user_id + " class=sel />"
 				          	_html += "		<img src='/img/ico_per.png' class=coImg16 style='margin-left:5px' />"
-				          	_html += "		<span class='coDotDot' style='white-space:nowrap;overflow:hidden;margin-left:5px'>" + nodeStr + "</span>"
+				          	_html += "		<span class=coDotDot style='white-space:nowrap;overflow:hidden;margin-left:5px'>" + nodeStr + "</span>"
 				          	_html += "  </div>"
                             g_list.append(_html)
                         }
@@ -209,12 +209,17 @@
 							const top_org_cd = row.TOP_ORG_CD
 							const top_org_nm = row.TOP_ORG_NM
 							const nodeStr = org_nm + "/" + top_org_nm
-                            let _html = "<div id=row_" + i.toString() + " class=row style='height:40px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid lightgray;padding-left:3px'>"
-				          	_html += "		<div style='display:flex;align-items:center;justify-content:flex-start;margin-right:5px'>"
-				          	_html += "   		<input type=checkbox id=sel_" + i + " code=" + org_cd + " class=sel />"
-				          	_html += "			<img src='/img/ico_per.png' class=coImg16 style='margin-left:5px' />"
-				          	_html += "			<span style='white-space:nowrap;overflow:hidden;margin-left:5px'>" + nodeStr + "</span>"
-				          	_html += "      </div>"				          	
+                            // let _html = "<div id=row_" + i.toString() + " class=row style='height:40px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid lightgray;padding-left:3px'>"
+				          	// _html += "		<div style='display:flex;align-items:center;justify-content:flex-start;margin-right:5px'>"
+				          	// _html += "   		<input type=checkbox id=sel_" + i + " code=" + org_cd + " class=sel />"
+				          	// _html += "			<img src='/img/ico_per.png' class=coImg16 style='margin-left:5px' />"
+				          	// _html += "			<span class=coDotDot style='white-space:nowrap;overflow:hidden;margin-left:5px'>" + nodeStr + "</span>"
+				          	// _html += "      </div>"				          	
+				          	// _html += "  </div>"
+							let _html = "<div id=row_" + i.toString() + " class=row style='height:40px;display:flex;align-items:center;cursor:pointer;border-bottom:1px solid lightgray;padding-left:3px'>"
+				          	_html += "   	<input type=checkbox id=sel_" + i + " code=" + org_cd + " class=sel />"
+				          	_html += "		<img src='/img/ico_per.png' class=coImg16 style='margin-left:5px' />"
+				          	_html += "		<span class=coDotDot style='white-space:nowrap;overflow:hidden;margin-left:5px'>" + nodeStr + "</span>"
 				          	_html += "  </div>"
                             g_list.append(_html)
                         }
@@ -290,7 +295,7 @@
 				          	const expcolImg = (expanded) ? "minus_1.png" : "plus_1.png"
 				          	const paddingLeft = lvl * g_nodeIndent + 3
 				          	if (nodekind == "U") {
-								nodeStr = user_nm + "/" + org_nm + "/" + top_org_nm
+								nodeStr = user_nm + "/" + org_nm + "/" + top_org_nm + "/" + org_nm + "/" + top_org_nm + "/" + org_nm + "/" + top_org_nm
 				          		_code = user_id
 							} else {
 				          		nodeStr = org_nm + (g_nodeToGet == "U" && nodekind == "D" && mem_cnt > 0 ? " <span style='font-size: 12px; color: dimgray'>(" + mem_cnt + ")</span>" : "")
@@ -301,15 +306,15 @@
 				        	row.haschild = hasChild
 				        	row.expanded = expanded
 				        	row.parentidx = parentidx
-				          	let _html = "<div id=row_" + i.toString() + " class=row style='min-height:40px;display:" + disp + ";flex-direction:row;align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid lightgray;padding-left:" + paddingLeft + "px'>"
-				          	_html += "		<div style='display:flex;flex-direction:row;align-items:center;justify-content:flex-start;margin-right:5px'>"
+				          	let _html = "<div id=row_" + i.toString() + " class=row style='min-height:40px;display:" + disp + ";align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid lightgray;padding-left:" + paddingLeft + "px'>"
+				          	_html += "		<div style='display:flex;align-items:center;justify-content:flex-start;margin-right:5px'>"
 				          	_html += "   		<input type=checkbox id=sel_" + i + " code=" + _code + " class=sel />"
 				          	if (nodekind == "U") {
 				          		_html += "		<img src='/img/ico_per.png' class=coImg16 style='margin-left:5px' />"
 				          	} else {
 				          		_html += "		<img src='/img/ico_dept.png' class=coImg16 style='margin-left:5px' />"
 				          	}
-			          		_html += "			<span style='white-space:nowrap;overflow:hidden;margin-left:5px'>" + nodeStr + "</span>"
+			          		_html += "			<span class=coDotDot style='white-space:nowrap;overflow:hidden;margin-left:5px'>" + nodeStr + "</span>"
 				          	_html += "      </div>"				          	
 				          	_html += "      <div style='width:100px;display:flex;align-items:center;justify-content:flex-end;margin-right:5px'>"
 					        const dispImg = (hasChild) ? "" : " style='display:none'"
