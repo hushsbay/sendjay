@@ -299,6 +299,13 @@
                 	tag.animate({ opacity : 0.2 }, 50).animate({ opacity : 1 }, 500)
                 }                
             },
+            fadeout : (tag, callback) => { //jqueryui
+                if (callback) {
+                	tag.animate({ opacity : 0.2 }, 500, null, callback)
+                } else {
+                	tag.animate({ opacity : 0.2 }, 500)
+                }                
+            },
         }
     }
 })(jQuery)
