@@ -379,6 +379,21 @@
 				          	procSelect(g_nodeToGet, idx)
                         })
                     })
+					$("#in_search").keyup(function(e) { 
+	            		if (e.keyCode === 13) $("#btn_search").click()
+	            	})	            	
+	            	$("#btn_search").click(function() {
+	            		const _keyword = $("#in_search").val().trim()
+	            		if (_keyword == "") {
+                   			hush.msg.toast("검색어가 빈칸입니다.")
+                   			return
+                   		}
+	            		if (g_nodeToGet == "U") {
+	            			getUserData(_keyword)
+	            		} else {
+	            			getDeptData(_keyword)
+	            		}
+	            	})
 					$("#btn_team").click(function() {
 	            		$("#in_search").val("")
 						getUserData(null, g_user.orgcd)
