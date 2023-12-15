@@ -87,8 +87,7 @@
         	    		_nm = row1.USER_NM + "/" + row1.ORG_NM
         	    	}
         	        if (_chk) {
-						debugger
-						if (nodekind == "D" && g_selectOnlyChildDept == "Y" && row1.hasChild) return
+						if (nodekind == "D" && g_selectOnlyChildDept == "Y" && row1.haschild) return
         	            if ($("#add_" + _id).length > 0) {
         	                $("#add_" + _id).effect("highlight", { color: hush.cons.color_fadein }, 500)
         	                return
@@ -269,7 +268,7 @@
 							//const ab_cd = row.AB_CD
 							//const ab_nm = row.AB_NM
 							const nodekind = (lvl == 0) ? "C" : (user_id ? "U" : "D") //회사(C) / 사용자(U)레벨은 소속 부서 레벨+1 /부서(D)
-				          	let nodeStr, disp, hasChild = true, expanded, parentIdx = -1, _code
+				          	let nodeStr, disp, hasChild = true, expanded, parentidx = -1, _code
 				          	if (i == _len - 1 || nodekind == "U" || parseInt(rs.list[i + 1].LVL) <= lvl) hasChild = false
 				          	if (obj.expandAllDept == "Y") { //이 경우 obj.expandTo 무시됨
 				          		if (nodekind == "U") {
@@ -282,7 +281,7 @@
 				          		disp = (lvl <= obj.expandTo) ? "flex" : "none"
 				          		expanded = (lvl < obj.expandTo) ? true : false
 				          	}
-				          	if (lvl > 0 && _objUpperLevel[lvl - 1]) parentIdx = _objUpperLevel[lvl - 1]
+				          	if (lvl > 0 && _objUpperLevel[lvl - 1]) parentidx = _objUpperLevel[lvl - 1]
 				          	const expcolImg = (expanded) ? "minus_1.png" : "plus_1.png"
 				          	const paddingLeft = lvl * g_nodeIndent + 3
 				          	if (nodekind == "U") {
@@ -296,7 +295,7 @@
 				        	row.dispstate = disp
 				        	row.haschild = hasChild
 				        	row.expanded = expanded
-				        	row.parentIdx = parentIdx
+				        	row.parentidx = parentidx
 				          	let _html = "<div id=row_" + i.toString() + " class=row style='min-height:40px;display:" + disp + ";flex-direction:row;align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid lightgray;padding-left:" + paddingLeft + "px'>"
 				          	_html += "		<div style='display:flex;flex-direction:row;align-items:center;justify-content:flex-start;margin-right:5px'>"
 				          	_html += "   		<input type=checkbox id=sel_" + i + " code=" + _code + " class=sel />"
@@ -367,7 +366,7 @@
 				                              	_nextTag.css("display", "flex")
 				                              	row1.dispstate = "flex"
 				                          	} else {
-				                          		if ($("#row_" + row1.parentIdx).css("display") == "none") { //if ($("#" + _nextTag.attr("parent")).css("display") == "none") {
+				                          		if ($("#row_" + row1.parentidx).css("display") == "none") { //if ($("#" + _nextTag.attr("parent")).css("display") == "none") {
 				                                  	_nextTag.css("display", "none")
 				                              	} else { //or recall child node's display state
 				                                  	_nextTag.css("display", row1.dispstate)
