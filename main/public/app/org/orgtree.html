@@ -183,6 +183,51 @@
                 // })    	                
             }
 
+			const getDeptData = async (_keyword) => {
+            	//$wise.onceJwtCall(g_payload, false, async function(token) {  
+                    try {
+                    	g_list.empty()
+						const _comp = $("#chk_mycomp").prop("checked") ? g_user.toporgcd : g_comp
+                        const rs = await hush.http.ajax("/org/deptsearch", { keyword : _keyword, comp : _comp }) //{ token : token, user : g_user }
+						if (rs.code != hush.cons.CODE_OK) {
+                        	hush.msg.showMsg(rs.msg)
+                            return
+						}
+						g_rs = rs
+				      	const _len = rs.list.length
+						if (_len == 0) return
+                        for (let i = 0; i < _len; i++) {
+                            const row = rs.list[i]
+							const org_cd = row.ORG_CD
+							const org_nm = row.ORG_NM
+							const top_org_cd = row.TOP_ORG_CD
+							const top_org_nm = row.TOP_ORG_NM
+							const nodeStr = org_nm + "/" + top_org_nm
+                            let _html = "<div id=row_" + i.toString() + " class=row style='height:40px;display:flex;flex-direction:row;align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid lightgray;padding-left:3px'>"
+				          	_html += "		<div style='display:flex;flex-direction:row;align-items:center;justify-content:flex-start;margin-right:5px'>"
+				          	_html += "   		<input type=checkbox id=sel_" + i + " code=" + org_cd + " class=sel />"
+				          	_html += "			<img src='/img/ico_per.png' class=coImg16 style='margin-left:5px' />"
+				          	_html += "			<span style='white-space:nowrap;overflow:hidden;margin-left:5px'>" + nodeStr + "</span>"
+				          	_html += "      </div>"				          	
+				          	_html += "  </div>"
+                            g_list.append(_html)
+                        }
+                    	if (_len == 0) return
+				      	$(".sel").off("change").on("change", function(e) {
+				      		const _self = $(this)
+				          	const _id = this.id //sel_2
+				          	const _idx = parseInt(_id.substring(4)) //2
+				          	procSelect("D", _idx)
+				      	})
+						$("#chk_selectall").prop("disabled", true)
+                    } catch (ex) {
+                        hush.util.showEx(ex)
+                    }    	                    
+                // }, function(ex1) {
+                //     alert(survey.util.getErrorMsg(ex1.message, survey.cons.jwt))
+                // })    	                
+            }
+
             const getOrgTree = async (obj) => {
 	        	//nodeToGet = C(회사), D(부서), U(사용자)
 				//comp = ALL 또는 회사코드(델리미터는 콤마(,)) / Default는 ALL
@@ -390,9 +435,11 @@
                    		}
 	            		if (g_nodeToGet == "U") {
 	            			getUserData(_keyword)
-	            		} else {
+						} else if (g_nodeToGet == "D") {
 	            			getDeptData(_keyword)
-	            		}
+	            		} else {
+							hush.msg.toast("회사명 검색은 지원되지 않습니다.")
+						}
 	            	})
 					$("#btn_team").click(function() {
 	            		$("#in_search").val("")
