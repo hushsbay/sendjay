@@ -285,13 +285,11 @@
                 return window.open(_url, "", _bar)
             },
             fadein : (tag, callback) => { //jqueryui
-                setTimeout(function() {
-                    if (callback) {
-                        tag.animate({ opacity : 1 }, 100, null, callback)
-                    } else {
-                        tag.animate({ opacity : 1 }, 100)
-                    }
-                }, 1)                
+                if (callback) {
+                    tag.animate({ opacity : 1 }, 100, null, callback)
+                } else {
+                    tag.animate({ opacity : 1 }, 100)
+                }              
             },
             fadeout : (tag, callback) => { //jqueryui
                 if (callback) {
