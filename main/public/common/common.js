@@ -292,6 +292,13 @@
                 	tag.animate({ backgroundColor : hush.cons.color_fadein }, 40) //40 and 80이 적당히 빠른 느낌임
                 }                
             },
+            animOpacity : (tag, callback) => { //jqueryui
+                if (callback) {
+                	tag.animate({ opacity : 0.2 }, 50).animate({ opacity : 1 }, 100, null, callback)
+                } else {
+                	tag.animate({ opacity : 0.2 }, 50)
+                }                
+            },
         }
     }
 })(jQuery)

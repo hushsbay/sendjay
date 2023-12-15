@@ -104,7 +104,7 @@
         	            const _idTag = $("#add_" + _id)
         	            _idTag.effect("highlight", { color: hush.cons.color_fadein }, 100)
         	            _idTag.off("click").on("click", function() {
-        	            	hush.util.animAction(_idTag, () => { 
+        	            	hush.util.animOpacity(_idTag, () => { 
         	            		const _tag = $(".sel[code='" + _id + "']")
         	            		_tag[0].checked = false      
         	            		$(this).remove()
@@ -117,7 +117,7 @@
         	        } else {
         	            const _idTag = $("#add_" + _id)
 						$("#add_" + _id).effect("highlight", { color: hush.cons.color_fadein }, 500)
-        	            hush.util.animAction(_idTag, () => { 
+        	            hush.util.animOpacity(_idTag, () => { 
         	            	_idTag.remove()
         	                procMemPanel()
         	            })
