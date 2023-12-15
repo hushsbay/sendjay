@@ -66,7 +66,7 @@
         <script src="/plugin/jquery-3.4.1.min.js"></script>
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
         <script>
-			let g_nodeToGet, g_expandAllDept
+			let g_from, g_nodeToGet, g_comp, g_expandTo, g_expandAllDept
 			let g_nodeIndent = 24
             let g_rs, g_list, g_listSel
 
@@ -326,10 +326,36 @@
 					g_from = param.get("from")					
 					g_nodeToGet = param.get("nodeToGet")
 					g_comp = param.get("comp")
-					const expandTo = param.get("expandTo")
-					g_expandAllDept = param.get("expandAllDept")                    
+					g_expandTo = param.get("expandTo")
+					g_expandAllDept = param.get("expandAllDept")
+					$("#btn_orgtree").click()
+					// if (g_nodeToGet == "U") {
+					// 	if (g_comp) {
+					// 		if (g_comp == g_user.cocd) $("#my_comp").prop("checked", true)
+					// 			$("#my_comp").prop("disabled", true)
+					// 	} else {
+					// 		$("#my_comp").prop("disabled", false)
+					// 	}
+					//  $("#btn_team").click()
+                    // } else if (g_nodeToGet == "D") {
+                    // 	if (g_comp) {
+                    // 		if (g_comp == g_user.cocd) $("#my_comp").prop("checked", true) //소속부서만
+                   	// 		$("#my_comp").prop("disabled", true)
+                    // 	} else {
+                    // 		$("#my_comp").prop("disabled", false)
+                    // 	}
+                    // 	$("#btn_team").hide()
+                    // 	$("#btn_jojik").click()
+                    // } else {
+                   	// 	$("#in_search").hide()
+                   	// 	$("#btn_search").hide()
+                   	// 	$("#btn_team").hide()
+                   	// 	$("#btn_jojik").hide()
+                   	// 	$("#lbl_comp_guide").show()                    	
+                    // 	$("#btn_jojik").click()
+                    // }
                     $("#btn_orgtree").click(function() {
-	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : g_comp, expandTo : expandTo, expandAllDept : g_expandAllDept })
+	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : g_comp, expandTo : g_expandTo, expandAllDept : g_expandAllDept })
                     })
 					$("#btn_minus,#btn_plus").click(function() {
 	            		const _id = this.id
