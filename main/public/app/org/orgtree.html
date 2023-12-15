@@ -137,7 +137,7 @@
                     try {
                     	g_list.empty()
 						const _comp = $("#chk_mycomp").prop("checked") ? g_user.toporgcd : g_comp
-                        const rs = await hush.http.ajax("/orgtree/empsearch", { keyword : _keyword, teamcode : _teamcode, comp : _comp }) //{ token : token, user : g_user }
+                        const rs = await hush.http.ajax("/org/empsearch", { keyword : _keyword, teamcode : _teamcode, comp : _comp }) //{ token : token, user : g_user }
 						if (rs.code != hush.cons.CODE_OK) {
                         	hush.msg.showMsg(rs.msg)
                             return
