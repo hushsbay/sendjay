@@ -145,6 +145,7 @@
 						if (hush.util.isvoid(obj.nodeToGet)) obj.nodeToGet = "U"
 						if (hush.util.isvoid(obj.comp)) obj.comp = "ALL"
 						if (hush.util.isvoid(obj.expandTo) || obj.expandTo < 0) obj.expandTo = 0
+						$('#spn_depth').html(parseInt(obj.expandTo) + 1)
 						if (hush.util.isvoid(obj.expandAllDept)) obj.expandAllDept = ""			
 						g_list.empty()
                         const rs = await hush.http.ajax("/org/orgtree", { obj : obj }) //{ token : token, user : g_user, obj : obj }
@@ -319,14 +320,16 @@
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
-                    g_list = $("#listMain")
+					g_list = $("#listMain")
 					g_listSel = $("#listSel")
-					g_from = "~~"
-					g_nodeToGet = "U"
-					g_expandAllDept = "Y"
-					$("#spn_depth").html(4) //if (urlObj.expandTo) $("#spn_depth").html(urlObj.expandTo) 구현 필요 - max_level 체크
+					const param = new URLSearchParams(location.search)
+					g_from = param.get("from")					
+					g_nodeToGet = param.get("nodeToGet")
+					g_comp = param.get("comp")
+					const expandTo = param.get("expandTo")
+					g_expandAllDept = param.get("expandAllDept")                    
                     $("#btn_orgtree").click(function() {
-	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : "Company_A,Company_B", expandTo : parseInt($('#spn_depth').html()) - 1 })
+	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : g_comp, expandTo : expandTo, expandAllDept : g_expandAllDept })
                     })
 					$("#btn_minus,#btn_plus").click(function() {
 	            		const _id = this.id

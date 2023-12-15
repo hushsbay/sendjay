@@ -1,4 +1,4 @@
-(function() { //jQuery 없음
+(function($) {
     window.hush = {
         cons : {
             CODE_OK : '0',
@@ -267,4 +267,4 @@
             },
         }
     }
-})()
+})(jQuery)
