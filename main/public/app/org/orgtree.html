@@ -66,7 +66,7 @@
         <script src="/plugin/jquery-3.4.1.min.js"></script>
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
         <script>
-			let g_from, g_nodeToGet, g_comp, g_expandTo, g_expandAllDept
+			let g_from, g_nodeToGet, g_comp, g_expandTo, g_expandAllDept, g_singleSelect
 			let g_nodeIndent = 24
             let g_rs, g_list, g_listSel
 
@@ -235,7 +235,10 @@
 				      			_tag.prop("checked", _bool)
 				      			if (row1.nodekind == obj.nodeToGet) setTimeout(() => { procSelect(row1.nodekind, i) }, 1)
 				      		}
-				      	})
+							if (g_singleSelect == "Y" && $(".members").length > 1) {
+								hush.msg.msg("하나의 행만 선택 가능합니다.")
+								return
+							}
 				      	$(".row").off("click").on("click", async function(e) {
 				          	if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 checkbox event만 먹히도록 함
 				          	const _id = this.id //row_2
@@ -328,6 +331,7 @@
 					g_comp = param.get("comp")
 					g_expandTo = param.get("expandTo")
 					g_expandAllDept = param.get("expandAllDept")
+					g_singleSelect = param.get("singleSelect")
 					$("#btn_orgtree").click()
 					// if (g_nodeToGet == "U") {
 					// 	if (g_comp) {
@@ -355,7 +359,7 @@
                     // 	$("#btn_jojik").click()
                     // }
                     $("#btn_orgtree").click(function() {
-	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : g_comp, expandTo : g_expandTo, expandAllDept : g_expandAllDept })
+	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : g_comp, expandTo : g_expandTo, expandAllDept : g_expandAllDept, singleSelect : g_singleSelect })
                     })
 					$("#btn_minus,#btn_plus").click(function() {
 	            		const _id = this.id
@@ -393,6 +397,10 @@
                         	hush.msg.toast("선택한 행이 없습니다.")
                         	return
                         }
+						if (g_singleSelect == "Y" && arr.length > 1) {
+							hush.msg.msg("하나의 행만 선택 가능합니다.")
+							return
+						}
                     	if (!opener) {
                     		hush.msg.msg("opener가 존재하지 않습니다.") //개발자오류 chk
                     		return
@@ -400,7 +408,7 @@
 						if (!opener.procFromOrgTree) {
 							hush.msg.msg("opener에 procFromOrgTree() 함수가 존재하지 않습니다.") //개발자오류 chk
 							return
-						}
+						}						
 						opener.procFromOrgTree(g_from, g_nodeToGet, arr)
 						window.close()
                     })
