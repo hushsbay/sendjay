@@ -23,7 +23,7 @@ router.post('/', async function(req, res, next) {
 		sql += " WHERE ORG_CD IS NOT NULL " //바로 아래 조건이 where는 고려하지 말고 and만 편하게 사용하기 위한 dummy where절임
         if (comp != 'all') sql += " AND TOP_ORG_CD IN ('" + comp + "') "
         if (teamcode) {
-            sql += " AND ORG_CD IN = '" + teamcode + "' "
+            sql += " AND ORG_CD = '" + teamcode + "' "
         } else {
             sql += " AND (USER_NM LIKE '%" + keyword + "%' OR ORG_NM LIKE '%" + keyword + "%') "
         }
