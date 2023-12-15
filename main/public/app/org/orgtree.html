@@ -333,36 +333,9 @@
 					g_expandTo = param.get("expandTo")
 					g_expandAllDept = param.get("expandAllDept")
 					g_singleSelect = param.get("singleSelect")
-					debugger
-					$("#btn_orgtree").click()
-					// if (g_nodeToGet == "U") {
-					// 	if (g_comp) {
-					// 		if (g_comp == g_user.cocd) $("#my_comp").prop("checked", true)
-					// 			$("#my_comp").prop("disabled", true)
-					// 	} else {
-					// 		$("#my_comp").prop("disabled", false)
-					// 	}
-					//  $("#btn_team").click()
-                    // } else if (g_nodeToGet == "D") {
-                    // 	if (g_comp) {
-                    // 		if (g_comp == g_user.cocd) $("#my_comp").prop("checked", true) //소속부서만
-                   	// 		$("#my_comp").prop("disabled", true)
-                    // 	} else {
-                    // 		$("#my_comp").prop("disabled", false)
-                    // 	}
-                    // 	$("#btn_team").hide()
-                    // 	$("#btn_jojik").click()
-                    // } else {
-                   	// 	$("#in_search").hide()
-                   	// 	$("#btn_search").hide()
-                   	// 	$("#btn_team").hide()
-                   	// 	$("#btn_jojik").hide()
-                   	// 	$("#lbl_comp_guide").show()                    	
-                    // 	$("#btn_jojik").click()
-                    // }
                     $("#btn_orgtree").click(function() {
 	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : g_comp, expandTo : g_expandTo, expandAllDept : g_expandAllDept, singleSelect : g_singleSelect })
-                    })
+                    })					
 					$("#btn_minus,#btn_plus").click(function() {
 	            		const _id = this.id
 						g_expandAllDept = ""
@@ -417,6 +390,32 @@
 					$("#btn_cancel").on("click", function() { 
 						window.close() 
 					})
+					// if (g_nodeToGet == "U") {
+					// 	if (g_comp) {
+					// 		if (g_comp == g_user.cocd) $("#my_comp").prop("checked", true)
+					// 			$("#my_comp").prop("disabled", true)
+					// 	} else {
+					// 		$("#my_comp").prop("disabled", false)
+					// 	}
+					//  $("#btn_team").click()
+                    // } else if (g_nodeToGet == "D") {
+                    // 	if (g_comp) {
+                    // 		if (g_comp == g_user.cocd) $("#my_comp").prop("checked", true) //소속부서만
+                   	// 		$("#my_comp").prop("disabled", true)
+                    // 	} else {
+                    // 		$("#my_comp").prop("disabled", false)
+                    // 	}
+                    // 	$("#btn_team").hide()
+                    // 	$("#btn_jojik").click()
+                    // } else {
+                   	// 	$("#in_search").hide()
+                   	// 	$("#btn_search").hide()
+                   	// 	$("#btn_team").hide()
+                   	// 	$("#btn_jojik").hide()
+                   	// 	$("#lbl_comp_guide").show()                    	
+                    // 	$("#btn_jojik").click()
+                    // }
+					$("#btn_orgtree").click()
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }                
