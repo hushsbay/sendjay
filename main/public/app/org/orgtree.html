@@ -81,10 +81,10 @@
         	    		_nm = row1.ORG_NM
         	    	} else if (nodekind == "D") {
         	    		_id = row1.ORG_CD
-        	    		_nm = row1.ORG_NM + "/" + row1.TOP_ORG_NM
+        	    		_nm = row1.ORG_NM + "<br>" + row1.TOP_ORG_NM
         	    	} else {
         	    		_id = row1.USER_ID
-        	    		_nm = row1.USER_NM + "/" + row1.ORG_NM
+        	    		_nm = row1.USER_NM + "/" + row1.ORG_NM + "dkjsfhdsfkjhsdf" + "<br>" + row1.TOP_ORG_NM
         	    	}
         	        if (_chk) {
 						if (nodekind == "D" && g_selectOnlyChildDept == "Y" && row1.haschild) return
@@ -154,7 +154,7 @@
 							const org_nm = row.ORG_NM
 							const top_org_cd = row.TOP_ORG_CD
 							const top_org_nm = row.TOP_ORG_NM
-							const nodeStr = user_nm + " / " + org_nm + " / " + top_org_nm
+							const nodeStr = user_nm + "/" + org_nm + "/" + top_org_nm
 							let _html = "<div id=row_" + i.toString() + " class=row style='width:100%;height:40px;display:flex;align-items:center;cursor:pointer;border-bottom:1px solid lightgray;padding-left:3px'>"
 				          	_html += "   	<input type=checkbox id=sel_" + i + " code=" + user_id + " class=sel />"
 				          	_html += "		<img src='/img/ico_per.png' class=coImg16 style='margin-left:5px' />"
@@ -281,7 +281,7 @@
 				          	const expcolImg = (expanded) ? "minus_1.png" : "plus_1.png"
 				          	const paddingLeft = lvl * g_nodeIndent + 3
 				          	if (nodekind == "U") {
-								nodeStr = user_nm + " / " + org_nm + " / " + top_org_nm
+								nodeStr = user_nm + "/" + org_nm + "/" + top_org_nm
 								title = nodeStr
 				          		_code = user_id
 							} else {
