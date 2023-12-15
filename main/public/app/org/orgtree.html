@@ -239,6 +239,7 @@
 								hush.msg.msg("하나의 행만 선택 가능합니다.")
 								return
 							}
+						})
 				      	$(".row").off("click").on("click", async function(e) {
 				          	if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 checkbox event만 먹히도록 함
 				          	const _id = this.id //row_2
