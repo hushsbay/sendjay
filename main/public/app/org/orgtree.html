@@ -67,7 +67,7 @@
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
         <script>
 			let g_from, g_nodeToGet, g_comp, g_expandTo, g_expandAllDept, g_singleSelect
-			let g_nodeIndent = 24
+			let g_nodeIndent = 24, g_max_level = 6 //조직도에서 펼칠 수 있는 최대 레벨(depth) - 각 조직에 따라 변경 가능   
             let g_rs, g_list, g_listSel
 
             document.oncontextmenu = new Function("return false;")
@@ -145,8 +145,8 @@
 						if (hush.util.isvoid(obj.nodeToGet)) obj.nodeToGet = "U"
 						if (hush.util.isvoid(obj.comp)) obj.comp = "ALL"
 						if (hush.util.isvoid(obj.expandTo) || obj.expandTo < 0) obj.expandTo = 0
-						$('#spn_depth').html(parseInt(obj.expandTo) + 1)
-						if (hush.util.isvoid(obj.expandAllDept)) obj.expandAllDept = ""			
+						if (hush.util.isvoid(obj.expandAllDept)) obj.expandAllDept = ""
+						$("#spn_depth").html(obj.expandTo)			
 						g_list.empty()
                         const rs = await hush.http.ajax("/org/orgtree", { obj : obj }) //{ token : token, user : g_user, obj : obj }
                         if (rs.code != hush.cons.CODE_OK) {
@@ -331,29 +331,28 @@
 					g_nodeToGet = param.get("nodeToGet")
 					g_comp = param.get("comp")
 					g_expandTo = param.get("expandTo")
+					if (g_expandTo < 0 || g_expandTo > g_max_level) g_expandTo = g_max_level
 					g_expandAllDept = param.get("expandAllDept")
-					g_singleSelect = param.get("singleSelect")
+					g_singleSelect = param.get("singleSelect")					
                     $("#btn_orgtree").click(function() {
 	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : g_comp, expandTo : g_expandTo, expandAllDept : g_expandAllDept, singleSelect : g_singleSelect })
                     })					
 					$("#btn_minus,#btn_plus").click(function() {
 	            		const _id = this.id
 						g_expandAllDept = ""
-                    	let _num = parseInt($("#spn_depth").html())
 						if (_id == "btn_minus") {
-							if (_num <= 1) {
-								_num = 1
+							if (g_expandTo <= 1) {
+								g_expandTo = 1
 							} else {
-								_num -= 1
+								g_expandTo -= 1
 							}
 						} else {
-							if (_num >= hush.cons.max_level) {
-								_num = hush.cons.max_level
+							if (g_expandTo >= g_max_level) {
+								g_expandTo = g_max_level
 							} else {
-								_num += 1
+								g_expandTo += 1
 							}	
 						}
-                    	$("#spn_depth").html(_num)
                     	$("#btn_orgtree").click()
                     })
 					$("#removeSel").on("click", function() {
@@ -433,7 +432,7 @@
 				<div id="btn_team" class="coMenuBtn coActive"><img src="/img/white_team.png" class="coImg16"/><span class="coSpanWithImg">내팀</span></div>
 				<div id="btn_orgtree" class="coMenuBtn coActive"><img src="/img/white_company.png" class="coImg16"/><span class="coSpanWithImg">조직도</span></div>
 				<div id="div_depth" style="display: flex; align-items: center">
-					<span id="spn_depth" style="border:1px solid darkgray; padding: 3px; margin-left: 3px">1</span>
+					<span id="spn_depth" style="border:1px solid darkgray; padding: 3px; margin-left: 3px">0</span>
 					<img id="btn_minus" src="/img/minus.png" class="coImg20 coActive" style="margin-left: 3px"/>
 					<img id="btn_plus" src="/img/plus.png" class="coImg20 coActive" style="margin-left: 3px"/>
 				</div>
