@@ -87,6 +87,7 @@
         	    		_nm = row1.USER_NM + "/" + row1.ORG_NM
         	    	}
         	        if (_chk) {
+						debugger
 						if (nodekind == "D" && g_selectOnlyChildDept == "Y" && row1.hasChild) return
         	            if ($("#add_" + _id).length > 0) {
         	                $("#add_" + _id).effect("highlight", { color: hush.cons.color_fadein }, 500)
