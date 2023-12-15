@@ -13,5 +13,6 @@ wasServer.listen(config.http.port, () => { console.log('wasServer listening on '
 
 app.use('/org/orgtree', require('./route/org/orgtree')) 
 app.use('/org/empsearch', require('./route/org/empsearch')) 
+app.use('/org/deptsearch', require('./route/org/deptsearch')) 
 
 ws.util.watchProcessError()
