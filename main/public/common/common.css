@@ -65,7 +65,7 @@ input {
 }
 
 .coRowText {
-    height: 20px; margin-left: 5px; 
+    height: 20px; margin-left: 5px; boder:1px solid red;
     display: flex; align-items: center; flex: none
 }
 
