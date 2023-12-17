@@ -13,10 +13,10 @@
 			//의도적으로 인증체크하지 않음
 			let g_rs, g_list
 			
-			const getUserData = async (_keyword, _kind) => {
+			const getUserData = async (_keyword, _sort) => {
 				try {
 					g_list.empty()
-					const rs = await hush.http.ajax("/user/userlist", { keyword : _keyword, kind : _kind })
+					const rs = await hush.http.ajax("/user/userlist", { keyword : _keyword, sort : _sort })
 					if (rs.code != hush.cons.CODE_OK) {
 						hush.msg.showMsg(rs.msg)
 						return
@@ -55,11 +55,9 @@
 	            	})	            	
 	            	$("#btn_search").click(function() {
 	            		const _keyword = $("#in_search").val().trim()
-	            		if (_keyword == "") {
-                   			hush.msg.toast(warn_search_blank)
-                   			return
-                   		}
-            			getUserData(_keyword)
+						const _sort = $("#rdoName").prop("checked") ? $("#rdoName").val() : $("#rdoOrg").val()
+						debugger
+	            		getUserData(_keyword, _sort)
 	            	})
                 } catch (ex) {
                     hush.util.showEx(ex)
@@ -72,9 +70,11 @@
     <body> 
         <div class="container">
             <div class="top">
+				<input type=radio id=rdoName name=sortKind value=N style="cursor:pointer" checked="checked"/><label for=rdoName style="cursor:pointer">이름순</label>
+				<input type=radio id=rdoOrg name=sortKind value=O style="cursor:pointer"/><label for=rdoOrg style="cursor:pointer">조직순</label>
                 <input id="in_search" type=search spellcheck=false autocomplete=off style="width: 80px; height: 28px; margin-left: 5px"/>                
-				<div id="btn_search" class="coMenuBtn coActive"><img src="/img/white_search.png" class="coImg16"/><span class="coSpanWithImg">검색</span></div>
-            </div>
+				<div id="btn_search" class="coMenuBtn coActive"><img src="/img/white_search.png" class="coImg16"/><span class="coSpanWithImg">조회</span></div>
+			</div>
             <div class="main">
                 <div id="listMain"></div>
             </div>

@@ -16,7 +16,7 @@ router.post('/', async function(req, res, next) {
 		sql =  "SELECT ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, USER_ID, USER_NM, NICK_NM, JOB, TEL_NO, AB_CD, AB_NM "
 		sql += "  FROM JAY.Z_USER_TBL "
         if (keyword) sql += " WHERE USER_NM LIKE '%" + keyword + "%' OR ORG_NM LIKE '%" + keyword + "%' "
-		if (sort == "0") {
+		if (sort == 'N') {
 			sql += " ORDER BY USER_NM, USER_ID "
 		} else { //1
 			sql += " ORDER BY TOP_ORG_NM, ORG_NM "
@@ -24,7 +24,7 @@ router.post('/', async function(req, res, next) {
 		data = await wsmysql.query(conn, sql, null)
 		len = data.length
         if (len == 0) {
-			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA, title) //true=toast
+			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true) //true=toast
 			return
 		}
        	rs.list = data

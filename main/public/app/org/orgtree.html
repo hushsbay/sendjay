@@ -367,7 +367,7 @@
 	            	$("#btn_search").click(function() {
 	            		const _keyword = $("#in_search").val().trim()
 	            		if (_keyword == "") {
-							hush.msg.toast(warn_search_blank)
+							hush.msg.toast(hush.cons.warn_search_blank)
                    			return
                    		}
 	            		if (g_nodeToGet == "U") {
