@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
         <title>사용자목록</title>
         <link rel="stylesheet" href="/common/common.css">
-        <link rel="stylesheet" href="/app/org/orgtree.css">
+        <link rel="stylesheet" href="/app/org/orgtree.css">		
         <script src="/plugin/jquery-3.4.1.min.js"></script>
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
         <script>
@@ -26,21 +26,21 @@
 					if (_len == 0) return
 					for (let i = 0; i < _len; i++) {
 						const row = rs.list[i]
-						const user_id = row.USER_ID+"ASDFGHJKLPOU"
+						const user_id = row.USER_ID
 						const user_nm = row.USER_NM
 						const org_cd = row.ORG_CD
 						const org_nm = row.ORG_NM
 						const top_org_cd = row.TOP_ORG_CD
-						const top_org_nm = row.TOP_ORG_NM+"가나다라마바사아자차카타파하"
-						let _html = "<div id=row_" + i.toString() + " class=row style='width:100%;min-height:40px;display:flex;align-items:center;cursor:pointer;border-bottom:1px solid lightgray;padding-left:3px'>"
-						_html += "		<div style='width:20px;height:100%;display:flex;justify-content:center;align-items:center'>"
+						const top_org_nm = row.TOP_ORG_NM
+						let _html = "<div id=row_" + i.toString() + " class=coRow >"
+						_html += "		<div class=coRowLeft >"
 						_html += "			<img src='/img/ico_user.png' class=coImg16 />"
 						_html += "  	</div>"
-						_html += "		<div style='width:100%;height:100%;display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center'>"
-						_html += "			<span class=coDotDot style='width:100px;height:20px;flex:none;margin-left:5px' title='" + user_nm + "'>" + user_nm + "</span>"
-						_html += "			<span class=coDotDot style='width:140px;height:20px;flex:none;margin-left:5px' title='" + user_id + "'>" + user_id + "</span>"
-						_html += "			<span class=coDotDot style='width:140px;height:20px;flex:none;margin-left:5px' title='" + org_nm + "'>" + org_nm + "</span>"
-						_html += "			<span class=coDotDot style='width:140px;height:20px;flex:none;margin-left:5px' title='" + top_org_nm + "'>" + top_org_nm + "</span>"
+						_html += "		<div class=coRowMain >"
+						_html += "			<span class='coDotDot coRowText' title='" + user_nm + "'>" + user_nm + "</span>"
+						_html += "			<span class='coDotDot coRowText' title='" + user_id + "'>" + user_id + "</span>"
+						_html += "			<span class='coDotDot coRowText' title='" + org_nm + "'>" + org_nm + "</span>"
+						_html += "			<span class='coDotDot coRowText' title='" + top_org_nm + "'>" + top_org_nm + "</span>"
 						_html += "  	</div>"
 						_html += "  </div>"
 						g_list.append(_html)
@@ -76,18 +76,14 @@
             <div class="top">
 				<input type=radio id=rdoName name=sortKind value=N style="cursor:pointer" checked="checked"/><label for=rdoName style="cursor:pointer">이름순</label>
 				<input type=radio id=rdoOrg name=sortKind value=O style="cursor:pointer"/><label for=rdoOrg style="cursor:pointer">조직순</label>
-                <input id="in_search" type=search spellcheck=false autocomplete=off style="width: 80px; height: 28px; margin-left: 5px"/>                
+                <input id="in_search" type=search spellcheck=false autocomplete=off style="width: 80px"/>                
 				<div id="btn_search" class="coMenuBtn coActive"><img src="/img/white_search.png" class="coImg16"/><span class="coSpanWithImg">조회</span></div>
 			</div>
             <div class="main">
                 <div id="listMain"></div>
             </div>
-            <div class="bottom">
-                <div style="display: flex; align-items: center">
-	        	</div>
-	        	<div style="display: flex; align-items: center">
-	                <div id="btn_new" class="coMenuBtn coActive"><img src="/img/white_new.png" class="coImg16"/><span class="coSpanWithImg">신규</span></div>
-	        	</div>
+            <div class="bottom" style="justify-content: flex-end; align-items: center">
+                <div id="btn_new" class="coMenuBtn coActive"><img src="/img/white_new.png" class="coImg16"/><span class="coSpanWithImg">신규</span></div>
             </div>
         </div>
     </body>
