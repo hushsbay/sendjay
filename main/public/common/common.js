@@ -1,5 +1,5 @@
-document.oncontextmenu = new Function("return false")
 (function($) {
+    document.oncontextmenu = new Function("return false")
     window.hush = {
         cons : {
             CODE_OK : '0',
