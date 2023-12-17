@@ -32,7 +32,7 @@
 						const org_nm = row.ORG_NM
 						const top_org_cd = row.TOP_ORG_CD
 						const top_org_nm = row.TOP_ORG_NM+"가나다라마바사아자차카타파하"
-						let _html = "<div id=row_" + i.toString() + " class=row style='width:100%;height:40px;display:flex;justify-content:space-around;align-items:space-around;cursor:pointer;border-bottom:1px solid lightgray;padding-left:3px'>"
+						let _html = "<div id=row_" + i.toString() + " class=row style='width:100%;height:40px;display:flex;flex-wrap:wrap;justify-content:space-around;align-items:space-around;cursor:pointer;border-bottom:1px solid lightgray;padding-left:3px'>"
 						_html += "		<img src='/img/ico_user.png' class=coImg16 />"
 						_html += "		<span class=coDotDot style='width:100px;margin-left:5px' title='" + user_nm + "'>" + user_nm + "</span>"
 						_html += "		<span class=coDotDot style='width:140px;margin-left:5px' title='" + user_id + "'>" + user_id + "</span>"
