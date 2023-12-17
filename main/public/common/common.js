@@ -1,5 +1,6 @@
 (function($) {
     document.oncontextmenu = new Function("return false")
+    const _warn_blank = " 필드가 빈값입니다."
     window.hush = {
         cons : {
             CODE_OK : '0',
@@ -20,8 +21,8 @@
             failOnLoad : "failOnLoad",
             restful_timeout : 10000,
             color_fadein : "#b2e2f8",            
-            warn_blank : " 필드가 빈값입니다.",
-            warn_search_blank : "검색어" + hush.cons.warn_blank,
+            warn_blank : _warn_blank,
+            warn_search_blank : "검색어" + _warn_blank,
             warn_no_row_selected : "선택한 행이 없습니다.",
             warn_no_opener : "opener가 존재하지 않습니다.",
         },
