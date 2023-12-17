@@ -19,7 +19,7 @@ router.post('/', async function(req, res, next) {
 		if (sort == 'N') {
 			sql += " ORDER BY USER_NM, USER_ID "
 		} else { //1
-			sql += " ORDER BY TOP_ORG_NM, ORG_NM "
+			sql += " ORDER BY TOP_ORG_NM, ORG_NM, USER_NM, USER_ID "
 		}
 		data = await wsmysql.query(conn, sql, null)
 		len = data.length
