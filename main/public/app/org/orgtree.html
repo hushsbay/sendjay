@@ -6,63 +6,7 @@
         <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
         <title>조직도</title>
         <link rel="stylesheet" href="/common/common.css">
-        <style>
-            .container { 
-                width: 100%; height: 100%; padding: 0 5px;
-                display: flex; flex-direction: column; 
-                background-color: #eaeaea;
-            }
-
-            .top {
-                height:50px;
-                display: flex; align-items: center;
-                background-color: transparent;
-            }
-
-            .main {
-                height: 100%; 
-                display: flex; flex: 1; overflow-y: auto;
-                background-color: white;
-            }
-
-            .bottom {
-                height: 50px; padding: 0 5px;
-                display: flex; justify-content: space-between; align-items: center;
-                background-color: transparent;
-            }
-
-            #listMain { 
-                width: calc(100% - 100px); display: flex; flex-direction: column; flex-grow: 1; overflow-y: auto;
-				border: 1px solid darkgray;
-            }
-
-            #panSel { 
-                width: 100px; 
-                display: none; flex-direction: column;  
-                border:1px solid darkgray; border-left: 0;
-            }
-
-            #panSelTop { 
-                height: 24px; 
-                display: flex; align-items: center; justify-content: space-between; 
-                border-bottom: 1px solid darkgray;
-            }
-
-			#listSel {
-				display: flex; flex-direction: column; overflow: auto; 
-			}
-
-			.mem {
-				height: 40px; padding-top: 4px; margin: 4px 4px 0px 4px;
-				display: flex; flex-direction: column; flex: none; overflow: auto; 
-				background-color: #0086cd; opacity: 0.2;
-			}
-
-            .memNm { 
-				margin-left: 3px;
-				font-size: 12px; color: white; cursor: pointer;  /*#005192*/
-			}
-        </style>
+		<link rel="stylesheet" href="/app/org/orgtree.css">
         <script src="/plugin/jquery-3.4.1.min.js"></script>
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
         <script>

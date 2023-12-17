@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <link id=favicon href="/img/hushsbay.png" rel="shortcut icon" type="image/x-icon"/>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+        <title>사용자목록</title>
+        <link rel="stylesheet" href="/common/common.css">
+        <link rel="stylesheet" href="/app/org/orgtree.css">
+        <script src="/plugin/jquery-3.4.1.min.js"></script>
+		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
+        <script>
+			let g_user, g_rs, g_list
+			
+			const getUserData = async (_keyword, _teamcode) => {
+				try {
+					g_list.empty()
+					const _comp = $("#chk_mycomp").prop("checked") ? g_user.toporgcd : g_comp
+					const rs = await hush.http.ajax("/org/empsearch", { keyword : _keyword, teamcode : _teamcode, comp : _comp }) //{ token : token, user : g_user }
+					if (rs.code != hush.cons.CODE_OK) {
+						hush.msg.showMsg(rs.msg)
+						return
+					}
+					g_rs = rs
+					const _len = rs.list.length
+					if (_len == 0) return
+					for (let i = 0; i < _len; i++) {
+						const row = rs.list[i]
+						const user_id = row.USER_ID
+						const user_nm = row.USER_NM
+						const org_cd = row.ORG_CD
+						const org_nm = row.ORG_NM
+						const top_org_cd = row.TOP_ORG_CD
+						const top_org_nm = row.TOP_ORG_NM
+						const nodeStr = user_nm + "/" + org_nm + "/" + top_org_nm
+						let _html = "<div id=row_" + i.toString() + " class=row style='width:100%;height:40px;display:flex;align-items:center;cursor:pointer;border-bottom:1px solid lightgray;padding-left:3px'>"
+						_html += "   	<input type=checkbox id=sel_" + i + " code=" + user_id + " class=sel />"
+						_html += "		<img src='/img/ico_user.png' class=coImg16 style='margin-left:5px' />"
+						_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
+						_html += "  </div>"
+						g_list.append(_html)
+					}
+					if (_len == 0) return
+					$(".sel").off("change").on("change", function(e) {
+						const _self = $(this)
+						const _id = this.id //sel_2
+						const _idx = parseInt(_id.substring(4)) //2
+						procSelect("U", _idx)
+					}) //g_nodeToGet == "U"일 경우만 btn_team() 실행됨
+					if (_teamcode) { //내팀
+						$("#chk_selectall").prop("disabled", false)
+					} else { //검색
+						$("#chk_selectall").prop("disabled", true)
+					}
+				} catch (ex) {
+					hush.util.showEx(ex)
+				} 	                
+            }
+
+            $.when($.ready).done(async function() {
+                try {
+                    await $.getScript("/common/common.js")
+					document.oncontextmenu = new Function("return false;")
+					g_list = $("#listMain")
+					$("#in_search").keyup(function(e) { 
+	            		if (e.keyCode === 13) $("#btn_search").click()
+	            	})	            	
+	            	$("#btn_search").click(function() {
+	            		const _keyword = $("#in_search").val().trim()
+	            		if (_keyword == "") {
+                   			hush.msg.toast("검색어가 빈칸입니다.")
+                   			return
+                   		}
+            			getUserData(_keyword)
+	            	})
+                } catch (ex) {
+                    hush.util.showEx(ex)
+                }                
+            }).fail(function(ex) {
+                hush.util.showEx(ex, hush.cons.failOnLoad)
+            })
+        </script>
+    </head>
+    <body> 
+        <div class="container">
+            <div class="top">
+                <input id="in_search" type=search spellcheck=false autocomplete=off style="width: 80px; height: 28px; margin-left: 5px"/>                
+				<div id="btn_search" class="coMenuBtn coActive"><img src="/img/white_search.png" class="coImg16"/><span class="coSpanWithImg">검색</span></div>
+            </div>
+            <div class="main">
+                <div id="listMain"></div>
+            </div>
+            <div class="bottom">
+                <div style="display: flex; align-items: center">
+	        	</div>
+	        	<div style="display: flex; align-items: center">
+	                <div id="btn_new" class="coMenuBtn coActive"><img src="/img/white_new.png" class="coImg16"/><span class="coSpanWithImg">신규</span></div>
+	        	</div>
+            </div>
+        </div>
+    </body>
+</html>
