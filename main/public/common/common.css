@@ -49,7 +49,7 @@ input {
 }
 
 .coRow {
-    width: 100%; min-height: 40px; padding-left:3px;
+    width: 100%; min-height: 50px; padding-left:3px;
     display: flex; align-items: center; 
     cursor: pointer; border-bottom: 1px solid lightgray
 }
