@@ -66,7 +66,7 @@ input {
 
 .coRowText {
     height: 20px; margin-left: 5px; 
-    flex: none
+    display: flex; align-items: center; flex: none
 }
 
 @media screen and (min-device-width: 501px) { }
