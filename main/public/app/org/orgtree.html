@@ -96,7 +96,7 @@
 							const top_org_cd = row.TOP_ORG_CD
 							const top_org_nm = row.TOP_ORG_NM
 							const nodeStr = user_nm + "/" + org_nm + "/" + top_org_nm
-							let _html = "<div id=row_" + i.toString() + " class=row style='width:100%;height:40px;display:flex;align-items:center;cursor:pointer;border-bottom:1px solid lightgray;padding-left:3px'>"
+							let _html = "<div id=row_" + i.toString() + " class=coRow >"
 				          	_html += "   	<input type=checkbox id=sel_" + i + " code=" + user_id + " class=sel />"
 				          	_html += "		<img src='/img/ico_user.png' class=coImg16 style='margin-left:5px' />"
 				          	_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
@@ -143,7 +143,7 @@
 							const top_org_cd = row.TOP_ORG_CD
 							const top_org_nm = row.TOP_ORG_NM
 							const nodeStr = org_nm + "/" + top_org_nm
-							let _html = "<div id=row_" + i.toString() + " class=row style='width:100%;height:40px;display:flex;align-items:center;cursor:pointer;border-bottom:1px solid lightgray;padding-left:3px'>"
+							let _html = "<div id=row_" + i.toString() + " class=coRow >"
 				          	_html += "   	<input type=checkbox id=sel_" + i + " code=" + org_cd + " class=sel />"
 				          	_html += "		<img src='/img/ico_user.png' class=coImg16 style='margin-left:5px' />"
 				          	_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
@@ -235,14 +235,15 @@
 				        	row.haschild = hasChild
 				        	row.expanded = expanded
 				        	row.parentidx = parentidx
-				          	let _html = "<div id=row_" + i.toString() + " class=row style='width:100%;min-height:50px;display:" + disp + ";align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid lightgray;padding-left:" + paddingLeft + "px'>"
-				          	_html += "		<div style='width:calc(100% - 45px);display:flex;align-items:center;justify-content:flex-start;margin-right:5px'>"
+				          	//let _html = "<div id=row_" + i.toString() + " class=row style='width:100%;min-height:50px;display:" + disp + ";align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid lightgray;padding-left:" + paddingLeft + "px'>"
+							let _html = "<div id=row_" + i.toString() + " class=coRow style='display:" + disp + ";justify-content:space-between;padding-left:" + paddingLeft + "px'>"
+				          	_html += "		<div style='width:calc(100% - 45px);display:flex;align-items:center;justify-content:flex-start;margin-right:3px'>"
 				          	_html += "   		<input type=checkbox id=sel_" + i + " code=" + _code + " class=sel />"
 				          	const _ico = (nodekind == "U") ? "user" : "dept"
 							_html += "			<img src='/img/ico_" + _ico + ".png' class=coImg16 style='margin-left:5px' />"
-			          		_html += "			<span class=coDotDot style='margin-left:5px' title='" + title + "'>" + nodeStr + "</span>"
+			          		_html += "			<span class=coRowText title='" + title + "'>" + nodeStr + "</span>"
 				          	_html += "      </div>"				          	
-				          	_html += "      <div style='width:40px;display:flex;align-items:center;justify-content:flex-end;margin-right:5px'>"
+				          	_html += "      <div style='width:40px;display:flex;align-items:center;justify-content:flex-end;margin-right:3px'>"
 					        const dispImg = (hasChild) ? "" : " style='display:none'"
 					        _html += "          <img id=expcol_" + i + " src='/img/" + expcolImg + "' class=coImg32" + dispImg + " />"
 					        _html += "      </div>"
@@ -270,7 +271,7 @@
 								return
 							}
 						})
-				      	$(".row").off("click").on("click", async function(e) {
+				      	$(".coRow").off("click").on("click", async function(e) {
 				          	if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 checkbox event만 먹히도록 함
 				          	const _id = this.id //row_2
 				          	const _idx = parseInt(_id.substring(4)) //2
