@@ -34,10 +34,10 @@
 						const top_org_nm = row.TOP_ORG_NM+"가나다라마바사아자차카타파하"
 						let _html = "<div id=row_" + i.toString() + " class=row style='width:100%;height:40px;display:flex;align-items:center;cursor:pointer;border-bottom:1px solid lightgray;padding-left:3px'>"
 						_html += "		<img src='/img/ico_user.png' class=coImg16 style='margin-left:5px' />"
-						_html += "		<span style='width:100px;margin-left:5px' title='" + user_nm + "'>" + user_nm + "</span>"
-						_html += "		<span style='width:100px;margin-left:5px' title='" + user_id + "'>" + user_id + "</span>"
-						_html += "		<span style='width:100px;margin-left:5px' title='" + org_nm + "'>" + org_nm + "</span>"
-						_html += "		<span style='width:100px;margin-left:5px' title='" + top_org_nm + "'>" + top_org_nm + "</span>"
+						_html += "		<span style='width:100px;flex:none;margin-left:5px' title='" + user_nm + "'>" + user_nm + "</span>"
+						_html += "		<span style='width:100px;flex:none;margin-left:5px' title='" + user_id + "'>" + user_id + "</span>"
+						_html += "		<span style='width:100px;flex:none;margin-left:5px' title='" + org_nm + "'>" + org_nm + "</span>"
+						_html += "		<span style='width:100px;flex:none;margin-left:5px' title='" + top_org_nm + "'>" + top_org_nm + "</span>"
 						_html += "  </div>"
 						g_list.append(_html)
 					}
