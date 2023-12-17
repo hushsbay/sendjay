@@ -44,8 +44,7 @@ input {
 }
 
 .coDotDot { 
-    overflow: hidden;
-    white-space: nowrap; text-overflow: ellipsis;
+    overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
 }
 
 .coRow {
@@ -65,8 +64,9 @@ input {
 }
 
 .coRowText {
-    height: 20px; margin-left: 5px; border:1px solid red;
-    display: flex; align-items: center; flex: none
+    height: 20px; margin-left: 3px;
+    display: flex; align-items: center; flex: none; 
+    overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
 }
 
 @media screen and (min-device-width: 501px) { }
