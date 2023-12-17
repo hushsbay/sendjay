@@ -1,3 +1,4 @@
+document.oncontextmenu = new Function("return false")
 (function($) {
     window.hush = {
         cons : {

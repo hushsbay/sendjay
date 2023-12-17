@@ -343,7 +343,6 @@
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
-					document.oncontextmenu = new Function("return false;")
 					g_user = hush.auth.setUser()
 					g_list = $("#listMain")
 					g_listSel = $("#listSel")
