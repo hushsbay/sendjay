@@ -20,18 +20,14 @@
 			/* #lbl_1 { grid-area: lbl_1; } #fld_1 { grid-area: fld_1; } #lbl_2 { grid-area: lbl_2; } #fld_2 { grid-area: fld_2; } */
 
 			.gridCellLabel {
-				display: flex; align-items: center; padding-left: 3px;
+				padding-left: 3px;
+				display: flex; align-items: center;
 				border: 1px solid lightgray; font-weight: bold;
 			}
 
 			.gridCellField {
-				display: flex; align-items: center; padding-left: 3px;
-				border: 1px solid lightgray;
-			}
-
-			.gridCellFieldWrap {
 				padding-left: 3px;
-				display: flex; align-items: center;
+				display: flex; align-items: center; flex-wrap: wrap;
 				border: 1px solid lightgray;
 			}
 		</style>	
@@ -83,18 +79,18 @@
 					
 					<div id="lbl_5" class="gridCellLabel">새비번</div>
 					<div id="fld_5" class="gridCellField">
-						<input id="in_pwd_1" spellcheck=false autocomplete=off style="width: 140px; margin: 0 3px"/>
+						<input id="in_pwd_1" spellcheck=false autocomplete=off style="width: 120px; margin: 0 3px"/>
 					</div>
 
 					<div id="lbl_6" class="gridCellLabel">새비번(확인)</div>
 					<div id="fld_6" class="gridCellField">
-						<input id="in_pwd_2" spellcheck=false autocomplete=off style="width: 140px; margin: 0 3px"/>
+						<input id="in_pwd_2" spellcheck=false autocomplete=off style="width: 120px; margin: 0 3px"/>
 					</div>
 					
-					<div id="lbl_7" class="gridCellLabel">회사/부서</div>
-					<div id="fld_7" class="gridCellField" style="flex-wrap:wrap">
-						<button style="margin: 0 3px; flex: none">선택</button>
-						<div id="txt_comp" style="margin: 0 3px; flex: none">삼성전자삼성전자삼성전자</div><div id="txt_dept" style="margin: 0 3px; flex: none">재무팀재무팀재무팀재무팀</div>
+					<div id="lbl_7" class="gridCellLabel">회사/부서<button style="margin-left: 3px; flex: none">선택</button></div>
+					<div id="fld_7" class="gridCellField">						
+						<div id="txt_comp" style="margin: 0 3px; flex: none">삼성전자삼성전자삼성전자</div>
+						<div id="txt_dept" style="margin: 0 3px; flex: none">재무팀재무팀재무팀재무팀</div>
 					</div>
 
 					<div id="lbl_8" class="gridCellLabel">사진</div>
