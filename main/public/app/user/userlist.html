@@ -11,7 +11,7 @@
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
         <script>
 			//의도적으로 인증체크하지 않음
-			let g_rs, g_list
+			let g_list
 			
 			const getUserData = async (_keyword, _sort) => {
 				try {
@@ -21,7 +21,6 @@
 						hush.msg.showMsg(rs.msg)
 						return
 					}
-					g_rs = rs
 					const _len = rs.list.length
 					if (_len == 0) return
 					for (let i = 0; i < _len; i++) {

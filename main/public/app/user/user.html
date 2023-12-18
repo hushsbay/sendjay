@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <link id=favicon href="/img/hushsbay.png" rel="shortcut icon" type="image/x-icon"/>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+        <title>사용자</title>
+        <link rel="stylesheet" href="/common/common.css">
+		<link rel="stylesheet" href="/app/org/orgtree.css">	
+		<style>
+			#gridMain {
+				display: grid;
+				grid-template-columns: repeat(2, 100px, 100%);
+				grid-auto-rows: 50px;
+				column-gap: 5px;				
+				row-gap: 5px;
+				grid-template-areas: 
+					"cell_lbl_id cell_in_id"
+					"cell_lbl_nm cell_in_nm"
+				;
+			}
+
+			#lbl_id { grid-area: cell_lbl_id; }
+			#in_id { grid-area: cell_in_id; }
+			#lbl_nm { grid-area: cell_lbl_nm; }
+			#in_nm { grid-area: cell_in_nm; }
+		</style>	
+        <script src="/plugin/jquery-3.4.1.min.js"></script>
+		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
+        <script>
+			//의도적으로 인증체크하지 않음
+			
+			
+
+            $.when($.ready).done(async function() {
+                try {
+                    await $.getScript("/common/common.js")
+					
+					
+                } catch (ex) {
+                    hush.util.showEx(ex)
+                }                
+            }).fail(function(ex) {
+                hush.util.showEx(ex, hush.cons.failOnLoad)
+            })
+        </script>
+    </head>
+    <body> 
+        <div class="container">
+            <div class="main">
+                <div id="gridMain">
+					<div id="lbl_id"></div><div id="in_id"></div>
+					<div id="lbl_nm"></div><div id="in_nm"></div>
+				</div>
+            </div>
+            <div class="bottom" style="justify-content: flex-end; align-items: center">
+                <div id="btn_save" class="coMenuBtn coActive"><img src="/img/white_ok.png" class="coImg16"/><span class="coSpanWithImg">저장</span></div>
+				<div id="btn_delete" class="coMenuBtn coActive"><img src="/img/white_trash.png" class="coImg16"/><span class="coSpanWithImg">삭제</span></div>
+            </div>
+        </div>
+    </body>
+</html>
