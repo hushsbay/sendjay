@@ -26,7 +26,7 @@
 
 			.gridCellField {
 				display: flex; align-items: center; padding-left: 3px;
-				border: 1px solid lightgray; font-weight: bold;
+				border: 1px solid lightgray;
 			}
 		</style>	
         <script src="/plugin/jquery-3.4.1.min.js"></script>
@@ -72,7 +72,7 @@
 					<div id="lbl_4" class="gridCellLabel">비번</div>
 					<div id="fld_4" class="gridCellField">
 						<input id="in_pwd" spellcheck=false autocomplete=off style="width: 140px; margin: 0 3px"/>
-						<button style="margin: 0 3px">비번변경</button>
+						<input id="chk_change_pwd" type=checkbox /><label id="lbl_change_pwd" for="chk_change_pwd" style="cursor: pointer; margin-left: 3px">비번변경</label>
 					</div>
 					
 					<div id="lbl_5" class="gridCellLabel">새비번</div>
@@ -88,13 +88,13 @@
 					<div id="lbl_7" class="gridCellLabel">회사/부서</div>
 					<div id="fld_7" class="gridCellField">
 						<button style="margin: 0 3px">선택</button>
-						<div id="txt_comp" style="margin: 0 3px">삼성전자</div><div id="txt_dept" style="margin: 0 3px">재무팀</div>
+						<div id="txt_comp" style="margin: 0 3px">삼성전자삼성전자삼성전자</div><div id="txt_dept" style="margin: 0 3px">재무팀재무팀재무팀재무팀</div>
 					</div>
 
 					<div id="lbl_8" class="gridCellLabel">사진</div>
 					<div id="fld_8" class="gridCellField">
 						<button style="margin: 0 3px">선택</button>
-						<div id="img_user" style="margin: 0 3px">000</div>
+						<div id="img_user" style="margin: 0 3px">사진</div>
 					</div>
 				</div>
             </div>
