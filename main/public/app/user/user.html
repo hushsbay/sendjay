@@ -12,18 +12,17 @@
 				display: grid;
 				grid-template-columns: 100px auto;
 				grid-auto-rows: 40px;
-				column-gap: 5px;				
-				row-gap: 5px;
-				grid-template-areas: 
-					"cell_lbl_id cell_in_id"
-					"cell_lbl_nm cell_in_nm"
-				;
+				column-gap: 3px;				
+				row-gap: 3px;
+				grid-template-areas: "lbl_1 fld_1" "lbl_2 fld_2" "lbl_3 fld_3" "lbl_4 fld_4";
 			}
 
-			#lbl_id { grid-area: cell_lbl_id; }
-			#in_id { grid-area: cell_in_id; }
-			#lbl_nm { grid-area: cell_lbl_nm; }
-			#in_nm { grid-area: cell_in_nm; }
+			#lbl_1 { grid-area: lbl_1; } #fld_1 { grid-area: fld_1; }
+			#lbl_2 { grid-area: lbl_2; } #fld_2 { grid-area: fld_2; }
+
+			.gridCell {
+				border: 1px solid lightgray;
+			}
 		</style>	
         <script src="/plugin/jquery-3.4.1.min.js"></script>
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
@@ -50,8 +49,8 @@
             <div class="main" style="width:100%;flex-direction:column">
 				<div style="width:100%;padding:5px">dklsfgjdklsfj<br>dfklgjfdlkgfdlk</div>
                 <div id="gridMain" style="width:100%">
-					<div id="lbl_id" style="border:1px solid dimgray"></div><div id="in_id" style="border:1px solid dimgray"></div>
-					<div id="lbl_nm" style="border:1px solid dimgray"></div><div id="in_nm" style="border:1px solid dimgray"></div>
+					<div id="lbl_1" class="gridCell"></div><div id="fld_1" class="gridCell"></div>
+					<div id="lbl_2" class="gridCell"></div><div id="fld_2" class="gridCell"></div>
 				</div>
             </div>
             <div class="bottom" style="justify-content: flex-end; align-items: center">
