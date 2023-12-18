@@ -23,6 +23,11 @@
 				display: flex; align-items: center; padding-left: 3px;
 				border: 1px solid lightgray; font-weight: bold;
 			}
+
+			.gridCellField {
+				display: flex; align-items: center; padding-left: 3px;
+				border: 1px solid lightgray; font-weight: bold;
+			}
 		</style>	
         <script src="/plugin/jquery-3.4.1.min.js"></script>
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
@@ -50,32 +55,32 @@
 				<div style="width:100%;padding:5px">설명 내용..</div>
                 <div id="gridMain" style="width:100%">					
 					<div id="lbl_1" class="gridCellLabel">아이디</div>
-					<div id="fld_1" class="gridCell">
+					<div id="fld_1" class="gridCellField">
 						<input id="in_id" spellcheck=false autocomplete=off style="width: 140px; margin: 0 3px"/>
 					</div>
 					
 					<div id="lbl_2" class="gridCellLabel">이름</div>
-					<div id="fld_2" class="gridCell">
+					<div id="fld_2" class="gridCellField">
 						<input id="in_nm" spellcheck=false autocomplete=off style="width: 100%; margin: 0 3px"/>
 					</div>
 					
 					<div id="lbl_3" class="gridCellLabel">별칭(Alias)</div>
-					<div id="fld_3" class="gridCell"></div>
+					<div id="fld_3" class="gridCellField"></div>
 					
 					<div id="lbl_4" class="gridCellLabel">비번</div>
-					<div id="fld_4" class="gridCell"></div>
+					<div id="fld_4" class="gridCellField"></div>
 					
 					<div id="lbl_5" class="gridCellLabel">새비번</div>
-					<div id="fld_5" class="gridCell"></div>
+					<div id="fld_5" class="gridCellField"></div>
 
 					<div id="lbl_6" class="gridCellLabel">새비번(확인)</div>
-					<div id="fld_6" class="gridCell"></div>
+					<div id="fld_6" class="gridCellField"></div>
 					
 					<div id="lbl_7" class="gridCellLabel">회사/부서</div>
-					<div id="fld_7" class="gridCell"></div>
+					<div id="fld_7" class="gridCellField"></div>
 
 					<div id="lbl_8" class="gridCellLabel">사진</div>
-					<div id="fld_8" class="gridCell"></div>
+					<div id="fld_8" class="gridCellField"></div>
 				</div>
             </div>
             <div class="bottom" style="justify-content: flex-end; align-items: center">
