@@ -29,14 +29,14 @@
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
         <script>
 			//의도적으로 인증체크하지 않음
-			
-			
+			let g_userid			
 
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
-					
-					
+					const param = new URLSearchParams(location.search)
+					g_userid = param.get("user_id")
+					alert(g_userid)
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }                

@@ -48,11 +48,10 @@
 					$(".coRow").off("click").on("click", function(e) {
 						const _self = $(this)
 						const _id = this.id //sel_2
-						//const _idx = parseInt(_id.substring(4)) //2
-						//const row = g_rs.list[_idx]
-						//const _bool = _self.prop("checked")
-						hush.util.anim(_self, () => { 
-							hush.msg.toast(_id)	
+						const _idx = parseInt(_id.substring(4)) //2
+						const row = g_rs.list[_idx]
+						hush.util.anim(_self, () => { 							
+							hush.util.openWinPop("/app/user/user.html?user_id=" + row.USER_ID)
         	            })
 					})
 				} catch (ex) {
