@@ -11,7 +11,7 @@
 			#gridMain {				
 				display: grid;
 				grid-template-columns: 100px auto;
-				grid-auto-rows: 40px;
+				grid-auto-rows: minmax(40px, auto);
 				column-gap: 3px;				
 				row-gap: 3px;
 				grid-template-areas: "lbl_1 fld_1" "lbl_2 fld_2" "lbl_3 fld_3" "lbl_4 fld_4" "lbl_5 fld_5" "lbl_6 fld_6" "lbl_7 fld_7" "lbl_8 fld_8";
@@ -26,6 +26,12 @@
 
 			.gridCellField {
 				display: flex; align-items: center; padding-left: 3px;
+				border: 1px solid lightgray;
+			}
+
+			.gridCellFieldWrap {
+				padding-left: 3px;
+				display: flex; align-items: center;
 				border: 1px solid lightgray;
 			}
 		</style>	
