@@ -83,7 +83,7 @@
                 try { //By default, $.getScript() sets the cache setting to false. You can override this with $.ajaxSetup({ cache: true })
                     await $.getScript("/common/common.js")
                     $("#btn_user").on("click", function() {
-                        hush.util.openWinPop("/app/user/userlist.html")
+                        hush.util.openWinPop("/app/user/userlist.html", 550, 700)
                     })
                     $("#btn_orgtree").on("click", function() {
                         //from = 호출자 식별을 위한 참고용
@@ -113,7 +113,7 @@
                 </div>
                 <div class="topRight">
                     <div class="topRightItem coActive" id="btn_guide">안내</div>
-                    <div class="topRightItem coActive" id="btn_user">사용자목록</div>
+                    <div class="topRightItem coActive" id="btn_user">사용자</div>
                     <div class="topRightItem coActive" id="btn_login">로그인</div>
                 </div>
             </div>

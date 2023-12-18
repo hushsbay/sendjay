@@ -269,8 +269,8 @@
             },
             openWinPop : (url, width, height, pos) => { //pos : 1) 없으면 중앙 2) 1~9999면 중앙인데 top만 지정 3) 0이면 (0, 0) 4) random은 랜덤
                 let _left, _top
-                const _width = width ? width : "550"
-                const _height = height ? height : "700"
+                const _width = width ? width : "500"
+                const _height = height ? height : "680"
                 if (hush.util.isvoid(pos)) {
                     _left = (parseInt(screen.width) - _width) / 2
                     _top = (parseInt(screen.height) - _height) / 2
