@@ -387,6 +387,8 @@
                 }
                 return true
             },
+        },
+        blob : {
             getBlobUrlForImage : (buffer, mimetype) => {
                 const _mimetype = (mimetype) ? mimetype : "image/png"
                 const uInt8Array = new Uint8Array(buffer)
@@ -410,6 +412,58 @@
                 }
                 return _ret
             },
+            ajax : async (url, data, noToast, method) => {
+                try {
+                    if (!noToast) hush.msg.toast("waiting..", -1)
+                    const rs = await hush.http.ajaxPromise(url, data, method)               
+                    if (!noToast) hush.msg.toastEnd()                    
+                    return rs
+                } catch (ex) {
+                    if (!noToast) hush.msg.toastEnd()
+                    throw ex //new Error(ex.message)
+                }
+            },
+            blobPromise : (blobUrl, data, method) => new Promise((resolve, reject) => {
+                const objUrl = hush.util.parseBlobUrl(blobUrl)
+                if (!objUrl) {
+                    hush.msg.toast("Mime type not found.")
+                    return
+                }
+                const rs = { code : "0", ret : "" }
+                const xhr = new XMLHttpRequest()
+                xhr.open("GET", blobUrl, true) //since blobUrl might be just blob without any infomation for base64 and contentType eg) blob:https://~
+                xhr.responseType = "11blob"
+                xhr.onload = function(e) {
+                    debugger
+                    if (this.status == 200) {
+                        rs.ret = this.response
+                        resolve(rs)
+                    } else {
+                        rs.code = "-1"
+                        rs.ret = ""
+                    }
+                }
+                xhr.send()
+                
+                $.ajax({dataType : "json", //response data type
+                    contentType : "application/json; charset=utf-8", //request mime type
+                    url : url,
+                    data: (method && method.toLowerCase() == "get") ? data : JSON.stringify(data),
+                    cache : false,
+                    async : true,
+                    type : (method) ? method : "post",
+                    timeout : hush.cons.restful_timeout,
+                    success : function(rs) {
+                        resolve(rs)
+                    },
+                    error : function(xhr, status, error) {
+                        //"Uncaught (in promise) Error" => status=error, error=""
+                        //When done().fail(), "Uncaught (in promise) Error: error" returned
+                        const msg = (typeof error == "string") ? error : error.toString()
+                        reject(new Error(msg))
+                    }
+                }
+            )}),
         }
     }
 })(jQuery)
