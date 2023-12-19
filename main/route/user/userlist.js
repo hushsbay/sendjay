@@ -6,7 +6,7 @@ const router = express.Router()
 
 const title = 'userlist'
 
-router.post('/', async function(req, res, next) {
+router.post('/', async function(req, res) {
 	let conn, sql, data, len
 	const rs = ws.http.resInit()
 	try {

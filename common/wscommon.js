@@ -18,8 +18,9 @@ module.exports = (function() {
 		cons : {
 			 CODE_OK : '0',
 			 CODE_ERR : '-1',
+			 MSG_ALREADY_EXISTS : '이미 존재하는 데이터입니다.',
 			 CODE_NO_DATA : '-100',
-			 MSG_NO_DATA : 'no data.',
+			 MSG_NO_DATA : '데이터가 없습니다.',
 			 CODE_PASSWORD_NEEDED : '-76',
 			 CODE_PASSKEY_NEEDED : '-77',
 			 CODE_PASSWORD_NOT_MATCHED : '-78',

@@ -10,7 +10,7 @@ router.use(function(req, res, next) {
 	next() //next('blabla') for going to ws.util.watchRouterError() below
 })
 
-router.post('/', async function(req, res, next) {
+router.post('/', async function(req, res) {
 	let conn, sql, data, len
 	const rs = ws.http.resInit()
 	try {

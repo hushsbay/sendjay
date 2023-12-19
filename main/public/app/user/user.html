@@ -32,13 +32,13 @@
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
         <script>
 			//의도적으로 인증체크하지 않음
-			let g_userid			
+			let g_id			
 
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
 					const param = new URLSearchParams(location.search)
-					g_userid = param.get("user_id")
+					g_id = param.get("user_id")
 					$("#btn_save").click(async function() {
 						try {
 							const _id = $("#in_id").val().trim()
@@ -47,41 +47,39 @@
 							const _pwd = $("#in_pwd").val().trim()
 							const _pwd_1 = $("#in_pwd_1").val().trim()
 							const _pwd_2 = $("#in_pwd_2").val().trim()
-							const _comp = $("#txt_comp").html()
-							const _dept = $("#txt_dept").html()
-							const blobUrl = $("#img_pict").attr("src")
+							const _toporgcd = $("#txt_toporgcd").html()
+							const _toporgnm = $("#txt_toporgnm").html()
+							const _orgcd = $("#txt_orgcd").html()
+							const _orgnm = $("#txt_orgnm").html()
 							if (!hush.util.chkFieldVal(_id, "아이디", 4, 20, true)) return
-							debugger
-							// if (!blobUrl) {
-							//     hush.msg.toast("Image file needed.")
-							//     return
-							// }
-							const blob = await hush.blob.get(blobUrl)
-							debugger
-							// const objUrl = hush.blob.parseBlobUrl(blobUrl)
-							// if (!objUrl) {
-							//     hush.msg.toast("Mime type not found.")
-							//     return
-							// }
-							// debugger
-							// const xhr = new XMLHttpRequest()
-							// xhr.open("GET", blobUrl, true) //since blobUrl might be just blob without any infomation for base64 and contentType eg) blob:https://~
-							// xhr.responseType = "blob"
-							// xhr.onload = function(e) {
-							// 	debugger
-							//     if (this.status == 200) {
-							//         const blob = this.response
-							//         const fd = new FormData()
-							//         fd.append("userid", g_userid)
-							//         fd.append("type", "U") //U(Update Picture), D(Delete Picture)
-							//         fd.append("mimetype", objUrl.mimetype)
-							//         fd.append("file", blob)
-							//         //hushj.http.ajaxFormData(hush.cons.route + "/proc_picture", fd, (rs) => {
-							//         //    hushj.msg.toast("Upload done.")
-							//         //})
-							//     }
-							// }
-							// xhr.send()
+							
+							const fd = new FormData()
+							fd.append("type", (g_id) ? "U" : "C")
+							fd.append("id", _id)
+							fd.append("nm", _nm)
+							fd.append("alias", _alias)
+							fd.append("pwd", _pwd)
+							fd.append("pwd_1", _pwd_1)
+							fd.append("pwd_2", _pwd_2)
+							fd.append("toporgcd", _toporgcd)
+							fd.append("toporgnm", _toporgnm)
+							fd.append("orgcd", _orgcd)
+							fd.append("orgnm", _orgnm)
+							const blobUrl = $("#img_pict").attr("src")
+							if (blobUrl) {
+								fd.append("file", await hush.blob.get(blobUrl))
+								fd.append("mimetype", objUrl.mimetype)
+							} else {
+								fd.append("file", "")
+								fd.append("mimetype", "")
+							}
+							hush.http.ajaxFormData("/user/user", fd, (rs) => {
+								if (rs.code != hush.cons.CODE_OK) {
+									hush.msg.showMsg(rs.msg)
+								} else {
+									hush.msg.toast(hush.cons.MSG_OK)
+								}
+							})
 						} catch (ex) {
 							hush.util.showEx(ex)
 						}
@@ -161,9 +159,11 @@
 					</div>
 					
 					<div id="lbl_7" class="cellLabel">소속<button>선택</button></div>
-					<div id="fld_7" class="cellField">						
-						<div id="txt_comp" style="margin: 0 5px">삼성전자삼성전자삼성전자삼성전자</div>
-						<div id="txt_dept" style="margin: 0 5px">재무팀재무팀재무팀재무팀재무팀</div>
+					<div id="fld_7" class="cellField">
+						<div id="txt_toporgcd" style="display: none"></div>
+						<div id="txt_orgcd" style="display: none"></div>						
+						<div id="txt_toporgnm" style="margin: 0 5px"></div>
+						<div id="txt_orgnm" style="margin: 0 5px"></div>						
 					</div>
 
 					<div id="lbl_8" class="cellLabel">사진<button id="pict_browse">선택</button></div>

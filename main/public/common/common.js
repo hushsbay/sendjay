@@ -4,9 +4,10 @@
     window.hush = {
         cons : {
             CODE_OK : '0',
+            MSG_OK : '처리 완료',
             CODE_ERR : '-1',
             CODE_NO_DATA : '-100',
-            MSG_NO_DATA : 'no data.',
+            MSG_NO_DATA : '데이터가 없습니다.',
             CODE_PASSWORD_NEEDED : '-76',
             CODE_PASSKEY_NEEDED : '-77',
             CODE_PASSWORD_NOT_MATCHED : '-78',
