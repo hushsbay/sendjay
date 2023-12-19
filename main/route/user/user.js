@@ -28,6 +28,7 @@ router.post('/', async function(req, res) { //router.post('/', upload.any(), asy
 		conn = await wsmysql.getConnFromPool(global.pool)
 		sql =  "SELECT COUNT(*) CNT FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [id])
+		console.log(type, "===")
 		if (type == 'C') {
 			if (data[0].CNT > 0) {
 				ws.http.resWarn(res, ws.cons.MSG_ALREADY_EXISTS)
