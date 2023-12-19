@@ -55,7 +55,7 @@
                             hush.msg.toast("Image file needed.")
                             return
                         }
-                        const objUrl = hush.util.parseBlobUrl(blobUrl)
+                        const objUrl = hush.blob.parseBlobUrl(blobUrl)
                         if (!objUrl) {
                             hush.msg.toast("Mime type not found.")
                             return
@@ -63,7 +63,7 @@
 						debugger
                         const xhr = new XMLHttpRequest()
                         xhr.open("GET", blobUrl, true) //since blobUrl might be just blob without any infomation for base64 and contentType eg) blob:https://~
-                        xhr.responseType = "blob"
+                        xhr.responseType = "1blob"
                         xhr.onload = function(e) {
 							debugger
                             if (this.status == 200) {

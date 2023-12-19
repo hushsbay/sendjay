@@ -424,7 +424,7 @@
                 }
             },
             blobPromise : (blobUrl, data, method) => new Promise((resolve, reject) => {
-                const objUrl = hush.util.parseBlobUrl(blobUrl)
+                const objUrl = hush.blob.parseBlobUrl(blobUrl)
                 if (!objUrl) {
                     hush.msg.toast("Mime type not found.")
                     return
@@ -432,7 +432,7 @@
                 const rs = { code : "0", ret : "" }
                 const xhr = new XMLHttpRequest()
                 xhr.open("GET", blobUrl, true) //since blobUrl might be just blob without any infomation for base64 and contentType eg) blob:https://~
-                xhr.responseType = "11blob"
+                xhr.responseType = "blob"
                 xhr.onload = function(e) {
                     debugger
                     if (this.status == 200) {
