@@ -422,25 +422,20 @@
                 }
             },
             getPromise : (blobUrl) => new Promise((resolve, reject) => {
-                const rs = { code : "0", ret : "" }
+                const rs = { url : "", blob : "" }
                 const objUrl = hush.blob.parseBlobUrl(blobUrl)
-                if (!objUrl) {
-                    rs.code = "-1"
-                    rs.ret = "Mime Type을 찾을 수 없습니다."
-                    reject(rs)
-                }                
+                if (!objUrl) reject(new Error("Mime Type을 찾을 수 없습니다."))
                 const xhr = new XMLHttpRequest()
                 xhr.open("GET", blobUrl, true) //since blobUrl might be just blob without any infomation for base64 and contentType eg) blob:https://~
                 xhr.responseType = "blob"
                 xhr.onload = function(e) {
                     if (this.status == 200) {
-                        rs.ret = this.response
+                        rs.url = objUrl
+                        rs.blob = this.response
                         resolve(rs)
-                    } else {                        
-                        rs.code = "-1"
-                        rs.ret = this.status + "/Blob처리오류입니다."
-                        debugger
-                        reject(rs)
+                    } else {
+                        debugger //e로 오류 핸들링 가능한지 알아봐야 함
+                        reject(new Error(this.status + "/Blob처리오류입니다."))
                     }
                 }
                 xhr.send()

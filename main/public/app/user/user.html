@@ -52,7 +52,7 @@
 							const _orgcd = $("#txt_orgcd").html()
 							const _orgnm = $("#txt_orgnm").html()
 							if (!hush.util.chkFieldVal(_id, "아이디", 4, 20, true)) return
-							
+							debugger
 							const fd = new FormData()
 							fd.append("type", (g_id) ? "U" : "C")
 							fd.append("id", _id)
@@ -67,8 +67,9 @@
 							fd.append("orgnm", _orgnm)
 							const blobUrl = $("#img_pict").attr("src")
 							if (blobUrl) {
-								fd.append("file", await hush.blob.get(blobUrl))
-								fd.append("mimetype", objUrl.mimetype)
+								const rs = await hush.blob.get(blobUrl)
+								fd.append("file", rs.blob)
+								fd.append("mimetype", rs.url.mimetype)
 							} else {
 								fd.append("file", "")
 								fd.append("mimetype", "")
