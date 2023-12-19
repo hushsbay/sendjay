@@ -49,9 +49,7 @@
 						const _comp = $("#txt_comp").html()
 						const _dept = $("#txt_dept").html()
 						const blobUrl = $("#img_pict").attr("src")
-						debugger
-						const ret = hush.util.chkFieldVal(_id, "아이디", 4, 20, true)
-
+						if (!hush.util.chkFieldVal(_id, "아이디", 4, 20, true)) return
                         debugger
                         if (!blobUrl) {
                             hush.msg.toast("Image file needed.")
