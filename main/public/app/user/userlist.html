@@ -71,6 +71,9 @@
 						const _sort = $("#rdoName").prop("checked") ? $("#rdoName").val() : $("#rdoOrg").val()
 	            		getUserData(_keyword, _sort)
 	            	})
+					$("#btn_new").click(function() {
+	            		hush.util.openWinPop("/app/user/user.html")
+	            	})
 					$("#btn_search").click()
                 } catch (ex) {
                     hush.util.showEx(ex)
