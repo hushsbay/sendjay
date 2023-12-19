@@ -39,32 +39,12 @@
                     await $.getScript("/common/common.js")
 					const param = new URLSearchParams(location.search)
 					g_userid = param.get("user_id")
-					$("#pict_browse").click(function() {
-                        $("#file_upload").val("")
-                        $("#file_upload").trigger("click")
-                    })
-					$("#file_upload").change(function() {
-                        try {
-                            const file = this.files[0]
-                            const obj = hush.util.getFileNameAndExtension(file.name)
-                            if (obj.ext == "" || !hush.cons.ext_image.includes(obj.ext)) {
-                                hush.msg.msg("이미지 파일이 필요합니다. (" + hush.cons.ext_image + ")")
-                                return
-                            }
-                            if (file.size > hush.cons.max_image) {
-                                hush.msg.msg("이미지 파일 크기 제한 : " + hush.util.formatBytes(hush.cons.max_image) + ". 현재 : " + hush.util.formatBytes(hush.cons.max_image))
-                                return
-                            }
-                            const reader = new FileReader()
-                            reader.readAsDataURL(file)
-                            reader.addEventListener("load", function () {
-                                $("#img_pict").attr("src", reader.result) //$("#img_pict").on("load", function() { $("#pict_upload").click() }).attr("src", reader.result)
-                            }, false)
-                        } catch (ex) { 
-                            hush.util.showEx(ex)
-                        }
-                    })
-                    $("#pict_upload").click(function() {
+					$("#btn_save").click(function() {
+						const _id = $("#in_id").val().trim()
+						debugger
+						if (!hush.util.chkFieldVal(_id, "아이디", 4, 20, true)) return
+						return
+
                         const blobUrl = $("#img_pict").attr("src")
                         if (!blobUrl) {
                             hushj.msg.toast("Image file needed.")
@@ -93,6 +73,31 @@
                         }
                         xhr.send()
                     })
+					$("#pict_browse").click(function() {
+                        $("#file_upload").val("")
+                        $("#file_upload").trigger("click")
+                    })
+					$("#file_upload").change(function() {
+                        try {
+                            const file = this.files[0]
+                            const obj = hush.util.getFileNameAndExtension(file.name)
+                            if (obj.ext == "" || !hush.cons.ext_image.includes(obj.ext)) {
+                                hush.msg.msg("이미지 파일이 필요합니다. (" + hush.cons.ext_image + ")")
+                                return
+                            }
+                            if (file.size > hush.cons.max_image) {
+                                hush.msg.msg("이미지 파일 크기 제한 : " + hush.util.formatBytes(hush.cons.max_image) + ". 현재 : " + hush.util.formatBytes(hush.cons.max_image))
+                                return
+                            }
+                            const reader = new FileReader()
+                            reader.readAsDataURL(file)
+                            reader.addEventListener("load", function () {
+                                $("#img_pict").attr("src", reader.result) //$("#img_pict").on("load", function() { $("#pict_upload").click() }).attr("src", reader.result)
+                            }, false)
+                        } catch (ex) { 
+                            hush.util.showEx(ex)
+                        }
+                    })                    
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }                
@@ -150,7 +155,7 @@
 
 					<div id="lbl_8" class="cellLabel">사진<button id="pict_browse">선택</button></div>
 					<div id="fld_8" class="cellField">						
-						<img id="img_pict" style="width: 32px; height: 32px; margin: 5px" />
+						<img id="img_pict" style="width: 64px; height: 64px; margin: 5px" />
 					</div>
 
 				</div>

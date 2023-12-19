@@ -20,6 +20,7 @@
             ///////////////////////////////////위는 서버와 동일
             failOnLoad : "failOnLoad",
             restful_timeout : 10000,
+            pattern : /^[A-Za-z0-9!@^*(),.]*$/, //do not include # $ - _ % & + = ( //pattern excludes characters concerned with problem of uri malforming and jquery selector, so not worry about encodeURIComponent for that field) 
             color_fadein : "#b2e2f8",
             ext_image : "png,gif,jpg,jpeg,ico",
             max_image : 5242880, //5MB
@@ -27,6 +28,7 @@
             warn_search_blank : "검색어" + _warn_blank,
             warn_no_row_selected : "선택한 행이 없습니다.",
             warn_no_opener : "opener가 존재하지 않습니다.",
+            warn_char_not_allowed : "한글이나 특수문자 일부(# $ - _ % & + =)는 사용할 수 없습니다."
         },
         auth : {
             setUser : () => {                
@@ -347,6 +349,43 @@
                 let units = ["B", "KB", "MB", "GB", "TB"], i
                 for (i = 0; bytes >= 1024 && i < 4; i++) bytes /= 1024
                 return bytes.toFixed(2) + units[i]
+            },
+            strLen : function(s, b, i, c) { //https://programmingsummaries.tistory.com/239
+                // for (b = i = 0; i < s.length; i++) {
+                //     c = s.charCodeAt(i)
+                //     //b += c >> 11 ? 3 : c >> 7 ? 2 : 1 //(2048(2^11)로 나눌 때 몫이 있으면 2048보다 큰 유니코드이므로 3바이트를 할당.. 128(2^7)로 나눌 땐 ..)
+                //     b += c >> 11 ? 2 : c >> 7 ? 2 : 1 //mySql에 한글이 insert될 때 왜 1바이트로 계산되는지 모르겠음 (일단 2바이트로 처리하고자 함)
+                // }
+                // return b
+                return s.length
+            },
+            chkFieldVal : async (_val, _nm, _min, _max, _pattern) => {
+                const nm = (_nm) ? "[" + _nm + "] " : ""
+                if (_pattern) {
+                    if (!hush.cons.pattern.test(_val)) {
+                        await hush.msg.alert(nm + hush.cons.warn_char_not_allowed)
+                        return false
+                    }
+                }
+                const _len = hush.util.strLen(_val)
+                if (_max) {
+                    if (_len > _max) {
+                        await hush.msg.alert(nm + "최대 " + _max + " 바이트까지만 가능합니다 : " + _len)
+                        return false
+                    }
+                }
+                if (_min) {
+                    if (_val.trim() == "") {
+                        await hush.msg.alert(nm + "빈칸입니다.")
+                        return false
+                    } else {
+                        if (_len < _min) {
+                            await hush.msg.alert(nm + "최소 " + _min + " 바이트가 필요합니다 : " + _len)
+                            return false
+                        }
+                    }
+                }
+                return true
             },
         }
     }
