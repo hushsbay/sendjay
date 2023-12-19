@@ -17,13 +17,13 @@
 				grid-template-areas: "lbl_1 fld_1" "lbl_2 fld_2" "lbl_3 fld_3" "lbl_4 fld_4" "lbl_5 fld_5" "lbl_6 fld_6" "lbl_7 fld_7" "lbl_8 fld_8";
 			} /* #lbl_1 { grid-area: lbl_1; } #fld_1 { grid-area: fld_1; } #lbl_2 { grid-area: lbl_2; } #fld_2 { grid-area: fld_2; } */
 
-			.gridCellLabel {
+			.cellLabel {
 				padding-left: 3px;
 				display: flex; align-items: center;
 				border: 1px solid lightgray; font-weight: bold;
 			}
 
-			.gridCellField {				
+			.cellField {				
 				display: flex; align-items: center; flex-wrap: wrap;
 				border: 1px solid lightgray;
 			}
@@ -39,7 +39,60 @@
                     await $.getScript("/common/common.js")
 					const param = new URLSearchParams(location.search)
 					g_userid = param.get("user_id")
-
+					$("#pict_browse").click(function() {
+                        $("#file_upload").val("")
+                        $("#file_upload").trigger("click")
+                    })
+					$("#file_upload").change(function() {
+                        try {
+                            const file = this.files[0]
+                            const obj = hush.util.getFileNameAndExtension(file.name)
+                            if (obj.ext == "" || !hush.cons.ext_image.includes(obj.ext)) {
+                                hush.msg.msg("이미지 파일이 필요합니다. (" + hush.cons.ext_image + ")")
+                                return
+                            }
+                            if (file.size > hush.cons.max_image) {
+                                hush.msg.msg("이미지 파일 크기 제한 : " + hush.util.formatBytes(hush.cons.max_image) + ". 현재 : " + hush.util.formatBytes(hush.cons.max_image))
+                                return
+                            }
+                            const reader = new FileReader()
+                            reader.readAsDataURL(file)
+                            reader.addEventListener("load", function () {
+                                $("#img_pict").attr("src", reader.result) //$("#img_pict").on("load", function() { $("#pict_upload").click() }).attr("src", reader.result)
+                            }, false)
+                        } catch (ex) { 
+                            hush.util.showEx(ex)
+                        }
+                    })
+                    $("#pict_upload").click(function() {
+                        const blobUrl = $("#img_pict").attr("src")
+                        if (!blobUrl) {
+                            hushj.msg.toast("Image file needed.")
+                            return
+                        }
+                        const objUrl = hush.http.parseBlobUrl(blobUrl)
+                        if (!objUrl) {
+                            hushj.msg.toast("Mime type not found.")
+                            return
+                        }
+                        const xhr = new XMLHttpRequest()
+                        xhr.open("GET", blobUrl, true) //since blobUrl might be just blob without any infomation for base64 and contentType eg) blob:https://~
+                        xhr.responseType = "blob"
+                        xhr.onload = function(e) {
+                            if (this.status == 200) {
+                                const blob = this.response
+                                const fd = new FormData()
+                                fd.append("userid", g_userid)
+                                fd.append("type", "U") //U(Update Picture), D(Delete Picture)
+                                fd.append("mimetype", objUrl.mimetype)
+                                fd.append("file", blob)
+                                hushj.http.ajaxFormData(hush.cons.route + "/proc_picture", fd, (rs) => {
+                                    hushj.msg.toast("Upload done.")
+                                })
+                            }
+                        }
+                        xhr.send()
+                    })
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }                
@@ -58,50 +111,51 @@
 				<div style="width:100%;padding:5px">설명 내용..</div>
                 <div id="gridMain" style="width:100%">		
 
-					<div id="lbl_1" class="gridCellLabel">아이디</div>
-					<div id="fld_1" class="gridCellField">
+					<div id="lbl_1" class="cellLabel">아이디</div>
+					<div id="fld_1" class="cellField">
 						<input id="in_id" spellcheck=false autocomplete=off style="width: 140px"/>
 					</div>
 					
-					<div id="lbl_2" class="gridCellLabel">이름</div>
-					<div id="fld_2" class="gridCellField">
+					<div id="lbl_2" class="cellLabel">이름</div>
+					<div id="fld_2" class="cellField">
 						<input id="in_nm" spellcheck=false autocomplete=off style="width: 200px"/>
 					</div>
 					
-					<div id="lbl_3" class="gridCellLabel">별칭(Alias)</div>
-					<div id="fld_3" class="gridCellField">
+					<div id="lbl_3" class="cellLabel">별칭(Alias)</div>
+					<div id="fld_3" class="cellField">
 						<input id="in_alias" spellcheck=false autocomplete=off style="width: 200px"/>
 					</div>
 					
-					<div id="lbl_4" class="gridCellLabel">비번</div>
-					<div id="fld_4" class="gridCellField">
+					<div id="lbl_4" class="cellLabel">비번</div>
+					<div id="fld_4" class="cellField">
 						<input id="in_pwd" spellcheck=false autocomplete=off style="width: 140px"/>
 						<input id="chk_pwd" type=checkbox style="margin-left: 5px"/><label id="lbl_pwd" for="chk_pwd" style="cursor: pointer">비번변경</label>
 					</div>
 					
-					<div id="lbl_5" class="gridCellLabel">새비번</div>
-					<div id="fld_5" class="gridCellField">
+					<div id="lbl_5" class="cellLabel">새비번</div>
+					<div id="fld_5" class="cellField">
 						<input id="in_pwd_1" spellcheck=false autocomplete=off style="width: 140px"/>
 					</div>
 
-					<div id="lbl_6" class="gridCellLabel">새비번(확인)</div>
-					<div id="fld_6" class="gridCellField">
+					<div id="lbl_6" class="cellLabel">새비번(확인)</div>
+					<div id="fld_6" class="cellField">
 						<input id="in_pwd_2" spellcheck=false autocomplete=off style="width: 140px"/>
 					</div>
 					
-					<div id="lbl_7" class="gridCellLabel">소속<button>선택</button></div>
-					<div id="fld_7" class="gridCellField">						
+					<div id="lbl_7" class="cellLabel">소속<button>선택</button></div>
+					<div id="fld_7" class="cellField">						
 						<div id="txt_comp" style="margin: 0 5px">삼성전자삼성전자삼성전자삼성전자</div>
 						<div id="txt_dept" style="margin: 0 5px">재무팀재무팀재무팀재무팀재무팀</div>
 					</div>
 
-					<div id="lbl_8" class="gridCellLabel">사진<button>선택</button></div>
-					<div id="fld_8" class="gridCellField">						
-						<div id="img_user" style="margin: 0 5px">사진</div>
+					<div id="lbl_8" class="cellLabel">사진<button id="pict_browse">선택</button></div>
+					<div id="fld_8" class="cellField">						
+						<img id="img_pict" style="width: 32px; height: 32px; margin: 5px" />
 					</div>
 
 				</div>
             </div>
+			<input id=file_upload type=file accept="image/*" style="display: none">
         </div>
     </body>
 </html>

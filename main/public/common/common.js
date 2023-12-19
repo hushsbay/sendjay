@@ -20,7 +20,9 @@
             ///////////////////////////////////위는 서버와 동일
             failOnLoad : "failOnLoad",
             restful_timeout : 10000,
-            color_fadein : "#b2e2f8",            
+            color_fadein : "#b2e2f8",
+            ext_image : "png,gif,jpg,jpeg,ico",
+            max_image : 5242880, //5MB
             warn_blank : _warn_blank,
             warn_search_blank : "검색어" + _warn_blank,
             warn_no_row_selected : "선택한 행이 없습니다.",
@@ -102,6 +104,29 @@
                     }
                 }
             )}),
+            ajaxFormData : (url, data, callback, failCallback) => {
+                $.ajax({url : url,
+                    data : data,
+                    processData : false,
+                    enctype : "multipart/form-data",
+                    contentType : false,
+                    cache : false,
+                    type : "POST",
+                    success : function(rs) { 
+                        if (callback) callback(rs)
+                    },
+                    error : function(xhr, status, error) {
+                        const msg = (typeof error == "string") ? error : error.toString()
+                        if (failCallback == false) {
+                            //skip (like getting image)
+                        } else if (failCallback) {
+                            failCallback(msg)
+                        } else {
+                            hush.msg.showEx(msg)
+                        }
+                    }
+                })
+            },
             getCookie : (name) => { //cookie 처리는 jquery.cookie.js 참조
                 return $.cookie(name)
             },
@@ -310,6 +335,18 @@
                 } else {
                 	tag.animate({ opacity : 1 }, 150).animate({ opacity : 1 }, 300)
                 }                
+            },
+            getFileNameAndExtension : (fileStr) => {
+				const obj = { }
+				const arr = fileStr.split(".")
+				obj.name = arr[0]
+                obj.ext = (arr.length == 1) ? "" : arr[arr.length - 1]
+				return obj
+            },
+            formatBytes : (bytes) => {
+                let units = ["B", "KB", "MB", "GB", "TB"], i
+                for (i = 0; bytes >= 1024 && i < 4; i++) bytes /= 1024
+                return bytes.toFixed(2) + units[i]
             },
         }
     }
