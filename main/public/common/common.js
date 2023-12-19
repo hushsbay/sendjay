@@ -360,7 +360,7 @@
                 return s.length
             },
             chkFieldVal : async (_val, _nm, _min, _max, _pattern) => {
-                const nm = (_nm) ? "[" + _nm + "] " : ""
+                const nm = (_nm) ? "[" + _nm + "]<br>" : ""
                 if (_pattern) {
                     if (!hush.cons.pattern.test(_val)) {
                         await hush.msg.alert(nm + hush.cons.warn_char_not_allowed)
