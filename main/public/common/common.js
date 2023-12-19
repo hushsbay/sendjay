@@ -412,58 +412,38 @@
                 }
                 return _ret
             },
-            ajax : async (url, data, noToast, method) => {
+            get : async (blobUrl) => {
                 try {
-                    if (!noToast) hush.msg.toast("waiting..", -1)
-                    const rs = await hush.http.ajaxPromise(url, data, method)               
-                    if (!noToast) hush.msg.toastEnd()                    
+                    const rs = await hush.blob.getPromise(blobUrl)               
                     return rs
                 } catch (ex) {
-                    if (!noToast) hush.msg.toastEnd()
                     throw ex //new Error(ex.message)
                 }
             },
-            blobPromise : (blobUrl, data, method) => new Promise((resolve, reject) => {
+            getPromise : (blobUrl) => new Promise((resolve, reject) => {
+                const rs = { code : "0", ret : "" }
                 const objUrl = hush.blob.parseBlobUrl(blobUrl)
                 if (!objUrl) {
-                    hush.msg.toast("Mime type not found.")
-                    return
-                }
-                const rs = { code : "0", ret : "" }
+                    rs.code = "-1"
+                    rs.ret = "Mime Type을 찾을 수 없습니다."
+                    reject(rs)
+                }                
                 const xhr = new XMLHttpRequest()
                 xhr.open("GET", blobUrl, true) //since blobUrl might be just blob without any infomation for base64 and contentType eg) blob:https://~
                 xhr.responseType = "blob"
                 xhr.onload = function(e) {
-                    debugger
                     if (this.status == 200) {
                         rs.ret = this.response
                         resolve(rs)
-                    } else {
+                    } else {                        
                         rs.code = "-1"
-                        rs.ret = ""
+                        rs.ret = this.status + "/Blob처리오류입니다."
+                        debugger
+                        reject(rs)
                     }
                 }
                 xhr.send()
-                
-                $.ajax({dataType : "json", //response data type
-                    contentType : "application/json; charset=utf-8", //request mime type
-                    url : url,
-                    data: (method && method.toLowerCase() == "get") ? data : JSON.stringify(data),
-                    cache : false,
-                    async : true,
-                    type : (method) ? method : "post",
-                    timeout : hush.cons.restful_timeout,
-                    success : function(rs) {
-                        resolve(rs)
-                    },
-                    error : function(xhr, status, error) {
-                        //"Uncaught (in promise) Error" => status=error, error=""
-                        //When done().fail(), "Uncaught (in promise) Error: error" returned
-                        const msg = (typeof error == "string") ? error : error.toString()
-                        reject(new Error(msg))
-                    }
-                }
-            )}),
+            })
         }
     }
 })(jQuery)
