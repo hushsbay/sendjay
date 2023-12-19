@@ -49,7 +49,8 @@
 						const _comp = $("#txt_comp").html()
 						const _dept = $("#txt_dept").html()
 						const blobUrl = $("#img_pict").attr("src")
-						if (!hush.util.chkFieldVal(_id, "아이디", 4, 20, true)) return
+						debugger
+						const ret = hush.util.chkFieldVal(_id, "아이디", 4, 20, true)
 
                         debugger
                         if (!blobUrl) {
