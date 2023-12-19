@@ -359,28 +359,28 @@
                 // return b
                 return s.length
             },
-            chkFieldVal : async (_val, _nm, _min, _max, _pattern) => {
+            chkFieldVal : (_val, _nm, _min, _max, _pattern) => {
                 const nm = (_nm) ? "[" + _nm + "]<br>" : ""
                 if (_pattern) {
                     if (!hush.cons.pattern.test(_val)) {
-                        await hush.msg.alert(nm + hush.cons.warn_char_not_allowed)
+                        hush.msg.alert(nm + hush.cons.warn_char_not_allowed)
                         return false
                     }
                 }
                 const _len = hush.util.strLen(_val)
                 if (_max) {
                     if (_len > _max) {
-                        await hush.msg.alert(nm + "최대 " + _max + " 바이트까지만 가능합니다 : " + _len)
+                        hush.msg.alert(nm + "최대 " + _max + " 바이트까지만 가능합니다 : " + _len)
                         return false
                     }
                 }
                 if (_min) {
                     if (_val.trim() == "") {
-                        await hush.msg.alert(nm + "빈칸입니다.")
+                        hush.msg.alert(nm + "빈칸입니다.")
                         return false
                     } else {
                         if (_len < _min) {
-                            await hush.msg.alert(nm + "최소 " + _min + " 바이트가 필요합니다 : " + _len)
+                            hush.msg.alert(nm + "최소 " + _min + " 바이트가 필요합니다 : " + _len)
                             return false
                         }
                     }
