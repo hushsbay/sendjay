@@ -2,13 +2,13 @@ const config = require('../../config')
 const ws = require(config.app.ws)
 const wsmysql = require(config.app.wsmysql)
 const express = require('express')
-//const multer  = require('multer')
+const multer  = require('multer')
 const router = express.Router()
-//const upload = multer({ storage: multer.memoryStorage() })
+const upload = multer({ storage: multer.memoryStorage() })
 
 const title = 'user'
 
-router.post('/', async function(req, res) { //router.post('/', upload.any(), async function(req, res) {
+router.post('/', upload.any(), async function(req, res) {
 	let conn, sql, data, len
 	const rs = ws.http.resInit()
 	try {
