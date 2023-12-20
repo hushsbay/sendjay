@@ -27,6 +27,10 @@
 				display: flex; align-items: center; flex-wrap: wrap;
 				border: 1px solid lightgray;
 			}
+
+			.pict {
+				width: 64px; height: 64px; margin: 5px
+			}
 		</style>	
         <script src="/plugin/jquery-3.4.1.min.js"></script>
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
@@ -147,8 +151,8 @@
                         $("#file_upload").trigger("click")
                     })
 					$("#pict_clear").click(function() {
-                        $("#img_pict").remove() //$("#img_pict").attr("src", "") //가비지가 남아 있어 문제가 됨
-						$("#fld_img").prepend("<img id='img_pict' style='width: 64px; height: 64px; margin: 5px' />")
+                        $("#img_pict").remove() //$("#img_pict").attr("src", "") //DB에 가비지가 남아 있어 문제가 됨
+						$("#fld_img").prepend("<img id='img_pict' class='pict' />")
 						hush.msg.toast("저장해야 최종 적용됩니다.")
                     })
 					$("#file_upload").change(function() {
@@ -231,7 +235,7 @@
 
 					<div id="lbl_img" class="cellLabel">사진<button id="pict_browse">선택</button></div>
 					<div id="fld_img" class="cellField">						
-						<img id="img_pict" style="width: 64px; height: 64px; margin: 5px" /> <button id="pict_clear">Clear</button></div>
+						<img id="img_pict" class="pict" /> <button id="pict_clear">Clear</button></div>
 					</div>
 
 				</div>
