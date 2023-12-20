@@ -32,7 +32,21 @@
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
         <script>
 			//의도적으로 인증체크하지 않음
-			let g_id, g_mode		
+			let g_mode		
+
+			function dispPwd(show) {
+				if (show) {
+					$("#lbl_pwd_1").show()
+					$("#fld_pwd_1").show()
+					$("#lbl_pwd_2").show()
+					$("#fld_pwd_3").show()
+				} else {
+					$("#lbl_pwd_1").hide()
+					$("#fld_pwd_1").hide()
+					$("#lbl_pwd_2").hide()
+					$("#fld_pwd_3").hide()
+				}
+			}
 
             $.when($.ready).done(async function() {
                 try {
@@ -44,6 +58,7 @@
 						$("#lbl_pwd").hide()
 						$("#fld_pwd").hide()
 					} else {
+						dispPwd(false)
 						const rs = await hush.http.ajax("/user/getuser", { id : id })
 						if (rs.code != hush.cons.CODE_OK) {
 							hush.msg.showMsg(rs.msg)
@@ -55,10 +70,10 @@
 						$("#in_id").val(row.USER_ID)
 						$("#in_nm").val(row.USER_NM)
 						$("#in_alias").val(row.NICK_NM)
-						$("#txt_toporgcd").html(row.TOPORGCD)
-						$("#txt_toporgnm").html(row.TOPORGNM)
-						$("#txt_orgcd").html(row.ORGCD)
-						$("#txt_orgnm").html(row.ORGNM)
+						$("#txt_toporgcd").html(row.TOP_ORG_CD)
+						$("#txt_toporgnm").html(row.TOP_ORG_NM)
+						$("#txt_orgcd").html(row.ORG_CD)
+						$("#txt_orgnm").html(row.ORG_NM)
 					}
 					$("#btn_save").click(async function() {
 						try {
@@ -106,6 +121,10 @@
 							hush.util.showEx(ex)
 						}
                     })
+					$("#chk_pwd").change(function() {
+						const _self = $(this)
+						dispPwd(_self.prop("checked"))
+					})
 					$("#pict_browse").click(function() {
                         $("#file_upload").val("")
                         $("#file_upload").trigger("click")
