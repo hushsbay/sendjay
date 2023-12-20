@@ -82,8 +82,8 @@
 							const _nm = $("#in_nm").val().trim()
 							const _alias = $("#in_alias").val().trim()
 							const _pwd = $("#in_pwd").val().trim()
-							const _pwd_1 = _chkPwd ? $("#in_pwd_1").val().trim() : ""
-							const _pwd_2 = _chkPwd ? $("#in_pwd_2").val().trim() : ""
+							const _pwd_1 = (g_mode == "C" || _chkPwd) ? $("#in_pwd_1").val().trim() : ""
+							const _pwd_2 = (g_mode == "C" || _chkPwd) ? $("#in_pwd_2").val().trim() : ""
 							const _toporgcd = $("#txt_toporgcd").html()
 							const _toporgnm = $("#txt_toporgnm").html()
 							const _orgcd = $("#txt_orgcd").html()
@@ -93,7 +93,7 @@
 								if (_pwd_1 != _pwd_2) {
 									hush.msg.toast("비번과 비번(확인용)이 다릅니다.")
 									return
-								}								
+								}
 							}
 							if (g_mode == "U") {
 								if (!hush.util.chkFieldVal(_pwd, "비번", 4, 20, true)) return	
