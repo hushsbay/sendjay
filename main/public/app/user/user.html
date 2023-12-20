@@ -141,6 +141,19 @@
                         $("#file_upload").val("")
                         $("#file_upload").trigger("click")
                     })
+					$("#img_pict").on("drop", function(e) { 
+						debugger
+						try {
+                            const _data = e.originalEvent.dataTransfer.getData("text") //"image##2023021015343534000076787542LOrtKxoR##20230223151253235000695133ZOwDPVZr1w"
+                            const _files = e.originalEvent.dataTransfer.files
+                        } catch (ex) {
+                            hush.util.showEx(ex)
+                        }
+					})
+					$("#pict_clear").click(function() {
+                        $("#img_pict").attr("src", "")
+						hush.msg.toast("저장해야 최종 적용됩니다.")
+                    })
 					$("#file_upload").change(function() {
                         try {
                             const file = this.files[0]
@@ -221,7 +234,7 @@
 
 					<div id="lbl_img" class="cellLabel">사진<button id="pict_browse">선택</button></div>
 					<div id="fld_img" class="cellField">						
-						<img id="img_pict" style="width: 64px; height: 64px; margin: 5px" />
+						<img id="img_pict" style="width: 64px; height: 64px; margin: 5px" /> <button id="pict_clear">Clear</button></div>
 					</div>
 
 				</div>
