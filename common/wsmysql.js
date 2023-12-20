@@ -90,11 +90,11 @@ module.exports = (function() {
 			}
 		})
 
-		,closeConn : (conn) => {
-			if (conn) {
-				try { 
-					conn.release()
-				} catch (ex) {}
+		,closeConn : (conn, title) => {
+			try { 
+				if (conn) conn.release() 
+			} catch (ex) { 
+				ws.util.loge(ws.cons.mysql_close_error, title) 
 			}
 		}
 

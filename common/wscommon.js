@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const http = require('http')
 const https = require('https')
-//const crypto = require('crypto')
+const crypto = require('crypto')
 const url = require('url')
 const express = require('express')
 const requestIp = require('request-ip')
@@ -122,13 +122,6 @@ module.exports = (function() {
 				router.use(function(err, req, res, next) {
 					ws.http.resException(res, err, title)
 				})
-			},			
-			mysqlDisconnect : (conn, title) => {
-				try { 
-					if (conn) conn.release() 
-				} catch (ex) { 
-					ws.util.loge(ws.cons.mysql_close_error, title) 
-				}	
 			},
 			getLastItemFromStr : (_arg, _deli) => {
 				if (typeof _arg != 'string') return null
@@ -147,7 +140,64 @@ module.exports = (function() {
 				_ret = _ret.substring(1)
 				_ret = _ret.substr(0, _ret.length - 1)
 				return _ret
-			}
+			},
+			encrypt : (text, key) => { //key = 32bytes
+				const iv = crypto.randomBytes(16)
+				let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv)
+				let encrypted = cipher.update(text)
+				encrypted = Buffer.concat([encrypted, cipher.final()])
+				return iv.toString('hex') + ':' + encrypted.toString('hex')
+			}, 
+			decrypt : (text, key) => { 				
+				let arr = text.split(':')
+				let iv = Buffer.from(arr[0], 'hex')
+				let encryptedText = Buffer.from(arr[1], 'hex')
+				let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), iv) //const decode = crypto.createDecipher('aes-256-cbc', key). createDecipher deprecated
+				let decrypted = decipher.update(encryptedText)
+				decrypted = Buffer.concat([decrypted, decipher.final()])
+				return decrypted.toString()
+			},
+			getCurDateTimeStr : (deli) => {
+				const now = new Date()
+				if (deli) {
+					return now.getFullYear().toString() + "-" + (now.getMonth() + 1).toString().padStart(2, "0") + "-" + now.getDate().toString().padStart(2, "0") + " " + 
+						now.getHours().toString().padStart(2, "0") + ":" + now.getMinutes().toString().padStart(2, "0") + ":" + now.getSeconds().toString().padStart(2, "0")
+				} else {
+					return now.getFullYear().toString() + (now.getMonth() + 1).toString().padStart(2, "0") + now.getDate().toString().padStart(2, "0") + 
+						now.getHours().toString().padStart(2, "0") + now.getMinutes().toString().padStart(2, "0") + now.getSeconds().toString().padStart(2, "0")
+				}
+			},
+			getTimeStamp : (str) => { //str(2012-08-02 14:12:04) to Date()
+				const d = str.match(/\d+/g) //extracts date parts
+				return new Date(d[0], d[1] - 1, d[2], d[3], d[4], d[5])
+			},
+			getDateTimeDiff : (_prev, _now) => { //_prev(2012-08-02 14:12:04)
+				const dtPrev = ws.util.getTimeStamp(_prev)
+				return parseInt((_now - dtPrev) / 1000) //return seconds
+			},
+			setDateAdd : (date, days) => {
+				let _date = date
+				const _days = (Number.isInteger(days)) ? days : parseInt(days)
+				_date.setDate(_date.getDate() + _days)
+				const year = _date.getFullYear()
+				const month = (_date.getMonth() + 1).toString().padStart(2, "0")
+				const day = _date.getDate().toString().padStart(2, "0")
+				const _dateString = year + '-' + month + '-' + day
+				return _dateString
+			},
+			setHourAdd : (dt, hours) => { //eg)72hours=60*60*1000*72=259,200,000
+				let _dt = dt
+				const _hours = (Number.isInteger(hours)) ? hours : parseInt(hours)
+				_dt.setTime(_dt.getTime() + (_hours * 60 * 60 * 1000)) //Suppose that server set to UTC 
+				const year = _dt.getFullYear()
+				const month = (_dt.getMonth() + 1).toString().padStart(2, "0")
+				const day = _dt.getDate().toString().padStart(2, "0")
+				const hour = _dt.getHours().toString().padStart(2, "0")
+				const minute = _dt.getMinutes().toString().padStart(2, "0")
+				const second = _dt.getSeconds().toString().padStart(2, "0")
+				const _dtString = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second
+				return _dtString
+			},
 		}
 
 	}

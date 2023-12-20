@@ -18,7 +18,6 @@ router.post('/', upload.any(), async function(req, res) {
 		const alias = req.body.alias
 		const pwd = req.body.pwd
 		const pwd_1 = req.body.pwd_1
-		const pwd_2 = req.body.pwd_2
 		const toporgcd = req.body.toporgcd
 		const toporgnm = req.body.toporgnm
 		const orgcd = req.body.orgcd
@@ -28,15 +27,15 @@ router.post('/', upload.any(), async function(req, res) {
 		conn = await wsmysql.getConnFromPool(global.pool)
 		sql =  "SELECT COUNT(*) CNT FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [id])
-		console.log(type, "===")
 		if (type == 'C') {
 			if (data[0].CNT > 0) {
 				ws.http.resWarn(res, ws.cons.MSG_ALREADY_EXISTS)
 				return
 			}
+			const _enc = ws.util.encrypt(pwd_1, nodeConfig.crypto.key)
 			sql = "INSERT INTO JAY.Z_USER_TBL (USER_ID, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, PICTURE, MIMETYPE, NICK_NM, ISUDT) "
 			sql += " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
-			await wsmysql.query(conn, sql, [id, pwd, nm, orgcd, orgnm, toporgcd, toporgnm, buf, mimetype, alias])
+			await wsmysql.query(conn, sql, [id, _enc, nm, orgcd, orgnm, toporgcd, toporgnm, buf, mimetype, alias])
 		} else {
 			if (data[0].CNT == 0) {
 				ws.http.resWarn(res, ws.cons.MSG_NO_DATA)
@@ -46,8 +45,14 @@ router.post('/', upload.any(), async function(req, res) {
 				sql = "DELETE FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
 				await wsmysql.query(conn, sql, [id])
 			} else { //U(Update)
+				if (pwd_1 == "") { //비번변경 X
+					_str = "PWD"
+				} else {
+					const _enc = ws.util.encrypt(pwd_1, nodeConfig.crypto.key)
+					_str = "'" + _enc + "'"
+				}				
 				sql =  "UPDATE JAY.Z_USER_TBL "
-				sql += "   SET USER_NM = ?, ORG_CD = ?, ORG_NM = ?, TOP_ORG_CD = ?, TOP_ORG_NM = ?, PICTURE = ?, MIMETYPE = ?, NICK_NM = ? "
+				sql += "   SET USER_NM = ?, PWD = " + _str + ", ORG_CD = ?, ORG_NM = ?, TOP_ORG_CD = ?, TOP_ORG_NM = ?, PICTURE = ?, MIMETYPE = ?, NICK_NM = ? "
 				sql += " WHERE USER_ID = ? "
 				await wsmysql.query(conn, sql, [id, nm, orgcd, orgnm, toporgcd, toporgnm, buf, mimetype, alias])
 			}
@@ -56,7 +61,7 @@ router.post('/', upload.any(), async function(req, res) {
 	} catch (ex) {
 		ws.http.resException(res, ex, title)
 	} finally {
-		ws.util.mysqlDisconnect(conn, title)
+		wsmysql.closeConn(conn, title)
 	}
 })
 

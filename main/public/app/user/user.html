@@ -53,11 +53,11 @@
                     await $.getScript("/common/common.js")
 					const param = new URLSearchParams(location.search)
 					const id = param.get("user_id")
-					g_mode = id ? "U" : "C" //있으면 수정모드 없으면 신규모드
-					if (g_mode == "C") {
+					g_mode = id ? "U" : "C"
+					if (g_mode == "C") { //신규모드
 						$("#lbl_pwd").hide()
 						$("#fld_pwd").hide()
-					} else {
+					} else { //수정모드
 						dispPwd(false)
 						const rs = await hush.http.ajax("/user/getuser", { id : id })
 						if (rs.code != hush.cons.CODE_OK) {
@@ -77,26 +77,36 @@
 					}
 					$("#btn_save").click(async function() {
 						try {
+							const _chkPwd = $("#chk_pwd").prop("checked")
 							const _id = $("#in_id").val().trim()
 							const _nm = $("#in_nm").val().trim()
 							const _alias = $("#in_alias").val().trim()
 							const _pwd = $("#in_pwd").val().trim()
-							const _pwd_1 = $("#in_pwd_1").val().trim()
-							const _pwd_2 = $("#in_pwd_2").val().trim()
+							const _pwd_1 = _chkPwd ? $("#in_pwd_1").val().trim() : ""
+							const _pwd_2 = _chkPwd ? $("#in_pwd_2").val().trim() : ""
 							const _toporgcd = $("#txt_toporgcd").html()
 							const _toporgnm = $("#txt_toporgnm").html()
 							const _orgcd = $("#txt_orgcd").html()
 							const _orgnm = $("#txt_orgnm").html()
+							if (g_mode == "C" || _chkPwd) { //신규모드 또는 수정모드중 비번 변경시
+								if (!hush.util.chkFieldVal(_pwd_1, "새비번", 4, 20, true)) return	
+								if (_pwd_1 != _pwd_2) {
+									hush.msg.toast("비번과 비번(확인용)이 다릅니다.")
+									return
+								}								
+							}
+							if (g_mode == "U") {
+								if (!hush.util.chkFieldVal(_pwd, "비번", 4, 20, true)) return	
+							}
 							if (!hush.util.chkFieldVal(_id, "아이디", 4, 20, true)) return
-
+							
 							const fd = new FormData()
 							fd.append("type", g_mode)
 							fd.append("id", _id)
 							fd.append("nm", _nm)
 							fd.append("alias", _alias)
 							fd.append("pwd", _pwd)
-							fd.append("pwd_1", _pwd_1)
-							fd.append("pwd_2", _pwd_2)
+							fd.append("pwd_1", _pwd_1) //서버에는 pwd_2 필요없음
 							fd.append("toporgcd", _toporgcd)
 							fd.append("toporgnm", _toporgnm)
 							fd.append("orgcd", _orgcd)
