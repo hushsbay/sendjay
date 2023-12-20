@@ -145,7 +145,8 @@
                     })
 					$("#pict_clear").click(function() {
                         $("#img_pict").remove() //$("#img_pict").attr("src", "") //가비지가 남아 있어 문제가 됨
-						//hush.msg.toast("저장해야 최종 적용됩니다.")
+						$("#fld_img").append("<img id='img_pict' style='width: 64px; height: 64px; margin: 5px' />")
+						hush.msg.toast("저장해야 최종 적용됩니다.")
                     })
 					$("#file_upload").change(function() {
                         try {
