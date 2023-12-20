@@ -55,9 +55,11 @@
 					const id = param.get("user_id")
 					g_mode = id ? "U" : "C"
 					if (g_mode == "C") { //신규모드
+						$("#btn_delete").hide()
 						$("#lbl_pwd").hide()
 						$("#fld_pwd").hide()
 					} else { //수정모드
+						$("#in_id").prop("disabled", true)
 						dispPwd(false)
 						const rs = await hush.http.ajax("/user/getuser", { id : id })
 						if (rs.code != hush.cons.CODE_OK) {
