@@ -25,7 +25,7 @@ router.post('/', upload.any(), async function(req, res) {
 		const mimetype = req.body.mimetype
 		const buf = mimetype ? Buffer.from(new Uint8Array(req.files[0].buffer)) : null
 		conn = await wsmysql.getConnFromPool(global.pool)
-		sql =  "SELECT COUNT(*) CNT FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
+		sql =  "SELECT COUNT(*) CNT, PWD FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [id])
 		if (type == 'C') {
 			if (data[0].CNT > 0) {
@@ -39,6 +39,11 @@ router.post('/', upload.any(), async function(req, res) {
 		} else {
 			if (data[0].CNT == 0) {
 				ws.http.resWarn(res, ws.cons.MSG_NO_DATA)
+				return
+			}
+			const _dec = ws.util.encrypt(data[0].PWD, nodeConfig.crypto.key)
+			if (pwd != _dec) {
+				ws.http.resWarn(res, '입력한 (기존) 비번이 서버에 저장된 비번과 다릅니다.')
 				return
 			}
 			if (type == 'D') {

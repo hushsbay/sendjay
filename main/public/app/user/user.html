@@ -91,7 +91,7 @@
 							if (g_mode == "C" || _chkPwd) { //신규모드 또는 수정모드중 비번 변경시
 								if (!hush.util.chkFieldVal(_pwd_1, "새비번", 4, 20, true)) return	
 								if (_pwd_1 != _pwd_2) {
-									hush.msg.toast("비번과 비번(확인용)이 다릅니다.")
+									hush.msg.msg("비번과 비번(확인용)이 다릅니다.")
 									return
 								}
 							}
