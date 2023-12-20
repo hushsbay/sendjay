@@ -12,7 +12,8 @@ const wasServer = ws.util.createWas(app, config.http.method) //not https (becaus
 wasServer.listen(config.http.port, () => { console.log('wasServer listening on ' + config.http.port) })
 
 app.use('/user/userlist', require('./route/user/userlist')) //의도적으로 인증체크하지 않음
-app.use('/user/user', require('./route/user/user')) //의도적으로 인증체크하지 않음
+app.use('/user/getuser', require('./route/user/getuser')) //의도적으로 인증체크하지 않음
+app.use('/user/setuser', require('./route/user/setuser')) //의도적으로 인증체크하지 않음
 
 app.use('/org/orgtree', require('./route/org/orgtree')) 
 app.use('/org/empsearch', require('./route/org/empsearch')) 

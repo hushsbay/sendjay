@@ -43,6 +43,22 @@
 					if (g_mode == "C") {
 						$("#lbl_pwd").hide()
 						$("#fld_pwd").hide()
+					} else {
+						const rs = await hush.http.ajax("/user/getuser", { id : id })
+						if (rs.code != hush.cons.CODE_OK) {
+							hush.msg.showMsg(rs.msg)
+							return
+						}
+						const _len = rs.list.length
+						if (_len == 0) return
+						const row = rs.list[0]
+						$("#in_id").val(row.USER_ID)
+						$("#in_nm").val(row.USER_NM)
+						$("#in_alias").val(row.NICK_NM)
+						$("#txt_toporgcd").html(row.TOPORGCD)
+						$("#txt_toporgnm").html(row.TOPORGNM)
+						$("#txt_orgcd").html(row.ORGCD)
+						$("#txt_orgnm").html(row.ORGNM)
 					}
 					$("#btn_save").click(async function() {
 						try {
@@ -57,7 +73,7 @@
 							const _orgcd = $("#txt_orgcd").html()
 							const _orgnm = $("#txt_orgnm").html()
 							if (!hush.util.chkFieldVal(_id, "아이디", 4, 20, true)) return
-							debugger
+
 							const fd = new FormData()
 							fd.append("type", g_mode)
 							fd.append("id", _id)
@@ -79,7 +95,7 @@
 								fd.append("file", "")
 								fd.append("mimetype", "")
 							}
-							hush.http.ajaxFormData("/user/user", fd, (rs) => {
+							hush.http.ajaxFormData("/user/setuser", fd, (rs) => {
 								if (rs.code != hush.cons.CODE_OK) {
 									hush.msg.showMsg(rs.msg)
 								} else {
@@ -150,18 +166,18 @@
 					
 					<div id="lbl_pwd" class="cellLabel">비번</div>
 					<div id="fld_pwd" class="cellField">
-						<input id="in_pwd" spellcheck=false autocomplete=off style="width: 140px"/>
+						<input id="in_pwd" type=password spellcheck=false autocomplete=off style="width: 140px"/>
 						<input id="chk_pwd" type=checkbox style="margin-left: 5px"/><label id="lbl_pwd" for="chk_pwd" style="cursor: pointer">비번변경</label>
 					</div>
 					
 					<div id="lbl_pwd_1" class="cellLabel">새비번</div>
 					<div id="fld_pwd_1" class="cellField">
-						<input id="in_pwd_1" spellcheck=false autocomplete=off style="width: 140px"/>
+						<input id="in_pwd_1" type=password spellcheck=false autocomplete=off style="width: 140px"/>
 					</div>
 
 					<div id="lbl_pwd_2" class="cellLabel">새비번(확인)</div>
 					<div id="fld_pwd_2" class="cellField">
-						<input id="in_pwd_2" spellcheck=false autocomplete=off style="width: 140px"/>
+						<input id="in_pwd_2" type=password spellcheck=false autocomplete=off style="width: 140px"/>
 					</div>
 					
 					<div id="lbl_org" class="cellLabel">소속<button>선택</button></div>

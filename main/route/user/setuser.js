@@ -2,11 +2,11 @@ const config = require('../../config')
 const ws = require(config.app.ws)
 const wsmysql = require(config.app.wsmysql)
 const express = require('express')
-const multer  = require('multer')
+const multer  = require('multer') //ajax enctype을 "multipart/form-data"으로 했을 경우 multer로 처리 필요
 const router = express.Router()
 const upload = multer({ storage: multer.memoryStorage() })
 
-const title = 'user'
+const title = 'setuser'
 
 router.post('/', upload.any(), async function(req, res) {
 	let conn, sql, data, len
