@@ -142,6 +142,7 @@
                         $("#file_upload").trigger("click")
                     })
 					$("#img_pict").on("drop", function(e) { 
+						e.preventDefault()
 						debugger
 						try {
                             const _data = e.originalEvent.dataTransfer.getData("text") //"image##2023021015343534000076787542LOrtKxoR##20230223151253235000695133ZOwDPVZr1w"
