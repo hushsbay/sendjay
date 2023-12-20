@@ -14,8 +14,8 @@
 				grid-auto-rows: minmax(40px, auto);
 				column-gap: 3px;				
 				row-gap: 3px;
-				grid-template-areas: "lbl_1 fld_1" "lbl_2 fld_2" "lbl_3 fld_3" "lbl_4 fld_4" "lbl_5 fld_5" "lbl_6 fld_6" "lbl_7 fld_7" "lbl_8 fld_8";
-			} /* #lbl_1 { grid-area: lbl_1; } #fld_1 { grid-area: fld_1; } #lbl_2 { grid-area: lbl_2; } #fld_2 { grid-area: fld_2; } */
+				grid-template-areas: "lbl_id fld_id" "lbl_nm fld_nm" "lbl_alias fld_alias" "lbl_pwd fld_pwd" "lbl_pwd_1 fld_pwd_1" "lbl_pwd_2 fld_pwd_2" "lbl_org fld_org" "lbl_img fld_img";
+			} /* #lbl_id { grid-area: lbl_id; } #fld_id { grid-area: fld_id; } #lbl_nm { grid-area: lbl_nm; } #fld_nm { grid-area: fld_nm; } .. */
 
 			.cellLabel {
 				padding-left: 3px;
@@ -32,13 +32,18 @@
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
         <script>
 			//의도적으로 인증체크하지 않음
-			let g_id			
+			let g_id, g_mode		
 
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
 					const param = new URLSearchParams(location.search)
-					g_id = param.get("user_id")
+					const id = param.get("user_id")
+					g_mode = id ? "U" : "C" //있으면 수정모드 없으면 신규모드
+					if (g_mode == "C") {
+						$("#lbl_pwd").hide()
+						$("#fld_pwd").hide()
+					}
 					$("#btn_save").click(async function() {
 						try {
 							const _id = $("#in_id").val().trim()
@@ -54,7 +59,7 @@
 							if (!hush.util.chkFieldVal(_id, "아이디", 4, 20, true)) return
 							debugger
 							const fd = new FormData()
-							fd.append("type", (g_id) ? "U" : "C")
+							fd.append("type", g_mode)
 							fd.append("id", _id)
 							fd.append("nm", _nm)
 							fd.append("alias", _alias)
@@ -128,47 +133,47 @@
 				<div style="width:100%;padding:5px">설명 내용..</div>
                 <div id="gridMain" style="width:100%">		
 
-					<div id="lbl_1" class="cellLabel">아이디</div>
-					<div id="fld_1" class="cellField">
+					<div id="lbl_id" class="cellLabel">아이디</div>
+					<div id="fld_id" class="cellField">
 						<input id="in_id" spellcheck=false autocomplete=off style="width: 140px"/>
 					</div>
 					
-					<div id="lbl_2" class="cellLabel">이름</div>
-					<div id="fld_2" class="cellField">
+					<div id="lbl_nm" class="cellLabel">이름</div>
+					<div id="fld_nm" class="cellField">
 						<input id="in_nm" spellcheck=false autocomplete=off style="width: 200px"/>
 					</div>
 					
-					<div id="lbl_3" class="cellLabel">별칭(Alias)</div>
-					<div id="fld_3" class="cellField">
+					<div id="lbl_alias" class="cellLabel">별칭(Alias)</div>
+					<div id="fld_alias" class="cellField">
 						<input id="in_alias" spellcheck=false autocomplete=off style="width: 200px"/>
 					</div>
 					
-					<div id="lbl_4" class="cellLabel">비번</div>
-					<div id="fld_4" class="cellField">
+					<div id="lbl_pwd" class="cellLabel">비번</div>
+					<div id="fld_pwd" class="cellField">
 						<input id="in_pwd" spellcheck=false autocomplete=off style="width: 140px"/>
 						<input id="chk_pwd" type=checkbox style="margin-left: 5px"/><label id="lbl_pwd" for="chk_pwd" style="cursor: pointer">비번변경</label>
 					</div>
 					
-					<div id="lbl_5" class="cellLabel">새비번</div>
-					<div id="fld_5" class="cellField">
+					<div id="lbl_pwd_1" class="cellLabel">새비번</div>
+					<div id="fld_pwd_1" class="cellField">
 						<input id="in_pwd_1" spellcheck=false autocomplete=off style="width: 140px"/>
 					</div>
 
-					<div id="lbl_6" class="cellLabel">새비번(확인)</div>
-					<div id="fld_6" class="cellField">
+					<div id="lbl_pwd_2" class="cellLabel">새비번(확인)</div>
+					<div id="fld_pwd_2" class="cellField">
 						<input id="in_pwd_2" spellcheck=false autocomplete=off style="width: 140px"/>
 					</div>
 					
-					<div id="lbl_7" class="cellLabel">소속<button>선택</button></div>
-					<div id="fld_7" class="cellField">
+					<div id="lbl_org" class="cellLabel">소속<button>선택</button></div>
+					<div id="fld_org" class="cellField">
 						<div id="txt_toporgcd" style="display: none"></div>
 						<div id="txt_orgcd" style="display: none"></div>						
 						<div id="txt_toporgnm" style="margin: 0 5px"></div>
 						<div id="txt_orgnm" style="margin: 0 5px"></div>						
 					</div>
 
-					<div id="lbl_8" class="cellLabel">사진<button id="pict_browse">선택</button></div>
-					<div id="fld_8" class="cellField">						
+					<div id="lbl_img" class="cellLabel">사진<button id="pict_browse">선택</button></div>
+					<div id="fld_img" class="cellField">						
 						<img id="img_pict" style="width: 64px; height: 64px; margin: 5px" />
 					</div>
 
