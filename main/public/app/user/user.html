@@ -141,20 +141,6 @@
                         $("#file_upload").val("")
                         $("#file_upload").trigger("click")
                     })
-					$("#img_pict").on("paste", function(e) { 
-						debugger
-						const pastedData = e.originalEvent.clipboardData.items
-						for (var i = 0; i < pastedData.length; i++) {
-							const clipboardItem = pastedData[i]
-							const type = clipboardItem.type
-							if (type.includes("image")) { 
-								const blob = clipboardItem.getAsFile()
-								const blobUrl = URL.createObjectURL(blob)
-								$("#img_pict").attr("src", blobUrl)
-								break
-							}			               
-						}
-					})
 					$("#pict_clear").click(function() {
                         $("#img_pict").attr("src", "")
 						hush.msg.toast("저장해야 최종 적용됩니다.")
