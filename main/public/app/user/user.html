@@ -144,7 +144,7 @@
                         $("#file_upload").trigger("click")
                     })
 					$("#pict_clear").click(function() {
-                        $("#img_pict").removeAttr("src") //$("#img_pict").attr("src", "")
+                        $("#img_pict").remove() //$("#img_pict").attr("src", "") //가비지가 남아 있어 문제가 됨
 						//hush.msg.toast("저장해야 최종 적용됩니다.")
                     })
 					$("#file_upload").change(function() {
