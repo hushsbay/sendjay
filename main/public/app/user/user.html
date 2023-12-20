@@ -141,15 +141,19 @@
                         $("#file_upload").val("")
                         $("#file_upload").trigger("click")
                     })
-					$("#img_pict").on("drop", function(e) { 
-						e.preventDefault()
+					$("#img_pict").on("paste", function(e) { 
 						debugger
-						try {
-                            const _data = e.originalEvent.dataTransfer.getData("text") //"image##2023021015343534000076787542LOrtKxoR##20230223151253235000695133ZOwDPVZr1w"
-                            const _files = e.originalEvent.dataTransfer.files
-                        } catch (ex) {
-                            hush.util.showEx(ex)
-                        }
+						const pastedData = e.originalEvent.clipboardData.items
+						for (var i = 0; i < pastedData.length; i++) {
+							const clipboardItem = pastedData[i]
+							const type = clipboardItem.type
+							if (type.includes("image")) { 
+								const blob = clipboardItem.getAsFile()
+								const blobUrl = URL.createObjectURL(blob)
+								$("#img_pict").attr("src", blobUrl)
+								break
+							}			               
+						}
 					})
 					$("#pict_clear").click(function() {
                         $("#img_pict").attr("src", "")
