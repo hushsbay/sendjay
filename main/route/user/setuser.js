@@ -23,7 +23,7 @@ router.post('/', upload.any(), async function(req, res) {
 		const orgcd = req.body.orgcd
 		const orgnm = req.body.orgnm
 		const mimetype = req.body.mimetype
-		const buf = mimetype ? Buffer.from(new Uint8Array(req.files[0].buffer)) : null
+		const buf = mimetype ? Buffer.from(new Uint8Array(req.files[0].buffer)) : ''
 		conn = await wsmysql.getConnFromPool(global.pool)
 		sql =  "SELECT COUNT(*) CNT, PWD FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [id])
@@ -60,7 +60,7 @@ router.post('/', upload.any(), async function(req, res) {
 				sql =  "UPDATE JAY.Z_USER_TBL "
 				sql += "   SET USER_NM = ?, PWD = " + _str + ", ORG_CD = ?, ORG_NM = ?, TOP_ORG_CD = ?, TOP_ORG_NM = ?, PICTURE = ?, MIMETYPE = ?, NICK_NM = ? "
 				sql += " WHERE USER_ID = ? "
-				await wsmysql.query(conn, sql, [id, nm, orgcd, orgnm, toporgcd, toporgnm, buf, mimetype, alias])
+				await wsmysql.query(conn, sql, [nm, orgcd, orgnm, toporgcd, toporgnm, buf, mimetype, alias, id])
 			}
 		}
 		res.json(rs)
