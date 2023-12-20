@@ -41,8 +41,8 @@ router.post('/', upload.any(), async function(req, res) {
 				ws.http.resWarn(res, ws.cons.MSG_NO_DATA)
 				return
 			}
-			const _dec = ws.util.encrypt(data[0].PWD, nodeConfig.crypto.key)
-			console.log(_dec, "======")
+			const _dec = ws.util.decrypt(data[0].PWD, nodeConfig.crypto.key)
+			console.log(_dec, "======", pwd)
 			if (pwd != _dec) {
 				ws.http.resWarn(res, '입력한 (기존) 비번이 서버에 저장된 비번과 다릅니다.')
 				return
