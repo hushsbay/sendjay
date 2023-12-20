@@ -141,7 +141,7 @@
                         $("#file_upload").val("")
                         $("#file_upload").trigger("click")
                     })
-					$("#fld_img").on("paste", function(e) { 
+					$("#img_pict").on("paste", function(e) { 
 						debugger
 						const pastedData = e.originalEvent.clipboardData.items
 						for (var i = 0; i < pastedData.length; i++) {
