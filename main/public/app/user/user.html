@@ -101,7 +101,7 @@
 						// }
 						if (rs.picture) {
 							const blobUrl = hush.blob.getBlobUrlForImage(row.PICTURE.data)
-							$("#img_pict").attr("src", rs.picture.data)
+							$("#img_pict").attr("src", row.PICTURE.data)
 						}
 					}
 					$("#btn_save").click(async function() {
