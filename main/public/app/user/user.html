@@ -100,8 +100,8 @@
 						// 	$("#img_pict").attr("src", blobUrl)							
 						// }
 						if (rs.picture) {
-							//const blobUrl = hush.blob.getBlobUrlForImage(row.PICTURE.data)
-							$("#img_pict").attr("src", rs.picture)
+							const blobUrl = hush.blob.getBlobUrlForImage(row.PICTURE.data)
+							$("#img_pict").attr("src", rs.picture.data)
 						}
 					}
 					$("#btn_save").click(async function() {
