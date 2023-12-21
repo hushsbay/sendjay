@@ -126,7 +126,8 @@
 								if (!hush.util.chkFieldVal(_pwd, "비번", 4, 20, true)) return	
 							}
 							if (!hush.util.chkFieldVal(_id, "아이디", 4, 20, true)) return
-							
+							if (!hush.util.chkFieldVal(_id, "이름", 2, 50)) return //테스트로 Ed, Hi..
+							if (!hush.util.chkFieldVal(_id, "별칭(Alias)", 0, 100)) return
 							const fd = new FormData()
 							fd.append("type", g_mode)
 							fd.append("id", _id)
