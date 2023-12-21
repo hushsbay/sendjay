@@ -23,7 +23,7 @@ router.post('/', upload.any(), async function(req, res) {
 		const orgcd = req.body.orgcd
 		const orgnm = req.body.orgnm
 		const mimetype = req.body.mimetype
-		const buf = mimetype ? Buffer.from(new Uint8Array(req.files[0].buffer)) : null
+		const buf = mimetype ? Buffer.from(new Uint8Array(req.files[0].buffer)) : null //MySql PICTURE 필드가 longblob 타입으로 되어 있음
 		conn = await wsmysql.getConnFromPool(global.pool)
 		sql =  "SELECT COUNT(*) CNT, PWD FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [id])
