@@ -38,6 +38,18 @@
 			//의도적으로 인증체크하지 않음
 			let g_mode		
 
+			function procFromOrgTree(from, nodeToGet, arr) {
+        		try {
+	        		if (!$.isArray(arr) || arr.length == 0) {
+	        			hush.msg.msg("조직도 팝업으로부터 선택한 값이 없습니다.")
+	        			return
+	        		}
+                    hush.msg.msg(JSON.stringify(arr))
+        		} catch (ex) {
+                	hush.util.showEx(ex)
+                }
+        	}
+
 			function dispPwd(show) {
 				if (show) {
 					$("#lbl_pwd_1").css("display", "flex")
@@ -146,6 +158,10 @@
 						const _self = $(this)
 						dispPwd(_self.prop("checked"))
 					})
+					$("#btn_orgtree").on("click", function() {
+                        const obj = { from : this.id, nodeToGet : "D", expandTo : 99, singleSelect : "Y", selectOnlyChildDept : "Y" }
+                        hush.util.openWinPop("/app/org/orgtree.html?" + $.param(obj))
+                    })
 					$("#pict_browse").click(function() {
                         $("#file_upload").val("")
                         $("#file_upload").trigger("click")
@@ -225,7 +241,7 @@
 						<input id="in_pwd_2" type=password spellcheck=false autocomplete=off style="width: 140px"/>
 					</div>
 					
-					<div id="lbl_org" class="cellLabel">소속<button>선택</button></div>
+					<div id="lbl_org" class="cellLabel">소속<button id="btn_orgtree">선택</button></div>
 					<div id="fld_org" class="cellField">
 						<div id="txt_toporgcd" style="display: none"></div>
 						<div id="txt_orgcd" style="display: none"></div>						
