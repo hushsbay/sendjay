@@ -95,15 +95,11 @@
 						$("#txt_toporgnm").html(row.TOP_ORG_NM)
 						$("#txt_orgcd").html(row.ORG_CD)
 						$("#txt_orgnm").html(row.ORG_NM)
-						if (row.PICTURE) {
-							const blobUrl = hush.blob.getBlobUrlForImage(row.PICTURE.data, row.MIMETYPE)
-							$("#img_pict").attr("src", blobUrl)
-debugger
-							//const dataUrl = hush.blob.setDataUrl(rs.picture, row.MIMETYPE) //서버에서 base64(rs.picture)로 내려줌
-							//$("#img_pict").attr("src", dataUrl)
-
-
-							
+						if (row.PICTURE) { //common.js참조 : 노드에서 MySql에 저장된 PICTURE(longblob)값 내리기
+							//const url = hush.blob.setDataUrl(rs.picture, row.MIMETYPE) //방법1) base64로 변환해 내림 (사용시 서버에서도 코딩 변경 필요)
+							const url = hush.blob.getBlobUrlForImage(row.PICTURE.data, row.MIMETYPE) //방법2) 특별히 변환하지 않고 그냥 blob으로 내림
+							$("#img_pict").attr("src", url)
+							$("#img_pict").attr("mimetype", row.MIMETYPE)
 						}
 					}
 					$("#btn_save").click(async function() {
