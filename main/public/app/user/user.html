@@ -44,7 +44,11 @@
 	        			hush.msg.msg("조직도 팝업으로부터 선택한 값이 없습니다.")
 	        			return
 	        		}
-                    hush.msg.msg(JSON.stringify(arr))
+                    debugger
+					$("#txt_toporgcd").html(row.TOP_ORG_CD)
+					$("#txt_toporgnm").html(row.TOP_ORG_NM)
+					$("#txt_orgcd").html(row.ORG_CD)
+					$("#txt_orgnm").html(row.ORG_NM)
         		} catch (ex) {
                 	hush.util.showEx(ex)
                 }
