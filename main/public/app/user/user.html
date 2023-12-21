@@ -9,10 +9,8 @@
 		<link rel="stylesheet" href="/app/org/orgtree.css">	
 		<style>
 			#gridMain {	
-				width: 100%;			
-				display: grid; grid-template-columns: 100px auto; /*grid-template-rows: 40px 40px 40px 40px minmax(40px, auto) minmax(40px, auto);*/
-				grid-auto-rows: minmax(40px, auto); /* 이 경우 필요한 행보다 여분의 그리드 행이 화면 아래 생기는데 높이를 줄이면  */				
-				column-gap: 3px; row-gap: 3px; 
+				width: 100%; /* grid-auto-rows: minmax(40px, auto); grid-template-rows 대신에 이 경우는 필요한 행보다 여분의 그리드 행이 화면 아래 생김 (높이를 맨 아래 행에 맞추면 스크롤 생김 */
+				display: grid; grid-template-columns: 100px auto; grid-template-rows: 40px 40px 40px 40px minmax(40px, auto) minmax(40px, auto); column-gap: 3px; row-gap: 3px; 
 				grid-template-areas: "lbl_id fld_id" "lbl_nm fld_nm" "lbl_alias fld_alias" "lbl_pwd fld_pwd" "lbl_pwd_1 fld_pwd_1" "lbl_pwd_2 fld_pwd_2" "lbl_org fld_org" "lbl_img fld_img";
 			} /* #lbl_id { grid-area: lbl_id; } #fld_id { grid-area: fld_id; } #lbl_nm { grid-area: lbl_nm; } #fld_nm { grid-area: fld_nm; } .. */
 
