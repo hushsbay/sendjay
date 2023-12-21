@@ -98,8 +98,15 @@
 						if (row.PICTURE) {
 							//const blobUrl = hush.blob.getBlobUrlForImage(row.PICTURE.data, row.MIMETYPE)
 							//$("#img_pict").attr("src", blobUrl)
-							const data = "data:" + row.MIMETYPE + ";base64," + rs.picture
-							$("#img_pict").attr("src", data)
+
+							//const data = "data:" + row.MIMETYPE + ";base64," + rs.picture
+							//$("#img_pict").attr("src", data)
+debugger
+							const reader = new FileReader()
+                            reader.readAsDataURL(row.PICTURE.data)
+                            reader.addEventListener("load", function () { //$("#img_pict").on("load", function() { $("#pict_upload").click() }).attr("src", reader.result)
+                                $("#img_pict").attr("src", reader.result) //reader.result는 base64 인코딩된 스트링 데이터
+                            })
 						}
 					}
 					$("#btn_save").click(async function() {
@@ -189,9 +196,9 @@
                             }
                             const reader = new FileReader()
                             reader.readAsDataURL(file)
-                            reader.addEventListener("load", function () {
-                                $("#img_pict").attr("src", reader.result) //$("#img_pict").on("load", function() { $("#pict_upload").click() }).attr("src", reader.result)
-                            }, false)
+                            reader.addEventListener("load", function () { //$("#img_pict").on("load", function() { $("#pict_upload").click() }).attr("src", reader.result)
+                                $("#img_pict").attr("src", reader.result) //reader.result는 base64 인코딩된 스트링 데이터
+                            }) //, false)
                         } catch (ex) { 
                             hush.util.showEx(ex)
                         }
