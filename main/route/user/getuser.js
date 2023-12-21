@@ -21,6 +21,7 @@ router.post('/', async function(req, res) {
 			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true) //true=toast
 			return
 		}
+		rs.picture = data[0].PICTURE ? Buffer.from(data[0].PICTURE, 'binary').toString('base64') : null
        	rs.list = data
 		res.json(rs)
 	} catch (ex) {

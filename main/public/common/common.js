@@ -404,7 +404,7 @@
                 const uInt8Array = new Uint8Array(buffer)
                 const blob = new Blob([uInt8Array], { type: _mimetype })
                 const blobUrl = URL.createObjectURL(blob)
-                return blobUrl
+                return blobUrl //blob:https://hushsbay.com/f4cb83ea-5d46-40b7-8baa-ba62dca2ffca
             },
             parseBlobUrl : (objUrl) => { //eg) data:image/png;base64,~
                 let _ret = { mimetype : "", body : "" }
