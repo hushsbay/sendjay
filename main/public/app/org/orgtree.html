@@ -33,7 +33,7 @@
         	        if (_chk) {
 						if (nodekind == "D" && g_selectOnlyChildDept == "Y" && row1.haschild) return
         	            if ($("#add_" + _id).length > 0) {
-        	                hush.util.anim$("#add_" + _id)
+        	                hush.util.anim($("#add_" + _id))
         	                return
         	            }						
         	            let _html = "<div id=add_" + _id + " class=mem>"
