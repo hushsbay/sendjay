@@ -142,22 +142,41 @@
 							fd.append("toporgnm", _toporgnm)
 							fd.append("orgcd", _orgcd)
 							fd.append("orgnm", _orgnm)
-							const dataUrl = $("#img_pict").attr("src")
-							if (dataUrl) {
-								const rs = await hush.blob.get(dataUrl)
-								fd.append("file", rs.blob)
-								fd.append("mimetype", rs.url.mimetype)
-							} else {
-								fd.append("file", "")
-								fd.append("mimetype", "")
-							}
-							hush.http.ajaxFormData("/user/setuser", fd, (rs) => {
-								if (rs.code != hush.cons.CODE_OK) {
-									hush.msg.showMsg(rs.msg)
+							// const dataUrl = $("#img_pict").attr("src")
+							// if (dataUrl) {
+							// 	const rs = await hush.blob.get(dataUrl)
+							// 	fd.append("file", rs.blob)
+							// 	fd.append("mimetype", rs.url.mimetype)
+							// } else {
+							// 	fd.append("file", "")
+							// 	fd.append("mimetype", "")
+							// }
+							// hush.http.ajaxFormData("/user/setuser", fd, (rs) => {
+							// 	if (rs.code != hush.cons.CODE_OK) {
+							// 		hush.msg.showMsg(rs.msg)
+							// 	} else {
+							// 		hush.msg.toast(hush.cons.MSG_OK)
+							// 	}
+							// })
+							debugger
+							const blobUrl = $("#img_pict").attr("src")
+							const xhr = new XMLHttpRequest()
+							xhr.open("GET", blobUrl, true) //since dataUrl might be just blob without any infomation for base64 and contentType eg) blob:https://~
+							xhr.responseType = "blob"
+							xhr.onload = function(e) {
+								if (this.status == 200) {
+									fd.append("file", this.response)
+									hush.http.ajaxFormData("/user/setuser", fd, (rs) => {
+										if (rs.code != hush.cons.CODE_OK) {
+											hush.msg.showMsg(rs.msg)
+										} else {
+											hush.msg.toast(hush.cons.MSG_OK)
+										}
+									})
 								} else {
-									hush.msg.toast(hush.cons.MSG_OK)
+									debugger //e로 오류 핸들링 가능한지 알아봐야 함
 								}
-							})
+							}
 						} catch (ex) {
 							hush.util.showEx(ex)
 						}
@@ -199,17 +218,11 @@
 							debugger
 							const reader = new FileReader()
 							reader.onload = function(e) {
-								const blob = new Blob([new Uint8Array(e.target.result)], {type: "image/png" })
-								console.log(blob)
+								const blob = new Blob([new Uint8Array(e.target.result)], {type: file.type })
 								const blobUrl = URL.createObjectURL(blob)
-								$("#img_pict").attr("src", blobUrl)
+								$("#img_pict").attr("src", blobUrl) //blob:https://hushsbay.com/512bc969-441c-4019-8ba9-478a478b2cfd
 							}
 							reader.readAsArrayBuffer(file)
-
-							//const uInt8Array = new Uint8Array(file.buffer)
-							//const blob = new Blob([uInt8Array], { type: "image/png" })
-							//const blobUrl = URL.createObjectURL(blob)
-							//$("#img_pict").attr("src", blobUrl)
                         } catch (ex) { 
                             hush.util.showEx(ex)
                         }
