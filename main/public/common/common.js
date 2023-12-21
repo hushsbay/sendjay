@@ -399,7 +399,7 @@
             },
         },
         blob : {
-            //브라우저에서 파일 선택후 노드서버에 올리고 다시 내려 표시하는 등 처리는 2가지 방법이 있음 => 1) blob 2) base64인코딩스트링
+            //브라우저에서 이미지 파일 선택후 노드서버에 올리고 다시 내려 표시하는 등 처리는 2가지 방법이 있음 => 1) blob 2) base64인코딩스트링
             getUrlForFile : (file, returnBlob, callback) => {
                 const reader = new FileReader()
                 if (returnBlob) {
@@ -416,6 +416,28 @@
                     })
                 }
             },
+            get : async (url) => { //get(getPromise)도 <img>의 src url이 blob이든 base64든 관계없이 blob 데이터 리턴해서 서버로 보낼 준비를 함
+                try {
+                    const rs = await hush.blob.getPromise(url)               
+                    return rs
+                } catch (ex) {
+                    throw ex //new Error(ex.message)
+                }
+            },
+            getPromise : (url) => new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest()
+                xhr.open("GET", url, true) //since dataUrl might be just blob without any infomation for base64 and contentType eg) blob:https://~
+                xhr.responseType = "blob"
+                xhr.onload = function(e) {
+                    if (this.status == 200) {
+                        resolve(this.response)
+                    } else {
+                        debugger //e로 오류 핸들링 가능한지 알아봐야 함
+                        reject(new Error(this.status + " / getBlob 오류입니다."))
+                    }
+                }
+                xhr.send()
+            }),
             //1) base64인코딩스트링을 이용해 처리
             parseDataUrl : (dataUrl) => { //eg) data:image/png;base64,~
                 let _ret = { mimetype : "", body : "" }
@@ -433,39 +455,32 @@
                 }
                 return _ret
             },
-            get : async (dataUrl) => {
-                try {
-                    const rs = await hush.blob.getPromise(dataUrl)               
-                    return rs
-                } catch (ex) {
-                    throw ex //new Error(ex.message)
-                }
-            },
-            getPromise : (dataUrl) => new Promise((resolve, reject) => {
-                const rs = { url : "", blob : "" }
-                const objUrl = hush.blob.parseDataUrl(dataUrl)
-                if (!objUrl) reject(new Error("Mime Type을 찾을 수 없습니다."))
-                const xhr = new XMLHttpRequest()
-                xhr.open("GET", dataUrl, true) //since dataUrl might be just blob without any infomation for base64 and contentType eg) blob:https://~
-                xhr.responseType = "blob"
-                xhr.onload = function(e) {
-                    if (this.status == 200) {
-                        rs.url = objUrl
-                        rs.blob = this.response
-                        resolve(rs)
-                    } else {
-                        debugger //e로 오류 핸들링 가능한지 알아봐야 함
-                        reject(new Error(this.status + "/Blob처리오류입니다."))
-                    }
-                }
-                xhr.send()
-            }),
+            
+            // getPromise : (dataUrl) => new Promise((resolve, reject) => {
+            //     const rs = { url : "", blob : "" }
+            //     const objUrl = hush.blob.parseDataUrl(dataUrl)
+            //     if (!objUrl) reject(new Error("Mime Type을 찾을 수 없습니다."))
+            //     const xhr = new XMLHttpRequest()
+            //     xhr.open("GET", dataUrl, true) //since dataUrl might be just blob without any infomation for base64 and contentType eg) blob:https://~
+            //     xhr.responseType = "blob"
+            //     xhr.onload = function(e) {
+            //         if (this.status == 200) {
+            //             rs.url = objUrl
+            //             rs.blob = this.response
+            //             resolve(rs)
+            //         } else {
+            //             debugger //e로 오류 핸들링 가능한지 알아봐야 함
+            //             reject(new Error(this.status + "/Blob처리오류입니다."))
+            //         }
+            //     }
+            //     xhr.send()
+            // }),
+            
             setDataUrl : (base64, mimetype) => { //base64는 노드 서버에서 Buffer.from(data[0].PICTURE, 'binary').toString('base64')로 처리된 것을 전제로 함
                 const dataUrl = "data:" + mimetype + ";base64," + base64
 				return dataUrl
             },
-            //dataUrl 이용 관련 End
-            //노드서버에 이미지 등 파일 올리고 내려서 표시하는 2가지 방법중 아래는 2) blob을 이용해 처리하는 것임
+            //2) blob을 이용해 처리
             getBlobUrlForImage : (buffer, mimetype) => {
                 const _mimetype = (mimetype) ? mimetype : "image/png"
                 const uInt8Array = new Uint8Array(buffer)

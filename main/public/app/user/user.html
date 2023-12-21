@@ -159,27 +159,44 @@ debugger
 							// 	}
 							// })
 							debugger
-							const blobUrl = $("#img_pict").attr("src")
-							const xhr = new XMLHttpRequest()
-							xhr.open("GET", blobUrl, true) //since dataUrl might be just blob without any infomation for base64 and contentType eg) blob:https://~
-							xhr.responseType = "blob"
-							xhr.onload = function(e) {
-								if (this.status == 200) {
-									debugger
-									fd.append("file", this.response)
-									fd.append("mimetype", "0000")
-									hush.http.ajaxFormData("/user/setuser", fd, (rs) => {
-										if (rs.code != hush.cons.CODE_OK) {
-											hush.msg.showMsg(rs.msg)
-										} else {
-											hush.msg.toast(hush.cons.MSG_OK)
-										}
-									})
-								} else {
-									debugger //e로 오류 핸들링 가능한지 알아봐야 함
-								}
+							// const blobUrl = $("#img_pict").attr("src")
+							// const xhr = new XMLHttpRequest()
+							// xhr.open("GET", blobUrl, true) //since dataUrl might be just blob without any infomation for base64 and contentType eg) blob:https://~
+							// xhr.responseType = "blob"
+							// xhr.onload = function(e) {
+							// 	if (this.status == 200) {
+							// 		debugger
+							// 		fd.append("file", this.response)
+							// 		fd.append("mimetype", "0000")
+							// 		hush.http.ajaxFormData("/user/setuser", fd, (rs) => {
+							// 			if (rs.code != hush.cons.CODE_OK) {
+							// 				hush.msg.showMsg(rs.msg)
+							// 			} else {
+							// 				hush.msg.toast(hush.cons.MSG_OK)
+							// 			}
+							// 		})
+							// 	} else {
+							// 		debugger //e로 오류 핸들링 가능한지 알아봐야 함
+							// 	}
+							// }
+							// xhr.send()
+							const url = $("#img_pict").attr("src")
+							if (url) {
+								const blob = await hush.blob.get(url)
+								const mimetype = $("#img_pict").attr("mimetype")
+								fd.append("file", blob)
+								fd.append("mimetype", mimetype)
+							} else {
+								fd.append("file", "")
+								fd.append("mimetype", "")
 							}
-							xhr.send()
+							hush.http.ajaxFormData("/user/setuser", fd, (rs) => {
+								if (rs.code != hush.cons.CODE_OK) {
+									hush.msg.showMsg(rs.msg)
+								} else {
+									hush.msg.toast(hush.cons.MSG_OK)
+								}
+							})
 						} catch (ex) {
 							hush.util.showEx(ex)
 						}
@@ -226,8 +243,9 @@ debugger
 							// 	$("#img_pict").attr("src", blobUrl) //blob:https://hushsbay.com/512bc969-441c-4019-8ba9-478a478b2cfd
 							// }
 							// reader.readAsArrayBuffer(file)
-							hush.blob.getUrlForFile(file, false, function(url) {
+							hush.blob.getUrlForFile(file, true, function(url) {
 								$("#img_pict").attr("src", url)
+								$("#img_pict").attr("mimetype", file.type)
 							})
                         } catch (ex) { 
                             hush.util.showEx(ex)
