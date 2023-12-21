@@ -167,7 +167,7 @@
 								if (this.status == 200) {
 									debugger
 									fd.append("file", this.response)
-									fd.append("mimetype", "")
+									fd.append("mimetype", "0000")
 									hush.http.ajaxFormData("/user/setuser", fd, (rs) => {
 										if (rs.code != hush.cons.CODE_OK) {
 											hush.msg.showMsg(rs.msg)
