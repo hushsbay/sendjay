@@ -339,6 +339,15 @@
                 	tag.animate({ opacity : 1 }, 150).animate({ opacity : 1 }, 300)
                 }                
             },
+            animBgColor : (tag, callback, bgColor) => { //jqueryui
+                const _prevBackcolor = tag.css("background-color")
+                const _bgColor = bgColor ? bgColor : hush.cons.color_fadein
+                if (callback) {
+                	tag.animate({ backgroundColor : _bgColor }, 150).animate({ backgroundColor : _prevBackcolor }, 300, null, callback)
+                } else {
+                	tag.animate({ backgroundColor : _bgColor }, 150).animate({ backgroundColor : _prevBackcolor }, 300)
+                }                
+            },
             getFileNameAndExtension : (fileStr) => {
 				const obj = { }
 				const arr = fileStr.split(".")
