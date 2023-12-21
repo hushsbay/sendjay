@@ -196,6 +196,7 @@
                             // reader.addEventListener("load", function () { //$("#img_pict").on("load", function() { $("#pict_upload").click() }).attr("src", reader.result)
                             //     $("#img_pict").attr("src", reader.result) //reader.result는 base64 인코딩된 스트링 데이터
                             // }) //, false)
+							debugger
 							const uInt8Array = new Uint8Array(file.buffer)
 							const blob = new Blob([uInt8Array], { type: "image/png" })
 							const blobUrl = URL.createObjectURL(blob)
