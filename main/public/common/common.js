@@ -439,22 +439,22 @@
                 xhr.send()
             }),
             //1) base64인코딩스트링을 이용해 처리
-            parseDataUrl : (dataUrl) => { //eg) data:image/png;base64,~
-                let _ret = { mimetype : "", body : "" }
-                var _header = dataUrl.split(";base64,")
-                if (_header.length == 2) {
-                    const _data = _header[0].split(":")
-                    if (_data[0] == "data") {
-                        _ret.mimetype = _data[1] //eg) image/png
-                        _ret.body = _header[1]
-                    } else {
-                        _ret = null
-                    }
-                } else {
-                    _ret = null
-                }
-                return _ret
-            },
+            // parseDataUrl : (dataUrl) => { //eg) data:image/png;base64,~
+            //     let _ret = { mimetype : "", body : "" }
+            //     var _header = dataUrl.split(";base64,")
+            //     if (_header.length == 2) {
+            //         const _data = _header[0].split(":")
+            //         if (_data[0] == "data") {
+            //             _ret.mimetype = _data[1] //eg) image/png
+            //             _ret.body = _header[1]
+            //         } else {
+            //             _ret = null
+            //         }
+            //     } else {
+            //         _ret = null
+            //     }
+            //     return _ret
+            // },
             
             // getPromise : (dataUrl) => new Promise((resolve, reject) => {
             //     const rs = { url : "", blob : "" }
@@ -475,12 +475,7 @@
             //     }
             //     xhr.send()
             // }),
-            
-            setDataUrl : (base64, mimetype) => { //base64는 노드 서버에서 Buffer.from(data[0].PICTURE, 'binary').toString('base64')로 처리된 것을 전제로 함
-                const dataUrl = "data:" + mimetype + ";base64," + base64
-				return dataUrl
-            },
-            //2) blob을 이용해 처리
+            //1) blob을 이용해 처리
             getBlobUrlForImage : (buffer, mimetype) => {
                 const _mimetype = (mimetype) ? mimetype : "image/png"
                 const uInt8Array = new Uint8Array(buffer)
@@ -488,6 +483,11 @@
                 const blobUrl = URL.createObjectURL(blob)
                 return blobUrl //blob:https://hushsbay.com/f4cb83ea-5d46-40b7-8baa-ba62dca2ffca
             },
+            //2) base64인코딩스트링
+            setDataUrl : (base64, mimetype) => { //base64는 노드 서버에서 Buffer.from(data[0].PICTURE, 'binary').toString('base64')로 처리된 것을 전제로 함
+                const dataUrl = "data:" + mimetype + ";base64," + base64
+				return dataUrl
+            }            
         }
     }
 })(jQuery)
