@@ -98,16 +98,8 @@
 						if (row.PICTURE) {
 							//const blobUrl = hush.blob.getBlobUrlForImage(row.PICTURE.data, row.MIMETYPE)
 							//$("#img_pict").attr("src", blobUrl)
-
-							//const data = "data:" + row.MIMETYPE + ";base64," + rs.picture
-							//$("#img_pict").attr("src", data)
-debugger
-							const blob = hush.blob.getBlobUrlForImage(row.PICTURE.data, row.MIMETYPE)
-							const reader = new FileReader()
-                            reader.readAsDataURL(blob)
-                            reader.addEventListener("load", function () { //$("#img_pict").on("load", function() { $("#pict_upload").click() }).attr("src", reader.result)
-                                $("#img_pict").attr("src", reader.result) //reader.result는 base64 인코딩된 스트링 데이터
-                            })
+							const dataUrl = hush.blob.setDataUrl(rs.picture, row.MIMETYPE) //서버에서 base64(rs.picture)로 내려줌
+							$("#img_pict").attr("src", dataUrl)
 						}
 					}
 					$("#btn_save").click(async function() {
@@ -146,9 +138,9 @@ debugger
 							fd.append("toporgnm", _toporgnm)
 							fd.append("orgcd", _orgcd)
 							fd.append("orgnm", _orgnm)
-							const blobUrl = $("#img_pict").attr("src")
-							if (blobUrl) {
-								const rs = await hush.blob.get(blobUrl)
+							const dataUrl = $("#img_pict").attr("src")
+							if (dataUrl) {
+								const rs = await hush.blob.get(dataUrl)
 								fd.append("file", rs.blob)
 								fd.append("mimetype", rs.url.mimetype)
 							} else {

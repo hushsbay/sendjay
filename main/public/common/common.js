@@ -399,16 +399,16 @@
             },
         },
         blob : {
-            getBlobUrlForImage : (buffer, mimetype) => {
-                const _mimetype = (mimetype) ? mimetype : "image/png"
-                const uInt8Array = new Uint8Array(buffer)
-                const blob = new Blob([uInt8Array], { type: _mimetype })
-                const blobUrl = URL.createObjectURL(blob)
-                return blobUrl //blob:https://hushsbay.com/f4cb83ea-5d46-40b7-8baa-ba62dca2ffca
-            },
-            parseBlobUrl : (objUrl) => { //eg) data:image/png;base64,~
+            // getBlobUrlForImage : (buffer, mimetype) => {
+            //     const _mimetype = (mimetype) ? mimetype : "image/png"
+            //     const uInt8Array = new Uint8Array(buffer)
+            //     const blob = new Blob([uInt8Array], { type: _mimetype })
+            //     const blobUrl = URL.createObjectURL(blob)
+            //     return blobUrl //blob:https://hushsbay.com/f4cb83ea-5d46-40b7-8baa-ba62dca2ffca
+            // },
+            parseDataUrl : (dataUrl) => { //eg) data:image/png;base64,~
                 let _ret = { mimetype : "", body : "" }
-                var _header = objUrl.split(";base64,")
+                var _header = dataUrl.split(";base64,")
                 if (_header.length == 2) {
                     const _data = _header[0].split(":")
                     if (_data[0] == "data") {
@@ -422,20 +422,20 @@
                 }
                 return _ret
             },
-            get : async (blobUrl) => {
+            get : async (dataUrl) => {
                 try {
-                    const rs = await hush.blob.getPromise(blobUrl)               
+                    const rs = await hush.blob.getPromise(dataUrl)               
                     return rs
                 } catch (ex) {
                     throw ex //new Error(ex.message)
                 }
             },
-            getPromise : (blobUrl) => new Promise((resolve, reject) => {
+            getPromise : (dataUrl) => new Promise((resolve, reject) => {
                 const rs = { url : "", blob : "" }
-                const objUrl = hush.blob.parseBlobUrl(blobUrl)
+                const objUrl = hush.blob.parseDataUrl(dataUrl)
                 if (!objUrl) reject(new Error("Mime Type을 찾을 수 없습니다."))
                 const xhr = new XMLHttpRequest()
-                xhr.open("GET", blobUrl, true) //since blobUrl might be just blob without any infomation for base64 and contentType eg) blob:https://~
+                xhr.open("GET", dataUrl, true) //since dataUrl might be just blob without any infomation for base64 and contentType eg) blob:https://~
                 xhr.responseType = "blob"
                 xhr.onload = function(e) {
                     if (this.status == 200) {
@@ -448,7 +448,11 @@
                     }
                 }
                 xhr.send()
-            })
+            }),
+            setDataUrl : (base64, mimetype) => { //base64는 노드 서버에서 Buffer.from(data[0].PICTURE, 'binary').toString('base64')로 처리된 것을 전제로 함
+                const dataUrl = "data:" + mimetype + ";base64," + base64
+				return dataUrl
+            }
         }
     }
 })(jQuery)
