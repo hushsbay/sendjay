@@ -96,7 +96,7 @@
 						$("#txt_orgcd").html(row.ORG_CD)
 						$("#txt_orgnm").html(row.ORG_NM)
 						if (row.PICTURE) {
-							const blobUrl = hush.blob.getBlobUrlForImage(row.PICTURE.data)
+							const blobUrl = hush.blob.getBlobUrlForImage(row.PICTURE.data, row.MIMETYPE)
 							$("#img_pict").attr("src", blobUrl)							
 						}
 					}
