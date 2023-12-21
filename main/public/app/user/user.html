@@ -138,6 +138,7 @@
 							fd.append("orgnm", _orgnm)
 							const blobUrl = $("#img_pict").attr("src")
 							if (blobUrl) {
+								debugger
 								const rs = await hush.blob.get(blobUrl)
 								fd.append("file", rs.blob)
 								fd.append("mimetype", rs.url.mimetype)
