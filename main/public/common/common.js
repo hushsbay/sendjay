@@ -399,13 +399,24 @@
             },
         },
         blob : {
-            // getBlobUrlForImage : (buffer, mimetype) => {
-            //     const _mimetype = (mimetype) ? mimetype : "image/png"
-            //     const uInt8Array = new Uint8Array(buffer)
-            //     const blob = new Blob([uInt8Array], { type: _mimetype })
-            //     const blobUrl = URL.createObjectURL(blob)
-            //     return blobUrl //blob:https://hushsbay.com/f4cb83ea-5d46-40b7-8baa-ba62dca2ffca
-            // },
+            //브라우저에서 파일 선택후 노드서버에 올리고 다시 내려 표시하는 등 처리는 2가지 방법이 있음 => 1) blob 2) base64인코딩스트링
+            getUrlForFile : (file, returnBlob, callback) => {
+                const reader = new FileReader()
+                if (returnBlob) {
+                    reader.onload = function(e) {
+                        const blob = new Blob([new Uint8Array(e.target.result)], {type: file.type })
+                        const blobUrl = URL.createObjectURL(blob)
+                        callback(blobUrl) //blob:https://hushsbay.com/512bc969-441c-4019-8ba9-478a478b2cfd
+                    }
+                    reader.readAsArrayBuffer(file)
+                } else { //base64 인코딩된 스트링 데이터로 리턴
+                    reader.readAsDataURL(file)
+                    reader.addEventListener("load", function () {
+                        callback(reader.result) //data:image/png;base64,~
+                    })
+                }
+            },
+            //1) base64인코딩스트링을 이용해 처리
             parseDataUrl : (dataUrl) => { //eg) data:image/png;base64,~
                 let _ret = { mimetype : "", body : "" }
                 var _header = dataUrl.split(";base64,")
@@ -452,7 +463,16 @@
             setDataUrl : (base64, mimetype) => { //base64는 노드 서버에서 Buffer.from(data[0].PICTURE, 'binary').toString('base64')로 처리된 것을 전제로 함
                 const dataUrl = "data:" + mimetype + ";base64," + base64
 				return dataUrl
-            }
+            },
+            //dataUrl 이용 관련 End
+            //노드서버에 이미지 등 파일 올리고 내려서 표시하는 2가지 방법중 아래는 2) blob을 이용해 처리하는 것임
+            getBlobUrlForImage : (buffer, mimetype) => {
+                const _mimetype = (mimetype) ? mimetype : "image/png"
+                const uInt8Array = new Uint8Array(buffer)
+                const blob = new Blob([uInt8Array], { type: _mimetype })
+                const blobUrl = URL.createObjectURL(blob)
+                return blobUrl //blob:https://hushsbay.com/f4cb83ea-5d46-40b7-8baa-ba62dca2ffca
+            },
         }
     }
 })(jQuery)

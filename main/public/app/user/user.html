@@ -96,11 +96,11 @@
 						$("#txt_orgcd").html(row.ORG_CD)
 						$("#txt_orgnm").html(row.ORG_NM)
 						if (row.PICTURE) {
-							//const blobUrl = hush.blob.getBlobUrlForImage(row.PICTURE.data, row.MIMETYPE)
-							//$("#img_pict").attr("src", blobUrl)
-
-							const dataUrl = hush.blob.setDataUrl(rs.picture, row.MIMETYPE) //서버에서 base64(rs.picture)로 내려줌
-							$("#img_pict").attr("src", dataUrl)
+							const blobUrl = hush.blob.getBlobUrlForImage(row.PICTURE.data, row.MIMETYPE)
+							$("#img_pict").attr("src", blobUrl)
+debugger
+							//const dataUrl = hush.blob.setDataUrl(rs.picture, row.MIMETYPE) //서버에서 base64(rs.picture)로 내려줌
+							//$("#img_pict").attr("src", dataUrl)
 
 
 							
@@ -213,19 +213,22 @@
                                 hush.msg.msg("이미지 파일 크기 제한 : " + hush.util.formatBytes(hush.cons.max_image) + ". 현재 : " + hush.util.formatBytes(hush.cons.max_image))
                                 return
                             }
-                            // const reader = new FileReader()
+                            //const reader = new FileReader()
                             // reader.readAsDataURL(file)
                             // reader.addEventListener("load", function () { //$("#img_pict").on("load", function() { $("#pict_upload").click() }).attr("src", reader.result)
                             //     $("#img_pict").attr("src", reader.result) //reader.result는 base64 인코딩된 스트링 데이터
                             // }) //, false)
-							debugger
-							const reader = new FileReader()
-							reader.onload = function(e) {
-								const blob = new Blob([new Uint8Array(e.target.result)], {type: file.type })
-								const blobUrl = URL.createObjectURL(blob)
-								$("#img_pict").attr("src", blobUrl) //blob:https://hushsbay.com/512bc969-441c-4019-8ba9-478a478b2cfd
-							}
-							reader.readAsArrayBuffer(file)
+							//2) blob 사용 - common.js 참조
+							// const reader = new FileReader()
+							// reader.onload = function(e) {
+							// 	const blob = new Blob([new Uint8Array(e.target.result)], {type: file.type })
+							// 	const blobUrl = URL.createObjectURL(blob)
+							// 	$("#img_pict").attr("src", blobUrl) //blob:https://hushsbay.com/512bc969-441c-4019-8ba9-478a478b2cfd
+							// }
+							// reader.readAsArrayBuffer(file)
+							hush.blob.getUrlForFile(file, true, function(url) {
+								$("#img_pict").attr("src", url)
+							})
                         } catch (ex) { 
                             hush.util.showEx(ex)
                         }
