@@ -97,12 +97,7 @@
 						$("#txt_orgnm").html(row.ORG_NM)
 						if (row.PICTURE) {
 							const blobUrl = hush.blob.getBlobUrlForImage(row.PICTURE.data)
-							//$("#img_pict").attr("src", blobUrl)
-							const reader = new FileReader()
-                            reader.readAsDataURL(blobUrl)
-                            reader.addEventListener("load", function () {
-                                $("#img_pict").attr("src", reader.result) //$("#img_pict").on("load", function() { $("#pict_upload").click() }).attr("src", reader.result)
-                            }, false)
+							$("#img_pict").attr("src", blobUrl)							
 						}
 					}
 					$("#btn_save").click(async function() {
