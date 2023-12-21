@@ -246,7 +246,7 @@
                 if (_sec == -1) { 
                     //endless toast (예: 서버호출) : 사용자가 hush.msg.toastEnd()를 이용해 종료해야 함
                 } else {
-                    const sec = (!_sec ? 3 : _sec) * 1000
+                    const sec = (!_sec ? 2 : _sec) * 1000
                     setTimeout(function() {
                         hush.msg.toastEnd()
                     }, sec)
@@ -380,7 +380,7 @@
                 const _len = hush.util.strLen(_val)
                 if (_max) {
                     if (_len > _max) {
-                        hush.msg.alert(nm + "최대 " + _max + " 바이트까지만 가능합니다 : " + _len)
+                        hush.msg.alert(nm + "최대 " + _max + " 바이트까지만 가능합니다 : 현재 " + _len + "바이트")
                         return false
                     }
                 }
@@ -390,7 +390,7 @@
                         return false
                     } else {
                         if (_len < _min) {
-                            hush.msg.alert(nm + "최소 " + _min + " 바이트가 필요합니다 : " + _len)
+                            hush.msg.alert(nm + "최소 " + _min + " 바이트가 필요합니다 : 현재 " + _len + "바이트")
                             return false
                         }
                     }
