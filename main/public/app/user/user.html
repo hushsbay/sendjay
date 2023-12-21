@@ -226,7 +226,7 @@ debugger
 							// 	$("#img_pict").attr("src", blobUrl) //blob:https://hushsbay.com/512bc969-441c-4019-8ba9-478a478b2cfd
 							// }
 							// reader.readAsArrayBuffer(file)
-							hush.blob.getUrlForFile(file, true, function(url) {
+							hush.blob.getUrlForFile(file, false, function(url) {
 								$("#img_pict").attr("src", url)
 							})
                         } catch (ex) { 
