@@ -45,10 +45,10 @@
 	        			return
 	        		}
                     debugger
-					$("#txt_toporgcd").html(row.TOP_ORG_CD)
-					$("#txt_toporgnm").html(row.TOP_ORG_NM)
-					$("#txt_orgcd").html(row.ORG_CD)
-					$("#txt_orgnm").html(row.ORG_NM)
+					$("#txt_toporgcd").html(arr[0].TOP_ORG_CD)
+					$("#txt_toporgnm").html(arr[0].TOP_ORG_NM)
+					$("#txt_orgcd").html(arr[0].ORG_CD)
+					$("#txt_orgnm").html(arr[0].ORG_NM)
         		} catch (ex) {
                 	hush.util.showEx(ex)
                 }
