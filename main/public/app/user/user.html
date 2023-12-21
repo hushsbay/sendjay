@@ -166,6 +166,7 @@
 							xhr.onload = function(e) {
 								if (this.status == 200) {
 									fd.append("file", this.response)
+									fd.append("mimetype", "")
 									hush.http.ajaxFormData("/user/setuser", fd, (rs) => {
 										if (rs.code != hush.cons.CODE_OK) {
 											hush.msg.showMsg(rs.msg)
