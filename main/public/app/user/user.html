@@ -165,6 +165,7 @@
 							xhr.responseType = "blob"
 							xhr.onload = function(e) {
 								if (this.status == 200) {
+									debugger
 									fd.append("file", this.response)
 									fd.append("mimetype", "")
 									hush.http.ajaxFormData("/user/setuser", fd, (rs) => {
