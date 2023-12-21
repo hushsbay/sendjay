@@ -8,12 +8,9 @@
         <link rel="stylesheet" href="/common/common.css">
 		<link rel="stylesheet" href="/app/org/orgtree.css">	
 		<style>
-			#gridMain {				
-				display: grid;
-				grid-template-columns: 100px auto;
-				grid-auto-rows: minmax(40px, auto);
-				column-gap: 3px;				
-				row-gap: 3px;
+			#gridMain {	
+				width: 100%;			
+				display: grid; grid-template-columns: 100px auto; grid-auto-rows: minmax(40px, auto); column-gap: 3px; row-gap: 3px; 
 				grid-template-areas: "lbl_id fld_id" "lbl_nm fld_nm" "lbl_alias fld_alias" "lbl_pwd fld_pwd" "lbl_pwd_1 fld_pwd_1" "lbl_pwd_2 fld_pwd_2" "lbl_org fld_org" "lbl_img fld_img";
 			} /* #lbl_id { grid-area: lbl_id; } #fld_id { grid-area: fld_id; } #lbl_nm { grid-area: lbl_nm; } #fld_nm { grid-area: fld_nm; } .. */
 
@@ -211,44 +208,37 @@
 				<div id="btn_save" class="coMenuBtn coActive"><img src="/img/white_yes.png" class="coImg16"/><span class="coSpanWithImg">저장</span></div>
 				<div id="btn_delete" class="coMenuBtn coActive"><img src="/img/white_trash.png" class="coImg16"/><span class="coSpanWithImg">삭제</span></div>
 			</div>
-            <div class="main" style="width:100%;flex-direction:column">
-				<div style="width:100%;padding:5px">
+            <div class="main" style="flex-direction: column">
+				<div style="width: 100%; padding: 10px">
 					이 사이트에서의 아이디 등 모든 정보는 사이트를 알아보기 위한 테스트용으로만 사용됩니다.
 					따라서, 개인정보와 관련없는 1회성 정보로 저장해 테스트해 보시길 바랍니다.
 				</div>
-                <div id="gridMain" style="width:100%">		
-
+                <div id="gridMain">		
 					<div id="lbl_id" class="cellLabel">아이디</div>
 					<div id="fld_id" class="cellField">
 						<input id="in_id" spellcheck=false autocomplete=off style="width: 140px"/>
 					</div>
-					
 					<div id="lbl_nm" class="cellLabel">이름</div>
 					<div id="fld_nm" class="cellField">
 						<input id="in_nm" spellcheck=false autocomplete=off style="width: 200px"/>
 					</div>
-					
 					<div id="lbl_alias" class="cellLabel">별칭(Alias)</div>
 					<div id="fld_alias" class="cellField">
 						<input id="in_alias" spellcheck=false autocomplete=off style="width: 200px"/>
 					</div>
-					
 					<div id="lbl_pwd" class="cellLabel">비번</div>
 					<div id="fld_pwd" class="cellField">
 						<input id="in_pwd" type=password spellcheck=false autocomplete=off style="width: 140px"/>
 						<input id="chk_pwd" type=checkbox style="margin-left: 5px"/><label id="lbl_pwd" for="chk_pwd" style="cursor: pointer">비번변경</label>
 					</div>
-					
 					<div id="lbl_pwd_1" class="cellLabel">새비번</div>
 					<div id="fld_pwd_1" class="cellField">
 						<input id="in_pwd_1" type=password spellcheck=false autocomplete=off style="width: 140px"/>
 					</div>
-
 					<div id="lbl_pwd_2" class="cellLabel">새비번(확인)</div>
 					<div id="fld_pwd_2" class="cellField">
 						<input id="in_pwd_2" type=password spellcheck=false autocomplete=off style="width: 140px"/>
 					</div>
-					
 					<div id="lbl_org" class="cellLabel">소속<button id="btn_orgtree">선택</button></div>
 					<div id="fld_org" class="cellField">
 						<div id="txt_toporgcd" style="display: none"></div>
@@ -256,12 +246,10 @@
 						<div id="txt_toporgnm" style="margin: 0 5px"></div>
 						<div id="txt_orgnm" style="margin: 0 5px"></div>						
 					</div>
-
 					<div id="lbl_img" class="cellLabel">사진<button id="pict_browse">선택</button></div>
 					<div id="fld_img" class="cellField">						
 						<img id="img_pict" class="pict" /> <button id="pict_clear">Clear</button></div>
 					</div>
-
 				</div>
             </div>
 			<input id=file_upload type=file accept="image/*" style="display: none">
