@@ -95,13 +95,9 @@
 						$("#txt_toporgnm").html(row.TOP_ORG_NM)
 						$("#txt_orgcd").html(row.ORG_CD)
 						$("#txt_orgnm").html(row.ORG_NM)
-						// if (row.PICTURE) {
-						// 	const blobUrl = hush.blob.getBlobUrlForImage(row.PICTURE.data)
-						// 	$("#img_pict").attr("src", blobUrl)							
-						// }
 						if (row.PICTURE) {
-							//const blobUrl = hush.blob.getBlobUrlForImage(row.PICTURE.data)
-							$("#img_pict").attr("src", row.PICTURE.data)
+							const blobUrl = hush.blob.getBlobUrlForImage(row.PICTURE.data)
+							$("#img_pict").attr("src", blobUrl)							
 						}
 					}
 					$("#btn_save").click(async function() {
