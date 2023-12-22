@@ -196,7 +196,6 @@
 								if (rs.code != hush.cons.CODE_OK) {
 									hush.msg.showMsg(rs.msg)
 								} else {
-									g_id = _id
 									hush.msg.toast(hush.cons.MSG_OK)
 									if (opener && opener.refreshForRow) opener.refreshForRow(g_id, "D")
 									window.close()
