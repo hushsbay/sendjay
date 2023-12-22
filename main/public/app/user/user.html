@@ -191,6 +191,7 @@
 							const fd = new FormData()
 							fd.append("type", "D")
 							fd.append("id", g_id)
+							fd.append("pwd", $("#in_pwd").val().trim())
 							hush.http.ajaxFormData("/user/setuser", fd, (rs) => {
 								if (rs.code != hush.cons.CODE_OK) {
 									hush.msg.showMsg(rs.msg)
