@@ -385,7 +385,8 @@
                     })					
                     $("#btn_orgtree").click(function() {
 						$("#in_search").val("")
-	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : g_comp, expandTo : g_expandTo, expandAllDept : g_expandAllDept })
+						const _comp = $("#chk_mycomp").prop("checked") ? g_user.toporgcd : g_comp
+	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : _comp, expandTo : g_expandTo, expandAllDept : g_expandAllDept })
                     })					
 					$("#btn_minus,#btn_plus").click(function() {
 	            		const _id = this.id
