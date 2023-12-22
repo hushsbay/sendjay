@@ -76,7 +76,8 @@
 						const tag = $(".coRow[userid='oldclock']")
 						if (tag.length > 0) {
 							debugger
-						}
+							g_list.scrollTop(tag.position().top)
+	        			}
 	            	})
 					$("#btn_search").click()
                 } catch (ex) {
