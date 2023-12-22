@@ -157,7 +157,7 @@
 							hush.util.showEx(ex)
 						}
                     })
-					$("#in_nm").change(function() {
+					$("#in_nm").keyup(function() {
 						debugger
 						const _val = $(this).val()
 						if (hush.util.strLen(_val) > 4) {
