@@ -21,7 +21,7 @@
 					const tag = $(".coRow[userid='" + userid + "']")
 					if (tag.length > 0) {
 						g_list.scrollTop(tag.position().top)
-						setTimeout(function() { hush.util.animBgColor(tag) }, 1000) //child 저장후 바로 닫아야 식별 가능. 아니면 bgColor를 그대로 두는 방법 등 고려하면 됨
+						setTimeout(function() { hush.util.animBgColor(tag) }, 1000) //child 저장후 식별 가능하려면 바로 닫아야 할 것임. 아니면 bgColor를 그대로 두는 방법 등 고려
 					}
 				} else if (cud == "U") {
 					const _prevScroll = g_list.scrollTop()
@@ -29,7 +29,7 @@
 					g_list.scrollTop(_prevScroll)
 					const tag = $(".coRow[userid='" + userid + "']")
 					if (tag.length > 0) {
-						setTimeout(function() { hush.util.animBgColor(tag) }, 1000) //child 저장후 바로 닫아야 식별 가능. 아니면 bgColor를 그대로 두는 방법 등 고려하면 됨
+						setTimeout(function() { hush.util.animBgColor(tag) }, 1000) //child 저장후 식별 가능하려면 바로 닫아야 할 것임. 아니면 bgColor를 그대로 두는 방법 등 고려
 					}
 				} else { //D(삭제)
 					const tag = $(".coRow[userid='" + userid + "']")
