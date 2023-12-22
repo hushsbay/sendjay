@@ -158,8 +158,9 @@
 						}
                     })
 					$("#in_nm").change(function() {
+						debugger
 						const _val = $(this).val()
-						if (hush.util.strlen(_val) > 4) {
+						if (hush.util.strLen(_val) > 4) {
 							$("#txt_warn").html("이름 필드값 4바이트 초과")
 							$("#txt_warn").show()
 						} else {
