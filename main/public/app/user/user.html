@@ -33,7 +33,34 @@
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
         <script>
 			//의도적으로 인증체크하지 않음
-			let g_mode		
+			let g_mode
+			const MAX_LEN_ID = 20, MAX_LEN_NM = 50, MAX_LEN_ALIAS = 100, MAX_LEN_PWD = 20
+
+			function chkLen() {
+				debugger
+				const _id = this.id
+				const _val = $(this).val()
+				let _maxLen, _title
+				if (_id == "in_id") {
+					_maxLen = MAX_LEN_ID
+					_title = "아이디"
+				} else if (_id == "in_nm") {
+					_maxLen = MAX_LEN_NM
+					_title = "이름"
+				} else if (_id == "in_alias") {
+					_maxLen = MAX_LEN_ALIAS
+					_title = "별칭(Alias)"
+				} else {
+					_maxLen = MAX_LEN_PWD
+					_title = "비번"
+				}
+				if (hush.util.strLen(_val) > _maxLen) {
+					$("#txt_warn").html(_title + " 필드값 " + _maxLen + "바이트 초과")
+					$("#txt_warn").show()
+				} else {
+					$("#txt_warn").hide()
+				}
+			}
 
 			function procFromOrgTree(from, nodeToGet, arr) {
         		try {
@@ -120,11 +147,11 @@
 								}
 							}
 							if (g_mode == "U") {
-								if (!hush.util.chkFieldVal(_pwd, "비번", 4, 20, true)) return	
+								if (!hush.util.chkFieldVal(_pwd, "비번", 4, MAX_LEN_PWD, true)) return	
 							}
-							if (!hush.util.chkFieldVal(_id, "아이디", 4, 20, true)) return
-							if (!hush.util.chkFieldVal(_nm, "이름", 2, 50)) return //테스트로 Ed, Hi..
-							if (!hush.util.chkFieldVal(_alias, "별칭(Alias)", 0, 100)) return
+							if (!hush.util.chkFieldVal(_id, "아이디", 4, MAX_LEN_ID, true)) return
+							if (!hush.util.chkFieldVal(_nm, "이름", 2, MAX_LEN_NM)) return //테스트로 Ed, Hi..
+							if (!hush.util.chkFieldVal(_alias, "별칭(Alias)", 0, MAX_LEN_ALIAS)) return
 							const fd = new FormData()
 							fd.append("type", g_mode)
 							fd.append("id", _id)
@@ -158,13 +185,7 @@
 						}
                     })
 					$("#in_nm,#in_alias").keyup(function() {
-						const _val = $(this).val()
-						if (hush.util.strLen(_val) > 4) {
-							$("#txt_warn").html("이름 필드값 4바이트 초과")
-							$("#txt_warn").show()
-						} else {
-							$("#txt_warn").hide()
-						}
+						chkLen.call(this)
 					})
 					$("#chk_pwd").change(function() {
 						const _self = $(this)
