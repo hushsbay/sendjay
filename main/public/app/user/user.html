@@ -188,6 +188,8 @@
                     })
 					$("#btn_delete").click(async function() {
 						try {
+							const ret = await hush.msg.confirm("삭제할까요?")
+							if (!ret) return
 							const fd = new FormData()
 							fd.append("type", "D")
 							fd.append("id", g_id)
