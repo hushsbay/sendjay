@@ -12,6 +12,33 @@
         <script>
 			//의도적으로 인증체크하지 않음
 			let g_rs, g_list
+
+			//목록보기 화면마다 다른 특성이므로 그 특성에 맞게 함수를 만들어야 함 (데이터 많고 적음. 페이지 구현. 소팅이 최신생성행부터 표시 등..)
+			function refreshForRow(userid, cud) { //여기서는 id가 있으면 업데이트 또는 삭제, 없으면 새로 생성되므로 구분 처리하기
+	        	if (cud == "C") { //목록보기가 생성일시 역순이면 맨 위에 위치하게 되지만 예를 들어, 이름순 목록보기라면 어디에 위치할 지 알 수 없으므로 보기를 다시 가져와 찾아야 함
+					$("#btn_search").click()
+					const tag = $(".coRow[userid='" + userid + "']")
+					if (tag.length > 0) {
+						g_list.scrollTop(tag.position().top)
+						setTimeout(function() { hush.util.animBgColor(tag) }, 1000) //child 저장후 바로 닫아야 식별 가능. 아니면 bgColor를 그대로 두는 방법 등 고려하면 됨
+					}
+				} else if (cud == "U") {
+					const _prevScroll = g_list.scrollTop()
+					$("#btn_search").click()
+					g_list.scrollTop(_prevScroll)
+					const tag = $(".coRow[userid='" + userid + "']")
+					if (tag.length > 0) {
+						setTimeout(function() { hush.util.animBgColor(tag) }, 1000) //child 저장후 바로 닫아야 식별 가능. 아니면 bgColor를 그대로 두는 방법 등 고려하면 됨
+					}
+				} else { //D(삭제)
+					const tag = $(".coRow[userid='" + userid + "']")
+					if (tag.length > 0) {
+						hush.util.animBgColor(tag, function() {
+							tag.hide()
+						})
+					}
+				}
+	        }
 			
 			const getUserData = async (_keyword, _sort) => {
 				try {
@@ -72,13 +99,7 @@
 	            		getUserData(_keyword, _sort)
 	            	})
 					$("#btn_new").click(function() {
-	            		//hush.util.openWinPop("/app/user/user.html", 430, 500)
-						const tag = $(".coRow[userid='oldclock']")
-						if (tag.length > 0) {
-							debugger
-							g_list.scrollTop(tag.position().top)
-							hush.util.animBgColor(tag)
-	        			}
+	            		hush.util.openWinPop("/app/user/user.html", 430, 500)						
 	            	})
 					$("#btn_search").click()
                 } catch (ex) {

@@ -94,8 +94,8 @@
                 try {
                     await $.getScript("/common/common.js")
 					const param = new URLSearchParams(location.search)
-					const id = param.get("user_id")
-					g_mode = id ? "U" : "C"
+					g_id = param.get("user_id")
+					g_mode = g_id ? "U" : "C"
 					if (g_mode == "C") { //신규모드
 						$("#btn_delete").hide()
 						$("#lbl_pwd").hide()
@@ -103,7 +103,7 @@
 					} else { //수정모드
 						$("#in_id").prop("disabled", true)
 						dispPwd(false)
-						const rs = await hush.http.ajax("/user/getuser", { id : id })
+						const rs = await hush.http.ajax("/user/getuser", { id : g_id })
 						if (rs.code != hush.cons.CODE_OK) {
 							hush.msg.showMsg(rs.msg)
 							return
@@ -183,6 +183,10 @@
 							hush.util.showEx(ex)
 						}
                     })
+					$("#btn_delete").click(async function() {
+						if (opener && opener.refreshForRow) opener.refreshForRow(g_id, "U")
+						window.close()
+					})
 					$("#in_id,#in_nm,#in_alias,#in_pwd").keyup(function() {
 						chkLen.call(this)
 					})
