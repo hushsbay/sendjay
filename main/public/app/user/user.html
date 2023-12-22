@@ -176,9 +176,10 @@
 								if (rs.code != hush.cons.CODE_OK) {
 									hush.msg.showMsg(rs.msg)
 								} else {
+									g_id = _id
 									hush.msg.toast(hush.cons.MSG_OK)
 									if (opener && opener.refreshForRow) opener.refreshForRow(g_id, g_mode)
-									//window.close()
+									window.close() //닫지 않으면 주소창의 주소를 userid가 포함되게 새로 불러야 하는 부분을 고려해야 함
 								}
 							})
 						} catch (ex) {
@@ -187,7 +188,7 @@
                     })
 					$("#btn_delete").click(async function() {
 						if (opener && opener.refreshForRow) opener.refreshForRow(g_id, "D")
-						//window.close()
+						window.close()
 					})
 					$("#in_id,#in_nm,#in_alias,#in_pwd").keyup(function() {
 						chkLen.call(this)
