@@ -149,8 +149,9 @@
 								if (!hush.util.chkFieldVal(_pwd, "비번", 4, MAX_LEN_PWD, true)) return	
 							}
 							if (!hush.util.chkFieldVal(_id, "아이디", 4, MAX_LEN_ID, true)) return
-							if (!hush.util.chkFieldVal(_nm, "이름", 2, MAX_LEN_NM)) return //테스트로 Ed, Hi..
+							if (!hush.util.chkFieldVal(_nm, "이름", 2, MAX_LEN_NM)) return
 							if (!hush.util.chkFieldVal(_alias, "별칭(Alias)", 0, MAX_LEN_ALIAS)) return
+							if (!hush.util.chkFieldVal(_orgcd, "회사/부서", 1)) return
 							const fd = new FormData()
 							fd.append("type", g_mode)
 							fd.append("id", _id)
@@ -209,6 +210,10 @@
 					})
 					$("#in_id,#in_nm,#in_alias,#in_pwd").keyup(function() {
 						chkLen.call(this)
+					})
+					$("#in_pwd,#in_pwd_1,#in_pwd_2").focus(function() {
+						const _self = $(this)
+						_self.select()
 					})
 					$("#chk_pwd").change(function() {
 						const _self = $(this)
