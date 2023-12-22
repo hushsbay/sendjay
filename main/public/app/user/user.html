@@ -157,6 +157,15 @@
 							hush.util.showEx(ex)
 						}
                     })
+					$("#in_nm").change(function() {
+						const _val = $(this).val()
+						if (hush.util.strlen(_val) > 4) {
+							$("#txt_warn").html("이름 필드값 4바이트 초과")
+							$("#txt_warn").show()
+						} else {
+							$("#txt_warn").hide()
+						}
+					})
 					$("#chk_pwd").change(function() {
 						const _self = $(this)
 						dispPwd(_self.prop("checked"))
@@ -207,6 +216,7 @@
 			<div class="top">
 				<div id="btn_save" class="coMenuBtn coActive"><img src="/img/white_yes.png" class="coImg16"/><span class="coSpanWithImg">저장</span></div>
 				<div id="btn_delete" class="coMenuBtn coActive"><img src="/img/white_trash.png" class="coImg16"/><span class="coSpanWithImg">삭제</span></div>
+				<div id="txt_warn" style="display:none;color: red;margin-left:10px"></div>
 			</div>
             <div class="main" style="flex-direction: column">
 				<div style="width: 100%; padding: 10px">

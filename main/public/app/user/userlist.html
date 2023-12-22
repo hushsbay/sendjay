@@ -51,7 +51,7 @@
 						const _idx = parseInt(_id.substring(4)) //2
 						const row = g_rs.list[_idx]
 						hush.util.animBgColor(_self, () => { 							
-							hush.util.openWinPop("/app/user/user.html?user_id=" + row.USER_ID)
+							hush.util.openWinPop("/app/user/user.html?user_id=" + row.USER_ID, 430, 500)
         	            })
 					})
 				} catch (ex) {
@@ -72,7 +72,7 @@
 	            		getUserData(_keyword, _sort)
 	            	})
 					$("#btn_new").click(function() {
-	            		hush.util.openWinPop("/app/user/user.html")
+	            		hush.util.openWinPop("/app/user/user.html", 430, 500)
 	            	})
 					$("#btn_search").click()
                 } catch (ex) {
