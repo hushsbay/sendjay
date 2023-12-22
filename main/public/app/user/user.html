@@ -157,8 +157,7 @@
 							hush.util.showEx(ex)
 						}
                     })
-					$("#in_nm").keyup(function() {
-						debugger
+					$("#in_nm #in_alias").keyup(function() {
 						const _val = $(this).val()
 						if (hush.util.strLen(_val) > 4) {
 							$("#txt_warn").html("이름 필드값 4바이트 초과")
