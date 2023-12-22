@@ -37,7 +37,6 @@
 			const MAX_LEN_ID = 20, MAX_LEN_NM = 50, MAX_LEN_ALIAS = 100, MAX_LEN_PWD = 20
 
 			function chkLen() {
-				debugger
 				const _id = this.id
 				const _val = $(this).val()
 				let _maxLen, _title
@@ -184,7 +183,7 @@
 							hush.util.showEx(ex)
 						}
                     })
-					$("#in_nm,#in_alias").keyup(function() {
+					$("#in_id,#in_nm,#in_alias,#in_pwd").keyup(function() {
 						chkLen.call(this)
 					})
 					$("#chk_pwd").change(function() {

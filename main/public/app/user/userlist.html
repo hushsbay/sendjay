@@ -32,7 +32,7 @@
 						const org_nm = row.ORG_NM
 						const top_org_cd = row.TOP_ORG_CD
 						const top_org_nm = row.TOP_ORG_NM
-						let _html = "<div id=row_" + i.toString() + " class=coRow >"
+						let _html = "<div id=row_" + i.toString() + " class=coRow userid='" + user_id + "'>"
 						_html += "		<div class=coRowLeft >"
 						_html += "			<img src='/img/ico_user.png' class=coImg16 />"
 						_html += "  	</div>"
@@ -72,7 +72,11 @@
 	            		getUserData(_keyword, _sort)
 	            	})
 					$("#btn_new").click(function() {
-	            		hush.util.openWinPop("/app/user/user.html", 430, 500)
+	            		//hush.util.openWinPop("/app/user/user.html", 430, 500)
+						const tag = $(".coRow[userid='oldclock']")
+						if (tag.length > 0) {
+							debugger
+						}
 	            	})
 					$("#btn_search").click()
                 } catch (ex) {
