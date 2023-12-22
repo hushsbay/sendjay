@@ -104,6 +104,9 @@
 					$("#btn_new").click(function() {
 	            		hush.util.openWinPop("/app/user/user.html", 430, 500)						
 	            	})
+					$("#btn_cancel").on("click", function() { 
+						window.close() 
+					})
 					getUserData()
                 } catch (ex) {
                     hush.util.showEx(ex)
