@@ -187,8 +187,23 @@
 						}
                     })
 					$("#btn_delete").click(async function() {
-						if (opener && opener.refreshForRow) opener.refreshForRow(g_id, "D")
-						window.close()
+						try {
+							const fd = new FormData()
+							fd.append("type", "D")
+							fd.append("id", g_id)
+							hush.http.ajaxFormData("/user/setuser", fd, (rs) => {
+								if (rs.code != hush.cons.CODE_OK) {
+									hush.msg.showMsg(rs.msg)
+								} else {
+									g_id = _id
+									hush.msg.toast(hush.cons.MSG_OK)
+									if (opener && opener.refreshForRow) opener.refreshForRow(g_id, "D")
+									window.close()
+								}
+							})
+						} catch (ex) {
+							hush.util.showEx(ex)
+						}
 					})
 					$("#in_id,#in_nm,#in_alias,#in_pwd").keyup(function() {
 						chkLen.call(this)
