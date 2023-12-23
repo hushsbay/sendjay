@@ -96,7 +96,7 @@
                         //getImage = Y이면 사죵자정보에 등록된 이미지를 가져옴
                         const obj = { 
                             from : this.id, nodeToGet : "U", comp : "ALL", expandTo : 99, expandAllDept : "", 
-                            singleSelect : "", selectOnlyChildDept : "", getImage : "Y"
+                            singleSelect : "", selectOnlyChildDept : "", getImage : ""
                         }
                         hush.util.openWinPop("/app/org/orgtree.html?" + $.param(obj))
                     })
