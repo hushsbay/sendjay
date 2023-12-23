@@ -105,9 +105,9 @@
 							let _html = "<div id=row_" + i.toString() + " class=coRow >"
 				          	_html += "   	<input type=checkbox id=sel_" + i + " code=" + user_id + " class=sel />"
 							if (g_getImage == "Y") {
-								_html += "	<img src='/img/ico_user.png' class=imgPerson />"
-							} else {
 								_html += "	<img id=img_" + user_id + " src='/img/noperson.png' class=imgPerson />"
+								} else {
+								_html += "	<img src='/img/ico_user.png' class=imgPerson />"
 							}
 				          	_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
 				          	_html += "  </div>"
