@@ -12,6 +12,10 @@
 				width: 32px; height:32px; margin-left:5px;
 				border: 1px solid dimgray; border-radius: 3px
 			}
+
+			.noImgPerson {
+				width: 16px; height:16px; margin-left:5px;
+			}
 		</style>
         <script src="/plugin/jquery-3.4.1.min.js"></script>
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
@@ -107,7 +111,7 @@
 							if (g_getImage == "Y") {
 								_html += "	<img id=img_" + user_id + " src='/img/noperson.png' class=imgPerson />"
 								} else {
-								_html += "	<img src='/img/ico_user.png' class=imgPerson />"
+								_html += "	<img src='/img/ico_user.png' class=noImgPerson />"
 							}
 				          	_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
 				          	_html += "  </div>"
