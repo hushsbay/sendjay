@@ -93,7 +93,11 @@
 				        //expandAllDept = Y이면 임직원만 안보이게 접고 회사/부서는 모두 펼치기 (이 경우 expandTo는 무시됨. nodeToGet=U일 경우만 의미있음)
                         //singleSelect = Y이면 한개만 선택 가능
                         //selectOnlyChildDept = Y이면 최하단 부서만 선택 가능 (nodeToGet=D일 경우만 의미있음)
-                        const obj = { from : this.id, nodeToGet : "U", comp : "ALL", expandTo : 99, expandAllDept : "", singleSelect : "", selectOnlyChildDept : "" }
+                        //getImage = Y이면 사죵자정보에 등록된 이미지를 가져옴
+                        const obj = { 
+                            from : this.id, nodeToGet : "U", comp : "ALL", expandTo : 99, expandAllDept : "", 
+                            singleSelect : "", selectOnlyChildDept : "", getImage : "Y"
+                        }
                         hush.util.openWinPop("/app/org/orgtree.html?" + $.param(obj))
                     })
                 } catch (ex) {

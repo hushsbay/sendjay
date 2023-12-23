@@ -11,6 +11,7 @@ router.post('/', async function(req, res) {
 	const rs = ws.http.resInit()
 	try {
 		const id = req.body.id
+		const imgOnly = req.body.imgOnly
 		conn = await wsmysql.getConnFromPool(global.pool)
 		sql =  "SELECT ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, USER_ID, USER_NM, NICK_NM, JOB, TEL_NO, AB_CD, AB_NM, PICTURE, MIMETYPE "
 		sql += "  FROM JAY.Z_USER_TBL "
@@ -22,7 +23,11 @@ router.post('/', async function(req, res) {
 			return
 		}
 		//rs.picture = data[0].PICTURE ? Buffer.from(data[0].PICTURE, 'binary').toString('base64') : null //base64로 변환해 내림 (사용시 클라이언트 코딩도 변경 필요)
-       	rs.list = data
+		if (imgOnly == "Y") {
+			rs.list.push({ PICTURE : data[0].PICTURE })
+		} else {
+			rs.list = data
+		}
 		res.json(rs)
 	} catch (ex) {
 		ws.http.resException(res, ex, title)

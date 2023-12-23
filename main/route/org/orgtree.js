@@ -14,9 +14,8 @@ router.post('/', async function(req, res) {
 	let conn, sql, data, len
 	const rs = ws.http.resInit()
 	try {
-		const rqObj = req.body.obj
-		const nodeToGet = rqObj.nodeToGet
-		const comp = (!rqObj.comp || rqObj.comp.toLowerCase() == 'all') ? 'all' : ws.util.toStringForInClause(rqObj.comp)
+		const nodeToGet = req.body.nodeToGet
+		const comp = (!req.body.comp || req.body.comp.toLowerCase() == 'all') ? 'all' : ws.util.toStringForInClause(req.body.comp)
 		conn = await wsmysql.getConnFromPool(global.pool)
 		sql =  "SELECT A.SEQ, A.LVL, A.ORG_CD, A.ORG_NM, B.ORG_CD TOP_ORG_CD, B.ORG_NM TOP_ORG_NM, '' USER_ID, '' USER_NM, '' NICK_NM, '' JOB, '' TEL_NO, '' AB_CD, '' AB_NM, "
 		sql += "       (SELECT COUNT(*) FROM JAY.Z_USER_TBL WHERE ORG_CD = A.ORG_CD) MEM_CNT "

@@ -7,11 +7,17 @@
         <title>조직도</title>
         <link rel="stylesheet" href="/common/common.css">
 		<link rel="stylesheet" href="/app/org/orgtree.css">
+		<style>
+			.imgPerson {
+				width: 32px; height:32px; margin-left:5px;
+				border: 1px solid dimgray; border-radius: 3px
+			}
+		</style>
         <script src="/plugin/jquery-3.4.1.min.js"></script>
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
         <script>
 			let g_user, g_rs, g_list, g_listSel
-			let g_from, g_nodeToGet, g_comp, g_expandTo, g_expandAllDept, g_singleSelect, g_selectOnlyChildDept
+			let g_from, g_nodeToGet, g_comp, g_expandTo, g_expandAllDept, g_singleSelect, g_selectOnlyChildDept, g_getImage
 			let g_nodeIndent = 24, g_max_level = 4 //조직도에서 펼칠 수 있는 최대 레벨(depth) - 각 조직에 따라 변경 가능
 
 			const procSelect = (nodekind, idx) => {
@@ -98,23 +104,27 @@
 							const nodeStr = user_nm + "/" + org_nm + "/" + top_org_nm
 							let _html = "<div id=row_" + i.toString() + " class=coRow >"
 				          	_html += "   	<input type=checkbox id=sel_" + i + " code=" + user_id + " class=sel />"
-				          	//_html += "		<img src='/img/ico_user.png' class=coImg16 style='width:32px;height:32px;border:1px solid dimgray;margin-left:5px' />"
-							  _html += "		<img id=img_" + user_id + " src='/img/noperson.png' style='width:32px;height:32px;border:1px solid dimgray;margin-left:5px'/>"
+							if (g_getImage == "Y") {
+								_html += "	<img src='/img/ico_user.png' class=imgPerson />"
+							} else {
+								_html += "	<img id=img_" + user_id + " src='/img/noperson.png' class=imgPerson />"
+							}
 				          	_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
 				          	_html += "  </div>"
                             g_list.append(_html)
-							hush.http.ajaxCall("/user/getuser", { id : user_id }, function(rs) {
-								debugger
-								if (rs.code != hush.cons.CODE_OK) return
-								const _len = rs.list.length
-								if (_len == 0) return
-								const row = rs.list[0]
-								if (row.PICTURE) { //common.js참조 : 노드에서 MySql에 저장된 PICTURE(longblob)값 내리기 (2가지 방법)
-									//const url = hush.blob.setDataUrl(rs.picture, row.MIMETYPE) //방법2) base64로 변환해 내림 (사용시 서버에서도 코딩 변경 필요) + getUrlForFile() false 설정 + 서버 코딩 변경
-									const url = hush.blob.getBlobUrlForImage(row.PICTURE.data, row.MIMETYPE) //방법1) 특별히 변환하지 않고 그냥 blob으로 내림 + getUrlForFile() true 설정 + 서버 코딩 변경
-									$("#img_" + user_id).attr("src", url)
-								}
-							})
+							if (g_getImage == "Y") {
+								hush.http.ajaxCall("/user/getuser", { id : user_id, imgOnly : "Y" }, function(rs) {
+									if (rs.code != hush.cons.CODE_OK) return
+									const _len = rs.list.length
+									if (_len == 0) return
+									const row = rs.list[0]
+									if (row.PICTURE) { //common.js참조 : 노드에서 MySql에 저장된 PICTURE(longblob)값 내리기 (2가지 방법)
+										//const url = hush.blob.setDataUrl(rs.picture, row.MIMETYPE) //방법2) base64로 변환해 내림 (사용시 서버에서도 코딩 변경 필요) + getUrlForFile() false 설정 + 서버 코딩 변경
+										const url = hush.blob.getBlobUrlForImage(row.PICTURE.data, row.MIMETYPE) //방법1) 특별히 변환하지 않고 그냥 blob으로 내림 + getUrlForFile() true 설정 + 서버 코딩 변경
+										$("#img_" + user_id).attr("src", url)
+									}
+								})
+							}
                         }
                     	if (_len == 0) return
 				      	$(".sel").off("change").on("change", function(e) {
@@ -158,7 +168,7 @@
 							const nodeStr = org_nm + "/" + top_org_nm
 							let _html = "<div id=row_" + i.toString() + " class=coRow >"
 				          	_html += "   	<input type=checkbox id=sel_" + i + " code=" + org_cd + " class=sel />"
-				          	_html += "		<img src='/img/ico_user.png' class=coImg16 style='margin-left:5px' />"
+				          	_html += "		<img src='/img/ico_dept.png' class=coImg16 style='margin-left:5px' />"
 				          	_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
 				          	_html += "  </div>"
                             g_list.append(_html)
@@ -179,20 +189,13 @@
                 // })    	                
             }
 
-            const getOrgTree = async (obj) => {
-	        	//nodeToGet = C(회사), D(부서), U(사용자)
-				//comp = ALL 또는 회사코드(델리미터는 콤마(,)) / Default는 ALL
-				//expandTo (클라이언트에서만 사용) = 0,1,2.. (0 : all collapsed (회사만 보임) / 99 : all expanded)
-				//expandAllDept (클라이언트에서만 사용) = Y이면 임직원만 안보이게 접고 회사/부서는 모두 펼치기 (expandTo는 무시됨. nodeToGet=U일 경우만 의미있음)
+            const getOrgTree = async () => {
 				//$wise.onceJwtCall(g_payload, false, async function(token) {
 					try {
-						if (hush.util.isvoid(obj.nodeToGet)) obj.nodeToGet = "U"
-						if (hush.util.isvoid(obj.comp)) obj.comp = "ALL"
-						if (hush.util.isvoid(obj.expandTo) || obj.expandTo < 0) obj.expandTo = 0
-						if (hush.util.isvoid(obj.expandAllDept)) obj.expandAllDept = ""
-						$("#spn_depth").html(obj.expandTo)			
+						const _comp = $("#chk_mycomp").prop("checked") ? g_user.toporgcd : g_comp
+						$("#spn_depth").html(g_expandTo)			
 						g_list.empty()
-                        const rs = await hush.http.ajax("/org/orgtree", { obj : obj }) //{ token : token, user : g_user }
+                        const rs = await hush.http.ajax("/org/orgtree", { nodeToGet : g_nodeToGet, comp : _comp }) //{ token : token, user : g_user }
                         if (rs.code != hush.cons.CODE_OK) {
                         	hush.msg.showMsg(rs.msg)
                             return
@@ -220,7 +223,7 @@
 							const nodekind = (lvl == 0) ? "C" : (user_id ? "U" : "D") //회사(C) / 사용자(U)레벨은 소속 부서 레벨+1 /부서(D)
 				          	let nodeStr, title, disp, hasChild = true, expanded, parentidx = -1, _code
 				          	if (i == _len - 1 || nodekind == "U" || parseInt(rs.list[i + 1].LVL) <= lvl) hasChild = false
-				          	if (obj.expandAllDept == "Y") { //이 경우 obj.expandTo 무시됨
+				          	if (g_expandAllDept == "Y") { //이 경우 g_expandTo 무시됨
 				          		if (nodekind == "U") {
 				          			disp = "none"
 				          		} else {
@@ -228,8 +231,8 @@
 				          		}
 				          		if (hasChild && !rs.list[i + 1].USER_ID) expanded = true
 				          	} else {
-				          		disp = (lvl <= obj.expandTo) ? "flex" : "none"
-				          		expanded = (lvl < obj.expandTo) ? true : false
+				          		disp = (lvl <= g_expandTo) ? "flex" : "none"
+				          		expanded = (lvl < g_expandTo) ? true : false
 				          	}
 				          	if (lvl > 0 && _objUpperLevel[lvl - 1]) parentidx = _objUpperLevel[lvl - 1]
 				          	const expcolImg = (expanded) ? "minus_1.png" : "plus_1.png"
@@ -270,14 +273,14 @@
 				          	const _idx = parseInt(_id.substring(4)) //2
 				          	const row = g_rs.list[_idx]
 				          	const _bool = _self.prop("checked")
-				          	if (row.nodekind == obj.nodeToGet) procSelect(row.nodekind, _idx)
+				          	if (row.nodekind == g_nodeToGet) procSelect(row.nodekind, _idx)
 				      		const _lenA = g_rs.list.length
 				      		for (let i = _idx + 1; i < _lenA; i++) {
 				      			const row1 = g_rs.list[i]
 				      			if (row1.LVL <= row.LVL) break
 				      			const _tag = $("#sel_" + i)
 				      			_tag.prop("checked", _bool)
-				      			if (row1.nodekind == obj.nodeToGet) setTimeout(() => { procSelect(row1.nodekind, i) }, 1)
+				      			if (row1.nodekind == g_nodeToGet) setTimeout(() => { procSelect(row1.nodekind, i) }, 1)
 				      		}							
 							if (g_singleSelect == "Y" && _bool && $(".sel:checked").length > 1) {
 								hush.msg.toast("하나의 행만 선택 가능합니다.")
@@ -360,15 +363,30 @@
 					g_user = hush.auth.setUser()
 					g_list = $("#listMain")
 					g_listSel = $("#listSel")
+					//from = 호출자 식별을 위한 참고용
+					//nodeToGet = C(회사), D(부서), U(사용자)
+					//comp = ALL 또는 회사코드(콤마(,)델리미터) / Default는 ALL
+					//expandTo = 0 : all collapsed (회사만 보임) / 99 : all expanded)
+					//expandAllDept = Y이면 임직원만 안보이게 접고 회사/부서는 모두 펼치기 (이 경우 expandTo는 무시됨. nodeToGet=U일 경우만 의미있음)
+					//singleSelect = Y이면 한개만 선택 가능
+					//selectOnlyChildDept = Y이면 최하단 부서만 선택 가능 (nodeToGet=D일 경우만 의미있음)
+					//getImage = Y이면 사용자정보에 등록된 이미지를 가져옴
 					const param = new URLSearchParams(location.search)
 					g_from = param.get("from")					
 					g_nodeToGet = param.get("nodeToGet")
+					g_nodeToGet = (g_nodeToGet == "C" || g_nodeToGet == "D") ? g_nodeToGet : "U"
 					g_comp = param.get("comp")
+					g_comp = hush.util.isvoid(g_comp) ? "ALL" : g_comp 
 					g_expandTo = param.get("expandTo")
-					if (g_expandTo < 0 || g_expandTo > g_max_level) g_expandTo = g_max_level
+					if (hush.util.isvoid(g_expandTo) || g_expandTo < 0) {
+						g_expandTo = 0
+					} else if (g_expandTo > g_max_level) {
+						g_expandTo = g_max_level
+					}
 					g_expandAllDept = param.get("expandAllDept")
 					g_singleSelect = param.get("singleSelect")
 					g_selectOnlyChildDept = param.get("selectOnlyChildDept")
+					g_getImage = param.get("getImage")
 					$("#chk_selectall").on("change", function() { 
 	                	$(".sel").prop("checked", $(this).is(":checked"))
 	                	$(".sel").each(function(idx, item) {                                
@@ -398,8 +416,7 @@
                     })					
                     $("#btn_orgtree").click(function() {
 						$("#in_search").val("")
-						const _comp = $("#chk_mycomp").prop("checked") ? g_user.toporgcd : g_comp
-	            		getOrgTree({ nodeToGet : g_nodeToGet, comp : _comp, expandTo : g_expandTo, expandAllDept : g_expandAllDept })
+	            		getOrgTree()
                     })					
 					$("#btn_minus,#btn_plus").click(function() {
 	            		const _id = this.id
