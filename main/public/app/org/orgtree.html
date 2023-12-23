@@ -12,10 +12,6 @@
 				width: 32px; height:32px; margin-left:5px;
 				border: 1px solid dimgray; border-radius: 3px
 			}
-
-			.noImgPerson {
-				width: 16px; height:16px; margin-left:5px;
-			}
 		</style>
         <script src="/plugin/jquery-3.4.1.min.js"></script>
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
@@ -111,23 +107,24 @@
 							if (g_getImage == "Y") {
 								_html += "	<img id=img_" + user_id + " src='/img/noperson.png' class=imgPerson />"
 								} else {
-								_html += "	<img src='/img/ico_user.png' class=noImgPerson />"
+								_html += "	<img src='/img/ico_user.png' class=coImg16 style='margin-left:5px' />"
 							}
 				          	_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
 				          	_html += "  </div>"
                             g_list.append(_html)
 							if (g_getImage == "Y") {
-								hush.http.ajaxCall("/user/getuser", { id : user_id, imgOnly : "Y" }, function(rs) {
-									if (rs.code != hush.cons.CODE_OK) return
-									const _len = rs.list.length
-									if (_len == 0) return
-									const row = rs.list[0]
-									if (row.PICTURE) { //common.js참조 : 노드에서 MySql에 저장된 PICTURE(longblob)값 내리기 (2가지 방법)
-										//const url = hush.blob.setDataUrl(rs.picture, row.MIMETYPE) //방법2) base64로 변환해 내림 (사용시 서버에서도 코딩 변경 필요) + getUrlForFile() false 설정 + 서버 코딩 변경
-										const url = hush.blob.getBlobUrlForImage(row.PICTURE.data, row.MIMETYPE) //방법1) 특별히 변환하지 않고 그냥 blob으로 내림 + getUrlForFile() true 설정 + 서버 코딩 변경
-										$("#img_" + user_id).attr("src", url)
-									}
-								})
+								// hush.http.ajaxCall("/user/getuser", { id : user_id, imgOnly : "Y" }, function(rs) {
+								// 	if (rs.code != hush.cons.CODE_OK) return
+								// 	const _len = rs.list.length
+								// 	if (_len == 0) return
+								// 	const row = rs.list[0]
+								// 	if (row.PICTURE) { //common.js참조 : 노드에서 MySql에 저장된 PICTURE(longblob)값 내리기 (2가지 방법)
+								// 		//const url = hush.blob.setDataUrl(rs.picture, row.MIMETYPE) //방법2) base64로 변환해 내림 (사용시 서버에서도 코딩 변경 필요) + getUrlForFile() false 설정 + 서버 코딩 변경
+								// 		const url = hush.blob.getBlobUrlForImage(row.PICTURE.data, row.MIMETYPE) //방법1) 특별히 변환하지 않고 그냥 blob으로 내림 + getUrlForFile() true 설정 + 서버 코딩 변경
+								// 		$("#img_" + user_id).attr("src", url)
+								// 	}
+								// })
+								hush.auth.getUserPhoto(user_id, "img_" + user_id)
 							}
                         }
                     	if (_len == 0) return
@@ -219,11 +216,7 @@
 							const user_id = row.USER_ID
 							const user_nm = row.USER_NM
 							const mem_cnt = parseInt(row.MEM_CNT)
-							//const nick_nm = row.NICK_NM
-							//const job = row.JOB
-							//const tel_no = row.TEL_NO
-							//const ab_cd = row.AB_CD
-							//const ab_nm = row.AB_NM
+							const nick_nm = row.NICK_NM
 							const nodekind = (lvl == 0) ? "C" : (user_id ? "U" : "D") //회사(C) / 사용자(U)레벨은 소속 부서 레벨+1 /부서(D)
 				          	let nodeStr, title, disp, hasChild = true, expanded, parentidx = -1, _code
 				          	if (i == _len - 1 || nodekind == "U" || parseInt(rs.list[i + 1].LVL) <= lvl) hasChild = false
@@ -242,7 +235,7 @@
 				          	const expcolImg = (expanded) ? "minus_1.png" : "plus_1.png"
 				          	const paddingLeft = lvl * g_nodeIndent + 3
 				          	if (nodekind == "U") {
-								nodeStr = user_nm + "/" + org_nm + "/" + top_org_nm
+								nodeStr = user_nm + (nick_nm ? " [" + nick_nm + "]" : "")
 								title = nodeStr
 				          		_code = user_id
 							} else {
@@ -260,7 +253,11 @@
 				          	_html += "		<div style='width:calc(100% - 45px);display:flex;align-items:center;justify-content:flex-start;margin-right:3px'>"
 				          	_html += "   		<input type=checkbox id=sel_" + i + " code=" + _code + " class=sel />"
 				          	const _ico = (nodekind == "U") ? "user" : "dept"
-							_html += "			<img src='/img/ico_" + _ico + ".png' class=coImg16 style='margin-left:5px' />"
+							if (nodekind == "U" && g_getImage == "Y") {
+								_html += "		<img id=img_" + user_id + " src='/img/noperson.png' class=imgPerson />"
+							} else {
+								_html += "		<img src='/img/ico_" + _ico + ".png' class=coImg16 style='margin-left:5px' />"
+							}
 			          		_html += "			<span class=coDotDot style='margin-left:3px' title='" + title + "'>" + nodeStr + "</span>"
 				          	_html += "      </div>"				          	
 				          	_html += "      <div style='width:40px;display:flex;align-items:center;justify-content:flex-end;margin-right:3px'>"
@@ -270,6 +267,9 @@
 				          	_html += "  </div>"
 				          	g_list.append(_html)
 				          	_objUpperLevel[lvl] = i
+							if (nodekind == "U" && g_getImage == "Y") {
+								hush.auth.getUserPhoto(user_id, "img_" + user_id)
+							}
 				      	}				      	
 				      	$(".sel").off("change").on("change", function(e) {  
 				        	const _self = $(this)
