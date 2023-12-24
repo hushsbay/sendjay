@@ -1,6 +1,7 @@
 function procWhenScrollStop(callback) {
     clearTimeout($.data(this, 'scrollTimer'))
-    $.data(this, 'scrollTimer', setTimeout(function() {	//console.log("Haven't scrolled in 250ms!")
+    $.data(this, 'scrollTimer', setTimeout(function() {	//
+        console.log("Haven't scrolled in 250ms!")
         if (callback) callback
     }, 250))
 }
