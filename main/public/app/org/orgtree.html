@@ -443,8 +443,8 @@
 						}
                     	$("#btn_orgtree").click()
                     })
-					g_list.scroll(function() { //endless scroll
-						console.log("111111111111")
+					g_list.on("scrollstop", function() { //endless scroll
+						console.log("2222222")
 					})
 					$("#removeSel").on("click", function() {
                         g_listSel.empty()
