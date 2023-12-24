@@ -92,7 +92,7 @@ function procWhenScrollStop(callback) {
                         } else if (failCallback) {
                             failCallback(msg)
                         } else {
-                            hush.msg.showEx(msg)
+                            hush.util.showEx(msg)
                         }
                     }
                 })
@@ -146,7 +146,7 @@ function procWhenScrollStop(callback) {
                         } else if (failCallback) {
                             failCallback(msg)
                         } else {
-                            hush.msg.showEx(msg)
+                            hush.util.showEx(msg)
                         }
                     }
                 })
