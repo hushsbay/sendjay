@@ -463,9 +463,10 @@
 						const intId = parseInt(ele.id.substring(4))
 						for (let i = intId; i < 100; i++) {
 							const idTag = $("#row_" + i.toString())
-							if (idTag.position().top >= listHeight) break 
+							if (idTag.length == 0 || idTag.position().top >= listHeight) break 
 							const row = g_rs.list[i]
 							console.log(row.USER_ID+row.USER_NM)
+							
 						}
 					})
 					if (g_nodeToGet == "U" || g_nodeToGet == "D") {
