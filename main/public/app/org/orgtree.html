@@ -445,7 +445,12 @@
                     })
 					g_list.scroll(function() {
 						console.log("111111")
-						procWhenScrollStop.call(this, procPhoto())
+						//procWhenScrollStop.call(this, procPhoto())
+						clearTimeout($.data(this, 'scrollTimer'))
+						$.data(this, 'scrollTimer', setTimeout(function() {	//
+							console.log("Haven't scrolled in 250ms!")
+							if (callback) callback
+						}, 250))
 					})
 					$("#removeSel").on("click", function() {
                         g_listSel.empty()
