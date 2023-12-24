@@ -458,12 +458,15 @@
                     })
 					$("#btn_cancel").on("click", function() { 
 						//window.close()
+						const listHeight = g_list.height()
 						const ele = document.elementFromPoint(7, 51) //5까지 .container, 6은 .listMain / 50까지는 top => css size+padding+margin에 따라 달라짐
-						const rowFr = $(ele)
-						const ele1 = document.elementFromPoint(7, 101)
-						const ele2 = document.elementFromPoint(7, 151)
-						const ele3 = document.elementFromPoint(7, 201)
-						debugger
+						const intId = parseInt(ele.id.substring(4))
+						for (let i = intId; i < 100; i++) {
+							const idTag = $("#row_" + i.toString())
+							if (idTag.position().top >= listHeight) break 
+							const row = g_rs.list[i]
+							console.log(row.USER_ID+row.USER_NM)
+						}
 					})
 					if (g_nodeToGet == "U" || g_nodeToGet == "D") {
 						if (g_comp) {
