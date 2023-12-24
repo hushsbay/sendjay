@@ -22,7 +22,7 @@
     background-color: transparent;
 }
 
-#listMain { 
+#listMain { /* position:relative는 사용될 수도 안될 수도 있으나 기본적으로 설정하는 것이 좋을 것임 */
     position: relative; width: calc(100% - 100px); 
     display: flex; flex-direction: column; flex-grow: 1; 
     overflow-y: auto; border: 1px solid darkgray;

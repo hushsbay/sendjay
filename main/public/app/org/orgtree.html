@@ -102,17 +102,17 @@
 							const top_org_cd = row.TOP_ORG_CD
 							const top_org_nm = row.TOP_ORG_NM
 							const nodeStr = user_nm + "/" + org_nm + "/" + top_org_nm
-							let _html = "<div id=row_" + i.toString() + " class=coRow >"
+							let _html = "<div id=row_" + i.toString() + " class=coRow userid=" + user_id + " >"
 				          	_html += "   	<input type=checkbox id=sel_" + i + " code=" + user_id + " class=sel />"
 							if (g_getImage == "Y") {
-								_html += "	<img id=img_" + user_id + " src='/img/noperson.png' class=imgPerson />"
+								_html += "	<img id=img_" + user_id + " src='/img/noperson.png' class=imgPerson downloaded='' />"
 								} else {
 								_html += "	<img src='/img/ico_user.png' class=coImg16 style='margin-left:5px' />"
 							}
 				          	_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
 				          	_html += "  </div>"
                             g_list.append(_html)
-							if (g_getImage == "Y") hush.auth.getUserPhoto(user_id, "img_" + user_id)
+							//if (g_getImage == "Y") hush.auth.getUserPhoto(user_id, "img_" + user_id)
                         }
                     	if (_len == 0) return
 				      	$(".sel").off("change").on("change", function(e) {
@@ -254,7 +254,7 @@
 				          	_html += "  </div>"
 				          	g_list.append(_html)
 				          	_objUpperLevel[lvl] = i
-							if (nodekind == "U" && g_getImage == "Y") hush.auth.getUserPhoto(user_id, "img_" + user_id)
+							//if (nodekind == "U" && g_getImage == "Y") hush.auth.getUserPhoto(user_id, "img_" + user_id)
 				      	}				      	
 				      	$(".sel").off("change").on("change", function(e) {  
 				        	const _self = $(this)
@@ -458,16 +458,18 @@
                     })
 					$("#btn_cancel").on("click", function() { 
 						//window.close()
-						const listHeight = g_list.height() //- $(".bottom").height()
-						const ele = document.elementFromPoint(7, 51) //5까지 .container, 6은 .listMain / 50까지는 top => css size+padding+margin에 따라 달라짐
-						debugger
+						if (g_getImage != "Y") return 
+						const listHeight = g_list.height()
+						const ele = document.elementFromPoint(7, 51) //5까지 .container, 6은 .listMain / 50까지는 .top
 						const intId = parseInt(ele.id.substring(4))
 						for (let i = intId; i < 100; i++) {
 							const idTag = $("#row_" + i.toString())
 							if (idTag.length == 0 || idTag.position().top >= listHeight) break 
 							const row = g_rs.list[i]
 							console.log(row.USER_ID+row.USER_NM)
-
+							const userid = idTag.attr("userid")
+							if ($("#img_" + userid).attr("downloaded") == "Y") continue
+							hush.auth.getUserPhoto(userid, "img_" + userid)
 						}
 					})
 					if (g_nodeToGet == "U" || g_nodeToGet == "D") {
