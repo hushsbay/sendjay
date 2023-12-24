@@ -458,7 +458,8 @@
                     })
 					$("#btn_cancel").on("click", function() { 
 						//window.close()
-						elem = document.elementFromPoint(7, 51);
+						const ele = document.elementFromPoint(7, 51) //5까지 .container, 6은 .listMain / 50까지는 top => css size+padding+margin에 따라 달라짐
+						const rowFr = $(ele)
 						debugger
 					})
 					if (g_nodeToGet == "U" || g_nodeToGet == "D") {
