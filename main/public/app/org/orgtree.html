@@ -360,6 +360,7 @@
 					const row = g_rs.list[i]
 					if (!row.USER_ID) continue
 					if ($("#img_" + row.USER_ID).attr("downloaded") == "Y") continue
+					console.log(row.USER_ID+"====")
 					hush.auth.getUserPhoto(row.USER_ID, "img_" + row.USER_ID)
 				}
 			}
@@ -484,19 +485,7 @@
 						window.close()
                     })
 					$("#btn_cancel").on("click", function() { 
-						//window.close()
-						if (g_getImage != "Y") return 
-						const listHeight = g_list.height()
-						const ele = document.elementFromPoint(7, 51) //5까지 .container, 6은 .listMain / 50까지는 .top
-						const intId = parseInt(ele.id.substring(4))
-						for (let i = intId; i < 100; i++) { //100은 max로 설정한 대략의 값
-							const idTag = $("#row_" + i.toString())
-							if (idTag.length == 0 || idTag.position().top >= listHeight) break 
-							const row = g_rs.list[i]
-							if (!row.USER_ID) continue
-							if ($("#img_" + row.USER_ID).attr("downloaded") == "Y") continue
-							hush.auth.getUserPhoto(row.USER_ID, "img_" + row.USER_ID)
-						}
+						window.close()
 					})
 					if (g_nodeToGet == "U" || g_nodeToGet == "D") {
 						if (g_comp) {
