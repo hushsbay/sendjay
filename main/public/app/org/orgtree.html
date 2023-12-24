@@ -467,7 +467,7 @@
 							if (idTag.length == 0 || idTag.position().top >= listHeight) break 
 							const row = g_rs.list[i]
 							console.log(row.USER_ID+row.USER_NM)
-							deugger
+							debugger
 							const userid = idTag.attr("userid")
 							if ($("#img_" + userid).attr("downloaded") == "Y") continue
 							hush.auth.getUserPhoto(userid, "img_" + userid)
