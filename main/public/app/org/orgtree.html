@@ -468,9 +468,9 @@
 							const row = g_rs.list[i]
 							console.log(row.USER_ID+row.USER_NM)
 							debugger
-							const userid = idTag.attr("userid")
-							if ($("#img_" + userid).attr("downloaded") == "Y") continue
-							hush.auth.getUserPhoto(userid, "img_" + userid)
+							if (!row.USER_ID) continue
+							if ($("#img_" + row.USER_ID).attr("downloaded") == "Y") continue
+							hush.auth.getUserPhoto(row.USER_ID, "img_" + row.USER_ID)
 						}
 					})
 					if (g_nodeToGet == "U" || g_nodeToGet == "D") {
