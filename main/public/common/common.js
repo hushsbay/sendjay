@@ -1,3 +1,10 @@
+function procWhenScrollStop(callback) {
+    clearTimeout($.data(this, 'scrollTimer'))
+    $.data(this, 'scrollTimer', setTimeout(function() {	//console.log("Haven't scrolled in 250ms!")
+        if (callback) callback
+    }, 250))
+}
+
 (function($) {
     document.oncontextmenu = new Function("return false")
     const _warn_blank = " 필드가 빈값입니다."

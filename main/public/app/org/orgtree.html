@@ -125,7 +125,7 @@
 						} else { //검색
 							$("#chk_selectall").prop("disabled", true)
 						}
-						procPhoto()
+						//procPhoto()
                     } catch (ex) {
                         hush.util.showEx(ex)
                     }    	                    
@@ -328,7 +328,7 @@
 						} else {
 							$("#chk_selectall").prop("disabled", false)
 						}
-						procPhoto()				     	
+						//procPhoto()				     	
 				    } catch (ex) {
 				        hush.util.showEx(ex)
 				    }
@@ -444,12 +444,8 @@
                     	$("#btn_orgtree").click()
                     })
 					g_list.scroll(function() {
-						clearTimeout($.data(this, 'scrollTimer'));
-						$.data(this, 'scrollTimer', setTimeout(function() {
-							// do something
-							console.log("Haven't scrolled in 250ms!");
-						}, 250));
-					});
+						procWhenScrollStop.call(this, procPhoto())
+					})
 					$("#removeSel").on("click", function() {
                         g_listSel.empty()
                         $(".sel").prop("checked", false)
