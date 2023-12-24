@@ -23,7 +23,7 @@
 }
 
 #listMain { 
-    width: calc(100% - 100px); height: 100%; display: flex; flex-direction: column; flex-grow: 1; 
+    width: calc(100% - 100px); display: flex; flex-direction: column; flex-grow: 1; 
     overflow-y: auto; border: 1px solid darkgray;
 }
 
