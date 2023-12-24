@@ -112,7 +112,6 @@
 				          	_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
 				          	_html += "  </div>"
                             g_list.append(_html)
-							//if (g_getImage == "Y") hush.auth.getUserPhoto(user_id, "img_" + user_id)
                         }
                     	if (_len == 0) return
 				      	$(".sel").off("change").on("change", function(e) {
@@ -126,6 +125,7 @@
 						} else { //검색
 							$("#chk_selectall").prop("disabled", true)
 						}
+						procPhoto()
                     } catch (ex) {
                         hush.util.showEx(ex)
                     }    	                    
@@ -241,7 +241,7 @@
 				          	_html += "   		<input type=checkbox id=sel_" + i + " code=" + _code + " class=sel />"
 				          	const _ico = (nodekind == "U") ? "user" : "dept"
 							if (nodekind == "U" && g_getImage == "Y") {
-								_html += "		<img id=img_" + user_id + " src='/img/noperson.png' class=imgPerson />"
+								_html += "		<img id=img_" + user_id + " src='/img/noperson.png' class=imgPerson downloaded='' />"
 							} else {
 								_html += "		<img src='/img/ico_" + _ico + ".png' class=coImg16 style='margin-left:5px' />"
 							}
@@ -319,13 +319,16 @@
 				                  	}  
 				                  	if (j > 0) procExpCol(_expanded, _tag, _idx)
 				              	}
+								if (!_expanded) procPhoto()
 				          	}
+
 				      	})
 						if (g_nodeToGet == "U" || g_nodeToGet == "D") {
 							$("#chk_selectall").prop("disabled", true)
 						} else {
 							$("#chk_selectall").prop("disabled", false)
-						}				     	
+						}
+						procPhoto()				     	
 				    } catch (ex) {
 				        hush.util.showEx(ex)
 				    }
@@ -345,6 +348,21 @@
                 	_tagExpcol.attr("src", "/img/minus_1.png")
             	}
         	}
+
+			const procPhoto = () => { 
+				if (g_getImage != "Y") return 
+				const listHeight = g_list.height()
+				const ele = document.elementFromPoint(7, 51) //5까지 .container, 6은 .listMain / 50까지는 .top
+				const intId = parseInt(ele.id.substring(4))
+				for (let i = intId; i < 100; i++) { //100은 max로 설정한 대략의 값
+					const idTag = $("#row_" + i.toString())
+					if (idTag.length == 0 || idTag.position().top >= listHeight) break 
+					const row = g_rs.list[i]
+					if (!row.USER_ID) continue
+					if ($("#img_" + row.USER_ID).attr("downloaded") == "Y") continue
+					hush.auth.getUserPhoto(row.USER_ID, "img_" + row.USER_ID)
+				}
+			}
 
             $.when($.ready).done(async function() {
                 try {
@@ -425,6 +443,9 @@
 						}
                     	$("#btn_orgtree").click()
                     })
+					g_list.scroll(function() { //endless scroll
+						console.log("111111111111")
+					})
 					$("#removeSel").on("click", function() {
                         g_listSel.empty()
                         $(".sel").prop("checked", false)
@@ -462,12 +483,10 @@
 						const listHeight = g_list.height()
 						const ele = document.elementFromPoint(7, 51) //5까지 .container, 6은 .listMain / 50까지는 .top
 						const intId = parseInt(ele.id.substring(4))
-						for (let i = intId; i < 100; i++) {
+						for (let i = intId; i < 100; i++) { //100은 max로 설정한 대략의 값
 							const idTag = $("#row_" + i.toString())
 							if (idTag.length == 0 || idTag.position().top >= listHeight) break 
 							const row = g_rs.list[i]
-							console.log(row.USER_ID+row.USER_NM)
-							debugger
 							if (!row.USER_ID) continue
 							if ($("#img_" + row.USER_ID).attr("downloaded") == "Y") continue
 							hush.auth.getUserPhoto(row.USER_ID, "img_" + row.USER_ID)
