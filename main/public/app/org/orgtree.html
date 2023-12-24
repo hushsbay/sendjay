@@ -458,9 +458,9 @@
                     })
 					$("#btn_cancel").on("click", function() { 
 						//window.close()
-						const listHeight = g_list.prop("scrollHeight") // height()
+						const listHeight = g_list.height() - $(".bottom").height()
 						const ele = document.elementFromPoint(7, 51) //5까지 .container, 6은 .listMain / 50까지는 top => css size+padding+margin에 따라 달라짐
-						debugger
+						//debugger
 						const intId = parseInt(ele.id.substring(4))
 						for (let i = intId; i < 100; i++) {
 							const idTag = $("#row_" + i.toString())
