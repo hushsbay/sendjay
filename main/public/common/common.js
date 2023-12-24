@@ -54,6 +54,7 @@ function procWhenScrollStop(callback) {
                 return { id : _id, nm : _nm, orgcd : _orgcd, orgnm : _orgnm, toporgcd : _toporgcd, toporgnm : _toporgnm }
             }, 
             getUserPhoto : (user_id, tag_id) => {
+                if ($("#" + tag_id).attr("downloaded") == "Y") return
                 hush.http.ajaxCall("/user/getuser", { id : user_id, imgOnly : "Y" }, function(rs) {
                     if (rs.code != hush.cons.CODE_OK) return
                     const _len = rs.list.length
