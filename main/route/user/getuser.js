@@ -22,7 +22,7 @@ router.post('/', async function(req, res) {
 			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true) //true=toast
 			return
 		}
-		//rs.picture = data[0].PICTURE ? Buffer.from(data[0].PICTURE, 'binary').toString('base64') : null //base64로 변환해 내림 (사용시 클라이언트 코딩도 변경 필요)
+		rs.picture = data[0].PICTURE ? Buffer.from(data[0].PICTURE, 'binary').toString('base64') : null //base64로 변환해 내림 (사용시 클라이언트 코딩도 변경 필요)
 		if (imgOnly == "Y") {
 			rs.list.push({ PICTURE : data[0].PICTURE })
 		} else {
