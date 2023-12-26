@@ -24,7 +24,7 @@ router.post('/', async function(req, res) {
 		}
 		//rs.picture = data[0].PICTURE ? Buffer.from(data[0].PICTURE, 'binary').toString('base64') : null //base64로 변환해 내림 (사용시 클라이언트 코딩도 변경 필요)
 		if (imgOnly == "Y") {
-			rs.list.push({ PICTURE : data[0].PICTURE })
+			rs.list.push({ PICTURE : data[0].PICTURE }) //base64 방법과 육안으로는 속도 차이 안남
 		} else {
 			rs.list = data
 		}
