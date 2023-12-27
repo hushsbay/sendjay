@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <link id=favicon href="/img/hushsbay.png" rel="shortcut icon" type="image/x-icon"/>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+        <title>로그인</title>
+        <link rel="stylesheet" href="/common/common.css">
+		<style>
+			.container { 
+				width: 100%; height: 100%; padding: 0 5px;
+				display: flex; flex-direction: column; justify-content: center; align-items: center;
+				background-color: #eaeaea;
+			}
+
+			#gridMain {	
+				width: 300px; height: 400px;
+				display: grid; grid-template-columns: 100px auto; grid-template-rows: 40px 40px 40px 40px minmax(40px, auto) minmax(40px, auto); column-gap: 3px; row-gap: 3px; 
+				grid-template-areas: "lbl_id fld_id" "lbl_nm fld_nm" "lbl_alias fld_alias" "lbl_pwd fld_pwd" "lbl_pwd_1 fld_pwd_1" "lbl_pwd_2 fld_pwd_2" "lbl_org fld_org" "lbl_img fld_img";
+			} /* #lbl_id { grid-area: lbl_id; } #fld_id { grid-area: fld_id; } #lbl_nm { grid-area: lbl_nm; } #fld_nm { grid-area: fld_nm; } .. */
+
+			.cellLabel {
+				padding-left: 3px;
+				display: flex; align-items: center;
+				border: 1px solid lightgray; font-weight: bold;
+			}
+
+			.cellField {				
+				display: flex; align-items: center; flex-wrap: wrap;
+				border: 1px solid lightgray;
+			}
+
+			.pict {
+				width: 64px; height: 64px; margin: 5px
+			}
+		</style>	
+        <script src="/plugin/jquery-3.4.1.min.js"></script>
+		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
+        <script>
+			let g_mode
+			const MAX_LEN_ID = 20, MAX_LEN_NM = 50, MAX_LEN_ALIAS = 100, MAX_LEN_PWD = 20
+
+			function chkLen() {
+				const _id = this.id
+				const _val = $(this).val()
+				let _maxLen, _title
+				if (_id == "in_id") {
+					_maxLen = MAX_LEN_ID
+					_title = "아이디"
+				} else if (_id == "in_nm") {
+					_maxLen = MAX_LEN_NM
+					_title = "이름"
+				} else if (_id == "in_alias") {
+					_maxLen = MAX_LEN_ALIAS
+					_title = "별칭(Alias)"
+				} else {
+					_maxLen = MAX_LEN_PWD
+					_title = "비번"
+				}
+				if (hush.util.strLen(_val) > _maxLen) {
+					$("#txt_warn").html(_title + " 필드값 " + _maxLen + "바이트 초과")
+					$("#txt_warn").show()
+				} else {
+					$("#txt_warn").hide()
+				}
+			}
+
+			function procFromOrgTree(from, nodeToGet, arr) {
+        		try {
+	        		if (!$.isArray(arr) || arr.length == 0) {
+	        			hush.msg.msg("조직도 팝업으로부터 선택한 값이 없습니다.")
+	        			return
+	        		}
+					$("#txt_toporgcd").html(arr[0].TOP_ORG_CD)
+					$("#txt_toporgnm").html(arr[0].TOP_ORG_NM)
+					$("#txt_orgcd").html(arr[0].ORG_CD)
+					$("#txt_orgnm").html(arr[0].ORG_NM)
+        		} catch (ex) {
+                	hush.util.showEx(ex)
+                }
+        	}
+
+			function dispPwd(show) {
+				if (show) {
+					$("#lbl_pwd_1").css("display", "flex")
+					$("#fld_pwd_1").css("display", "flex")
+					$("#lbl_pwd_2").css("display", "flex")
+					$("#fld_pwd_2").css("display", "flex")
+				} else {
+					$("#lbl_pwd_1").hide()
+					$("#fld_pwd_1").hide()
+					$("#lbl_pwd_2").hide()
+					$("#fld_pwd_2").hide()
+				}
+			}
+
+            $.when($.ready).done(async function() {
+                try {
+                    await $.getScript("/common/common.js")
+					const param = new URLSearchParams(location.search)
+					g_id = param.get("user_id")
+					g_mode = g_id ? "U" : "C"
+					if (g_mode == "C") { //신규모드
+						$("#btn_delete").hide()
+						$("#lbl_pwd").hide()
+						$("#fld_pwd").hide()
+					} else { //수정모드
+						$("#in_id").prop("disabled", true)
+						dispPwd(false)
+						const rs = await hush.http.ajax("/user/getuser", { id : g_id })
+						if (rs.code != hush.cons.CODE_OK) {
+							hush.msg.showMsg(rs.msg)
+							return
+						}
+						const _len = rs.list.length
+						if (_len == 0) return
+						const row = rs.list[0]
+						$("#in_id").val(row.USER_ID)
+						$("#in_nm").val(row.USER_NM)
+						$("#in_alias").val(row.NICK_NM)
+						$("#txt_toporgcd").html(row.TOP_ORG_CD)
+						$("#txt_toporgnm").html(row.TOP_ORG_NM)
+						$("#txt_orgcd").html(row.ORG_CD)
+						$("#txt_orgnm").html(row.ORG_NM)
+						if (row.PICTURE) { //common.js참조 : 노드에서 MySql에 저장된 PICTURE(longblob)값 내리기 (2가지 방법)
+							//const url = hush.blob.setDataUrl(rs.picture, row.MIMETYPE) //방법2) base64로 변환해 내림 (사용시 서버에서도 코딩 변경 필요) + getUrlForFile() false 설정 + 서버 코딩 변경
+							const url = hush.blob.getBlobUrlForImage(row.PICTURE.data, row.MIMETYPE) //방법1) 특별히 변환하지 않고 그냥 blob으로 내림 + getUrlForFile() true 설정 + 서버 코딩 변경
+							$("#img_pict").attr("src", url)
+							$("#img_pict").attr("mimetype", row.MIMETYPE)
+						}
+					}
+					$("#btn_save").click(async function() {
+						try {
+							const _chkPwd = $("#chk_pwd").prop("checked")
+							const _id = $("#in_id").val().trim()
+							const _nm = $("#in_nm").val().trim()
+							const _alias = $("#in_alias").val().trim()
+							const _pwd = $("#in_pwd").val().trim()
+							const _pwd_1 = (g_mode == "C" || _chkPwd) ? $("#in_pwd_1").val().trim() : ""
+							const _pwd_2 = (g_mode == "C" || _chkPwd) ? $("#in_pwd_2").val().trim() : ""
+							const _toporgcd = $("#txt_toporgcd").html()
+							const _toporgnm = $("#txt_toporgnm").html()
+							const _orgcd = $("#txt_orgcd").html()
+							const _orgnm = $("#txt_orgnm").html()
+							if (g_mode == "C" || _chkPwd) { //신규모드 또는 수정모드중 비번 변경시
+								if (!hush.util.chkFieldVal(_pwd_1, "새비번", 4, 20, true)) return	
+								if (_pwd_1 != _pwd_2) {
+									hush.msg.msg("비번과 비번(확인용)이 다릅니다.")
+									return
+								}
+							}
+							if (g_mode == "U") {
+								if (!hush.util.chkFieldVal(_pwd, "비번", 4, MAX_LEN_PWD, true)) return	
+							}
+							if (!hush.util.chkFieldVal(_id, "아이디", 4, MAX_LEN_ID, true)) return
+							if (!hush.util.chkFieldVal(_nm, "이름", 2, MAX_LEN_NM)) return
+							if (!hush.util.chkFieldVal(_alias, "별칭(Alias)", 0, MAX_LEN_ALIAS)) return
+							if (!hush.util.chkFieldVal(_orgcd, "회사/부서", 1)) return
+							const fd = new FormData()
+							fd.append("type", g_mode)
+							fd.append("id", _id)
+							fd.append("nm", _nm)
+							fd.append("alias", _alias)
+							fd.append("pwd", _pwd)
+							fd.append("pwd_1", _pwd_1) //서버에는 pwd_2 필요없음
+							fd.append("toporgcd", _toporgcd)
+							fd.append("toporgnm", _toporgnm)
+							fd.append("orgcd", _orgcd)
+							fd.append("orgnm", _orgnm)
+							const url = $("#img_pict").attr("src")
+							if (url) {
+								const blob = await hush.blob.get(url)
+								const mimetype = $("#img_pict").attr("mimetype")
+								fd.append("file", blob)
+								fd.append("mimetype", mimetype)
+							} else {
+								fd.append("file", "")
+								fd.append("mimetype", "")
+							}
+							hush.http.ajaxFormData("/user/setuser", fd, (rs) => {
+								if (rs.code != hush.cons.CODE_OK) {
+									hush.msg.showMsg(rs.msg)
+								} else {
+									g_id = _id
+									hush.msg.toast(hush.cons.MSG_OK)
+									if (opener && opener.refreshForRow) opener.refreshForRow(g_id, g_mode)
+									window.close() //닫지 않으면 주소창의 주소를 userid가 포함되게 새로 불러야 하는 부분을 고려해야 함
+								}
+							})
+						} catch (ex) {
+							hush.util.showEx(ex)
+						}
+                    })
+					$("#btn_delete").click(async function() {
+						try {
+							const ret = await hush.msg.confirm("삭제할까요?")
+							if (!ret) return
+							const fd = new FormData()
+							fd.append("type", "D")
+							fd.append("id", g_id)
+							fd.append("pwd", $("#in_pwd").val().trim())
+							hush.http.ajaxFormData("/user/setuser", fd, (rs) => {
+								if (rs.code != hush.cons.CODE_OK) {
+									hush.msg.showMsg(rs.msg)
+								} else {
+									hush.msg.toast(hush.cons.MSG_OK)
+									if (opener && opener.refreshForRow) opener.refreshForRow(g_id, "D")
+									window.close()
+								}
+							})
+						} catch (ex) {
+							hush.util.showEx(ex)
+						}
+					})
+					$("#in_id,#in_nm,#in_alias,#in_pwd").keyup(function() {
+						chkLen.call(this)
+					})
+					$("#in_pwd,#in_pwd_1,#in_pwd_2").focus(function() {
+						const _self = $(this)
+						_self.select()
+					})
+					$("#chk_pwd").change(function() {
+						const _self = $(this)
+						dispPwd(_self.prop("checked"))
+					})
+					$("#btn_orgtree").on("click", function() {
+                        const obj = { from : this.id, nodeToGet : "D", expandTo : 99, singleSelect : "Y", selectOnlyChildDept : "Y" }
+                        hush.util.openWinPop("/app/org/orgtree.html?" + $.param(obj))
+                    })
+					$("#pict_browse").click(function() {
+                        $("#file_upload").val("")
+                        $("#file_upload").trigger("click")
+                    })
+					$("#pict_clear").click(function() {
+                        $("#img_pict").remove() //$("#img_pict").attr("src", "") //DB에 가비지가 남아 있어 문제가 됨
+						$("#fld_img").prepend("<img id='img_pict' class='pict' />")
+						hush.msg.toast("저장해야 최종 적용됩니다.")
+                    })
+					$("#file_upload").change(function() {
+                        try {
+                            const file = this.files[0]
+                            const obj = hush.util.getFileNameAndExtension(file.name)
+                            if (obj.ext == "" || !hush.cons.ext_image.includes(obj.ext)) {
+                                hush.msg.msg("이미지 파일이 필요합니다. (" + hush.cons.ext_image + ")")
+                                return
+                            }
+                            if (file.size > hush.cons.max_image) {
+                                hush.msg.msg("이미지 파일 크기 제한 : " + hush.util.formatBytes(hush.cons.max_image) + ". 현재 : " + hush.util.formatBytes(hush.cons.max_image))
+                                return
+                            }
+							hush.blob.getUrlForFile(file, true, function(url) { //base64로 처리시 false
+								$("#img_pict").attr("src", url)
+								$("#img_pict").attr("mimetype", file.type)
+							})
+                        } catch (ex) { 
+                            hush.util.showEx(ex)
+                        }
+                    })                    
+                } catch (ex) {
+                    hush.util.showEx(ex)
+                }                
+            }).fail(function(ex) {
+                hush.util.showEx(ex, hush.cons.failOnLoad)
+            })
+        </script>
+    </head>
+    <body> 
+        <div class="container">
+			<div id="gridMain">		
+				<div id="lbl_id" class="cellLabel">아이디</div>
+				<div id="fld_id" class="cellField">
+					<input id="in_id" spellcheck=false autocomplete=off style="width: 140px"/>
+				</div>
+				<div id="lbl_nm" class="cellLabel">이름</div>
+				<div id="fld_nm" class="cellField">
+					<input id="in_nm" spellcheck=false autocomplete=off style="width: 200px"/>
+				</div>
+				<div id="lbl_alias" class="cellLabel">별칭(Alias)</div>
+				<div id="fld_alias" class="cellField">
+					<input id="in_alias" spellcheck=false autocomplete=off style="width: 200px"/>
+				</div>
+				<div id="lbl_pwd" class="cellLabel">비번</div>
+				<div id="fld_pwd" class="cellField">
+					<input id="in_pwd" type=password spellcheck=false autocomplete=off style="width: 140px"/>
+					<input id="chk_pwd" type=checkbox style="margin-left: 5px"/><label id="lbl_pwd" for="chk_pwd" style="cursor: pointer">비번변경</label>
+				</div>
+				<div id="lbl_pwd_1" class="cellLabel">새비번</div>
+				<div id="fld_pwd_1" class="cellField">
+					<input id="in_pwd_1" type=password spellcheck=false autocomplete=off style="width: 140px"/>
+				</div>
+				<div id="lbl_pwd_2" class="cellLabel">새비번(확인)</div>
+				<div id="fld_pwd_2" class="cellField">
+					<input id="in_pwd_2" type=password spellcheck=false autocomplete=off style="width: 140px"/>
+				</div>
+				<div id="lbl_org" class="cellLabel">소속<button id="btn_orgtree">선택</button></div>
+				<div id="fld_org" class="cellField">
+					<div id="txt_toporgcd" style="display: none"></div>
+					<div id="txt_orgcd" style="display: none"></div>						
+					<div id="txt_toporgnm" style="margin: 0 5px"></div>
+					<div id="txt_orgnm" style="margin: 0 5px"></div>						
+				</div>
+				<div id="lbl_img" class="cellLabel">사진<button id="pict_browse">선택</button></div>
+				<div id="fld_img" class="cellField">						
+					<img id="img_pict" class="pict" /> <button id="pict_clear">Clear</button></div>
+				</div>
+			</div>
+        </div>
+    </body>
+</html>
