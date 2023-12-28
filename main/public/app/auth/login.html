@@ -55,7 +55,7 @@
                 try {
                     await $.getScript("/common/common.js")
 					$("#in_id").focus()
-					$("#in_id").click()
+					setTimeout(function() { ("#in_id").click() }, 1000)
 
 					$("#btn_save").click(async function() {
 						try {
