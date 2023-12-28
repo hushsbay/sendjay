@@ -76,4 +76,5 @@ button {
 @media screen and (min-device-width: 501px) { }
 @media screen and (max-device-width: 500px) { 
     .coMenuBtn>img { display: none } /* 모바일중에 가로가 작은 것은 이미지 제외하고 표시 (>의 앞뒤는 붙여야 함을 유의) */
+    .login { padding-top: 30px; display: flex; flex-direction: column; justify-content: flex-start; background-color: yellow; }
 }
