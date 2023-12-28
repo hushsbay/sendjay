@@ -33,9 +33,10 @@
 			}
 
 			.item:nth-child(3) {
-				grid-column: 2;
- 				grid-row: 2/4;
-				background-color: yellow;
+				width: 100%; height: 100%;
+				grid-column: 2;	grid-row: 2/4;
+                display: flex; justify-content: center; align-items: center;
+				background-color: #0082AD;
 			}
 
 			@media screen and (max-device-width: 500px) { 
@@ -276,12 +277,22 @@
     <body> 
         <div class="container login">
 			<div id="gridMain">
-				<div class="item">1</div>
-				<div class="item">2</div>
-				<div class="item">3</div>
-				<div class="item">4</div>
-				<div class="item">5</div>
-				<div class="item">6</div>
+				<div class="item">
+					
+				</div>
+				<div class="item">
+					<input id="in_id" spellcheck=false autocomplete=off style="width: 100%"/>
+				</div>
+				<div id="btn_login" class="item">로그인</div>
+				<div class="item">
+					<input id="in_pwd" type=password spellcheck=false autocomplete=off style="width: 100%"/>
+				</div>
+				<div class="item">
+					<input id="chk_save" type=checkbox style="margin-left: 5px"/><label id="lbl_save" for="chk_save" style="cursor: pointer">비번저장</label>
+				</div>
+				<div class="item">
+					<a href="">간편가입</a>
+				</div>
 				<!-- <div class="item">7</div>
 				<div class="item">8</div> -->
 				<!-- <div id="lbl_id" class="cellLabel">아이디</div>
