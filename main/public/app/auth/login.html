@@ -32,7 +32,7 @@
 			}
 
 			.item:nth-child(3) { /* 로그인 버튼 부모 */
-				width: 100%; height: 100%; padding: 5px;
+				width: 100%; height: 100%; padding: 6px;
 				grid-column: 2;	grid-row: 2/4;
                 display: flex; justify-content: center; align-items: center;
 			}
@@ -40,7 +40,7 @@
 			#btn_login { /* 로그인 버튼 */
 				width: 100%; height: 100%;
                 display: flex; justify-content: center; align-items: center;
-				background-color: #0082AD;
+				border-radius: 4px; background-color: beige;
 			}
 
 			@media screen and (max-device-width: 500px) { /* 모바일일 경우 키보드 올라오는 경우 대비해 상단 배치 */
@@ -51,63 +51,6 @@
         <script src="/plugin/jquery-3.4.1.min.js"></script>
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
         <script>
-			let g_mode
-			const MAX_LEN_ID = 20, MAX_LEN_NM = 50, MAX_LEN_ALIAS = 100, MAX_LEN_PWD = 20
-
-			function chkLen() {
-				const _id = this.id
-				const _val = $(this).val()
-				let _maxLen, _title
-				if (_id == "in_id") {
-					_maxLen = MAX_LEN_ID
-					_title = "아이디"
-				} else if (_id == "in_nm") {
-					_maxLen = MAX_LEN_NM
-					_title = "이름"
-				} else if (_id == "in_alias") {
-					_maxLen = MAX_LEN_ALIAS
-					_title = "별칭(Alias)"
-				} else {
-					_maxLen = MAX_LEN_PWD
-					_title = "비번"
-				}
-				if (hush.util.strLen(_val) > _maxLen) {
-					$("#txt_warn").html(_title + " 필드값 " + _maxLen + "바이트 초과")
-					$("#txt_warn").show()
-				} else {
-					$("#txt_warn").hide()
-				}
-			}
-
-			function procFromOrgTree(from, nodeToGet, arr) {
-        		try {
-	        		if (!$.isArray(arr) || arr.length == 0) {
-	        			hush.msg.msg("조직도 팝업으로부터 선택한 값이 없습니다.")
-	        			return
-	        		}
-					$("#txt_toporgcd").html(arr[0].TOP_ORG_CD)
-					$("#txt_toporgnm").html(arr[0].TOP_ORG_NM)
-					$("#txt_orgcd").html(arr[0].ORG_CD)
-					$("#txt_orgnm").html(arr[0].ORG_NM)
-        		} catch (ex) {
-                	hush.util.showEx(ex)
-                }
-        	}
-
-			function dispPwd(show) {
-				if (show) {
-					$("#lbl_pwd_1").css("display", "flex")
-					$("#fld_pwd_1").css("display", "flex")
-					$("#lbl_pwd_2").css("display", "flex")
-					$("#fld_pwd_2").css("display", "flex")
-				} else {
-					$("#lbl_pwd_1").hide()
-					$("#fld_pwd_1").hide()
-					$("#lbl_pwd_2").hide()
-					$("#fld_pwd_2").hide()
-				}
-			}
-
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
@@ -205,27 +148,6 @@
 							hush.util.showEx(ex)
 						}
                     })
-					$("#btn_delete").click(async function() {
-						try {
-							const ret = await hush.msg.confirm("삭제할까요?")
-							if (!ret) return
-							const fd = new FormData()
-							fd.append("type", "D")
-							fd.append("id", g_id)
-							fd.append("pwd", $("#in_pwd").val().trim())
-							hush.http.ajaxFormData("/user/setuser", fd, (rs) => {
-								if (rs.code != hush.cons.CODE_OK) {
-									hush.msg.showMsg(rs.msg)
-								} else {
-									hush.msg.toast(hush.cons.MSG_OK)
-									if (opener && opener.refreshForRow) opener.refreshForRow(g_id, "D")
-									window.close()
-								}
-							})
-						} catch (ex) {
-							hush.util.showEx(ex)
-						}
-					})
 					$("#in_id,#in_nm,#in_alias,#in_pwd").keyup(function() {
 						chkLen.call(this)
 					})
@@ -240,36 +162,7 @@
 					$("#btn_orgtree").on("click", function() {
                         const obj = { from : this.id, nodeToGet : "D", expandTo : 99, singleSelect : "Y", selectOnlyChildDept : "Y" }
                         hush.util.openWinPop("/app/org/orgtree.html?" + $.param(obj))
-                    })
-					$("#pict_browse").click(function() {
-                        $("#file_upload").val("")
-                        $("#file_upload").trigger("click")
-                    })
-					$("#pict_clear").click(function() {
-                        $("#img_pict").remove() //$("#img_pict").attr("src", "") //DB에 가비지가 남아 있어 문제가 됨
-						$("#fld_img").prepend("<img id='img_pict' class='pict' />")
-						hush.msg.toast("저장해야 최종 적용됩니다.")
-                    })
-					$("#file_upload").change(function() {
-                        try {
-                            const file = this.files[0]
-                            const obj = hush.util.getFileNameAndExtension(file.name)
-                            if (obj.ext == "" || !hush.cons.ext_image.includes(obj.ext)) {
-                                hush.msg.msg("이미지 파일이 필요합니다. (" + hush.cons.ext_image + ")")
-                                return
-                            }
-                            if (file.size > hush.cons.max_image) {
-                                hush.msg.msg("이미지 파일 크기 제한 : " + hush.util.formatBytes(hush.cons.max_image) + ". 현재 : " + hush.util.formatBytes(hush.cons.max_image))
-                                return
-                            }
-							hush.blob.getUrlForFile(file, true, function(url) { //base64로 처리시 false
-								$("#img_pict").attr("src", url)
-								$("#img_pict").attr("mimetype", file.type)
-							})
-                        } catch (ex) { 
-                            hush.util.showEx(ex)
-                        }
-                    })                    
+                    })            
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }                
@@ -283,7 +176,7 @@
 			<div id="gridMain">
 				<div class="item">
 					<img class="coImg32" src="/img/hushsbay.png"/>
-                    <div style="font-size: 16px; font-weight: bold">Hushsbay</div>
+                    <div style="font-size: 18px; font-weight: bold">Hushsbay</div>
 				</div>
 				<div class="item">
 					<input id="in_id" placeholder="아이디" spellcheck=false autocomplete=off style="width: 100%"/>
@@ -298,46 +191,8 @@
 					<input id="chk_save" type=checkbox style="margin-left: 5px"/><label id="lbl_save" for="chk_save" style="cursor: pointer">비번저장</label>
 				</div>
 				<div class="item">
-					<a href="">간편가입</a>
+					<a id="btn_join" href="">간편가입</a>
 				</div>
-				<!-- <div class="item">7</div>
-				<div class="item">8</div> -->
-				<!-- <div id="lbl_id" class="cellLabel">아이디</div>
-				<div id="fld_id" class="cellField">
-					<input id="in_id" spellcheck=false autocomplete=off style="width: 140px"/>
-				</div>
-				<div id="lbl_nm" class="cellLabel">이름</div>
-				<div id="fld_nm" class="cellField">
-					<input id="in_nm" spellcheck=false autocomplete=off style="width: 200px"/>
-				</div>
-				<div id="lbl_alias" class="cellLabel">별칭(Alias)</div>
-				<div id="fld_alias" class="cellField">
-					<input id="in_alias" spellcheck=false autocomplete=off style="width: 200px"/>
-				</div>
-				<div id="lbl_pwd" class="cellLabel">비번</div>
-				<div id="fld_pwd" class="cellField">
-					<input id="in_pwd" type=password spellcheck=false autocomplete=off style="width: 140px"/>
-					<input id="chk_pwd" type=checkbox style="margin-left: 5px"/><label id="lbl_pwd" for="chk_pwd" style="cursor: pointer">비번변경</label>
-				</div>
-				<div id="lbl_pwd_1" class="cellLabel">새비번</div>
-				<div id="fld_pwd_1" class="cellField">
-					<input id="in_pwd_1" type=password spellcheck=false autocomplete=off style="width: 140px"/>
-				</div>
-				<div id="lbl_pwd_2" class="cellLabel">새비번(확인)</div>
-				<div id="fld_pwd_2" class="cellField">
-					<input id="in_pwd_2" type=password spellcheck=false autocomplete=off style="width: 140px"/>
-				</div>
-				<div id="lbl_org" class="cellLabel">소속<button id="btn_orgtree">선택</button></div>
-				<div id="fld_org" class="cellField">
-					<div id="txt_toporgcd" style="display: none"></div>
-					<div id="txt_orgcd" style="display: none"></div>						
-					<div id="txt_toporgnm" style="margin: 0 5px"></div>
-					<div id="txt_orgnm" style="margin: 0 5px"></div>						
-				</div>
-				<div id="lbl_img" class="cellLabel">사진<button id="pict_browse">선택</button></div>
-				<div id="fld_img" class="cellField">						
-					<img id="img_pict" class="pict" /> <button id="pict_clear">Clear</button></div>
-				</div> -->
 			</div>
         </div>
     </body>
