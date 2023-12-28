@@ -78,6 +78,7 @@
 							const row = rs.list[0]
 							hush.auth.setCookieForUser(row, _chkSave)
 							debugger
+							alert(hush.http.getCookie("usernm"))
 						} catch (ex) {
 							hush.util.showEx(ex)
 						}
