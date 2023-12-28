@@ -6,7 +6,7 @@ const router = express.Router()
 
 const title = 'login'
 
-router.post('/', upload.any(), async function(req, res) {
+router.post('/', async function(req, res) {
 	let conn, sql, data, len
 	const rs = ws.http.resInit()
 	try {
