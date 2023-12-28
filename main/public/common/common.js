@@ -34,7 +34,7 @@
         auth : {
             setCookieForUser : (rs, persist) => {
                 hush.http.setCookie("autologin", persist, true) //auto login or not (Y/N)
-                //hush.http.setCookie("token", rs.token, persist) //jwt(JsonWebToken)
+                //hush.http.setCookie("token", rs.token, persist) //jwt
                 hush.http.setCookie("userid", rs.USER_ID, persist)
                 //hush.http.setCookie("userkey", (fromWebView ? hush.cons.m_key : hush.cons.w_key) + rs.userid, persist)
                 //hush.http.setCookie("passkey", rs.passkey, persist) //See login.js
@@ -48,12 +48,13 @@
                 hush.http.deleteCookie('autologin')
                 hush.http.deleteCookie('token')
                 hush.http.deleteCookie('userid')
-                hush.http.deleteCookie('userkey')
-                hush.http.deleteCookie('passkey')
+                //hush.http.deleteCookie('userkey')
+                //hush.http.deleteCookie('passkey')
                 hush.http.deleteCookie('usernm')
                 hush.http.deleteCookie('orgcd')
-                hush.http.deleteCookie('role')
-                hush.http.deleteCookie('logined')
+                hush.http.deleteCookie('toporgcd')
+                //hush.http.deleteCookie('role')
+                //hush.http.deleteCookie('logined')
             },
             setUser : () => {                
                 const _id = "oldclock" //hush.http.getCookie("userid")

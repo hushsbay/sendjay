@@ -73,12 +73,9 @@
 								hush.msg.showMsg(rs.msg)
 								return
 							}
-							const _len = rs.list.length
-							if (_len == 0) return
+							if (rs.list.length == 0) return
 							const row = rs.list[0]
 							hush.auth.setCookieForUser(row, _chkSave)
-							debugger  
-							alert(hush.http.getCookie("usernm"))
 						} catch (ex) {
 							hush.util.showEx(ex)
 						}
