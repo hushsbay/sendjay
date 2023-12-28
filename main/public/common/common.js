@@ -32,15 +32,17 @@
             warn_char_not_allowed : "한글이나 특수문자 일부(# $ - _ % & + =)는 사용할 수 없습니다."
         },
         auth : {
-            setCookieForUser : (rs, _autoLogin, fromWebView) => { //called from web or mobile webview
-                const persist = (_autoLogin == "Y") ? true : false
-                hush.http.setCookie("autologin", _autoLogin, persist) //auto login or not (Y/N)
+            setCookieForUser : (rs, _autoLogin) => {
+                debugger
+                const persist = (_autoLogin) ? true : false
+                hush.http.setCookie("autologin", _autoLogin, true) //auto login or not (Y/N)
                 //hush.http.setCookie("token", rs.token, persist) //jwt(JsonWebToken)
-                hush.http.setCookie("userid", rs.userid, persist)
+                hush.http.setCookie("userid", rs.USER_ID, true)
                 //hush.http.setCookie("userkey", (fromWebView ? hush.cons.m_key : hush.cons.w_key) + rs.userid, persist)
                 //hush.http.setCookie("passkey", rs.passkey, persist) //See login.js
-                hush.http.setCookie("usernm", rs.usernm, persist)
-                hush.http.setCookie("orgcd", rs.orgcd, persist)
+                hush.http.setCookie("usernm", rs.USER_NM, persist)
+                hush.http.setCookie("orgcd", rs.ORG_CD, persist)
+                hush.http.setCookie("orgcd", rs.TOP_ORG_CD, persist)
                 //hush.http.setCookie("role", rs.role, persist)
                 //hush.http.setCookie("logined", "Y", false) //항상 세션쿠키 (자동이든 수동이든 인증되면 Y) : 화면에 로그인/로그아웃 등의 단순표시를 위해서만 사용하기
             },

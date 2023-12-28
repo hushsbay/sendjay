@@ -24,7 +24,8 @@ router.post('/', async function(req, res) {
 			ws.http.resWarn(res, '비번이 다릅니다.')
 			return
 		}
-		rs.list = data
+		data[0].PWD = ''
+		rs.list = data		
 		res.json(rs)
 	} catch (ex) {
 		ws.http.resException(res, ex, title)
