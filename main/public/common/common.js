@@ -32,6 +32,29 @@
             warn_char_not_allowed : "한글이나 특수문자 일부(# $ - _ % & + =)는 사용할 수 없습니다."
         },
         auth : {
+            setCookieForUser : (rs, _autoLogin, fromWebView) => { //called from web or mobile webview
+                const persist = (_autoLogin == "Y") ? true : false
+                hush.http.setCookie("autologin", _autoLogin, persist) //auto login or not (Y/N)
+                //hush.http.setCookie("token", rs.token, persist) //jwt(JsonWebToken)
+                hush.http.setCookie("userid", rs.userid, persist)
+                //hush.http.setCookie("userkey", (fromWebView ? hush.cons.m_key : hush.cons.w_key) + rs.userid, persist)
+                //hush.http.setCookie("passkey", rs.passkey, persist) //See login.js
+                hush.http.setCookie("usernm", rs.usernm, persist)
+                hush.http.setCookie("orgcd", rs.orgcd, persist)
+                //hush.http.setCookie("role", rs.role, persist)
+                //hush.http.setCookie("logined", "Y", false) //항상 세션쿠키 (자동이든 수동이든 인증되면 Y) : 화면에 로그인/로그아웃 등의 단순표시를 위해서만 사용하기
+            },
+            deleteCookieForUser : () => {
+                hush.http.deleteCookie('autologin')
+                hush.http.deleteCookie('token')
+                hush.http.deleteCookie('userid')
+                hush.http.deleteCookie('userkey')
+                hush.http.deleteCookie('passkey')
+                hush.http.deleteCookie('usernm')
+                hush.http.deleteCookie('orgcd')
+                hush.http.deleteCookie('role')
+                hush.http.deleteCookie('logined')
+            },
             setUser : () => {                
                 const _id = "oldclock" //hush.http.getCookie("userid")
                 const _nm = "이상순" //hush.http.getCookie("usernm")

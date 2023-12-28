@@ -55,85 +55,33 @@
                 try {
                     await $.getScript("/common/common.js")
 					$("#in_id").focus()
-					navigator.virtualKeyboard.show();
-
-					$("#btn_save").click(async function() {
+					navigator.virtualKeyboard.show() //Calling show is only supported if user has interacted with the page
+					$("#in_id,#in_pwd").focus(function() {
+						const _self = $(this)
+						_self.select()
+					})
+					$("#btn_login").click(async function() {
 						try {
-							const _chkPwd = $("#chk_pwd").prop("checked")
 							const _id = $("#in_id").val().trim()
-							const _nm = $("#in_nm").val().trim()
-							const _alias = $("#in_alias").val().trim()
 							const _pwd = $("#in_pwd").val().trim()
-							const _pwd_1 = (g_mode == "C" || _chkPwd) ? $("#in_pwd_1").val().trim() : ""
-							const _pwd_2 = (g_mode == "C" || _chkPwd) ? $("#in_pwd_2").val().trim() : ""
-							const _toporgcd = $("#txt_toporgcd").html()
-							const _toporgnm = $("#txt_toporgnm").html()
-							const _orgcd = $("#txt_orgcd").html()
-							const _orgnm = $("#txt_orgnm").html()
-							if (g_mode == "C" || _chkPwd) { //신규모드 또는 수정모드중 비번 변경시
-								if (!hush.util.chkFieldVal(_pwd_1, "새비번", 4, 20, true)) return	
-								if (_pwd_1 != _pwd_2) {
-									hush.msg.msg("비번과 비번(확인용)이 다릅니다.")
-									return
-								}
+							const _chkSave = $("#chk_save").prop("checked")
+							if (!hush.util.chkFieldVal(_id, "아이디", 1)) return
+							if (!hush.util.chkFieldVal(_pwd, "비번", 1)) return
+							const rs = await hush.http.ajax("/auth/login", { id : _id, pwd : _pwd })
+							if (rs.code != hush.cons.CODE_OK) {
+								hush.msg.showMsg(rs.msg)
+								return
 							}
-							if (g_mode == "U") {
-								if (!hush.util.chkFieldVal(_pwd, "비번", 4, MAX_LEN_PWD, true)) return	
-							}
-							if (!hush.util.chkFieldVal(_id, "아이디", 4, MAX_LEN_ID, true)) return
-							if (!hush.util.chkFieldVal(_nm, "이름", 2, MAX_LEN_NM)) return
-							if (!hush.util.chkFieldVal(_alias, "별칭(Alias)", 0, MAX_LEN_ALIAS)) return
-							if (!hush.util.chkFieldVal(_orgcd, "회사/부서", 1)) return
-							const fd = new FormData()
-							fd.append("type", g_mode)
-							fd.append("id", _id)
-							fd.append("nm", _nm)
-							fd.append("alias", _alias)
-							fd.append("pwd", _pwd)
-							fd.append("pwd_1", _pwd_1) //서버에는 pwd_2 필요없음
-							fd.append("toporgcd", _toporgcd)
-							fd.append("toporgnm", _toporgnm)
-							fd.append("orgcd", _orgcd)
-							fd.append("orgnm", _orgnm)
-							const url = $("#img_pict").attr("src")
-							if (url) {
-								const blob = await hush.blob.get(url)
-								const mimetype = $("#img_pict").attr("mimetype")
-								fd.append("file", blob)
-								fd.append("mimetype", mimetype)
-							} else {
-								fd.append("file", "")
-								fd.append("mimetype", "")
-							}
-							hush.http.ajaxFormData("/user/setuser", fd, (rs) => {
-								if (rs.code != hush.cons.CODE_OK) {
-									hush.msg.showMsg(rs.msg)
-								} else {
-									g_id = _id
-									hush.msg.toast(hush.cons.MSG_OK)
-									if (opener && opener.refreshForRow) opener.refreshForRow(g_id, g_mode)
-									window.close() //닫지 않으면 주소창의 주소를 userid가 포함되게 새로 불러야 하는 부분을 고려해야 함
-								}
-							})
+							const _len = rs.list.length
+							if (_len == 0) return
+							debugger
 						} catch (ex) {
 							hush.util.showEx(ex)
 						}
                     })
-					$("#in_id,#in_nm,#in_alias,#in_pwd").keyup(function() {
-						chkLen.call(this)
-					})
-					$("#in_pwd,#in_pwd_1,#in_pwd_2").focus(function() {
-						const _self = $(this)
-						_self.select()
-					})
-					$("#chk_pwd").change(function() {
-						const _self = $(this)
-						dispPwd(_self.prop("checked"))
-					})
-					$("#btn_orgtree").on("click", function() {
-                        const obj = { from : this.id, nodeToGet : "D", expandTo : 99, singleSelect : "Y", selectOnlyChildDept : "Y" }
-                        hush.util.openWinPop("/app/org/orgtree.html?" + $.param(obj))
-                    })            
+					$("#btn_join").click(async function() {
+						hush.util.openWinPop("/app/user/userlist.html", 550, 700)
+                    })
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }                
