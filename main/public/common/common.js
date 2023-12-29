@@ -31,7 +31,7 @@
             warn_no_opener : "opener가 존재하지 않습니다.",
             warn_char_not_allowed : "한글이나 특수문자 일부(# $ - _ % & + =)는 사용할 수 없습니다."
         },
-        auth : {
+        auth : {    
             setCookieForUser : (rs, _persist) => {
                 const persist = (_persist == "Y") ? true : false
                 hush.http.setCookie("autologin", _persist, true) //auto login or not (Y/N)
