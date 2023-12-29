@@ -32,8 +32,9 @@
             warn_char_not_allowed : "한글이나 특수문자 일부(# $ - _ % & + =)는 사용할 수 없습니다."
         },
         auth : {
-            setCookieForUser : (rs, persist) => {
-                hush.http.setCookie("autologin", persist, true) //auto login or not (Y/N)
+            setCookieForUser : (rs, _persist) => {
+                const persist = (_persist == "Y") ? true : false
+                hush.http.setCookie("autologin", _persist, true) //auto login or not (Y/N)
                 hush.http.setCookie("token", rs.token, persist) //jwt
                 hush.http.setCookie("userid", rs.USER_ID, persist)
                 //hush.http.setCookie("userkey", (fromWebView ? hush.cons.m_key : hush.cons.w_key) + rs.userid, persist)

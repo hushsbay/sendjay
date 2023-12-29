@@ -55,8 +55,7 @@
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
-					debugger
-					const _chkSave = hush.http.getCookie("autologin")
+					const _chkSave = (hush.http.getCookie("autologin") == "Y") ? true : false
 					$("#chk_save").prop("checked", _chkSave)
 					$("#in_id").focus() //navigator.virtualKeyboard.show() //Calling show is only supported if user has interacted with the page
 					$("#in_id,#in_pwd").focus(function() {
@@ -67,7 +66,6 @@
 						try {
 							const _id = $("#in_id").val().trim()
 							const _pwd = $("#in_pwd").val().trim()
-							const _chkSave = $("#chk_save").prop("checked")
 							if (!hush.util.chkFieldVal(_id, "아이디", 1)) return
 							if (!hush.util.chkFieldVal(_pwd, "비번", 1)) return
 							const rs = await hush.http.ajax("/auth/login", { id : _id, pwd : _pwd })
@@ -75,6 +73,7 @@
 								hush.msg.showMsg(rs.msg)
 								return
 							} //rs.list 없음
+							const _chkSave = $("#chk_save").prop("checked") ? "Y" : ""
 							hush.auth.setCookieForUser(rs, _chkSave)
 						} catch (ex) {
 							hush.util.showEx(ex)
