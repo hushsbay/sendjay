@@ -55,8 +55,10 @@
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
-					$("#in_id").focus()
-					navigator.virtualKeyboard.show() //Calling show is only supported if user has interacted with the page
+					debugger
+					const _chkSave = hush.http.getCookie("autologin")
+					$("#chk_save").prop("checked", _chkSave)
+					$("#in_id").focus() //navigator.virtualKeyboard.show() //Calling show is only supported if user has interacted with the page
 					$("#in_id,#in_pwd").focus(function() {
 						const _self = $(this)
 						_self.select()
