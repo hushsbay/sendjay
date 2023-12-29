@@ -97,6 +97,7 @@ module.exports = (function() {
 								//return
 							} //아래부터는 위변조도 체크하는 것이 됨
 							const decodedStr = JSON.stringify(decoded)
+							console.log(decodedStr, "====", _payloadStr)
 							if (decodedStr != _payloadStr) {
 								rs.code = ws.cons.CODE_TOKEN_MISMATCH
 								rs.msg = 'Token mismatch.'
