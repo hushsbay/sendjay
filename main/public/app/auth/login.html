@@ -75,6 +75,7 @@
 							} //rs.list 없음
 							const _chkSave = $("#chk_save").prop("checked") ? "Y" : ""
 							hush.auth.setCookieForUser(rs, _chkSave)
+							debugger
 						} catch (ex) {
 							hush.util.showEx(ex)
 						}
