@@ -72,10 +72,8 @@
 							if (rs.code != hush.cons.CODE_OK) {
 								hush.msg.showMsg(rs.msg)
 								return
-							}
-							if (rs.list.length == 0) return
-							const row = rs.list[0]
-							hush.auth.setCookieForUser(row, _chkSave)
+							} //rs.list 없음
+							hush.auth.setCookieForUser(rs, _chkSave)
 						} catch (ex) {
 							hush.util.showEx(ex)
 						}

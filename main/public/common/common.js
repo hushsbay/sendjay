@@ -34,7 +34,7 @@
         auth : {
             setCookieForUser : (rs, persist) => {
                 hush.http.setCookie("autologin", persist, true) //auto login or not (Y/N)
-                //hush.http.setCookie("token", rs.token, persist) //jwt
+                hush.http.setCookie("token", rs.token, persist) //jwt
                 hush.http.setCookie("userid", rs.USER_ID, persist)
                 //hush.http.setCookie("userkey", (fromWebView ? hush.cons.m_key : hush.cons.w_key) + rs.userid, persist)
                 //hush.http.setCookie("passkey", rs.passkey, persist) //See login.js
