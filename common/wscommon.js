@@ -66,6 +66,7 @@ module.exports = (function() {
 					try {
 						const token = tokenInfo.token
 						const userid = tokenInfo.userid
+						console.log(token, "@@@@", userid)
 						//const orgcd = userInfo.orgcd
 						//const toporgcd = userInfo.toporgcd
 						const key = _key || global.nodeConfig.jwt.key					
