@@ -42,11 +42,6 @@
                 display: flex; justify-content: center; align-items: center;
 				border-radius: 4px; background-color: #0082AD; color: white;
 			}
-
-			@media screen and (max-device-width: 500px) { /* 모바일일 경우 키보드 올라오는 경우 대비해 상단 배치 */
-				.login { padding-top: 50px; display: flex; flex-direction: column; justify-content: flex-start; }	
-			}
-			@media screen and (min-device-width: 501px) { }			
 		</style>	
         <script src="/plugin/jquery-3.4.1.min.js"></script>
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
@@ -92,7 +87,7 @@
         </script>
     </head>
     <body> 
-        <div class="container login">
+        <div class="container coLogin">
 			<div id="gridMain">
 				<div class="item">
 					<img class="coImg32" src="/img/hushsbay.png"/>

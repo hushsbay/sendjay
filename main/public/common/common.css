@@ -74,6 +74,7 @@ button {
 }
 
 @media screen and (max-device-width: 500px) { 
+    .coLogin { padding-top: 50px; display: flex; flex-direction: column; justify-content: flex-start; } /* login.html : 모바일일 경우 키보드 올라오는 경우 대비해 상단 배치 */
     .coMenuBtn>img { display: none } /* 모바일중에 가로가 작은 것은 이미지 제외하고 표시 (>의 앞뒤는 붙여야 함을 유의) */    
 }
 @media screen and (min-device-width: 501px) { }
