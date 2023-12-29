@@ -8,7 +8,7 @@ const express = require('express')
 const requestIp = require('request-ip')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
-//const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 //const os = require('os-utils')
 
 module.exports = (function() {
@@ -21,15 +21,15 @@ module.exports = (function() {
 			 MSG_ALREADY_EXISTS : '이미 존재하는 데이터입니다.',
 			 CODE_NO_DATA : '-100',
 			 MSG_NO_DATA : '데이터가 없습니다.',
-			 CODE_PASSWORD_NEEDED : '-76',
-			 CODE_PASSKEY_NEEDED : '-77',
-			 CODE_PASSWORD_NOT_MATCHED : '-78',
-			 CODE_PASSKEY_NOT_MATCHED : '-79',
+			 //CODE_PASSWORD_NEEDED : '-76',
+			 //CODE_PASSKEY_NEEDED : '-77',
+			 //CODE_PASSWORD_NOT_MATCHED : '-78',
+			 //CODE_PASSKEY_NOT_MATCHED : '-79',
 			 CODE_TOKEN_NEEDED : '-81', //jwt 
 			 CODE_TOKEN_MISMATCH : '-82', //jwt payload not equal to decoded
-			 CODE_USERID_MISMATCH : '-83',
+			 CODE_USERINFO_MISMATCH : '-83',
 			 CODE_TOKEN_EXPIRED : '-84',
-			 CODE_USE_YOUR_OWN_USERID : '-85',
+			 //CODE_USE_YOUR_OWN_USERID : '-85',
 			 mysql_close_error : 'mysql_close_error',
 			 toast_prefix : '##$$', //클라이언트와 동일
 		},
@@ -52,6 +52,126 @@ module.exports = (function() {
 				ws.util.loge(ex, title)
 				ws.http.resJson(res, ws.cons.CODE_ERR, ex, title)
 			},
+		},
+
+		jwt : {
+			//payload내 userid말고도 부서 등 기본적인 사용자정보(쿠키값)가 들어가도록 해서 아래 verify에서도 체크하도록 하여 위변조안되게 함
+			//userInfo = { userid, orgcd, toporgcd }
+			make : (userInfo, _key) => {
+				const key = _key || global.nodeConfig.jwt.key
+				return jwt.sign(userInfo, key, { algorithm : global.nodeConfig.jwt.algo, expiresIn : global.nodeConfig.jwt.expiry })
+			},
+			verify : (token, userInfo, _key) => {
+				return new Promise((resolve, reject) => {
+					try {
+						const userid = userInfo.userid
+						const orgcd = userInfo.orgcd
+						const toporgcd = userInfo.toporgcd
+						const key = _key || global.nodeConfig.jwt.key					
+						let rs = ws.http.resInit()
+						if (!token) {
+							rs.code = ws.cons.CODE_TOKEN_NEEDED
+							rs.msg = '인증(토큰)이 필요합니다.'
+							resolve(rs)
+							//return
+						}
+						if (!userid || !orgcd || !toporgcd) {
+							rs.code = ws.cons.CODE_USERINFO_MISMATCH
+							rs.msg = '토큰과 비교할 사용자정보에 문제가 있습니다 : ' + JSON.stringify(userInfo)
+							resolve(rs)
+							//return
+						}
+						const _arr = token.split('.')
+						const _payloadStr = Buffer.from(_arr[1], 'base64').toString('utf-8')
+						jwt.verify(token, key, function(err, decoded) { 
+							if (err) {
+								if (err.message.includes('jwt expired')) {
+									rs.code = ws.cons.CODE_TOKEN_EXPIRED
+									rs.msg = 'Token expired.'
+								} else {
+									rs.code = ws.cons.CODE_ERR
+									rs.msg = err.message
+								}
+								resolve(rs)
+								//return
+							} //아래부터는 위변조도 체크하는 것이 됨
+							const decodedStr = JSON.stringify(decoded)
+							if (decodedStr != _payloadStr) {
+								rs.code = ws.cons.CODE_TOKEN_MISMATCH
+								rs.msg = 'Token mismatch.'
+								resolve(rs)
+								//return
+							}
+							if (decoded.userid != userid || decoded.orgcd != orgcd || decoded.toporgcd != toporgcd) {
+								rs.code = ws.cons.CODE_USERINFO_MISMATCH
+								rs.msg = 'Userinfo not matched with token.'
+								resolve(rs)
+								//return
+							}
+							rs.token = decoded //com.verifyToken()에서처럼 token을 받아서 비교하는 데 사용하기 위한 목적임
+							resolve(rs)
+						})
+					} catch (ex) {
+						reject(ex)
+					}
+				})
+			}
+			// make : (payload, _key) => {
+			// 	const key = _key || global.nodeConfig.jwt.key
+			// 	return jwt.sign(payload, key, { algorithm : global.nodeConfig.jwt.algo, expiresIn : global.nodeConfig.jwt.expiry })
+			// },
+			// verify : (token, userid, _key) => {
+			// 	return new Promise((resolve, reject) => {
+			// 		try {
+			// 			const key = _key || global.nodeConfig.jwt.key					
+			// 			let rs = ws.http.resInit()
+			// 			if (!token) {
+			// 				rs.code = ws.cons.CODE_TOKEN_NEEDED
+			// 				rs.msg = '인증(토큰)이 필요합니다.'
+			// 				resolve(rs)
+			// 				//return
+			// 			}
+			// 			if (!userid) {
+			// 				rs.code = ws.cons.CODE_USERID_MISMATCH
+			// 				rs.msg = '토큰과 비교할 사용자아이디가 필요합니다.'
+			// 				resolve(rs)
+			// 				//return
+			// 			}
+			// 			const _arr = token.split('.')
+			// 			const _payloadStr = Buffer.from(_arr[1], 'base64').toString('utf-8')
+			// 			jwt.verify(token, key, function(err, decoded) { 
+			// 				if (err) {
+			// 					if (err.message.includes('jwt expired')) {
+			// 						rs.code = ws.cons.CODE_TOKEN_EXPIRED
+			// 						rs.msg = 'Token expired.'
+			// 					} else {
+			// 						rs.code = ws.cons.CODE_ERR
+			// 						rs.msg = err.message
+			// 					}
+			// 					resolve(rs)
+			// 					//return
+			// 				}
+			// 				const decodedStr = JSON.stringify(decoded)
+			// 				if (decodedStr != _payloadStr) {
+			// 					rs.code = ws.cons.CODE_TOKEN_MISMATCH
+			// 					rs.msg = 'Token mismatch.'
+			// 					resolve(rs)
+			// 					//return
+			// 				}
+			// 				if (decoded.userid != userid) {
+			// 					rs.code = ws.cons.CODE_USERID_MISMATCH
+			// 					rs.msg = 'Userid not matched with token.'
+			// 					resolve(rs)
+			// 					//return
+			// 				}
+			// 				rs.token = decoded //com.verifyToken()에서처럼 token을 받아서 비교하는 데 사용하기 위한 목적임
+			// 				resolve(rs)
+			// 			})
+			// 		} catch (ex) {
+			// 			reject(ex)
+			// 		}
+			// 	})
+			// }
 		},
 
 		util : {

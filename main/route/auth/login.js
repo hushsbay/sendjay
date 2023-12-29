@@ -24,6 +24,8 @@ router.post('/', async function(req, res) {
 			ws.http.resWarn(res, '비번이 다릅니다.')
 			return
 		}
+		const userInfo = { userid : data[0].USER_ID, orgcd : data[0].ORG_CD, toporgcd : data[0].TOP_ORG_CD }
+		rs.token = ws.jwt.make(userInfo) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
 		data[0].PWD = ''
 		rs.list = data		
 		res.json(rs)
