@@ -15,7 +15,7 @@ app.use('/user/userlist', require('./route/user/userlist')) //의도적으로 �
 app.use('/user/getuser', require('./route/user/getuser')) //의도적으로 인증체크하지 않음
 app.use('/user/setuser', require('./route/user/setuser')) //의도적으로 인증체크하지 않음
 
-app.use('/auth/login', require('./route/auth/login')) 
+app.use('/auth/login', require('./route/auth/login'))
 
 app.use('/org/orgtree', require('./route/org/orgtree')) 
 app.use('/org/empsearch', require('./route/org/empsearch')) 

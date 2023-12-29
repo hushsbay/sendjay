@@ -12,6 +12,11 @@ router.post('/', async function(req, res) {
 	try {
 		const keyword = req.body.keyword
 		const sort = req.body.sort
+		const jwtRet = await ws.jwt.verify(req.body.tokenInfo)
+		if (jwtRet.code != ws.cons.CODE_OK) {
+			ws.http.resWarn(res, jwtRet.msg, false, jwtRet.code, title)
+			return
+		}
 		conn = await wsmysql.getConnFromPool(global.pool)
 		sql =  "SELECT ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, USER_ID, USER_NM, NICK_NM, JOB, TEL_NO, AB_CD, AB_NM "
 		sql += "  FROM JAY.Z_USER_TBL "

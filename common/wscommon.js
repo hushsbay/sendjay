@@ -61,12 +61,13 @@ module.exports = (function() {
 				const key = _key || global.nodeConfig.jwt.key
 				return jwt.sign(userInfo, key, { algorithm : global.nodeConfig.jwt.algo, expiresIn : global.nodeConfig.jwt.expiry })
 			},
-			verify : (token, userInfo, _key) => {
+			verify : (tokenInfo, _key) => {
 				return new Promise((resolve, reject) => {
 					try {
-						const userid = userInfo.userid
-						const orgcd = userInfo.orgcd
-						const toporgcd = userInfo.toporgcd
+						const token = tokenInfo.token
+						const userid = tokenInfo.userid
+						//const orgcd = userInfo.orgcd
+						//const toporgcd = userInfo.toporgcd
 						const key = _key || global.nodeConfig.jwt.key					
 						let rs = ws.http.resInit()
 						if (!token) {
@@ -75,7 +76,7 @@ module.exports = (function() {
 							resolve(rs)
 							//return
 						}
-						if (!userid || !orgcd || !toporgcd) {
+						if (!userid) { //|| !orgcd || !toporgcd) {
 							rs.code = ws.cons.CODE_USERINFO_MISMATCH
 							rs.msg = '토큰과 비교할 사용자정보에 문제가 있습니다 : ' + JSON.stringify(userInfo)
 							resolve(rs)
@@ -102,7 +103,7 @@ module.exports = (function() {
 								resolve(rs)
 								//return
 							}
-							if (decoded.userid != userid || decoded.orgcd != orgcd || decoded.toporgcd != toporgcd) {
+							if (decoded.userid != userid) { //|| decoded.orgcd != orgcd || decoded.toporgcd != toporgcd) {
 								rs.code = ws.cons.CODE_USERINFO_MISMATCH
 								rs.msg = 'Userinfo not matched with token.'
 								resolve(rs)
