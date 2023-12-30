@@ -17,7 +17,7 @@
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
 		<script src="/plugin/jquery.cookie.js"></script>
         <script>
-			let g_user, g_rs, g_list, g_listSel
+			let g_rs, g_list, g_listSel
 			let g_from, g_nodeToGet, g_comp, g_expandTo, g_expandAllDept, g_singleSelect, g_selectOnlyChildDept, g_getImage
 			let g_nodeIndent = 24, g_max_level = 4 //조직도에서 펼칠 수 있는 최대 레벨(depth) - 각 조직에 따라 변경 가능
 
@@ -85,8 +85,8 @@
             	//$wise.onceJwtCall(g_payload, false, async function(token) {  
                     try {
                     	g_list.empty()
-						const _comp = $("#chk_mycomp").prop("checked") ? g_user.toporgcd : g_comp
-                        const rs = await hush.http.ajax("/org/empsearch", { keyword : _keyword, teamcode : _teamcode, comp : _comp }) //{ token : token, user : g_user }
+						const _comp = $("#chk_mycomp").prop("checked") ? hush.user.toporgcd : g_comp
+                        const rs = await hush.http.ajax("/org/empsearch", { keyword : _keyword, teamcode : _teamcode, comp : _comp })
 						if (rs.code != hush.cons.CODE_OK) {
                         	hush.msg.showMsg(rs.msg)
                             return
@@ -139,8 +139,8 @@
             	//$wise.onceJwtCall(g_payload, false, async function(token) {  
                     try {
                     	g_list.empty()
-						const _comp = $("#chk_mycomp").prop("checked") ? g_user.toporgcd : g_comp
-                        const rs = await hush.http.ajax("/org/deptsearch", { keyword : _keyword, comp : _comp }) //{ token : token, user : g_user }
+						const _comp = $("#chk_mycomp").prop("checked") ? hush.user.toporgcd : g_comp
+                        const rs = await hush.http.ajax("/org/deptsearch", { keyword : _keyword, comp : _comp })
 						if (rs.code != hush.cons.CODE_OK) {
                         	hush.msg.showMsg(rs.msg)
                             return
@@ -181,10 +181,10 @@
             const getOrgTree = async () => {
 				//$wise.onceJwtCall(g_payload, false, async function(token) {
 					try {
-						const _comp = $("#chk_mycomp").prop("checked") ? g_user.toporgcd : g_comp
+						const _comp = $("#chk_mycomp").prop("checked") ? hush.user.toporgcd : g_comp
 						$("#spn_depth").html(g_expandTo)			
 						g_list.empty()
-                        const rs = await hush.http.ajax("/org/orgtree", { nodeToGet : g_nodeToGet, comp : _comp }) //{ token : token, user : g_user }
+                        const rs = await hush.http.ajax("/org/orgtree", { nodeToGet : g_nodeToGet, comp : _comp })
                         if (rs.code != hush.cons.CODE_OK) {
                         	hush.msg.showMsg(rs.msg)
                             return
@@ -367,11 +367,11 @@
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
-					g_user = hush.auth.setUser()
-					if (!g_user.token) {
-						const _target = location.pathname + location.search
-						hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
-					}
+					hush.auth.setUser()
+					// if (!g_user.token) {
+					// 	const _target = location.pathname + location.search
+					// 	hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
+					// }
 					g_list = $("#listMain")
 					g_listSel = $("#listSel")
 					//from = 호출자 식별을 위한 참고용
@@ -423,7 +423,7 @@
 	            	})
 					$("#btn_team").click(function() {
 	            		$("#in_search").val("")
-						getUserData(null, g_user.orgcd)
+						getUserData(null, hush.user.orgcd)
                     })					
                     $("#btn_orgtree").click(function() {
 						$("#in_search").val("")
@@ -489,7 +489,7 @@
 					})
 					if (g_nodeToGet == "U" || g_nodeToGet == "D") {
 						if (g_comp) {
-							if (g_comp == g_user.toporgcd) $("#chk_mycomp").prop("checked", true)
+							if (g_comp == hush.user.toporgcd) $("#chk_mycomp").prop("checked", true)
 							$("#chk_mycomp").prop("disabled", true)
 						} else {
 							$("#chk_mycomp").prop("disabled", false)

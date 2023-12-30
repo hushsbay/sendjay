@@ -31,10 +31,11 @@
             warn_no_opener : "opener가 존재하지 않습니다.",
             warn_char_not_allowed : "한글이나 특수문자 일부(# $ - _ % & + =)는 사용할 수 없습니다."
         },
+        user : null,
         auth : {         
             setCookieForUser : (rs, _persist) => { //_persist = Y or else
                 const persist = (_persist == "Y") ? true : false
-                hush.http.setCookie("autologin", _persist, true) //auto login or not (Y/N)
+                //hush.http.setCookie("autologin", _persist, true) //auto login or not (Y/N)
                 hush.http.setCookie("token", rs.token, persist) //jwt
                 hush.http.setCookie("userid", rs.USER_ID, persist)
                 //hush.http.setCookie("userkey", (fromWebView ? hush.cons.m_key : hush.cons.w_key) + rs.userid, persist)
@@ -46,7 +47,7 @@
                 //hush.http.setCookie("logined", "Y", false) //항상 세션쿠키 (자동이든 수동이든 인증되면 Y) : 화면에 로그인/로그아웃 등의 단순표시를 위해서만 사용하기
             },
             deleteCookieForUser : () => {
-                hush.http.deleteCookie('autologin')
+                //hush.http.deleteCookie('autologin')
                 hush.http.deleteCookie('token')
                 hush.http.deleteCookie('userid')
                 //hush.http.deleteCookie('userkey')
@@ -57,19 +58,23 @@
                 //hush.http.deleteCookie('role')
                 //hush.http.deleteCookie('logined')
             },
-            setUser : () => {
-                const _autologin = hush.http.getCookie("autologin")  
-                const _token = hush.http.getCookie("token")              
+            setUser : () => {                
+                const _token = hush.http.getCookie("token")  
+                if (!_token) {
+                    const _target = location.pathname + location.search
+                    hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
+                }            
                 const _id = hush.http.getCookie("userid")
                 const _nm = hush.http.getCookie("usernm")
                 const _orgcd = hush.http.getCookie("orgcd")
                 const _orgnm = hush.http.getCookie("orgnm")
                 const _toporgcd = hush.http.getCookie("toporgcd")
-                const _toporgnm = hush.http.getCookie("toporgnm")                
+                const _toporgnm = hush.http.getCookie("toporgnm")
+                //const _autologin = hush.http.getCookie("autologin")  
                 //const _key = hush.http.getCookie("userkey") //hushj.cons.w_key + _id //for socket
                 //const _role = hush.http.getCookie("role") //'role' check in browser is just for convenience. Keep in mind that you should check this on server.
                 //return { key : _key, id : _id, nm : _nm, orgcd : _orgcd, token : _token, role : _role }
-                return { autologin : _autologin, token : _token, id : _id, nm : _nm, orgcd : _orgcd, orgnm : _orgnm, toporgcd : _toporgcd, toporgnm : _toporgnm }
+                hush.user = { token : _token, id : _id, nm : _nm, orgcd : _orgcd, orgnm : _orgnm, toporgcd : _toporgcd, toporgnm : _toporgnm }
             }, 
             getUserPhoto : (user_id, tag_id) => {
                 if ($("#" + tag_id).attr("downloaded") == "Y") return
