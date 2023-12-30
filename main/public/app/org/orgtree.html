@@ -368,8 +368,7 @@
                 try {
                     await $.getScript("/common/common.js")
 					g_user = hush.auth.setUser()
-					debugger
-					if (!g_user.token || !g_user.autologin) {
+					if (!g_user.token) {
 						const _target = location.pathname + location.search
 						hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
 					}

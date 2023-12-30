@@ -131,7 +131,6 @@
             ajaxPromise : (url, _data, method) => new Promise((resolve, reject) => { //ajaxPromise()는 hush.http.ajax를 통해서만 사용하기
                 let data = _data
                 Object.assign(data, { tokenInfo : { token : hush.http.getCookie("token"), userid : hush.http.getCookie("userid") }})
-                debugger
                 $.ajax({dataType : "json", //response data type
                     contentType : "application/json; charset=utf-8", //request mime type
                     url : url,
