@@ -85,7 +85,7 @@
 							const _chkAuto = $("#chk_auto").prop("checked") ? "Y" : ""
 							hush.auth.setCookieForUser(rs, _chkAuto)
 							const _target = g_target ? g_target : "/index.html"
-							hush.util.openWinTab(_target)
+							hush.util.openWinTab(_target, true)
 						} catch (ex) {
 							hush.util.showEx(ex)
 						}
