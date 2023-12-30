@@ -369,7 +369,10 @@
                     await $.getScript("/common/common.js")
 					g_user = hush.auth.setUser()
 					debugger
-					if (!g_user.token || !g_user.autologin) hush.util.openWinTab("/auth/login.html?target=" + location.search, true)
+					if (!g_user.token || !g_user.autologin) {
+						const _target = location.pathname + location.search
+						hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
+					}
 					g_list = $("#listMain")
 					g_listSel = $("#listSel")
 					//from = 호출자 식별을 위한 참고용
