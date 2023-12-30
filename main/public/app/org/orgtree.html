@@ -15,6 +15,7 @@
 		</style>
         <script src="/plugin/jquery-3.4.1.min.js"></script>
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
+		<script src="/plugin/jquery.cookie.js"></script>
         <script>
 			let g_user, g_rs, g_list, g_listSel
 			let g_from, g_nodeToGet, g_comp, g_expandTo, g_expandAllDept, g_singleSelect, g_selectOnlyChildDept, g_getImage
@@ -367,6 +368,7 @@
                 try {
                     await $.getScript("/common/common.js")
 					g_user = hush.auth.setUser()
+					if (!g_user.token || !g_user.autologin) hush.util.openWinTab("/auth/login.html?target=" + location.search)
 					g_list = $("#listMain")
 					g_listSel = $("#listSel")
 					//from = 호출자 식별을 위한 참고용

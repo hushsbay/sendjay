@@ -32,7 +32,7 @@
             warn_char_not_allowed : "한글이나 특수문자 일부(# $ - _ % & + =)는 사용할 수 없습니다."
         },
         auth : {         
-            setCookieForUser : (rs, _persist) => {
+            setCookieForUser : (rs, _persist) => { //_persist = Y or else
                 const persist = (_persist == "Y") ? true : false
                 hush.http.setCookie("autologin", _persist, true) //auto login or not (Y/N)
                 hush.http.setCookie("token", rs.token, persist) //jwt
@@ -57,18 +57,19 @@
                 //hush.http.deleteCookie('role')
                 //hush.http.deleteCookie('logined')
             },
-            setUser : () => {                
-                const _id = "oldclock" //hush.http.getCookie("userid")
-                const _nm = "이상순" //hush.http.getCookie("usernm")
-                const _orgcd = "Dept_A11" //hush.http.getCookie("orgcd")
-                const _orgnm = "팀_A11"
-                const _toporgcd = "Company_A"
-                const _toporgnm = "삼성전자"
-                //const _token = hushj.http.getCookie("token")
+            setUser : () => {
+                const _autologin = hush.http.getCookie("autologin")  
+                const _token = hush.http.getCookie("token")              
+                const _id = hush.http.getCookie("userid")
+                const _nm = hush.http.getCookie("usernm")
+                const _orgcd = hush.http.getCookie("orgcd")
+                const _orgnm = hush.http.getCookie("orgnm")
+                const _toporgcd = hush.http.getCookie("toporgcd")
+                const _toporgnm = hush.http.getCookie("toporgnm")                
                 //const _key = hush.http.getCookie("userkey") //hushj.cons.w_key + _id //for socket
                 //const _role = hush.http.getCookie("role") //'role' check in browser is just for convenience. Keep in mind that you should check this on server.
                 //return { key : _key, id : _id, nm : _nm, orgcd : _orgcd, token : _token, role : _role }
-                return { id : _id, nm : _nm, orgcd : _orgcd, orgnm : _orgnm, toporgcd : _toporgcd, toporgnm : _toporgnm }
+                return { autologin : _autologin, token : _token, id : _id, nm : _nm, orgcd : _orgcd, orgnm : _orgnm, toporgcd : _toporgcd, toporgnm : _toporgnm }
             }, 
             getUserPhoto : (user_id, tag_id) => {
                 if ($("#" + tag_id).attr("downloaded") == "Y") return
@@ -337,6 +338,14 @@
                 const min = (!_min && _min != 0) ? 100000 : _min
                 const max = (!_max && _max != 0) ? 999999 : _max
                 return Math.floor(Math.random() * (max - min)) + min //return min(inclusive) ~ max(exclusive) Integer only 
+            },
+            openWinTab : (url, replace) => {
+                const _url = hush.http.handleNoCache(url)
+                if (replace) {
+                    location.replace(_url)
+                } else {
+                    return window.open(_url)
+                }
             },
             openWinPop : (url, width, height, pos) => { //pos : 1) 없으면 중앙 2) 1~9999면 중앙인데 top만 지정 3) 0이면 (0, 0) 4) random은 랜덤
                 let _left, _top

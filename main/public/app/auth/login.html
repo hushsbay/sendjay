@@ -84,12 +84,8 @@
 							} //rs.list 없음
 							const _chkAuto = $("#chk_auto").prop("checked") ? "Y" : ""
 							hush.auth.setCookieForUser(rs, _chkAuto)
-							if (g_target) {
-								g_target = hush.http.handleNoCache(g_target)
-							} else {
-								g_target = hush.http.handleNoCache("/index.html")
-							}
-							location.replace(g_target)
+							const _target = g_target ? g_target : "/index.html"
+							hush.util.openWinTab(_target)
 						} catch (ex) {
 							hush.util.showEx(ex)
 						}
