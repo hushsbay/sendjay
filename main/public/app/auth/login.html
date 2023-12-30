@@ -64,6 +64,8 @@
 					// 	}
 					// 	debugger
 					// }
+					const param = new URLSearchParams(location.search)
+					g_target = param.get("target")
 					$("#in_userid").focus() //navigator.virtualKeyboard.show() //Calling show is only supported if user has interacted with the page
 					$("#in_userid,#in_pwd").focus(function() {
 						const _self = $(this)
@@ -82,7 +84,12 @@
 							} //rs.list 없음
 							const _chkAuto = $("#chk_auto").prop("checked") ? "Y" : ""
 							hush.auth.setCookieForUser(rs, _chkAuto)
-							debugger
+							if (g_target) {
+								g_target = hush.http.handleNoCache(g_target)
+							} else {
+								g_target = hush.http.handleNoCache("/index.html")
+							}
+							location.replace(g_target)
 						} catch (ex) {
 							hush.util.showEx(ex)
 						}
