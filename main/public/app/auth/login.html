@@ -53,7 +53,6 @@
                     await $.getScript("/common/common.js")
 					const param = new URLSearchParams(location.search)
 					g_target = param.get("target")
-					console.log(g_target+"=====")
 					const userid = hush.http.getCookie("userid")
 					if (userid) {
 						$("#in_userid").val(userid)
