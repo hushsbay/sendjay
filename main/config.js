@@ -1,6 +1,6 @@
 module.exports = {
 	http : {
-		method : process.env.HTTP_METHOD, //로드밸랜서 안쪽이면 https or http
+		method : process.env.HTTP_METHOD, //로드밸랜서 안쪽이면 http로 가능
 		port : process.env.HTTP_PORT
 	},
 	mysql : {

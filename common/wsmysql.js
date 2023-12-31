@@ -1,5 +1,6 @@
 const config = require('./config')
 const nodeConfig = require(config.app.nodeConfig)
+const ws = require(config.app.ws)
 const mysql = require('mysql2')
 
 module.exports = (function() {
@@ -7,15 +8,16 @@ module.exports = (function() {
 	let wsmysql = {
 
 		createPool : (_scheme, _verbose) => {
-			//const mysqloption = nodeConfig.mysql[config.app.mysql_dbinst]
-			//const mysqluser = mysqloption[config.app.mysql_user]	
 			if (_verbose) {
                 console.log('mysql pool created', nodeConfig.mysql.host, nodeConfig.mysql.port, nodeConfig.mysql.user, _scheme, nodeConfig.mysql.poolsize)
 			} else {
 				console.log('mysql pool created')
 			}
-		 	return mysql.createPool({ host: nodeConfig.mysql.host, port: nodeConfig.mysql.port, user: nodeConfig.mysql.user, password: nodeConfig.mysql.pwd, database: _scheme, 
-		 							  connectionLimit: nodeConfig.mysql.poolsize, queueLimit: 0, waitForConnections: true, dateStrings : 'date' })
+		 	return mysql.createPool({ 
+				host: nodeConfig.mysql.host, port: nodeConfig.mysql.port, user: nodeConfig.mysql.user, password: nodeConfig.mysql.pwd, 
+				database: _scheme, connectionLimit: nodeConfig.mysql.poolsize, queueLimit: 0, waitForConnections: true, 
+				dateStrings : 'date' 
+			})
 		} 
 
 		,getConnFromPool : (pool) => new Promise((resolve, reject) => {

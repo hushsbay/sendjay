@@ -1,4 +1,3 @@
-const config = require('../main/config')
 const winston = require('winston')
 const winstonDaily = require('winston-daily-rotate-file')
 
@@ -49,19 +48,19 @@ module.exports = function(logPath, title) {
    })
 
    //if (process.env.NODE_ENV !== 'production') { //Production이 아닌 개발 환경일 경우 파일 들어가서 로그 확인하기 번거로우니까 화면에서 바로 찍게 설정 (로그 파일은 여전히 생성)
-      logger.add(
-         new winston.transports.Console({
-            format: winston.format.combine( //json, label, timestamp, printf, simple, combine
-               //winston.format.colorize(), // 색깔 넣어서 출력
-               //winston.format.simple() // `${info.level}: ${info.message} JSON.stringify({ ...rest })` 포맷으로 출력
-               winston.format.timestamp({ format: 'YYYY-MM-DD HH:MM:SS' }),
-               winston.format.colorize({ all: true }),
-               winston.format.printf(
-                  (info) => `${info.timestamp} ${info.message}`
-               )
-            ),
-         }),
-      )
+   logger.add(
+      new winston.transports.Console({
+         format: winston.format.combine( //json, label, timestamp, printf, simple, combine
+            //winston.format.colorize(), // 색깔 넣어서 출력
+            //winston.format.simple() // `${info.level}: ${info.message} JSON.stringify({ ...rest })` 포맷으로 출력
+            winston.format.timestamp({ format: 'YYYY-MM-DD HH:MM:SS' }),
+            winston.format.colorize({ all: true }),
+            winston.format.printf(
+               (info) => `${info.timestamp} ${info.message}`
+            )
+         ),
+      }),
+   )
    //}
 
    return logger
