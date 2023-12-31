@@ -84,7 +84,6 @@
                     await $.getScript("/common/common.js")
                     const _token = hush.http.getCookie("token")  
                     const _autologin = hush.http.getCookie("autologin")
-                    debugger
                     if (_token && _autologin) {
                         const _userid = hush.http.getCookie("userid")  
                         const rs = await hush.http.ajax("/auth/login", { token : _token, userid : _userid })
@@ -97,7 +96,6 @@
                         hush.util.openWinPop("/app/user/userlist.html", 550, 700)
                     })
                     $("#btn_login").on("click", function() {
-                        debugger
                         location.replace("/app/auth/login.html")
                     })
                     $("#btn_logout").on("click", async function() {
