@@ -118,7 +118,16 @@ module.exports = (function() {
 						reject(ex)
 					}
 				})
-			}
+			},
+			chkVerify : async (tokenInfo) => { //app.use(), router.use() 사용해도 되지만, 함수로 체크 : 코딩 약간 수월 (클라이언트에 code, msg 전달)
+				const jwtRet = await ws.jwt.verify(tokenInfo)
+				if (jwtRet.code == ws.cons.CODE_OK) { //await 빼고 chkVerify() 호출할 때 대비해 if절 구성
+					return true
+				} else {
+					ws.http.resWarn(res, jwtRet.msg, false, jwtRet.code, title)
+					return false
+				}
+			},
 			// make : (payload, _key) => {
 			// 	const key = _key || global.nodeConfig.jwt.key
 			// 	return jwt.sign(payload, key, { algorithm : global.nodeConfig.jwt.algo, expiresIn : global.nodeConfig.jwt.expiry })
