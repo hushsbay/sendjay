@@ -88,14 +88,16 @@
                     if (_token && _autologin) {
                         const _userid = hush.http.getCookie("userid")  
                         const rs = await hush.http.ajax("/auth/login", { token : _token, userid : _userid })
-                        if (rs.code != hush.cons.CODE_OK) return //rs.list 없음
-                        $("#btn_login").hide()
-                        $("#btn_logout").css("display", "flex")
+                        if (rs.code == hush.cons.CODE_OK) {
+                            $("#btn_login").hide()
+                            $("#btn_logout").css("display", "flex")
+                        }
                     }
                     $("#btn_user").on("click", function() {
                         hush.util.openWinPop("/app/user/userlist.html", 550, 700)
                     })
                     $("#btn_login").on("click", function() {
+                        debugger
                         location.replace("/app/auth/login.html")
                     })
                     $("#btn_logout").on("click", async function() {

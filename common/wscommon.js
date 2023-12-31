@@ -73,13 +73,13 @@ module.exports = (function() {
 							rs.code = ws.cons.CODE_TOKEN_NEEDED
 							rs.msg = '인증(토큰)이 필요합니다.'
 							resolve(rs)
-							//return
+							return
 						}
 						if (!userid) { //|| !orgcd || !toporgcd) {
 							rs.code = ws.cons.CODE_USERINFO_MISMATCH
 							rs.msg = '토큰과 비교할 사용자정보에 문제가 있습니다 : ' + JSON.stringify(userInfo)
 							resolve(rs)
-							//return
+							return
 						}
 						const _arr = token.split('.')
 						const _payloadStr = Buffer.from(_arr[1], 'base64').toString('utf-8')
@@ -92,8 +92,9 @@ module.exports = (function() {
 									rs.code = ws.cons.CODE_ERR
 									rs.msg = err.message
 								}
+								console.log(rs.code, rs.msg)
 								resolve(rs)
-								//return
+								return
 							} //아래부터는 위변조도 체크하는 것이 됨
 							const decodedStr = JSON.stringify(decoded)
 							console.log(decodedStr, "====", _payloadStr)
@@ -101,14 +102,15 @@ module.exports = (function() {
 								rs.code = ws.cons.CODE_TOKEN_MISMATCH
 								rs.msg = 'Token mismatch.'
 								resolve(rs)
-								//return
+								return
 							}
 							if (decoded.userid != userid) { //|| decoded.orgcd != orgcd || decoded.toporgcd != toporgcd) {
 								rs.code = ws.cons.CODE_USERINFO_MISMATCH
 								rs.msg = 'Userinfo not matched with token.'
 								resolve(rs)
-								//return
+								return
 							}
+							console.log(rs.code, rs.msg)
 							//rs.token = decoded //com.verifyToken()에서처럼 token을 받아서 비교하는 데 사용하기 위한 목적임
 							resolve(rs)
 						})
