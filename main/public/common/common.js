@@ -73,6 +73,9 @@
                             return false
                         }                        
                     }
+                } else {
+                    hush.util.openWinTab("/app/auth/login.html", true)
+                    return false
                 }
                 const _id = hush.http.getCookie("userid")
                 const _nm = hush.http.getCookie("usernm")
