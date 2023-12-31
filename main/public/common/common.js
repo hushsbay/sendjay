@@ -65,16 +65,23 @@
                     const rs = await hush.http.ajax("/auth/login", { token : _token, userid : _userid })
                     if (rs.code != hush.cons.CODE_OK) {
                         if (rs.code.startsWith("-8")) {
-                            await hush.msg.alert(rs.msg + "<br>로그인 페이지로 이동합니다.")
-                            hush.util.openWinTab("/app/auth/login.html", true)
-                            return false
+                            if (opener) {
+                                await hush.msg.alert(rs.msg + "<br>로그인이 필요합니다.")
+                            } else {
+                                await hush.msg.alert(rs.msg + "<br>로그인 페이지로 이동합니다.")
+                                hush.util.openWinTab("/app/auth/login.html?target=" + location.pathname + location.search, true)
+                            }
                         } else {
                             hush.msg.msg(rs.msg)
-                            return false
-                        }                        
+                        }  
+                        return false                      
                     }
-                } else {
-                    hush.util.openWinTab("/app/auth/login.html", true)
+                } else {                    
+                    if (opener) {
+                        await hush.msg.alert("로그인이 필요합니다.")
+                    } else {
+                        hush.util.openWinTab("/app/auth/login.html?target=" + location.pathname + location.search, true)
+                    }                    
                     return false
                 }
                 const _id = hush.http.getCookie("userid")
