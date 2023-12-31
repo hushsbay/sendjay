@@ -329,7 +329,7 @@
                     const _strMsg = (_arr.length >= 2) ? _arr[1] : _arr[0]
                     hush.msg.toast(_strMsg, _sec)	
                 } else {
-                    if (code.startsWith("-8")) {
+                    if (_code.startsWith("-8")) {
                         hush.msg.msg(_msg + "<br>로그인이 필요합니다.")
                     } else {
                         hush.msg.msg(_msg)
