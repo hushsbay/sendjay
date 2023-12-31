@@ -69,6 +69,7 @@
 	            	})
 					$("#btn_login").click(async function() {
 						try {
+							if (opener) alert("11111111")
 							const _userid = $("#in_userid").val().trim()
 							const _pwd = $("#in_pwd").val().trim()
 							if (!hush.util.chkFieldVal(_userid, "아이디", 1)) return
