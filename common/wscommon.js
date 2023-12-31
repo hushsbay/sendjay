@@ -3,8 +3,6 @@ const path = require('path')
 const http = require('http')
 const https = require('https')
 const crypto = require('crypto')
-//const url = require('url')
-//const os = require('os-utils')
 const express = require('express')
 const requestIp = require('request-ip')
 const bodyParser = require('body-parser')
@@ -40,7 +38,7 @@ module.exports = (function() {
 			},
 			resCodeMsg : (res, code, ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기 (아래처럼 오류 처리에서만 사용중)
 				res.type('application/json')
-				const _msg = ws.util.getLogMsg(ex, title)
+				const _msg = ws.util.getLogMsg(null, ex, title)
 				res.json({ code : code, msg : _msg })
 			},
 			resWarn : (res, msg, withToast, code, title) => { //catch로 넘기지 말고 try 안에서 체크해 return으로 마쳐야 할 때만 사용 (return되어도 finally 사용해 db 등 해제할 건 해제해야 함)
@@ -48,8 +46,8 @@ module.exports = (function() {
 				const _code = ws.util.isvoid(code) ? ws.cons.CODE_ERR : code.toString()
 				ws.http.resCodeMsg(res, _code, _msg, title)
 			},
-			resException : (res, ex, title) => { //catch나 .use(err)내에서만 사용하기
-				ws.util.loge(ex, title)
+			resException : (req, res, ex, title) => { //catch나 .use(err)내에서만 사용하기
+				ws.util.loge(req, ex, title)
 				ws.http.resCodeMsg(res, ws.cons.CODE_ERR, ex, title)
 			},
 		},
@@ -130,8 +128,9 @@ module.exports = (function() {
 				if (nodeConfig) global.nodeConfig = nodeConfig
 				global.logger = wslogger
 				//global.projDir = ws.util.getLastItemFromStr(obj.dirName, path.sep) //아직 사용처없으나 일단 지우지 말고 두기
-				console.log('projDir :', obj.dirName)
-				console.log('version :', process.version)				
+				console.log('version :', process.version)
+				console.log('projPath :', obj.dirName)					
+				console.log('logPath : ', obj.logPath)			
 			},
 			initExpressApp : (public) => {
 				const _app = express()
@@ -157,8 +156,13 @@ module.exports = (function() {
                 if (typeof obj == 'undefined' || obj == null) return true
                 return false
             },
-			getLogMsg : (ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기
-				let _msg = (title) ? '[' + title + '] ' : ''
+			getLogMsg : (req, ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기
+				let _uInfo = '', _msg = ''
+				if (req) {
+					if (req.clientIp) _uInfo = '[' + req.clientIp + ']'
+					if (req.body && req.body.tokenInfo) _uInfo += '[' + req.body.tokenInfo.userid + ']'
+				}
+				_msg = _uInfo + (title ? '[' + title + '] ' : '')
 				if (typeof ex == 'string') {
 					_msg += ex
 				} else {
@@ -172,12 +176,12 @@ module.exports = (function() {
 				}
 				return _msg
 			},
-			logi : (ex, title) => {
-				const _msg = ws.util.getLogMsg(ex, title)
+			logi : (req, ex, title) => {
+				const _msg = ws.util.getLogMsg(req, ex, title)
 				global.logger.info(_msg)
 			},
-			loge : (ex, title) => { //ex가 catch되는 곳에서 사용하기
-				const _msg = ws.util.getLogMsg(ex, title)
+			loge : (req, ex, title) => { //ex가 catch되는 곳에서 사용하기
+				const _msg = ws.util.getLogMsg(req, ex, title)
 				global.logger.error(_msg)
 			},
 			watchProcessError : () => {
@@ -191,7 +195,7 @@ module.exports = (function() {
 			},
 			watchRouterError : (router, title) => { //router.use(function(req, res, next) {에서 next("오류내용")으로 router.use(function(err, req, res, next) { 으로 전달됨
 				router.use(function(err, req, res, next) {
-					ws.http.resException(res, err, title)
+					ws.http.resException(req, res, err, title)
 				})
 			},
 			getLastItemFromStr : (_arg, _deli) => {

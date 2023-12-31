@@ -41,7 +41,7 @@ router.post('/', async function(req, res) {
 		rs.token = ws.jwt.make(userInfo) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음		
 		res.json(rs)
 	} catch (ex) {
-		ws.http.resException(res, ex, title)
+		ws.http.resException(req, res, ex, title)
 	} finally {
 		wsmysql.closeConn(conn, title)
 	}

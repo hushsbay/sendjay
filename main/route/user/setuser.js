@@ -65,7 +65,7 @@ router.post('/', upload.any(), async function(req, res) {
 		}
 		res.json(rs)
 	} catch (ex) {
-		ws.http.resException(res, ex, title)
+		ws.http.resException(req, res, ex, title)
 	} finally {
 		wsmysql.closeConn(conn, title)
 	}

@@ -34,7 +34,7 @@ router.post('/', async function(req, res) {
        	rs.list = data
 		res.json(rs)
 	} catch (ex) {
-		ws.http.resException(res, ex, title)
+		ws.http.resException(req, res, ex, title)
 	} finally {
 		wsmysql.closeConn(conn, title)
 	}
