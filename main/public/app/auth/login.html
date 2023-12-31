@@ -68,8 +68,7 @@
 	            		if (e.keyCode === 13) $("#btn_login").click()
 	            	})
 					$("#btn_login").click(async function() {
-						try {
-							if (opener) alert("11111111")
+						try {							
 							const _userid = $("#in_userid").val().trim()
 							const _pwd = $("#in_pwd").val().trim()
 							if (!hush.util.chkFieldVal(_userid, "아이디", 1)) return
@@ -81,6 +80,7 @@
 							} //rs.list 없음
 							const _chkAuto = $("#chk_auto").prop("checked") ? "Y" : ""
 							hush.auth.setCookieForUser(rs, _chkAuto)
+							if (opener && opener.showLogout) opener.showLogout(true) //포털(index.html) 
 							const _target = g_target ? g_target : "/index.html"
 							hush.util.openWinTab(_target, true)
 						} catch (ex) {
