@@ -123,7 +123,7 @@ module.exports = (function() {
 				if (jwtRet.code == ws.cons.CODE_OK) { //실수로 await 빼고 chkVerify() 호출할 때 대비해 if절 구성
 					return true
 				} else {					
-					ws.http.resWarn(res, _uInfo + jwtRet.msg, false, jwtRet.code)
+					ws.http.resWarn(res, jwtRet.msg, false, jwtRet.code)
 					return false
 				}
 			},
