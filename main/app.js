@@ -19,7 +19,8 @@ for (let i; i < rt.length; i++) app.use('/user/' + rt[i], require('./route/user/
 //app.use('/user/getuser', require('./route/user/getuser')) //의도적으로 인증체크하지 않음
 //app.use('/user/setuser', require('./route/user/setuser')) //의도적으로 인증체크하지 않음
 
-//rt = ['orgtree', 'empsearch', 'deptsearch']
+rt = ['orgtree', 'empsearch', 'deptsearch']
+for (let i; i < rt.length; i++) app.use('/org/' + rt[i], require('./route/org/' + rt[i])) 
 //for (let item in rt) app.use('/org/' + item, require('./route/org/' + item))
 //app.use('/org/orgtree', require('./route/org/orgtree')) 
 //app.use('/org/empsearch', require('./route/org/empsearch')) 
