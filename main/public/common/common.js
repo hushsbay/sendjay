@@ -69,7 +69,7 @@
                             //    await hush.msg.alert(rs.msg + "<br>로그인이 필요합니다.")
                             //} else {
                                 await hush.msg.alert(rs.msg + "<br>로그인 페이지로 이동합니다.")
-                                hush.util.openWinTab("/app/auth/login.html?target=" + location.pathname + location.search + "&aaa=하하하", true)
+                                hush.util.openWinTab("/app/auth/login.html?target=" + location.pathname + location.search, true)
                             //}
                         } else {
                             hush.msg.msg(rs.msg)
@@ -80,7 +80,7 @@
                     //if (opener) {
                     //    await hush.msg.alert("로그인이 필요합니다.")
                     //} else {
-                        hush.util.openWinTab("/app/auth/login.html?target=" + location.pathname + location.search, true)
+                        hush.util.openWinTab("/app/auth/login.html?target=" + location.pathname + location.search + "&aaa=하하하", true)
                     //}                    
                     return false
                 }
