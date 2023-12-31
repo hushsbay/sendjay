@@ -101,7 +101,9 @@
                 if (!_url.includes("nocache=")) _url += (_url.includes("?") ? "&" : "?") + "nocache=" + hush.util.getRnd()
                 return _url
             },
-            ajaxCall : (url, data, callback, failCallback, method) => {
+            ajaxCall : (url, _data, callback, failCallback, method) => {
+                let data = _data
+                Object.assign(data, { tokenInfo : { token : hush.http.getCookie("token"), userid : hush.http.getCookie("userid") }})
                 $.ajax({dataType : "json", //response data type
                     contentType : "application/json; charset=utf-8", //request mime type
                     url : url,
@@ -158,7 +160,9 @@
                     }
                 }
             )}),
-            ajaxFormData : (url, data, callback, failCallback) => {
+            ajaxFormData : (url, _data, callback, failCallback) => {
+                let data = _data
+                data.append("tokenInfo", { token : hush.http.getCookie("token"), userid : hush.http.getCookie("userid") })
                 $.ajax({url : url,
                     data : data,
                     processData : false,
