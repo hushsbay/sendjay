@@ -90,6 +90,8 @@
                         if (rs.code == hush.cons.CODE_OK) {
                             $("#btn_login").hide()
                             $("#btn_logout").css("display", "flex")
+                        } else {
+                            //어떤 인증 문제인지는 rs.code/rs.msg를 참조하면 되고 여기서는 사용자 편의상 포털 페이지를 그대로 뿌려 주기로 함
                         }
                     }
                     $("#btn_user").on("click", function() {
