@@ -82,8 +82,7 @@
 							const _chkAuto = $("#chk_auto").prop("checked") ? "Y" : ""
 							hush.auth.setCookieForUser(rs, _chkAuto)
 							if (opener && opener.showLogout) opener.showLogout(true) //포털(index.html) 
-							const _target = g_target ? g_target : "/index.html"
-						debugger
+							const _target = g_target ? decodeURIComponent(g_target) : "/index.html"
 							hush.util.openWinTab(_target, true)
 						} catch (ex) {
 							hush.util.showEx(ex)
