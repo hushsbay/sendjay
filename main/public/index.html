@@ -65,6 +65,7 @@
         </style>
         <script src="/plugin/jquery-3.4.1.min.js"></script>
         <script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
+        <script src="/plugin/jquery.cookies.js"></script>
         <script>
             function procFromOrgTree(from, nodeToGet, arr) {
         		try {
@@ -81,11 +82,26 @@
             $.when($.ready).done(async function() {
                 try { //By default, $.getScript() sets the cache setting to false. You can override this with $.ajaxSetup({ cache: true })
                     await $.getScript("/common/common.js")
+                    const _token = hush.http.getCookie("token")  
+                    const _autologin = hush.http.getCookie("autologin")
+                    debugger
+                    if (_token && _autologin) {
+                        const _userid = hush.http.getCookie("userid")  
+                        const rs = await hush.http.ajax("/auth/login", { token : _token, userid : _userid })
+                        if (rs.code != hush.cons.CODE_OK) return //rs.list 없음
+                        $("#btn_login").hide()
+                        $("#btn_logout").css("display", "flex")
+                    }
                     $("#btn_user").on("click", function() {
                         hush.util.openWinPop("/app/user/userlist.html", 550, 700)
                     })
                     $("#btn_login").on("click", function() {
                         location.replace("/app/auth/login.html")
+                    })
+                    $("#btn_logout").on("click", async function() {
+                        if (!hush.msg.confirm(hush.http.getCookie("usernm") + "님, 로그아웃할까요?"))
+                        hush.auth.deleteCookieForUser()
+                        location.reload() //로그인 페이지를 의도적으로 띄우지 않음
                     })
                     $("#btn_orgtree").on("click", function() {                        
                         //from = 호출자 식별을 위한 참고용
@@ -121,7 +137,7 @@
                     <div class="topRightItem coActive" id="btn_guide">안내</div>
                     <div class="topRightItem coActive" id="btn_user">간편등록</div>
                     <div class="topRightItem coActive" id="btn_login">로그인</div>
-                    <div class="topRightItem coActive" id="btn_logout">로그아웃</div>
+                    <div class="topRightItem coActive" id="btn_logout" style="display:none">로그아웃</div>
                 </div>
             </div>
             <div class="main">

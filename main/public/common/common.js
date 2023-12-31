@@ -1,23 +1,4 @@
-function downloadScript($) {
-    return new Promise((resolve, reject) => {
-        $.getScript("/plugin/jquery.cookie.js")
-        .done(function( script, textStatus ) {
-            console.log("1111")
-            resolve()
-        }).fail(function( jqxhr, settings, exception ) {
-            console.log("22222")
-            reject()
-        })
-    })
-}
-
-(async function($) {
-    try {
-        debugger
-        await downloadScript($)
-    } catch (ex) {
-        console.log("33333333333333333")
-    }
+(function($) {
     document.oncontextmenu = new Function("return false")
     const _warn_blank = " 필드가 빈값입니다."
     window.hush = {
@@ -78,7 +59,6 @@ function downloadScript($) {
                 //hush.http.deleteCookie('logined')
             },
             setUser : () => {
-                debugger
                 const _autologin = hush.http.getCookie("autologin")               
                 const _token = hush.http.getCookie("token")  
                 if (!_token) {

@@ -55,13 +55,11 @@ module.exports = (function() {
 		},
 
 		jwt : {
-			//payload내 userid말고도 부서 등 기본적인 사용자정보(쿠키값)가 들어가도록 해서 아래 verify에서도 체크하도록 하여 위변조안되게 함
-			//userInfo = { userid, orgcd, toporgcd }
-			make : (userInfo, _key) => {
+			make : (userInfo, _key) => { //userInfo = { userid }
 				const key = _key || global.nodeConfig.jwt.key
 				return jwt.sign(userInfo, key, { algorithm : global.nodeConfig.jwt.algo, expiresIn : global.nodeConfig.jwt.expiry })
 			},
-			verify : (tokenInfo, _key) => {
+			verify : (tokenInfo, _key) => { //tokenInfo = { token, userid }
 				return new Promise((resolve, reject) => {
 					try {
 						const token = tokenInfo.token
@@ -111,7 +109,7 @@ module.exports = (function() {
 								resolve(rs)
 								//return
 							}
-							rs.token = decoded //com.verifyToken()에서처럼 token을 받아서 비교하는 데 사용하기 위한 목적임
+							//rs.token = decoded //com.verifyToken()에서처럼 token을 받아서 비교하는 데 사용하기 위한 목적임
 							resolve(rs)
 						})
 					} catch (ex) {
