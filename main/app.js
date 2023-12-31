@@ -11,9 +11,9 @@ const app = ws.util.initExpressApp('public')
 const wasServer = ws.util.createWas(app, config.http.method) //프로젝트 hushsbay는 aws 기반(https는 로드밸런서CLB 이용)이므로 여기서는 https가 아닌 http로 설정
 wasServer.listen(config.http.port, () => { console.log('wasServer listening on ' + config.http.port) })
 
-app.use('/user/:userlist', require('./route/user/:userlist')) //의도적으로 인증체크하지 않음
-//app.use('/user/getuser', require('./route/user/getuser')) //의도적으로 인증체크하지 않음
-//app.use('/user/setuser', require('./route/user/setuser')) //의도적으로 인증체크하지 않음
+app.use('/user/userlist', require('./route/user/userlist')) //의도적으로 인증체크하지 않음
+app.use('/user/getuser', require('./route/user/getuser')) //의도적으로 인증체크하지 않음
+app.use('/user/setuser', require('./route/user/setuser')) //의도적으로 인증체크하지 않음
 
 app.use('/auth/login', require('./route/auth/login'))
 
