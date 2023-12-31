@@ -330,7 +330,7 @@
                     hush.msg.toast(_strMsg, _sec)	
                 } else {
                     if (_code.startsWith("-8")) {
-                        hush.msg.msg(_msg + "<br>로그인이 필요합니다.")
+                        hush.msg.msg(_msg + "<br>로그인하시기 바랍니다.")
                     } else {
                         hush.msg.msg(_msg)
                     }
