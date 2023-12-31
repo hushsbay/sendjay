@@ -56,13 +56,9 @@
 					const userid = hush.http.getCookie("userid")
 					if (userid) {
 						$("#in_userid").val(userid)
-						$("#in_pwd").val(userid)
 						$("#in_pwd").focus()	
-						$("#in_pwd").select()
 					} else {
-						$("#in_userid").val("1111")
 						$("#in_userid").focus() //navigator.virtualKeyboard.show() //Calling show is only supported if user has interacted with the page
-						$("#in_userid").select()
 					}
 					$("#in_userid,#in_pwd").focus(function() {
 						const _self = $(this)
