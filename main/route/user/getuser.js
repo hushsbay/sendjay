@@ -12,6 +12,7 @@ router.post('/', async function(req, res) {
 	try {
 		const id = req.body.id
 		const imgOnly = req.body.imgOnly
+		//if (!(await ws.jwt.chkVerify(req.body.tokenInfo))) return //의도적으로 인증체크하지 않음
 		conn = await wsmysql.getConnFromPool(global.pool)
 		sql =  "SELECT ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, USER_ID, USER_NM, NICK_NM, JOB, TEL_NO, AB_CD, AB_NM, PICTURE, MIMETYPE "
 		sql += "  FROM JAY.Z_USER_TBL "
