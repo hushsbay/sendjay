@@ -59,7 +59,8 @@
                 //hush.http.deleteCookie('role')
                 //hush.http.deleteCookie('logined')
             },
-            setUser : () => {   
+            setUser : () => {
+                debugger
                 const _autologin = hush.http.getCookie("autologin")               
                 const _token = hush.http.getCookie("token")  
                 if (!_token) {
