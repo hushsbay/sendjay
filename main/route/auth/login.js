@@ -15,7 +15,7 @@ router.post('/', async function(req, res) {
 		const token = req.body.token
 		if (token) { //index.html(포털)에서 인증체크하는 것임
 			const ret = ws.jwt.verify({ token : token, userid : userid })
-			if (ret.code != hush.cons.CODE_OK) {
+			if (ret.code != ws.cons.CODE_OK) {
 				ws.http.resWarn(res, ret.msg)
 				return
 			}
