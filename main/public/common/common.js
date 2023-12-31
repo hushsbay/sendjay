@@ -58,12 +58,22 @@
                 //hush.http.deleteCookie('role')
                 //hush.http.deleteCookie('logined')
             },
-            setUser : () => {
+            setUser : async () => {
+                // const _token = hush.http.getCookie("token")  
+                // if (!_token) {
+                //     const _target = location.pathname + location.search
+                //     hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
+                // }  
+                
                 const _token = hush.http.getCookie("token")  
-                if (!_token) {
-                    const _target = location.pathname + location.search
-                    hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
-                }            
+                if (_token) {
+                    const _userid = hush.http.getCookie("userid")  
+                    const rs = await hush.http.ajax("/auth/login", { token : _token, userid : _userid })
+                    if (rs.code != hush.cons.CODE_OK) {
+                        hush.msg.showMsg(rs.msg)
+						return false                           
+                    }
+                }
                 const _id = hush.http.getCookie("userid")
                 const _nm = hush.http.getCookie("usernm")
                 const _orgcd = hush.http.getCookie("orgcd")
@@ -73,6 +83,7 @@
                 //const _key = hush.http.getCookie("userkey") //hushj.cons.w_key + _id //for socket
                 //const _role = hush.http.getCookie("role") //'role' check in browser is just for convenience. Keep in mind that you should check this on server.
                 hush.user = { token : _token, id : _id, nm : _nm, orgcd : _orgcd, orgnm : _orgnm, toporgcd : _toporgcd, toporgnm : _toporgnm }
+                return true
             }, 
             getUserPhoto : (user_id, tag_id) => {
                 if ($("#" + tag_id).attr("downloaded") == "Y") return

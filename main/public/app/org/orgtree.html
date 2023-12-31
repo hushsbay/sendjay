@@ -368,7 +368,7 @@
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
-					hush.auth.setUser()
+					if (!hush.auth.setUser()) return
 					// if (!g_user.token) {
 					// 	const _target = location.pathname + location.search
 					// 	hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
