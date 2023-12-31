@@ -15,15 +15,8 @@ app.use('/auth/login', require('./route/auth/login'))
 
 let rt = ['userlist', 'getuser', 'setuser']
 for (let i = 0; i < rt.length; i++) app.use('/user/' + rt[i], require('./route/user/' + rt[i])) //의도적으로 인증체크하지 않음
-//app.use('/user/userlist', require('./route/user/userlist')) //의도적으로 인증체크하지 않음
-//app.use('/user/getuser', require('./route/user/getuser')) //의도적으로 인증체크하지 않음
-//app.use('/user/setuser', require('./route/user/setuser')) //의도적으로 인증체크하지 않음
 
 rt = ['orgtree', 'empsearch', 'deptsearch']
 for (let i = 0; i < rt.length; i++) app.use('/org/' + rt[i], require('./route/org/' + rt[i])) 
-//for (let item in rt) app.use('/org/' + item, require('./route/org/' + item))
-//app.use('/org/orgtree', require('./route/org/orgtree')) 
-//app.use('/org/empsearch', require('./route/org/empsearch')) 
-//app.use('/org/deptsearch', require('./route/org/deptsearch')) 
 
 ws.util.watchProcessError()
