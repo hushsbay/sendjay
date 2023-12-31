@@ -24,7 +24,7 @@ router.post('/', upload.any(), async function(req, res) {
 		const orgnm = req.body.orgnm
 		const mimetype = req.body.mimetype
 		const buf = mimetype ? Buffer.from(new Uint8Array(req.files[0].buffer)) : null //MySql PICTURE 필드가 longblob 타입으로 되어 있고 브라우저에서 blob으로 넘겨받아 저장하는 것임
-		console.log(JSON.stringify(req.body.tokenInfo))
+		console.log(req.body.tokenInfo.userid, "@@@@@@@@@@")
 		if (!(await ws.jwt.chkVerify(res, req.body.tokenInfo))) return //의도적으로 인증체크하지 않음
 		conn = await wsmysql.getConnFromPool(global.pool)
 		sql =  "SELECT COUNT(*) CNT, PWD FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
