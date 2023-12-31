@@ -94,8 +94,8 @@
                 try { //By default, $.getScript() sets the cache setting to false. You can override this with $.ajaxSetup({ cache: true })
                     await $.getScript("/common/common.js")
                     const _token = hush.http.getCookie("token")  
-                    const _autologin = hush.http.getCookie("autologin")
-                    if (_token && _autologin) {
+                    //const _autologin = hush.http.getCookie("autologin")
+                    if (_token) { //&& _autologin) {
                         const _userid = hush.http.getCookie("userid")  
                         const rs = await hush.http.ajax("/auth/login", { token : _token, userid : _userid })
                         if (rs.code == hush.cons.CODE_OK) {
