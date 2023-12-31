@@ -101,6 +101,7 @@
                     $("#btn_logout").on("click", async function() {
                         try {
                             const ret = await hush.msg.confirm(hush.http.getCookie("usernm") + "님, 로그아웃할까요?")
+                            if (!ret) return
                             hush.auth.deleteCookieForUser()
                             location.reload() //로그인 페이지를 의도적으로 띄우지 않음
                         } catch (ex) {

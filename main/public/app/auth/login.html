@@ -51,22 +51,10 @@
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
-					//const _chkAuto = (hush.http.getCookie("autologin") == "Y") ? true : false
-					//$("#chk_auto").prop("checked", _chkAuto)
-					// if (_chkAuto) {
-					// 	const userid = hush.http.getCookie("userid")
-					// 	const orgcd = hush.http.getCookie("orgcd")
-					// 	const toporgcd = hush.http.getCookie("toporgcd")
-					// 	const userInfo = { userid : userid, orgcd : orgcd, toporgcd : toporgcd }
-					// 	const rs = await hush.http.ajax("/auth/verifytoken", userInfo)
-					// 	if (rs.code != hush.cons.CODE_OK) {
-					// 		hush.msg.showMsg(rs.msg)
-					// 		return
-					// 	}
-					// 	debugger
-					// }
 					const param = new URLSearchParams(location.search)
 					g_target = param.get("target")
+					const userid = hush.http.getCookie("userid")
+					if (userid) $("#in_userid").val(userid)
 					$("#in_userid").focus() //navigator.virtualKeyboard.show() //Calling show is only supported if user has interacted with the page
 					$("#in_userid,#in_pwd").focus(function() {
 						const _self = $(this)

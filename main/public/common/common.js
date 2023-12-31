@@ -37,7 +37,7 @@
                 const persist = (_persist == "Y") ? true : false
                 hush.http.setCookie("autologin", _persist, true) //auto login or not (Y/N)
                 hush.http.setCookie("token", rs.token, persist) //jwt
-                hush.http.setCookie("userid", rs.USER_ID, persist)
+                hush.http.setCookie("userid", rs.USER_ID, true)
                 //hush.http.setCookie("userkey", (fromWebView ? hush.cons.m_key : hush.cons.w_key) + rs.userid, persist)
                 //hush.http.setCookie("passkey", rs.passkey, persist) //See login.js
                 hush.http.setCookie("usernm", rs.USER_NM, persist)
