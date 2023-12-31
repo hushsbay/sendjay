@@ -130,62 +130,6 @@ module.exports = (function() {
 					return false
 				}
 			},
-			// make : (payload, _key) => {
-			// 	const key = _key || global.nodeConfig.jwt.key
-			// 	return jwt.sign(payload, key, { algorithm : global.nodeConfig.jwt.algo, expiresIn : global.nodeConfig.jwt.expiry })
-			// },
-			// verify : (token, userid, _key) => {
-			// 	return new Promise((resolve, reject) => {
-			// 		try {
-			// 			const key = _key || global.nodeConfig.jwt.key					
-			// 			let rs = ws.http.resInit()
-			// 			if (!token) {
-			// 				rs.code = ws.cons.CODE_TOKEN_NEEDED
-			// 				rs.msg = '인증(토큰)이 필요합니다.'
-			// 				resolve(rs)
-			// 				//return
-			// 			}
-			// 			if (!userid) {
-			// 				rs.code = ws.cons.CODE_USERID_MISMATCH
-			// 				rs.msg = '토큰과 비교할 사용자아이디가 필요합니다.'
-			// 				resolve(rs)
-			// 				//return
-			// 			}
-			// 			const _arr = token.split('.')
-			// 			const _payloadStr = Buffer.from(_arr[1], 'base64').toString('utf-8')
-			// 			jwt.verify(token, key, function(err, decoded) { 
-			// 				if (err) {
-			// 					if (err.message.includes('jwt expired')) {
-			// 						rs.code = ws.cons.CODE_TOKEN_EXPIRED
-			// 						rs.msg = 'Token expired.'
-			// 					} else {
-			// 						rs.code = ws.cons.CODE_ERR
-			// 						rs.msg = err.message
-			// 					}
-			// 					resolve(rs)
-			// 					//return
-			// 				}
-			// 				const decodedStr = JSON.stringify(decoded)
-			// 				if (decodedStr != _payloadStr) {
-			// 					rs.code = ws.cons.CODE_TOKEN_MISMATCH
-			// 					rs.msg = 'Token mismatch.'
-			// 					resolve(rs)
-			// 					//return
-			// 				}
-			// 				if (decoded.userid != userid) {
-			// 					rs.code = ws.cons.CODE_USERID_MISMATCH
-			// 					rs.msg = 'Userid not matched with token.'
-			// 					resolve(rs)
-			// 					//return
-			// 				}
-			// 				rs.token = decoded //com.verifyToken()에서처럼 token을 받아서 비교하는 데 사용하기 위한 목적임
-			// 				resolve(rs)
-			// 			})
-			// 		} catch (ex) {
-			// 			reject(ex)
-			// 		}
-			// 	})
-			// }
 		},
 
 		util : {
