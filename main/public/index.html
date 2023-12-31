@@ -99,9 +99,13 @@
                         location.replace("/app/auth/login.html")
                     })
                     $("#btn_logout").on("click", async function() {
-                        if (!hush.msg.confirm(hush.http.getCookie("usernm") + "님, 로그아웃할까요?"))
-                        hush.auth.deleteCookieForUser()
-                        location.reload() //로그인 페이지를 의도적으로 띄우지 않음
+                        try {
+                            const ret = hush.msg.confirm(hush.http.getCookie("usernm") + "님, 로그아웃할까요?")
+                            hush.auth.deleteCookieForUser()
+                            location.reload() //로그인 페이지를 의도적으로 띄우지 않음
+                        } catch (ex) {
+                            hush.util.showEx(ex)
+                        }
                     })
                     $("#btn_orgtree").on("click", function() {                        
                         //from = 호출자 식별을 위한 참고용
