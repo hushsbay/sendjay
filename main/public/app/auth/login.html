@@ -53,6 +53,7 @@
                     await $.getScript("/common/common.js")
 					const param = new URLSearchParams(location.search)
 					g_target = param.get("target")
+					console.log(g_target+"=====")
 					const userid = hush.http.getCookie("userid")
 					if (userid) {
 						$("#in_userid").val(userid)
@@ -82,6 +83,7 @@
 							hush.auth.setCookieForUser(rs, _chkAuto)
 							if (opener && opener.showLogout) opener.showLogout(true) //포털(index.html) 
 							const _target = g_target ? g_target : "/index.html"
+						debugger
 							hush.util.openWinTab(_target, true)
 						} catch (ex) {
 							hush.util.showEx(ex)
