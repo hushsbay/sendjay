@@ -368,7 +368,8 @@
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
-					if (await !hush.auth.setUser()) return
+					const ret = await hush.auth.setUser()
+					if (!ret) return
 					console.log("1111")
 					debugger
 					// if (!g_user.token) {
