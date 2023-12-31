@@ -67,6 +67,7 @@
                         if (rs.code.startsWith("-8")) {
                             await hush.msg.alert(rs.msg + "<br>로그인 페이지로 이동합니다.")
                             hush.util.openWinTab("/app/auth/login.html", true)
+                            return false
                         } else {
                             hush.msg.msg(rs.msg)
                             return false
