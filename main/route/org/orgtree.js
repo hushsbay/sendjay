@@ -17,7 +17,7 @@ router.post('/', async function(req, res) {
 		const nodeToGet = req.body.nodeToGet
 		const comp = (!req.body.comp || req.body.comp.toLowerCase() == 'all') ? 'all' : ws.util.toStringForInClause(req.body.comp)
 		if (nodeToGet == 'U') { //사용자(U)일 경우만 인증체크함
-			if (!(await ws.jwt.chkVerify(res, req.body.tokenInfo))) return
+			if (!(await ws.jwt.chkVerify(req, res, req.body.tokenInfo))) return
 		}
 		conn = await wsmysql.getConnFromPool(global.pool)
 		sql =  "SELECT A.SEQ, A.LVL, A.ORG_CD, A.ORG_NM, B.ORG_CD TOP_ORG_CD, B.ORG_NM TOP_ORG_NM, '' USER_ID, '' USER_NM, '' NICK_NM, '' JOB, '' TEL_NO, '' AB_CD, '' AB_NM, "

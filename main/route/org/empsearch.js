@@ -13,7 +13,7 @@ router.post('/', async function(req, res) {
 		const keyword = req.body.keyword
 		const teamcode = req.body.teamcode
 		const comp = (!req.body.comp || req.body.comp.toLowerCase() == 'all') ? 'all' : ws.util.toStringForInClause(req.body.comp)
-		if (!(await ws.jwt.chkVerify(res, req.body.tokenInfo))) return
+		if (!(await ws.jwt.chkVerify(req, res, req.body.tokenInfo))) return
 		conn = await wsmysql.getConnFromPool(global.pool)
 		sql =  "SELECT ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, USER_ID, USER_NM, NICK_NM, JOB, TEL_NO, AB_CD, AB_NM "
 		sql += "  FROM JAY.Z_USER_TBL "
