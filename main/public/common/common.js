@@ -3,8 +3,10 @@ function downloadScript() {
         $.getScript("/plugin/jquery.cookie.js")
         .done(function( script, textStatus ) {
             console.log("1111")
+            resolve()
         }).fail(function( jqxhr, settings, exception ) {
             console.log("22222")
+            reject()
         })
     })
 }
