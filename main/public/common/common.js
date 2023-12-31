@@ -9,8 +9,12 @@ function downloadScript() {
     })
 }
 
-(function($) {
-    downloadScript()
+(async function($) {
+    try {
+        await downloadScript()
+    } catch (ex) {
+        console.log("33333333333333333")
+    }
     document.oncontextmenu = new Function("return false")
     const _warn_blank = " 필드가 빈값입니다."
     window.hush = {
