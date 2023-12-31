@@ -1,6 +1,16 @@
-(async function($) {
-    debugger
-    await $.getScript("/plugin/jquery.cookie.js")
+function downloadScript() {
+    return new Promise((resolve, reject) => {
+        $.getScript("/plugin/jquery.cookie.js")
+        .done(function( script, textStatus ) {
+            console.log("1111")
+        }).fail(function( jqxhr, settings, exception ) {
+            console.log("22222")
+        })
+    })
+}
+
+(function($) {
+    downloadScript()
     document.oncontextmenu = new Function("return false")
     const _warn_blank = " 필드가 빈값입니다."
     window.hush = {
