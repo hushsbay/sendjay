@@ -67,12 +67,14 @@ module.exports = (function() {
 						if (!token) {
 							rs.code = ws.cons.CODE_TOKEN_NEEDED
 							rs.msg = '인증(토큰)이 없습니다.'
+							console.log(tokenInfo.ip, rs.msg) //안정화때까지 임시로 찍어보기 (나중에 막기)
 							resolve(rs)
 							return
 						}
 						if (!userid) {
 							rs.code = ws.cons.CODE_USERINFO_MISMATCH
 							rs.msg = '토큰과 비교할 사용자정보가 없습니다.'
+							console.log(tokenInfo.ip, rs.msg) //안정화때까지 임시로 찍어보기 (나중에 막기)
 							resolve(rs)
 							return
 						}
@@ -82,24 +84,27 @@ module.exports = (function() {
 							if (err) {
 								if (err.message.includes('jwt expired')) {
 									rs.code = ws.cons.CODE_TOKEN_EXPIRED
-									rs.msg = '토큰이 만료되었습니다.'
+									rs.msg = '토큰이 만료되었습니다 : ' + userid
 								} else {
 									rs.code = ws.cons.CODE_ERR
-									rs.msg = err.message
+									rs.msg = err.message + ' : ' + userid
 								}
+								console.log(tokenInfo.ip, rs.msg) //안정화때까지 임시로 찍어보기 (나중에 막기)
 								resolve(rs)
 								return
 							} //아래부터는 위변조도 체크하는 것이 됨
 							const decodedStr = JSON.stringify(decoded)
 							if (decodedStr != _payloadStr) {
 								rs.code = ws.cons.CODE_TOKEN_MISMATCH
-								rs.msg = 'Token mismatch.'
+								rs.msg = 'Token mismatch : ' + decoded.userid + '/' + userid
+								console.log(tokenInfo.ip, rs.msg) //안정화때까지 임시로 찍어보기 (나중에 막기)
 								resolve(rs)
 								return
 							}
 							if (decoded.userid != userid) {
 								rs.code = ws.cons.CODE_USERINFO_MISMATCH
 								rs.msg = '사용자정보에 문제가 있습니다 : ' + decoded.userid + '/' + userid
+								console.log(tokenInfo.ip, rs.msg) //안정화때까지 임시로 찍어보기 (나중에 막기)
 								resolve(rs)
 								return
 							}
@@ -110,14 +115,15 @@ module.exports = (function() {
 					}
 				})
 			},
-			chkVerify : async (res, tokenInfo) => { 
+			chkVerify : async (req, res, tokenInfo) => { 
 				//app.use(), router.use()에서 ws.jwt.verify()로 사용해도 되지만, 래핑된 chkVerify()로 체크 : 코딩 약간 수월
 				//클라이언트에 code, msg 전달해야 하는데 app.use(), router.use()보다는 손이 더 갈 수도 있지만 더 유연하게 사용 가능
+				if (req && req.clientIp) Object.assign(tokenInfo, { ip : req.clientIp })
 				const jwtRet = await ws.jwt.verify(tokenInfo)
 				if (jwtRet.code == ws.cons.CODE_OK) { //실수로 await 빼고 chkVerify() 호출할 때 대비해 if절 구성
 					return true
-				} else {
-					ws.http.resWarn(res, jwtRet.msg, false, jwtRet.code)
+				} else {					
+					ws.http.resWarn(res, _uInfo + jwtRet.msg, false, jwtRet.code)
 					return false
 				}
 			},
