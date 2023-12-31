@@ -140,7 +140,7 @@
             	//$wise.onceJwtCall(g_payload, false, async function(token) {  
                     try {
                     	g_list.empty()
-						const _comp = $("#chk_mycomp").prop("checked") ? hush.user.toporgcd : g_comp
+						const _comp = (hush.user && $("#chk_mycomp").prop("checked")) ? hush.user.toporgcd : g_comp //편의상 U말고는 hush.user가 null일 수 있음
                         const rs = await hush.http.ajax("/org/deptsearch", { keyword : _keyword, comp : _comp })
 						if (rs.code != hush.cons.CODE_OK) {
                         	hush.msg.showMsg(rs.msg, rs.code)
@@ -182,7 +182,7 @@
             const getOrgTree = async () => {
 				//$wise.onceJwtCall(g_payload, false, async function(token) {
 					try {
-						const _comp = $("#chk_mycomp").prop("checked") ? hush.user.toporgcd : g_comp
+						const _comp = (hush.user && $("#chk_mycomp").prop("checked")) ? hush.user.toporgcd : g_comp //편의상 U말고는 hush.user가 null일 수 있음
 						$("#spn_depth").html(g_expandTo)			
 						g_list.empty()
                         const rs = await hush.http.ajax("/org/orgtree", { nodeToGet : g_nodeToGet, comp : _comp })
@@ -488,7 +488,7 @@
 					})
 					if (g_nodeToGet == "U" || g_nodeToGet == "D") {
 						if (g_comp) {
-							if (g_comp == hush.user.toporgcd) $("#chk_mycomp").prop("checked", true)
+							if (hush.uer && (g_comp == hush.user.toporgcd)) $("#chk_mycomp").prop("checked", true) //편의상 U말고는 hush.user가 null일 수 있음
 							$("#chk_mycomp").prop("disabled", true)
 						} else {
 							$("#chk_mycomp").prop("disabled", false)
