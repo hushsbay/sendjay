@@ -119,7 +119,7 @@ module.exports = (function() {
 					}
 				})
 			},
-			chkVerify : async (tokenInfo) => { 
+			chkVerify : async (res, tokenInfo) => { 
 				//app.use(), router.use() 사용해도 되지만, 함수로 체크 : 코딩 약간 수월
 				//클라이언트에 code, msg 전달해야 하는데 app.use(), router.use()는 손이 더 가고 함수보다 덜 유연함
 				const jwtRet = await ws.jwt.verify(tokenInfo)
