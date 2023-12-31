@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.use(function(req, res, next) {
 	req.title = 'orgtree'
-	next() //next('blabla') for going to ws.util.watchRouterError() below
+	next() //next('error') for going to ws.util.watchRouterError() below
 })
 
 router.post('/', async function(req, res) {

@@ -4,7 +4,10 @@ const wsmysql = require(config.app.wsmysql)
 const express = require('express')
 const router = express.Router()
 
-const title = 'userlist'
+router.use(function(req, res, next) {
+	req.title = 'userlist'
+	next() //next('error') for going to ws.util.watchRouterError() below
+})
 
 router.post('/', async function(req, res) {
 	let conn, sql, data, len
@@ -31,12 +34,12 @@ router.post('/', async function(req, res) {
        	rs.list = data
 		res.json(rs)
 	} catch (ex) {
-		ws.http.resException(req, res, ex, title)
+		ws.http.resException(req, res, ex)
 	} finally {
-		wsmysql.closeConn(conn, title)
+		wsmysql.closeConn(conn, req.title)
 	}
 })
 
-ws.util.watchRouterError(router, title)
+ws.util.watchRouterError(router)
 
 module.exports = router

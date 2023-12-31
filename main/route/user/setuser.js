@@ -6,7 +6,10 @@ const multer  = require('multer') //ajax enctype을 "multipart/form-data"으로 
 const router = express.Router()
 const upload = multer({ storage: multer.memoryStorage() })
 
-const title = 'setuser'
+router.use(function(req, res, next) {
+	req.title = 'setuser'
+	next() //next('error') for going to ws.util.watchRouterError() below
+})
 
 router.post('/', upload.any(), async function(req, res) {
 	let conn, sql, data, len
@@ -65,12 +68,12 @@ router.post('/', upload.any(), async function(req, res) {
 		}
 		res.json(rs)
 	} catch (ex) {
-		ws.http.resException(req, res, ex, title)
+		ws.http.resException(req, res, ex)
 	} finally {
-		wsmysql.closeConn(conn, title)
+		wsmysql.closeConn(conn, req.title)
 	}
 })
 
-ws.util.watchRouterError(router, title)
+ws.util.watchRouterError(router)
 
 module.exports = router
