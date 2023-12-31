@@ -59,12 +59,6 @@
                 //hush.http.deleteCookie('logined')
             },
             setUser : async () => {
-                // const _token = hush.http.getCookie("token")  
-                // if (!_token) {
-                //     const _target = location.pathname + location.search
-                //     hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
-                // }  
-                
                 const _token = hush.http.getCookie("token")  
                 if (_token) {
                     const _userid = hush.http.getCookie("userid")  
@@ -73,7 +67,6 @@
                         hush.msg.showMsg(rs.msg)
 						return false                           
                     }
-                    console.log("11112222222222222")
                 }
                 const _id = hush.http.getCookie("userid")
                 const _nm = hush.http.getCookie("usernm")
