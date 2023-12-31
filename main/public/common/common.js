@@ -1,4 +1,4 @@
-function downloadScript() {
+function downloadScript($) {
     return new Promise((resolve, reject) => {
         $.getScript("/plugin/jquery.cookie.js")
         .done(function( script, textStatus ) {
@@ -13,7 +13,8 @@ function downloadScript() {
 
 (async function($) {
     try {
-        await downloadScript()
+        debugger
+        await downloadScript($)
     } catch (ex) {
         console.log("33333333333333333")
     }
