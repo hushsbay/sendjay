@@ -89,7 +89,7 @@
 						const _comp = $("#chk_mycomp").prop("checked") ? hush.user.toporgcd : g_comp
                         const rs = await hush.http.ajax("/org/empsearch", { keyword : _keyword, teamcode : _teamcode, comp : _comp })
 						if (rs.code != hush.cons.CODE_OK) {
-                        	hush.msg.showMsg(rs.msg)
+                        	hush.msg.showMsg(rs.msg, rs.code)
                             return
 						}
 						g_rs = rs
@@ -143,7 +143,7 @@
 						const _comp = $("#chk_mycomp").prop("checked") ? hush.user.toporgcd : g_comp
                         const rs = await hush.http.ajax("/org/deptsearch", { keyword : _keyword, comp : _comp })
 						if (rs.code != hush.cons.CODE_OK) {
-                        	hush.msg.showMsg(rs.msg)
+                        	hush.msg.showMsg(rs.msg, rs.code)
                             return
 						}
 						g_rs = rs
@@ -187,7 +187,7 @@
 						g_list.empty()
                         const rs = await hush.http.ajax("/org/orgtree", { nodeToGet : g_nodeToGet, comp : _comp })
                         if (rs.code != hush.cons.CODE_OK) {
-                        	hush.msg.showMsg(rs.msg)
+                        	hush.msg.showMsg(rs.msg, rs.code)
                             return
 						}
 						g_rs = rs

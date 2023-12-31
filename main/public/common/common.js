@@ -323,13 +323,17 @@
                     }, sec)
                 }
             },
-            showMsg : (_msg, _sec) => { //서버의 ws.http.resWarn()의 토스트 메시지와 관련
+            showMsg : (_msg, _code, _sec) => { //서버의 ws.http.resWarn()의 토스트 메시지와 관련
                 if (_msg.includes(hush.cons.toast_prefix)) {
                     const _arr = _msg.split(hush.cons.toast_prefix)
                     const _strMsg = (_arr.length >= 2) ? _arr[1] : _arr[0]
                     hush.msg.toast(_strMsg, _sec)	
                 } else {
-                    hush.msg.msg(_msg)
+                    if (code.startsWith("-8")) {
+                        hush.msg.msg(_msg + "<br>로그인이 필요합니다.")
+                    } else {
+                        hush.msg.msg(_msg)
+                    }
                 }
             }
         },

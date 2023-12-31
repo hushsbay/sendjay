@@ -75,7 +75,7 @@
 							if (!hush.util.chkFieldVal(_pwd, "비번", 1)) return
 							const rs = await hush.http.ajax("/auth/login", { userid : _userid, pwd : _pwd })
 							if (rs.code != hush.cons.CODE_OK) {
-								hush.msg.showMsg(rs.msg)
+								hush.msg.showMsg(rs.msg, rs.code)
 								return
 							} //rs.list 없음
 							const _chkAuto = $("#chk_auto").prop("checked") ? "Y" : ""
