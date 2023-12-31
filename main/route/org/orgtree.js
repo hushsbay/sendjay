@@ -16,6 +16,7 @@ router.post('/', async function(req, res) {
 	try {
 		const nodeToGet = req.body.nodeToGet
 		const comp = (!req.body.comp || req.body.comp.toLowerCase() == 'all') ? 'all' : ws.util.toStringForInClause(req.body.comp)
+		console.log(nodeToGet, "=====")
 		if (nodeToGet == 'U') { //사용자(U)일 경우만 인증체크함
 			if (!(await ws.jwt.chkVerify(res, req.body.tokenInfo))) return
 		}
