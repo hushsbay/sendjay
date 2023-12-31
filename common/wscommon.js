@@ -46,8 +46,9 @@ module.exports = (function() {
 				const _code = ws.util.isvoid(code) ? ws.cons.CODE_ERR : code.toString()
 				ws.http.resCodeMsg(res, _code, _msg, title)
 			},
-			resException : (req, res, ex, title) => { //catch나 .use(err)내에서만 사용하기
-				ws.util.loge(req, ex, title)
+			resException : (req, res, ex) => { //catch나 .use(err)내에서만 사용하기
+				const title = req ? req.title : ''
+				ws.util.loge(req, ex)
 				ws.http.resCodeMsg(res, ws.cons.CODE_ERR, ex, title)
 			},
 		},
@@ -167,8 +168,10 @@ module.exports = (function() {
 				if (req) {
 					if (req.clientIp) _uInfo = '[' + req.clientIp + ']'
 					if (req.body && req.body.tokenInfo) _uInfo += '[' + req.body.tokenInfo.userid + ']'
+					_msg = _uInfo + (req.title ? '[' + req.title + '] ' : '')
+				} else {
+					_msg = title ? '[' + title + '] ' : ''
 				}
-				_msg = _uInfo + (title ? '[' + title + '] ' : '')
 				if (typeof ex == 'string') {
 					_msg += ex
 				} else {
@@ -182,12 +185,12 @@ module.exports = (function() {
 				}
 				return _msg
 			},
-			logi : (req, ex, title) => {
-				const _msg = ws.util.getLogMsg(req, ex, title)
+			logi : (req, ex) => {
+				const _msg = ws.util.getLogMsg(req, ex)
 				global.logger.info(_msg)
 			},
-			loge : (req, ex, title) => { //ex가 catch되는 곳에서 사용하기
-				const _msg = ws.util.getLogMsg(req, ex, title)
+			loge : (req, ex) => { //ex가 catch되는 곳에서 사용하기
+				const _msg = ws.util.getLogMsg(req, ex)
 				global.logger.error(_msg)
 			},
 			watchProcessError : () => {
@@ -199,9 +202,9 @@ module.exports = (function() {
 					global.logger.error(reason, 'process.on Unhandled Rejection at Promise.. ' + p)
 				})
 			},
-			watchRouterError : (router, title) => { //router.use(function(req, res, next) {에서 next("오류내용")으로 router.use(function(err, req, res, next) { 으로 전달됨
+			watchRouterError : (router) => { //router.use(function(req, res, next) {에서 next("오류내용")으로 router.use(function(err, req, res, next) { 으로 전달됨
 				router.use(function(err, req, res, next) {
-					ws.http.resException(req, res, err, title)
+					ws.http.resException(req, res, err)
 				})
 			},
 			getLastItemFromStr : (_arg, _deli) => {

@@ -4,7 +4,10 @@ const wsmysql = require(config.app.wsmysql)
 const express = require('express')
 const router = express.Router()
 
-const title = 'login'
+router.use(function(req, res, next) {
+	req.title = 'login'
+	next() //next('blabla') for going to ws.util.watchRouterError() below
+})
 
 router.post('/', async function(req, res) {
 	let conn, sql, data, len
@@ -41,12 +44,12 @@ router.post('/', async function(req, res) {
 		rs.token = ws.jwt.make(userInfo) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음		
 		res.json(rs)
 	} catch (ex) {
-		ws.http.resException(req, res, ex, title)
+		ws.http.resException(req, res, ex)
 	} finally {
-		wsmysql.closeConn(conn, title)
+		wsmysql.closeConn(conn, req.title)
 	}
 })
 
-ws.util.watchRouterError(router, title)
+ws.util.watchRouterError(router)
 
 module.exports = router
