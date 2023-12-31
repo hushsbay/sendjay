@@ -178,8 +178,7 @@
             )}),
             ajaxFormData : (url, _data, callback, failCallback) => {
                 let data = _data
-                //data.append("tokenInfo", { token : hush.http.getCookie("token"), userid : hush.http.getCookie("userid") })
-                Object.assign(data, { tokenInfo : { token : hush.http.getCookie("token"), userid : hush.http.getCookie("userid") }})
+                data.append("tokenInfo", { token : hush.http.getCookie("token"), userid : hush.http.getCookie("userid") })
                 $.ajax({url : url,
                     data : data,
                     processData : false,
