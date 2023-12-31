@@ -368,6 +368,7 @@
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
+					debugger
 					if (!hush.auth.setUser()) return
 					// if (!g_user.token) {
 					// 	const _target = location.pathname + location.search
