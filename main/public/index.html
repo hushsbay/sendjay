@@ -88,8 +88,8 @@
                         const _userid = hush.http.getCookie("userid")  
                         const rs = await hush.http.ajax("/auth/login", { token : _token, userid : _userid })
                         if (rs.code == hush.cons.CODE_OK) {
-                            $("#btn_login").hide()
-                            $("#btn_logout").css("display", "flex")
+                            $("#btn_logout").hide()
+                            $("#btn_login").css("display", "flex")                            
                         } else {
                             //어떤 인증 문제인지는 rs.code/rs.msg를 참조하면 되고 여기서는 사용자 편의상 포털 페이지를 그대로 뿌려 주기로 함
                         }
@@ -143,8 +143,8 @@
                 <div class="topRight">
                     <div class="topRightItem coActive" id="btn_guide">안내</div>
                     <div class="topRightItem coActive" id="btn_user">간편등록</div>
-                    <div class="topRightItem coActive" id="btn_login">로그인</div>
-                    <div class="topRightItem coActive" id="btn_logout" style="display:none">로그아웃</div>
+                    <div class="topRightItem coActive" id="btn_login" style="display:none">로그인</div>
+                    <div class="topRightItem coActive" id="btn_logout">로그아웃</div>
                 </div>
             </div>
             <div class="main">
