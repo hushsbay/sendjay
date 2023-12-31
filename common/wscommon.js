@@ -4,12 +4,12 @@ const http = require('http')
 const https = require('https')
 const crypto = require('crypto')
 //const url = require('url')
+//const os = require('os-utils')
 const express = require('express')
 const requestIp = require('request-ip')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const jwt = require('jsonwebtoken')
-//const os = require('os-utils')
 
 module.exports = (function() {
 	
@@ -25,7 +25,7 @@ module.exports = (function() {
 			 //CODE_PASSKEY_NEEDED : '-77',
 			 //CODE_PASSWORD_NOT_MATCHED : '-78',
 			 //CODE_PASSKEY_NOT_MATCHED : '-79',
-			 CODE_TOKEN_NEEDED : '-81', //jwt 
+			 CODE_TOKEN_NEEDED : '-81', //jwt : -8로 시작하는 오류코드는 클라이언트에서 로그인이 필요하다는 안내에 의미있게 쓰이고 있음
 			 CODE_TOKEN_MISMATCH : '-82', //jwt payload not equal to decoded
 			 CODE_USERINFO_MISMATCH : '-83',
 			 CODE_TOKEN_EXPIRED : '-84',
@@ -38,19 +38,19 @@ module.exports = (function() {
 			resInit : () => {
 				return { code : ws.cons.CODE_OK, msg : '', list : [ ] }
 			},
-			resJson : (res, code, ex, title) => {
+			resCodeMsg : (res, code, ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기 (아래처럼 오류 처리에서만 사용중)
 				res.type('application/json')
 				const _msg = ws.util.getLogMsg(ex, title)
 				res.json({ code : code, msg : _msg })
 			},
-			resWarn : (res, msg, withToast, code, title) => { //'데이터가 없습니다' 처럼 catch로 넘기지 말고 try 안에서 체크해 return으로 마쳐야 할 때만 사용 (return되어도 finally 사용해 db 등 해제할 건 해제해야 함)
+			resWarn : (res, msg, withToast, code, title) => { //catch로 넘기지 말고 try 안에서 체크해 return으로 마쳐야 할 때만 사용 (return되어도 finally 사용해 db 등 해제할 건 해제해야 함)
 				const _msg = (withToast ? ws.cons.toast_prefix : '' ) + msg
 				const _code = ws.util.isvoid(code) ? ws.cons.CODE_ERR : code.toString()
-				ws.http.resJson(res, _code, _msg, title)
+				ws.http.resCodeMsg(res, _code, _msg, title)
 			},
-			resException : (res, ex, title) => {
+			resException : (res, ex, title) => { //catch나 .use(err)내에서만 사용하기
 				ws.util.loge(ex, title)
-				ws.http.resJson(res, ws.cons.CODE_ERR, ex, title)
+				ws.http.resCodeMsg(res, ws.cons.CODE_ERR, ex, title)
 			},
 		},
 
@@ -64,20 +64,17 @@ module.exports = (function() {
 					try {
 						const token = tokenInfo.token
 						const userid = tokenInfo.userid
-						console.log(token, "@@@@", userid)
-						//const orgcd = userInfo.orgcd
-						//const toporgcd = userInfo.toporgcd
-						const key = _key || global.nodeConfig.jwt.key					
+						const key = _key || global.nodeConfig.jwt.key			
 						let rs = ws.http.resInit()
 						if (!token) {
 							rs.code = ws.cons.CODE_TOKEN_NEEDED
-							rs.msg = '인증(토큰)이 필요합니다.'
+							rs.msg = '인증(토큰)이 없습니다.'
 							resolve(rs)
 							return
 						}
-						if (!userid) { //|| !orgcd || !toporgcd) {
+						if (!userid) {
 							rs.code = ws.cons.CODE_USERINFO_MISMATCH
-							rs.msg = '토큰과 비교할 사용자정보에 문제가 있습니다 : ' + JSON.stringify(userInfo)
+							rs.msg = '토큰과 비교할 사용자정보가 없습니다.'
 							resolve(rs)
 							return
 						}
@@ -87,31 +84,27 @@ module.exports = (function() {
 							if (err) {
 								if (err.message.includes('jwt expired')) {
 									rs.code = ws.cons.CODE_TOKEN_EXPIRED
-									rs.msg = 'Token expired.'
+									rs.msg = '토큰이 만료되었습니다.'
 								} else {
 									rs.code = ws.cons.CODE_ERR
 									rs.msg = err.message
 								}
-								console.log(rs.code, rs.msg)
 								resolve(rs)
 								return
 							} //아래부터는 위변조도 체크하는 것이 됨
 							const decodedStr = JSON.stringify(decoded)
-							console.log(decodedStr, "====", _payloadStr)
 							if (decodedStr != _payloadStr) {
 								rs.code = ws.cons.CODE_TOKEN_MISMATCH
 								rs.msg = 'Token mismatch.'
 								resolve(rs)
 								return
 							}
-							if (decoded.userid != userid) { //|| decoded.orgcd != orgcd || decoded.toporgcd != toporgcd) {
+							if (decoded.userid != userid) {
 								rs.code = ws.cons.CODE_USERINFO_MISMATCH
-								rs.msg = 'Userinfo not matched with token.'
+								rs.msg = '사용자정보에 문제가 있습니다 : ' + decoded.userid + '/' + userid
 								resolve(rs)
 								return
 							}
-							console.log(rs.code, rs.msg)
-							//rs.token = decoded //com.verifyToken()에서처럼 token을 받아서 비교하는 데 사용하기 위한 목적임
 							resolve(rs)
 						})
 					} catch (ex) {
@@ -120,10 +113,10 @@ module.exports = (function() {
 				})
 			},
 			chkVerify : async (res, tokenInfo) => { 
-				//app.use(), router.use() 사용해도 되지만, 함수로 체크 : 코딩 약간 수월
-				//클라이언트에 code, msg 전달해야 하는데 app.use(), router.use()는 손이 더 가고 함수보다 덜 유연함
+				//app.use(), router.use()에서 ws.jwt.verify()로 사용해도 되지만, 래핑된 chkVerify()로 체크 : 코딩 약간 수월
+				//클라이언트에 code, msg 전달해야 하는데 app.use(), router.use()보다는 손이 더 갈 수도 있지만 더 유연하게 사용 가능
 				const jwtRet = await ws.jwt.verify(tokenInfo)
-				if (jwtRet.code == ws.cons.CODE_OK) { //await 빼고 chkVerify() 호출할 때 대비해 if절 구성
+				if (jwtRet.code == ws.cons.CODE_OK) { //실수로 await 빼고 chkVerify() 호출할 때 대비해 if절 구성
 					return true
 				} else {
 					ws.http.resWarn(res, jwtRet.msg, false, jwtRet.code)
@@ -133,12 +126,12 @@ module.exports = (function() {
 		},
 
 		util : {
-			addToGlobal : (wslogger, _obj, nodeConfig) => {
+			addToGlobal : (wslogger, obj, nodeConfig) => {
 				if (nodeConfig) global.nodeConfig = nodeConfig
 				global.logger = wslogger
-				global.projDir = ws.util.getLastItemFromStr(_obj.dirName, path.sep)
-				console.log('version', process.version)
-				console.log('projDir', global.projDir, _obj.dirName)
+				//global.projDir = ws.util.getLastItemFromStr(obj.dirName, path.sep) //아직 사용처없으나 일단 지우지 말고 두기
+				console.log('projDir :', obj.dirName)
+				console.log('version :', process.version)				
 			},
 			initExpressApp : (public) => {
 				const _app = express()
@@ -151,7 +144,7 @@ module.exports = (function() {
 			},
 			createWas : (_app, _kind) => {
 				let server
-				if (_kind == 'https') { //watch out for expiry date.
+				if (_kind == 'https') { //프로젝트 hushsbay는 aws 기반(https는 로드밸런서CLB 이용)이므로 여기서는 https가 아닌 http로 설정
 					const sslOption = { key: fs.readFileSync(nodeConfig.ssl.key, 'utf-8'), cert: fs.readFileSync(nodeConfig.ssl.cert, 'utf-8') }
 					server = https.Server(sslOption, _app)
 				} else {
@@ -160,11 +153,11 @@ module.exports = (function() {
 				server.keepAliveTimeout = 120000
 				return server
 			},
-			isvoid : (obj) => {
+			isvoid : (obj) => { //"0", 0, 등의 경우는 유효할 경우도 고려해야 하므로 아래 2가지 경우만 체크하는 함수임
                 if (typeof obj == 'undefined' || obj == null) return true
                 return false
             },
-			getLogMsg : (ex, title) => {
+			getLogMsg : (ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기
 				let _msg = (title) ? '[' + title + '] ' : ''
 				if (typeof ex == 'string') {
 					_msg += ex

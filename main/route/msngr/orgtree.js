@@ -15,7 +15,7 @@ router.post('/', async function(req, res, next) {
 	} catch (ex) {
 		//ws.log.ex(req, ex, logTitle)
 		console.log(logTitle, ex.message)
-		ws.http.resJson(res, '-1', ex.message, logTitle)
+		//ws.http.resJson(res, '-1', ex.message, logTitle)
 	} finally {
 		//try { conn.release() } catch (ex) { console.log(ws.cons.mysql_close_error) }
 	}
@@ -24,7 +24,7 @@ router.post('/', async function(req, res, next) {
 router.use(function(err, req, res, next) {
 	//global.log.error(logTitle, err.message)
 	console.log(logTitle, err.message)
-	ws.http.resJson(res, '-1', err.message, logTitle)
+	//ws.http.resJson(res, '-1', err.message, logTitle)
 })
 
 module.exports = router
