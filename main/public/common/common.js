@@ -73,6 +73,7 @@
                         hush.msg.showMsg(rs.msg)
 						return false                           
                     }
+                    console.log("11112222222222222")
                 }
                 const _id = hush.http.getCookie("userid")
                 const _nm = hush.http.getCookie("usernm")
