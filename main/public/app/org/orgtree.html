@@ -381,6 +381,7 @@
 					//selectOnlyChildDept = Y이면 최하단 부서만 선택 가능 (nodeToGet=D일 경우만 의미있음)
 					//getImage = Y이면 사용자정보에 등록된 이미지를 가져옴
 					const param = new URLSearchParams(location.search)
+					console.log(param.get("aaa"))
 					g_from = param.get("from")					
 					g_nodeToGet = param.get("nodeToGet")
 					g_nodeToGet = (g_nodeToGet == "C" || g_nodeToGet == "D") ? g_nodeToGet : "U"
