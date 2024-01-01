@@ -35,7 +35,7 @@
         auth : {
             setCookieForUser : (rs, _persist) => { //_persist = Y or else
                 const persist = (_persist == "Y") ? true : false
-                hush.http.setCookie("autologin", _persist, true) //포털(index.html)에서만 사용됨
+                hush.http.setCookie("autologin", _persist, true) //포털(index.html)에서만 사용됨 : 로그아웃전까지는 브라우저를 나와도 남아 있음
                 hush.http.setCookie("token", rs.token, persist) //jwt
                 hush.http.setCookie("userid", rs.USER_ID, true)
                 //hush.http.setCookie("userkey", (fromWebView ? hush.cons.m_key : hush.cons.w_key) + rs.userid, persist)
@@ -131,6 +131,7 @@
                     type : (method) ? method : "post",
                     timeout : hush.cons.restful_timeout,
                     success : function(rs) {
+                        if (rs.token) hush.http.refreshToken(rs.token)
                         if (callback) callback(rs)
                     },
                     error : function(xhr, status, error) {
@@ -168,6 +169,7 @@
                     type : (method) ? method : "post",
                     timeout : hush.cons.restful_timeout,
                     success : function(rs) {
+                        if (rs.token) hush.http.refreshToken(rs.token)
                         resolve(rs)
                     },
                     error : function(xhr, status, error) {
@@ -189,6 +191,7 @@
                     cache : false,
                     type : "POST",
                     success : function(rs) { 
+                        if (rs.token) hush.http.refreshToken(rs.token)
                         if (callback) callback(rs)
                     },
                     error : function(xhr, status, error) {
@@ -221,7 +224,11 @@
                     token : hush.http.getCookie("token"), userid : hush.http.getCookie("userid"),
                     orgcd : hush.http.getCookie("orgcd"), toporgcd : hush.http.getCookie("toporgcd")
                 }
-            }           
+            },
+            refreshToken : (token) => {
+                const _persist = (hush.http.getCookie("autologin") == "Y") ? true : false
+                hush.http.setCookie("token", token, _persist)
+            }
         },
         msg : { //1. msg(비동기콜백) 2. alert(=window.alert) 3. confirm(=window.confirm) 4. toast(복수메시지 순서대로 표시 지원)
             //아래 실행후 육안으로 먼저 보이는 순서는 = 1 > 2 > 3 > 5 > 6 > 7 > 4 

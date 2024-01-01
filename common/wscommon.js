@@ -60,7 +60,7 @@ module.exports = (function() {
 				const key = _key || global.nodeConfig.jwt.key
 				return jwt.sign(userInfo, key, { algorithm : global.nodeConfig.jwt.algo, expiresIn : global.nodeConfig.jwt.expiry })
 			},
-			verify : (tokenInfo, _key) => { //tokenInfo = { token, userid }
+			verify : (tokenInfo, _key) => { //tokenInfo = { token, userid } //여기서는 orgcd, toporgcd 체크하지 않음
 				return new Promise((resolve, reject) => {
 					try {
 						const token = tokenInfo.token
@@ -140,6 +140,7 @@ module.exports = (function() {
 							return false
 						}
 					}
+
 					return true
 				} else {					
 					ws.http.resWarn(res, jwtRet.msg, false, jwtRet.code)

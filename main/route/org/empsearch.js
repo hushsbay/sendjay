@@ -17,7 +17,8 @@ router.post('/', async function(req, res) {
 		const teamcode = req.body.teamcode
 		const comp = (!req.body.comp || req.body.comp.toLowerCase() == 'all') ? 'all' : ws.util.toStringForInClause(req.body.comp)
 		conn = await wsmysql.getConnFromPool(global.pool)
-		if (!(await ws.jwt.chkVerify(req, res, req.body.tokenInfo, conn))) return		
+		if (!(await ws.jwt.chkVerify(req, res, req.body.tokenInfo, conn))) return
+		rs.token = ws.jwt.make({ userid : req.body.tokenInfo.userid }) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음		
 		sql =  "SELECT ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, USER_ID, USER_NM, NICK_NM, JOB, TEL_NO, AB_CD, AB_NM "
 		sql += "  FROM JAY.Z_USER_TBL "
 		sql += " WHERE ORG_CD IS NOT NULL " //바로 아래 조건이 where는 고려하지 말고 and만 편하게 사용하기 위한 dummy where절임
