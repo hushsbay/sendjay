@@ -1,5 +1,5 @@
 const fs = require('fs')
-const path = require('path')
+//const path = require('path')
 const http = require('http')
 const https = require('https')
 const crypto = require('crypto')
@@ -7,6 +7,7 @@ const express = require('express')
 const requestIp = require('request-ip')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
+const wsmysql = require(config.app.wsmysql)
 const jwt = require('jsonwebtoken')
 
 module.exports = (function() {
