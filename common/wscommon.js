@@ -30,7 +30,6 @@ module.exports = (function() {
 			 CODE_USERINFO_MISMATCH : '-83',
 			 CODE_TOKEN_EXPIRED : '-84',
 			 CODE_USERCOOKIE_MISMATCH : '-85',
-			 //CODE_USE_YOUR_OWN_USERID : '-85',
 			 mysql_close_error : 'mysql_close_error',
 			 toast_prefix : '##$$', //클라이언트와 동일
 		},
@@ -135,7 +134,7 @@ module.exports = (function() {
 							return false
 						}
 						if (data[0].ORG_CD != tokenInfo.orgcd || data[0].TOP_ORG_CD != tokenInfo.toporgcd) {
-							const msg = '사용자쿠키값이 다릅니다/' + tokenInfo.userid + '/' + tokenInfo.orgcd + '/' + tokenInfo.toporgcd
+							const msg = '사용자쿠키값에 문제가 있습니다 : ' + tokenInfo.userid + '/' + tokenInfo.orgcd + '/' + tokenInfo.toporgcd
 							ws.util.loge(req, msg)
 							ws.http.resWarn(res, msg, false, ws.cons.CODE_USERCOOKIE_MISMATCH, 'chkVerify')
 							return false
