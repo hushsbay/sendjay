@@ -17,7 +17,8 @@ router.post('/', async function(req, res) {
 		const pwd = req.body.pwd
 		const token = req.body.token
 		if (token) { //index.html(포털)에서 인증체크하는 것임
-			if (!(await ws.jwt.chkVerify(req, res, { token : token, userid : userid }))) return
+			rs.token = await ws.jwt.chkVerify(req, res, { token : token, userid : userid })
+			if (rs.token == '') return //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
 		}
 		conn = await wsmysql.getConnFromPool(global.pool)
 		sql =  "SELECT ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, USER_ID, PWD, USER_NM, NICK_NM, JOB, TEL_NO, AB_CD, AB_NM FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
@@ -34,9 +35,7 @@ router.post('/', async function(req, res) {
 			}
 		}
 		data[0].PWD = ''
-		Object.assign(rs, data[0])
-		const userInfo = { userid : userid }
-		rs.token = ws.jwt.make(userInfo) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음		
+		Object.assign(rs, data[0])	
 		res.json(rs)
 	} catch (ex) {
 		ws.http.resException(req, res, ex)

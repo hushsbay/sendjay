@@ -17,8 +17,8 @@ router.post('/', async function(req, res) {
 		const comp = (!req.body.comp || req.body.comp.toLowerCase() == 'all') ? 'all' : ws.util.toStringForInClause(req.body.comp)
 		conn = await wsmysql.getConnFromPool(global.pool)
 		if (nodeToGet == 'U') { //사용자(U)일 경우만 인증체크함
-			if (!(await ws.jwt.chkVerify(req, res, req.body.tokenInfo, conn))) return
-			rs.token = ws.jwt.make({ userid : req.body.tokenInfo.userid }) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음	
+			rs.token = await ws.jwt.chkVerify(req, res, req.body.tokenInfo, conn)
+			if (rs.token == '') return //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음	
 		}
 		sql =  "SELECT A.SEQ, A.LVL, A.ORG_CD, A.ORG_NM, B.ORG_CD TOP_ORG_CD, B.ORG_NM TOP_ORG_NM, '' USER_ID, '' USER_NM, '' NICK_NM, '' JOB, '' TEL_NO, '' AB_CD, '' AB_NM, "
 		sql += "       (SELECT COUNT(*) FROM JAY.Z_USER_TBL WHERE ORG_CD = A.ORG_CD) MEM_CNT "

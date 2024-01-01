@@ -131,7 +131,7 @@
                     type : (method) ? method : "post",
                     timeout : hush.cons.restful_timeout,
                     success : function(rs) {
-                        if (rs.token) hush.http.refreshToken(rs.token)
+                        if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
                         if (callback) callback(rs)
                     },
                     error : function(xhr, status, error) {
@@ -169,7 +169,7 @@
                     type : (method) ? method : "post",
                     timeout : hush.cons.restful_timeout,
                     success : function(rs) {
-                        if (rs.token) hush.http.refreshToken(rs.token)
+                        if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
                         resolve(rs)
                     },
                     error : function(xhr, status, error) {
@@ -191,7 +191,7 @@
                     cache : false,
                     type : "POST",
                     success : function(rs) { 
-                        if (rs.token) hush.http.refreshToken(rs.token)
+                        if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
                         if (callback) callback(rs)
                     },
                     error : function(xhr, status, error) {

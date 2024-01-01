@@ -121,6 +121,7 @@ module.exports = (function() {
 			chkVerify : async (req, res, tokenInfo, conn) => { 
 				//app.use(), router.use()에서 ws.jwt.verify()로 사용해도 되지만, 래핑된 chkVerify()로 체크 : 코딩 약간 수월
 				//클라이언트에 code, msg 전달해야 하는데 app.use(), router.use()보다는 손이 더 갈 수도 있지만 더 유연하게 사용 가능
+				let retToken = ''
 				if (req && req.clientIp) Object.assign(tokenInfo, { ip : req.clientIp })
 				const jwtRet = await ws.jwt.verify(tokenInfo)
 				if (jwtRet.code == ws.cons.CODE_OK) { //실수로 await 빼고 chkVerify() 호출할 때 대비해 if절 구성
@@ -131,20 +132,20 @@ module.exports = (function() {
 							const msg = ws.cons.MSG_NO_DATA + '/' + tokenInfo.userid
 							ws.util.loge(req, msg)
 							ws.http.resWarn(res, msg, false, ws.cons.CODE_NO_DATA, 'chkVerify')
-							return false
+							return retToken
 						}
 						if (data[0].ORG_CD != tokenInfo.orgcd || data[0].TOP_ORG_CD != tokenInfo.toporgcd) {
 							const msg = '사용자쿠키값에 문제가 있습니다 : ' + tokenInfo.userid + '/' + tokenInfo.orgcd + '/' + tokenInfo.toporgcd
 							ws.util.loge(req, msg)
 							ws.http.resWarn(res, msg, false, ws.cons.CODE_USERCOOKIE_MISMATCH, 'chkVerify')
-							return false
+							return retToken
 						}
 					}
-
-					return true
+					retToken = ws.jwt.make({ userid : tokenInfo.userid }) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
+					return retToken
 				} else {					
 					ws.http.resWarn(res, jwtRet.msg, false, jwtRet.code)
-					return false
+					return retToken
 				}
 			},
 		},
