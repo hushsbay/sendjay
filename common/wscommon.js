@@ -124,7 +124,7 @@ module.exports = (function() {
 				if (req && req.clientIp) Object.assign(tokenInfo, { ip : req.clientIp })
 				const jwtRet = await ws.jwt.verify(tokenInfo)
 				if (jwtRet.code == ws.cons.CODE_OK) { //실수로 await 빼고 chkVerify() 호출할 때 대비해 if절 구성
-					if (conn) { //userid뿐만 아니라 부서정보 등 위변조도 체크 필요 (문제 발생시 로깅)
+					if (conn) { //userid뿐만 아니라 부서정보 등 위변조도 체크 필요 (문제 발생시 로깅. 겸직 코딩은 제외되어 있음)
 						const sql = "SELECT ORG_CD, TOP_ORG_CD FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
 						const data = await wsmysql.query(conn, sql, [tokenInfo.userid])
 						if (data.length == 0) {
