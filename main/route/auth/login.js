@@ -16,7 +16,7 @@ router.post('/', async function(req, res) {
 		const userid = req.body.userid
 		const pwd = req.body.pwd
 		const token = req.body.token
-		if (token) { //index.html(포털)에서 인증체크하는 것임
+		if (token) { //index.html(포털)에서 인증체크하는 것임 : ws.jwt.make()으로 갱신함
 			rs.token = await ws.jwt.chkVerify(req, res, { token : token, userid : userid })
 			if (rs.token == '') return //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
 		}
@@ -33,6 +33,7 @@ router.post('/', async function(req, res) {
 				ws.http.resWarn(res, '비번이 다릅니다.')
 				return
 			}
+			rs.token = ws.jwt.make({ userid : userid }) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
 		}
 		data[0].PWD = ''
 		Object.assign(rs, data[0])	
