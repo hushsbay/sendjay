@@ -8,15 +8,15 @@
             CODE_ERR : '-1',
             CODE_NO_DATA : '-100',
             MSG_NO_DATA : '데이터가 없습니다.',
-            CODE_PASSWORD_NEEDED : '-76',
-            CODE_PASSKEY_NEEDED : '-77',
-            CODE_PASSWORD_NOT_MATCHED : '-78',
-            CODE_PASSKEY_NOT_MATCHED : '-79',
-            CODE_TOKEN_NEEDED : '-81', //jwt 
-            CODE_TOKEN_MISMATCH : '-82', //jwt payload not equal to decoded
-            CODE_USERID_MISMATCH : '-83',
-            CODE_TOKEN_EXPIRED : '-84',
-            CODE_USE_YOUR_OWN_USERID : '-85',
+            //CODE_PASSWORD_NEEDED : '-76',
+            //CODE_PASSKEY_NEEDED : '-77',
+            //CODE_PASSWORD_NOT_MATCHED : '-78',
+            //CODE_PASSKEY_NOT_MATCHED : '-79',
+            //CODE_TOKEN_NEEDED : '-81', //jwt 
+            //CODE_TOKEN_MISMATCH : '-82', //jwt payload not equal to decoded
+            //CODE_USERID_MISMATCH : '-83',
+            //CODE_TOKEN_EXPIRED : '-84',
+            //CODE_USE_YOUR_OWN_USERID : '-85',
             toast_prefix : "##$$", 
             ///////////////////////////////////위는 서버와 동일
             failOnLoad : "failOnLoad",
