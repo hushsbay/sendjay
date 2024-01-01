@@ -1,6 +1,5 @@
 const config = require('./config')
 const fs = require('fs')
-//const path = require('path')
 const http = require('http')
 const https = require('https')
 const crypto = require('crypto')
@@ -21,10 +20,6 @@ module.exports = (function() {
 			 MSG_ALREADY_EXISTS : '이미 존재하는 데이터입니다.',
 			 CODE_NO_DATA : '-100',
 			 MSG_NO_DATA : '데이터가 없습니다.',
-			 //CODE_PASSWORD_NEEDED : '-76',
-			 //CODE_PASSKEY_NEEDED : '-77',
-			 //CODE_PASSWORD_NOT_MATCHED : '-78',
-			 //CODE_PASSKEY_NOT_MATCHED : '-79',
 			 CODE_TOKEN_NEEDED : '-81', //jwt : -8로 시작하는 오류코드는 클라이언트에서 로그인이 필요하다는 안내에 의미있게 쓰이고 있음
 			 CODE_TOKEN_MISMATCH : '-82', //jwt payload not equal to decoded
 			 CODE_USERINFO_MISMATCH : '-83',
@@ -52,7 +47,7 @@ module.exports = (function() {
 				const title = req ? req.title : ''
 				ws.util.loge(req, ex)
 				ws.http.resCodeMsg(res, ws.cons.CODE_ERR, ex, title)
-			},
+			}
 		},
 
 		jwt : {
@@ -147,14 +142,13 @@ module.exports = (function() {
 					ws.http.resWarn(res, jwtRet.msg, false, jwtRet.code)
 					return retToken
 				}
-			},
+			}
 		},
 
 		util : {
 			addToGlobal : (wslogger, obj, nodeConfig) => {
 				if (nodeConfig) global.nodeConfig = nodeConfig
 				global.logger = wslogger
-				//global.projDir = ws.util.getLastItemFromStr(obj.dirName, path.sep) //아직 사용처없으나 일단 지우지 말고 두기
 				console.log('version :', process.version)
 				console.log('projPath :', obj.dirName)					
 				console.log('logPath : ', obj.logPath)			

@@ -83,260 +83,246 @@
         	}
 			
 			const getUserData = async (_keyword, _teamcode) => {
-            	//$wise.onceJwtCall(g_payload, false, async function(token) {  
-                    try {
-                    	g_list.empty()
-						const _comp = $("#chk_mycomp").prop("checked") ? hush.user.toporgcd : g_comp
-                        const rs = await hush.http.ajax("/org/empsearch", { keyword : _keyword, teamcode : _teamcode, comp : _comp })
-						if (rs.code != hush.cons.CODE_OK) {
-                        	hush.msg.showMsg(rs.msg, rs.code)
-                            return
+				try {
+					g_list.empty()
+					const _comp = $("#chk_mycomp").prop("checked") ? hush.user.toporgcd : g_comp
+					const rs = await hush.http.ajax("/org/empsearch", { keyword : _keyword, teamcode : _teamcode, comp : _comp })
+					if (rs.code != hush.cons.CODE_OK) {
+						hush.msg.showMsg(rs.msg, rs.code)
+						return
+					}
+					g_rs = rs
+					const _len = rs.list.length
+					if (_len == 0) return
+					for (let i = 0; i < _len; i++) {
+						const row = rs.list[i]
+						const user_id = row.USER_ID
+						const user_nm = row.USER_NM
+						const org_cd = row.ORG_CD
+						const org_nm = row.ORG_NM
+						const top_org_cd = row.TOP_ORG_CD
+						const top_org_nm = row.TOP_ORG_NM
+						const nodeStr = user_nm + "/" + org_nm + "/" + top_org_nm
+						let _html = "<div id=row_" + i.toString() + " class=coRow >"
+						_html += "   	<input type=checkbox id=sel_" + i + " code=" + user_id + " class=sel />"
+						if (g_getImage == "Y") {
+							_html += "	<img id=img_" + user_id + " src='/img/noperson.png' class=imgPerson downloaded='' />"
+						} else {
+							_html += "	<img src='/img/ico_user.png' class=coImg16 style='margin-left:5px' />"
 						}
-						g_rs = rs
-				      	const _len = rs.list.length
-						if (_len == 0) return
-                        for (let i = 0; i < _len; i++) {
-                            const row = rs.list[i]
-							const user_id = row.USER_ID
-							const user_nm = row.USER_NM
-							const org_cd = row.ORG_CD
-							const org_nm = row.ORG_NM
-							const top_org_cd = row.TOP_ORG_CD
-							const top_org_nm = row.TOP_ORG_NM
-							const nodeStr = user_nm + "/" + org_nm + "/" + top_org_nm
-							let _html = "<div id=row_" + i.toString() + " class=coRow >"
-				          	_html += "   	<input type=checkbox id=sel_" + i + " code=" + user_id + " class=sel />"
-							if (g_getImage == "Y") {
-								_html += "	<img id=img_" + user_id + " src='/img/noperson.png' class=imgPerson downloaded='' />"
-							} else {
-								_html += "	<img src='/img/ico_user.png' class=coImg16 style='margin-left:5px' />"
-							}
-				          	_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
-				          	_html += "  </div>"
-                            g_list.append(_html)
-                        }
-                    	if (_len == 0) return
-				      	$(".sel").off("change").on("change", function(e) {
-				      		const _self = $(this)
-				          	const _id = this.id //sel_2
-				          	const _idx = parseInt(_id.substring(4)) //2
-				          	procSelect("U", _idx)
-				      	}) //g_nodeToGet == "U"일 경우만 btn_team() 실행됨
-						if (_teamcode) { //내팀
-							$("#chk_selectall").prop("disabled", false)
-						} else { //검색
-							$("#chk_selectall").prop("disabled", true)
-						}
-						procPhoto()
-                    } catch (ex) {
-                        hush.util.showEx(ex)
-                    }    	                    
-                // }, function(ex1) {
-                //     alert(survey.util.getErrorMsg(ex1.message, survey.cons.jwt))
-                // })    	                
+						_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
+						_html += "  </div>"
+						g_list.append(_html)
+					}
+					if (_len == 0) return
+					$(".sel").off("change").on("change", function(e) {
+						const _self = $(this)
+						const _id = this.id //sel_2
+						const _idx = parseInt(_id.substring(4)) //2
+						procSelect("U", _idx)
+					}) //g_nodeToGet == "U"일 경우만 btn_team() 실행됨
+					if (_teamcode) { //내팀
+						$("#chk_selectall").prop("disabled", false)
+					} else { //검색
+						$("#chk_selectall").prop("disabled", true)
+					}
+					procPhoto()
+				} catch (ex) {
+					hush.util.showEx(ex)
+				}  	                
             }
 
 			const getDeptData = async (_keyword) => {
-            	//$wise.onceJwtCall(g_payload, false, async function(token) {  
-                    try {
-                    	g_list.empty()
-						const _comp = (hush.user && $("#chk_mycomp").prop("checked")) ? hush.user.toporgcd : g_comp //편의상 U말고는 hush.user가 null일 수 있음
-                        const rs = await hush.http.ajax("/org/deptsearch", { keyword : _keyword, comp : _comp })
-						if (rs.code != hush.cons.CODE_OK) {
-                        	hush.msg.showMsg(rs.msg, rs.code)
-                            return
-						}
-						g_rs = rs
-				      	const _len = rs.list.length
-						if (_len == 0) return
-                        for (let i = 0; i < _len; i++) {
-                            const row = rs.list[i]
-							const org_cd = row.ORG_CD
-							const org_nm = row.ORG_NM
-							const top_org_cd = row.TOP_ORG_CD
-							const top_org_nm = row.TOP_ORG_NM
-							const nodeStr = org_nm + "/" + top_org_nm
-							let _html = "<div id=row_" + i.toString() + " class=coRow >"
-				          	_html += "   	<input type=checkbox id=sel_" + i + " code=" + org_cd + " class=sel />"
-				          	_html += "		<img src='/img/ico_dept.png' class=coImg16 style='margin-left:5px' />"
-				          	_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
-				          	_html += "  </div>"
-                            g_list.append(_html)
-                        }
-                    	if (_len == 0) return
-				      	$(".sel").off("change").on("change", function(e) {
-				      		const _self = $(this)
-				          	const _id = this.id //sel_2
-				          	const _idx = parseInt(_id.substring(4)) //2
-				          	procSelect("D", _idx)
-				      	})
-						$("#chk_selectall").prop("disabled", true)
-                    } catch (ex) {
-                        hush.util.showEx(ex)
-                    }    	                    
-                // }, function(ex1) {
-                //     alert(survey.util.getErrorMsg(ex1.message, survey.cons.jwt))
-                // })    	                
+				try {
+					g_list.empty()
+					const _comp = (hush.user && $("#chk_mycomp").prop("checked")) ? hush.user.toporgcd : g_comp //편의상 U말고는 hush.user가 null일 수 있음
+					const rs = await hush.http.ajax("/org/deptsearch", { keyword : _keyword, comp : _comp })
+					if (rs.code != hush.cons.CODE_OK) {
+						hush.msg.showMsg(rs.msg, rs.code)
+						return
+					}
+					g_rs = rs
+					const _len = rs.list.length
+					if (_len == 0) return
+					for (let i = 0; i < _len; i++) {
+						const row = rs.list[i]
+						const org_cd = row.ORG_CD
+						const org_nm = row.ORG_NM
+						const top_org_cd = row.TOP_ORG_CD
+						const top_org_nm = row.TOP_ORG_NM
+						const nodeStr = org_nm + "/" + top_org_nm
+						let _html = "<div id=row_" + i.toString() + " class=coRow >"
+						_html += "   	<input type=checkbox id=sel_" + i + " code=" + org_cd + " class=sel />"
+						_html += "		<img src='/img/ico_dept.png' class=coImg16 style='margin-left:5px' />"
+						_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
+						_html += "  </div>"
+						g_list.append(_html)
+					}
+					if (_len == 0) return
+					$(".sel").off("change").on("change", function(e) {
+						const _self = $(this)
+						const _id = this.id //sel_2
+						const _idx = parseInt(_id.substring(4)) //2
+						procSelect("D", _idx)
+					})
+					$("#chk_selectall").prop("disabled", true)
+				} catch (ex) {
+					hush.util.showEx(ex)
+				}  	                
             }
 
             const getOrgTree = async () => {
-				//$wise.onceJwtCall(g_payload, false, async function(token) {
-					try {
-						const _comp = (hush.user && $("#chk_mycomp").prop("checked")) ? hush.user.toporgcd : g_comp //편의상 U말고는 hush.user가 null일 수 있음
-						$("#spn_depth").html(g_expandTo)			
-						g_list.empty()
-                        const rs = await hush.http.ajax("/org/orgtree", { nodeToGet : g_nodeToGet, comp : _comp })
-                        if (rs.code != hush.cons.CODE_OK) {
-                        	hush.msg.showMsg(rs.msg, rs.code)
-                            return
-						}
-						g_rs = rs
-				      	const _len = rs.list.length
-						if (_len == 0) return
-				      	const _objUpperLevel = { } //used for deciding child node's parent tag idx
-				      	for (let i = 0; i < _len; i++) {
-				        	const row = rs.list[i]
-							const seq = row.SEQ
-							const lvl = parseInt(row.LVL)
-							const org_cd = row.ORG_CD
-							const org_nm = row.ORG_NM
-							const top_org_cd = row.TOP_ORG_CD
-							const top_org_nm = row.TOP_ORG_NM
-							const user_id = row.USER_ID
-							const user_nm = row.USER_NM
-							const mem_cnt = parseInt(row.MEM_CNT)
-							const nick_nm = row.NICK_NM
-							const nodekind = (lvl == 0) ? "C" : (user_id ? "U" : "D") //회사(C) / 사용자(U)레벨은 소속 부서 레벨+1 /부서(D)
-				          	let nodeStr, title, disp, hasChild = true, expanded, parentidx = -1, _code
-				          	if (i == _len - 1 || nodekind == "U" || parseInt(rs.list[i + 1].LVL) <= lvl) hasChild = false
-				          	if (g_expandAllDept == "Y") { //이 경우 g_expandTo 무시됨
-				          		if (nodekind == "U") {
-				          			disp = "none"
-				          		} else {
-				          			disp = "flex"
-				          		}
-				          		if (hasChild && !rs.list[i + 1].USER_ID) expanded = true
-				          	} else {
-				          		disp = (lvl <= g_expandTo) ? "flex" : "none"
-				          		expanded = (lvl < g_expandTo) ? true : false
-				          	}
-				          	if (lvl > 0 && _objUpperLevel[lvl - 1]) parentidx = _objUpperLevel[lvl - 1]
-				          	const expcolImg = (expanded) ? "minus_1.png" : "plus_1.png"
-				          	const paddingLeft = lvl * g_nodeIndent + 3
-				          	if (nodekind == "U") {
-								nodeStr = user_nm + (nick_nm ? " [" + nick_nm + "]" : "")
-								title = nodeStr
-				          		_code = user_id
+				try {
+					const _comp = (hush.user && $("#chk_mycomp").prop("checked")) ? hush.user.toporgcd : g_comp //편의상 U말고는 hush.user가 null일 수 있음
+					$("#spn_depth").html(g_expandTo)			
+					g_list.empty()
+					const rs = await hush.http.ajax("/org/orgtree", { nodeToGet : g_nodeToGet, comp : _comp })
+					if (rs.code != hush.cons.CODE_OK) {
+						hush.msg.showMsg(rs.msg, rs.code)
+						return
+					}
+					g_rs = rs
+					const _len = rs.list.length
+					if (_len == 0) return
+					const _objUpperLevel = { } //used for deciding child node's parent tag idx
+					for (let i = 0; i < _len; i++) {
+						const row = rs.list[i]
+						const seq = row.SEQ
+						const lvl = parseInt(row.LVL)
+						const org_cd = row.ORG_CD
+						const org_nm = row.ORG_NM
+						const top_org_cd = row.TOP_ORG_CD
+						const top_org_nm = row.TOP_ORG_NM
+						const user_id = row.USER_ID
+						const user_nm = row.USER_NM
+						const mem_cnt = parseInt(row.MEM_CNT)
+						const nick_nm = row.NICK_NM
+						const nodekind = (lvl == 0) ? "C" : (user_id ? "U" : "D") //회사(C) / 사용자(U)레벨은 소속 부서 레벨+1 /부서(D)
+						let nodeStr, title, disp, hasChild = true, expanded, parentidx = -1, _code
+						if (i == _len - 1 || nodekind == "U" || parseInt(rs.list[i + 1].LVL) <= lvl) hasChild = false
+						if (g_expandAllDept == "Y") { //이 경우 g_expandTo 무시됨
+							if (nodekind == "U") {
+								disp = "none"
 							} else {
-				          		nodeStr = org_nm + (g_nodeToGet == "U" && nodekind == "D" && mem_cnt > 0 ? " <span style='font-size: 12px; color: dimgray'>(" + mem_cnt + ")</span>" : "")
-								title = org_nm + " (" + mem_cnt + ")"
-								_code = org_cd
-				          	}
-				        	row.nodekind = nodekind
-				        	row.dispstate = disp
-				        	row.haschild = hasChild
-				        	row.expanded = expanded
-				        	row.parentidx = parentidx
-				          	//let _html = "<div id=row_" + i.toString() + " class=row style='width:100%;min-height:50px;display:" + disp + ";align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid lightgray;padding-left:" + paddingLeft + "px'>"
-							let _html = "<div id=row_" + i.toString() + " class=coRow style='display:" + disp + ";justify-content:space-between;padding-left:" + paddingLeft + "px'>"
-				          	_html += "		<div style='width:calc(100% - 45px);display:flex;align-items:center;justify-content:flex-start;margin-right:3px'>"
-				          	_html += "   		<input type=checkbox id=sel_" + i + " code=" + _code + " class=sel />"
-				          	const _ico = (nodekind == "U") ? "user" : "dept"
-							if (nodekind == "U" && g_getImage == "Y") {
-								_html += "		<img id=img_" + user_id + " src='/img/noperson.png' class=imgPerson downloaded='' />"
-							} else {
-								_html += "		<img src='/img/ico_" + _ico + ".png' class=coImg16 style='margin-left:5px' />"
+								disp = "flex"
 							}
-			          		_html += "			<span class=coDotDot style='margin-left:3px' title='" + title + "'>" + nodeStr + "</span>"
-				          	_html += "      </div>"				          	
-				          	_html += "      <div style='width:40px;display:flex;align-items:center;justify-content:flex-end;margin-right:3px'>"
-					        const dispImg = (hasChild) ? "" : " style='display:none'"
-					        _html += "          <img id=expcol_" + i + " src='/img/" + expcolImg + "' class=coImg32" + dispImg + " />"
-					        _html += "      </div>"
-				          	_html += "  </div>"
-				          	g_list.append(_html)
-				          	_objUpperLevel[lvl] = i
-							//if (nodekind == "U" && g_getImage == "Y") hush.auth.getUserPhoto(user_id, "img_" + user_id)
-				      	}				      	
-				      	$(".sel").off("change").on("change", function(e) {  
-				        	const _self = $(this)
-				          	const _id = this.id //sel_2
-				          	const _idx = parseInt(_id.substring(4)) //2
-				          	const row = g_rs.list[_idx]
-				          	const _bool = _self.prop("checked")
-				          	if (row.nodekind == g_nodeToGet) procSelect(row.nodekind, _idx)
-				      		const _lenA = g_rs.list.length
-				      		for (let i = _idx + 1; i < _lenA; i++) {
-				      			const row1 = g_rs.list[i]
-				      			if (row1.LVL <= row.LVL) break
-				      			const _tag = $("#sel_" + i)
-				      			_tag.prop("checked", _bool)
-				      			if (row1.nodekind == g_nodeToGet) setTimeout(() => { procSelect(row1.nodekind, i) }, 1)
-				      		}							
-							if (g_singleSelect == "Y" && _bool && $(".sel:checked").length > 1) {
-								hush.msg.toast("하나의 행만 선택 가능합니다.")
-								return
-							}
-						})
-				      	$(".coRow").off("click").on("click", async function(e) {
-				          	if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 checkbox event만 먹히도록 함
-				          	const _id = this.id //row_2
-				          	const _idx = parseInt(_id.substring(4)) //2
-				          	const row = g_rs.list[_idx]
-				          	const _tag = $(this)				          	
-				          	const _level = parseInt(row.LVL)
-				          	const _expanded = row.expanded
-				          	const _hasChild = row.haschild
-				          	if (_hasChild) {
-				              	const row1 = g_rs.list[_idx + 1]
-				              	if (!row1 || parseInt(row1.LVL) <= _level) {
-				                  	procExpCol(_expanded, _tag, _idx)
-				              	} else {
-				                  	let j = 0
-				                  	for (let i = _idx + 1; i < _len; i++) {
-				                  		const row1 = g_rs.list[i]
-				                      	const _nextTag = $("#row_" + i)
-				                      	const levelNext = parseInt(row1.LVL) //const levelNext = parseInt(_nextTag.attr("level"))
-				                      	if (levelNext <= _level) break
-				                      	if (_expanded) { //if (_expanded == "Y") {
-				                          	if (levelNext == _level + 1) {
-				                              	row1.dispstate = "none" //_nextTag.attr("dispstate", "none")
-				                          	} else {
-				                          		row1.dispstate = _nextTag.css("display") //_nextTag.attr("dispstate", _nextTag.css("display"))
-				                          	}
-				                          	_nextTag.hide()
-				                      	} else { //펼쳐야 함
-				                          	if (levelNext == _level + 1) { //사용자(U)레벨은 소속 부서 레벨+1
-				                              	_nextTag.css("display", "flex")
-				                              	row1.dispstate = "flex"
-				                          	} else {
-				                          		if ($("#row_" + row1.parentidx).css("display") == "none") { //if ($("#" + _nextTag.attr("parent")).css("display") == "none") {
-				                                  	_nextTag.css("display", "none")
-				                              	} else { //or recall child node's display state
-				                                  	_nextTag.css("display", row1.dispstate)
-				                              	}
-				                          	}
-				                      	}
-				                      	j += 1
-				                  	}  
-				                  	if (j > 0) procExpCol(_expanded, _tag, _idx)
-				              	}
-								if (!_expanded) procPhoto()
-				          	}
-
-				      	})
-						if (g_nodeToGet == "U" || g_nodeToGet == "D") {
-							$("#chk_selectall").prop("disabled", true)
+							if (hasChild && !rs.list[i + 1].USER_ID) expanded = true
 						} else {
-							$("#chk_selectall").prop("disabled", false)
+							disp = (lvl <= g_expandTo) ? "flex" : "none"
+							expanded = (lvl < g_expandTo) ? true : false
 						}
-						procPhoto()				     	
-				    } catch (ex) {
-				        hush.util.showEx(ex)
-				    }
-				// }, function(ex1) {
-				// 	alert(survey.util.getErrorMsg(ex1.message, survey.cons.jwt))
-				// })
+						if (lvl > 0 && _objUpperLevel[lvl - 1]) parentidx = _objUpperLevel[lvl - 1]
+						const expcolImg = (expanded) ? "minus_1.png" : "plus_1.png"
+						const paddingLeft = lvl * g_nodeIndent + 3
+						if (nodekind == "U") {
+							nodeStr = user_nm + (nick_nm ? " [" + nick_nm + "]" : "")
+							title = nodeStr
+							_code = user_id
+						} else {
+							nodeStr = org_nm + (g_nodeToGet == "U" && nodekind == "D" && mem_cnt > 0 ? " <span style='font-size: 12px; color: dimgray'>(" + mem_cnt + ")</span>" : "")
+							title = org_nm + " (" + mem_cnt + ")"
+							_code = org_cd
+						}
+						row.nodekind = nodekind
+						row.dispstate = disp
+						row.haschild = hasChild
+						row.expanded = expanded
+						row.parentidx = parentidx
+						let _html = "<div id=row_" + i.toString() + " class=coRow style='display:" + disp + ";justify-content:space-between;padding-left:" + paddingLeft + "px'>"
+						_html += "		<div style='width:calc(100% - 45px);display:flex;align-items:center;justify-content:flex-start;margin-right:3px'>"
+						_html += "   		<input type=checkbox id=sel_" + i + " code=" + _code + " class=sel />"
+						const _ico = (nodekind == "U") ? "user" : "dept"
+						if (nodekind == "U" && g_getImage == "Y") {
+							_html += "		<img id=img_" + user_id + " src='/img/noperson.png' class=imgPerson downloaded='' />"
+						} else {
+							_html += "		<img src='/img/ico_" + _ico + ".png' class=coImg16 style='margin-left:5px' />"
+						}
+						_html += "			<span class=coDotDot style='margin-left:3px' title='" + title + "'>" + nodeStr + "</span>"
+						_html += "      </div>"				          	
+						_html += "      <div style='width:40px;display:flex;align-items:center;justify-content:flex-end;margin-right:3px'>"
+						const dispImg = (hasChild) ? "" : " style='display:none'"
+						_html += "          <img id=expcol_" + i + " src='/img/" + expcolImg + "' class=coImg32" + dispImg + " />"
+						_html += "      </div>"
+						_html += "  </div>"
+						g_list.append(_html)
+						_objUpperLevel[lvl] = i
+					}				      	
+					$(".sel").off("change").on("change", function(e) {  
+						const _self = $(this)
+						const _id = this.id //sel_2
+						const _idx = parseInt(_id.substring(4)) //2
+						const row = g_rs.list[_idx]
+						const _bool = _self.prop("checked")
+						if (row.nodekind == g_nodeToGet) procSelect(row.nodekind, _idx)
+						const _lenA = g_rs.list.length
+						for (let i = _idx + 1; i < _lenA; i++) {
+							const row1 = g_rs.list[i]
+							if (row1.LVL <= row.LVL) break
+							const _tag = $("#sel_" + i)
+							_tag.prop("checked", _bool)
+							if (row1.nodekind == g_nodeToGet) setTimeout(() => { procSelect(row1.nodekind, i) }, 1)
+						}							
+						if (g_singleSelect == "Y" && _bool && $(".sel:checked").length > 1) {
+							hush.msg.toast("하나의 행만 선택 가능합니다.")
+							return
+						}
+					})
+					$(".coRow").off("click").on("click", async function(e) {
+						if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 checkbox event만 먹히도록 함
+						const _id = this.id //row_2
+						const _idx = parseInt(_id.substring(4)) //2
+						const row = g_rs.list[_idx]
+						const _tag = $(this)				          	
+						const _level = parseInt(row.LVL)
+						const _expanded = row.expanded
+						const _hasChild = row.haschild
+						if (_hasChild) {
+							const row1 = g_rs.list[_idx + 1]
+							if (!row1 || parseInt(row1.LVL) <= _level) {
+								procExpCol(_expanded, _tag, _idx)
+							} else {
+								let j = 0
+								for (let i = _idx + 1; i < _len; i++) {
+									const row1 = g_rs.list[i]
+									const _nextTag = $("#row_" + i)
+									const levelNext = parseInt(row1.LVL)
+									if (levelNext <= _level) break
+									if (_expanded) {
+										if (levelNext == _level + 1) {
+											row1.dispstate = "none"
+										} else {
+											row1.dispstate = _nextTag.css("display")
+										}
+										_nextTag.hide()
+									} else { //펼쳐야 함
+										if (levelNext == _level + 1) { //사용자(U)레벨은 소속 부서 레벨+1
+											_nextTag.css("display", "flex")
+											row1.dispstate = "flex"
+										} else {
+											if ($("#row_" + row1.parentidx).css("display") == "none") {
+												_nextTag.css("display", "none")
+											} else { //or recall child node's display state
+												_nextTag.css("display", row1.dispstate)
+											}
+										}
+									}
+									j += 1
+								}  
+								if (j > 0) procExpCol(_expanded, _tag, _idx)
+							}
+							if (!_expanded) procPhoto()
+						}
+
+					})
+					if (g_nodeToGet == "U" || g_nodeToGet == "D") {
+						$("#chk_selectall").prop("disabled", true)
+					} else {
+						$("#chk_selectall").prop("disabled", false)
+					}
+					procPhoto()				     	
+				} catch (ex) {
+					hush.util.showEx(ex)
+				}
 	        }
 	
 	        const procExpCol = (_expanded, _tag, _idx) => {

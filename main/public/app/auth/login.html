@@ -77,9 +77,9 @@
 							if (rs.code != hush.cons.CODE_OK) {
 								hush.msg.showMsg(rs.msg, rs.code)
 								return
-							} //rs.list 없음
+							}
 							const _chkAuto = $("#chk_auto").prop("checked") ? "Y" : ""
-							hush.auth.setCookieForUser(rs, _chkAuto)
+							hush.auth.setCookieForUser(rs, _chkAuto) //rs.list 아님을 유의
 							if (opener && opener.showLogout) opener.showLogout(true) //포털(index.html) 
 							const _target = g_target ? decodeURIComponent(g_target) : "/index.html"
 							hush.util.openWinTab(_target, true)

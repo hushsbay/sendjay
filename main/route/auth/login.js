@@ -21,7 +21,9 @@ router.post('/', async function(req, res) {
 			if (rs.token == '') return //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
 		}
 		conn = await wsmysql.getConnFromPool(global.pool)
-		sql =  "SELECT ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, USER_ID, PWD, USER_NM, NICK_NM, JOB, TEL_NO, AB_CD, AB_NM FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
+		sql =  "SELECT ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, USER_ID, PWD, USER_NM, NICK_NM, JOB, TEL_NO, AB_CD, AB_NM "
+		sql += "  FROM JAY.Z_USER_TBL "
+		sql += " WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [userid])
 		if (data.length == 0) {
 			ws.http.resWarn(res, ws.cons.MSG_NO_DATA)

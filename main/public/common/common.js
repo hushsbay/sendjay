@@ -8,15 +8,6 @@
             CODE_ERR : '-1',
             CODE_NO_DATA : '-100',
             MSG_NO_DATA : '데이터가 없습니다.',
-            //CODE_PASSWORD_NEEDED : '-76',
-            //CODE_PASSKEY_NEEDED : '-77',
-            //CODE_PASSWORD_NOT_MATCHED : '-78',
-            //CODE_PASSKEY_NOT_MATCHED : '-79',
-            //CODE_TOKEN_NEEDED : '-81', //jwt 
-            //CODE_TOKEN_MISMATCH : '-82', //jwt payload not equal to decoded
-            //CODE_USERID_MISMATCH : '-83',
-            //CODE_TOKEN_EXPIRED : '-84',
-            //CODE_USE_YOUR_OWN_USERID : '-85',
             toast_prefix : "##$$", 
             ///////////////////////////////////위는 서버와 동일
             failOnLoad : "failOnLoad",
@@ -38,25 +29,17 @@
                 hush.http.setCookie("autologin", _persist, true) //포털(index.html)에서만 사용됨 : 로그아웃전까지는 브라우저를 나와도 남아 있음
                 hush.http.setCookie("token", rs.token, persist) //jwt
                 hush.http.setCookie("userid", rs.USER_ID, true)
-                //hush.http.setCookie("userkey", (fromWebView ? hush.cons.m_key : hush.cons.w_key) + rs.userid, persist)
-                //hush.http.setCookie("passkey", rs.passkey, persist) //See login.js
                 hush.http.setCookie("usernm", rs.USER_NM, persist)
                 hush.http.setCookie("orgcd", rs.ORG_CD, persist)
                 hush.http.setCookie("toporgcd", rs.TOP_ORG_CD, persist)
-                //hush.http.setCookie("role", rs.role, persist)
-                //hush.http.setCookie("logined", "Y", false) //항상 세션쿠키 (자동이든 수동이든 인증되면 Y) : 화면에 로그인/로그아웃 등의 단순표시를 위해서만 사용하기
             },
             deleteCookieForUser : () => {
                 hush.http.deleteCookie('autologin')
                 hush.http.deleteCookie('token')
                 hush.http.deleteCookie('userid')
-                //hush.http.deleteCookie('userkey')
-                //hush.http.deleteCookie('passkey')
                 hush.http.deleteCookie('usernm')
                 hush.http.deleteCookie('orgcd')
                 hush.http.deleteCookie('toporgcd')
-                //hush.http.deleteCookie('role')
-                //hush.http.deleteCookie('logined')
             },
             setUser : async () => {
                 const _token = hush.http.getCookie("token")  
@@ -65,25 +48,17 @@
                     const rs = await hush.http.ajax("/auth/login", { token : _token, userid : _userid })
                     if (rs.code != hush.cons.CODE_OK) {
                         if (rs.code.startsWith("-8")) {
-                            //if (opener) {
-                            //    await hush.msg.alert(rs.msg + "<br>로그인이 필요합니다.")
-                            //} else {
-                                await hush.msg.alert(rs.msg + "<br>로그인 페이지로 이동합니다.")
-                                const _target = encodeURIComponent(location.pathname + location.search)
-                                hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
-                            //}
+                            await hush.msg.alert(rs.msg + "<br>로그인 페이지로 이동합니다.")
+                            const _target = encodeURIComponent(location.pathname + location.search)
+                            hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
                         } else {
                             hush.msg.msg(rs.msg)
                         }  
                         return false                      
                     }
                 } else {                    
-                    //if (opener) {
-                    //    await hush.msg.alert("로그인이 필요합니다.")
-                    //} else {
-                        const _target = encodeURIComponent(location.pathname + location.search + "&aaa=하하하")
-                        hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
-                    //}                    
+                    const _target = encodeURIComponent(location.pathname + location.search + "&aaa=하하하")
+                    hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
                     return false
                 }
                 const _id = hush.http.getCookie("userid")
@@ -92,9 +67,9 @@
                 const _orgnm = hush.http.getCookie("orgnm")
                 const _toporgcd = hush.http.getCookie("toporgcd")
                 const _toporgnm = hush.http.getCookie("toporgnm")
-                //const _key = hush.http.getCookie("userkey") //hushj.cons.w_key + _id //for socket
-                //const _role = hush.http.getCookie("role") //'role' check in browser is just for convenience. Keep in mind that you should check this on server.
-                hush.user = { token : _token, id : _id, nm : _nm, orgcd : _orgcd, orgnm : _orgnm, toporgcd : _toporgcd, toporgnm : _toporgnm }
+                hush.user = { 
+                    token : _token, id : _id, nm : _nm, orgcd : _orgcd, orgnm : _orgnm, toporgcd : _toporgcd, toporgnm : _toporgnm 
+                }
                 return true
             }, 
             getUserPhoto : (user_id, tag_id) => {
@@ -210,7 +185,7 @@
                 return $.cookie(name)
             },
             setCookie : (name, value, persist) => {
-                if (persist) { //expires value should be same as server's global.nodeConfig.jwt.expiry
+                if (persist) {
                     $.cookie(name, value, { expires: 365, path: '/' })
                 } else {
                     $.cookie(name, value, { path: '/' }) //session cookie
