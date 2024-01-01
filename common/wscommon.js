@@ -27,6 +27,7 @@ module.exports = (function() {
 			 CODE_TOKEN_MISMATCH : '-82', //jwt payload not equal to decoded
 			 CODE_USERINFO_MISMATCH : '-83',
 			 CODE_TOKEN_EXPIRED : '-84',
+			 CODE_USERCOOKIE_MISMATCH : '-85',
 			 //CODE_USE_YOUR_OWN_USERID : '-85',
 			 mysql_close_error : 'mysql_close_error',
 			 toast_prefix : '##$$', //클라이언트와 동일
@@ -116,12 +117,28 @@ module.exports = (function() {
 					}
 				})
 			},
-			chkVerify : async (req, res, tokenInfo) => { 
+			chkVerify : async (req, res, tokenInfo, conn) => { 
 				//app.use(), router.use()에서 ws.jwt.verify()로 사용해도 되지만, 래핑된 chkVerify()로 체크 : 코딩 약간 수월
 				//클라이언트에 code, msg 전달해야 하는데 app.use(), router.use()보다는 손이 더 갈 수도 있지만 더 유연하게 사용 가능
 				if (req && req.clientIp) Object.assign(tokenInfo, { ip : req.clientIp })
 				const jwtRet = await ws.jwt.verify(tokenInfo)
 				if (jwtRet.code == ws.cons.CODE_OK) { //실수로 await 빼고 chkVerify() 호출할 때 대비해 if절 구성
+					if (conn) { //userid뿐만 아니라 부서정보 등 위변조도 체크 필요 (문제 발생시 로깅)
+						const sql = "SELECT ORG_CD, TOP_ORG_CD FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
+						const data = await wsmysql.query(conn, sql, [tokenInfo.userid])
+						if (data.length == 0) {
+							const msg = ws.cons.MSG_NO_DATA + '/' + tokenInfo.userid
+							ws.util.loge(req, msg)
+							ws.http.resWarn(res, msg, false, ws.cons.CODE_NO_DATA, 'chkVerify')
+							return false
+						}
+						if (data[0].ORG_CD != tokenInfo.orgcd || data[0].TOP_ORG_CD != tokenInfo.toporgcd) {
+							const msg = '사용자쿠키값이 다릅니다/' + tokenInfo.userid + '/' + tokenInfo.orgcd + '/' + tokenInfo.toporgcd
+							ws.util.loge(req, msg)
+							ws.http.resWarn(res, msg, false, ws.cons.CODE_USERCOOKIE_MISMATCH, 'chkVerify')
+							return false
+						}
+					}
 					return true
 				} else {					
 					ws.http.resWarn(res, jwtRet.msg, false, jwtRet.code)
