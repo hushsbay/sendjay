@@ -17,11 +17,6 @@ router.post('/', async function(req, res) {
 		const pwd = req.body.pwd
 		const token = req.body.token
 		if (token) { //index.html(포털)에서 인증체크하는 것임
-			//const ret = await ws.jwt.verify({ token : token, userid : userid })
-			//if (ret.code != ws.cons.CODE_OK) {
-			//	ws.http.resWarn(res, ret.msg, false, ret.code)
-			//	return
-			//}
 			if (!(await ws.jwt.chkVerify(req, res, { token : token, userid : userid }))) return
 		}
 		conn = await wsmysql.getConnFromPool(global.pool)

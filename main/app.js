@@ -14,7 +14,7 @@ wasServer.listen(config.http.port, () => { console.log('wasServer listening on '
 app.use('/auth/login', require('./route/auth/login'))
 
 let rt = ['userlist', 'getuser', 'setuser']
-for (let i = 0; i < rt.length; i++) app.use('/user/' + rt[i], require('./route/user/' + rt[i])) //의도적으로 인증체크하지 않음
+for (let i = 0; i < rt.length; i++) app.use('/user/' + rt[i], require('./route/user/' + rt[i]))
 
 rt = ['orgtree', 'empsearch', 'deptsearch']
 for (let i = 0; i < rt.length; i++) app.use('/org/' + rt[i], require('./route/org/' + rt[i])) 
