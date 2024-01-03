@@ -16,3 +16,4 @@ Here are some ideas to get you started:
 -->
 
 <img class="coImg32" src="https://hushsbay.com/img/hushsbay.png"/>
+![image](https://github.com/hushsbay/hushsbay/assets/51398212/ffce98a9-1a70-44a7-8e8a-1dfac091f656)
