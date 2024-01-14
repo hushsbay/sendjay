@@ -4,7 +4,12 @@ const ws = require(config.app.ws)
 const wsmysql = require(config.app.wsmysql)
 const wslogger = require(config.app.wslogger)(config.app.logPath, 'hushsbay')
 
-ws.util.addToGlobal(wslogger, { dirName: __dirname, logPath : config.app.logPath }, nodeConfig)
+console.log('version:', process.version)
+console.log('projPath:', __dirname)					
+console.log('logPath:', config.app.logPath)
+
+global.nodeConfig = nodeConfig
+global.logger = wslogger
 global.pool = wsmysql.createPool(config.mysql.schema, true)
 
 const app = ws.util.initExpressApp('public')

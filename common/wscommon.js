@@ -146,13 +146,6 @@ module.exports = (function() {
 		},
 
 		util : {
-			addToGlobal : (wslogger, obj, nodeConfig) => {
-				if (nodeConfig) global.nodeConfig = nodeConfig
-				global.logger = wslogger
-				console.log('version :', process.version)
-				console.log('projPath :', obj.dirName)					
-				console.log('logPath : ', obj.logPath)			
-			},
 			initExpressApp : (public) => {
 				const _app = express()
 				_app.use(requestIp.mw()) //req.clientIp => X-Forwarded-For header info in AWS checked (req.headers['x-forwarded-for'] || req.connection.remoteAddress)
