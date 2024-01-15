@@ -59,7 +59,9 @@ if (config.redis.flush == 'Y') global.store.flushdb(function(err, result) { cons
 //sub.on('error', err => { console.error('ioredis sub error:', err.stack) })
 
 Promise.all([global.store.connect(), global.pub.connect(), sub.connect()]).then(() => {
+    console.log("111333444")
     io.adapter(createAdapter(global.store, global.pub, sub))
+    console.log("111333666")
     io.listen(config.sock.port, () => { console.log('socketServer listening on ' + config.sock.port) })
     global.jay = io.of('/' + config.sock.namespace)
     global.jay.on('connection', async (socket) => {
