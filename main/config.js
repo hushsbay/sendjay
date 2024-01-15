@@ -18,6 +18,8 @@ module.exports = {
 		nodeConfig : process.env.NODE_CONFIG,
 		ws : process.env.MODULE_COMMON,
 		wsmysql : process.env.MODULE_MYSQL,
+		corsRestful : ['https://hushsbay.com'], //Array type. It's ok even if same origin not here
+		corsSocket : 'https://hushsbay.com', //Non-array type. Same origin should be here
 		wslogger : process.env.MODULE_LOGGER,
 		logPath : process.env.LOG_PATH
 	}
