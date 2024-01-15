@@ -6,6 +6,14 @@ module.exports = {
 	mysql : {
 		schema : process.env.MYSQL_SCHEMA
 	},
+	sock : {
+		port : process.env.SOCK_PORT,	
+		namespace : process.env.SOCK_NAMESPACE		
+    },
+	redis : {
+		db : process.env.REDIS_DB,
+		flush : process.env.REDIS_FLUSH_SERVER 
+	},
 	app : {
 		nodeConfig : process.env.NODE_CONFIG,
 		ws : process.env.MODULE_COMMON,
