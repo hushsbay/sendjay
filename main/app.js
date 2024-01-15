@@ -51,9 +51,9 @@ global.store = createClient({ host: nodeConfig.redis.host, port: nodeConfig.redi
 global.pub = global.store.duplicate()
 const sub = global.store.duplicate()
 if (config.redis.flush == 'Y') global.store.flushdb(function(err, result) { console.log('redis db flushed :', result) }) //Only one server flushes db
-sub.psubscribe(com.cons.pattern, (err, count) => { console.log('ioredis psubscribe pattern : ' + com.cons.pattern) }) //ioredis (not socket.io-redis)
-sub.on('pmessage', (pattern, channel, message) => { require(DIR_PUBSUB + 'pmessage')(pattern, channel, message) })
-sub.on('error', err => { console.error('ioredis sub error:', err.stack) })
+//sub.psubscribe(com.cons.pattern, (err, count) => { console.log('ioredis psubscribe pattern : ' + com.cons.pattern) }) //ioredis (not socket.io-redis)
+//sub.on('pmessage', (pattern, channel, message) => { require(DIR_PUBSUB + 'pmessage')(pattern, channel, message) })
+//sub.on('error', err => { console.error('ioredis sub error:', err.stack) })
 
 Promise.all([global.store.connect(), global.pub.connect(), sub.connect()]).then(() => {
     io.adapter(createAdapter(global.store, global.pub, sub))
