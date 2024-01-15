@@ -3,7 +3,9 @@ const nodeConfig = require(config.app.nodeConfig)
 const ws = require(config.app.ws)
 const wsmysql = require(config.app.wsmysql)
 const wslogger = require(config.app.wslogger)(config.app.logPath, 'hushsbay')
+const com = require('./common')
 
+const DIR_PUBSUB = './pubsub/'
 const PING_TIMEOUT = 5000, PING_INTERVAL = 25000 //default
 
 global.nodeConfig = nodeConfig
@@ -44,20 +46,35 @@ const { createAdapter } = require('@socket.io/redis-adapter');
 
 const appSocket = ws.util.initExpressApp()
 const socketServer = ws.util.createWas(appSocket, config.http.method) //not https (because of aws elastic load balancer)
-
 const io = new Server(socketServer, { allowEIO3: false, autoConnect: true, pingTimeout: PING_TIMEOUT, pingInterval: PING_INTERVAL, cors: { origin: config.app.corsSocket, methods: ["GET", "POST"] }})
-const pubClient = createClient({ host: nodeConfig.redis.host, port: nodeConfig.redis.port, password : nodeConfig.redis.pwd, db : config.redis.db })
-const subClient = pubClient.duplicate()
+global.store = createClient({ host: nodeConfig.redis.host, port: nodeConfig.redis.port, password : nodeConfig.redis.pwd, db : config.redis.db })
+global.pub = global.store.duplicate()
+const sub = global.store.duplicate()
+if (config.redis.flush == 'Y') global.store.flushdb(function(err, result) { console.log('redis db flushed :', result) }) //Only one server flushes db
+sub.psubscribe(com.cons.pattern, (err, count) => { console.log('ioredis psubscribe pattern : ' + com.cons.pattern) }) //ioredis (not socket.io-redis)
+sub.on('pmessage', (pattern, channel, message) => { require(DIR_PUBSUB + 'pmessage')(pattern, channel, message) })
+sub.on('error', err => { console.error('ioredis sub error:', err.stack) })
 
-Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
-    io.adapter(createAdapter(pubClient, subClient));
-    io.listen(config.sock.port);
+Promise.all([global.store.connect(), global.pub.connect(), sub.connect()]).then(() => {
+    io.adapter(createAdapter(global.store, global.pub, sub))
+    io.listen(config.sock.port, () => { console.log('socketServer listening on ' + config.sock.port) })
     global.jay = io.of('/' + config.sock.namespace)
-    console.log("@@@@@@@@@@@@@@@")
     global.jay.on('connection', async (socket) => {
         console.log("@@@@@@@@@@@@@@@22222222222222")
     })
 })
+
+const corsOptions = { //for Rest
+	origin : function (origin, callback) {
+		if (!origin || config.app.corsRestful.indexOf(origin) > -1) { //!origin = in case of same origin
+			callback(null, true)
+		} else {
+			const _msg = 'Not allowed by CORS : ' + origin
+			global.logger.info(_msg)
+			callback(new Error(_msg))
+		}
+	}
+}
 
 app.use('/auth/login', require('./route/auth/login'))
 
