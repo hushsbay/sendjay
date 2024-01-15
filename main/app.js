@@ -39,9 +39,9 @@ const { Server } = require('socket.io');
 const { createClient } = require('redis');
 const { createAdapter } = require('@socket.io/redis-adapter');
 
-const io = new Server();
-const pubClient = createClient({ host: nodeConfig.redis.host, port: nodeConfig.redis.port })
-const subClient = pubClient.duplicate();
+const io = new Server()
+const pubClient = createClient({ host: nodeConfig.redis.host, port: nodeConfig.redis.port, password : nodeConfig.redis.pwd, db : config.redis.db })
+const subClient = pubClient.duplicate()
 
 Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
   io.adapter(createAdapter(pubClient, subClient));
