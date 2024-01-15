@@ -48,24 +48,20 @@ const appSocket = ws.util.initExpressApp()
 const socketServer = ws.util.createWas(appSocket, config.http.method) //not https (because of aws elastic load balancer)
 const io = new Server(socketServer, { allowEIO3: false, autoConnect: true, pingTimeout: PING_TIMEOUT, pingInterval: PING_INTERVAL, cors: { origin: config.app.corsSocket, methods: ["GET", "POST"] }})
 global.store = createClient({ host: nodeConfig.redis.host, port: nodeConfig.redis.port, password : nodeConfig.redis.pwd, db : config.redis.db })
-console.log("111")
 global.pub = global.store.duplicate()
-console.log("111222")
 const sub = global.store.duplicate()
-console.log("111333")
 //if (config.redis.flush == 'Y') global.store.flushdb(function(err, result) { console.log('redis db flushed :', result) }) //Only one server flushes db
 //sub.psubscribe(com.cons.pattern, (err, count) => { console.log('ioredis psubscribe pattern : ' + com.cons.pattern) }) //ioredis (not socket.io-redis)
 //sub.on('pmessage', (pattern, channel, message) => { require(DIR_PUBSUB + 'pmessage')(pattern, channel, message) })
 //sub.on('error', err => { console.error('ioredis sub error:', err.stack) })
 
 Promise.all([global.store.connect(), global.pub.connect(), sub.connect()]).then(() => {
-    console.log("111333444")
     io.adapter(createAdapter(global.store, global.pub, sub))
-    console.log("111333666")
-    io.listen(config.sock.port, () => { console.log('socketServer listening on ' + config.sock.port) })
+    io.listen(config.sock.port)
     global.jay = io.of('/' + config.sock.namespace)
+    console.log('socketServer listening on ' + config.sock.port)
     global.jay.on('connection', async (socket) => {
-        console.log("@@@@@@@@@@@@@@@22222222222222")
+        console.log("@@@@@@@@@@@@@@@")
     })
 })
 
