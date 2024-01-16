@@ -84,7 +84,8 @@ Promise.all([global.store.connect(), global.pub.connect(), sub.connect()]).then(
     global.jay = io.of('/' + config.sock.namespace)
     console.log('socketServer listening on ' + config.sock.port)
     global.jay.on('connection', async (socket) => {
-        console.log("@@@@@@@@@@@@@@@")
+        const queryParam = socket.handshake.query
+        console.log("@@@@@@@@@@@@@@@" + queryParam.userid)
     })
 })
 
