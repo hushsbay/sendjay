@@ -85,7 +85,10 @@ Promise.all([global.store.connect(), global.pub.connect(), sub.connect()]).then(
     console.log('socketServer listening on ' + config.sock.port)
     global.jay.on('connection', async (socket) => {
         const queryParam = socket.handshake.query
-        console.log("@@@@@@@@@@@@@@@" + queryParam.userid)
+        console.log("connect @@@@@@@@@@@@@@@ " + queryParam.userid)
+		socket.on('disconnect', (reason) => {
+			console.log("disconnect ############# " + reason)
+		})
     })
 })
 
