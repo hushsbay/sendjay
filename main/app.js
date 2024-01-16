@@ -39,26 +39,26 @@ wasServer.listen(config.http.port, () => { console.log('wasServer listening on '
 // io.adapter(redisAdapter({ host: nodeConfig.redis.host, port: nodeConfig.redis.port, password : nodeConfig.redis.pwd }))
 // global.jay = io.of('/' + config.sock.namespace)
 
+// const cors = require('cors')
+// const { Server } = require('socket.io');
+// const { createClient } = require('redis');
+// const { createAdapter } = require('@socket.io/redis-adapter');
+
+// const io = new Server();
+// const pubClient = createClient({ host: nodeConfig.redis.host, port: nodeConfig.redis.port, password : nodeConfig.redis.pwd, db : config.redis.db })
+// const subClient = pubClient.duplicate();
+
+// Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
+//   io.adapter(createAdapter(pubClient, subClient));
+//   io.listen(config.sock.port);
+//   global.jay = io.of('/' + config.sock.namespace)
+//     console.log('socketServer listening on ' + config.sock.port)
+//     global.jay.on('connection', async (socket) => {
+//         console.log("@@@@@@@@@@@@@@@")
+//     })
+// });
+
 const cors = require('cors')
-const { Server } = require('socket.io');
-const { createClient } = require('redis');
-const { createAdapter } = require('@socket.io/redis-adapter');
-
-const io = new Server();
-const pubClient = createClient({ host: nodeConfig.redis.host, port: nodeConfig.redis.port, password : nodeConfig.redis.pwd, db : config.redis.db })
-const subClient = pubClient.duplicate();
-
-Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
-  io.adapter(createAdapter(pubClient, subClient));
-  io.listen(config.sock.port);
-  global.jay = io.of('/' + config.sock.namespace)
-    console.log('socketServer listening on ' + config.sock.port)
-    global.jay.on('connection', async (socket) => {
-        console.log("@@@@@@@@@@@@@@@")
-    })
-});
-
-/*const cors = require('cors')
 const { Server } = require('socket.io');
 const { createClient } = require('redis');
 const { createAdapter } = require('@socket.io/redis-adapter');
@@ -86,7 +86,7 @@ Promise.all([global.store.connect(), global.pub.connect(), sub.connect()]).then(
     global.jay.on('connection', async (socket) => {
         console.log("@@@@@@@@@@@@@@@")
     })
-})*/
+})
 
 const corsOptions = { //for Rest
 	origin : function (origin, callback) {
