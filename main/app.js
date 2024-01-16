@@ -44,6 +44,20 @@ const { Server } = require('socket.io');
 const { createClient } = require('redis');
 const { createAdapter } = require('@socket.io/redis-adapter');
 
+const io = new Server();
+const pubClient = createClient({ host: nodeConfig.redis.host, port: nodeConfig.redis.port, password : nodeConfig.redis.pwd, db : config.redis.db })
+const subClient = pubClient.duplicate();
+
+Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
+  io.adapter(createAdapter(pubClient, subClient));
+  io.listen(config.sock.port);
+});
+
+/*const cors = require('cors')
+const { Server } = require('socket.io');
+const { createClient } = require('redis');
+const { createAdapter } = require('@socket.io/redis-adapter');
+
 const appSocket = ws.util.initExpressApp()
 const socketServer = ws.util.createWas(appSocket, config.http.method) //not https (because of aws elastic load balancer)
 const io = new Server(socketServer, { allowEIO3: false, autoConnect: true, pingTimeout: PING_TIMEOUT, pingInterval: PING_INTERVAL, cors: { origin: config.app.corsSocket, methods: ["GET", "POST"] }})
@@ -67,7 +81,7 @@ Promise.all([global.store.connect(), global.pub.connect(), sub.connect()]).then(
     global.jay.on('connection', async (socket) => {
         console.log("@@@@@@@@@@@@@@@")
     })
-})
+})*/
 
 const corsOptions = { //for Rest
 	origin : function (origin, callback) {
