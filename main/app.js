@@ -44,7 +44,7 @@ wasServer.listen(config.http.port, () => { console.log('wasServer listening on '
 // const { createClient } = require('redis');
 // const { createAdapter } = require('@socket.io/redis-adapter');
 
-// const io = new Server();
+// const io = new Server(); //인자없이 생성시 브라우저에서 xhr poll 오류 나타남
 // const pubClient = createClient({ host: nodeConfig.redis.host, port: nodeConfig.redis.port, password : nodeConfig.redis.pwd, db : config.redis.db })
 // const subClient = pubClient.duplicate();
 
