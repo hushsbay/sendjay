@@ -16,6 +16,7 @@ router.post('/', async function(req, res) {
 		const userid = req.body.userid
 		const pwd = req.body.pwd
 		const token = req.body.token
+		console.log(userid, pwd, "===========")
 		if (token) { //index.html(포털)에서 인증체크하는 것임 : ws.jwt.make()으로 갱신함
 			rs.token = await ws.jwt.chkVerify(req, res, { token : token, userid : userid })
 			if (rs.token == '') return //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
@@ -26,7 +27,7 @@ router.post('/', async function(req, res) {
 		sql += " WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [userid])
 		if (data.length == 0) {
-			ws.http.resWarn(res, ws.cons.MSG_NO_DATA)
+			ws.http.resWarn(res, '사용자아이디가 없습니다.')
 			return
 		}
 		if (!token) { //login.html에서 인증하는 것임
