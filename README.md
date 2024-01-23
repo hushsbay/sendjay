@@ -15,6 +15,6 @@ Here are some ideas to get you started:
 
 ![image](https://github.com/hushsbay/hushsbay/assets/51398212/b86591c8-f16b-484f-bcf0-1a7d58a90909)
 
-현재는 인증 및 조직도만 완성된 상태입니다.
+현재는 인증테스트중..
 
 내용 정리중..
