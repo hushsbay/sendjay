@@ -17,6 +17,10 @@ router.post('/', async function(req, res) {
 		const pwd = req.body.pwd //사용자가 인증을 위해 입력한 사용자비번
 		const userid = req.cookies.userid //웹 또는 앱에서 항상 넘어오는 쿠키
 		const token = req.cookies.token //웹 또는 앱에서 항상 넘어오는 쿠키
+
+		var source = req.headers['user-agent']
+		console.log(source)
+
 		console.log(uid, pwd, "===========", userid, token)
 		let useridReal
 		if (!uid) { //index.html(포털)에서 인증체크하는 것임 : 아래에서 ws.jwt.make()으로 갱신함
