@@ -15,18 +15,20 @@ module.exports = (function() {
 	let ws = {
 	
 		cons : {
-			 CODE_OK : '0',
-			 CODE_ERR : '-1',
-			 MSG_ALREADY_EXISTS : '이미 존재하는 데이터입니다.',
-			 CODE_NO_DATA : '-100',
-			 MSG_NO_DATA : '데이터가 없습니다.',
-			 CODE_TOKEN_NEEDED : '-81', //jwt : -8로 시작하는 오류코드는 클라이언트에서 로그인이 필요하다는 안내에 의미있게 쓰이고 있음
-			 CODE_TOKEN_MISMATCH : '-82', //jwt payload not equal to decoded
-			 CODE_USERINFO_MISMATCH : '-83',
-			 CODE_TOKEN_EXPIRED : '-84',
-			 CODE_USERCOOKIE_MISMATCH : '-85',
-			 mysql_close_error : 'mysql_close_error',
-			 toast_prefix : '##$$', //클라이언트와 동일
+
+			CODE_OK : '0',
+			CODE_ERR : '-1',
+			MSG_ALREADY_EXISTS : '이미 존재하는 데이터입니다.',
+			CODE_NO_DATA : '-100',
+			MSG_NO_DATA : '데이터가 없습니다.',
+			CODE_TOKEN_NEEDED : '-81', //jwt : -8로 시작하는 오류코드는 클라이언트에서 로그인이 필요하다는 안내에 의미있게 쓰이고 있음
+			CODE_TOKEN_MISMATCH : '-82', //jwt payload not equal to decoded
+			CODE_USERINFO_MISMATCH : '-83',
+			CODE_TOKEN_EXPIRED : '-84',
+			CODE_USERCOOKIE_MISMATCH : '-85',
+			domain : 'hushsbay.com',
+			mysql_close_error : 'mysql_close_error',
+			toast_prefix : '##$$', //클라이언트와 동일
 		},
 
 		http : {
@@ -47,6 +49,13 @@ module.exports = (function() {
 				const title = req ? req.title : ''
 				ws.util.loge(req, ex)
 				ws.http.resCodeMsg(res, ws.cons.CODE_ERR, ex, title)
+			},
+			resCookie : (res, key, val, persist) => {
+				res.cookie(key, val, { 
+					domain : ws.cons.domain,
+					path : '/',
+					maxAge : persist ? 60 * 60 * 24 * 365 : null
+				})
 			}
 		},
 
