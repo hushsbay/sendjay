@@ -16,7 +16,7 @@ router.post('/', async function(req, res) {
 		const userid = req.body.userid
 		const pwd = req.body.pwd
 		const token = req.body.token
-		console.log(userid, pwd, "===========")
+		console.log(userid, pwd, "===========", req.body.toString(), JSON.stringify(req.body))
 		if (token) { //index.html(포털)에서 인증체크하는 것임 : ws.jwt.make()으로 갱신함
 			rs.token = await ws.jwt.chkVerify(req, res, { token : token, userid : userid })
 			if (rs.token == '') return //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
