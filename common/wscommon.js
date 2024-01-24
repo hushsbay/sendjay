@@ -26,7 +26,6 @@ module.exports = (function() {
 			CODE_USERINFO_MISMATCH : '-83',
 			CODE_TOKEN_EXPIRED : '-84',
 			CODE_USERCOOKIE_MISMATCH : '-85',
-			domain : 'hushsbay.com',
 			mysql_close_error : 'mysql_close_error',
 			toast_prefix : '##$$', //클라이언트와 동일
 		},
@@ -51,8 +50,7 @@ module.exports = (function() {
 				ws.http.resCodeMsg(res, ws.cons.CODE_ERR, ex, title)
 			},
 			resCookie : (res, key, val, persist) => {
-				res.cookie(key, val, { 
-					domain : ws.cons.domain,
+				res.cookie(key, val, {  //domain : xx.co.kr, //도메인쿠키 여기서는 필요없음
 					path : '/',
 					maxAge : persist ? 60 * 60 * 24 * 365 : null
 				})
