@@ -150,7 +150,8 @@ module.exports = (function() {
 					}
 					ws.http.resCookieForTokenRefresh(res, tokenInfo.userid) 
 					return tokenInfo.userid
-				} else {					
+				} else {	
+					console.log("1111111111111111")				
 					ws.http.resWarn(res, jwtRet.msg, false, jwtRet.code)
 					return null
 				}

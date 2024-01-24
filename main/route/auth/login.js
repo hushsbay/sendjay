@@ -21,6 +21,7 @@ router.post('/', async function(req, res) {
 		let useridReal
 		if (!uid) {
 			useridReal = await ws.jwt.chkToken(req, res) //여기 login.js에서만 세번째 인자인 conn이 없음
+			console.log("222222222")
 			if (!useridReal) return			
 		} else {
 			useridReal = uid
