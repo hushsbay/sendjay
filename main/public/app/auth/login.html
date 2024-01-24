@@ -79,7 +79,7 @@
 								hush.msg.showMsg(rs.msg, rs.code)
 								return
 							}
-							if ($("#chk_save").prop("checked")) hush.http.setCookie("userid", _userid, true)
+							hush.http.setCookie("userid", _userid, $("#chk_save").prop("checked"))
 							if (opener && opener.showLogout) opener.showLogout(true) //포털(index.html) 
 							const _target = g_target ? decodeURIComponent(g_target) : "/index.html"
 							hush.util.openWinTab(_target, true)
