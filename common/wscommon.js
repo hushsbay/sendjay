@@ -152,7 +152,8 @@ module.exports = (function() {
 					ws.http.resCookieForTokenRefresh(res, tokenInfo.userid) 
 					return tokenInfo.userid
 				} else {	
-					console.log("1111111111111111" + jwtRet.msg)				
+					console.log("1111111111111111" + jwtRet.msg)	
+					ws.util.loge(req, jwtRet.msg)			
 					ws.http.resWarn(res, jwtRet.msg, false, jwtRet.code)
 					return null
 				}
