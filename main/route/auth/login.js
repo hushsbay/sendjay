@@ -18,7 +18,7 @@ router.post('/', async function(req, res) {
 		const userid = req.cookies.userid //웹 또는 앱에서 항상 넘어오는 쿠키
 		const token = req.cookies.token //웹 또는 앱에서 항상 넘어오는 쿠키
 
-		var source = req.headers['user-agent']
+		var source = req.headers['user-agent'] //String
 		console.log(source)
 
 		console.log(uid, pwd, "===========", userid, token)

@@ -15,6 +15,7 @@ global.pool = wsmysql.createPool(config.mysql.schema, true)
 console.log('version:', process.version)
 console.log('projPath:', __dirname)					
 console.log('logPath:', config.app.logPath)
+console.log('jwtExpiry:', nodeConfig.jwt.expiry)
 
 const app = ws.util.initExpressApp('public')
 const wasServer = ws.util.createWas(app, config.http.method) //프로젝트 hushsbay는 aws 기반(https는 로드밸런서CLB 이용)이므로 여기서는 https가 아닌 http로 설정
