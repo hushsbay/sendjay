@@ -55,6 +55,7 @@
 					g_target = param.get("target")
 					const userid = hush.http.getCookie("userid")
 					if (userid) {
+						$("#chk_save").prop("checked", true)
 						$("#in_userid").val(userid)
 						$("#in_pwd").focus()	
 					} else {
