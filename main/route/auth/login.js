@@ -15,7 +15,7 @@ router.post('/', async function(req, res) {
 	try { //console.log(userid, pwd, token, "===========", req.body.toString(), JSON.stringify(req.body))
 		const uid = req.body.uid //사용자가 인증을 위해 입력한 사용자아이디
 		const pwd = req.body.pwd //사용자가 인증을 위해 입력한 사용자비번
-		
+
 		const userid = req.cookies.userid //웹 또는 앱에서 항상 넘어오는 쿠키
 		const token = req.cookies.token //웹 또는 앱에서 항상 넘어오는 쿠키
 
@@ -32,7 +32,8 @@ router.post('/', async function(req, res) {
 			useridReal = uid
 		}
 		conn = await wsmysql.getConnFromPool(global.pool)
-		sql =  "SELECT ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, USER_ID, PWD, USER_NM, NICK_NM, JOB, TEL_NO, AB_CD, AB_NM "
+		//sql =  "SELECT ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, USER_ID, PWD, USER_NM, NICK_NM, JOB, TEL_NO, AB_CD, AB_NM "
+		sql =  "SELECT USER_NM, ORG_CD, TOP_ORG_CD "
 		sql += "  FROM JAY.Z_USER_TBL "
 		sql += " WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [useridReal])
@@ -46,10 +47,12 @@ router.post('/', async function(req, res) {
 				ws.http.resWarn(res, '비번이 다릅니다.')
 				return
 			}
-			rs.token = ws.jwt.make({ userid : uid }) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
-		}
-		data[0].PWD = ''
-		Object.assign(rs, data[0])	
+			//rs.token = ws.jwt.make({ userid : uid }) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
+		}		
+		rs.token = ws.jwt.make({ userid : useridReal })
+		//data[0].PWD = ''
+		//Object.assign(rs, data[0])
+		ws.http.resCookieForUser(res, rs)
 		res.json(rs)
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
