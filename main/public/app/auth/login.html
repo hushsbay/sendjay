@@ -73,13 +73,13 @@
 							const _pwd = $("#in_pwd").val().trim()
 							if (!hush.util.chkFieldVal(_userid, "아이디", 1)) return
 							if (!hush.util.chkFieldVal(_pwd, "비번", 1)) return
-							const rs = await hush.http.ajax("/auth/login", { userid : _userid, pwd : _pwd })
+							const rs = await hush.http.ajax("/auth/login", { uid : _userid, pwd : _pwd })
 							if (rs.code != hush.cons.CODE_OK) {
 								hush.msg.showMsg(rs.msg, rs.code)
 								return
 							}
-							const _chkAuto = $("#chk_auto").prop("checked") ? "Y" : ""
-							hush.auth.setCookieForUser(rs, _chkAuto) //rs.list 아님을 유의
+							const _chkSave = $("#chk_save").prop("checked") ? "Y" : ""
+							hush.auth.setCookieForUser(rs, _chkSave) //rs.list 아님을 유의
 							if (opener && opener.showLogout) opener.showLogout(true) //포털(index.html) 
 							const _target = g_target ? decodeURIComponent(g_target) : "/index.html"
 							hush.util.openWinTab(_target, true)
@@ -115,7 +115,7 @@
 					<input id="in_pwd" type=password placeholder="비번" spellcheck=false autocomplete=off style="width: 100%"/>
 				</div>
 				<div class="item">
-					<input id="chk_auto" type=checkbox style="margin-left: 5px"/><label id="lbl_save" for="chk_auto" style="cursor: pointer">자동로그인</label>
+					<input id="chk_save" type=checkbox style="margin-left: 5px"/><label id="lbl_save" for="chk_save" style="cursor: pointer">아이디저장</label>
 				</div>
 				<div class="item">
 					<span id="btn_join">간편가입</span>

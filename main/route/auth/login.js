@@ -15,6 +15,7 @@ router.post('/', async function(req, res) {
 	try { //console.log(userid, pwd, token, "===========", req.body.toString(), JSON.stringify(req.body))
 		const uid = req.body.uid //사용자가 인증을 위해 입력한 사용자아이디
 		const pwd = req.body.pwd //사용자가 인증을 위해 입력한 사용자비번
+		
 		const userid = req.cookies.userid //웹 또는 앱에서 항상 넘어오는 쿠키
 		const token = req.cookies.token //웹 또는 앱에서 항상 넘어오는 쿠키
 
