@@ -57,9 +57,9 @@ module.exports = (function() {
 					maxAge : persist ? 60 * 60 * 24 * 365 : null
 				})
 			},
-			resCookieForUser : (res, rs) => {
+			resCookieForUser : (res, rs, newToken) => {
 				ws.http.resCookie(res, "userid", rs.USER_ID) //session or persist는 클라이언트에서 다시 한번 판단하기로 하고 여기는 모두 세션 쿠키로 내림
-                ws.http.resCookie(res, "token", rs.token) //jwt
+                ws.http.resCookie(res, "token", newToken) //jwt
                 ws.http.resCookie(res, "usernm", rs.USER_NM)
                 ws.http.resCookie(res, "orgcd", rs.ORG_CD)
                 ws.http.resCookie(res, "toporgcd", rs.TOP_ORG_CD)
