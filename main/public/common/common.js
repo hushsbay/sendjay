@@ -26,15 +26,15 @@
         auth : {
             setCookieForUser : (rs, _persist) => { //_persist = Y or else
                 const persist = (_persist == "Y") ? true : false
-                hush.http.setCookie("autologin", _persist, true) //포털(index.html)에서만 사용됨 : 로그아웃전까지는 브라우저를 나와도 남아 있음
-                hush.http.setCookie("token", rs.token, persist) //jwt
-                hush.http.setCookie("userid", rs.USER_ID, true)
-                hush.http.setCookie("usernm", rs.USER_NM, persist)
-                hush.http.setCookie("orgcd", rs.ORG_CD, persist)
-                hush.http.setCookie("toporgcd", rs.TOP_ORG_CD, persist)
+                //hush.http.setCookie("autologin", _persist, true) //persistent cookie - 포털(index.html)에서만 사용됨 : 로그아웃전까지는 브라우저를 나와도 남아 있음
+                hush.http.setCookie("userid", rs.USER_ID, persist) //persistent cookie - _persist는 아이디를 화면에 저장할 지에만 사용
+                hush.http.setCookie("token", rs.token) //jwt 포함 이하는 모두 세션 쿠키로 처리                
+                hush.http.setCookie("usernm", rs.USER_NM)
+                hush.http.setCookie("orgcd", rs.ORG_CD)
+                hush.http.setCookie("toporgcd", rs.TOP_ORG_CD)
             },
             deleteCookieForUser : () => {
-                hush.http.deleteCookie('autologin')
+                //hush.http.deleteCookie('autologin')
                 hush.http.deleteCookie('token')
                 hush.http.deleteCookie('userid')
                 hush.http.deleteCookie('usernm')
@@ -201,8 +201,9 @@
                 }
             },
             refreshToken : (token) => {
-                const _persist = (hush.http.getCookie("autologin") == "Y") ? true : false
-                hush.http.setCookie("token", token, _persist)
+                //const _persist = (hush.http.getCookie("autologin") == "Y") ? true : false
+                //hush.http.setCookie("token", token, _persist)
+                hush.http.setCookie("token", token) //jwt는 세션쿠키로만 처리되어야 함
             }
         },
         msg : { //1. msg(비동기콜백) 2. alert(=window.alert) 3. confirm(=window.confirm) 4. toast(복수메시지 순서대로 표시 지원)
