@@ -106,7 +106,7 @@
                     type : (method) ? method : "post",
                     timeout : hush.cons.restful_timeout,
                     success : function(rs) {
-                        if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
+                        //if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
                         if (callback) callback(rs)
                     },
                     error : function(xhr, status, error) {
@@ -144,7 +144,7 @@
                     type : (method) ? method : "post",
                     timeout : hush.cons.restful_timeout,
                     success : function(rs) {
-                        if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
+                        //if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
                         resolve(rs)
                     },
                     error : function(xhr, status, error) {
@@ -166,7 +166,7 @@
                     cache : false,
                     type : "POST",
                     success : function(rs) { 
-                        if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
+                        //if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
                         if (callback) callback(rs)
                     },
                     error : function(xhr, status, error) {
@@ -200,11 +200,11 @@
                     orgcd : hush.http.getCookie("orgcd"), toporgcd : hush.http.getCookie("toporgcd")
                 }
             },
-            refreshToken : (token) => {
-                //const _persist = (hush.http.getCookie("autologin") == "Y") ? true : false
-                //hush.http.setCookie("token", token, _persist)
-                hush.http.setCookie("token", token) //jwt는 세션쿠키로만 처리되어야 함
-            }
+            // refreshToken : (token) => {
+            //     //const _persist = (hush.http.getCookie("autologin") == "Y") ? true : false
+            //     //hush.http.setCookie("token", token, _persist)
+            //     hush.http.setCookie("token", token) //jwt는 세션쿠키로만 처리되어야 함
+            // }
         },
         msg : { //1. msg(비동기콜백) 2. alert(=window.alert) 3. confirm(=window.confirm) 4. toast(복수메시지 순서대로 표시 지원)
             //아래 실행후 육안으로 먼저 보이는 순서는 = 1 > 2 > 3 > 5 > 6 > 7 > 4 

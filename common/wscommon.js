@@ -56,12 +56,12 @@ module.exports = (function() {
 				})
 			},
 			resCookieForUser : (res, rs) => { //여기는 모두 세션 쿠키로 내림
-				//ws.http.resCookie(res, "userid", rs.USER_ID) //userid는 session or persist 여부를 클라이언트에서 판단해야 함 (아이디저장)
+				//userid는 여기 서버가 아닌 (아이디저장 옵션때문에 session/persist 여부를) 브라우저에서 판단함 : 이걸 풀면 브라우저에서의 userid setcookie가 충돌 (빠를 수 있어 문제)
                 ws.http.resCookie(res, "usernm", rs.USER_NM)
                 ws.http.resCookie(res, "orgcd", rs.ORG_CD)
                 ws.http.resCookie(res, "toporgcd", rs.TOP_ORG_CD)
 			},
-			resCookieForTokenRefresh : (res, useridReal) => {
+			resCookieForTokenRefresh : (res, useridReal) => { //세션 쿠키로 내림
 				const newToken = ws.jwt.make({ userid : useridReal })
                 ws.http.resCookie(res, "token", newToken)
 			}
