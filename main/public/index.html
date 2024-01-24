@@ -100,6 +100,7 @@
                         if (rs.code == hush.cons.CODE_OK) {
                             showLogout(true)
                         } else { //인증 문제있으면 rs.code/rs.msg를 참조하면 되고, 여기서는 사용자 편의상 포털 페이지를 그대로 뿌려 주기로 함
+                            hush.msg.showMsg(rs.msg, rs.code)
                             showLogout(false)
                         }
                     }
