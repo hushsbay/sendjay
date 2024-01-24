@@ -41,7 +41,7 @@
                 hush.http.deleteCookie('orgcd')
                 hush.http.deleteCookie('toporgcd')
             },
-            setUser : async () => {
+            verifyUser : async () => {
                 const _token = hush.http.getCookie("token")  
                 if (_token) {
                     const _userid = hush.http.getCookie("userid")  
@@ -57,7 +57,7 @@
                         return false                      
                     }
                 } else {                    
-                    const _target = encodeURIComponent(location.pathname + location.search + "&aaa=하하하")
+                    const _target = encodeURIComponent(location.pathname + location.search)
                     hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
                     return false
                 }
@@ -96,7 +96,7 @@
             },
             ajaxCall : (url, _data, callback, failCallback, method) => {
                 let data = _data
-                Object.assign(data, { tokenInfo : hush.http.getTokenInfo()})
+                //Object.assign(data, { tokenInfo : hush.http.getTokenInfo()})
                 $.ajax({dataType : "json", //response data type
                     contentType : "application/json; charset=utf-8", //request mime type
                     url : url,
@@ -134,7 +134,7 @@
             },
             ajaxPromise : (url, _data, method) => new Promise((resolve, reject) => { //ajaxPromise()는 hush.http.ajax를 통해서만 사용하기
                 let data = _data
-                Object.assign(data, { tokenInfo : hush.http.getTokenInfo()})
+                //Object.assign(data, { tokenInfo : hush.http.getTokenInfo()})
                 $.ajax({dataType : "json", //response data type
                     contentType : "application/json; charset=utf-8", //request mime type
                     url : url,
@@ -157,7 +157,7 @@
             )}),
             ajaxFormData : (url, _data, callback, failCallback) => {
                 let data = _data
-                data.append("tokenInfo", JSON.stringify(hush.http.getTokenInfo()))
+                //data.append("tokenInfo", JSON.stringify(hush.http.getTokenInfo()))
                 $.ajax({url : url,
                     data : data,
                     processData : false,
@@ -194,12 +194,12 @@
             deleteCookie : (name) => { //actually 'return' needed
                 $.removeCookie(name, { path: '/' })
             },
-            getTokenInfo : () => { //서버에서 쿠키 위변조 체크할 대상 : ws.jwt.chkVerify() 참고
-                return { 
-                    token : hush.http.getCookie("token"), userid : hush.http.getCookie("userid"),
-                    orgcd : hush.http.getCookie("orgcd"), toporgcd : hush.http.getCookie("toporgcd")
-                }
-            },
+            // getTokenInfo : () => { //서버에서 쿠키 위변조 체크할 대상 : ws.jwt.chkToken() 참고
+            //     return { 
+            //         token : hush.http.getCookie("token"), userid : hush.http.getCookie("userid"),
+            //         orgcd : hush.http.getCookie("orgcd"), toporgcd : hush.http.getCookie("toporgcd")
+            //     }
+            // },
             // refreshToken : (token) => {
             //     //const _persist = (hush.http.getCookie("autologin") == "Y") ? true : false
             //     //hush.http.setCookie("token", token, _persist)

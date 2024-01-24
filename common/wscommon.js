@@ -55,12 +55,6 @@ module.exports = (function() {
 					maxAge : persist ? 60 * 60 * 24 * 365 : null
 				})
 			},
-			resCookieForUser : (res, rs) => { //여기는 모두 세션 쿠키로 내림
-				//userid는 여기 서버가 아닌 (아이디저장 옵션때문에 session/persist 여부를) 브라우저에서 판단함 : 이걸 풀면 브라우저에서의 userid setcookie가 충돌 (빠를 수 있어 문제)
-                ws.http.resCookie(res, "usernm", rs.USER_NM)
-                ws.http.resCookie(res, "orgcd", rs.ORG_CD)
-                ws.http.resCookie(res, "toporgcd", rs.TOP_ORG_CD)
-			},
 			resCookieForTokenRefresh : (res, useridReal) => { //세션 쿠키로 내림
 				const newToken = ws.jwt.make({ userid : useridReal })
                 ws.http.resCookie(res, "token", newToken)
@@ -130,34 +124,34 @@ module.exports = (function() {
 					}
 				})
 			},
-			chkVerify : async (req, res, tokenInfo, conn) => { 
-				//app.use(), router.use()에서 ws.jwt.verify()로 사용해도 되지만, 래핑된 chkVerify()로 체크 : 코딩 약간 수월
-				//클라이언트에 code, msg 전달해야 하는데 app.use(), router.use()보다는 손이 더 갈 수도 있지만 더 유연하게 사용 가능
-				let retToken = ''
+			//app.use(), router.use()에서 ws.jwt.verify()로 사용해도 되지만, 래핑된 chkToken()로 체크 : 코딩 약간 수월
+			//클라이언트에 code, msg 전달해야 하는데 app.use(), router.use()보다는 손이 더 갈 수도 있지만 더 유연하게 사용 가능
+			chkToken : async (req, res, conn) => {
+				const tokenInfo = { userid : req.cookies.userid, token : req.cookies.token } //login.html을 제외하고 웹 또는 앱에서 항상 넘어오는 쿠키
 				if (req && req.clientIp) Object.assign(tokenInfo, { ip : req.clientIp })
 				const jwtRet = await ws.jwt.verify(tokenInfo)
-				if (jwtRet.code == ws.cons.CODE_OK) { //실수로 await 빼고 chkVerify() 호출할 때 대비해 if절 구성
+				if (jwtRet.code == ws.cons.CODE_OK) { //실수로 await 빼고 chkToken() 호출할 때 대비해 if절 구성
 					if (conn) { //userid뿐만 아니라 부서정보 등 위변조도 체크 필요 (문제 발생시 로깅. 겸직 코딩은 제외되어 있음)
 						const sql = "SELECT ORG_CD, TOP_ORG_CD FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
 						const data = await wsmysql.query(conn, sql, [tokenInfo.userid])
 						if (data.length == 0) {
 							const msg = ws.cons.MSG_NO_DATA + '/' + tokenInfo.userid
 							ws.util.loge(req, msg)
-							ws.http.resWarn(res, msg, false, ws.cons.CODE_NO_DATA, 'chkVerify')
-							return retToken
+							ws.http.resWarn(res, msg, false, ws.cons.CODE_NO_DATA, 'chkToken')
+							return null
 						}
 						if (data[0].ORG_CD != tokenInfo.orgcd || data[0].TOP_ORG_CD != tokenInfo.toporgcd) {
 							const msg = '사용자쿠키값에 문제가 있습니다 : ' + tokenInfo.userid + '/' + tokenInfo.orgcd + '/' + tokenInfo.toporgcd
 							ws.util.loge(req, msg)
-							ws.http.resWarn(res, msg, false, ws.cons.CODE_USERCOOKIE_MISMATCH, 'chkVerify')
-							return retToken
+							ws.http.resWarn(res, msg, false, ws.cons.CODE_USERCOOKIE_MISMATCH, 'chkToken')
+							return null
 						}
 					}
-					retToken = ws.jwt.make({ userid : tokenInfo.userid }) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
-					return retToken
+					ws.http.resCookieForTokenRefresh(res, tokenInfo.userid) 
+					return tokenInfo.userid
 				} else {					
 					ws.http.resWarn(res, jwtRet.msg, false, jwtRet.code)
-					return retToken
+					return null
 				}
 			}
 		},

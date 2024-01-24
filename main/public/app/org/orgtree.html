@@ -381,7 +381,7 @@
 					g_selectOnlyChildDept = param.get("selectOnlyChildDept")
 					g_getImage = param.get("getImage")
 					if (g_nodeToGet == "U") { //사용자(U)일 경우만 인증체크함
-						if (!(await hush.auth.setUser())) return
+						if (!(await hush.auth.verifyUser())) return
 					}
 					$("#chk_selectall").on("change", function() { 
 	                	$(".sel").prop("checked", $(this).is(":checked"))
