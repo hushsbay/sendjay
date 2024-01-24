@@ -14,14 +14,10 @@ router.post('/', async function(req, res) {
 	const rs = ws.http.resInit()
 	try { //console.log(userid, pwd, token, "===========", req.body.toString(), JSON.stringify(req.body))
 		const { uid, pwd } = req.body //사용자가 인증을 위해 입력한 사용자아이디
-		//const pwd = req.body.pwd //사용자가 인증을 위해 입력한 사용자비번
-
-		const { userid, token } = req.cookies //웹 또는 앱에서 항상 넘어오는 쿠키
-		//const token = req.cookies.token //웹 또는 앱에서 항상 넘어오는 쿠키
-
+		const { userid, token } = req.cookies //login.html을 제외하고 웹 또는 앱에서 항상 넘어오는 쿠키
 		var source = req.headers['user-agent'] //String
 		console.log(source)
-		console.log(uid, pwd, "===========", userid, token)
+		console.log(uid, pwd, userid, token)
 		let useridReal
 		if (!uid) {
 			useridReal = userid

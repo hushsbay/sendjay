@@ -79,9 +79,6 @@
 								hush.msg.showMsg(rs.msg, rs.code)
 								return
 							}
-							alert("111")
-							//const _chkSave = $("#chk_save").prop("checked") ? "Y" : ""
-							//hush.auth.setCookieForUser(rs, _chkSave) //rs.list 아님을 유의
 							if ($("#chk_save").prop("checked")) hush.http.setCookie("userid", _userid, true)
 							if (opener && opener.showLogout) opener.showLogout(true) //포털(index.html) 
 							const _target = g_target ? decodeURIComponent(g_target) : "/index.html"

@@ -24,15 +24,15 @@
         },
         user : null,
         auth : {
-            setCookieForUser : (rs, _persist) => { //_persist = Y or else
-                const persist = (_persist == "Y") ? true : false
-                //hush.http.setCookie("autologin", _persist, true) //persistent cookie - 포털(index.html)에서만 사용됨 : 로그아웃전까지는 브라우저를 나와도 남아 있음
-                hush.http.setCookie("userid", rs.USER_ID, persist) //persistent cookie - _persist는 아이디를 화면에 저장할 지에만 사용
-                hush.http.setCookie("token", rs.token) //jwt 포함 이하는 모두 세션 쿠키로 처리                
-                hush.http.setCookie("usernm", rs.USER_NM)
-                hush.http.setCookie("orgcd", rs.ORG_CD)
-                hush.http.setCookie("toporgcd", rs.TOP_ORG_CD)
-            },
+            // setCookieForUser : (rs, _persist) => { //_persist = Y or else
+            //     const persist = (_persist == "Y") ? true : false
+            //     //hush.http.setCookie("autologin", _persist, true) //persistent cookie - 포털(index.html)에서만 사용됨 : 로그아웃전까지는 브라우저를 나와도 남아 있음
+            //     hush.http.setCookie("userid", rs.USER_ID, persist) //persistent cookie - _persist는 아이디를 화면에 저장할 지에만 사용
+            //     hush.http.setCookie("token", rs.token) //jwt 포함 이하는 모두 세션 쿠키로 처리                
+            //     hush.http.setCookie("usernm", rs.USER_NM)
+            //     hush.http.setCookie("orgcd", rs.ORG_CD)
+            //     hush.http.setCookie("toporgcd", rs.TOP_ORG_CD)
+            // },
             deleteCookieForUser : () => {
                 //hush.http.deleteCookie('autologin')
                 hush.http.deleteCookie('token')
