@@ -20,7 +20,9 @@
             warn_search_blank : "검색어" + _warn_blank,
             warn_no_row_selected : "선택한 행이 없습니다.",
             warn_no_opener : "opener가 존재하지 않습니다.",
-            warn_char_not_allowed : "한글이나 특수문자 일부(# $ - _ % & + =)는 사용할 수 없습니다."
+            warn_char_not_allowed : "한글이나 특수문자 일부(# $ - _ % & + =)는 사용할 수 없습니다.",
+            w_key : 'W__', //Web userkey
+            m_key : 'M__', //Mobile userkey
         },
         user : null,
         auth : {

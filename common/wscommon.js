@@ -15,7 +15,6 @@ module.exports = (function() {
 	let ws = {
 	
 		cons : {
-
 			CODE_OK : '0',
 			CODE_ERR : '-1',
 			MSG_ALREADY_EXISTS : '이미 존재하는 데이터입니다.',
@@ -28,6 +27,13 @@ module.exports = (function() {
 			CODE_USERCOOKIE_MISMATCH : '-85',
 			mysql_close_error : 'mysql_close_error',
 			toast_prefix : '##$$', //클라이언트와 동일
+			easydeli : ';', //Use this for absolutely safe place.
+			/////////////////////////////////////////////아래는 메신저 관련			
+			w_key : 'W__', //Web userkey
+			m_key : 'M__', //Mobile userkey
+			key_str_winid : PREFIX + 'W', //redis strings (userkey+deli+winid prefix added) - get winid for auto launch
+			key_str_socket : PREFIX + 'S', //redis strings (userkey+deli+socketid prefix added) - get socketid
+			scan_stream_cnt : 100, //means scanning count at a time, not whole count to scan. https://www.gitmemory.com/issue/luin/ioredis/908/511472853. Without count param, Something unexpectable might be happend ?!.
 		},
 
 		http : {

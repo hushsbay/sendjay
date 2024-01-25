@@ -18,7 +18,7 @@ router.post('/', async function(req, res) {
 		console.log(uid, pwd, '=====', userid, token)
 		let useridReal
 		if (!uid) {
-			useridReal = await ws.jwt.chkToken(req, res) //여기 login.js에서만 세번째 인자인 conn이 없음
+			useridReal = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
 			if (!useridReal) return			
 		} else {
 			useridReal = uid

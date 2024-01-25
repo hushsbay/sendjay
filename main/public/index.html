@@ -90,6 +90,47 @@
                 }
         	}
 
+            async function startMsngr() {
+                try {
+                    const _userid = hush.http.getCookie("userid")  
+                    const rs = await hush.http.ajax("/msngr/chk_redis", { type : "set_new", userkey : hush.cons.w_key + _userid, winid : hush.util.getRnd() }) //winid는 여기서 테스트 용도임
+                    if (rs.code != hush.cons.CODE_OK) {
+						hush.msg.showMsg(rs.msg, rs.code)
+						return
+					}
+
+                    //hush.socket = await hush.sock.connect(io, { token : hush.user.token, userkey : hush.user.key, userid : g_userid, winid : e.data.winid, userip : rs1.userip }) 
+                    /*const socket = io("https://hushsbay.com:3050/jay", { forceNew: false, reconnection: false, query: { userid : "S921060" } }) //forceNew=false //See 'disconnect_prev_sock' in pmessage.js (on server)
+                    socket.off("connect_error").on("connect_error", (e) => { hush.msg.alert("connect_error\n" + e.toString()) })
+                    socket.off("disconnect").on("disconnect", () => { 
+                        //location.replace("/" + hush.cons.erp_portal)
+                        hush.msg.alert("disconnected")
+                    }) 
+                    socket.off("connect").on("connect", () => {
+                        console.log("socket connected......")
+                        // hush.sock.on(socket, (rs) => {
+                        //     console.log("chk => " + JSON.stringify(rs))
+                        //     if (rs.returnTo == "parent" || rs.returnTo == "all") {
+                        //         funcSockEv[rs.ev].call(null, rs.data)
+                        //         if (rs.returnTo == "all") { //call from app.js or disconnect.js on server
+                        //             Object.entries(hush.sock.rooms).forEach(([key, value]) => {
+                        //                 const _win = hush.sock.rooms[key]
+                        //                 if (_win && !_win.closed) _win.funcSockEv[rs.ev].call(null, rs.data)
+                        //             })
+                        //         }
+                        //     } else { //to roomid
+                        //         const _win = hush.sock.rooms[rs.returnTo]
+                        //         if (_win && !_win.closed) _win.funcSockEv[rs.ev].call(null, rs.data)
+                        //         if (rs.returnToAnother == "parent") funcSockEv[rs.ev].call(null, rs.data)
+                        //     }
+                        // })
+                        // resolve(socket)
+                    })*/
+                } catch (ex) {
+                    hush.util.showEx(ex)
+                }
+            }
+
             $.when($.ready).done(async function() {
                 try { //By default, $.getScript() sets the cache setting to false. You can override this with $.ajaxSetup({ cache: true })
                     await $.getScript("/common/common.js")
@@ -97,11 +138,12 @@
                     if (_token) { //jwt는 세션쿠키이므로 있다면 사용자가 인증한 것이 됨. 따라서 jwt를 검증해야 함
                         const _userid = hush.http.getCookie("userid")  
                         const rs = await hush.http.ajax("/auth/login", { token : _token, userid : _userid })
-                        if (rs.code == hush.cons.CODE_OK) {
-                            showLogout(true)
-                        } else {
+                        if (rs.code != hush.cons.CODE_OK) {
                             hush.msg.showMsg(rs.msg, rs.code)
-                            showLogout(false)
+                            showLogout(false) //return 하지 말기
+                        } else {
+                            showLogout(true)
+                            startMsngr()
                         }
                     }
                     $("#btn_user").on("click", function() {
@@ -135,35 +177,6 @@
                         }
                         hush.util.openWinPop("/app/org/orgtree.html?" + $.param(obj))
                     })
-
-                    //hush.socket = await hush.sock.connect(io, { token : hush.user.token, userkey : hush.user.key, userid : g_userid, winid : e.data.winid, userip : rs1.userip }) 
-                    /*const socket = io("https://hushsbay.com:3050/jay", { forceNew: false, reconnection: false, query: { userid : "S921060" } }) //forceNew=false //See 'disconnect_prev_sock' in pmessage.js (on server)
-                    socket.off("connect_error").on("connect_error", (e) => { hush.msg.alert("connect_error\n" + e.toString()) })
-                    socket.off("disconnect").on("disconnect", () => { 
-                        //location.replace("/" + hush.cons.erp_portal)
-                        hush.msg.alert("disconnected")
-                    }) 
-                    socket.off("connect").on("connect", () => {
-                        console.log("socket connected......")
-                        // hush.sock.on(socket, (rs) => {
-                        //     console.log("chk => " + JSON.stringify(rs))
-                        //     if (rs.returnTo == "parent" || rs.returnTo == "all") {
-                        //         funcSockEv[rs.ev].call(null, rs.data)
-                        //         if (rs.returnTo == "all") { //call from app.js or disconnect.js on server
-                        //             Object.entries(hush.sock.rooms).forEach(([key, value]) => {
-                        //                 const _win = hush.sock.rooms[key]
-                        //                 if (_win && !_win.closed) _win.funcSockEv[rs.ev].call(null, rs.data)
-                        //             })
-                        //         }
-                        //     } else { //to roomid
-                        //         const _win = hush.sock.rooms[rs.returnTo]
-                        //         if (_win && !_win.closed) _win.funcSockEv[rs.ev].call(null, rs.data)
-                        //         if (rs.returnToAnother == "parent") funcSockEv[rs.ev].call(null, rs.data)
-                        //     }
-                        // })
-                        // resolve(socket)
-                    })*/
-
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }
