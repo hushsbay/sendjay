@@ -65,15 +65,19 @@ module.exports = (function() {
 					maxAge : persist ? 60 * 60 * 24 * 365 : null
 				})
 			},
-			resCookieForTokenRefresh : (res, useridReal) => { //세션 쿠키로 내림
-				const newToken = ws.jwt.make({ userid : useridReal })
-                ws.http.resCookie(res, "token", newToken)
+			resJson : (res, rs, useridReal) => {
+				if (useridReal) {
+					const newToken = ws.jwt.make({ userid : useridReal })
+                	ws.http.resCookie(res, "token", newToken) //jwt 만기 갱신해 세션 쿠키로 내림
+					rs.token = newToken //웹일 경우는 필요없는데 앱에서는 쿠키로 받아 UserInfo에 넣기 불편한 구조여서 아예 response에 넣어서 내려서 처리하도록 함
+				}
+				res.json(rs)
 			},
 			deviceFrom : (req) => {
 				const userAgent = req.headers['user-agent'] //String
 				if (userAgent.includes('Dalvik') && userAgent.includes('Android')) {
 					return 'aos'
-				} else if (userAgent.includes('blabla') && userAgent.includes('dududududu')) {
+				} else if (userAgent.includes('notyettested') && userAgent.includes('notyettested')) {
 					return 'ios'
 				} else {
 					return 'web'
@@ -150,9 +154,6 @@ module.exports = (function() {
 				const { token, userid, orgcd, toporgcd } = req.cookies
 				const tokenInfo = { userid : userid, token : token, orgcd : orgcd, toporgcd : toporgcd } //login.html을 제외하고 웹 또는 앱에서 항상 넘어오는 쿠키
 				if (req && req.clientIp) Object.assign(tokenInfo, { ip : req.clientIp })
-				//var source = req.headers['user-agent'] //String
-				//console.log(source)
-				//console.log("chkToken", tokenInfo.token)
 				const jwtRet = await ws.jwt.verify(tokenInfo)
 				if (jwtRet.code == ws.cons.CODE_OK) { //실수로 await 빼고 chkToken() 호출할 때 대비해 if절 구성
 					if (conn) { //userid뿐만 아니라 부서정보 등 위변조도 체크 필요 (문제 발생시 로깅. 겸직 코딩은 제외되어 있음)
@@ -171,7 +172,6 @@ module.exports = (function() {
 							return null
 						}
 					}
-					ws.http.resCookieForTokenRefresh(res, tokenInfo.userid) 
 					return tokenInfo.userid
 				} else {	
 					ws.util.loge(req, jwtRet.msg)
