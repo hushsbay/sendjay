@@ -16,6 +16,8 @@ router.post('/', async function(req, res) {
 		const { uid, pwd } = req.body //사용자가 인증을 위해 입력한 사용자아이디
 		const { userid, token } = req.cookies //login.html을 제외하고 웹 또는 앱에서 항상 넘어오는 쿠키
 		console.log(uid, pwd, '=====', userid, token)
+		var userAgent = req.headers['user-agent'] //String
+		console.log(userAgent)
 		let useridReal
 		if (!uid) {
 			useridReal = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
