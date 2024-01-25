@@ -11,6 +11,8 @@ const wsmysql = require(config.app.wsmysql)
 const jwt = require('jsonwebtoken')
 
 module.exports = (function() {
+
+	const PREFIX = '$$' //for redis
 	
 	let ws = {
 	
