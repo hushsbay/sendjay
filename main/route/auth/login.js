@@ -40,14 +40,16 @@ router.post('/', async function(req, res) {
 				ws.http.resWarn(res, '비번이 다릅니다.')
 				return
 			}
-		} //data[0].PWD = '' //Object.assign(rs, data[0])
+		}
+		if (ws.http.deviceFrom(req) == 'web') data[0].PWD = ''
+		Object.assign(rs, data[0])
 		//여기는 모두 세션 쿠키로 내림. 아래 쿠키설정은 verifyUser() in common.js의 쿠키가져오기와 일치해야 함 
 		//userid는 여기가 아닌 (아이디저장 옵션때문에 session/persist 여부를) login.html에서 판단 : 여기서도 설정하면 브라우저에서와 충돌 (빠를 수 있어 문제)
-		ws.http.resCookie(res, "usernm", data[0].USER_NM)
-		ws.http.resCookie(res, "orgcd", data[0].ORG_CD)
-		ws.http.resCookie(res, "orgnm", data[0].ORG_NM)
-		ws.http.resCookie(res, "toporgcd", data[0].TOP_ORG_CD)
-		ws.http.resCookie(res, "toporgnm", data[0].TOP_ORG_NM)
+		ws.http.resCookie(res, "usernm", rs.USER_NM)
+		ws.http.resCookie(res, "orgcd", rs.ORG_CD)
+		ws.http.resCookie(res, "orgnm", rs.ORG_NM)
+		ws.http.resCookie(res, "toporgcd", rs.TOP_ORG_CD)
+		ws.http.resCookie(res, "toporgnm", rs.TOP_ORG_NM)
 		ws.http.resCookieForTokenRefresh(res, useridReal) 
 		res.json(rs)
 	} catch (ex) {

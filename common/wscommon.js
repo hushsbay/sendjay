@@ -68,6 +68,16 @@ module.exports = (function() {
 			resCookieForTokenRefresh : (res, useridReal) => { //세션 쿠키로 내림
 				const newToken = ws.jwt.make({ userid : useridReal })
                 ws.http.resCookie(res, "token", newToken)
+			},
+			deviceFrom : (req) => {
+				const userAgent = req.headers['user-agent'] //String
+				if (userAgent.includes('Dalvik') && userAgent.includes('Android')) {
+					return 'aos'
+				} else if (userAgent.includes('blabla') && userAgent.includes('dududududu')) {
+					return 'ios'
+				} else {
+					return 'web'
+				}
 			}
 		},
 
@@ -315,6 +325,7 @@ module.exports = (function() {
 				const _dtString = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second
 				return _dtString
 			},
+
 		}
 
 	}
