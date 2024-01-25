@@ -60,8 +60,6 @@ router.post('/', async function(req, res) {
 		
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
-	} finally {
-		wsmysql.closeConn(conn, req.title)
 	}
 })
 
