@@ -150,4 +150,7 @@ for (let i = 0; i < rt.length; i++) app.use('/user/' + rt[i], require('./route/u
 rt = ['orgtree', 'empsearch', 'deptsearch']
 for (let i = 0; i < rt.length; i++) app.use('/org/' + rt[i], require('./route/org/' + rt[i])) 
 
+rt = ['chk_redis']
+for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/msngr/' + rt[i])) 
+
 ws.util.watchProcessError()
