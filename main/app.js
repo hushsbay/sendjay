@@ -3,7 +3,10 @@ const nodeConfig = require(config.app.nodeConfig)
 const ws = require(config.app.ws)
 const wsmysql = require(config.app.wsmysql)
 const wslogger = require(config.app.wslogger)(config.app.logPath, 'hushsbay')
-const com = require('./common')
+const cors = require('cors')
+const Redis = require('ioredis') //not redis npm 
+const { Server } = require('socket.io')
+const redisAdapter = require('@socket.io/redis-adapter')
 
 const DIR_PUBSUB = './pubsub/'
 const PING_TIMEOUT = 5000, PING_INTERVAL = 25000 //default
@@ -17,32 +20,30 @@ console.log('projPath:', __dirname)
 console.log('logPath:', config.app.logPath)
 console.log('jwtExpiry:', nodeConfig.jwt.expiry)
 
+//1. Was Server
 const app = ws.util.initExpressApp('public')
 const wasServer = ws.util.createWas(app, config.http.method) //프로젝트 hushsbay는 aws 기반(https는 로드밸런서CLB 이용)이므로 여기서는 https가 아닌 http로 설정
 wasServer.listen(config.http.port, () => { console.log('wasServer listening on ' + config.http.port) })
 
-const Redis = require('ioredis')
-const { Server } = require('socket.io')
-const redisAdapter = require('@socket.io/redis-adapter')
-
+//2. Redis(ioredis) Server
 const redisOpt = { host : nodeConfig.redis.host, port : nodeConfig.redis.port, password : nodeConfig.redis.pwd, db : config.redis.db }
 global.store = new Redis(redisOpt)
 global.pub = new Redis(redisOpt)
 const sub = new Redis(redisOpt)
 global.pub.on('error', err => console.error('ioredis pub error :', err.stack))
-sub.psubscribe(com.cons.pattern, (err, count) => { console.log('ioredis psubscribe pattern : ' + com.cons.pattern) }) //ioredis (not socket.io-redis)
+sub.psubscribe(ws.cons.pattern, (err, count) => { console.log('ioredis psubscribe pattern : ' + ws.cons.pattern) })
 sub.on('pmessage', (pattern, channel, message) => { require(DIR_PUBSUB + 'pmessage')(pattern, channel, message) })
 sub.on('error', err => { console.error('ioredis sub error:', err.stack) })
+//현재 Redis가 멀티서버에서의 소켓연결정보 관리에만 사용중이므로 NodeJS 재시작시 해당 redis데이터베이스내 데이터를 모두 지우는 것이 가비지정리 등에도 좋을 것임
 if (config.redis.flush == 'Y') global.store.flushdb(function(err, result) { console.log('redis db flushed :', result) }) //Only one server flushes db (config.redis.flush == 'Y')
-//현재로선, Redis가 멀티서버에서의 소켓연결정보 관리에만 사용중이므로 NodeJS 재시작시 해당 redis데이터베이스내 데이터를 모두 지우는 것이 가비지정리 등에도 좋을 것임
 
+//3. Socket Server (with Redis Adapter)
 const appSocket = ws.util.initExpressApp()
 const socketServer = ws.util.createWas(appSocket, config.http.method) //not https (because of aws elastic load balancer)
 const io = new Server(socketServer, { allowEIO3: false, autoConnect: true, pingTimeout: PING_TIMEOUT, pingInterval: PING_INTERVAL, cors: { origin: config.app.corsSocket, methods: ["GET", "POST"] }})
 io.adapter(redisAdapter(global.pub, sub))
 io.listen(config.sock.port)
 global.jay = io.of('/' + config.sock.namespace)
-console.log('socketServer listening on ' + config.sock.port)
 global.jay.on('connection', async (socket) => {
 	const queryParam = socket.handshake.query
 	console.log(ws.util.getCurDateTimeStr(true) + " connect @@@@@@@@@@@@@@@ " + queryParam.userid)
@@ -50,6 +51,7 @@ global.jay.on('connection', async (socket) => {
 		console.log(ws.util.getCurDateTimeStr(true) + " disconnect ############# " + reason)
 	})
 })
+console.log('socketServer listening on ' + config.sock.port)
 
 //const appSocket = ws.util.initExpressApp()
 //const socketServer = ws.util.createWas(appSocket, config.http.method) //not https (because of aws elastic load balancer)
@@ -112,7 +114,7 @@ const sub = global.store.duplicate()
 //     global.store.flushdb(function(err, result) { console.log('redis db flushed :', result) }) //Only one server flushes db
 //     console.log("@@@@@@@@@@@@@@@")
 // }
-//sub.psubscribe(com.cons.pattern, (err, count) => { console.log('ioredis psubscribe pattern : ' + com.cons.pattern) }) //ioredis (not socket.io-redis)
+//sub.psubscribe(ws.cons.pattern, (err, count) => { console.log('ioredis psubscribe pattern : ' + ws.cons.pattern) }) //ioredis (not socket.io-redis)
 //sub.on('pmessage', (pattern, channel, message) => { require(DIR_PUBSUB + 'pmessage')(pattern, channel, message) })
 //sub.on('error', err => { console.error('ioredis sub error:', err.stack) })
 
@@ -130,17 +132,17 @@ Promise.all([global.store.connect(), global.pub.connect(), sub.connect()]).then(
     })
 })*/
 
-// const corsOptions = { //for Rest
-// 	origin : function (origin, callback) {
-// 		if (!origin || config.app.corsRestful.indexOf(origin) > -1) { //!origin = in case of same origin
-// 			callback(null, true)
-// 		} else {
-// 			const _msg = 'Not allowed by CORS : ' + origin
-// 			global.logger.info(_msg)
-// 			callback(new Error(_msg))
-// 		}
-// 	}
-// }
+const corsOptions = { //for Rest
+	origin : function (origin, callback) {
+		if (!origin || config.app.corsRestful.indexOf(origin) > -1) { //!origin = in case of same origin
+			callback(null, true)
+		} else {
+			const _msg = 'Not allowed by CORS : ' + origin
+			global.logger.info(_msg)
+			callback(new Error(_msg))
+		}
+	}
+}
 
 app.use('/auth/login', require('./route/auth/login'))
 
