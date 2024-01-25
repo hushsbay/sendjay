@@ -12,9 +12,10 @@ router.use(function(req, res, next) {
 router.post('/', async function(req, res) {
 	let conn, sql, data, len
 	const rs = ws.http.resInit()
-	try { //console.log(userid, pwd, token, "===========", req.body.toString(), JSON.stringify(req.body))
+	try { 
 		const { uid, pwd } = req.body //사용자가 인증을 위해 입력한 사용자아이디
 		const { userid, token } = req.cookies //login.html을 제외하고 웹 또는 앱에서 항상 넘어오는 쿠키
+		console.log(uid, pwd, '=====', userid, token)
 		let useridReal
 		if (!uid) {
 			useridReal = await ws.jwt.chkToken(req, res) //여기 login.js에서만 세번째 인자인 conn이 없음
