@@ -130,6 +130,9 @@ module.exports = (function() {
 				const { token, userid, orgcd, toporgcd } = req.cookies
 				const tokenInfo = { userid : userid, token : token, orgcd : orgcd, toporgcd : toporgcd } //login.html을 제외하고 웹 또는 앱에서 항상 넘어오는 쿠키
 				if (req && req.clientIp) Object.assign(tokenInfo, { ip : req.clientIp })
+				//var source = req.headers['user-agent'] //String
+				//console.log(source)
+				console.log("chkToken", tokenInfo.token)
 				const jwtRet = await ws.jwt.verify(tokenInfo)
 				if (jwtRet.code == ws.cons.CODE_OK) { //실수로 await 빼고 chkToken() 호출할 때 대비해 if절 구성
 					if (conn) { //userid뿐만 아니라 부서정보 등 위변조도 체크 필요 (문제 발생시 로깅. 겸직 코딩은 제외되어 있음)
