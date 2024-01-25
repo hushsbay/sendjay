@@ -16,22 +16,22 @@ router.post('/', async function(req, res) {
 		if (!userid) return	
 		
 		const pattern = ws.cons.key_str_winid + userkey + ws.cons.easydeli //eg) $$WW__USERID;
-		const uwKey = pattern + _winid //eg) $$WW__USERID;20200918210554260
-		const stream = global.store.scanStream({ match : pattern + '*', count : ws.cons.scan_stream_cnt }) //console.log(_type, _userkey, _winid, pattern, uwKey)
+		const uwKey = pattern + winid //eg) $$WW__USERID;20200918210554260
+		const stream = global.store.scanStream({ match : pattern + '*', count : ws.cons.scan_stream_cnt }) //console.log(type, userkey, winid, pattern, uwKey)
 		stream.on('data', async (resultKeys) => { //resultKeys is an array of strings representing key names
-			if (_type == "chk_embeded") { //웹메신저 자동실행을 위한 마지막 체크임
+			if (type == "chk_embeded") { //웹메신저 자동실행을 위한 마지막 체크임
 				const _dt = ws.util.getCurDateTimeStr(true)
-				if (resultKeys.length == 0) { //console.log(_type, _userkey, _winid, pattern, uwKey, "====new")
+				if (resultKeys.length == 0) { //console.log(type, userkey, winid, pattern, uwKey, "====new")
 					await global.store.set(uwKey, _dt)
 					rs.result = "new" //새로운 winner
 				} else {
 					for (let item of resultKeys) {
 						const arr = item.split(ws.cons.easydeli) //[0](userkey), [1](winid)
-						if (arr[1] == _winid) { //console.log(_type, _userkey, _winid, pattern, uwKey, "====same")
+						if (arr[1] == winid) { //console.log(type, userkey, winid, pattern, uwKey, "====same")
 							await global.store.set(uwKey, _dt)
 							rs.result = "same" //기존 우승자 계속
 							break
-						} else { //console.log(_type, _userkey, _winid, pattern, uwKey, "====another")
+						} else { //console.log(type, userkey, winid, pattern, uwKey, "====another")
 							//com.cons.max_diff_sec_worker가 지난 것은 닫힌 탭이므로 삭제해야 함 (Web Worker에 의해 업데이트 안되는 가비지 데이터임)
 							const _dtVal = await global.store.get(item)
 							const _diffSec = ws.util.getDateTimeDiff(_dtVal, new Date())
@@ -42,9 +42,9 @@ router.post('/', async function(req, res) {
 				}
 				rs.userip = req.clientIp
 				res.json(rs)
-			} else if (_type == "set_new") { //manual 실행시 무조건 키 setting함
+			} else if (type == "set_new") { //manual 실행시 무조건 키 setting함
 				for (let item of resultKeys) await global.store.del(item)
-				await global.store.set(uwKey, _winid) //console.log(_type, _userkey, _winid, pattern, uwKey)
+				await global.store.set(uwKey, winid) //console.log(type, userkey, winid, pattern, uwKey)
 				rs.result = "new" //새로운 winner		
 			}
 			rs.userip = req.clientIp
