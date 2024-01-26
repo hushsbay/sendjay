@@ -38,11 +38,12 @@ router.post('/', async function(req, res) {
 		}
 		let pwdToCompare
 		if (autologin == 'Y' && device != 'web') { //2중 체크
-			//pwd는 앱에 저장된 암호화된 상태의 값이므로 pwdToCompare도 그대로 비교 필요
+			//pwd는 앱에 저장된 암호화된 상태의 값이므로 pwdToCompare도 암호화된 값 그대로 비교 필요
 			pwdToCompare = data[0].PWD
 		} else {
 			//pwd는 암호화되지 않은 사용자 입력분 그대로이므 pwdToCompare도 디코딩 필요
 			pwdToCompare = ws.util.decrypt(data[0].PWD, nodeConfig.crypto.key)
+			console.log(pwd, pwdToCompare)
 		}
 		if (pwd != pwdToCompare) {
 			ws.http.resWarn(res, '비번이 다릅니다.')
