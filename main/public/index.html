@@ -98,34 +98,22 @@
 						hush.msg.showMsg(rs.msg, rs.code)
 						return
 					}
+                    const winid = hush.util.getRnd() + hush.util.getCurDateTimeStr()
+                    hush.socket = await hush.sock.connect(io, { 
+                        token : hush.user.token, userkey : hush.user.key, userid : hush.user.id, winid : winid, userip : rs.userip 
+                    }) 
+                    
 
-                    //hush.socket = await hush.sock.connect(io, { token : hush.user.token, userkey : hush.user.key, userid : g_userid, winid : e.data.winid, userip : rs1.userip }) 
-                    const socket = io("https://hushsbay.com:3050/jay", { forceNew: false, reconnection: false, query: { userid : "S921060" } }) //forceNew=false //See 'disconnect_prev_sock' in pmessage.js (on server)
+
+                    
+                    /*const socket = io("https://hushsbay.com:3050/jay", { forceNew: false, reconnection: false, query: { userid : "S921060" } }) //forceNew=false //See 'disconnect_prev_sock' in pmessage.js (on server)
                     socket.off("connect_error").on("connect_error", (e) => { hush.msg.alert("connect_error\n" + e.toString()) })
                     socket.off("disconnect").on("disconnect", () => { 
-                        //location.replace("/" + hush.cons.erp_portal)
                         hush.msg.alert("disconnected")
                     }) 
                     socket.off("connect").on("connect", () => {
                         console.log("socket connected......")
-                        // hush.sock.on(socket, (rs) => {
-                        //     console.log("chk => " + JSON.stringify(rs))
-                        //     if (rs.returnTo == "parent" || rs.returnTo == "all") {
-                        //         funcSockEv[rs.ev].call(null, rs.data)
-                        //         if (rs.returnTo == "all") { //call from app.js or disconnect.js on server
-                        //             Object.entries(hush.sock.rooms).forEach(([key, value]) => {
-                        //                 const _win = hush.sock.rooms[key]
-                        //                 if (_win && !_win.closed) _win.funcSockEv[rs.ev].call(null, rs.data)
-                        //             })
-                        //         }
-                        //     } else { //to roomid
-                        //         const _win = hush.sock.rooms[rs.returnTo]
-                        //         if (_win && !_win.closed) _win.funcSockEv[rs.ev].call(null, rs.data)
-                        //         if (rs.returnToAnother == "parent") funcSockEv[rs.ev].call(null, rs.data)
-                        //     }
-                        // })
-                        // resolve(socket)
-                    })
+                    })*/
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }
@@ -142,6 +130,7 @@
                             hush.msg.showMsg(rs.msg, rs.code)
                             showLogout(false) //return 하지 말기
                         } else {
+                            hush.auth.setUser(_token)
                             showLogout(true)
                             startMsngr()
                         }

@@ -10,6 +10,7 @@
             MSG_NO_DATA : '데이터가 없습니다.',
             toast_prefix : "##$$", 
             ///////////////////////////////////위는 서버와 동일
+            erp_portal : "index.html",
             failOnLoad : "failOnLoad",
             restful_timeout : 10000,
             pattern : /^[A-Za-z0-9!@^*(),.]*$/, //do not include # $ - _ % & + = ( //pattern excludes characters concerned with problem of uri malforming and jquery selector, so not worry about encodeURIComponent for that field) 
@@ -21,12 +22,17 @@
             warn_no_row_selected : "선택한 행이 없습니다.",
             warn_no_opener : "opener가 존재하지 않습니다.",
             warn_char_not_allowed : "한글이나 특수문자 일부(# $ - _ % & + =)는 사용할 수 없습니다.",
+            //////////////////////////////////아래는 소켓 관련 : 3050(web ops),3051(mobile ops) and 3060(web dev),3061(mobile dev)
+            socket_url : location.hostname + ":3050/jay", //jay는 socket.io namespace
             w_key : 'W__', //Web userkey
             m_key : 'M__', //Mobile userkey
+            prefix : "$$", //for redis, socket
         },
+        socket : null,
         user : null,
+        ////////////////////////////////////////////////////////////////////////////////////////
         auth : {
-            setCookieForUser : (rs, _persist) => { //token은 서버 쿠키+응답본문으로 내려옴
+            setCookieForUser : (rs, _persist) => { //token은 서버 쿠키+응답본문으로 자동으로 내려옴
                 debugger
                 const persist = (_persist == true) ? true : false
                 hush.http.setCookie("userid", rs.USER_ID, persist) //persistent cookie - _persist는 아이디를 화면에 저장할 지에만 사용
@@ -45,7 +51,19 @@
                 hush.http.deleteCookie('toporgcd')
                 hush.http.deleteCookie('toporgnm')
             },
-            verifyUser : async () => {
+            setUser : (_token) => { //바로 아래와 index.html에서 사용됨
+                const _id = hush.http.getCookie("userid")
+                const _nm = hush.http.getCookie("usernm")
+                const _orgcd = hush.http.getCookie("orgcd")
+                const _orgnm = hush.http.getCookie("orgnm")
+                const _toporgcd = hush.http.getCookie("toporgcd")
+                const _toporgnm = hush.http.getCookie("toporgnm")
+                hush.user = { 
+                    token : _token, id : _id, key : hush.cons.w_key + _id, nm : _nm, 
+                    orgcd : _orgcd, orgnm : _orgnm, toporgcd : _toporgcd, toporgnm : _toporgnm 
+                }
+            },
+            verifyUser : async () => { //index.html 제외한 나머지에서 사용됨
                 const _token = hush.http.getCookie("token")  
                 if (_token) {
                     const _userid = hush.http.getCookie("userid")  
@@ -65,15 +83,7 @@
                     hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
                     return false
                 }
-                const _id = hush.http.getCookie("userid")
-                const _nm = hush.http.getCookie("usernm")
-                const _orgcd = hush.http.getCookie("orgcd")
-                const _orgnm = hush.http.getCookie("orgnm")
-                const _toporgcd = hush.http.getCookie("toporgcd")
-                const _toporgnm = hush.http.getCookie("toporgnm")
-                hush.user = { 
-                    token : _token, id : _id, nm : _nm, orgcd : _orgcd, orgnm : _orgnm, toporgcd : _toporgcd, toporgnm : _toporgnm 
-                }
+                hush.auth.setUser(_token)
                 return true
             }, 
             getUserPhoto : (user_id, tag_id) => {
@@ -90,6 +100,59 @@
                         $("#" + tag_id).attr("src", url)
                     }
                 })
+            }
+        },
+        blob : { //브라우저에서 이미지 파일 선택후 노드서버에 올리고 다시 내려 표시하는 등 처리는 2가지 방법이 있음 => 1) blob 2) base64인코딩스트링
+            getUrlForFile : (file, returnBlob, callback) => {
+                const reader = new FileReader()
+                if (returnBlob) {
+                    reader.onload = function(e) {
+                        const blob = new Blob([new Uint8Array(e.target.result)], {type: file.type })
+                        const blobUrl = URL.createObjectURL(blob)
+                        callback(blobUrl) //blob:https://hushsbay.com/512bc969-441c-4019-8ba9-478a478b2cfd
+                    }
+                    reader.readAsArrayBuffer(file)
+                } else { //base64 인코딩된 스트링 데이터로 리턴
+                    reader.readAsDataURL(file)
+                    reader.addEventListener("load", function () {
+                        callback(reader.result) //data:image/png;base64,~
+                    })
+                }
+            },
+            get : async (url) => { //get(getPromise)도 <img>의 src url이 blob이든 base64든 관계없이 blob 데이터 리턴해서 서버로 보낼 준비를 함
+                try {
+                    const rs = await hush.blob.getPromise(url)               
+                    return rs
+                } catch (ex) {
+                    throw ex //new Error(ex.message)
+                }
+            },
+            getPromise : (url) => new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest()
+                xhr.open("GET", url, true) //url might be 1) blob or 2) base64 string
+                xhr.responseType = "blob"
+                xhr.onload = function(e) {
+                    if (this.status == 200) {
+                        resolve(this.response)
+                    } else {
+                        debugger //e로 오류 핸들링 가능한지 알아봐야 함
+                        reject(new Error(this.status + " / getBlob 오류입니다."))
+                    }
+                }
+                xhr.send()
+            }),
+            //1) blob을 이용해 처리
+            getBlobUrlForImage : (buffer, mimetype) => {
+                const _mimetype = (mimetype) ? mimetype : "image/png"
+                const uInt8Array = new Uint8Array(buffer)
+                const blob = new Blob([uInt8Array], { type: _mimetype })
+                const blobUrl = URL.createObjectURL(blob)
+                return blobUrl //blob:https://hushsbay.com/f4cb83ea-5d46-40b7-8baa-ba62dca2ffca
+            },
+            //2) base64인코딩스트링
+            setDataUrl : (base64, mimetype) => { //base64는 노드 서버에서 Buffer.from(data[0].PICTURE, 'binary').toString('base64')로 처리된 것을 전제로 함
+                const dataUrl = "data:" + mimetype + ";base64," + base64
+				return dataUrl
             }
         },
         http : {
@@ -315,6 +378,59 @@
                 }
             }
         },
+        sock : {
+            rooms : { }, //sock.connect => https://socket.io/docs/v3/client-initialization         
+            connect : (io, query) => new Promise((resolve, reject) => { //this will be occurred only on index.html
+                const socket = io(hush.cons.socket_url, { forceNew: false, reconnection: false, query: query }) //forceNew=false //See 'disconnect_prev_sock' in pmessage.js (on server)
+        		socket.off("connect_error").on("connect_error", (e) => { hush.msg.alert("connect_error\n" + e.toString()) })
+                socket.off("disconnect").on("disconnect", () => { 
+                    location.replace("/" + hush.cons.erp_portal)
+                }) 
+                socket.off("connect").on("connect", () => {
+                    console.log("socket connected")
+                    hush.sock.on(socket, (rs) => {
+                        console.log("hush.sock.on => " + JSON.stringify(rs))
+                        if (rs.returnTo == "parent" || rs.returnTo == "all") {
+                            funcSockEv[rs.ev].call(null, rs.data)
+                            if (rs.returnTo == "all") { //call from app.js or disconnect.js on server
+                                Object.entries(hush.sock.rooms).forEach(([key, value]) => {
+                                    const _win = hush.sock.rooms[key]
+                                    if (_win && !_win.closed) _win.funcSockEv[rs.ev].call(null, rs.data)
+                                })
+                            }
+                        } else { //to roomid
+                            const _win = hush.sock.rooms[rs.returnTo]
+                            if (_win && !_win.closed) _win.funcSockEv[rs.ev].call(null, rs.data)
+                            if (rs.returnToAnother == "parent") funcSockEv[rs.ev].call(null, rs.data)
+                        }
+                    })
+                    resolve(socket)
+                })
+            }),
+            send : (socket, ev, data, returnTo, returnToAnother) => {
+                //returnTo : 부모, 해당채팅방, all 중 하나를 지정하며 parent(부모)가 기본값임
+                //returnToAnother : returnTo 말고도 하나 더 전송 가능 (주로 특정 방에 보내면서 parent에게 추가로 보낼 때 사용)
+                const _returnTo = returnTo ? returnTo : "parent" //parent(부모)가 기본값
+                socket.emit(hush.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
+            },
+            on : (socket, callback) => {            
+                socket.off(hush.cons.sock_ev_alert).on(hush.cons.sock_ev_alert, (obj) => { 
+                    if (!obj.roomid) {
+                        hush.msg.alert("sock_ev_alert: " + obj.msg) 
+                    } else {
+                        hush.sock.rooms[obj.roomid].hush.msg.alert("sock_ev_alert: " + obj.msg)
+                    }
+                })
+                socket.off(hush.cons.sock_ev_toast).on(hush.cons.sock_ev_toast, (obj) => {
+                    if (!obj.roomid) {
+                        hush.msg.alert("sock_ev_toast: " + obj.msg) 
+                    } else {
+                        hush.sock.rooms[obj.roomid].toast("sock_ev_toast: " + obj.msg)
+                    }
+                })
+                socket.off(hush.cons.sock_ev_common).on(hush.cons.sock_ev_common, (rs) => { callback(rs) })
+            }
+        },        
         util : {
             isvoid : (obj) => {
                 if (typeof obj == "undefined" || obj == null) return true
@@ -458,60 +574,29 @@
                 }
                 return true
             },
-        },
-        blob : {
-            //브라우저에서 이미지 파일 선택후 노드서버에 올리고 다시 내려 표시하는 등 처리는 2가지 방법이 있음 => 1) blob 2) base64인코딩스트링
-            getUrlForFile : (file, returnBlob, callback) => {
-                const reader = new FileReader()
-                if (returnBlob) {
-                    reader.onload = function(e) {
-                        const blob = new Blob([new Uint8Array(e.target.result)], {type: file.type })
-                        const blobUrl = URL.createObjectURL(blob)
-                        callback(blobUrl) //blob:https://hushsbay.com/512bc969-441c-4019-8ba9-478a478b2cfd
-                    }
-                    reader.readAsArrayBuffer(file)
-                } else { //base64 인코딩된 스트링 데이터로 리턴
-                    reader.readAsDataURL(file)
-                    reader.addEventListener("load", function () {
-                        callback(reader.result) //data:image/png;base64,~
-                    })
+            getCurDateTimeStr : (deli, millisec) => {
+                const now = new Date()
+                let ret, _dot
+				if (deli) {
+					ret = now.getFullYear().toString() + "-" + (now.getMonth() + 1).toString().padStart(2, "0") + "-" + now.getDate().toString().padStart(2, "0") + " " + 
+                          now.getHours().toString().padStart(2, "0") + ":" + now.getMinutes().toString().padStart(2, "0") + ":" + now.getSeconds().toString().padStart(2, "0")
+                    _dot = "."      
+                } else {
+					ret = now.getFullYear().toString() + (now.getMonth() + 1).toString().padStart(2, "0") + now.getDate().toString().padStart(2, "0") + 
+						  now.getHours().toString().padStart(2, "0") + now.getMinutes().toString().padStart(2, "0") + now.getSeconds().toString().padStart(2, "0")
+                    _dot = ""
                 }
+                if (millisec) ret += _dot + now.getMilliseconds().toString().padEnd(6, "0")
+                return ret
             },
-            get : async (url) => { //get(getPromise)도 <img>의 src url이 blob이든 base64든 관계없이 blob 데이터 리턴해서 서버로 보낼 준비를 함
-                try {
-                    const rs = await hush.blob.getPromise(url)               
-                    return rs
-                } catch (ex) {
-                    throw ex //new Error(ex.message)
-                }
+            getTimeStamp : (str) => { //str = 2012-08-02 14:12:04
+                const d = str.match(/\d+/g) //extract date parts
+                return new Date(d[0], d[1] - 1, d[2], d[3], d[4], d[5])
             },
-            getPromise : (url) => new Promise((resolve, reject) => {
-                const xhr = new XMLHttpRequest()
-                xhr.open("GET", url, true) //url might be 1) blob or 2) base64 string
-                xhr.responseType = "blob"
-                xhr.onload = function(e) {
-                    if (this.status == 200) {
-                        resolve(this.response)
-                    } else {
-                        debugger //e로 오류 핸들링 가능한지 알아봐야 함
-                        reject(new Error(this.status + " / getBlob 오류입니다."))
-                    }
-                }
-                xhr.send()
-            }),
-            //1) blob을 이용해 처리
-            getBlobUrlForImage : (buffer, mimetype) => {
-                const _mimetype = (mimetype) ? mimetype : "image/png"
-                const uInt8Array = new Uint8Array(buffer)
-                const blob = new Blob([uInt8Array], { type: _mimetype })
-                const blobUrl = URL.createObjectURL(blob)
-                return blobUrl //blob:https://hushsbay.com/f4cb83ea-5d46-40b7-8baa-ba62dca2ffca
+            getDateTimeDiff(_prev, _cur) { //_prev = yyyy-mm-dd hh:MM:dd
+                const dtPrev = hush.util.getTimeStamp(_prev)
+                return parseInt((_cur - dtPrev) / 1000) //return seconds
             },
-            //2) base64인코딩스트링
-            setDataUrl : (base64, mimetype) => { //base64는 노드 서버에서 Buffer.from(data[0].PICTURE, 'binary').toString('base64')로 처리된 것을 전제로 함
-                const dataUrl = "data:" + mimetype + ";base64," + base64
-				return dataUrl
-            }
-        }
+        }        
     }
 })(jQuery)

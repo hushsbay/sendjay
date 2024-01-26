@@ -3,12 +3,11 @@ const nodeConfig = require(config.app.nodeConfig)
 const ws = require(config.app.ws)
 const wsmysql = require(config.app.wsmysql)
 const wslogger = require(config.app.wslogger)(config.app.logPath, 'hushsbay')
-const cors = require('cors')
 const Redis = require('ioredis') //not redis npm 
 const { Server } = require('socket.io')
 const redisAdapter = require('@socket.io/redis-adapter')
 
-const DIR_PUBSUB = './pubsub/'
+const DIR_PUBSUB = './pubsub/', DIR_SOCKET = './socket'
 const PING_TIMEOUT = 5000, PING_INTERVAL = 25000 //default
 
 global.nodeConfig = nodeConfig
@@ -45,104 +44,70 @@ io.adapter(redisAdapter(global.pub, sub))
 io.listen(config.sock.port)
 global.jay = io.of('/' + config.sock.namespace)
 global.jay.on('connection', async (socket) => {
-	const queryParam = socket.handshake.query
-	console.log(ws.util.getCurDateTimeStr(true) + " connect @@@@@@@@@@@@@@@ " + queryParam.userid)
-	socket.on('disconnect', (reason) => {
-		console.log(ws.util.getCurDateTimeStr(true) + " disconnect ############# " + reason)
-	})
+	const _logTitle = 'connection'	
+	try {
+		const queryParam = socket.handshake.query
+		if (queryParam && queryParam.userid && queryParam.userkey && queryParam.winid && queryParam.userip) {
+			socket.userid = queryParam.userid
+			socket.userkey = queryParam.userkey
+			socket.winid = queryParam.winid
+			socket.userip = queryParam.userip
+		} else {
+			ws.socket.warn(ws.cons.sock_ev_alert, socket, _logTitle, 'userid / userkey / winid / userip 모두 있어야 합니다')
+			socket.disconnect()
+			return
+		}
+		if (queryParam.token) {
+			if (!socket.usertoken) {
+				const tokenInfo = { userid : queryParam.userid, token : queryParam.token }
+				const jwtRet = await ws.jwt.verify(tokenInfo)
+				if (jwtRet.code != ws.cons.CODE_OK) {
+					ws.socket.warn(ws.cons.sock_ev_alert, socket, _logTitle, jwtRet.msg)
+					socket.disconnect()
+					return
+				}
+				socket.usertoken = rst.token
+			}
+		} else {
+			ws.socket.warn(ws.cons.sock_ev_alert, socket, _logTitle, '소켓 연결시 인증 토큰이 필요합니다') 
+			socket.disconnect()
+			return
+		}
+		await com.multiSetForUserkeySocket(socket)
+		const pattern = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli
+		const stream = store.scanStream({ match : pattern + '*', count : ws.cons.scan_stream_cnt })
+		stream.on('data', (resultKeys) => {
+			for (let item of resultKeys) {
+				const _sockid = item.split(ws.cons.easydeli)[1]
+				if (_sockid != socket.id) { //PC웹과 모바일 구분 (모바일이라면 모바일 userkey로만 찾아 현재 소켓이 아니면 이전 소켓이므로 모두 kill)
+					//adapter.remoteDisconnect 사용하지 않음 : 추가로 처리할 내용이 있어서 그대로 사용하기로 함
+					com.pub('disconnect_prev_sock', { prevkey : item, socketid : socket.id, userkey : socket.userkey, userip : socket.userip }) //call pmessage()
+				}
+			}
+		})
+		com.broadcast(socket, ws.cons.sock_ev_show_on, socket.userkey, 'all') //서버로 들어오는 것이 없고 클라이언트로 나가는 것만 있을 것임
+		socket.on(ws.cons.sock_ev_disconnect, (reason) => require(DIR_SOCKET + ws.cons.sock_ev_disconnect)(socket, reason))
+		socket.on(ws.cons.sock_ev_common, (param) => require(DIR_SOCKET + param.ev)(socket, param))
+		socket.on('error', (err) => global.log.error('socket error', err.toString()))
+	} catch (ex) {
+		ws.socket.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex)
+		socket.disconnect()
+	}
 })
 console.log('socketServer listening on ' + config.sock.port)
 
-//const appSocket = ws.util.initExpressApp()
-//const socketServer = ws.util.createWas(appSocket, config.http.method) //not https (because of aws elastic load balancer)
-//const io = new Server(socketServer, { allowEIO3: false, autoConnect: true, pingTimeout: PING_TIMEOUT, pingInterval: PING_INTERVAL, cors: { origin: config.app.corsSocket, methods: ["GET", "POST"] }})
-//global.store = createClient({ host: nodeConfig.redis.host, port: nodeConfig.redis.port, password : nodeConfig.redis.pwd, db : config.redis.db })
-//global.pub = global.store.duplicate()
-//const sub = global.store.duplicate()
-
-// const socketio = require('socket.io')
-// const Redis = require('ioredis')
-// const redisAdapter = require('socket.io-redis')
-
-// const redisOpt = { host : nodeConfig.redis.host, port : nodeConfig.redis.port, password : nodeConfig.redis.pwd, db : config.redis.db }
-// global.store = new Redis(redisOpt)
-// global.pub = new Redis(redisOpt)
-// const sub = new Redis(redisOpt)
-// global.pub.on('error', err => console.error('ioredis pub error :', err.stack))
-// //현재로선, Redis가 멀티서버에서의 소켓연결정보 관리에만 사용중이므로 NodeJS 재시작시 해당 redis데이터베이스내 데이터를 모두 지우는 것이 가비지정리 등에도 좋을 것임
-// if (config.redis.flush == 'Y') global.store.flushdb(function(err, result) { console.log('redis db flushed :', result) }) //Only one server flushes db
-
-// const appSocket = ws.util.initExpressApp()
-// const socketServer = ws.util.createWas(appSocket, config.http.method) //not https (because of aws elastic load balancer)
-// socketServer.listen(config.sock.port, () => { console.log('socketServer (namespace : ' + config.sock.namespace + ') listening on ' + config.sock.port) })
-// const io = socketio(socketServer, { allowEIO3: false, autoConnect: true, pingTimeout: PING_TIMEOUT, pingInterval: PING_INTERVAL, cors: { origin: config.app.corsSocket, methods: ["GET", "POST"] }})
-// io.adapter(redisAdapter({ host: nodeConfig.redis.host, port: nodeConfig.redis.port, password : nodeConfig.redis.pwd }))
-// global.jay = io.of('/' + config.sock.namespace)
-
 // const cors = require('cors')
-// const { Server } = require('socket.io');
-// const { createClient } = require('redis');
-// const { createAdapter } = require('@socket.io/redis-adapter');
-
-// const io = new Server(); //인자없이 생성시 브라우저에서 xhr poll 오류 나타남
-// const pubClient = createClient({ host: nodeConfig.redis.host, port: nodeConfig.redis.port, password : nodeConfig.redis.pwd, db : config.redis.db })
-// const subClient = pubClient.duplicate();
-
-// Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
-//   io.adapter(createAdapter(pubClient, subClient));
-//   io.listen(config.sock.port);
-//   global.jay = io.of('/' + config.sock.namespace)
-//     console.log('socketServer listening on ' + config.sock.port)
-//     global.jay.on('connection', async (socket) => {
-//         console.log("@@@@@@@@@@@@@@@")
-//     })
-// });
-
-/*const cors = require('cors')
-const { Server } = require('socket.io');
-const { createClient } = require('redis');
-const { createAdapter } = require('@socket.io/redis-adapter');
-
-const appSocket = ws.util.initExpressApp()
-const socketServer = ws.util.createWas(appSocket, config.http.method) //not https (because of aws elastic load balancer)
-const io = new Server(socketServer, { allowEIO3: false, autoConnect: true, pingTimeout: PING_TIMEOUT, pingInterval: PING_INTERVAL, cors: { origin: config.app.corsSocket, methods: ["GET", "POST"] }})
-global.store = createClient({ host: nodeConfig.redis.host, port: nodeConfig.redis.port, password : nodeConfig.redis.pwd, db : config.redis.db })
-global.pub = global.store.duplicate()
-const sub = global.store.duplicate()
-// if (config.redis.flush == 'Y') {
-//     console.log("@@@@@@@@@@@@@@@")
-//     global.store.flushdb(function(err, result) { console.log('redis db flushed :', result) }) //Only one server flushes db
-//     console.log("@@@@@@@@@@@@@@@")
+// const corsOptions = { //for Rest => 현재는 사용하지 않으나 향후 사용위해 그대로 두기
+// 	origin : function (origin, callback) {
+// 		if (!origin || config.app.corsRestful.indexOf(origin) > -1) { //!origin = in case of same origin
+// 			callback(null, true)
+// 		} else {
+// 			const _msg = 'Not allowed by CORS : ' + origin
+// 			global.logger.info(_msg)
+// 			callback(new Error(_msg))
+// 		}
+// 	}
 // }
-//sub.psubscribe(ws.cons.pattern, (err, count) => { console.log('ioredis psubscribe pattern : ' + ws.cons.pattern) }) //ioredis (not socket.io-redis)
-//sub.on('pmessage', (pattern, channel, message) => { require(DIR_PUBSUB + 'pmessage')(pattern, channel, message) })
-//sub.on('error', err => { console.error('ioredis sub error:', err.stack) })
-
-Promise.all([global.store.connect(), global.pub.connect(), sub.connect()]).then(() => {
-    io.adapter(createAdapter(global.store, global.pub, sub))
-    io.listen(config.sock.port)
-    global.jay = io.of('/' + config.sock.namespace)
-    console.log('socketServer listening on ' + config.sock.port)
-    global.jay.on('connection', async (socket) => {
-        const queryParam = socket.handshake.query
-        console.log(ws.util.getCurDateTimeStr(true) + " connect @@@@@@@@@@@@@@@ " + queryParam.userid)
-		socket.on('disconnect', (reason) => {
-			console.log(ws.util.getCurDateTimeStr(true) + " disconnect ############# " + reason)
-		})
-    })
-})*/
-
-const corsOptions = { //for Rest
-	origin : function (origin, callback) {
-		if (!origin || config.app.corsRestful.indexOf(origin) > -1) { //!origin = in case of same origin
-			callback(null, true)
-		} else {
-			const _msg = 'Not allowed by CORS : ' + origin
-			global.logger.info(_msg)
-			callback(new Error(_msg))
-		}
-	}
-}
 
 app.use('/auth/login', require('./route/auth/login'))
 

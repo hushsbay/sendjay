@@ -38,6 +38,26 @@ module.exports = (function() {
 			key_str_winid : PREFIX + 'W', //redis strings (userkey+deli+winid prefix added) - get winid for auto launch
 			key_str_socket : PREFIX + 'S', //redis strings (userkey+deli+socketid prefix added) - get socketid
 			scan_stream_cnt : 100, //means scanning count at a time, not whole count to scan. https://www.gitmemory.com/issue/luin/ioredis/908/511472853. Without count param, Something unexpectable might be happend ?!.
+			sock_ev_alert : 'alert',
+			sock_ev_toast : 'toast',
+			sock_ev_disconnect : "disconnect",
+			sock_ev_common : 'common', //Belows are handled in this sock_ev_common event.
+			sock_ev_chk_alive : 'chk_alive',
+			sock_ev_show_off : 'show_off',
+			sock_ev_show_on : 'show_on',
+			sock_ev_create_room : 'create_room',
+			sock_ev_open_room : 'open_room',
+			sock_ev_qry_msglist : 'qry_msglist',
+			sock_ev_send_msg : 'send_msg',
+			sock_ev_read_msg : 'read_msg', 
+			sock_ev_qry_msgcell : 'qry_msgcell', 
+			sock_ev_revoke_msgcell : 'revoke_msgcell',
+			sock_ev_delete_msg : 'delete_msg',
+			sock_ev_invite_user : 'invite_user',
+			sock_ev_rename_room : 'rename_room',
+			sock_ev_set_env : 'set_env',
+			sock_ev_chk_typing : 'chk_typing',
+			sock_ev_cut_mobile : 'cut_mobile',
 		},
 
 		http : {
@@ -179,6 +199,23 @@ module.exports = (function() {
 					return null
 				}
 			}
+		},
+
+		socket : {
+			warn : (_type, _socket, _logTitle, _ex, _roomid) => {
+				try { //_type = alert, toast, null(just logging)
+					const logTitle = _logTitle ? _logTitle : config.sock.namespace				
+					const ip = _socket && _socket.userip ? '[' + _socket.userip + ']' : '' //not _socket.handshake.address (because of aws load balancer)
+					const userkey = _socket && _socket.userkey ? '[' + _socket.userkey + ']' : ''
+					const errMsg = (typeof _ex == 'string') ? '[' + _ex + ']' : '[' + _ex.message + ']'
+					const errMsg1 = (typeof _ex == 'string') ? '[' + _ex + ']' : '[' + _ex.stack + ']'
+					const roomid = _roomid ? _roomid : ''
+					global.logger.info(logTitle, ip, userkey, errMsg1, roomid) //This line should precede _socket (in the next line)
+					if (_type && _socket) _socket.emit(_type, { code : '-1', msg : '[server::' + _logTitle + '] ' + errMsg, roomid : roomid })
+				} catch (ex) { 
+					global.logger.error(_logTitle, 'hush.socket.warn : ' + ex.stack)
+				}
+			},
 		},
 
 		util : {
