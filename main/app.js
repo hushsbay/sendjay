@@ -53,7 +53,7 @@ global.jay.on('connection', async (socket) => {
 			socket.winid = queryParam.winid
 			socket.userip = queryParam.userip
 		} else {
-			ws.socket.warn(ws.cons.sock_ev_alert, socket, _logTitle, 'userid / userkey / winid / userip 모두 있어야 합니다')
+			ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, 'userid/userkey/winid/userip 모두 필요합니다.')
 			socket.disconnect()
 			return
 		}
@@ -62,18 +62,18 @@ global.jay.on('connection', async (socket) => {
 				const tokenInfo = { userid : queryParam.userid, token : queryParam.token }
 				const jwtRet = await ws.jwt.verify(tokenInfo)
 				if (jwtRet.code != ws.cons.CODE_OK) {
-					ws.socket.warn(ws.cons.sock_ev_alert, socket, _logTitle, jwtRet.msg)
+					ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, jwtRet.msg)
 					socket.disconnect()
 					return
 				}
 				socket.usertoken = rst.token
 			}
 		} else {
-			ws.socket.warn(ws.cons.sock_ev_alert, socket, _logTitle, '소켓 연결시 인증 토큰이 필요합니다') 
+			ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, '소켓 연결시 인증 토큰이 필요합니다.') 
 			socket.disconnect()
 			return
 		}
-		await com.multiSetForUserkeySocket(socket)
+		await ws.redis.multiSetForUserkeySocket(socket)
 		const pattern = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli
 		const stream = store.scanStream({ match : pattern + '*', count : ws.cons.scan_stream_cnt })
 		stream.on('data', (resultKeys) => {
@@ -81,16 +81,16 @@ global.jay.on('connection', async (socket) => {
 				const _sockid = item.split(ws.cons.easydeli)[1]
 				if (_sockid != socket.id) { //PC웹과 모바일 구분 (모바일이라면 모바일 userkey로만 찾아 현재 소켓이 아니면 이전 소켓이므로 모두 kill)
 					//adapter.remoteDisconnect 사용하지 않음 : 추가로 처리할 내용이 있어서 그대로 사용하기로 함
-					com.pub('disconnect_prev_sock', { prevkey : item, socketid : socket.id, userkey : socket.userkey, userip : socket.userip }) //call pmessage()
+					ws.redis.pub('disconnect_prev_sock', { prevkey : item, socketid : socket.id, userkey : socket.userkey, userip : socket.userip }) //call pmessage()
 				}
 			}
 		})
-		com.broadcast(socket, ws.cons.sock_ev_show_on, socket.userkey, 'all') //서버로 들어오는 것이 없고 클라이언트로 나가는 것만 있을 것임
+		ws.sock.broadcast(socket, ws.cons.sock_ev_show_on, socket.userkey, 'all') //서버로 들어오는 것이 없고 클라이언트로 나가는 것만 있을 것임
 		socket.on(ws.cons.sock_ev_disconnect, (reason) => require(DIR_SOCKET + ws.cons.sock_ev_disconnect)(socket, reason))
 		socket.on(ws.cons.sock_ev_common, (param) => require(DIR_SOCKET + param.ev)(socket, param))
-		socket.on('error', (err) => global.log.error('socket error', err.toString()))
+		socket.on('error', (err) => global.logger.error('socket error', err.toString()))
 	} catch (ex) {
-		ws.socket.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex)
+		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex)
 		socket.disconnect()
 	}
 })

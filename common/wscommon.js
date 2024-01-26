@@ -201,7 +201,120 @@ module.exports = (function() {
 			}
 		},
 
-		socket : {
+		redis : {
+			//hash******************************
+			//await global.store.hmset(key, obj) //obj is 1 depth like { id : "aa", userkey : "bb"}
+			//await global.store.del(key)
+			//return await global.store.hmget(key, fields) //hmget key field1 field2 .. array returns array
+			//return await global.store.hgetall(key) //return object
+			//strings******************************
+			//await global.store.set(key, value) //setStr
+			//return await global.store.get(key) //getStr
+			//return await global.store.del(key) //delStr
+			//return await global.store.keys(pattern) //keyStr => do not use because this might occur redis lock
+			//sets******************************
+			//await global.store.sadd(key, value) //addToSet
+			//await global.store.srem(key, value) //delFromSet
+			//return await global.store.sismember(key, value) //isMemOfSet
+			//return await global.store.scard(key) //getSetCount
+			//return await global.store.smembers(key) //getSetAll
+			getMyOtherSocket : async (socket) => {
+				let myOtherUserkey
+				if (socket.userkey.startsWith(ws.cons.m_key)) {
+					myOtherUserkey = ws.cons.w_key + socket.userkey.replace(ws.cons.m_key, '')
+				} else {
+					myOtherUserkey = ws.cons.m_key + socket.userkey.replace(ws.cons.w_key, '')
+				}
+				const arr = await ws.redis.getUserkeySocket(myOtherUserkey)
+				return arr[0] //if not, undefined returned
+			},
+			getUserkeySocket : (userkey) => { //from redis
+				return new Promise((resolve, reject) => {
+					let arr = []
+					const pattern = ws.cons.key_str_socket + userkey + ws.cons.easydeli
+					const stream = global.store.scanStream({ match : pattern + '*', count: ws.cons.scan_stream_cnt })
+					stream.on('data', (resultKeys) => {
+						for (let key of resultKeys) arr.push(key)
+						resolve(arr)
+					}) //stream.on('end', () => { resolve(arr) }) //'end' does not guarantee rs.result as defined.
+				})
+			},
+			pub : (pubKey, obj) => { //obj needs 1 depth object like { id : "aa", userkey : "bb" }
+				global.pub.publish(ws.cons.prefix + pubKey, JSON.stringify(obj))
+			},	
+			multiSetForUserkeySocket : async (socket) => {
+				try {
+					const usKey = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli + socket.id //예) $$S + W__userid + ; + XYZ~
+					const uwKey = ws.cons.key_str_winid + socket.userkey + ws.cons.easydeli + socket.winid //예) $$W + W__userid + ; + 2023~
+					if (usKey.includes('undefined')) throw Error('multiSetForUserkeySocket : usKey not defined')
+					if (uwKey.includes('undefined')) throw Error('multiSetForUserkeySocket : uwKey not defined')
+					const arr = await global.store.multi().set(usKey, socket.socketid)
+												 		  .set(uwKey, ws.util.getCurDateTimeStr(true)) //See chk_redis.js, too.
+													      //.sadd(ws.cons.key_set_userkey_socket, usKey) //예) $$US에 $$S + W__userid + ; + XYZ~를 추가
+													      .exec() //.sadd는 현재 미사용이나 향후를 위해 소스 그대로 둠 / .scard(com.cons.key_set_userkey_socket)
+					return arr[2][1] //arr = [[null, 'OK'], [null, 'OK'], [null, 99]] => return 99 //for sadd count. smembers $$US for query list
+					//redis-cli에서 keys *로 모두 검색. smembers $$US로 검색하면 $$S + W__userid + ; + XYZ~ 등으로 목록이 나옴			
+				} catch(ex) {
+					throw new Error(ex)
+				}
+			},	
+			multiDelForUserkeySocket : async (socket) => {
+				try {
+					const usKey = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli + socket.id
+					const uwKey = ws.cons.key_str_winid + socket.userkey + ws.cons.easydeli + socket.winid
+					if (usKey.includes('undefined')) throw Error('multiDelForUserkeySocket : usKey not defined')
+					if (uwKey.includes('undefined')) throw Error('multiDelForUserkeySocket : uwKey not defined')
+					const arr = await global.store.multi().del(usKey)
+														  .del(uwKey)
+														  //.srem(com.cons.key_set_userkey_socket, usKey) //.scard(com.cons.key_set_userkey_socket)
+														  .exec()
+					return arr[2][1] //for srem count. smembers $$US for query list
+				} catch(ex) {
+					throw new Error(ex)
+				}
+			},	
+			multiDelGarbageForUserkeySocket : async (usKey, afterScan) => { //usKey = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli + socket.id
+				try {
+					if (usKey.includes('undefined')) throw Error('multiDelGarbageForUserkeySocket : usKey not defined')
+					if (afterScan) {
+						const stream = store.scanStream({ match : usKey, count : ws.cons.scan_stream_cnt })
+						stream.on('data', async (resultKeys) => { //Search for userkey's another socketid which might be alive on (other) server(s), and kill them.
+							for (let item of resultKeys) {
+								//await global.store.multi().del(item).srem(com.cons.key_set_userkey_socket, item).exec()
+								await global.store.multi().del(item).exec()
+							}
+						})
+					} else { //scanning not needed since already scanned
+						//await global.store.multi().del(usKey).srem(com.cons.key_set_userkey_socket, usKey).exec()
+						await global.store.multi().del(usKey).exec()
+					}
+				} catch(ex) {
+					throw new Error(ex)
+				}
+			},
+			sendToMyOtherSocket : async (socket, param) => {
+				param.data.userid = socket.userid //see ChatService.kt
+				const otherUserkeySocket = await ws.redis.getMyOtherSocket(socket)
+				if (otherUserkeySocket) ws.redis.pub('sendto_myother_socket', { socketid : socket.id, otherkey : otherUserkeySocket, param : param }) //call pmessage()
+			},
+		},
+
+		sock : {
+			broadcast : (socket, ev, data, returnTo, returnToAnother) => {
+				const _returnTo = returnTo ? returnTo : 'parent' //'all' used in most cases
+				//global.jay.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //to all inside namaspace. socket oneself included
+				//global.jay.emit => TypeError: opts.except is not iterable (from socket.io 3.0)
+				socket.broadcast.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //socket oneself excluded
+				socket.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
+			},
+			compareUserId : (idToCompare, socket_userid) => { //for socket only
+				//대부분의 경우는 idToCompare와 socket_userid는 일치해야 하는 경우가 많음
+				if (!idToCompare || (idToCompare != socket_userid)) {
+					return 'Mismatch between UserID(' + idToCompare + ') and SocketUserID(' + socket_userid + ')'
+				} else {
+					return ''
+				}
+			},			
 			warn : (_type, _socket, _logTitle, _ex, _roomid) => {
 				try { //_type = alert, toast, null(just logging)
 					const logTitle = _logTitle ? _logTitle : config.sock.namespace				
