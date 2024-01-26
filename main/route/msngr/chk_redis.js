@@ -14,7 +14,6 @@ router.post('/', async function(req, res) {
 		const { type, userkey, winid } = req.body
 		const userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
 		if (!userid) return	
-		
 		const pattern = ws.cons.key_str_winid + userkey + ws.cons.easydeli //eg) $$WW__USERID;
 		const uwKey = pattern + winid //eg) $$WW__USERID;20200918210554260
 		const stream = global.store.scanStream({ match : pattern + '*', count : ws.cons.scan_stream_cnt }) //console.log(type, userkey, winid, pattern, uwKey)
@@ -40,24 +39,14 @@ router.post('/', async function(req, res) {
 						}
 					}
 				}
-				rs.userip = req.clientIp
-				res.json(rs)
 			} else if (type == "set_new") { //manual 실행시 무조건 키 setting함
 				for (let item of resultKeys) await global.store.del(item)
 				await global.store.set(uwKey, winid) //console.log(type, userkey, winid, pattern, uwKey)
 				rs.result = "new" //새로운 winner		
 			}
-			rs.userip = req.clientIp
-			res.json(rs)
-			
+			rs.userip = req.clientIp //소켓서버에서 파악이 힘들어 미리 클라이언트로 내려 요청시 포함하도록 하려 함
+			ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
 		}) //stream.on('end', function() { resolve(rs) }) //'end' does not guarantee rs.result as defined.
-		
-
-        // if (len == 0) {
-		// 	ws.http.resWarn(res, ws.cons.MSG_NO_DATA)
-		// 	return
-		// }       	
-		
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
 	}

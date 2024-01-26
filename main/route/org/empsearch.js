@@ -36,7 +36,7 @@ router.post('/', async function(req, res) {
 			return
 		}
        	rs.list = data
-		res.json(rs)
+		ws.http.resJson(res, rs, userid) //세번째 인자가 있으면 token 생성(갱신)해 내림
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
 	} finally {

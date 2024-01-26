@@ -16,8 +16,9 @@ router.post('/', async function(req, res) {
 		const nodeToGet = req.body.nodeToGet
 		const comp = (!req.body.comp || req.body.comp.toLowerCase() == 'all') ? 'all' : ws.util.toStringForInClause(req.body.comp)
 		conn = await wsmysql.getConnFromPool(global.pool)
+		let userid
 		if (nodeToGet == 'U') { //사용자(U)일 경우만 인증체크함
-			const userid = await ws.jwt.chkToken(req, res, conn)
+			userid = await ws.jwt.chkToken(req, res, conn)
 			if (!userid) return
 		}
 		sql =  "SELECT A.SEQ, A.LVL, A.ORG_CD, A.ORG_NM, B.ORG_CD TOP_ORG_CD, B.ORG_NM TOP_ORG_NM, '' USER_ID, '' USER_NM, '' NICK_NM, '' JOB, '' TEL_NO, '' AB_CD, '' AB_NM, "
@@ -42,7 +43,7 @@ router.post('/', async function(req, res) {
 			return
 		}
        	rs.list = data
-		res.json(rs)
+		ws.http.resJson(res, rs, userid) //세번째 인자가 있으면 token 생성(갱신)해 내림 (위 userid 참조)
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
 	} finally {
