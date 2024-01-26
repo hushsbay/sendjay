@@ -26,22 +26,24 @@
         },
         user : null,
         auth : {
-            // setCookieForUser : (rs, _persist) => { //_persist = Y or else
-            //     const persist = (_persist == "Y") ? true : false
-            //     //hush.http.setCookie("autologin", _persist, true) //persistent cookie - 포털(index.html)에서만 사용됨 : 로그아웃전까지는 브라우저를 나와도 남아 있음
-            //     hush.http.setCookie("userid", rs.USER_ID, persist) //persistent cookie - _persist는 아이디를 화면에 저장할 지에만 사용
-            //     hush.http.setCookie("token", rs.token) //jwt 포함 이하는 모두 세션 쿠키로 처리                
-            //     hush.http.setCookie("usernm", rs.USER_NM)
-            //     hush.http.setCookie("orgcd", rs.ORG_CD)
-            //     hush.http.setCookie("toporgcd", rs.TOP_ORG_CD)
-            // },
+            setCookieForUser : (rs, _persist) => { //token은 서버 쿠키+응답본문으로 내려옴
+                debugger
+                const persist = (_persist == true) ? true : false
+                hush.http.setCookie("userid", rs.USER_ID, persist) //persistent cookie - _persist는 아이디를 화면에 저장할 지에만 사용
+                hush.http.setCookie("usernm", rs.USER_NM)
+                hush.http.setCookie("orgcd", rs.ORG_CD)
+                hush.http.setCookie("orgnm", rs.ORG_NM)
+                hush.http.setCookie("toporgcd", rs.TOP_ORG_CD)
+                hush.http.setCookie("toporgnm", rs.TOP_ORG_NM)
+            }, //위 아래 함수는 verifyUser() in common.js와 앱의 UserInfo 클래스내 항목과 같아야 함
             deleteCookieForUser : () => {
-                //hush.http.deleteCookie('autologin')
                 hush.http.deleteCookie('token')
                 hush.http.deleteCookie('userid')
                 hush.http.deleteCookie('usernm')
                 hush.http.deleteCookie('orgcd')
+                hush.http.deleteCookie('orgnm')
                 hush.http.deleteCookie('toporgcd')
+                hush.http.deleteCookie('toporgnm')
             },
             verifyUser : async () => {
                 const _token = hush.http.getCookie("token")  
@@ -97,8 +99,7 @@
                 return _url
             },
             ajaxCall : (url, _data, callback, failCallback, method) => {
-                let data = _data
-                //Object.assign(data, { tokenInfo : hush.http.getTokenInfo()})
+                let data = _data //Object.assign(data, { tokenInfo : hush.http.getTokenInfo()})
                 $.ajax({dataType : "json", //response data type
                     contentType : "application/json; charset=utf-8", //request mime type
                     url : url,
@@ -107,8 +108,7 @@
                     async : true,
                     type : (method) ? method : "post",
                     timeout : hush.cons.restful_timeout,
-                    success : function(rs) {
-                        //if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
+                    success : function(rs) { //if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
                         if (callback) callback(rs)
                     },
                     error : function(xhr, status, error) {
@@ -135,8 +135,7 @@
                 }
             },
             ajaxPromise : (url, _data, method) => new Promise((resolve, reject) => { //ajaxPromise()는 hush.http.ajax를 통해서만 사용하기
-                let data = _data
-                //Object.assign(data, { tokenInfo : hush.http.getTokenInfo()})
+                let data = _data //Object.assign(data, { tokenInfo : hush.http.getTokenInfo()})
                 $.ajax({dataType : "json", //response data type
                     contentType : "application/json; charset=utf-8", //request mime type
                     url : url,
@@ -145,8 +144,7 @@
                     async : true,
                     type : (method) ? method : "post",
                     timeout : hush.cons.restful_timeout,
-                    success : function(rs) {
-                        //if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
+                    success : function(rs) { //if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
                         resolve(rs)
                     },
                     error : function(xhr, status, error) {
@@ -158,8 +156,7 @@
                 }
             )}),
             ajaxFormData : (url, _data, callback, failCallback) => {
-                let data = _data
-                //data.append("tokenInfo", JSON.stringify(hush.http.getTokenInfo()))
+                let data = _data //data.append("tokenInfo", JSON.stringify(hush.http.getTokenInfo()))
                 $.ajax({url : url,
                     data : data,
                     processData : false,
@@ -167,8 +164,7 @@
                     contentType : false,
                     cache : false,
                     type : "POST",
-                    success : function(rs) { 
-                        //if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
+                    success : function(rs) { //if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
                         if (callback) callback(rs)
                     },
                     error : function(xhr, status, error) {
@@ -196,17 +192,6 @@
             deleteCookie : (name) => { //actually 'return' needed
                 $.removeCookie(name, { path: '/' })
             },
-            // getTokenInfo : () => { //서버에서 쿠키 위변조 체크할 대상 : ws.jwt.chkToken() 참고
-            //     return { 
-            //         token : hush.http.getCookie("token"), userid : hush.http.getCookie("userid"),
-            //         orgcd : hush.http.getCookie("orgcd"), toporgcd : hush.http.getCookie("toporgcd")
-            //     }
-            // },
-            // refreshToken : (token) => {
-            //     //const _persist = (hush.http.getCookie("autologin") == "Y") ? true : false
-            //     //hush.http.setCookie("token", token, _persist)
-            //     hush.http.setCookie("token", token) //jwt는 세션쿠키로만 처리되어야 함
-            // }
         },
         msg : { //1. msg(비동기콜백) 2. alert(=window.alert) 3. confirm(=window.confirm) 4. toast(복수메시지 순서대로 표시 지원)
             //아래 실행후 육안으로 먼저 보이는 순서는 = 1 > 2 > 3 > 5 > 6 > 7 > 4 

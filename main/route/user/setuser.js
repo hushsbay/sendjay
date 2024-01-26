@@ -15,17 +15,7 @@ router.post('/', upload.any(), async function(req, res) {
 	let conn, sql, data, len
 	const rs = ws.http.resInit()
 	try {
-		const type = req.body.type
-		const id = req.body.id
-		const nm = req.body.nm
-		const alias = req.body.alias
-		const pwd = req.body.pwd
-		const pwd_1 = req.body.pwd_1
-		const toporgcd = req.body.toporgcd
-		const toporgnm = req.body.toporgnm
-		const orgcd = req.body.orgcd
-		const orgnm = req.body.orgnm
-		const mimetype = req.body.mimetype
+		const { type, id, nm, alias, pwd, pwd_1, toporgcd, toporgnm, orgcd, orgnm, mimetype } = req.body
 		const buf = mimetype ? Buffer.from(new Uint8Array(req.files[0].buffer)) : null //MySql PICTURE 필드가 longblob 타입으로 되어 있고 브라우저에서 blob으로 넘겨받아 저장하는 것임
 		conn = await wsmysql.getConnFromPool(global.pool) //의도적으로 인증체크하지 않음
 		sql =  "SELECT COUNT(*) CNT, PWD FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
@@ -65,7 +55,7 @@ router.post('/', upload.any(), async function(req, res) {
 				await wsmysql.query(conn, sql, [nm, orgcd, orgnm, toporgcd, toporgnm, buf, mimetype, alias, id])
 			}
 		}
-		res.json(rs)
+		ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
 	} finally {

@@ -13,9 +13,8 @@ router.post('/', async function(req, res) {
 	let conn, sql, data, len
 	const rs = ws.http.resInit()
 	try {
-		const keyword = req.body.keyword
-		const teamcode = req.body.teamcode
-		const comp = (!req.body.comp || req.body.comp.toLowerCase() == 'all') ? 'all' : ws.util.toStringForInClause(req.body.comp)
+		const { keyword, teamcode, _comp } = req.body
+		const comp = (!_comp || _comp.toLowerCase() == 'all') ? 'all' : ws.util.toStringForInClause(_comp)
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const userid = await ws.jwt.chkToken(req, res, conn)
 		if (!userid) return	

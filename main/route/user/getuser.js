@@ -13,8 +13,7 @@ router.post('/', async function(req, res) {
 	let conn, sql, data, len
 	const rs = ws.http.resInit()
 	try {
-		const id = req.body.id
-		const imgOnly = req.body.imgOnly
+		const { id, imgOnly } = req.body.id
 		conn = await wsmysql.getConnFromPool(global.pool) //의도적으로 인증체크하지 않음
 		sql =  "SELECT ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, USER_ID, USER_NM, NICK_NM, JOB, TEL_NO, AB_CD, AB_NM, PICTURE, MIMETYPE "
 		sql += "  FROM JAY.Z_USER_TBL "
@@ -31,7 +30,7 @@ router.post('/', async function(req, res) {
 		} else {
 			rs.list = data
 		}
-		res.json(rs)
+		ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
 	} finally {
