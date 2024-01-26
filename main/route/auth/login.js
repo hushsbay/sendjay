@@ -14,27 +14,30 @@ router.post('/', async function(req, res) {
 	const rs = ws.http.resInit()
 	try { 
 		const { uid, pwd, autologin } = req.body //사용자가 인증을 위해 입력한 사용자아이디
-		//const { userid, token } = req.cookies //login.html을 제외하고 웹 또는 앱에서 항상 넘어오는 쿠키
 		const device = ws.http.deviceFrom(req)
 		console.log(uid, pwd, autologin, device)
-		//let userid
-		//if (!uid) {
-		//	userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
-		//	if (!userid) return			
-		//} else {
-		//	useridReal = uid
-		//}
+		let userid
+		if (device == 'web') {
+			if (!uid) {
+				userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
+				if (!userid) return			
+			} else {
+				userid = uid
+			}
+		} else {
+			userid = uid
+		}
 		conn = await wsmysql.getConnFromPool(global.pool)
 		sql =  "SELECT USER_ID, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM "
 		sql += "  FROM JAY.Z_USER_TBL "
 		sql += " WHERE USER_ID = ? "
-		data = await wsmysql.query(conn, sql, [uid])
+		data = await wsmysql.query(conn, sql, [userid])
 		if (data.length == 0) {
 			ws.http.resWarn(res, '사용자아이디가 없습니다.')
 			return
 		}
 		let pwdToCompare
-		if (autologin == 'Y') {
+		if (autologin == 'Y' && device != 'web') { //2중 체크
 			//pwd는 앱에 저장된 암호화된 상태의 값이므로 pwdToCompare도 그대로 비교 필요
 			pwdToCompare = data[0].PWD
 		} else {
@@ -58,7 +61,7 @@ router.post('/', async function(req, res) {
 		//결론적으로, 사용자정보는 응답본문으로 내리고 토큰만 응답본문+쿠키로 내림
 		//1) 웹에서는 사용자정보는 login.html에서 쿠키로 설정하고 토큰은 자동으로 쿠키로 내려감 (비번 불포함)
 		//2) 앱에서는 사용자정보 및 토큰을 응답본문으로 모두 받으므로 그걸 모두 UserInfo()에서 KeyChain으로 저장함 (비번 포함)
-		ws.http.resJson(res, rs, uid) //세번째 인자가 있으면 token 생성(갱신)해 내림
+		ws.http.resJson(res, rs, userid) //세번째 인자가 있으면 token 생성(갱신)해 내림
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
 	} finally {
