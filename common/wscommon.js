@@ -304,8 +304,10 @@ module.exports = (function() {
 				const _returnTo = returnTo ? returnTo : 'parent' //'all' used in most cases
 				//global.jay.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //to all inside namaspace. socket oneself included
 				//global.jay.emit => TypeError: opts.except is not iterable (from socket.io 3.0)
+				console.log("aaaa11111111")
 				socket.broadcast.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //socket oneself excluded
 				socket.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
+				console.log("aaaa22222222222")
 			},
 			compareUserId : (idToCompare, socket_userid) => { //for socket only
 				//대부분의 경우는 idToCompare와 socket_userid는 일치해야 하는 경우가 많음
@@ -317,12 +319,19 @@ module.exports = (function() {
 			},			
 			warn : (_type, _socket, _logTitle, _ex, _roomid) => {
 				try { //_type = alert, toast, null(just logging)
-					const logTitle = _logTitle ? _logTitle : config.sock.namespace				
+					console.log("aaaa")
+					const logTitle = _logTitle ? _logTitle : config.sock.namespace		
+					console.log("aaaab")		
 					const ip = _socket && _socket.userip ? '[' + _socket.userip + ']' : '' //not _socket.handshake.address (because of aws load balancer)
+					console.log("aaaac")
 					const userkey = _socket && _socket.userkey ? '[' + _socket.userkey + ']' : ''
+					console.log("aaaad")
 					const errMsg = (typeof _ex == 'string') ? '[' + _ex + ']' : '[' + _ex.message + ']'
+					console.log("aaaae")
 					const errMsg1 = (typeof _ex == 'string') ? '[' + _ex + ']' : '[' + _ex.stack + ']'
+					console.log("aaaaf")
 					const roomid = _roomid ? _roomid : ''
+					console.log("aaaag")
 					global.logger.info(logTitle, ip, userkey, errMsg1, roomid) //This line should precede _socket (in the next line)
 					if (_type && _socket) _socket.emit(_type, { code : '-1', msg : '[server::' + _logTitle + '] ' + errMsg, roomid : roomid })
 				} catch (ex) { 

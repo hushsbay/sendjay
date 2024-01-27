@@ -384,11 +384,13 @@
                 const socket = io(hush.cons.socket_url, { forceNew: false, reconnection: false, query: query }) //forceNew=false //See 'disconnect_prev_sock' in pmessage.js (on server)
         		socket.off("connect_error").on("connect_error", (e) => { hush.msg.alert("connect_error\n" + e.toString()) })
                 socket.off("disconnect").on("disconnect", () => { 
-                    location.replace("/" + hush.cons.erp_portal)
+                    //location.replace("/" + hush.cons.erp_portal) //현재는 새로고침되면 다시 소켓연결되어 무한루프돌기때문에 임시로 막음
+                    console.log("socket disconnected " + hush.util.getCurDateTimeStr())
                 }) 
                 socket.off("connect").on("connect", () => {
-                    console.log("socket connected")
+                    console.log("socket connected " + hush.util.getCurDateTimeStr())
                     hush.sock.on(socket, (rs) => {
+                        debugger
                         console.log("hush.sock.on => " + JSON.stringify(rs))
                         if (rs.returnTo == "parent" || rs.returnTo == "all") {
                             funcSockEv[rs.ev].call(null, rs.data)
