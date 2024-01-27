@@ -120,4 +120,16 @@ for (let i = 0; i < rt.length; i++) app.use('/org/' + rt[i], require('./route/or
 rt = ['chk_redis']
 for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/msngr/' + rt[i])) 
 
+proc()
+async function proc() {
+    try {
+        const sockets = await global.jay.adapter.sockets(new Set())
+		console.log('socket count :', sockets.size)
+    } catch (ex) {
+        global.logger.error(TITLE + ': error: ', ex.stack)
+    } finally {
+        setTimeout(() => { proc() }, 5000)
+    }
+}
+
 ws.util.watchProcessError()
