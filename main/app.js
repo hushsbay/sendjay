@@ -128,9 +128,10 @@ for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/
 proc()
 async function proc() {
     const sockets = await global.jay.adapter.sockets(new Set())
-    console.log('socket count :', sockets.size)
+    console.log('socket count :', sockets.size, JSON.stringify(sockets))
 	for (let item of sockets) {
-		console.log('socket :', item.id, item.userkey, item.userip, item.winid)
+		//console.log('socket :', item.id, item.userkey, item.userip, item.winid)
+		console.log('socket :', JSON.stringify(sockets))
 	}
     setTimeout(() => { proc() }, 5000)
 }
