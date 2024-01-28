@@ -78,7 +78,7 @@ global.jay.on('connection', async (socket) => {
 		const pattern = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli
 		const stream = store.scanStream({ match : pattern + '*', count : ws.cons.scan_stream_cnt })
 		console.log(pattern, "***********")
-		stream.on('data', (resultKeys) => { //아래는 비동기처리됨
+		stream.on('data', (resultKeys) => { //아래는 비동기처리됨. //call pmessage()
 			for (let item of resultKeys) {
 				console.log(item, "=======", ws.cons.easydeli)
 				const _sockid = item.split(ws.cons.easydeli)[1]
