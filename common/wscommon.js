@@ -293,7 +293,7 @@ module.exports = (function() {
 					//multiSet~과는 다르게 지울 때는 uwKey까지 같이 지워야 함
 					const arr = await global.store.multi().del(usKey).del(uwKey).exec()
 					if (!arr || arr.length < 2) throw Error('multiDelForUserkeySocket : global.store.multi() error')
-					if (arr[0][1] != 'OK' || arr[1][1] != 'OK') throw Error('multiDelForUserkeySocket : global.store.multi() error : ' + arr[0][1] + '/' + arr[1][1])
+					if (arr[0][1] != 1 || arr[1][1] != 1) throw Error('multiDelForUserkeySocket : global.store.multi() error : ' + arr[0][1] + '/' + arr[1][1])
 				} catch(ex) {
 					throw new Error(ex)
 				}
