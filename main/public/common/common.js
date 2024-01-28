@@ -417,6 +417,7 @@
             },
             on : (socket, callback) => {            
                 socket.off(hush.cons.sock_ev_alert).on(hush.cons.sock_ev_alert, (obj) => { 
+                    debugger
                     if (!obj.roomid) {
                         hush.msg.alert("sock_ev_alert: " + obj.msg) 
                     } else {
@@ -430,7 +431,7 @@
                         hush.sock.rooms[obj.roomid].toast("sock_ev_toast: " + obj.msg)
                     }
                 })
-                socket.off(hush.cons.sock_ev_common).on(hush.cons.sock_ev_common, (rs) => { callback(rs) })
+                socket.off(hush.cons.sock_ev_common).on(hush.cons.sock_ev_common, (rs) => { debugger; callback(rs) })
             }
         },        
         util : {
