@@ -76,9 +76,12 @@ global.jay.on('connection', async (socket) => {
 		await ws.redis.multiSetForUserkeySocket(socket)
 		const pattern = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli
 		const stream = store.scanStream({ match : pattern + '*', count : ws.cons.scan_stream_cnt })
+		console.log(pattern, "***********")
 		stream.on('data', (resultKeys) => {
 			for (let item of resultKeys) {
+				console.log(item, "=======", ws.cons.easydeli)
 				const _sockid = item.split(ws.cons.easydeli)[1]
+				console.log(_sockid, "@@@@@", socket.id, socket.userkey, socket.userip)
 				if (_sockid != socket.id) { //PC웹과 모바일 구분 (모바일이라면 모바일 userkey로만 찾아 현재 소켓이 아니면 이전 소켓이므로 모두 kill)
 					//adapter.remoteDisconnect 사용하지 않음 : 추가로 처리할 내용이 있어서 그대로 사용하기로 함
 					ws.redis.pub('disconnect_prev_sock', { prevkey : item, socketid : socket.id, userkey : socket.userkey, userip : socket.userip }) //call pmessage()
@@ -89,7 +92,7 @@ global.jay.on('connection', async (socket) => {
 		console.log("8888888888")
 		socket.on(ws.cons.sock_ev_disconnect, (reason) => require(DIR_SOCKET + ws.cons.sock_ev_disconnect)(socket, reason))
 		socket.on(ws.cons.sock_ev_common, (param) => require(DIR_SOCKET + param.ev)(socket, param))
-		socket.on('error', (err) => global.logger.error('socket error', err.toString()))
+		socket.on('error', (err) => global.logger.error('socket error\n' + err.toString()))
 	} catch (ex) {
 		console.log(ex.message, "111111")
 		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex)
