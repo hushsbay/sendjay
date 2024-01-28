@@ -318,14 +318,12 @@ module.exports = (function() {
 				}
 			},
 			getLogMsg : (_socket, ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기
-				let _uInfo = '', _msg = ''
+				let _msg = ''
 				if (_socket) {
-					if (_socket.userip) _uInfo = '[' + _socket.userip + ']'
-					if (_socket.userkey) _uInfo += '[' + _socket.userkey + ']'
-					_msg = _uInfo + (title ? '[' + config.sock.namespace + '] ' : '')
-				} else {
-					_msg = title ? '[' + title + '] ' : ''
+					if (_socket.userip) _msg += '[' + _socket.userip + ']'
+					if (_socket.userkey) _msg += '[' + _socket.userkey + ']'
 				}
+				if (title) _msg += title
 				if (typeof ex == 'string') {
 					_msg += ex
 				} else {
@@ -352,8 +350,8 @@ module.exports = (function() {
 					//console.log("aaaae")
 					//const errMsg1 = (typeof _ex == 'string') ? _ex : _ex.stack
 					//console.log("aaaaf")
-					let _msg = ws.sock.getLogMsg(_socket, _ex, _logTitle)
-					const roomid = _roomid ? _roomid : ''
+					let _msg = ws.sock.getLogMsg(_socket, _ex, _logTitle00)
+					if (_roomid) _msg += '<br>' + _roomid
 					//console.log("aaaag")
 					//let _msg = logTitle + ip + userkey + '\n'
 					//if (typeof _ex == 'string') {
@@ -367,12 +365,12 @@ module.exports = (function() {
 					//		_msg += ex.toString()
 					//	}
 					//}
-					_msg += '<br>' + roomid
 					global.logger.info(_msg) //logger는 console.log(a,b,c..)를 지원하지 않음. This line should precede _socket (in the next line)
 					if (_type && _socket) _socket.emit(_type, { code : '-1', msg : _msg, roomid : roomid })
 					console.log("aaaah", _type, _msg)
 				} catch (ex) { 
-					global.logger.error(_logTitle + ' hush.socket.warn\n' + ex.stack)
+					let _msg = ws.sock.getLogMsg(_socket, ex, _logTitle)
+					global.logger.error(_msg)
 				}
 			},
 		},
@@ -403,14 +401,12 @@ module.exports = (function() {
                 return false
             },
 			getLogMsg : (req, ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기
-				let _uInfo = '', _msg = ''
+				let _msg = ''
 				if (req) {
-					if (req.clientIp) _uInfo = '[' + req.clientIp + ']'
-					if (req.cookie && req.cookie.userid) _uInfo += '[' + req.cookie.userid + ']'
-					_msg = _uInfo + (req.title ? '[' + req.title + '] ' : '')
-				} else {
-					_msg = title ? '[' + title + '] ' : ''
+					if (req.clientIp) _msg += '[' + req.clientIp + ']'
+					if (req.cookie && req.cookie.userid) _msg += '[' + req.cookie.userid + ']'
 				}
+				if (title) _msg += title
 				if (typeof ex == 'string') {
 					_msg += ex
 				} else {
