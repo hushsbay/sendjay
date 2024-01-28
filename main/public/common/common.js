@@ -405,12 +405,12 @@
         		socket.off("connect_error").on("connect_error", (e) => { hush.msg.alert("connect_error\n" + e.toString()) })
                 socket.off("disconnect").on("disconnect", () => { 
                     //location.replace("/" + hush.cons.erp_portal) //현재는 새로고침되면 다시 소켓연결되어 무한루프돌기때문에 임시로 막음
+                    hush.msg.alert("socket disconnected " + hush.util.getCurDateTimeStr(true, true))
                     console.log("socket disconnected " + hush.util.getCurDateTimeStr(true, true))
                 }) 
                 socket.off("connect").on("connect", () => {
                     console.log("socket connected " + hush.util.getCurDateTimeStr(true, true))
                     hush.sock.on(socket, (rs) => {
-                        debugger
                         console.log("hush.sock.on => " + JSON.stringify(rs))
                         if (rs.returnTo == "parent" || rs.returnTo == "all") {
                             funcSockEv[rs.ev].call(null, rs.data)
@@ -437,18 +437,17 @@
             },
             on : (socket, callback) => {            
                 socket.off(hush.cons.sock_ev_alert).on(hush.cons.sock_ev_alert, (obj) => { 
-                    debugger
                     if (!obj.roomid) {
-                        hush.msg.alert("sock_ev_alert: " + obj.msg) 
+                        hush.msg.alert("sock_alert<br>" + obj.msg) 
                     } else {
-                        hush.sock.rooms[obj.roomid].hush.msg.alert("sock_ev_alert: " + obj.msg)
+                        hush.sock.rooms[obj.roomid].hush.msg.alert("sock_alert<br>" + obj.msg)
                     }
                 })
                 socket.off(hush.cons.sock_ev_toast).on(hush.cons.sock_ev_toast, (obj) => {
                     if (!obj.roomid) {
-                        hush.msg.alert("sock_ev_toast: " + obj.msg) 
+                        hush.msg.toast("sock_toast<br>" + obj.msg) 
                     } else {
-                        hush.sock.rooms[obj.roomid].toast("sock_ev_toast: " + obj.msg)
+                        hush.sock.rooms[obj.roomid].hush.msg.toast("socksock_toast<br>" + obj.msg)
                     }
                 })
                 socket.off(hush.cons.sock_ev_common).on(hush.cons.sock_ev_common, (rs) => { debugger; callback(rs) })
