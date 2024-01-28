@@ -41,6 +41,7 @@ router.post('/', async function(req, res) {
 				}
 			} else if (type == "set_new") { //manual 실행시 무조건 키 setting함
 				for (let item of resultKeys) await global.store.del(item)
+				console.log(winid, "--------------")
 				await global.store.set(uwKey, winid) //console.log(type, userkey, winid, pattern, uwKey)
 				rs.result = "new" //새로운 winner		
 			}
