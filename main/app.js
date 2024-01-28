@@ -142,10 +142,12 @@ async function proc() {
 	stream.on('data', (resultKeys) => {
 		for (let key of resultKeys) {
 			const obj = ws.redis.getUserkeySocketidFromKey(key)
-			console.log('key :', key, obj.socketid, obj.userkey)
+			//console.log('key :', key, obj.socketid, obj.userkey)
 			if (sockets.has(obj.socketid)) {
 				const socket = global.jay.sockets.get(obj.socketid)
 				console.log('socket :', socket.id, socket.userkey, socket.userip, socket.winid)
+			} else {
+				console.log('socke not exists', key, obj.socketid, obj.userkey)
 			}
 		}
 	})
