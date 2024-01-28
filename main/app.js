@@ -5,7 +5,7 @@ const wsmysql = require(config.app.wsmysql)
 const wslogger = require(config.app.wslogger)(config.app.logPath, 'hushsbay')
 const Redis = require('ioredis') //not redis npm => redisAdapter로 할 수 없는 과업을 각 서버별로 store.publish를 통해 모두 처리하는 개념임
 const { Server } = require('socket.io')
-const redisAdapter = require('@socket.io/redis-adapter')
+const redisAdapter = require('@socket.io/redis-adapter') //특히, sockets set에서 각 socket을 바로 뽑기 힘들어 ioredis의 global.store.scanStream으로 처리
 
 const DIR_PUBSUB = './pubsub/', DIR_SOCKET = './socket'
 const PING_TIMEOUT = 5000, PING_INTERVAL = 25000 //default
@@ -131,21 +131,24 @@ async function proc() {
 	const rooms = await global.jay.adapter.allRooms()
 	console.log('socket count :', JSON.stringify(sockets), sockets.toString())
     console.log('socket count :', sockets.size, rooms.size)
-	console.log('socket count :', sockets.has("id.."))
-	const prevSocket = global.jay.sockets.get("id..")
-	for (let item of sockets) {
-		console.log('socket :', item.id, item.userkey, item.userip, item.winid)
-		//console.log('socket :', JSON.stringify(item))
-		console.log('socket :', item.toString())
-	}
-
+	//console.log('socket count :', sockets.has("id.."))
+	//const prevSocket = global.jay.sockets.get("id..")
+	// for (let item of sockets) {
+	// 	console.log('socket :', item.id, item.userkey, item.userip, item.winid)
+	// 	//console.log('socket :', JSON.stringify(item))
+	// 	console.log('socket :', item.toString())
+	// }
 	const stream = global.store.scanStream({ match : ws.cons.key_str_socket + '*', count: ws.cons.scan_stream_cnt })
 	stream.on('data', (resultKeys) => {
 		for (let key of resultKeys) {
-			console.log('key :', key)
+			const obj = ws.redis.getUserkeySocketidFromKey(key)
+			console.log('key :', key, obj.socketid, obj.userkey)
+			if (sockets.has(obj.socketid)) {
+				const socket = sockets.get(obj.socketid)
+				console.log('socket :', socket.id, socket.userkey, socket.userip, socket.winid)
+			}
 		}
 	})
-
     setTimeout(() => { proc() }, 5000)
 }
 
