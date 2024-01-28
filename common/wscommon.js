@@ -265,7 +265,7 @@ module.exports = (function() {
 					if (usKey.includes('undefined')) throw Error('multiSetForUserkeySocket : usKey not defined')
 					const arr = await global.store.multi().set(usKey, socket.id).exec() //한개 항목이면 멀티로 안해도 되나 추가 고려해 유지함
 					if (!arr || arr.length < 1) throw Error('multiSetForUserkeySocket : global.store.multi() error')
-					if (arr[0][0] != 'OK') throw Error('multiSetForUserkeySocket : global.store.multi() error : ' + arr[0][0])
+					if (arr[0][1] != 'OK') throw Error('multiSetForUserkeySocket : global.store.multi() error : ' + arr[0][1])
 				} catch(ex) {
 					throw new Error(ex)
 				}
