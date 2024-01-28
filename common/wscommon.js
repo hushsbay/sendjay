@@ -366,7 +366,7 @@ module.exports = (function() {
 					//	}
 					//}
 					global.logger.info(_msg) //logger는 console.log(a,b,c..)를 지원하지 않음. This line should precede _socket (in the next line)
-					if (_type && _socket) _socket.emit(_type, { code : '-1', msg : _msg, roomid : roomid })
+					if (_type && _socket) _socket.emit(_type, { code : '-1', msg : _msg, roomid : _roomid })
 					console.log("aaaah", _type, _msg)
 				} catch (ex) { 
 					let _msg = ws.sock.getLogMsg(_socket, ex, _logTitle)
