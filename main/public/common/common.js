@@ -23,10 +23,30 @@
             warn_no_opener : "opener가 존재하지 않습니다.",
             warn_char_not_allowed : "한글이나 특수문자 일부(# $ - _ % & + =)는 사용할 수 없습니다.",
             //////////////////////////////////아래는 소켓 관련 : 3050(web ops),3051(mobile ops) and 3060(web dev),3061(mobile dev)
-            socket_url : location.hostname + ":3050/jay", //jay는 socket.io namespace
+            socket_url : location.hostname + ':3050/jay', //jay는 socket.io namespace
             w_key : 'W__', //Web userkey
             m_key : 'M__', //Mobile userkey
-            prefix : "$$", //for redis, socket
+            prefix : '$$', //for redis, socket
+            sock_ev_alert : 'alert',
+			sock_ev_toast : 'toast',
+			sock_ev_disconnect : "disconnect",
+			sock_ev_common : 'common', //Belows are handled in this sock_ev_common event.
+			sock_ev_chk_alive : 'chk_alive',
+			sock_ev_show_off : 'show_off',
+			sock_ev_show_on : 'show_on',
+			sock_ev_create_room : 'create_room',
+			sock_ev_open_room : 'open_room',
+			sock_ev_qry_msglist : 'qry_msglist',
+			sock_ev_send_msg : 'send_msg',
+			sock_ev_read_msg : 'read_msg', 
+			sock_ev_qry_msgcell : 'qry_msgcell', 
+			sock_ev_revoke_msgcell : 'revoke_msgcell',
+			sock_ev_delete_msg : 'delete_msg',
+			sock_ev_invite_user : 'invite_user',
+			sock_ev_rename_room : 'rename_room',
+			sock_ev_set_env : 'set_env',
+			sock_ev_chk_typing : 'chk_typing',
+			sock_ev_cut_mobile : 'cut_mobile',
         },
         socket : null,
         user : null,
