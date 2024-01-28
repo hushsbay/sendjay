@@ -280,7 +280,7 @@ module.exports = (function() {
 				try {
 					if (usKey.includes('undefined')) throw Error('multiDelGarbageForUserkeySocket : usKey not defined')
 					if (afterScan) {
-						const stream = store.scanStream({ match : usKey, count : ws.cons.scan_stream_cnt })
+						const stream = global.store.scanStream({ match : usKey, count : ws.cons.scan_stream_cnt })
 						stream.on('data', async (resultKeys) => { //Search for userkey's another socketid which might be alive on (other) server(s), and kill them.
 							for (let item of resultKeys) {
 								//await global.store.multi().del(item).srem(com.cons.key_set_userkey_socket, item).exec()
