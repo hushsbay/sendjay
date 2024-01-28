@@ -133,7 +133,7 @@ async function proc() {
     console.log('socket count :', sockets.size)
 	for (let item of sockets) {
 		//console.log('socket :', item.id, item.userkey, item.userip, item.winid)
-		console.log('socket :', JSON.stringify(sockets))
+		console.log('socket :', JSON.stringify(item))
 	}
     setTimeout(() => { proc() }, 5000)
 }
