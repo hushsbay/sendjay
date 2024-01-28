@@ -37,6 +37,7 @@ module.exports = async (pattern, channel, message) => {
 			if (otherSocket) otherSocket.emit(ws.cons.sock_ev_common, obj.param)
 		}
 	} catch (ex) {
+		global.logger.error(ex.stack) //아래 오류날 수 있으므로 미리 찍어두기
 		const curSocket = global.jay.sockets.get(obj.socketid)
 		if (curSocket) ws.sock.warn(ws.cons.sock_ev_toast, curSocket, _logTitle, ex) //only to socket server who published this message
 	}
