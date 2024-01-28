@@ -129,6 +129,9 @@ proc()
 async function proc() {
     const sockets = await global.jay.adapter.sockets(new Set())
     console.log('socket count :', sockets.size)
+	for (let item of sockets) {
+		console.log('socket :', item.id, item.userkey, item.userip, item.winid)
+	}
     setTimeout(() => { proc() }, 5000)
 }
 

@@ -246,7 +246,7 @@ module.exports = (function() {
 			multiSetForUserkeySocket : async (socket) => {
 				try {
 					/*const usKey = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli + socket.id //예) $$S + W__userid + ; + XYZ~
-					const uwKey = ws.cons.key_str_winid + socket.userkey + ws.cons.easydeli + socket.winid //예) $$W + W__userid + ; + xxxxxx_~
+					const uwKey = ws.cons.key_str_winid + socket.userkey + ws.cons.easydeli + socket.winid //예) $$W + W__userid + ; + xxxxxx~
 					if (usKey.includes('undefined')) throw Error('multiSetForUserkeySocket : usKey not defined')
 					if (uwKey.includes('undefined')) throw Error('multiSetForUserkeySocket : uwKey not defined')
 					const arr = await global.store.multi().set(usKey, socket.id)
@@ -287,8 +287,7 @@ module.exports = (function() {
 					//multiSet~과는 다르게 지울 때는 uwKey까지 같이 지워야 함
 					const arr = await global.store.multi().del(usKey).del(uwKey).exec()
 					if (!arr || arr.length < 2) throw Error('multiDelForUserkeySocket : global.store.multi() error')
-					if (arr[0][0] != 'OK' || arr[1][0] != 'OK') throw Error('multiDelForUserkeySocket : global.store.multi() error : ' + arr[0][0] + '/' + arr[1][0])
-					console.log(arr[0][0], "===!!!", arr[1][0]) //OK
+					if (arr[0][1] != 'OK' || arr[1][1] != 'OK') throw Error('multiDelForUserkeySocket : global.store.multi() error : ' + arr[0][1] + '/' + arr[1][1])
 				} catch(ex) {
 					throw new Error(ex)
 				}
