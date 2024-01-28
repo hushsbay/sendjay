@@ -429,7 +429,7 @@
                 })
             }),
             getWinId : () => { //xxxxxx20241231010159
-                return hush.util.getRnd().toString() + hush.util.getCurDateTimeStr()
+                return hush.util.getRnd().toString() + "_" + hush.util.getCurDateTimeStr()
             },
             on : (socket, callback) => {            
                 socket.off(hush.cons.sock_ev_alert).on(hush.cons.sock_ev_alert, (obj) => { 
