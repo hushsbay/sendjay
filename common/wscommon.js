@@ -350,7 +350,7 @@ module.exports = (function() {
 					//console.log("aaaae")
 					//const errMsg1 = (typeof _ex == 'string') ? _ex : _ex.stack
 					//console.log("aaaaf")
-					let _msg = ws.sock.getLogMsg(_socket, _ex, _logTitle00)
+					let _msg = ws.sock.getLogMsg(_socket, _ex, _logTitle)
 					if (_roomid) _msg += '<br>' + _roomid
 					//console.log("aaaag")
 					//let _msg = logTitle + ip + userkey + '\n'
