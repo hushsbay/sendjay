@@ -98,7 +98,7 @@
 						hush.msg.showMsg(rs.msg, rs.code)
 						return
 					}
-                    const winid = hush.util.getRnd() + hush.util.getCurDateTimeStr()
+                    const winid = hush.util.getWinId()
                     debugger
                     hush.socket = await hush.sock.connect(io, { 
                         token : hush.user.token, userkey : hush.user.key, userid : hush.user.id, winid : winid, userip : rs.userip 

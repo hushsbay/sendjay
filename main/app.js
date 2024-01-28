@@ -3,7 +3,7 @@ const nodeConfig = require(config.app.nodeConfig)
 const ws = require(config.app.ws)
 const wsmysql = require(config.app.wsmysql)
 const wslogger = require(config.app.wslogger)(config.app.logPath, 'hushsbay')
-const Redis = require('ioredis') //not redis npm 
+const Redis = require('ioredis') //not redis npm => redisAdapter로 할 수 없는 과업을 각 서버별로 store.publish를 통해 모두 처리하는 개념임
 const { Server } = require('socket.io')
 const redisAdapter = require('@socket.io/redis-adapter')
 
@@ -44,7 +44,7 @@ io.adapter(redisAdapter(global.pub, sub))
 io.listen(config.sock.port)
 global.jay = io.of('/' + config.sock.namespace)
 global.jay.on('connection', async (socket) => {
-	const _logTitle = 'connection'	
+	const _logTitle = 'connect'	
 	try {
 		const queryParam = socket.handshake.query
 		if (queryParam && queryParam.userid && queryParam.userkey && queryParam.winid && queryParam.userip) {

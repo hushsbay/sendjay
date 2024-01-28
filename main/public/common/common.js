@@ -53,7 +53,6 @@
         ////////////////////////////////////////////////////////////////////////////////////////
         auth : {
             setCookieForUser : (rs, _persist) => { //token은 서버 쿠키+응답본문으로 자동으로 내려옴
-                debugger
                 const persist = (_persist == true) ? true : false
                 hush.http.setCookie("userid", rs.USER_ID, persist) //persistent cookie - _persist는 아이디를 화면에 저장할 지에만 사용
                 hush.http.setCookie("usernm", rs.USER_NM)
@@ -429,11 +428,8 @@
                     resolve(socket)
                 })
             }),
-            send : (socket, ev, data, returnTo, returnToAnother) => {
-                //returnTo : 부모, 해당채팅방, all 중 하나를 지정하며 parent(부모)가 기본값임
-                //returnToAnother : returnTo 말고도 하나 더 전송 가능 (주로 특정 방에 보내면서 parent에게 추가로 보낼 때 사용)
-                const _returnTo = returnTo ? returnTo : "parent" //parent(부모)가 기본값
-                socket.emit(hush.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
+            getWinId : () => { //xxxxxx_20241231010159
+                return hush.util.getRnd() + "_" + hush.util.getCurDateTimeStr()
             },
             on : (socket, callback) => {            
                 socket.off(hush.cons.sock_ev_alert).on(hush.cons.sock_ev_alert, (obj) => { 
@@ -451,7 +447,13 @@
                     }
                 })
                 socket.off(hush.cons.sock_ev_common).on(hush.cons.sock_ev_common, (rs) => { debugger; callback(rs) })
-            }
+            },
+            send : (socket, ev, data, returnTo, returnToAnother) => {
+                //returnTo : 부모, 해당채팅방, all 중 하나를 지정하며 parent(부모)가 기본값임
+                //returnToAnother : returnTo 말고도 하나 더 전송 가능 (주로 특정 방에 보내면서 parent에게 추가로 보낼 때 사용)
+                const _returnTo = returnTo ? returnTo : "parent" //parent(부모)가 기본값
+                socket.emit(hush.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
+            },
         },        
         util : {
             isvoid : (obj) => {

@@ -37,6 +37,7 @@ module.exports = (function() {
 			pattern : PREFIX + '*', //redis pub/sub				
 			key_str_winid : PREFIX + 'W', //redis strings (userkey+deli+winid prefix added) - get winid for auto launch
 			key_str_socket : PREFIX + 'S', //redis strings (userkey+deli+socketid prefix added) - get socketid
+			//key_set_us : PREFIX + 'US', //redis set - prefix+'S'+userkey+deli+socketid
 			scan_stream_cnt : 100, //means scanning count at a time, not whole count to scan. https://www.gitmemory.com/issue/luin/ioredis/908/511472853. Without count param, Something unexpectable might be happend ?!.
 			sock_ev_alert : 'alert',
 			sock_ev_toast : 'toast',
@@ -244,18 +245,28 @@ module.exports = (function() {
 			},	
 			multiSetForUserkeySocket : async (socket) => {
 				try {
-					const usKey = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli + socket.id //예) $$S + W__userid + ; + XYZ~
-					const uwKey = ws.cons.key_str_winid + socket.userkey + ws.cons.easydeli + socket.winid //예) $$W + W__userid + ; + 2023~
+					/*const usKey = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli + socket.id //예) $$S + W__userid + ; + XYZ~
+					const uwKey = ws.cons.key_str_winid + socket.userkey + ws.cons.easydeli + socket.winid //예) $$W + W__userid + ; + xxxxxx_~
 					if (usKey.includes('undefined')) throw Error('multiSetForUserkeySocket : usKey not defined')
 					if (uwKey.includes('undefined')) throw Error('multiSetForUserkeySocket : uwKey not defined')
 					const arr = await global.store.multi().set(usKey, socket.id)
 												 		  .set(uwKey, ws.util.getCurDateTimeStr(true)) //See chk_redis.js, too.
 													      .sadd(ws.cons.key_set_userkey_socket, usKey) //예) $$US에 $$S + W__userid + ; + XYZ~를 추가
 													      .exec() //.scard(com.cons.key_set_userkey_socket)
+					//위 sadd()는 아직 쓰임새가 없으나 추가/삭제 실행함
 					if (!arr || arr.length < 3) throw Error('multiSetForUserkeySocket : global.store.multi() error')
-					return arr[2][1] //arr = [[null, 'OK'], [null, 'OK'], [null, 99]] => return 99 //for sadd count. smembers $$US for query list
-					//redis-cli에서 keys *로 모두 검색. smembers $$US로 검색하면 $$S + W__userid + ; + XYZ~ 등으로 목록이 나옴			
 					console.log(arr[2][1], "===")
+					return arr[2][1]*/ //arr = [[null, 'OK'], [null, 'OK'], [null, 99]] => return 99 //for sadd count. smembers $$US for query list
+					//redis-cli에서 keys *로 모두 검색. smembers $$US로 검색하면 $$S + W__userid + ; + XYZ~ 등으로 목록이 나옴			
+					//위를 아래와 같이 수정해 사용
+					//.set(uwKey, ws.util.getCurDateTimeStr(true))는 chk_redis.js에서 처리되므로 막음
+					//.sadd(ws.cons.key_set_userkey_socket, usKey)는 아직 쓰임새가 없으므로 막음
+					const usKey = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli + socket.id //예) $$S + W__userid + ; + XYZ~
+					if (usKey.includes('undefined')) throw Error('multiSetForUserkeySocket : usKey not defined')
+					const arr = await global.store.multi().set(usKey, socket.id).exec() //한개 항목이면 멀티로 안해도 되나 추가 고려해 유지함
+					if (!arr || arr.length < 1) throw Error('multiSetForUserkeySocket : global.store.multi() error')
+					if (arr[0][0] != 'OK') throw Error('multiSetForUserkeySocket : global.store.multi() error : ' + arr[0][0])
+					console.log(arr[0][0], "===@@@") //OK
 				} catch(ex) {
 					throw new Error(ex)
 				}
@@ -266,18 +277,27 @@ module.exports = (function() {
 					const uwKey = ws.cons.key_str_winid + socket.userkey + ws.cons.easydeli + socket.winid
 					if (usKey.includes('undefined')) throw Error('multiDelForUserkeySocket : usKey not defined')
 					if (uwKey.includes('undefined')) throw Error('multiDelForUserkeySocket : uwKey not defined')
-					const arr = await global.store.multi().del(usKey)
+					/*const arr = await global.store.multi().del(usKey)
 														  .del(uwKey)
 														  .srem(com.cons.key_set_userkey_socket, usKey) //.scard(com.cons.key_set_userkey_socket)
 														  .exec()
 					if (!arr || arr.length < 3) throw Error('multiDelForUserkeySocket : global.store.multi() error')
-					return arr[2][1] //for srem count. smembers $$US for query list
+					return arr[2][1]*/ //for srem count. smembers $$US for query list
+					//위를 아래와 같이 수정해 사용
+					//.srem(com.cons.key_set_userkey_socket, usKey)는 아직 쓰임새가 없으므로 막음
+					//multiSet~과는 다르게 지울 때는 uwKey까지 같이 지워야 함
+					const arr = await global.store.multi().del(usKey).del(uwKey).exec()
+					if (!arr || arr.length < 2) throw Error('multiDelForUserkeySocket : global.store.multi() error')
+					if (arr[0][0] != 'OK' || arr[1][0] != 'OK') throw Error('multiDelForUserkeySocket : global.store.multi() error : ' + arr[0][0] + '/' + arr[1][0])
+					console.log(arr[0][0], "===!!!", arr[1][0]) //OK
 				} catch(ex) {
 					throw new Error(ex)
 				}
 			},	
 			multiDelGarbageForUserkeySocket : async (usKey, afterScan) => { //usKey = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli + socket.id
-				try {
+				try { 
+					//위 multi~()에서 보듯 uwkey에 대해서도 지우면 좋겠지만 socket만 지우고 winid는 남겨 두어도 큰 무리 없으므로 socket 정보 가비지만 지움
+					//지우다 실패해도 오류처리하지 않고 넘어감
 					if (usKey.includes('undefined')) throw Error('multiDelGarbageForUserkeySocket : usKey not defined')
 					if (afterScan) {
 						const stream = global.store.scanStream({ match : usKey, count : ws.cons.scan_stream_cnt })
