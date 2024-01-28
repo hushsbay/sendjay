@@ -339,35 +339,10 @@ module.exports = (function() {
 			},
 			warn : (_type, _socket, _logTitle, _ex, _roomid) => {
 				try { //_type = alert, toast, null(just logging)
-					//console.log("aaaa")
-					//const logTitle = _logTitle ? _logTitle : config.sock.namespace		
-					//console.log("aaaab")		
-					//const ip = _socket && _socket.userip ? '[' + _socket.userip + ']' : '' //not _socket.handshake.address (because of aws load balancer)
-					//console.log("aaaac")
-					//const userkey = _socket && _socket.userkey ? '[' + _socket.userkey + ']' : ''
-					//console.log("aaaad")
-					//const errMsg = (typeof _ex == 'string') ? _ex : _ex.message
-					//console.log("aaaae")
-					//const errMsg1 = (typeof _ex == 'string') ? _ex : _ex.stack
-					//console.log("aaaaf")
 					let _msg = ws.sock.getLogMsg(_socket, _ex, _logTitle)
 					if (_roomid) _msg += '<br>' + _roomid
-					//console.log("aaaag")
-					//let _msg = logTitle + ip + userkey + '\n'
-					//if (typeof _ex == 'string') {
-					//	_msg += _ex
-					//} else {
-					//	if (ex.stack) {
-					//		_msg += ex.stack	
-					//	} else if (ex.message) {
-					//		_msg += ex.message
-					//	} else {
-					//		_msg += ex.toString()
-					//	}
-					//}
 					global.logger.info(_msg) //logger는 console.log(a,b,c..)를 지원하지 않음. This line should precede _socket (in the next line)
 					if (_type && _socket) _socket.emit(_type, { code : '-1', msg : _msg, roomid : _roomid })
-					console.log("aaaah", _type, _msg)
 				} catch (ex) { 
 					let _msg = ws.sock.getLogMsg(_socket, ex, _logTitle)
 					global.logger.error(_msg)

@@ -10,6 +10,7 @@ module.exports = function(logPath, title) {
       return `${timestamp} [${level}] ${message}` //return `${timestamp} [${label}] ${level}: ${message}`; // 날짜 [시스템이름] 로그레벨 메세지
    })
 
+   //가장 큰 단점은 console.log(a, b, c ..)처럼 여러 항목으로 표시가 안되고 a 한개의 항목으로만 표시된다는 것임
    //Log Level => error: 0, warn: 1, info: 2, http: 3, verbose: 4, debug: 5, silly: 6
    const logger = winston.createLogger({
       format: combine( //로그 출력 형식 정의

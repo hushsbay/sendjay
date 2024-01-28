@@ -68,7 +68,7 @@ global.jay.on('connection', async (socket) => {
 					socket.disconnect()
 					return
 				}
-				socket.usertoken = rst.token
+				socket.usertoken = queryParam.token
 			}
 		} else {
 			console.log("44444444")
@@ -130,14 +130,9 @@ for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/
 
 proc()
 async function proc() {
-    try {
-        const sockets = await global.jay.adapter.sockets(new Set())
-		console.log('socket count :', sockets.size)
-    } catch (ex) {
-        global.logger.error(TITLE + ': error: ', ex.stack)
-    } finally {
-        setTimeout(() => { proc() }, 5000)
-    }
+    const sockets = await global.jay.adapter.sockets(new Set())
+    console.log('socket count :', sockets.size)
+    setTimeout(() => { proc() }, 5000)
 }
 
 ws.util.watchProcessError()
