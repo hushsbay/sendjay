@@ -144,7 +144,7 @@ async function proc() {
 			const obj = ws.redis.getUserkeySocketidFromKey(key)
 			console.log('key :', key, obj.socketid, obj.userkey)
 			if (sockets.has(obj.socketid)) {
-				const socket = sockets.get(obj.socketid)
+				const socket = global.jay.sockets.get(obj.socketid)
 				console.log('socket :', socket.id, socket.userkey, socket.userip, socket.winid)
 			}
 		}
