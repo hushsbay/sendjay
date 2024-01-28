@@ -229,7 +229,7 @@ module.exports = (function() {
 				const arr = await ws.redis.getUserkeySocket(myOtherUserkey)
 				return arr[0] //if not, undefined returned
 			},
-			getUserkeySocket : (userkey) => { //from redis
+			getUserkeySocket : (userkey) => {
 				return new Promise((resolve, reject) => {
 					let arr = []
 					const pattern = ws.cons.key_str_socket + userkey + ws.cons.easydeli
@@ -239,6 +239,12 @@ module.exports = (function() {
 						resolve(arr)
 					}) //stream.on('end', () => { resolve(arr) }) //'end' does not guarantee rs.result as defined.
 				})
+			},
+			getUserkeySocketidFromKey : (key) => { //key => $$SD__3;/sendjay#sjkfhsaf8934kmhjsfd8
+				const arr = key.split(ws.cons.easydeli)
+				const _userkey = arr[0].replace(ws.cons.key_str_socket, '')
+				const _socketid = arr[1]
+				return { userkey : _userkey, socketid : _socketid }
 			},
 			pub : (pubKey, obj) => { //obj needs 1 depth object like { id : "aa", userkey : "bb" }
 				global.pub.publish(ws.cons.prefix + pubKey, JSON.stringify(obj))

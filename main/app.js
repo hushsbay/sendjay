@@ -133,12 +133,19 @@ async function proc() {
     console.log('socket count :', sockets.size, rooms.size)
 	console.log('socket count :', sockets.has("id.."))
 	const prevSocket = global.jay.sockets.get("id..")
-	const check1 = Array.from(sockets);
-	for (let item of check1) {
+	for (let item of sockets) {
 		console.log('socket :', item.id, item.userkey, item.userip, item.winid)
 		//console.log('socket :', JSON.stringify(item))
 		console.log('socket :', item.toString())
 	}
+
+	const stream = global.store.scanStream({ match : ws.cons.key_str_socket + '*', count: ws.cons.scan_stream_cnt })
+	stream.on('data', (resultKeys) => {
+		for (let key of resultKeys) {
+			console.log('key :', key)
+		}
+	})
+
     setTimeout(() => { proc() }, 5000)
 }
 
