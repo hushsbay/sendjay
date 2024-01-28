@@ -133,7 +133,8 @@ async function proc() {
     console.log('socket count :', sockets.size, rooms.size)
 	console.log('socket count :', sockets.has("id.."))
 	const prevSocket = global.jay.sockets.get("id..")
-	for (let item of sockets) {
+	const check1 = Array.from(sockets);
+	for (let item of check1) {
 		console.log('socket :', item.id, item.userkey, item.userip, item.winid)
 		//console.log('socket :', JSON.stringify(item))
 		console.log('socket :', item.toString())
