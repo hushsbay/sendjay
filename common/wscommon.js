@@ -329,10 +329,10 @@ module.exports = (function() {
 		sock : {
 			broadcast : (socket, ev, data, returnTo, returnToAnother) => {
 				const _returnTo = returnTo ? returnTo : 'parent' //'all' used in most cases
-				//global.jay.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //to all inside namaspace. socket oneself included
+				global.jay.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //to all inside namaspace. socket oneself included
 				//global.jay.emit => TypeError: opts.except is not iterable (from socket.io 3.0)
-				socket.broadcast.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //socket oneself excluded
-				socket.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
+				//socket.broadcast.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //socket oneself excluded
+				//socket.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
 			},
 			compareUserId : (idToCompare, socket_userid) => { //for socket only
 				//대부분의 경우는 idToCompare와 socket_userid는 일치해야 하는 경우가 많음
