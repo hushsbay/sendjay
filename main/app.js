@@ -139,7 +139,7 @@ async function proc() {
 	// 	//console.log('socket :', JSON.stringify(item))
 	// 	console.log('socket :', item.toString())
 	// }
-	const sids = global.jay.sockets.adapter.rooms
+	const sids = io.sockets.adapter.rooms
 	console.log('sids count :', sids.size)
 	for (let item of sids) {
 		console.log('sids :', item)
