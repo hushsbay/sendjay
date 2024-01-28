@@ -53,12 +53,10 @@ global.jay.on('connection', async (socket) => {
 			socket.winid = queryParam.winid
 			socket.userip = queryParam.userip
 		} else {
-			console.log("3333333333")
 			ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, 'userid/userkey/winid/userip 모두 필요합니다.')
 			socket.disconnect()
 			return
 		}
-		console.log("22222222")
 		if (queryParam.token) {
 			if (!socket.usertoken) {
 				const tokenInfo = { userid : queryParam.userid, token : queryParam.token }
@@ -71,16 +69,13 @@ global.jay.on('connection', async (socket) => {
 				socket.usertoken = queryParam.token
 			}
 		} else {
-			console.log("44444444")
 			ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, '소켓 연결시 인증 토큰이 필요합니다.') 
 			socket.disconnect()
 			return
 		}
-		console.log("555555555")
 		await ws.redis.multiSetForUserkeySocket(socket)
 		const pattern = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli
 		const stream = store.scanStream({ match : pattern + '*', count : ws.cons.scan_stream_cnt })
-		console.log("6666666666")
 		stream.on('data', (resultKeys) => {
 			for (let item of resultKeys) {
 				const _sockid = item.split(ws.cons.easydeli)[1]
@@ -90,7 +85,6 @@ global.jay.on('connection', async (socket) => {
 				}
 			}
 		})
-		console.log("7777777")
 		ws.sock.broadcast(socket, ws.cons.sock_ev_show_on, socket.userkey, 'all') //서버로 들어오는 것이 없고 클라이언트로 나가는 것만 있을 것임
 		console.log("8888888888")
 		socket.on(ws.cons.sock_ev_disconnect, (reason) => require(DIR_SOCKET + ws.cons.sock_ev_disconnect)(socket, reason))

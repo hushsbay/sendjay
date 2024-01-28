@@ -308,10 +308,8 @@ module.exports = (function() {
 				const _returnTo = returnTo ? returnTo : 'parent' //'all' used in most cases
 				//global.jay.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //to all inside namaspace. socket oneself included
 				//global.jay.emit => TypeError: opts.except is not iterable (from socket.io 3.0)
-				console.log("aaaa11111111")
 				socket.broadcast.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //socket oneself excluded
 				socket.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
-				console.log("aaaa22222222222")
 			},
 			compareUserId : (idToCompare, socket_userid) => { //for socket only
 				//대부분의 경우는 idToCompare와 socket_userid는 일치해야 하는 경우가 많음
@@ -327,7 +325,7 @@ module.exports = (function() {
 					if (_socket.userip) _msg += '[' + _socket.userip + ']'
 					if (_socket.userkey) _msg += '[' + _socket.userkey + ']'
 				}
-				if (title) _msg += title
+				if (title) _msg += '[' + title + ']'
 				if (typeof ex == 'string') {
 					_msg += ex
 				} else {
@@ -385,7 +383,7 @@ module.exports = (function() {
 					if (req.clientIp) _msg += '[' + req.clientIp + ']'
 					if (req.cookie && req.cookie.userid) _msg += '[' + req.cookie.userid + ']'
 				}
-				if (title) _msg += title
+				if (title) _msg += '[' + title + ']'
 				if (typeof ex == 'string') {
 					_msg += ex
 				} else {

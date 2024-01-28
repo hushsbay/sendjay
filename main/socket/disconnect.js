@@ -1,4 +1,4 @@
-const config = require('../../config')
+const config = require('../config')
 const ws = require(config.app.ws)
 //normal reason
 //  1. server namespace disconnect (from server) 2. client namespace disconnect (from client) 3. transport close (browser's page closed)
