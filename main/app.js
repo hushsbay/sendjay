@@ -47,6 +47,7 @@ global.jay.on('connection', async (socket) => {
 	const _logTitle = 'connect'	
 	try {
 		const queryParam = socket.handshake.query
+		console.log(JSON.stringify(queryParam),"====")
 		if (queryParam && queryParam.userid && queryParam.userkey && queryParam.winid && queryParam.userip) {
 			socket.userid = queryParam.userid
 			socket.userkey = queryParam.userkey
