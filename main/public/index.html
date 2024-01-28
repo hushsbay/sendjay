@@ -92,14 +92,13 @@
 
             async function startMsngr() {
                 try {
+                    const winid = hush.sock.getWinId()
                     const _userid = hush.http.getCookie("userid")  
-                    const rs = await hush.http.ajax("/msngr/chk_redis", { type : "set_new", userkey : hush.cons.w_key + _userid, winid : hush.util.getRnd() }) //winid는 여기서 테스트 용도임
+                    const rs = await hush.http.ajax("/msngr/chk_redis", { type : "set_new", userkey : hush.cons.w_key + _userid, winid : winid })
                     if (rs.code != hush.cons.CODE_OK) {
 						hush.msg.showMsg(rs.msg, rs.code)
 						return
 					}
-                    const winid = hush.sock.getWinId()
-                    debugger
                     hush.socket = await hush.sock.connect(io, { 
                         token : hush.user.token, userkey : hush.user.key, userid : hush.user.id, winid : winid, userip : rs.userip 
                     }) 
