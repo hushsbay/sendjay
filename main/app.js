@@ -127,13 +127,16 @@ for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/
 
 proc()
 async function proc() {
-    //const sockets = await global.jay.adapter.sockets(new Set()) //https://socket.io/docs/v4/adapter/
-    const sockets = await global.jay.sockets
-	console.log('socket count :', JSON.stringify(sockets))
-    console.log('socket count :', sockets.size)
+    const sockets = await global.jay.adapter.sockets(new Set()) //https://socket.io/docs/v4/adapter/
+	const rooms = await global.jay.adapter.allRooms()
+	console.log('socket count :', JSON.stringify(sockets), sockets.toString())
+    console.log('socket count :', sockets.size, rooms.size)
+	console.log('socket count :', sockets.has("id.."))
+	const prevSocket = global.jay.sockets.get("id..")
 	for (let item of sockets) {
 		console.log('socket :', item.id, item.userkey, item.userip, item.winid)
 		//console.log('socket :', JSON.stringify(item))
+		console.log('socket :', item.toString())
 	}
     setTimeout(() => { proc() }, 5000)
 }
