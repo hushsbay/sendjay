@@ -92,7 +92,6 @@
 
             async function startMsngr() {
                 try {
-                    debugger
                     const _userid = hush.http.getCookie("userid")  
                     const rs = await hush.http.ajax("/msngr/chk_redis", { type : "set_new", userkey : hush.cons.w_key + _userid, winid : hush.util.getRnd() }) //winid는 여기서 테스트 용도임
                     if (rs.code != hush.cons.CODE_OK) {

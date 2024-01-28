@@ -77,7 +77,7 @@ global.jay.on('connection', async (socket) => {
 		const pattern = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli
 		const stream = store.scanStream({ match : pattern + '*', count : ws.cons.scan_stream_cnt })
 		console.log(pattern, "***********")
-		stream.on('data', (resultKeys) => {
+		stream.on('data', (resultKeys) => { //아래는 비동기처리됨
 			for (let item of resultKeys) {
 				console.log(item, "=======", ws.cons.easydeli)
 				const _sockid = item.split(ws.cons.easydeli)[1]
@@ -88,7 +88,7 @@ global.jay.on('connection', async (socket) => {
 				}
 			}
 		})
-		ws.sock.broadcast(socket, ws.cons.sock_ev_show_on, socket.userkey, 'all') //서버로 들어오는 것이 없고 클라이언트로 나가는 것만 있을 것임
+		//ws.sock.broadcast(socket, ws.cons.sock_ev_show_on, socket.userkey, 'all') //서버로 들어오는 것이 없고 클라이언트로 나가는 것만 있을 것임
 		console.log("8888888888")
 		//socket.on(ws.cons.sock_ev_disconnect, (reason) => require(DIR_SOCKET + ws.cons.sock_ev_disconnect)(socket, reason))
 		//socket.on(ws.cons.sock_ev_common, (param) => require(DIR_SOCKET + param.ev)(socket, param))
