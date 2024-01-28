@@ -139,11 +139,11 @@ async function proc() {
 	// 	//console.log('socket :', JSON.stringify(item))
 	// 	console.log('socket :', item.toString())
 	// }
-	const sids = io.sockets.sids
+	/*const sids = io.sockets.sids
 	console.log('sids count :', sids.size)
 	for (let item of sids) {
 		console.log('sids :', item)
-	}
+	}*/
 	const stream = global.store.scanStream({ match : ws.cons.key_str_socket + '*', count: ws.cons.scan_stream_cnt })
 	stream.on('data', (resultKeys) => {
 		for (let key of resultKeys) {
