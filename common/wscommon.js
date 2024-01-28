@@ -352,7 +352,7 @@ module.exports = (function() {
 					//console.log("aaaae")
 					//const errMsg1 = (typeof _ex == 'string') ? _ex : _ex.stack
 					//console.log("aaaaf")
-					let _msg = ws.sock.getLogMsg(_socket, ex, title)
+					let _msg = ws.sock.getLogMsg(_socket, _ex, _logTitle)
 					const roomid = _roomid ? _roomid : ''
 					//console.log("aaaag")
 					//let _msg = logTitle + ip + userkey + '\n'
@@ -370,7 +370,7 @@ module.exports = (function() {
 					_msg += '<br>' + roomid
 					global.logger.info(_msg) //logger는 console.log(a,b,c..)를 지원하지 않음. This line should precede _socket (in the next line)
 					if (_type && _socket) _socket.emit(_type, { code : '-1', msg : _msg, roomid : roomid })
-					console.log("aaaah", _type, ip, userkey, errMsg1, roomid)
+					console.log("aaaah", _type, _msg)
 				} catch (ex) { 
 					global.logger.error(_logTitle + ' hush.socket.warn\n' + ex.stack)
 				}
