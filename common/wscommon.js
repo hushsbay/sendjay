@@ -248,7 +248,6 @@ module.exports = (function() {
 					const uwKey = ws.cons.key_str_winid + socket.userkey + ws.cons.easydeli + socket.winid //예) $$W + W__userid + ; + 2023~
 					if (usKey.includes('undefined')) throw Error('multiSetForUserkeySocket : usKey not defined')
 					if (uwKey.includes('undefined')) throw Error('multiSetForUserkeySocket : uwKey not defined')
-					console.log(socket.socketid, "===")
 					const arr = await global.store.multi().set(usKey, socket.id)
 												 		  .set(uwKey, ws.util.getCurDateTimeStr(true)) //See chk_redis.js, too.
 													      .sadd(ws.cons.key_set_userkey_socket, usKey) //예) $$US에 $$S + W__userid + ; + XYZ~를 추가
