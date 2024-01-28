@@ -334,7 +334,7 @@ module.exports = (function() {
 					console.log("aaaag")
 					global.logger.info(logTitle, ip, userkey, errMsg1, roomid) //This line should precede _socket (in the next line)
 					if (_type && _socket) _socket.emit(_type, { code : '-1', msg : '[server::' + _logTitle + '] ' + errMsg, roomid : roomid })
-					console.log("aaaah", ip, userkey, errMsg1, roomid)
+					console.log("aaaah", _type, ip, userkey, errMsg1, roomid)
 				} catch (ex) { 
 					global.logger.error(_logTitle, 'hush.socket.warn : ' + ex.stack)
 				}
