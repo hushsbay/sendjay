@@ -428,8 +428,8 @@
                     resolve(socket)
                 })
             }),
-            getWinId : () => { //xxxxxx_20241231010159
-                return hush.util.getRnd() + "_" + hush.util.getCurDateTimeStr()
+            getWinId : () => { //xxxxxx20241231010159
+                return hush.util.getRnd() + hush.util.getCurDateTimeStr()
             },
             on : (socket, callback) => {            
                 socket.off(hush.cons.sock_ev_alert).on(hush.cons.sock_ev_alert, (obj) => { 
