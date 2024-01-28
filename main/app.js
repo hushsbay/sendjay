@@ -99,7 +99,7 @@ global.jay.on('connection', async (socket) => {
 	} catch (ex) {
 		console.log(ex.message, "111111")
 		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex)
-		setTimeout(() => socket.disconnect(), 1000)
+		socket.disconnect() //setTimeout(() => socket.disconnect(), 1000)
 	}
 })
 console.log('socketServer listening on ' + config.sock.port)

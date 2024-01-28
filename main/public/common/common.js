@@ -405,7 +405,7 @@
         		socket.off("connect_error").on("connect_error", (e) => { hush.msg.alert("connect_error\n" + e.toString()) })
                 socket.off("disconnect").on("disconnect", () => { 
                     //location.replace("/" + hush.cons.erp_portal) //현재는 새로고침되면 다시 소켓연결되어 무한루프돌기때문에 임시로 막음
-                    hush.msg.alert("socket disconnected " + hush.util.getCurDateTimeStr(true, true))
+                    //hush.msg.alert("socket disconnected " + hush.util.getCurDateTimeStr(true, true))
                     console.log("socket disconnected " + hush.util.getCurDateTimeStr(true, true))
                 }) 
                 socket.off("connect").on("connect", () => {
