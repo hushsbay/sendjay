@@ -7,7 +7,7 @@ const Redis = require('ioredis') //not redis npm => redisAdapter로 할 수 없�
 const { Server } = require('socket.io')
 const redisAdapter = require('@socket.io/redis-adapter') //특히, sockets set에서 각 socket을 바로 뽑기 힘들어 ioredis의 global.store.scanStream으로 처리
 
-const DIR_PUBSUB = './pubsub/', DIR_SOCKET = './socket'
+const DIR_PUBSUB = './pubsub/', DIR_SOCKET = './socket/'
 const PING_TIMEOUT = 5000, PING_INTERVAL = 25000 //default
 
 global.nodeConfig = nodeConfig
