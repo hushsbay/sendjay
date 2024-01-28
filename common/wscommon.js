@@ -243,22 +243,23 @@ module.exports = (function() {
 				global.pub.publish(ws.cons.prefix + pubKey, JSON.stringify(obj))
 			},	
 			multiSetForUserkeySocket : async (socket) => {
-				//try {
+				try {
 					const usKey = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli + socket.id //예) $$S + W__userid + ; + XYZ~
 					const uwKey = ws.cons.key_str_winid + socket.userkey + ws.cons.easydeli + socket.winid //예) $$W + W__userid + ; + 2023~
 					if (usKey.includes('undefined')) throw Error('multiSetForUserkeySocket : usKey not defined')
 					if (uwKey.includes('undefined')) throw Error('multiSetForUserkeySocket : uwKey not defined')
 					console.log(socket.socketid, "===")
-					const arr = await global.store.multi().set(usKey, socket.socketid)
+					const arr = await global.store.multi().set(usKey, socket.id)
 												 		  .set(uwKey, ws.util.getCurDateTimeStr(true)) //See chk_redis.js, too.
-													      //.sadd(ws.cons.key_set_userkey_socket, usKey) //예) $$US에 $$S + W__userid + ; + XYZ~를 추가
-													      .exec() //.sadd는 현재 미사용이나 향후를 위해 소스 그대로 둠 / .scard(com.cons.key_set_userkey_socket)
+													      .sadd(ws.cons.key_set_userkey_socket, usKey) //예) $$US에 $$S + W__userid + ; + XYZ~를 추가
+													      .exec() //.scard(com.cons.key_set_userkey_socket)
+					if (!arr || arr.length < 3) throw Error('multiSetForUserkeySocket : global.store.multi() error')
 					return arr[2][1] //arr = [[null, 'OK'], [null, 'OK'], [null, 99]] => return 99 //for sadd count. smembers $$US for query list
 					//redis-cli에서 keys *로 모두 검색. smembers $$US로 검색하면 $$S + W__userid + ; + XYZ~ 등으로 목록이 나옴			
 					console.log(arr[2][1], "===")
-				//} catch(ex) {
-				//	throw new Error(ex)
-				//}
+				} catch(ex) {
+					throw new Error(ex)
+				}
 			},	
 			multiDelForUserkeySocket : async (socket) => {
 				try {
@@ -268,8 +269,9 @@ module.exports = (function() {
 					if (uwKey.includes('undefined')) throw Error('multiDelForUserkeySocket : uwKey not defined')
 					const arr = await global.store.multi().del(usKey)
 														  .del(uwKey)
-														  //.srem(com.cons.key_set_userkey_socket, usKey) //.scard(com.cons.key_set_userkey_socket)
+														  .srem(com.cons.key_set_userkey_socket, usKey) //.scard(com.cons.key_set_userkey_socket)
 														  .exec()
+					if (!arr || arr.length < 3) throw Error('multiDelForUserkeySocket : global.store.multi() error')
 					return arr[2][1] //for srem count. smembers $$US for query list
 				} catch(ex) {
 					throw new Error(ex)
