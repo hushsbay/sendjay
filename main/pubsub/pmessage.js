@@ -9,9 +9,9 @@ module.exports = async (pattern, channel, message) => {
 	let obj //const obj = JSON.parse(message) //{"prevkey":"$$SD__q;/sendjay#fNVceK6CERrueMCpAAAC","socketid":"/sendjay#7psRJ_F6lf6_FB6nAAAA",~}
 
 	try {
-		console.log(message, "pppppppppp")
-        obj = JSON.parse(message)
+		console.log(message, "pmessage string") //obj = JSON.parse(message) 여기 넣으면 다른 메시지도 전달되므로 파싱이 안되는 오류 발생       
 		if (_chan == 'disconnect_prev_sock') { //adapter.remoteDisconnect 사용하지 않음 : 아래 코딩처럼 처리할 내용이 있어서 그대로 사용하기로 함
+			obj = JSON.parse(message)
 			const prevsocketid = obj.prevkey.split(ws.cons.easydeli)[1]
 			const prevSocket = global.jay.sockets.get(prevsocketid)
 			console.log("####", prevSocket)
@@ -36,6 +36,7 @@ module.exports = async (pattern, channel, message) => {
 				await ws.redis.multiDelGarbageForUserkeySocket(obj.prevkey, true) //소켓정보 없으므로 가비지로 처리 (every socket server)
 			}
 		} else if (_chan == 'sendto_myother_socket') { //from read_msg.js, delete_msg.js
+			obj = JSON.parse(message)
 			const othersocketid = obj.otherkey.split(ws.cons.easydeli)[1]
 			const otherSocket = global.jay.sockets.get(othersocketid)
 			if (otherSocket) otherSocket.emit(ws.cons.sock_ev_common, obj.param)
