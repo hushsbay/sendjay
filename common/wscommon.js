@@ -256,7 +256,7 @@ module.exports = (function() {
 					//위 sadd()는 아직 쓰임새가 없으나 추가/삭제 실행함
 					if (!arr || arr.length < 3) throw Error('multiSetForUserkeySocket : global.store.multi() error')
 					console.log(arr[2][1], "===")
-					return arr[2][1]*/ //arr = [[null, 'OK'], [null, 'OK'], [null, 99]] => return 99 //for sadd count. smembers $$US for query list
+					return arr[2][1]*/ //arr = [[빈값, 'OK'], [빈값, 'OK'], [빈값, 99]] => return 99 //for sadd count. smembers $$US for query list
 					//redis-cli에서 keys *로 모두 검색. smembers $$US로 검색하면 $$S + W__userid + ; + XYZ~ 등으로 목록이 나옴			
 					//위를 아래와 같이 수정해 사용
 					//.set(uwKey, ws.util.getCurDateTimeStr(true))는 chk_redis.js에서 처리되므로 막음
@@ -265,8 +265,7 @@ module.exports = (function() {
 					if (usKey.includes('undefined')) throw Error('multiSetForUserkeySocket : usKey not defined')
 					const arr = await global.store.multi().set(usKey, socket.id).exec() //한개 항목이면 멀티로 안해도 되나 추가 고려해 유지함
 					if (!arr || arr.length < 1) throw Error('multiSetForUserkeySocket : global.store.multi() error')
-					//if (arr[0][0] != 'OK') throw Error('multiSetForUserkeySocket : global.store.multi() error : ' + arr[0][0])
-					console.log(arr.toString(), "===@@@") //OK
+					if (arr[0][0] != 'OK') throw Error('multiSetForUserkeySocket : global.store.multi() error : ' + arr[0][0])
 				} catch(ex) {
 					throw new Error(ex)
 				}
