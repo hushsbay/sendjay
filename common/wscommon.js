@@ -266,7 +266,7 @@ module.exports = (function() {
 					const arr = await global.store.multi().set(usKey, socket.id).exec() //한개 항목이면 멀티로 안해도 되나 추가 고려해 유지함
 					if (!arr || arr.length < 1) throw Error('multiSetForUserkeySocket : global.store.multi() error')
 					//if (arr[0][0] != 'OK') throw Error('multiSetForUserkeySocket : global.store.multi() error : ' + arr[0][0])
-					console.log(arr[0][0], "===@@@") //OK
+					console.log(arr.toString(), "===@@@") //OK
 				} catch(ex) {
 					throw new Error(ex)
 				}
