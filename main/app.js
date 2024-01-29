@@ -47,7 +47,6 @@ global.jay.on('connection', async (socket) => {
 	const _logTitle = 'connect'	
 	try {
 		const queryParam = socket.handshake.query
-		console.log(JSON.stringify(queryParam),"====")
 		if (queryParam && queryParam.userid && queryParam.userkey && queryParam.winid && queryParam.userip) {
 			socket.userid = queryParam.userid
 			socket.userkey = queryParam.userkey
@@ -77,12 +76,9 @@ global.jay.on('connection', async (socket) => {
 		await ws.redis.multiSetForUserkeySocket(socket)
 		const pattern = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli
 		const stream = store.scanStream({ match : pattern + '*', count : ws.cons.scan_stream_cnt })
-		console.log(pattern, "***********")
 		stream.on('data', (resultKeys) => { //아래는 비동기처리됨. //call pmessage()
 			for (let item of resultKeys) {
-				console.log(item, "=======", ws.cons.easydeli)
 				const _sockid = item.split(ws.cons.easydeli)[1]
-				console.log(_sockid, "@@@@@", socket.id, socket.userkey, socket.userip)
 				if (_sockid != socket.id) { //PC웹과 모바일 구분 (모바일이라면 모바일 userkey로만 찾아 현재 소켓이 아니면 이전 소켓이므로 모두 kill)
 					//adapter.remoteDisconnect 사용하지 않음 : 추가로 처리할 내용이 있어서 그대로 사용하기로 함
 					ws.redis.pub('disconnect_prev_sock', { prevkey : item, socketid : socket.id, userkey : socket.userkey, userip : socket.userip }) //call pmessage()
@@ -90,12 +86,10 @@ global.jay.on('connection', async (socket) => {
 			}
 		})
 		//ws.sock.broadcast(socket, ws.cons.sock_ev_show_on, socket.userkey, 'all') //서버로 들어오는 것이 없고 클라이언트로 나가는 것만 있을 것임
-		console.log("8888888888")
 		socket.on(ws.cons.sock_ev_disconnect, (reason) => require(DIR_SOCKET + ws.cons.sock_ev_disconnect)(socket, reason))
 		socket.on(ws.cons.sock_ev_common, (param) => require(DIR_SOCKET + param.ev)(socket, param))
 		socket.on('error', (err) => global.logger.error('socket error\n' + err.toString()))
 	} catch (ex) {
-		console.log(ex.message, "111111")
 		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex)
 		socket.disconnect() //setTimeout(() => socket.disconnect(), 1000)
 	}
@@ -129,32 +123,15 @@ for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/
 proc()
 async function proc() {
     const sockets = await global.jay.adapter.sockets(new Set()) //https://socket.io/docs/v4/adapter/
-	const sockets1 = await global.jay.sockets
-	//const rooms = await global.jay.adapter.allRooms()
-	//console.log('socket count :', JSON.stringify(sockets), sockets.toString())
-    console.log('socket count :', sockets.size, sockets1.size)
-	//console.log('socket count :', sockets.has("id.."))
-	//const prevSocket = global.jay.sockets.get("id..")
-	// for (let item of sockets) {
-	// 	console.log('socket :', item.id, item.userkey, item.userip, item.winid)
-	// 	//console.log('socket :', JSON.stringify(item))
-	// 	console.log('socket :', item.toString())
-	// }
-	/*const sids = io.sockets.sids
-	console.log('sids count :', sids.size)
-	for (let item of sids) {
-		console.log('sids :', item)
-	}*/
+	//const sockets1 = await global.jay.sockets //위 아래 둘 다 각 서버의 소켓 카운트만 가능
+    console.log('socket count :', sockets.size) //, sockets1.size)
 	const stream = global.store.scanStream({ match : ws.cons.key_str_socket + '*', count: ws.cons.scan_stream_cnt })
 	stream.on('data', (resultKeys) => {
 		for (let key of resultKeys) {
 			const obj = ws.redis.getUserkeySocketidFromKey(key)
-			//console.log('key :', key, obj.socketid, obj.userkey)
 			if (sockets.has(obj.socketid)) {
 				const socket = global.jay.sockets.get(obj.socketid)
 				console.log('socket :', socket.id, socket.userkey, socket.userip, socket.winid)
-			//} else {
-			//	console.log('socke not exists', key, obj.socketid, obj.userkey)
 			}
 		}
 	})

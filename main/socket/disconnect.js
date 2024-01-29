@@ -8,7 +8,6 @@ const ws = require(config.app.ws)
 module.exports = async function(socket, reason) {	
 	const _logTitle = ws.cons.sock_ev_disconnect
 	try { //userkey made to null when prevsocket disconnect
-		console.log("=======", socket.userkey, socket.prev)
 		if (socket.userkey) { //이전 소켓을 끊으려고 하는 pmessage에서 socket.prev=true로 주는데 sock_ev_show_off가 sock_ev_show_on보다 늦게 처리되어 on/off가 off로 보이는 걸 막기 위함
 			if (!socket.prev) ws.sock.broadcast(socket, ws.cons.sock_ev_show_off, socket.userkey, 'all')
 			await ws.redis.multiDelForUserkeySocket(socket)

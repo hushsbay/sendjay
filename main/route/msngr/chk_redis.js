@@ -12,7 +12,6 @@ router.post('/', async function(req, res) {
 	const rs = ws.http.resInit()
 	try {
 		const { type, userkey, winid } = req.body
-		console.log(winid, "--------------111")
 		const userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
 		if (!userid) return	
 		const pattern = ws.cons.key_str_winid + userkey + ws.cons.easydeli //eg) $$ + W + W__USERID;
@@ -42,7 +41,6 @@ router.post('/', async function(req, res) {
 				}
 			} else if (type == "set_new") { //manual 실행시 무조건 키 setting함
 				for (let item of resultKeys) await global.store.del(item)
-				console.log(winid, "--------------")
 				await global.store.set(uwKey, winid) //console.log(type, userkey, winid, pattern, uwKey)
 				rs.result = "new" //새로운 winner		
 			}
