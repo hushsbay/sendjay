@@ -153,8 +153,8 @@ async function proc() {
 			if (sockets.has(obj.socketid)) {
 				const socket = global.jay.sockets.get(obj.socketid)
 				console.log('socket :', socket.id, socket.userkey, socket.userip, socket.winid)
-			} else {
-				console.log('socke not exists', key, obj.socketid, obj.userkey)
+			//} else {
+			//	console.log('socke not exists', key, obj.socketid, obj.userkey)
 			}
 		}
 	})
