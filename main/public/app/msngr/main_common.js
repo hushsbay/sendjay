@@ -904,15 +904,16 @@ var procUnreadTitle = (roomid) => { //call from chat.html
 
 var funcSockEv = { //needs to be public
     [hush.cons.sock_ev_chk_alive] : (data) => { //[...]
-        for (let item of data) hushj.people.toggleDisplay(item, true)
+        for (let item of data) hush.util.displayOnOff(item, true)
         if (g_memWin && !g_memWin.closed) g_memWin.funcSockEv[hush.cons.sock_ev_chk_alive].call(null, data)
     },
     [hush.cons.sock_ev_show_off] : (userkey) => {
-        hushj.people.toggleDisplay(userkey, false) //클라이언트가 명시적으로 요청(보내지) 않고 서버 disconnect.js에서 보냄
+        hush.util.displayOnOff(userkey, false) //클라이언트가 명시적으로 요청(보내지) 않고 서버 disconnect.js에서 보냄
         if (g_memWin && !g_memWin.closed) g_memWin.funcSockEv[hush.cons.sock_ev_show_off].call(null, userkey)
     },
     [hush.cons.sock_ev_show_on] : (userkey) => {
-        hushj.people.toggleDisplay(userkey, true) //클라이언트가 명시적으로 요청(보내지) 않고 서버 app.js에서 보냄
+        debugger
+        hush.util.displayOnOff(userkey, true) //클라이언트가 명시적으로 요청(보내지) 않고 서버 app.js에서 보냄
         if (g_memWin && !g_memWin.closed) g_memWin.funcSockEv[hush.cons.sock_ev_show_on].call(null, userkey) 
     },
     [hush.cons.sock_ev_send_msg] : (data) => {

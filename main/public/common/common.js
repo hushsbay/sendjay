@@ -465,7 +465,7 @@
                 //returnToAnother : returnTo 말고도 하나 더 전송 가능 (주로 특정 방에 보내면서 parent에게 추가로 보낼 때 사용)
                 const _returnTo = returnTo ? returnTo : "parent" //parent(부모)가 기본값
                 socket.emit(hush.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
-            },
+            },            
         },        
         util : {
             isvoid : (obj) => {
@@ -633,6 +633,23 @@
                 const dtPrev = hush.util.getTimeStamp(_prev)
                 return parseInt((_cur - dtPrev) / 1000) //return seconds
             },
+            displayOnOff : (userkey, on) => {
+                if (on) {
+                    $("#w_" + userkey).removeClass("coStateOff").addClass("coStateOn")
+                    if ($("#m_" + userkey).hasClass("mobInstalled")) {
+                        $("#m_" + userkey).removeClass("coStateMob").addClass("coStateOn")
+                    } else {
+                        $("#m_" + userkey).removeClass("coStateOff").addClass("coStateOn")
+                    }
+                } else {
+                    $("#w_" + userkey).removeClass("coStateOn").addClass("coStateOff")
+                    if ($("#m_" + userkey).hasClass("mobInstalled")) {
+                        $("#m_" + userkey).removeClass("coStateOn").addClass("coStateMob")
+                    } else {
+                        $("#m_" + userkey).removeClass("coStateOn").addClass("coStateOff")
+                    }
+                }
+            }
         },
         webview : {
             on : false,
