@@ -14,10 +14,7 @@ router.post('/', async function(req, res) {
 	try {
 		const rs = ws.http.resInit()
 		const dateFr = ws.util.setDateAdd(new Date(), ws.cons.max_days_to_fetch)
-		const { roomid, msgid, type } = req.body //모두 undefined일 경우는 Bad Request 400 발생하므로 아래처럼 풀어주기
-		//const roomid = req.body.roomid
-		//const msgid = req.body.msgid
-		//const type = req.body.type
+		const { roomid, msgid, type } = req.body
 		conn = await wsmysql.getConnFromPool(global.pool)
 		if (type == 'U') {
 			userid = await ws.jwt.chkToken(req, res, conn) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
@@ -49,7 +46,6 @@ router.post('/', async function(req, res) {
 			sql += "GROUP BY ROOMID "
 			rs.list = await wsmysql.query(conn, sql, [userid, dt]) //console.log(rs.list.length+"====qry_unread====reconnect")
 		}
-		console.log(JSON.stringify(rs.list))
 		ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
