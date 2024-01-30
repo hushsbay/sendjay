@@ -42,6 +42,7 @@
                     g_year = (new Date()).getFullYear().toString()
                     g_nodeIndent = hush.webview.on ? 15 : 30
                     g_win_type = param.get("type") //invite, member, org 또는 빈값
+                    debugger
                     if (hush.webview.on) {
                         if (!g_win_type) { //메인은 모바일앱에서도 마찬가지로 빈값
                             //$("#in_search").width(80)
@@ -499,11 +500,11 @@
                 <div id=btn_people class=coNav><span class=mq_title>임직원</span></div>
                 <div id=btn_chat class=coNav>
                     <span class=mq_title>채팅</span>
-                    <span id=spn_unread style="font-size:12px;font-weight:normal;background-color:orange;color:white;border:1px solid yellow;border-radius:4px;padding:0px 1px;margin-left:5px">new</span>
+                    <span id=spn_unread style="display:none;font-size:12px;font-weight:normal;background-color:orange;color:white;border:1px solid yellow;border-radius:4px;padding:0px 1px;margin-left:5px">new</span>
                 </div>
                 <div id=btn_setting class=coNav style="border:1px"><span class=mq_title>환경설정</span></div>
             </div>
-            <div id=fr_menu_top class=coMenuTop style="">
+            <div id=fr_menu_top class=coMenuTop style="display:none">
                 <input type=checkbox id=chk_selectall name=chk_selectall style="margin-left:10px" />
                 <input id=in_search type=search spellcheck=false onsearch="OnSearch(this)" style="width:80px;height:24px;margin-left:8px" />
                 <div id=btn_search class=coImgBtn><img src="/img/white_search.png" class=coImg24 /></div>
