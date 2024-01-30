@@ -35,7 +35,7 @@
                 try { //By default, $.getScript() sets the cache setting to false. You can override this with $.ajaxSetup({ cache: true })
                     await $.getScript("/common/common.js")
                     await $.getScript("main_common.js")
-                    const param = hush.http.getParamsFromLocation()
+                    const param = new URLSearchParams(location.search)
                     hush.webview.chk(param)
                     g_list = $("#list_chat")
                     g_year = (new Date()).getFullYear().toString()
