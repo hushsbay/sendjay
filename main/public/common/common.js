@@ -83,10 +83,11 @@
                 }
             },
             verifyUser : async (verbose) => { //index.html 제외한 나머지에서 사용됨
+                let rs
                 const _token = hush.http.getCookie("token")  
                 if (_token) {
                     const _userid = hush.http.getCookie("userid")  
-                    const rs = await hush.http.ajax("/auth/login", { token : _token, userid : _userid })
+                    rs = await hush.http.ajax("/auth/login", { token : _token, userid : _userid })
                     if (rs.code != hush.cons.CODE_OK) {
                         if (verbose) {
                             await hush.msg.alert(rs.msg + "<br>다시 로그인해 주시기 바랍니다.")
