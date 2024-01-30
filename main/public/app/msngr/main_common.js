@@ -32,7 +32,6 @@ const procScrollEvent = () => {
 
 const procMenuTop = async (_mode, _mode_people) => {
     try {
-        debugger
         g_mode = (_mode) ? _mode : BTN_MODE_PEOPLE
         $(".coNav").removeClass("coNavSelected")
         $(".coMenuBtn").hide()
@@ -208,11 +207,11 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
         } else {
             list.empty()
         }
-        let rq = { type : type, keyword : encodeURIComponent(keyword) }
-        const rs = await hush.http.ajax(hush.cons.route + "/qry_userlist", rq)
-        if (rs.code != hush.cons.result_ok) {
-            hush.msg.toast(rs.msg)
-            return false
+        debugger
+        const rs = await hush.http.ajax("/msngr/qry_userlist", { type : type, keyword : encodeURIComponent(keyword) })
+        if (rs.code != hush.cons.CODE_OK) {
+            hush.msg.showMsg(rs.msg, rs.code)
+            return
         }
         let userkeyArr = [ ]
         const _len = rs.list.length
@@ -228,9 +227,9 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             const _abcd = row.AB_CD
             const _abnm = row.AB_NM
             const _nicknm = row.NICK_NM
-            const push_ios = row.PUSH_IOS
-            const push_and = row.PUSH_AND
-            const state_mob = (push_ios && push_ios != hush.cons.invalid_push_token) || (push_and && push_and != hush.cons.invalid_push_token) ? "coStateMob mobInstalled" : "coStateOff"
+            //const push_ios = row.PUSH_IOS
+            //const push_and = row.PUSH_AND
+            //const state_mob = (push_ios && push_ios != hush.cons.invalid_push_token) || (push_and && push_and != hush.cons.invalid_push_token) ? "coStateMob mobInstalled" : "coStateOff"
             let disp_nick = "display:none;", disp_abcd = "display:none;", disp_abnm = "display:none;"
             if (_nicknm && !_abcd && !_abnm) disp_nick = ""
             if (_abcd) disp_abcd = ""    
