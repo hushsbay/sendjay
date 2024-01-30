@@ -101,19 +101,7 @@
 					}
                     hush.socket = await hush.sock.connect(io, { 
                         token : hush.user.token, userkey : hush.user.key, userid : hush.user.id, winid : winid, userip : rs.userip 
-                    }) 
-                    
-
-
-                    
-                    /*const socket = io("https://hushsbay.com:3050/jay", { forceNew: false, reconnection: false, query: { userid : "S921060" } }) //forceNew=false //See 'disconnect_prev_sock' in pmessage.js (on server)
-                    socket.off("connect_error").on("connect_error", (e) => { hush.msg.alert("connect_error\n" + e.toString()) })
-                    socket.off("disconnect").on("disconnect", () => { 
-                        hush.msg.alert("disconnected")
-                    }) 
-                    socket.off("connect").on("connect", () => {
-                        console.log("socket connected......")
-                    })*/
+                    })
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }
@@ -132,7 +120,7 @@
                         } else {
                             hush.auth.setUser(_token)
                             showLogout(true)
-                            startMsngr()
+                            //startMsngr()
                         }
                     }
                     $("#btn_user").on("click", function() {
@@ -150,6 +138,9 @@
                         } catch (ex) {
                             hush.util.showEx(ex)
                         }
+                    })
+                    $("#btn_msngr").on("click", function() {
+                        hush.util.openWinTab("/app/msngr/main.html")
                     })
                     $("#btn_orgtree").on("click", function() {                        
                         //from = 호출자 식별을 위한 참고용
