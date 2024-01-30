@@ -1060,6 +1060,7 @@ const initMain = async (launch, winid) => {
         hush.msg.alert("Notification permission should be granted for this site.")
         return false
     }
+    debugger
     const rs = await hush.auth.verifyUser(true)
     if (!rs) return false
     //const rs = await hushj.auth.verifyLogin() //웹메신저는 사내포털에서 이미 인증된 후 실행되는 것으로 가정함
