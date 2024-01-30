@@ -32,6 +32,7 @@ const procScrollEvent = () => {
 
 const procMenuTop = async (_mode, _mode_people) => {
     try {
+        debugger
         g_mode = (_mode) ? _mode : BTN_MODE_PEOPLE
         $(".coNav").removeClass("coNavSelected")
         $(".coMenuBtn").hide()
@@ -55,7 +56,7 @@ const procMenuTop = async (_mode, _mode_people) => {
                 if (_mode_people) {
                     procMenuPeople(_mode_people, true)
                 } else {
-                    procMenuPeople(hushj.http.getCookie("mode_people"))
+                    procMenuPeople(hush.http.getCookie("mode_people"))
                 }
             }
         } else if (g_mode == BTN_MODE_CHAT) {
@@ -73,14 +74,14 @@ const procMenuTop = async (_mode, _mode_people) => {
             $("#fr_chat").hide()
             $("#fr_setting").css("display", "flex")
             $(".setting").show()
-            const rs = await hushj.auth.verifyLogin()
+            const rs = await hush.auth.verifyLogin()
             if (rs.code == hush.cons.result_ok) procSetting("load", rs, true)
         }
         $("#" + g_mode).addClass("coNavSelected")
         $("#fr_menu_bottom").css("display", "flex")
-        if (!_mode_people) hushj.http.setCookie("mode", g_mode, true)
+        if (!_mode_people) hush.http.setCookie("mode", g_mode, true)
     } catch (ex) {
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 
@@ -95,9 +96,9 @@ const procMenuPeople = (_mode, popup) => {
             getOrgTree({ keyword : "", withMember : true, expand : 0 })
             toggleForBtnCompany(true)
         }
-        if (!popup) hushj.http.setCookie("mode_people", g_mode_people, true)
+        if (!popup) hush.http.setCookie("mode_people", g_mode_people, true)
     } catch (ex) {
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 
@@ -157,7 +158,7 @@ const procSelect = (_userid) => {
             const _useridTag = $("#add_" + _userid)
             _useridTag.effect("highlight", { color: hush.cons.fadein }, 100)
             _useridTag.off("click").on("click", function() {
-                hushj.util.animAction(_useridTag, () => { 
+                hush.util.animAction(_useridTag, () => { 
                     $(this).remove()
                     $("#sel_" + _userid).prop("checked", false)
                     procMemPanel()    
@@ -168,20 +169,20 @@ const procSelect = (_userid) => {
             procMemPanel()
         } else {
             const _useridTag = $("#add_" + _userid)
-            hushj.util.animAction(_useridTag, () => { 
+            hush.util.animAction(_useridTag, () => { 
                 _useridTag.remove()
                 procMemPanel()
             })
         }
     } catch (ex) {
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 
 const procSearch = () => {
     const keyword = $("#in_search").val().trim()
     if (keyword.length == 0) {
-        hushj.msg.toast(hush.cons.msg.blank_requested)
+        hush.msg.toast(hush.cons.msg.blank_requested)
         return
     } 
     if (g_mode === BTN_MODE_PEOPLE) {
@@ -208,9 +209,9 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             list.empty()
         }
         let rq = { type : type, keyword : encodeURIComponent(keyword) }
-        const rs = await hushj.http.ajax(hush.cons.route + "/qry_userlist", rq)
+        const rs = await hush.http.ajax(hush.cons.route + "/qry_userlist", rq)
         if (rs.code != hush.cons.result_ok) {
-            hushj.msg.toast(rs.msg)
+            hush.msg.toast(rs.msg)
             return false
         }
         let userkeyArr = [ ]
@@ -268,11 +269,11 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             }
             userkeyArr.push(w_userkey)
             userkeyArr.push(m_userkey)
-            hushj.http.getUserPic(_userid, "img_" + _userid) //$("#per_" + _userid).off("click").on("click", async function(e) {
+            hush.http.getUserPic(_userid, "img_" + _userid) //$("#per_" + _userid).off("click").on("click", async function(e) {
             $("#mem_" + _userid).off("click").on("click", function(e) {
                 if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 event가 먹히도록 함
-                hushj.util.animCall(this.id, true)
-                hushj.msg.alert("이름 : " + _nm + "<br><br>전화 : <a href=tel:'" + _tel + "'>" + _tel + "</a><br>부서 : " + _org + "<br>직무 : " + _job + "<br><br>" + _abcd + " " + _abnm, null, "Info")
+                hush.util.animCall(this.id, true)
+                hush.msg.alert("이름 : " + _nm + "<br><br>전화 : <a href=tel:'" + _tel + "'>" + _tel + "</a><br>부서 : " + _org + "<br>직무 : " + _job + "<br><br>" + _abcd + " " + _abnm, null, "Info")
             })
         }
         if (_len == 0) return false          
@@ -284,7 +285,7 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
         sendChkAlive(userkeyArr)
         return true
     } catch (ex) {
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 
@@ -312,9 +313,9 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
         const list = $("#list_people")
         list.empty()
         let rq = { keyword : encodeURIComponent(obj.keyword) }
-        const rs = await hushj.http.ajax(hush.cons.route + "/qry_orgtree", rq) //without members
+        const rs = await hush.http.ajax(hush.cons.route + "/qry_orgtree", rq) //without members
         if (rs.code != hush.cons.result_ok) {
-            hushj.msg.toast(rs.msg)
+            hush.msg.toast(rs.msg)
             return
         }
         const _len = rs.list.length
@@ -411,7 +412,7 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
             const _hasChild = _tag.attr("haschild") //Y or ~
             const _memcnt = parseInt(_tag.attr("memcnt"))
             const _memDownloaded = _tag.attr("memdownloaded") //Y or ~ => withMember option needed
-            hushj.util.animCall(_id, true) //PC 브라우저에서는 문제없음. android webview에서는 행전체 effect와 .orgbody의 animcall이 같이 실행되는데 .orgbody가 높이가 더 커서 부자연스러움
+            hush.util.animCall(_id, true) //PC 브라우저에서는 문제없음. android webview에서는 행전체 effect와 .orgbody의 animcall이 같이 실행되는데 .orgbody가 높이가 더 커서 부자연스러움
             //원래 의도는 webview에서도 animCall만 먹었으면 좋겠는데 webview 자체의 efffect가 그것도 높낮이가 다른 두개의 effect가 보이는 것이 문제임 .orgbody의 height:100%로 해결함
             if (_hasChild == "Y") {
                 const _nextTag = $("#orgrow_" + (_idx + 1))
@@ -520,7 +521,7 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
             }
         })
     } catch (ex) {
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 
@@ -574,9 +575,9 @@ const getPortalList = async (obj) => {
             rq.dt = g_cdt
             rq.cnt = hush.cons.fetch_cnt_list //if (g_cdt == FIRST_QUERIED) g_list.empty()
         }
-        const rs = await hushj.http.ajax(hush.cons.route + "/qry_portal", rq, null, withToast)
+        const rs = await hush.http.ajax(hush.cons.route + "/qry_portal", rq, null, withToast)
         if (rs.code != hush.cons.result_ok && rs.code != hush.cons.result_no_data) {
-            hushj.msg.toast("getPortalList: " + rs.msg)
+            hush.msg.toast("getPortalList: " + rs.msg)
             if ($("#getmore").length > 0) $("#getmore").remove()
             portalListBeingQueried = false
             return
@@ -585,7 +586,7 @@ const getPortalList = async (obj) => {
             portalListBeingQueried = false
             if (rs.list.length == 0) return //console.log(rs.list[0].LASTDT + "===" + g_lastdt_for_toprow)
             if (rs.list[0].LASTDT == g_lastdt_for_toprow) return
-            procMenuTop(hushj.http.getCookie("mode"))
+            procMenuTop(hush.http.getCookie("mode"))
             return
         }
         if (obj.roomid && !obj.replace) $("#div_" + obj.roomid).remove() //ex) obj.replace used for when 'leave' 
@@ -594,7 +595,7 @@ const getPortalList = async (obj) => {
         const _len = rs.list.length
         if (_len == 0) {
             if (g_cdt == FIRST_QUERIED) {
-                hushj.msg.toast(hush.cons.msg.no_data)
+                hush.msg.toast(hush.cons.msg.no_data)
             } else {
                 $("#getmore").html(hush.cons.msg.no_more_data)
                 setTimeout(() => $("#getmore").remove(), 1000)
@@ -616,7 +617,7 @@ const getPortalList = async (obj) => {
             if (i == 0) {
                 if (obj.type == "normal" || (obj.roomid && !obj.replace)) g_lastdt_for_toprow = row.LASTDT //ex) ignore when member leave
             }
-            let _lastdt = (g_cdt) ? hush.util.formatMsgDt(hushj.util.tzDateTime(g_cdt), g_year, true) : "" //timezone            
+            let _lastdt = (g_cdt) ? hush.util.formatMsgDt(hush.util.tzDateTime(g_cdt), g_year, true) : "" //timezone            
             let _html = "<div id=div_" + _roomid + " class=div_row style='width:100%;height:50px;display:flex;align-items:center;border-bottom:1px solid lightgray'>"
             _html += "      <input type=checkbox id=sel_" + _roomid + " class=chkbox_portal style='margin-left:10px' />"
             _html += "      <div id=subdiv_" + _roomid + " class=row_portal style='flex:1;min-width:0;height:100%;align-self:stretch;display:flex;flex-direction:column;cursor:pointer;margin:0px 10px'>"
@@ -657,29 +658,29 @@ const getPortalList = async (obj) => {
             }
             getUnreadPerEachRoom(_roomid, true) //Or you can check unreads at a time by using 'group by roomid' sql in qry_unread.js
         }
-        if (obj.type == "normal" && g_cdt != FIRST_QUERIED && lastRoomid != "") hushj.util.animCall(lastRoomid, true) //tells if next fetch exists
+        if (obj.type == "normal" && g_cdt != FIRST_QUERIED && lastRoomid != "") hush.util.animCall(lastRoomid, true) //tells if next fetch exists
         const _tag = (obj.roomid) ? "#div_" + obj.roomid : ".div_row" //const _tag = (obj.roomid) ? "#subdiv_" + obj.roomid : ".row_portal"
         $(_tag).off("click").on("click", function(e) {
             if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 event가 먹히도록 함
             const _id = this.id
-            hushj.util.animCall(_id, true)
+            hush.util.animCall(_id, true)
             const _roomid = _id.substring(4) //const _roomid = _id.substring(7)
             if (hush.webview.ios) {
             } else if (hush.webview.and) {
                 setTimeout(() => AndroidMain.openRoom("open", _roomid, "portal", ""), hush.cons.sec_for_webview_func) //setTimeout없이 Android 함수 호출하면 animCall 동작안함
             } else {
-                hush.room.open(hushj.cons.chat, _roomid, "portal")
+                hush.room.open(hush.cons.chat, _roomid, "portal")
             }
         })
         portalListBeingQueried = false
     } catch (ex) {
         portalListBeingQueried = false
-        if (obj.type != "reconnect") hushj.msg.toast("getPortalList: " + obj.type + ": " + ex.message)
+        if (obj.type != "reconnect") hush.msg.toast("getPortalList: " + obj.type + ": " + ex.message)
     }
 }
 
 const getUnreadPerEachRoom = async (roomid, chkCloseNoti) => { //no unread display in case of invite/leave msg    
-    const rs = await hushj.http.ajax(hush.cons.route + "/qry_unread", { roomid : roomid })
+    const rs = await hush.http.ajax(hush.cons.route + "/qry_unread", { roomid : roomid })
     const _unread = rs.list[0].UNREAD
     if (_unread == 0) {
         $("#unread_" + roomid).hide() //for positioning problem
@@ -737,13 +738,13 @@ const getUnreadForAll = async () => { //tells if unread exists on load
 
 const closeNoti = (roomid, msgid, skipGetUnreadPerEachRoom) => {
     if (!hush.webview.on) {
-        const noti = hushj.noti.notis[roomid]
+        const noti = hush.noti.notis[roomid]
         if (noti) noti.close()
         procUnreadTitle(roomid)
         if (!skipGetUnreadPerEachRoom) getUnreadPerEachRoom(roomid)
         if (msgid) { //see [hush.cons.sock_ev_read_msg]
             setTimeout(function() {
-                const noti = hushj.noti.notis[roomid]
+                const noti = hush.noti.notis[roomid]
                 if (noti && noti.msgid && msgid == noti.msgid) {
                     noti.close()
                     procUnreadTitle(roomid)
@@ -766,19 +767,19 @@ const initMsg = (_roomid) => { //differ from chat.html
 function procNewChatFromPopup(useridArr) { //invoked from index.html (member) popup : Web Only
     if (useridArr.length == 0) return
     g_useridArr = useridArr
-    hush.room.create(hushj.cons.chat, "newFromPopup", g_token10)            
+    hush.room.create(hush.cons.chat, "newFromPopup", g_token10)            
 }
 
 const chkTime = (tm) => {
     if (tm == "") return true
     if (tm.length != 4 || parseInt(tm) < 0 || parseInt(tm) > 2400) {
-        hushj.msg.alert("Time should be between 0000 and 2400.")
+        hush.msg.alert("Time should be between 0000 and 2400.")
         return false
     }
     return true
 }
 
-const procSettingOnLoad = (rs) => { //rs = await hushj.auth.verifyLogin()
+const procSettingOnLoad = (rs) => { //rs = await hush.auth.verifyLogin()
     g_setting.nicknm = (rs.nicknm) ? rs.nicknm : ""
     g_setting.job = (rs.job) ? rs.job : ""
     g_setting.abcd = (rs.abcd) ? rs.abcd : ""
@@ -792,7 +793,7 @@ const procSettingOnLoad = (rs) => { //rs = await hushj.auth.verifyLogin()
     hush.http.setCookie("senderoff", rs.senderoff)
 }
 
-const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) rs = await hushj.auth.verifyLogin()
+const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) rs = await hush.auth.verifyLogin()
     try {
         if (type == "load") {
             procSettingOnLoad(rs)
@@ -810,7 +811,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             $("#chk_senderoff").prop("checked", (rs.senderoff == "Y" ? true : false))            
             if (needPicture) {
                 if (rs.picture != null) {
-                    hushj.http.getUserPic(g_userid, "img_pict")
+                    hush.auth.getUserPic(g_userid, "img_pict")
                 } else {
                     $("#img_pict").attr("src", hush.cons.img_noperson)
                 }
@@ -837,20 +838,20 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             const rq = { nicknm : encodeURIComponent(_nicknm), job : encodeURIComponent(_job), //type : "common", 
                         abcd : encodeURIComponent(_abcd), abnm : encodeURIComponent(_abnm), standalone : _standalone, notioff : _notioff,
                         soundoff : _soundoff, fr : _fr, to : _to, bodyoff : _bodyoff, senderoff : _senderoff }
-            const rs = await hushj.http.ajax(hush.cons.route + "/proc_env", rq, "POST")
+            const rs = await hush.http.ajax(hush.cons.route + "/proc_env", rq, "POST")
             if (rs.code != hush.cons.result_ok) throw new Error(rs.msg)
             $("#header_title").html(g_usernm + ((_nicknm != "") ? " [" + _nicknm + "]" : ""))
             g_setting.nicknm = _nicknm            
             g_setting.job = _job
             g_setting.abcd = _abcd
             g_setting.abnm = _abnm            
-            hushj.http.setCookie("standalone", _standalone)
-            hushj.http.setCookie("notioff", _notioff)
-            hushj.http.setCookie("soundoff", _soundoff)
+            hush.http.setCookie("standalone", _standalone)
+            hush.http.setCookie("notioff", _notioff)
+            hush.http.setCookie("soundoff", _soundoff)
             g_setting.fr = _fr
             g_setting.to = _to
-            hushj.http.setCookie("bodyoff", _bodyoff)
-            hushj.http.setCookie("senderoff", _senderoff)
+            hush.http.setCookie("bodyoff", _bodyoff)
+            hush.http.setCookie("senderoff", _senderoff)
             const rq1 = { kind : "userinfo", userid : g_userid, userkey : g_userkey, nicknm : _nicknm, job : _job, abcd : _abcd, abnm : _abnm, notioff : _notioff,  
             soundoff : _soundoff, fr : _fr, to : _to, bodyoff : _bodyoff, senderoff : _senderoff }
             if (hush.webview.ios) {
@@ -864,16 +865,16 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             $("#in_job").val(g_setting.job)
             $("#in_abcd").val(g_setting.abcd)
             $("#in_abnm").val(g_setting.abnm)  
-            $("#chk_standalone").prop("checked", (hushj.http.getCookie("standalone") == "Y" ? true : false))
-            $("#chk_notioff").prop("checked", (hushj.http.getCookie("notioff") == "Y" ? true : false))
-            $("#chk_soundoff").prop("checked", (hushj.http.getCookie("soundoff") == "Y" ? true : false))
+            $("#chk_standalone").prop("checked", (hush.http.getCookie("standalone") == "Y" ? true : false))
+            $("#chk_notioff").prop("checked", (hush.http.getCookie("notioff") == "Y" ? true : false))
+            $("#chk_soundoff").prop("checked", (hush.http.getCookie("soundoff") == "Y" ? true : false))
             $("#in_fr").val(g_setting.fr)  
             $("#in_to").val(g_setting.to)
-            $("#chk_bodyoff").prop("checked", (hushj.http.getCookie("bodyoff") == "Y" ? true : false))
-            $("#chk_senderoff").prop("checked", (hushj.http.getCookie("senderoff") == "Y" ? true : false))
+            $("#chk_bodyoff").prop("checked", (hush.http.getCookie("bodyoff") == "Y" ? true : false))
+            $("#chk_senderoff").prop("checked", (hush.http.getCookie("senderoff") == "Y" ? true : false))
         }
     } catch (ex) {
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 
@@ -887,7 +888,7 @@ function OnSearch(input) {
         if (g_win_type == "invite" || g_win_type == "member" || g_win_type == "org") {
             procMenuTop(BTN_MODE_PEOPLE, BTN_PEOPLE_COMPANY)
         } else {
-            procMenuTop(hushj.http.getCookie("mode"))
+            procMenuTop(hush.http.getCookie("mode"))
         }
     }
     setTimeout(() => $("#in_search").blur(), 500)
@@ -934,15 +935,15 @@ var funcSockEv = { //needs to be public
             } else {
                 const _win = hush.sock.rooms[data.roomid]
                 if (_win && !_win.closed) {
-                    if (!_win.document.hasFocus()) hushj.noti.procNoti(data.roomid, data)
+                    if (!_win.document.hasFocus()) hush.noti.procNoti(data.roomid, data)
                 } else {
-                    hushj.noti.procNoti(data.roomid, data)
+                    hush.noti.procNoti(data.roomid, data)
                 }
                 if (!runFromStandalone) return
                 getPortalList({ type: "row", roomid : data.roomid })
             }
         } catch (ex) {
-            hushj.msg.alert("[main]sock_ev_send_msg: " + ex.message)
+            hush.msg.alert("[main]sock_ev_send_msg: " + ex.message)
         }
     },
     [hush.cons.sock_ev_read_msg] : (data) => {        
@@ -1015,17 +1016,17 @@ var funcSockEv = { //needs to be public
         }
     },
     [hush.cons.sock_ev_cut_mobile] : (data) => {
-        hushj.msg.alert("Logout done. (including mobile device)")
+        hush.msg.alert("Logout done. (including mobile device)")
     },
     [hush.cons.sock_ev_disconnect] : (data) => { //mobile only
-        $("#img_disconn").show() //hushj.msg.toast("disconnected", false, true)
+        $("#img_disconn").show() //hush.msg.toast("disconnected", false, true)
     },
     [hush.cons.sock_ev_mark_as_connect] : (data) => {//mobile only
-        $("#img_disconn").hide() //hushj.msg.toastEnd()
+        $("#img_disconn").hide() //hush.msg.toastEnd()
     },
     [hush.cons.sock_ev_connect] : (data) => { //mobile only (reconnect event in actual)
         //Be careful that Socket.EVENT_CONNECT occurred many times at a moment. => from ChatService.kt
-        $("#img_disconn").hide() //hushj.msg.toastEnd()
+        $("#img_disconn").hide() //hush.msg.toastEnd()
         if (g_mode == BTN_MODE_PEOPLE) {
             const userkeyArr = []
             $(".state").each(function(idx, item) {
@@ -1034,7 +1035,7 @@ var funcSockEv = { //needs to be public
                 sendChkAlive(userkeyArr)
             })
         } else if (g_mode == BTN_MODE_CHAT) {
-            getPortalList({ type: "reconnect" }) //procMenuTop(hushj.http.getCookie("mode"))
+            getPortalList({ type: "reconnect" }) //procMenuTop(hush.http.getCookie("mode"))
         }
         AndroidCom.reconnectDone()
     }
@@ -1076,8 +1077,7 @@ const initMain = async (launch, winid) => {
     hush.socket = await hush.sock.connect(io, { 
         token : hush.user.token, userkey : hush.user.key, userid : hush.user.id, winid : winid, userip : rsRedis.userip 
     })
-    getUnreadForAll() 
-    procSettingOnLoad(rs)
+    initStandAlone(rs)
 
     return true
     const worker = new Worker(hush.cons.worker_path + "?" + Math.random()) //offline competition for autolaunch, maintaining winner for manual launch
@@ -1090,15 +1090,15 @@ const initMain = async (launch, winid) => {
             if (e.data.code == "idb_upgraded" || e.data.code == "idb_connected") {
                 worker.postMessage({ code : launch, msg : winid })
             } else if (e.data.code == "winner") { 
-                const _token = hushj.http.getCookie("token")
+                const _token = hush.http.getCookie("token")
                 if (!_token || _token == "") { //메신저가 임베디드되어 있지 않은 웹페이지(탭)에서 로그아웃시키면 임베디드된 페이지에서도 메신저가 종료되게 함 : disconnect보다 아예 포털페이지로 replace함.
-                    location.replace("/" + hush.cons.erp_portal) //hushj.msg.alert("disconnect") 
+                    location.replace("/" + hush.cons.erp_portal) //hush.msg.alert("disconnect") 
                     return
                 }
                 let _type = (winid && prevType == "") ? "set_new" : "chk_embeded" //set_new는 standalone일 때만 처음 한번만 설정됨
                 prevType = _type //동일 브라우저내에서 윈도우(탭)끼리 (offline)경합을 벌여 1등이 되면 http call을 통해 각 브라우저의 1등끼리 (online)경합으로 최종 winner를 결정
                 let rq = { type : _type, userkey : hush.cons.w_key + g_userid, winid : e.data.winid }
-                const rs1 = await hushj.http.ajax(hush.cons.route + "/chk_redis", rq)
+                const rs1 = await hush.http.ajax(hush.cons.route + "/chk_redis", rq)
                 if (rs1.code == hush.cons.result_ok) { //console.log(_type+"==="+e.data.winid+"==="+rs1.result+"==="+rs1.ip)
                     if (!rs1.result) return //watch out for stream.on('end') in chk_redis.js
                     if (rs1.result == "another") {
@@ -1109,9 +1109,9 @@ const initMain = async (launch, winid) => {
                         if (runFromStandalone) {
                             hush.socket = await hush.sock.connect(io, { token : hush.user.token, userkey : hush.user.key, userid : g_userid, winid : e.data.winid, userip : rs1.userip }) 
                             initStandAlone(rs) //not rs1
-                        } else if (hushj.http.getCookie("standalone") == "Y" && hushj.http.getCookie("launched_standalone_once") != "Y") { //Auto-Launching standalone messenger
+                        } else if (hush.http.getCookie("standalone") == "Y" && hush.http.getCookie("launched_standalone_once") != "Y") { //Auto-Launching standalone messenger
                             //$("#txt_state").html("Standalone messenger launched in another window")
-                            hushj.http.setCookie("launched_standalone_once", "Y") //Standalone도 한번만 자동실행되며 이후 auto에서는 embeded로 자동 실행됨
+                            hush.http.setCookie("launched_standalone_once", "Y") //Standalone도 한번만 자동실행되며 이후 auto에서는 embeded로 자동 실행됨
                             hush.util.openWinTab(hush.cons.app + "?launch=auto&winid=" + e.data.winid)
                             //경합이 아닌 실행시에는 StandaloneType은 winid=someValue
                         } else { //Auto-Launching embeded messenger //$("#txt_state").html("Embeded messenger started at this window tab")
@@ -1123,7 +1123,7 @@ const initMain = async (launch, winid) => {
                 } else {
                     worker.terminate()
                     console.log("chk_redis: " + rs1.msg)
-                    hushj.auth.chk_logout(rs1.code, rs1.msg)
+                    hush.auth.chk_logout(rs1.code, rs1.msg)
                 }
             } else if (e.data.code == "0") {	
                 //console.log(e.data.msg) //skip
@@ -1133,7 +1133,7 @@ const initMain = async (launch, winid) => {
             }
         } catch (ex) {
             worker.terminate()
-            hush.util.showException(ex)
+            hush.util.showEx(ex)
         }
     }
     return true
@@ -1144,8 +1144,8 @@ const procUnload = () => { //메신저 종료시 그에 종속된 채팅방 및 
         const _win = hush.sock.rooms[roomid]
         if (_win && !_win.closed) _win.close()
     }
-    for (let roomid in hushj.noti.notis) {
-        const _noti = hushj.noti.notis[roomid]
+    for (let roomid in hush.noti.notis) {
+        const _noti = hush.noti.notis[roomid]
         if (_noti) _noti.close()
     }
 }
@@ -1158,10 +1158,10 @@ const SetUserVar = () => { //편의상 한번 더 g_로 set
     g_token10 = hush.user.token.slice(-10)
 }
 
-const initStandAlone = (rs) => { //rs = await hushj.auth.verifyLogin()
+const initStandAlone = (rs) => {
     procSetting("load", rs, true)
     procScrollEvent() //not used for embeded
-    procMenuTop(hushj.http.getCookie("mode")) //not used for embeded
+    procMenuTop(hush.http.getCookie("mode")) //not used for embeded
     if (g_mode != BTN_MODE_CHAT) getUnreadForAll() 
     $("#header_title").html(g_usernm + ((rs.nicknm != "") ? " [" + rs.nicknm + "]" : ""))
 }
@@ -1179,7 +1179,7 @@ function procNewChat(useridArr) { //invoked from index.html and jay_main.js : Mo
 ////////////////////////////////////////////////////////////////////////mobile webview
 const startFromWebView = async (from, obj, rs) => {
     try {
-        hushj.auth.setCookieForUser(obj, "Y", true)
+        hush.auth.setCookieForUser(obj, "Y", true)
         SetUserVar()
         if (g_win_type) {
             procMenuTop(BTN_MODE_PEOPLE, BTN_PEOPLE_COMPANY)
@@ -1188,7 +1188,7 @@ const startFromWebView = async (from, obj, rs) => {
             AndroidMain.doneLoad()
         }     
     } catch (ex) {
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 
@@ -1197,7 +1197,7 @@ const getFromWebViewSocket = (from, json) => {
         if (!funcSockEv || !funcSockEv[json.ev]) return
         funcSockEv[json.ev].call(null, json.data)
     } catch (ex) {
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 

@@ -26,6 +26,7 @@
             title : "sendjay",
             app : "/app/msngr/main.html", //web messenger's location.pathname
             logo_darkblue : "/img/hushsbay.png",
+            img_noperson : "/img/noperson.png",
             socket_url : location.hostname + ':3050/jay', //jay는 socket.io namespace
             w_key : 'W__', //Web userkey
             m_key : 'M__', //Mobile userkey
@@ -117,7 +118,7 @@
                 hush.auth.setUser(_token)
                 return rs
             }, 
-            getUserPhoto : (user_id, tag_id) => {
+            getUserPic : (user_id, tag_id) => {
                 if ($("#" + tag_id).attr("downloaded") == "Y") return
                 hush.http.ajaxCall("/user/getuser", { id : user_id, imgOnly : "Y" }, function(rs) {
                     if (rs.code != hush.cons.CODE_OK) return
