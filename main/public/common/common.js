@@ -82,28 +82,36 @@
                     orgcd : _orgcd, orgnm : _orgnm, toporgcd : _toporgcd, toporgnm : _toporgnm 
                 }
             },
-            verifyUser : async () => { //index.html 제외한 나머지에서 사용됨
+            verifyUser : async (verbose) => { //index.html 제외한 나머지에서 사용됨
                 const _token = hush.http.getCookie("token")  
                 if (_token) {
                     const _userid = hush.http.getCookie("userid")  
                     const rs = await hush.http.ajax("/auth/login", { token : _token, userid : _userid })
                     if (rs.code != hush.cons.CODE_OK) {
-                        if (rs.code.startsWith("-8")) {
-                            await hush.msg.alert(rs.msg + "<br>로그인 페이지로 이동합니다.")
-                            const _target = encodeURIComponent(location.pathname + location.search)
-                            hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
+                        if (verbose) {
+                            await hush.msg.alert(rs.msg + "<br>다시 로그인해 주시기 바랍니다.")
                         } else {
-                            hush.msg.msg(rs.msg)
-                        }  
-                        return false                      
+                            if (rs.code.startsWith("-8")) {
+                                await hush.msg.alert(rs.msg + "<br>로그인 페이지로 이동합니다.")
+                                const _target = encodeURIComponent(location.pathname + location.search)
+                                hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
+                            } else {
+                                hush.msg.msg(rs.msg)
+                            }  
+                        }
+                        return null                      
                     }
-                } else {                    
-                    const _target = encodeURIComponent(location.pathname + location.search)
-                    hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
-                    return false
+                } else {
+                    if (verbose) {
+                        await hush.msg.alert(rs.msg + "<br>다시 로그인해 주시기 바랍니다.")
+                    } else {
+                        const _target = encodeURIComponent(location.pathname + location.search)
+                        hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
+                    }
+                    return null
                 }
                 hush.auth.setUser(_token)
-                return true
+                return rs
             }, 
             getUserPhoto : (user_id, tag_id) => {
                 if ($("#" + tag_id).attr("downloaded") == "Y") return

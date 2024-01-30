@@ -1040,32 +1040,49 @@ var funcSockEv = { //needs to be public
 const initMain = async (launch, winid) => {
     if (hush.webview.on) return true
     if (!window.Notification) { //window.Notification || window.mozNotification || window.webkitNotification
-        hushj.msg.alert("This browser does not support window.Notification.")
+        hush.msg.alert("This browser does not support window.Notification.")
         return false
     }
     if (!indexedDB) {
-        hushj.msg.alert("This browser does not support HTML5 IndexedDB.")
+        hush.msg.alert("This browser does not support HTML5 IndexedDB.")
         return false
     }
     if (!Worker) {
-        hushj.msg.alert("This browser does not support HTML5 Web Worker.")
+        hush.msg.alert("This browser does not support HTML5 Web Worker.")
         return false
     }
     if (location.protocol != "https:") { //http not allowed for notification with chrome
-        hushj.msg.alert("Https needed (for notification especially in chrome).")
+        hush.msg.alert("Https needed (for notification).")
         return false
     }    
     const permission = await window.Notification.requestPermission() 
     if (permission != "granted") {                        
-        hushj.msg.alert("Notification permission should be granted for this site.")
+        hush.msg.alert("Notification permission should be granted for this site.")
         return false
     }
-    const rs = await hushj.auth.verifyLogin() //웹메신저는 사내포털에서 이미 인증된 후 실행되는 것으로 가정함
-    if (rs.code != hush.cons.result_ok) {
-        hushj.msg.alert("initMain: " + rs.msg + ' : 인증이 필요합니다. 다시 로그인하시기 바랍니다.')
-        return false
+    const rs = await hush.auth.verifyUser(true)
+    if (!rs) return false
+    //const rs = await hushj.auth.verifyLogin() //웹메신저는 사내포털에서 이미 인증된 후 실행되는 것으로 가정함
+    //if (rs.code != hush.cons.result_ok) {
+    //    hushj.msg.alert("initMain: " + rs.msg + ' : 인증이 필요합니다. 다시 로그인하시기 바랍니다.')
+    //    return false
+    //}
+    SetUserVar()
+
+    const winid = hush.sock.getWinId()
+    const _userid = hush.http.getCookie("userid")  
+    const rsRedis = await hush.http.ajax("/msngr/chk_redis", { type : "set_new", userkey : hush.cons.w_key + _userid, winid : winid })
+    if (rsRedis.code != hush.cons.CODE_OK) {
+        hush.msg.showMsg(rsRedis.msg, rsRedis.code)
+        return
     }
-    SetUserVar() 
+    hush.socket = await hush.sock.connect(io, { 
+        token : hush.user.token, userkey : hush.user.key, userid : hush.user.id, winid : winid, userip : rsRedis.userip 
+    })
+    getUnreadForAll() 
+    procSettingOnLoad(rs)
+
+    return true
     const worker = new Worker(hush.cons.worker_path + "?" + Math.random()) //offline competition for autolaunch, maintaining winner for manual launch
     worker.onerror = function(err) {
         worker.terminate()
@@ -1136,8 +1153,7 @@ const procUnload = () => { //메신저 종료시 그에 종속된 채팅방 및 
     }
 }
 
-const SetUserVar = () => {
-    hush.user = hushj.auth.setUser()
+const SetUserVar = () => { //편의상 한번 더 g_로 set
     g_userkey = hush.user.key 
     g_userid = hush.user.id
     g_usernm = hush.user.nm
