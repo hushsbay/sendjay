@@ -14,10 +14,10 @@ router.post('/', async function(req, res) {
 	try {
 		const rs = ws.http.resInit()
 		const dateFr = ws.util.setDateAdd(new Date(), ws.cons.max_days_to_fetch)
-		//const { roomid, msgid, type } = req.body //모두 undefined일 경우는 Bad Request 400 발생하므로 아래처럼 풀어주기
-		const roomid = req.body.roomid
-		const msgid = req.body.msgid
-		const type = req.body.type
+		const { roomid, msgid, type } = req.body //모두 undefined일 경우는 Bad Request 400 발생하므로 아래처럼 풀어주기
+		//const roomid = req.body.roomid
+		//const msgid = req.body.msgid
+		//const type = req.body.type
 		conn = await wsmysql.getConnFromPool(global.pool)
 		if (type == 'U') {
 			userid = await ws.jwt.chkToken(req, res, conn) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
