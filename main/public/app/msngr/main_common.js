@@ -229,7 +229,7 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             const _nicknm = row.NICK_NM
             //const push_ios = row.PUSH_IOS
             //const push_and = row.PUSH_AND
-            //const state_mob = (push_ios && push_ios != hush.cons.invalid_push_token) || (push_and && push_and != hush.cons.invalid_push_token) ? "coStateMob mobInstalled" : "coStateOff"
+            const state_mob = "coStateMob mobInstalled" //(push_ios && push_ios != hush.cons.invalid_push_token) || (push_and && push_and != hush.cons.invalid_push_token) ? "coStateMob mobInstalled" : "coStateOff"
             let disp_nick = "display:none;", disp_abcd = "display:none;", disp_abnm = "display:none;"
             if (_nicknm && !_abcd && !_abnm) disp_nick = ""
             if (_abcd) disp_abcd = ""    
