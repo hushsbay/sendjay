@@ -268,7 +268,7 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             }
             userkeyArr.push(w_userkey)
             userkeyArr.push(m_userkey)
-            hush.http.getUserPic(_userid, "img_" + _userid) //$("#per_" + _userid).off("click").on("click", async function(e) {
+            hush.auth.getUserPic(_userid, "img_" + _userid) //$("#per_" + _userid).off("click").on("click", async function(e) {
             $("#mem_" + _userid).off("click").on("click", function(e) {
                 if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 event가 먹히도록 함
                 hush.util.animCall(this.id, true)
