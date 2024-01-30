@@ -1070,7 +1070,7 @@ const initMain = async (launch, winid) => {
     //}
     SetUserVar()
 
-    const winid = hush.sock.getWinId()
+    if (!winid) winid = hush.sock.getWinId()
     const _userid = hush.http.getCookie("userid")  
     const rsRedis = await hush.http.ajax("/msngr/chk_redis", { type : "set_new", userkey : hush.cons.w_key + _userid, winid : winid })
     if (rsRedis.code != hush.cons.CODE_OK) {
