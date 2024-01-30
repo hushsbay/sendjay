@@ -488,7 +488,6 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
         })
         $("#btn_collapseall").off("click").on("click", function() {
             const _len = $(".orgrow").length
-            debugger
             for (let i = 0; i < _len; i++) {
                 const _tag = $("#orgrow_" + i)
                 const _level = parseInt(_tag.attr("level"))
@@ -912,7 +911,6 @@ var funcSockEv = { //needs to be public
         if (g_memWin && !g_memWin.closed) g_memWin.funcSockEv[hush.cons.sock_ev_show_off].call(null, userkey)
     },
     [hush.cons.sock_ev_show_on] : (userkey) => {
-        debugger
         hush.util.displayOnOff(userkey, true) //클라이언트가 명시적으로 요청(보내지) 않고 서버 app.js에서 보냄
         if (g_memWin && !g_memWin.closed) g_memWin.funcSockEv[hush.cons.sock_ev_show_on].call(null, userkey) 
     },
@@ -1078,7 +1076,6 @@ const initMain = async (launch, winid) => {
     hush.socket = await hush.sock.connect(io, { 
         token : hush.user.token, userkey : hush.user.key, userid : hush.user.id, winid : winid, userip : rsRedis.userip 
     })
-    debugger
     getUnreadForAll() 
     procSettingOnLoad(rs)
 

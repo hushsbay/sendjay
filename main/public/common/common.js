@@ -458,7 +458,7 @@
                         hush.sock.rooms[obj.roomid].hush.msg.toast("socksock_toast<br>" + obj.msg)
                     }
                 })
-                socket.off(hush.cons.sock_ev_common).on(hush.cons.sock_ev_common, (rs) => { debugger; callback(rs) })
+                socket.off(hush.cons.sock_ev_common).on(hush.cons.sock_ev_common, (rs) => { callback(rs) })
             },
             send : (socket, ev, data, returnTo, returnToAnother) => {
                 //returnTo : 부모, 해당채팅방, all 중 하나를 지정하며 parent(부모)가 기본값임

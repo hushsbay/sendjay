@@ -68,7 +68,6 @@
 						g_list.empty()
                         const data = { } //{ token : token, user : g_user, obj : obj }
                         const rs = await hush.http.ajax("/org/orgtree", data, null, true)
-                        debugger
                         if (rs.code != "0") { //not found는 여기서는 확률적으로 없을 것이므로 굳이 100을 toast로 하지 않음
                         	//survey.msg.dispMsg(rs.msg)
                             return
