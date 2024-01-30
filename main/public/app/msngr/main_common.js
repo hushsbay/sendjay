@@ -719,7 +719,7 @@ const handleDocTitle = (unreads) => {
 
 const getUnreadForAll = async () => { //tells if unread exists on load
     try { //예를 들어, 안드로이드 ChatService.kt에서 먼저 qry_unread로 LASTCHKDT 필드 업데이트하면 PC브라우저에서는 안읽은 톡 정보 없는 것으로 나타날 것임 
-        const rs = await hush.http.ajax("/msngr/qry_unread", null)
+        const rs = await hush.http.ajax("/msngr/qry_unread", { })
         if (rs.code != hush.cons.CODE_OK) {
             hush.msg.showMsg(rs.msg, rs.code)
             return
