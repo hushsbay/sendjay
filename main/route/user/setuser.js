@@ -13,8 +13,8 @@ router.use(function(req, res, next) {
 
 router.post('/', upload.any(), async function(req, res) {
 	let conn, sql, data, len
-	const rs = ws.http.resInit()
 	try {
+		const rs = ws.http.resInit()
 		const { type, id, nm, alias, pwd, pwd_1, toporgcd, toporgnm, orgcd, orgnm, mimetype } = req.body
 		const buf = mimetype ? Buffer.from(new Uint8Array(req.files[0].buffer)) : null //MySql PICTURE 필드가 longblob 타입으로 되어 있고 브라우저에서 blob으로 넘겨받아 저장하는 것임
 		conn = await wsmysql.getConnFromPool(global.pool) //의도적으로 인증체크하지 않음

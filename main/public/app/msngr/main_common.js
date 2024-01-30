@@ -13,7 +13,7 @@ const runFromStandalone = (location.pathname == hush.cons.app) ? true : false //
 const resetEnvForScroll = () => {
     g_searchmode = false
     g_cdt = FIRST_QUERIED //FIRST_QUERIED(default). YYYYMMDD~ : when scrolled all the way down to the bottom, previous page shown and g_cdt gets YYYYMMDD~ value
-    if ($("#spn_unread").css("display") != "none") handleDocTitle(-1, runFromStandalone)
+    if ($("#spn_unread").css("display") != "none") handleDocTitle(-1)
 }
 
 const procScrollEvent = () => {            
@@ -692,7 +692,7 @@ const getUnreadPerEachRoom = async (roomid, chkCloseNoti) => { //no unread displ
     }
 }
 
-const handleDocTitle = (unreads, runFromStandalone) => {
+const handleDocTitle = (unreads) => {
     const CHECK_UNREADS = " - Check Unreads"
     if (unreads == 1) {
         if (runFromStandalone) {
@@ -719,16 +719,20 @@ const handleDocTitle = (unreads, runFromStandalone) => {
 
 const getUnreadForAll = async () => { //tells if unread exists on load
     try { //예를 들어, 안드로이드 ChatService.kt에서 먼저 qry_unread로 LASTCHKDT 필드 업데이트하면 PC브라우저에서는 안읽은 톡 정보 없는 것으로 나타날 것임 
-        const rs = await hushj.http.ajax(hush.cons.route + "/qry_unread", null)
-        const len = rs.list.length
-        if (len == 0) {
-            handleDocTitle(0, runFromStandalone)
+        const rs = await hush.http.ajax("/msngr/qry_unread", null)
+        if (rs.code != hush.cons.CODE_OK) {
+            hush.msg.showMsg(rs.msg, rs.code)
+            return
+        }
+        const _len = rs.list.length
+        if (_len == 0) {
+            handleDocTitle(0)
         } else {
-            handleDocTitle(1, runFromStandalone)
+            handleDocTitle(1)
             for (let i = 0; i < len; i++) g_unread[rs.list[i].ROOMID] = rs.list[i].UNREAD
         }
     } catch (ex) {
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 
@@ -780,13 +784,13 @@ const procSettingOnLoad = (rs) => { //rs = await hushj.auth.verifyLogin()
     g_setting.job = (rs.job) ? rs.job : ""
     g_setting.abcd = (rs.abcd) ? rs.abcd : ""
     g_setting.abnm = (rs.abnm) ? rs.abnm : ""
-    hushj.http.setCookie("standalone", rs.standalone)
-    hushj.http.setCookie("notioff", rs.notioff)
-    hushj.http.setCookie("soundoff", rs.soundoff)
+    hush.http.setCookie("standalone", rs.standalone)
+    hush.http.setCookie("notioff", rs.notioff)
+    hush.http.setCookie("soundoff", rs.soundoff)
     g_setting.fr = (rs.fr) ? rs.fr : ""
     g_setting.to = (rs.to) ? rs.to : ""
-    hushj.http.setCookie("bodyoff", rs.bodyoff)
-    hushj.http.setCookie("senderoff", rs.senderoff)
+    hush.http.setCookie("bodyoff", rs.bodyoff)
+    hush.http.setCookie("senderoff", rs.senderoff)
 }
 
 const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) rs = await hushj.auth.verifyLogin()
@@ -894,7 +898,7 @@ var procUnreadTitle = (roomid) => { //call from chat.html
     //document.title에 안읽은톡 표시는 메신저가 시작하기 전까지 안읽은 톡 갯수만 다루고 시작 이후의 톡은 대상으로 하지 않음.
     if (!$.isEmptyObject(g_unread)) {
         delete g_unread[roomid]
-        if ($.isEmptyObject(g_unread)) handleDocTitle(false, runFromStandalone)
+        if ($.isEmptyObject(g_unread)) handleDocTitle(false)
     }
 }
 
@@ -1060,16 +1064,9 @@ const initMain = async (launch, winid) => {
         hush.msg.alert("Notification permission should be granted for this site.")
         return false
     }
-    debugger
     const rs = await hush.auth.verifyUser(true)
     if (!rs) return false
-    //const rs = await hushj.auth.verifyLogin() //웹메신저는 사내포털에서 이미 인증된 후 실행되는 것으로 가정함
-    //if (rs.code != hush.cons.result_ok) {
-    //    hushj.msg.alert("initMain: " + rs.msg + ' : 인증이 필요합니다. 다시 로그인하시기 바랍니다.')
-    //    return false
-    //}
     SetUserVar()
-
     if (!winid) winid = hush.sock.getWinId()
     const _userid = hush.http.getCookie("userid")  
     const rsRedis = await hush.http.ajax("/msngr/chk_redis", { type : "set_new", userkey : hush.cons.w_key + _userid, winid : winid })
@@ -1080,6 +1077,7 @@ const initMain = async (launch, winid) => {
     hush.socket = await hush.sock.connect(io, { 
         token : hush.user.token, userkey : hush.user.key, userid : hush.user.id, winid : winid, userip : rsRedis.userip 
     })
+    debugger
     getUnreadForAll() 
     procSettingOnLoad(rs)
 

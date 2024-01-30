@@ -10,13 +10,12 @@ router.use(function(req, res, next) {
 })
 
 router.post('/', async function(req, res) {
-	let conn, sql, data, len
-	const rs = ws.http.resInit()
+	let conn, sql, data, len, userid
 	try {
+		const rs = ws.http.resInit()
 		const { nodeToGet, _comp } = req.body
 		const comp = (!_comp || _comp.toLowerCase() == 'all') ? 'all' : ws.util.toStringForInClause(_comp)
 		conn = await wsmysql.getConnFromPool(global.pool)
-		let userid
 		if (nodeToGet == 'U') { //사용자(U)일 경우만 인증체크함
 			userid = await ws.jwt.chkToken(req, res, conn)
 			if (!userid) return

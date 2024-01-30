@@ -10,12 +10,11 @@ router.use(function(req, res, next) {
 })
 
 router.post('/', async function(req, res) {
-	let conn, sql, data, len
-	const rs = ws.http.resInit()
+	let conn, sql, data, len, userid
 	try { 
+		const rs = ws.http.resInit()
 		const { uid, pwd, autologin } = req.body
 		const device = ws.http.deviceFrom(req) //console.log(uid, pwd, autologin, device)
-		let userid
 		if (device == 'web') {
 			if (!uid) {
 				userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨

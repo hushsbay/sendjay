@@ -11,8 +11,8 @@ router.use(function(req, res, next) {
 
 router.post('/', async function(req, res) {
 	let conn, sql, data, len
-	const rs = ws.http.resInit()
 	try {
+		const rs = ws.http.resInit()
 		const { id, imgOnly } = req.body.id
 		conn = await wsmysql.getConnFromPool(global.pool) //의도적으로 인증체크하지 않음
 		sql =  "SELECT ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, USER_ID, USER_NM, NICK_NM, JOB, TEL_NO, AB_CD, AB_NM, PICTURE, MIMETYPE "

@@ -29,6 +29,7 @@ module.exports = (function() {
 			CODE_USERCOOKIE_MISMATCH : '-85',
 			mysql_close_error : 'mysql_close_error',
 			toast_prefix : '##$$', //클라이언트와 동일
+			deli : '##',
 			easydeli : ';', //Use this for absolutely safe place.
 			/////////////////////////////////////////////아래는 메신저 관련
 			w_key : 'W__', //Web userkey
@@ -58,7 +59,8 @@ module.exports = (function() {
 			sock_ev_rename_room : 'rename_room',
 			sock_ev_set_env : 'set_env',
 			sock_ev_chk_typing : 'chk_typing',
-			sock_ev_cut_mobile : 'cut_mobile',
+			sock_ev_cut_mobile : 'cut_mobile',			
+			max_days_to_fetch : -365, //For sql where
 		},
 
 		http : {

@@ -9,10 +9,11 @@ router.use(function(req, res, next) {
 })
 
 router.post('/', async function(req, res) {
-	const rs = ws.http.resInit()
+	let userid
 	try {
+		const rs = ws.http.resInit()
 		const { type, userkey, winid } = req.body
-		const userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
+		userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
 		if (!userid) return	
 		const pattern = ws.cons.key_str_winid + userkey + ws.cons.easydeli //eg) $$ + W + W__USERID;
 		const uwKey = pattern + winid //eg) $$WW__USERID;xxxxxx20241231010159

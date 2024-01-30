@@ -22,7 +22,10 @@
             warn_no_row_selected : "선택한 행이 없습니다.",
             warn_no_opener : "opener가 존재하지 않습니다.",
             warn_char_not_allowed : "한글이나 특수문자 일부(# $ - _ % & + =)는 사용할 수 없습니다.",
-            //////////////////////////////////아래는 소켓 관련 : 3050(web ops),3051(mobile ops) and 3060(web dev),3061(mobile dev)
+            //////////////////////////////////아래는 메신저 관련 : 3050(web ops),3051(mobile ops) and 3060(web dev),3061(mobile dev)
+            title : "sendjay",
+            app : "/app/msngr/main.html", //web messenger's location.pathname
+            logo_darkblue : "/img/hushsbay.png",
             socket_url : location.hostname + ':3050/jay', //jay는 socket.io namespace
             w_key : 'W__', //Web userkey
             m_key : 'M__', //Mobile userkey
