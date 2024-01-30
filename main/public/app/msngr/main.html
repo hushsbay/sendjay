@@ -490,20 +490,20 @@
                     <div id=header_title class="coDotDot mq_title" style="font-weight:bold;color:#005192;margin-left:10px">Sendjay</div>
                 </div>
                 <div style="display:flex;align-items:center;justify-content:flex-end;margin-right:8px">
-                    <img id=img_disconn src="/img/disconnected.png" class=coImg24 style="margin-top:5px" /> <!--mobile-->
-                    <img id=btn_refresh src="/img/refresh.png" class=coImg24 style="margin-left:8px" /> <!--mobile-->
-                    <img id=btn_logout src="/img/logout.png" class=coImg24 style="margin-left:8px" /> <!--mobile-->
+                    <img id=img_disconn src="/img/disconnected.png" class=coImg24 style="display:none;margin-top:5px" /> <!--mobile-->
+                    <img id=btn_refresh src="/img/refresh.png" class=coImg24 style="display:none;margin-left:8px" /> <!--mobile-->
+                    <img id=btn_logout src="/img/logout.png" class=coImg24 style="display:none;margin-left:8px" /> <!--mobile-->
                 </div>
             </div>
             <div id=fr_header_tab style="height:40px;display:flex;justify-content:center;margin:0px 5px">
                 <div id=btn_people class=coNav><span class=mq_title>임직원</span></div>
                 <div id=btn_chat class=coNav>
                     <span class=mq_title>채팅</span>
-                    <span id=spn_unread style="display:none;font-size:12px;font-weight:normal;background-color:orange;color:white;border:1px solid yellow;border-radius:4px;padding:0px 1px;margin-left:5px">new</span>
+                    <span id=spn_unread style="font-size:12px;font-weight:normal;background-color:orange;color:white;border:1px solid yellow;border-radius:4px;padding:0px 1px;margin-left:5px">new</span>
                 </div>
                 <div id=btn_setting class=coNav style="border:1px"><span class=mq_title>환경설정</span></div>
             </div>
-            <div id=fr_menu_top class=coMenuTop style="display:none">
+            <div id=fr_menu_top class=coMenuTop style="">
                 <input type=checkbox id=chk_selectall name=chk_selectall style="margin-left:10px" />
                 <input id=in_search type=search spellcheck=false onsearch="OnSearch(this)" style="width:80px;height:24px;margin-left:8px" />
                 <div id=btn_search class=coImgBtn><img src="/img/white_search.png" class=coImg24 /></div>
