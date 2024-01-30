@@ -474,7 +474,7 @@
                         if (g_memWin && !g_memWin.closed) g_memWin.close()
                     })
                 } catch (ex) {
-                    hush.util.showException(ex)
+                    hush.util.showEx(ex)
                 }
             }).fail(function(ex) {
                 hush.util.showEx(ex, hush.cons.failOnLoad)
