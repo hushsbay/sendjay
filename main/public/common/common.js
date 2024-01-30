@@ -621,6 +621,31 @@
                 const dtPrev = hush.util.getTimeStamp(_prev)
                 return parseInt((_cur - dtPrev) / 1000) //return seconds
             },
-        }        
+        },
+        webview : {
+            on : false,
+            ios : false,
+            and : false,
+            screenHeightOnLoad : null, //모바일 키보드 올라오면서 높이 조정
+            chk : (param) => { //const param = new URLSearchParams(location.search)
+                const _os = param.get("webview")
+                if (_os == "and" || _os == "ios") {
+                    hush.webview.on = true
+                    if (_os == "ios") {
+                        hush.webview.ios = true
+                        hush.webview.and = false
+                    } else {
+                        hush.webview.ios = false
+                        hush.webview.and = true
+                    }
+                    hush.webview.screenHeightOnLoad = $(window).height()
+                } else {
+                    hush.webview.on = false
+                    hush.webview.ios = false
+                    hush.webview.and = false
+                }
+            },
+            ready : false
+        }      
     }
 })(jQuery)

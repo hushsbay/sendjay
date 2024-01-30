@@ -35,12 +35,12 @@
                 try { //By default, $.getScript() sets the cache setting to false. You can override this with $.ajaxSetup({ cache: true })
                     await $.getScript("/common/common.js")
                     await $.getScript("main_common.js")
-                    hush.webview.chk()
+                    const param = hush.http.getParamsFromLocation()
+                    hush.webview.chk(param)
                     g_list = $("#list_chat")
                     g_year = (new Date()).getFullYear().toString()
                     g_nodeIndent = hush.webview.on ? 15 : 30
-                    const param = hush.http.getParamsFromLocation()
-                    g_win_type = param.type //invite, member, org 또는 빈값
+                    g_win_type = param.get("type") //invite, member, org 또는 빈값
                     if (hush.webview.on) {
                         if (!g_win_type) { //메인은 모바일앱에서도 마찬가지로 빈값
                             //$("#in_search").width(80)
@@ -76,7 +76,7 @@
                                 })
                             }
                         } else {
-                            hushj.msg.alert("Android/iOS만 지원됩니다.")
+                            hush.msg.alert("Android/iOS만 지원됩니다.")
                             return
                         }
                     } else {
@@ -86,6 +86,7 @@
                         $("#btn_reset_auth").show()
                     }
                     hush.webview.ready = true
+                    debugger
                     //main.html은 아래 5군데에서 호출됨
                     //1) 메인으로서 onLoad 2) invite button from chat.html (invite) 3) newchat button from Chat Tab (member) 4) onRegistering Userid (org)?? 5) Selecting organization code
                     if (g_win_type) {
@@ -105,7 +106,7 @@
                             procMenuTop(BTN_MODE_PEOPLE, BTN_PEOPLE_COMPANY)
                         }
                     } else {
-                        const result = await initMain(param.launch, param.winid) //mobile app에서는 바로 return true
+                        const result = await initMain(param.get("launch"), param.get("winid")) //mobile app에서는 바로 return true
                         if (!result) return
                         $(".coNav").on("click", function() { procMenuTop(this.id) })
                         $("#btn_team, #btn_company").on("click", function() {
