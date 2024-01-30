@@ -46,6 +46,7 @@ router.post('/', async function(req, res) {
 			sql += "GROUP BY ROOMID "
 			rs.list = await wsmysql.query(conn, qry, [userid, dt]) //console.log(rs.list.length+"====qry_unread====reconnect")
 		}
+		console.log(JSON.stringify(rs.list))
 		ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
