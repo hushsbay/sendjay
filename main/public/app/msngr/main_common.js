@@ -269,10 +269,10 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             userkeyArr.push(w_userkey)
             userkeyArr.push(m_userkey)
             hush.auth.getUserPic(_userid, "img_" + _userid) //$("#per_" + _userid).off("click").on("click", async function(e) {
-            $("#mem_" + _userid).off("click").on("click", function(e) {
+            $("#mem_" + _userid).off("click").on("click", async function(e) {
                 if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 event가 먹히도록 함
                 hush.util.animCall(this.id, true)
-                hush.msg.alert("이름 : " + _nm + "<br><br>전화 : <a href=tel:'" + _tel + "'>" + _tel + "</a><br>부서 : " + _org + "<br>직무 : " + _job + "<br><br>" + _abcd + " " + _abnm, null, "Info")
+                await hush.msg.alert("이름 : " + _nm + "<br><br>전화 : <a href=tel:'" + _tel + "'>" + _tel + "</a><br>부서 : " + _org + "<br>직무 : " + _job + "<br><br>" + _abcd + " " + _abnm, null, "Info")
             })
         }
         if (_len == 0) return false          
@@ -770,10 +770,10 @@ function procNewChatFromPopup(useridArr) { //invoked from index.html (member) po
     hush.room.create(hush.cons.chat, "newFromPopup", g_token10)            
 }
 
-const chkTime = (tm) => {
+const chkTime = async (tm) => {
     if (tm == "") return true
     if (tm.length != 4 || parseInt(tm) < 0 || parseInt(tm) > 2400) {
-        hush.msg.alert("Time should be between 0000 and 2400.")
+        await hush.msg.alert("Time should be between 0000 and 2400.")
         return false
     }
     return true
@@ -916,7 +916,7 @@ var funcSockEv = { //needs to be public
         hush.util.displayOnOff(userkey, true) //클라이언트가 명시적으로 요청(보내지) 않고 서버 app.js에서 보냄
         if (g_memWin && !g_memWin.closed) g_memWin.funcSockEv[hush.cons.sock_ev_show_on].call(null, userkey) 
     },
-    [hush.cons.sock_ev_send_msg] : (data) => {
+    [hush.cons.sock_ev_send_msg] : async (data) => {
         try {
             if (data.type == "leave") {
                 if (!runFromStandalone) return
@@ -944,7 +944,7 @@ var funcSockEv = { //needs to be public
                 getPortalList({ type: "row", roomid : data.roomid })
             }
         } catch (ex) {
-            hush.msg.alert("[main]sock_ev_send_msg: " + ex.message)
+            await hush.msg.alert("[main]sock_ev_send_msg: " + ex.message)
         }
     },
     [hush.cons.sock_ev_read_msg] : (data) => {        
@@ -1016,8 +1016,8 @@ var funcSockEv = { //needs to be public
             hush.sock.send(hush.socket, hush.cons.sock_ev_send_msg, rq, data.roomid, "parent")
         }
     },
-    [hush.cons.sock_ev_cut_mobile] : (data) => {
-        hush.msg.alert("Logout done. (including mobile device)")
+    [hush.cons.sock_ev_cut_mobile] : async (data) => {
+        await hush.msg.alert("Logout done. (including mobile device)")
     },
     [hush.cons.sock_ev_disconnect] : (data) => { //mobile only
         $("#img_disconn").show() //hush.msg.toast("disconnected", false, true)
@@ -1045,24 +1045,24 @@ var funcSockEv = { //needs to be public
 const initMain = async (launch, winid) => {
     if (hush.webview.on) return true
     if (!window.Notification) { //window.Notification || window.mozNotification || window.webkitNotification
-        hush.msg.alert("This browser does not support window.Notification.")
+        await hush.msg.alert("This browser does not support window.Notification.")
         return false
     }
     if (!indexedDB) {
-        hush.msg.alert("This browser does not support HTML5 IndexedDB.")
+        await hush.msg.alert("This browser does not support HTML5 IndexedDB.")
         return false
     }
     if (!Worker) {
-        hush.msg.alert("This browser does not support HTML5 Web Worker.")
+        await hush.msg.alert("This browser does not support HTML5 Web Worker.")
         return false
     }
     if (location.protocol != "https:") { //http not allowed for notification with chrome
-        hush.msg.alert("Https needed (for notification).")
+        await hush.msg.alert("Https needed (for notification).")
         return false
     }    
     const permission = await window.Notification.requestPermission() 
     if (permission != "granted") {                        
-        hush.msg.alert("Notification permission should be granted for this site.")
+        await hush.msg.alert("Notification permission should be granted for this site.")
         return false
     }
     debugger
