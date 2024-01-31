@@ -207,7 +207,6 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
         } else {
             list.empty()
         }
-        debugger
         const rs = await hush.http.ajax("/msngr/qry_userlist", { type : type, keyword : encodeURIComponent(keyword) })
         if (rs.code != hush.cons.CODE_OK) {
             hush.msg.showMsg(rs.msg, rs.code)
@@ -289,7 +288,6 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
 }
 
 const sendChkAlive = (userkeyArr) => {
-    return
     const dataObj = { userkeys : userkeyArr }
     if (hush.webview.ios) {
     } else if (hush.webview.and) {
@@ -912,8 +910,7 @@ var funcSockEv = { //needs to be public
         if (g_memWin && !g_memWin.closed) g_memWin.funcSockEv[hush.cons.sock_ev_show_off].call(null, userkey)
     },
     [hush.cons.sock_ev_show_on] : (userkey) => {
-        debugger
-        hush.util.displayOnOff(userkey, true) //클라이언트가 명시적으로 요청(보내지) 않고 서버 app.js에서 보냄
+        hush.util.displayOnOff(userkey, true) //클라이언트가 명시적으로 요청(보내지) 않고 서버 app.js에서 보냄 : 맨 처음 로드시 자신이 랜더링되는 것보다 서버 전송이 더 빨라서 반영안될 것임
         if (g_memWin && !g_memWin.closed) g_memWin.funcSockEv[hush.cons.sock_ev_show_on].call(null, userkey) 
     },
     [hush.cons.sock_ev_send_msg] : async (data) => {
@@ -1065,7 +1062,6 @@ const initMain = async (launch, winid) => {
         await hush.msg.alert("Notification permission should be granted for this site.")
         return false
     }
-    debugger
     const rs = await hush.auth.verifyUser(true)
     if (!rs) return false
     SetUserVar()

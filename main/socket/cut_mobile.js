@@ -8,7 +8,6 @@ module.exports = function(socket, param) {
 		if (resVeri != '') throw new Error(resVeri)
 		if (socket.userkey.startsWith(ws.cons.m_key)) throw new Error("Mobile userkey cannot do this job.")
 		socket.emit(com.cons.sock_ev_common, param) //returns to web with no result
-	console.log("cut_mobile...")
 		ws.redis.sendToMyOtherSocket(socket, param) //goes to mobile app (for logout)
 	} catch (ex) {
 		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex)

@@ -242,7 +242,7 @@ module.exports = (function() {
 					}) //stream.on('end', () => { resolve(arr) }) //'end' does not guarantee rs.result as defined.
 				})
 			},
-			getUserkeySocketidFromKey : (key) => { //key => $$SD__3;/sendjay#sjkfhsaf8934kmhjsfd8
+			getUserkeySocketIdFromKey : (key) => { //key => $$SD__3;/sendjay#sjkfhsaf8934kmhjsfd8
 				const arr = key.split(ws.cons.easydeli)
 				const _userkey = arr[0].replace(ws.cons.key_str_socket, '')
 				const _socketid = arr[1]
