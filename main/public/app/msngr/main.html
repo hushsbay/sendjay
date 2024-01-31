@@ -106,6 +106,7 @@
                             procMenuTop(BTN_MODE_PEOPLE, BTN_PEOPLE_COMPANY)
                         }
                     } else {
+                        debugger
                         const result = await initMain(param.get("launch"), param.get("winid")) //mobile app(webview)에서는 바로 return true
                         if (!result) return
                         $(".coNav").on("click", function() { procMenuTop(this.id) })
