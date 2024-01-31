@@ -1065,6 +1065,7 @@ const initMain = async (launch, winid) => {
         hush.msg.alert("Notification permission should be granted for this site.")
         return false
     }
+    debugger
     const rs = await hush.auth.verifyUser(true)
     if (!rs) return false
     SetUserVar()
