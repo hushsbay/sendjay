@@ -36,8 +36,6 @@
                 try { //By default, $.getScript() sets the cache setting to false. You can override this with $.ajaxSetup({ cache: true })
                     await $.getScript("/common/common.js")
                     await $.getScript("main_common.js")
-                    alert("111")
-                    debugger
                     const param = new URLSearchParams(location.search)
                     hush.webview.chk(param)
                     g_list = $("#list_chat")
@@ -108,7 +106,6 @@
                             procMenuTop(BTN_MODE_PEOPLE, BTN_PEOPLE_COMPANY)
                         }
                     } else {
-                        debugger
                         const result = await initMain(param.get("launch"), param.get("winid")) //mobile app(webview)에서는 바로 return true
                         if (!result) return
                         $(".coNav").on("click", function() { procMenuTop(this.id) })

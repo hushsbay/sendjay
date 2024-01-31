@@ -128,7 +128,7 @@ async function proc() {
 	const stream = global.store.scanStream({ match : ws.cons.key_str_socket + '*', count: ws.cons.scan_stream_cnt })
 	stream.on('data', (resultKeys) => {
 		for (let key of resultKeys) {
-			const obj = ws.redis.getUserkeySocketidFromKey(key)
+			const obj = ws.redis.getUserkeySocketIdFromKey(key)
 			if (sockets.has(obj.socketid)) {
 				const socket = global.jay.sockets.get(obj.socketid)
 				console.log('socket :', socket.id, socket.userkey, socket.userip, socket.winid)
