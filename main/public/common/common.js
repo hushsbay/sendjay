@@ -414,10 +414,10 @@
             rooms : { }, //sock.connect => https://socket.io/docs/v3/client-initialization         
             connect : (io, query) => new Promise((resolve, reject) => { //this will be occurred only on index.html
                 const socket = io(hush.cons.socket_url, { forceNew: false, reconnection: false, query: query }) //forceNew=false //See 'disconnect_prev_sock' in pmessage.js (on server)
-        		socket.off("connect_error").on("connect_error", (e) => { hush.msg.alert("connect_error\n" + e.toString()) })
-                socket.off("disconnect").on("disconnect", () => { 
+        		socket.off("connect_error").on("connect_error", async (e) => { await hush.msg.alert("connect_error\n" + e.toString()) })
+                socket.off("disconnect").on("disconnect", async () => { 
                     //location.replace("/" + hush.cons.erp_portal) //현재는 새로고침되면 다시 소켓연결되어 무한루프돌기때문에 임시로 막음
-                    //hush.msg.alert("socket disconnected " + hush.util.getCurDateTimeStr(true, true))
+                    //await hush.msg.alert("socket disconnected " + hush.util.getCurDateTimeStr(true, true))
                     console.log("socket disconnected " + hush.util.getCurDateTimeStr(true, true))
                 }) 
                 socket.off("connect").on("connect", () => {
@@ -445,11 +445,11 @@
                 return hush.util.getRnd().toString() + "_" + hush.util.getCurDateTimeStr()
             },
             on : (socket, callback) => {            
-                socket.off(hush.cons.sock_ev_alert).on(hush.cons.sock_ev_alert, (obj) => { 
+                socket.off(hush.cons.sock_ev_alert).on(hush.cons.sock_ev_alert, async (obj) => { 
                     if (!obj.roomid) {
-                        hush.msg.alert("sock_alert<br>" + obj.msg) 
+                        await hush.msg.alert("sock_alert<br>" + obj.msg) 
                     } else {
-                        hush.sock.rooms[obj.roomid].hush.msg.alert("sock_alert<br>" + obj.msg)
+                        await hush.sock.rooms[obj.roomid].hush.msg.alert("sock_alert<br>" + obj.msg)
                     }
                 })
                 socket.off(hush.cons.sock_ev_toast).on(hush.cons.sock_ev_toast, (obj) => {
@@ -473,7 +473,7 @@
                 if (typeof obj == "undefined" || obj == null) return true
                 return false
             },
-            showEx : (ex, title, _msgType, _sec) => {
+            showEx : async (ex, title, _msgType, _sec) => {
                 hush.msg.toastEnd() //예외 발생시므로 혹시나 모를 토스트 메시지 제거
                 const _title = title ? "[" + title + "]<br>" : ""
                 let _msg
@@ -491,7 +491,7 @@
                 if (_msgType == "toast") {
                     hush.msg.toast(_msg, _sec)
                 } else if (_msgType == "alert") {
-                    hush.msg.alert(_msg)
+                    await hush.msg.alert(_msg)
                 } else {
                     hush.msg.msg(_msg) //기본은 비동기콜백 처리
                 }
@@ -583,28 +583,28 @@
                 // return b
                 return s.length //mySql 필드인 경우에는 한글이 1바이트로 계산되어 입력되고 있으므로 그냥 .length를 사용하고 있음 (다른 DB는 체크 필요)
             },
-            chkFieldVal : (_val, _nm, _min, _max, _pattern) => { //크리티컬한 내용은 서버에서 체크하고 그렇지 않은 것은 클라이언트에서 체크해도 무방할 것임
+            chkFieldVal : async (_val, _nm, _min, _max, _pattern) => { //크리티컬한 내용은 서버에서 체크하고 그렇지 않은 것은 클라이언트에서 체크해도 무방할 것임
                 const nm = (_nm) ? "[" + _nm + "]<br>" : ""
                 if (_pattern) {
                     if (!hush.cons.pattern.test(_val)) {
-                        hush.msg.alert(nm + hush.cons.warn_char_not_allowed)
+                        await hush.msg.alert(nm + hush.cons.warn_char_not_allowed)
                         return false
                     }
                 }
                 const _len = hush.util.strLen(_val)
                 if (_max) {
                     if (_len > _max) {
-                        hush.msg.alert(nm + "최대 " + _max + " 바이트까지만 가능합니다 : 현재 " + _len + "바이트")
+                        await hush.msg.alert(nm + "최대 " + _max + " 바이트까지만 가능합니다 : 현재 " + _len + "바이트")
                         return false
                     }
                 }
                 if (_min) {
                     if (_val.trim() == "") {
-                        hush.msg.alert(nm + "빈칸입니다.")
+                        await hush.msg.alert(nm + "빈칸입니다.")
                         return false
                     } else {
                         if (_len < _min) {
-                            hush.msg.alert(nm + "최소 " + _min + " 바이트가 필요합니다 : 현재 " + _len + "바이트")
+                            await hush.msg.alert(nm + "최소 " + _min + " 바이트가 필요합니다 : 현재 " + _len + "바이트")
                             return false
                         }
                     }
