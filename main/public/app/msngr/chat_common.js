@@ -1599,15 +1599,17 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
         }
     },
     [hush.cons.sock_ev_open_room] : (data) => { //from=after,create,dupchk,portal,noti,rename_room,hush.cons.sock_ev_show_on
-        sockConnected = true //for mobile only
-        if (data.from == hush.cons.sock_ev_show_on) return
-        setMembers(data) //console.log(JSON.stringify(data)+"===")
-        toggleDispMem(data.dispmem)
-        if (data.from == "rename_room" || data.from == "after") return
-        hush.idb.connect(() => {
-            //getMsgList() 
-            setTimeout(() => getMsgList(), 3000) //set for debugging
-        })
+        setTimeout(function() {
+            debugger
+            sockConnected = true //for mobile only
+            if (data.from == hush.cons.sock_ev_show_on) return
+            setMembers(data) //console.log(JSON.stringify(data)+"===")
+            toggleDispMem(data.dispmem)
+            if (data.from == "rename_room" || data.from == "after") return
+            hush.idb.connect(() => {
+                getMsgList() //setTimeout(() => getMsgList(), 3000) //set for debugging
+            })
+        }, 3000)
     },
     [hush.cons.sock_ev_set_env] : async (data) => {
         toggleDispMem(data.value)
