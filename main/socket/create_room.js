@@ -6,11 +6,11 @@ const wsmysql = require(config.app.wsmysql)
 module.exports = async function(socket, param) {
 	const _logTitle = param.ev, _roomid = param.returnTo
 	let conn, sql, data, len
-	try { //ws.sock.warn(null, socket, _logTitle, com.cons.rq + JSON.stringify(param), _roomid)
+	try { //ws.sock.warn(null, socket, _logTitle, JSON.stringify(param), _roomid)
 		const _useridArr = param.data.userids
 		const _chkSameMembers = _useridArr.length <= ws.cons.max_check_same_members ? true : false
 		_useridArr.sort((a, b) => { return (a > b) ? 1 : (b > a) ? -1 : 0 }) //alphabetical 순서로 sql 조회
-		const _useridJoinedEasy = _useridArr.join(com.cons.easydeli)
+		const _useridJoinedEasy = _useridArr.join(ws.cons.easydeli)
 		conn = await wsmysql.getConnFromPool(global.pool)
 		await wsmysql.txBegin(conn)
 		data = await wsmysql.query(conn, "SELECT ROOMID FROM A_ROOMMEM_TBL WHERE MEMBERS = ? AND ROOMID <> '' ORDER BY CDT DESC LIMIT 1 ", [_useridJoinedEasy])
@@ -36,10 +36,10 @@ module.exports = async function(socket, param) {
 			if (_chkSameMembers) await wsmysql.query(conn, "INSERT INTO A_ROOMMEM_TBL (ROOMID, MEMBERS, CDT) VALUES (?, ?, sysdate(6)) ", [_roomid, _useridJoinedEasy])
 		} 
 		await wsmysql.txCommit(conn)
-		socket.emit(com.cons.sock_ev_common, param)
-	} catch (ex) { //ws.sock.warn(null, socket, _logTitle, com.cons.rs + JSON.stringify(param), _roomid)
+		socket.emit(ws.cons.sock_ev_common, param)
+	} catch (ex) { //ws.sock.warn(null, socket, _logTitle, JSON.stringify(param), _roomid)
 		if (conn) await wsmysql.txRollback(conn)
-		ws.sock.warn(com.cons.sock_ev_alert, socket, _logTitle, ex, _roomid)
+		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex, _roomid)
 	} finally {
 		wsmysql.closeConn(conn, _logTitle)
 	}

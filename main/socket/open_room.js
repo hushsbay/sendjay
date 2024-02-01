@@ -33,7 +33,7 @@ module.exports = async function(socket, param) {
 			if (arr.length > 0) userkeySocketArr = userkeySocketArr.concat(arr)
 			if (brr.length > 0) userkeySocketArr = userkeySocketArr.concat(brr)
 		}
-		if (param.data.from != 'dupchk') await com.joinRoomWithUserkeySocketArr(userkeySocketArr, _roomid) //Overwriting joining ok
+		if (param.data.from != 'dupchk') await ws.sock.joinRoomWithUserkeySocketArr(userkeySocketArr, _roomid) //Overwriting joining ok
 		const dataR = await wsmysql.query(conn, "SELECT DISPMEM FROM A_ROOMDTL_TBL WHERE ROOMID = ? AND USERID = ? ", [_roomid, userid]) 
 		if (dataR.length == 0) throw new Error(ws.cons.MSG_NO_DATA + ' (roomid, userid)')
 		param.data.dispmem = dataR[0].DISPMEM
@@ -46,8 +46,8 @@ module.exports = async function(socket, param) {
 		param.data.receivernm = arrUsernmSortedByUsernm
 		param.data.userkeys = userkeyArr
 		socket.emit(ws.cons.sock_ev_common, param)
-	} catch (ex) { //ws.sock.warn(null, socket, _logTitle, com.cons.rs + JSON.stringify(param), _roomid)
-		ws.sock.warn(com.cons.sock_ev_alert, socket, _logTitle, ex, _roomid)
+	} catch (ex) { //ws.sock.warn(null, socket, _logTitle, JSON.stringify(param), _roomid)
+		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex, _roomid)
 	} finally {
 		wsmysql.closeConn(conn, _logTitle)
 	}
