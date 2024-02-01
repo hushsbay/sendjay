@@ -1,7 +1,6 @@
 const config = require('../config')
 const ws = require(config.app.ws)
 const wsmysql = require(config.app.wsmysql)
-const com = require('../common')
 //remoteJoining room for valid socket
 
 module.exports = async function(socket, param) { 
@@ -12,11 +11,11 @@ module.exports = async function(socket, param) {
 		conn = await wsmysql.getConnFromPool(global.pool)
 		sql = "SELECT B.USERID, B.USERNM, B.NICKNM, A.ROOMNM, A.NICKNM MAINNM, A.MASTERID "
 		sql += " FROM A_ROOMDTL_TBL B "
-		sql += "    INNER JOIN " + com.tbl.roommst + " A ON B.ROOMID = A.ROOMID AND B.STATE <> 'L' "
-		sql += "    WHERE B.ROOMID = ? "
-		sql += "    ORDER BY B.USERNM, USERID "
-		const data = await wsmysql.query(conn, sql, [_roomid])
-		const len = data.length
+		sql += "INNER JOIN A_ROOMMST_TBL A ON B.ROOMID = A.ROOMID AND B.STATE <> 'L' "
+		sql += "WHERE B.ROOMID = ? "
+		sql += "ORDER BY B.USERNM, USERID "
+		data = await wsmysql.query(conn, sql, [_roomid])
+		len = data.length
 		if (len == 0) throw new Error(ws.cons.MSG_NO_DATA + ' (roomid)')
 		let userkeyArr = [], userkeySocketArr = [], arrUseridSortedByUsernm = [], arrUsernmSortedByUsernm = []
 		for (let i = 0; i < len; i++) {
@@ -25,19 +24,17 @@ module.exports = async function(socket, param) {
 			const _usernm = data[i].USERNM
 			arrUseridSortedByUsernm.push(_userid)
 			arrUsernmSortedByUsernm.push(_usernm)
-			const w_userkey = com.cons.w_key + _userid
-			const m_userkey = com.cons.m_key + _userid
+			const w_userkey = ws.cons.w_key + _userid
+			const m_userkey = ws.cons.m_key + _userid
 			userkeyArr.push(w_userkey)
             userkeyArr.push(m_userkey)
-			const arr = await com.getUserkeySocket(w_userkey)
-			const brr = await com.getUserkeySocket(m_userkey)
+			const arr = await ws.redis.getUserkeySocket(w_userkey)
+			const brr = await ws.redis.getUserkeySocket(m_userkey)
 			if (arr.length > 0) userkeySocketArr = userkeySocketArr.concat(arr)
 			if (brr.length > 0) userkeySocketArr = userkeySocketArr.concat(brr)
 		}
-		if (param.data.from != 'dupchk') {
-			await com.joinRoomWithUserkeySocketArr(userkeySocketArr, _roomid) //Overwriting joining ok
-		}
-		const dataR = await wsmysql.query(conn, "SELECT DISPMEM FROM " + com.tbl.roomdtl + " WHERE ROOMID = ? AND USERID = ? ", [_roomid, userid]) 
+		if (param.data.from != 'dupchk') await com.joinRoomWithUserkeySocketArr(userkeySocketArr, _roomid) //Overwriting joining ok
+		const dataR = await wsmysql.query(conn, "SELECT DISPMEM FROM A_ROOMDTL_TBL WHERE ROOMID = ? AND USERID = ? ", [_roomid, userid]) 
 		if (dataR.length == 0) throw new Error(ws.cons.MSG_NO_DATA + ' (roomid, userid)')
 		param.data.dispmem = dataR[0].DISPMEM
 		param.data.roomid = _roomid
@@ -48,10 +45,10 @@ module.exports = async function(socket, param) {
 		param.data.receiverid = arrUseridSortedByUsernm
 		param.data.receivernm = arrUsernmSortedByUsernm
 		param.data.userkeys = userkeyArr
-		socket.emit(com.cons.sock_ev_common, param)
+		socket.emit(ws.cons.sock_ev_common, param)
 	} catch (ex) { //ws.sock.warn(null, socket, _logTitle, com.cons.rs + JSON.stringify(param), _roomid)
 		ws.sock.warn(com.cons.sock_ev_alert, socket, _logTitle, ex, _roomid)
 	} finally {
-		try { if (conn) wsmysql.closeConn(conn) } catch(ex) { }
+		wsmysql.closeConn(conn, _logTitle)
 	}
 }

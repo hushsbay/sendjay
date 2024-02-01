@@ -41,6 +41,6 @@ module.exports = async function(socket, param) {
 		if (conn) await wsmysql.txRollback(conn)
 		ws.sock.warn(com.cons.sock_ev_alert, socket, _logTitle, ex, _roomid)
 	} finally {
-		try { if (conn) wsmysql.closeConn(conn) } catch(ex) { }
+		wsmysql.closeConn(conn, _logTitle)
 	}
 }

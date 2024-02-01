@@ -32,6 +32,7 @@
             m_key : 'M__', //Mobile userkey
             prefix : '$$', //for redis, socket
             memdeli : " / ",
+            idb_tbl : "msngr", //indexedDB
             sock_ev_alert : 'alert',
 			sock_ev_toast : 'toast',
 			sock_ev_disconnect : "disconnect",
@@ -288,6 +289,34 @@
             deleteCookie : (name) => { //actually 'return' needed
                 $.removeCookie(name, { path: '/' })
             },
+        },
+        idb : { //for mobile only
+            db : null, 
+            connect : (callback) => {
+                if (!hush.idb.db) {
+                    let conn = indexedDB.open("jay_mobile", 1) //Increment will trigger conn.onupgradeneeded (add version number if upgrade needed)
+                    conn.onerror = function() {	
+                        if (callback) callback({ code : "idb_conn_err", msg : "IndexedDB connect error: " + conn.errorCode })
+                    }
+                    conn.onupgradeneeded = function(e) { //field(roomid, msgid, body, sent, cdt)
+                        hush.idb.db = e.target.result
+                        let os
+                        if (hush.idb.db.objectStoreNames.contains(hush.cons.idb_tbl)) {
+                            os = e.target.transaction.objectStore(hush.cons.idb_tbl)
+                        } else {
+                            os = hush.idb.db.createObjectStore(hush.cons.idb_tbl, { keyPath: "msgid" })
+                        }
+                        if (!os.indexNames.contains("roomid")) os.createIndex("roomid", "roomid", { unique : false }) //index 'roomid_cdt' failed to handle cursor
+                        os.transaction.oncomplete = function(e) { 
+                            if (callback) callback({ code : hush.cons.result_ok, msg : "IndexedDB upgraded" })
+                        }
+                    }
+                    conn.onsuccess = function(e) {
+                        hush.idb.db = conn.result
+                        if (callback) callback({ code : hush.cons.result_ok, msg : "IndexedDB connected" })
+                    }
+                }
+            }
         },
         msg : { //1. msg(비동기콜백) 2. alert(=window.alert) 3. confirm(=window.confirm) 4. toast(복수메시지 순서대로 표시 지원)
             //아래 실행후 육안으로 먼저 보이는 순서는 = 1 > 2 > 3 > 5 > 6 > 7 > 4 

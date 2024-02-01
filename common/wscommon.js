@@ -377,6 +377,33 @@ module.exports = (function() {
 				}
 				return _msg
 			},
+			joinRoomWithUserkeySocketArr : (userkeySocketArr, _roomid) => new Promise(async (resolve, reject) => { //open_room or invite_user
+				let _obj
+				try {
+					for (let key of userkeySocketArr) { //Garbage of socketid might be in userkeySocketArr.
+						_obj = ws.redis.getUserkeySocketIdFromKey(key)
+						try {
+							await global.jay.adapter.remoteJoin(_obj.socketid, _roomid)
+						} catch (ex) { //reject(new Error('cannot connect to specific server when remoteJoinging with ' + _obj.userkey))
+							if (ex.message.includes('timeout')) { //timeout reached while waiting for remoteJoin response (specific server down)
+								//특정 서버 다운시 그 서버내 연결이 끊어진 소켓이 포함된 톡방을 열 때 이 오류가 발생함
+								//이 경우, 해당 userkey가 연결이 안되면 오류가 계속 발생함. 그래서, 해당 userkey는 open room시 timeout을 만나면 그냥 skip하면 됨 
+								//다시 서버가 살거나 사용자가 해당 톡방을 열면 remoteJoin은 문제없이 처리됨
+							} else {
+								throw new Error(ex.message)
+							}
+						}
+					}
+					resolve()
+				} catch (ex) {
+					if (_obj) {
+						global.log.error('joinRoomWithUserkeySocketArr', _obj.userkey + '/' + _obj.socketid + '\n' + ex.stack)
+						reject(new Error(_obj.userkey + '/' + ex.message))
+					} else {
+						resolve()
+					}
+				}
+			}),
 			setRoomnmWithUsernm : (data, fieldUserNm, fieldUserId) => {
 				let _roomnm = '', _userid = ''
 				const len = data.length

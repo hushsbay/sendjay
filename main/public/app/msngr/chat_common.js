@@ -687,6 +687,7 @@ const procForCell = (obj) => {
 
 const getMsgList = async (type, keyword, start, end) => {
     try {
+        alert("getMsgList")
         g_year = (new Date()).getFullYear().toString()
         let rq, withToast = true, includeInviteOrLeave = false
         if (type == "search") {
@@ -1604,8 +1605,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
         toggleDispMem(data.dispmem)
         if (data.from == "rename_room" || data.from == "after") return
         hush.idb.connect(() => {
-            getMsgList() 
-            //setTimeout(() => getMsgList(), 2000) //set 2000 for debugging (F12) 
+            getMsgList() //setTimeout(() => getMsgList(), 2000) //set 2000 for debugging (F12) 
         })
     },
     [hush.cons.sock_ev_set_env] : async (data) => {
