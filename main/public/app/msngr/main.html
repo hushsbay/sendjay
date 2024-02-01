@@ -114,15 +114,15 @@
                             procMenuPeople(this.id) 
                         })
                         $("#btn_new").on("click", function() { 
-                            hushj.util.animCall(this.id, true)
+                            debugger
                             if (g_mode == BTN_MODE_PEOPLE) {
                                 const mem = $(".mem")
                                 if (mem.length == 0) {
-                                    hushj.msg.toast(hush.cons.msg.row_not_selected)
+                                    hush.msg.toast(hush.cons.warn_no_row_selected)
                                     return
                                 }
                                 if (!hush.webview.on) {
-                                    hush.room.create(hushj.cons.chat, "newFromMain", g_token10)
+                                    hush.sock.createRoom("/app/msngr/chat.html", "newFromMain", g_token10)
                                 } else {
                                     const useridArr = []
                                     for (let item of mem) {
@@ -132,7 +132,7 @@
                                     procNewChat(useridArr)                          
                                 }
                             } else {
-                                let urlStr = hushj.cons.main + "?type=member"
+                                let urlStr = "/app/msngr/main.html?type=member"
                                 if (!hush.webview.on) {
                                     g_memWin = hush.util.openWinPop(urlStr, 740, 650)
                                 } else {

@@ -31,6 +31,7 @@
             w_key : 'W__', //Web userkey
             m_key : 'M__', //Mobile userkey
             prefix : '$$', //for redis, socket
+            memdeli : " / ",
             sock_ev_alert : 'alert',
 			sock_ev_toast : 'toast',
 			sock_ev_disconnect : "disconnect",
@@ -411,6 +412,7 @@
             }
         },
         sock : {
+            roomMap : { }, //{ nm: 'xxx', noti: true/false }
             rooms : { }, //sock.connect => https://socket.io/docs/v3/client-initialization         
             connect : (io, query) => new Promise((resolve, reject) => { //this will be occurred only on index.html
                 const socket = io(hush.cons.socket_url, { forceNew: false, reconnection: false, query: query }) //forceNew=false //See 'disconnect_prev_sock' in pmessage.js (on server)
@@ -441,6 +443,23 @@
                     resolve(socket)
                 })
             }),
+            createRoom : (_url, _type, uniqueStr) => { //newFromMain, newFromPopup, me
+                const roomid = hush.util.createId(uniqueStr)
+                const _newwin = hush.util.openWinPop(_url + "?type=" + _type + "&roomid=" + roomid)
+                hush.sock.rooms[roomid] = _newwin
+            },
+            getAllRoomsOpen : (callback) => {
+                Object.entries(hush.sock.rooms).forEach(([key, value]) => {
+                    const _win = hush.sock.rooms[key]
+                    if (_win && !_win.closed) callback(_win)
+                })
+            },
+            getRoomName : (nicknm, mainnm, roomnm) => {
+                if (nicknm) return nicknm //각 멤버들이 만들기 가능
+                if (mainnm) return mainnm //Owner(Master=Creator)만 만들기 가능
+                const _roomnmObj = (typeof roomnm == "string") ? JSON.parse(roomnm) : roomnm
+                return hush.room.procRoomName(_roomnmObj, g_userid) //Or member's name are displayed with some delimeter.
+            },
             getWinId : () => { //xxxxxx20241231010159
                 return hush.util.getRnd().toString() + "_" + hush.util.getCurDateTimeStr()
             },
@@ -460,6 +479,34 @@
                     }
                 })
                 socket.off(hush.cons.sock_ev_common).on(hush.cons.sock_ev_common, (rs) => { callback(rs) })
+            },
+            openRoom : (_url, roomid, origin) => { //origin=""(new),portal,noti
+                const _win = hush.sock.rooms[roomid]
+                if (_win) {
+                    if (!_win.closed) {
+                        _win.focus()
+                        return
+                    }
+                    _win.close()
+                    delete _win
+                }
+                const _newwin = hush.util.openWinPop(_url + "?type=open&origin=" + origin + "&roomid=" + roomid)
+                hush.sock.rooms[roomid] = _newwin
+            },
+            procRoomName : (_roomnmObj, _userid) => { //See setRoomnmWithUsernm() in common.js
+                let finalnm             
+                const _idx = _roomnmObj.userid.split(hush.cons.memdeli).indexOf(_userid)
+                if (_idx == -1) {
+                    finalnm = _roomnmObj.roomnm
+                } else { //remove my name
+                    const _arr = _roomnmObj.roomnm.split(hush.cons.memdeli)
+                    let _brr = [ ]
+                    for (let i = 0; i < _arr.length; i++) {
+                        if (i != _idx) _brr.push(_arr[i])
+                    }
+                    finalnm = _brr.join(hush.cons.memdeli)
+                }
+                return finalnm
             },
             send : (socket, ev, data, returnTo, returnToAnother) => {
                 //returnTo : 부모, 해당채팅방, all 중 하나를 지정하며 parent(부모)가 기본값임
@@ -500,6 +547,14 @@
                 const min = (!_min && _min != 0) ? 100000 : _min
                 const max = (!_max && _max != 0) ? 999999 : _max
                 return Math.floor(Math.random() * (max - min)) + min //return min(inclusive) ~ max(exclusive) Integer only 
+            },
+            shuffleChar : (str) => {
+                let arr = [...str]
+                arr.sort(function() { return 0.5 - Math.random() })
+                return arr.join("")
+            },
+            createId : (uniqueStr) => {
+                return hush.util.getCurDateTimeStr(false, true) + hush.util.getRnd().toString().padStart(6, "0") + (uniqueStr ? hush.util.shuffleChar(uniqueStr) : "")
             },
             openWinTab : (url, replace) => {
                 const _url = hush.http.handleNoCache(url)
