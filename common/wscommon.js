@@ -13,6 +13,7 @@ const jwt = require('jsonwebtoken')
 module.exports = (function() {
 
 	const PREFIX = '$$' //for redis
+	const KEYDELI = '__'
 	
 	let ws = {
 	
@@ -30,10 +31,14 @@ module.exports = (function() {
 			mysql_close_error : 'mysql_close_error',
 			toast_prefix : '##$$', //클라이언트와 동일
 			deli : '##',
+			subdeli : '$$',
+			indeli : "','", //Use this for sql where in clause.
 			easydeli : ';', //Use this for absolutely safe place.
+			memdeli : ' / ',
+			keydeli : KEYDELI, 
 			/////////////////////////////////////////////아래는 메신저 관련
-			w_key : 'W__', //Web userkey
-			m_key : 'M__', //Mobile userkey
+			w_key : 'W' + KEYDELI, //Web userkey
+			m_key : 'M' + KEYDELI, //Mobile userkey
 			prefix : PREFIX, //for redis
 			pattern : PREFIX + '*', //redis pub/sub				
 			key_str_winid : PREFIX + 'W', //redis strings (userkey+deli+winid prefix added) - get winid for auto launch
@@ -61,6 +66,14 @@ module.exports = (function() {
 			sock_ev_chk_typing : 'chk_typing',
 			sock_ev_cut_mobile : 'cut_mobile',			
 			max_days_to_fetch : -365, //For sql where
+			max_check_same_members : 50, //Consider up to 50 and no more. max 1500 bytes for members field in z_roommem_tbl. userid(20) + alpha = 21 * 50 = 1050 bytes.
+			max_people_to_display : 3, //Consider up to 10 and no more. max 800 bytes for roomnm field in z_roommst_tbl. usernm(50) + userid(20) + alpha = 80 * 10 = 800 bytes.
+			max_hours_to_filesave : 1, //max_days_to_filesave : 1, //File's expiry
+			max_nicknm_len : 100, //same as client's
+			max_msg_len : 4000, //same as client's
+			max_filesize : 1110485760, //10MB //max_filesize : 10485760, //10MB
+			max_filecount : 5, //per user
+			max_size_to_sublink : 5242880, //5MB. same as client's
 		},
 
 		http : {
@@ -363,6 +376,29 @@ module.exports = (function() {
 					}
 				}
 				return _msg
+			},
+			setRoomnmWithUsernm : (data, fieldUserNm, fieldUserId) => {
+				let _roomnm = '', _userid = ''
+				const len = data.length
+				if (len == 1) {
+					_roomnm = 'Myself'
+				} else {				
+					for (let i = 0; i < len; i++) {
+						if (i > ws.cons.max_people_to_display) {
+							_roomnm += ws.cons.memdeli + 'more..'
+							_userid += ws.cons.memdeli + 'more..'
+							break
+						}
+						if (_roomnm == '') {
+							_roomnm = data[i][fieldUserNm]
+							_userid = data[i][fieldUserId]
+						} else {
+							_roomnm += ws.cons.memdeli + data[i][fieldUserNm]
+							_userid += ws.cons.memdeli + data[i][fieldUserId]
+						}					
+					}
+				}
+				return { roomnm : _roomnm, userid : _userid }
 			},
 			warn : (_type, _socket, _logTitle, _ex, _roomid) => {
 				try { //_type = alert, toast, null(just logging)

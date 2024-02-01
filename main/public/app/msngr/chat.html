@@ -81,7 +81,7 @@
                             }
                             if (useridArr.indexOf(g_userid) == -1) useridArr.push(g_userid) //me included   
                             const rq = { masterid : g_userid, masternm : g_usernm, userids : useridArr }
-                            //hush.sock.send(g_socket, hush.cons.sock_ev_create_room, rq, g_roomid)               
+                            hush.sock.send(g_socket, hush.cons.sock_ev_create_room, rq, g_roomid)               
                         } else if (g_type == "newFromPopup") {
                             if (opener.g_useridArr.indexOf(g_userid) == -1) opener.g_useridArr.push(g_userid) //me included
                             const rq = { masterid : g_userid, masternm : g_usernm, userids : opener.g_useridArr }
