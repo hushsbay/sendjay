@@ -2,11 +2,12 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <link href="/img/sendjay_darkblue.png" rel="shortcut icon" type="image/x-icon"/>
+        <link id=favicon href="/img/hushsbay.png" rel="shortcut icon" type="image/x-icon"/>
         <meta name="viewport" content="width=device-width, initial-scale=1" />    
-        <title>Sendjay Chat</title>
+        <title>Chat::Sendjay</title>
         <link rel="stylesheet" href="/plugin/jquery-ui-smoothness-1.12.1.min.css">
-        <link rel="stylesheet" href="/common/common.css">
+        <!-- <link rel="stylesheet" href="/common/common.css"> -->
+        <link rel="stylesheet" href="common.css">
         <style>
             @media screen and (max-device-width: 500px) { /* 모바일 기기중 width가 그리 크지 않는 경우 화면이 좁아 보이므로 폰트 줄이기 */
                 .mq_title { font-size:12px }
@@ -35,21 +36,19 @@
         <script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
         <script src="/plugin/jquery.cookie.js"></script>
         <script src="/plugin/lodash.min.js"></script><!--for debounce (scroll event)-->
-        <script src="/plugin/moment.min.js"></script>
-        <script src="/plugin/moment-timezone-with-data-1970-2030.min.js"></script>
         <script>
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
-                    await $.getScript("/jquery/jquery_common.js") 
-                    await $.getScript("/jquery/msngr/chat_common.js")
-                    hush.webview.chk()
+                    await $.getScript("chat_common.js")
+                    debugger
+                    const param = new URLSearchParams(location.search)
+                    hush.webview.chk(param)
                     g_in_chat = $("#in_chat")
                     g_list_msg = $("#list_msg")
-                    const param = hush.http.getParamsFromLocation()
-                    g_type = param.type
-                    g_roomid = param.roomid
-                    g_origin = param.origin
+                    g_type = param.get("type")
+                    g_roomid = param.get("roomid")
+                    g_origin = param.get("origin")
                     if (hush.webview.on) {
                         g_focus_for_webview = true
                         $("#fr_menu_top_right_m").css("display", "flex")
@@ -338,10 +337,10 @@
                         if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.close()
                     })
                 } catch (ex) {
-                    hush.util.showException(ex)
+                    hush.util.showEx(ex)
                 }
             }).fail(function(ex) {
-                hush.util.showException(ex)
+                hush.util.showEx(ex, hush.cons.failOnLoad)
             })
         </script>
     </head>
