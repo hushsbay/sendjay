@@ -6,18 +6,16 @@ const com = require('../common')
 
 module.exports = async function(socket, param) { 
 	const _logTitle = param.ev, _roomid = param.returnTo
-	let conn, _nicknm
-	try { //com.procWarn(null, socket, _logTitle, JSON.stringify(param), _roomid)
+	let conn, sql, data, len, _nicknm
+	try { //ws.sock.warn(null, socket, _logTitle, JSON.stringify(param), _roomid)
 		const userid = param.data.userid
-		const resVeri = com.verifyWithSocketUserId(userid, socket.userid)
-		if (resVeri != '') throw new Error(resVeri)
 		conn = await wsmysql.getConnFromPool(global.pool)
-		let qry = "SELECT B.USERID, B.USERNM, B.NICKNM, A.ROOMNM, A.NICKNM MAINNM, A.MASTERID "
-		qry += "     FROM " + com.tbl.roomdtl + " B "
-		qry += "    INNER JOIN " + com.tbl.roommst + " A ON B.ROOMID = A.ROOMID AND B.STATE <> 'L' "
-		qry += "    WHERE B.ROOMID = ? "
-		qry += "    ORDER BY B.USERNM, USERID "
-		const data = await wsmysql.query(conn, qry, [_roomid])
+		sql = "SELECT B.USERID, B.USERNM, B.NICKNM, A.ROOMNM, A.NICKNM MAINNM, A.MASTERID "
+		sql += " FROM A_ROOMDTL_TBL B "
+		sql += "    INNER JOIN " + com.tbl.roommst + " A ON B.ROOMID = A.ROOMID AND B.STATE <> 'L' "
+		sql += "    WHERE B.ROOMID = ? "
+		sql += "    ORDER BY B.USERNM, USERID "
+		const data = await wsmysql.query(conn, sql, [_roomid])
 		const len = data.length
 		if (len == 0) throw new Error(ws.cons.MSG_NO_DATA + ' (roomid)')
 		let userkeyArr = [], userkeySocketArr = [], arrUseridSortedByUsernm = [], arrUsernmSortedByUsernm = []
@@ -51,8 +49,8 @@ module.exports = async function(socket, param) {
 		param.data.receivernm = arrUsernmSortedByUsernm
 		param.data.userkeys = userkeyArr
 		socket.emit(com.cons.sock_ev_common, param)
-	} catch (ex) { //com.procWarn(null, socket, _logTitle, com.cons.rs + JSON.stringify(param), _roomid)
-		com.procWarn(com.cons.sock_ev_alert, socket, _logTitle, ex, _roomid)
+	} catch (ex) { //ws.sock.warn(null, socket, _logTitle, com.cons.rs + JSON.stringify(param), _roomid)
+		ws.sock.warn(com.cons.sock_ev_alert, socket, _logTitle, ex, _roomid)
 	} finally {
 		try { if (conn) wsmysql.closeConn(conn) } catch(ex) { }
 	}
