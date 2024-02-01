@@ -397,7 +397,7 @@ module.exports = (function() {
 					resolve()
 				} catch (ex) {
 					if (_obj) {
-						global.log.error('joinRoomWithUserkeySocketArr', _obj.userkey + '/' + _obj.socketid + '\n' + ex.stack)
+						global.logger.error('joinRoomWithUserkeySocketArr', _obj.userkey + '/' + _obj.socketid + '\n' + ex.stack)
 						reject(new Error(_obj.userkey + '/' + ex.message))
 					} else {
 						resolve()
