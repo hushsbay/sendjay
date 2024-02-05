@@ -115,7 +115,7 @@ const updateAllUnreads = (first_queried) => { //first_queried is dummy for preve
 const setMembers = async (data) => {            
     try {
         g_masterid = data.masterid
-        g_title = hush.room.getRoomName(data.nicknm, data.mainnm, data.roomnm)
+        g_title = hush.sock.getRoomName(data.nicknm, data.mainnm, data.roomnm)
         document.title = g_title + " - " + hush.cons.title
         const list = $("#people_sub")
         list.empty()                
