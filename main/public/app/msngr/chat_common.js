@@ -154,7 +154,7 @@ const setMembers = async (data) => {
         }                
         $("#people_cnt").html(_len)
         $(".mem").off("click").on("click", function() {
-            hushj.util.animCall(this.id, true) 
+            hush.util.animCall(this.id, true) 
             const _userid = this.id.substring(4)
             const _abnm = $(this).data("abnm") ? " / " + $(this).data("abnm") : ""
             const _usernm = $(this).data("nm")
@@ -162,15 +162,15 @@ const setMembers = async (data) => {
             _html += "  <img id=img_userid src='/img/noperson.png' style='width:64px;height:64px'>"
             _html += "  <span style='margin-top:15px'>" + _usernm + _abnm + "</span>"
             _html += "</div>"
-            hushj.msg.alert(_html, { 
+            hush.msg.alert(_html, { 
                 "채팅보기": function() { 
-                    hushj.msg.close()
+                    hush.msg.close()
                     g_list_msg.empty()
                     $("#btn_close_search").show()
                     resetEnvForScroll() //getMsgList()보다 먼저 실행되어야 함                    
                     getMsgList("onlyone", _userid)
                 }, "강제퇴장": function() { 
-                    hushj.msg.close()
+                    hush.msg.close()
                     const rq = initMsg()
                     rq.type = "leave"
                     rq.reply = _userid
@@ -182,10 +182,10 @@ const setMembers = async (data) => {
                         hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
                     }
                 }, "닫기": function() { 
-                    hushj.msg.close()
+                    hush.msg.close()
                 } 
             }, "Info", 320)
-            hushj.http.getUserPic(_userid, "img_userid")
+            hush.http.getUserPic(_userid, "img_userid")
         })
         if (!data.userkeys) return
         const dataObj = { userkeys : data.userkeys }
@@ -234,7 +234,7 @@ const setResult = (data) => {
         $("#result_cnt").html(_len) 
         list.scrollTop(list.prop("scrollHeight")) 
         $(".result").off("click").on("click", function(e) { 
-            hushj.util.animCall(this.id, true) 
+            hush.util.animCall(this.id, true) 
             procHighlight($(this))
             const start = $(this).data("cdt")
             if (start >= g_cdt) {
@@ -258,7 +258,7 @@ const setResult = (data) => {
         })
         $("#res_" + data.list[_len - 1].MSGID).click()
         $("#getprev").off("click").on("click", function(e) { 
-            hushj.util.animCall(this.id, true) 
+            hush.util.animCall(this.id, true) 
             g_cdt = $(this).data("cdt")
             getMsgList()
             setTimeout(() => $("#getprev").hide(), 500)
@@ -326,7 +326,7 @@ const procQueryUnread = () => {
 
 const addRow = (obj, kind) => {
     if (!kind) resetEnvForScroll()
-    let _dt = (obj.cnt == -1) ? obj.cdt : hushj.util.tzDateTime(obj.cdt) //cnt=-1 means local data
+    let _dt = (obj.cnt == -1) ? obj.cdt : hush.util.tzDateTime(obj.cdt) //cnt=-1 means local data
     _dt = hush.util.formatMsgDt(_dt, g_year)
     if (obj.type == "invite" || obj.type == "leave") {
         let _desc                
@@ -378,7 +378,7 @@ const addRow = (obj, kind) => {
                 const _fileStr = obj.body.split(hush.cons.deli)                
                 const _filelink = procFileLinkIfExists(obj, kind)
                 const _filesize = hush.util.formatBytes(parseInt(_fileStr[1]))
-                const _expiry = hushj.util.getExpiryWithTZ(obj.filestate, g_year)
+                const _expiry = hush.util.getExpiryWithTZ(obj.filestate, g_year)
                 const _color = obj.filestate == hush.cons.file_expired ? "darkgray" : "#005192"
                 _body = "<span id=filelink_" + obj.msgid + " class=mq_cell style='color:" + _color + ";cursor:default'>" + _filelink + "</span><br>"
                 _body += "<span class=mq_tiny style='color:darkgray;cursor:default'>" + ((obj.type == "flink") ? "Filelink" : "File") + "</span> "
@@ -494,7 +494,7 @@ const addRow = (obj, kind) => {
             g_list_msg.append(_html)
         }
         if (obj.bufferStr != null) { //only for image
-            hushj.http.ajaxCall(hush.cons.route + "/get_msginfo", { msgid : obj.msgid, body : obj.body }, "get", function(rsPic) {
+            hush.http.ajaxCall(hush.cons.route + "/get_msginfo", { msgid : obj.msgid, body : obj.body }, "get", function(rsPic) {
                 if (rsPic.buffer) {
                     const blobUrl = hush.http.getBlobUrlForImage(rsPic.buffer.data)
                     imageSrcEvent(blobUrl, obj.msgid, kind, obj.type, obj.body) //$("#~").attr("src", "data:image/png;base64," + data)
@@ -510,7 +510,7 @@ const addRow = (obj, kind) => {
             }
         }
         $("#unread_" + obj.msgid).off("click").on("click", function() {
-            hushj.util.animCall(this.id, true) 
+            hush.util.animCall(this.id, true) 
             const rq = { type : "getmembers", msgid : obj.msgid }
             if (hush.webview.ios) { 
             } else if (hush.webview.and) {
@@ -534,7 +534,7 @@ const addRow = (obj, kind) => {
             // $("#save_" + obj.msgid).hide()
         })
         $("#reply_" + obj.msgid).off("click").on("click", function() {
-            hushj.util.animCall(this.id, true) 
+            hush.util.animCall(this.id, true) 
             // if ($("#cancelreply").length > 0) {
             //     setTitleToFrTip(true)
             //     return
@@ -549,12 +549,12 @@ const addRow = (obj, kind) => {
             })
         })
         $("#save_" + obj.msgid).off("click").on("click", function() {
-            hushj.util.animCall(this.id, true) 
+            hush.util.animCall(this.id, true) 
             if (obj.filestate == hush.cons.file_expired || $("#body_" + obj.msgid).html() == hush.cons.cell_revoked) return
             if (obj.type == "image") {
-                hushj.http.fileDownload("imagetofile", obj.msgid)
+                hush.http.fileDownload("imagetofile", obj.msgid)
             } else {
-                hushj.http.fileDownload($("#ahref_" + obj.msgid).attr("param1"), $("#ahref_" + obj.msgid).attr("param2"))
+                hush.http.fileDownload($("#ahref_" + obj.msgid).attr("param1"), $("#ahref_" + obj.msgid).attr("param2"))
             }
         })
     }
@@ -578,14 +578,14 @@ const procForCell = (obj) => {
         }
     })
     $("#btn_delete_cell, #btn_delete_cell_m").off("click").on("click", function(e) { 
-        hushj.util.animCall(this.id, true) 
+        hush.util.animCall(this.id, true) 
         const checked = $(".chkboxSel:checked")
         const len = checked.length
         if (len == 0) {
-            hushj.msg.toast(hush.cons.MSG_NO_DATA)
+            hush.msg.toast(hush.cons.MSG_NO_DATA)
             return
         }
-        hushj.msg.alert("Continue to delete ? (" + len + ")", {
+        hush.msg.alert("Continue to delete ? (" + len + ")", {
             "Yes": function() { 
                 const msgidArr = []
                 for (let i  = 0; i < len; i++) msgidArr.push(checked[i].id.substring(4)) //sel_2019~
@@ -596,16 +596,16 @@ const procForCell = (obj) => {
                 } else {
                     hush.sock.send(g_socket, hush.cons.sock_ev_delete_msg, rq, g_roomid, "parent")
                 }
-                hushj.msg.close()
+                hush.msg.close()
                 showCellMenu(false)
             }, "No": function() { 
-                hushj.msg.close() 
+                hush.msg.close() 
                 showCellMenu(false)
             } 
         })                
     })
     $("#btn_cancel_cell, #btn_cancel_cell_m").off("click").on("click", function(e) { 
-        hushj.util.animCall(this.id, true) 
+        hush.util.animCall(this.id, true) 
         showCellMenu(false) 
     })
     if (!hush.webview.on) $("#msg_" + obj.msgid).on("contextmenu", function(e) { $("#menu_" + obj.msgid).click() })
@@ -615,18 +615,18 @@ const procForCell = (obj) => {
         e.originalEvent.dataTransfer.effectAllowed = "copy"
     })
     $("#menu_" + obj.msgid + ", #cellmenu_" + obj.msgid).off("click").on("click", function(e) { 
-        hushj.util.animCall(this.id, true) 
+        hush.util.animCall(this.id, true) 
         if ($("#btn_delete_cell").css("display") == "none") {
             showCellMenu(true, obj)
             $("#btn_copy_cell, #btn_copy_cell_m").off("click").on("click", function(e) { 
-                hushj.util.animCall(this.id, true) 
+                hush.util.animCall(this.id, true) 
                 if (obj.type == "" || !hush.cons.chat_handled.includes(obj.type)) return 
                 if ($("#body_" + obj.msgid).html() == hush.cons.cell_revoked) {
-                    hushj.msg.toast(hush.cons.cell_revoked)
+                    hush.msg.toast(hush.cons.cell_revoked)
                     return
                 }
                 if (obj.filestate == hush.cons.file_expired) {
-                    hushj.msg.toast(hush.cons.file_expired)
+                    hush.msg.toast(hush.cons.file_expired)
                     return
                 }
                 const _id = this.id
@@ -638,31 +638,31 @@ const procForCell = (obj) => {
                     document.execCommand('copy')
                     document.body.removeChild(t)
                     showCellMenu(false)
-                    hushj.msg.toast("Now " + obj.type + " will be sent with Ctrl+V.") //image, file, flink will be ok too
+                    hush.msg.toast("Now " + obj.type + " will be sent with Ctrl+V.") //image, file, flink will be ok too
                 } else { //mobile
                     AndroidRoom.copy(obj.msgid)
-                    hushj.msg.toast("Now " + obj.type + " will be sent with SendCopy button.") //image, file, flink will be ok too
+                    hush.msg.toast("Now " + obj.type + " will be sent with SendCopy button.") //image, file, flink will be ok too
                     $("#fr_tip").hide()
                     $("#fr_sendcopy").show()
                 }
                 showCellMenu(false)
             })
             $("#btn_revoke_cell, #btn_revoke_cell_m").off("click").on("click", function(e) {   
-                hushj.util.animCall(this.id, true)                  
+                hush.util.animCall(this.id, true)                  
                 if (obj.type == "" || !hush.cons.chat_handled.includes(obj.type)) return 
                 if ($("#body_" + obj.msgid).html() == hush.cons.cell_revoked) {
-                    hushj.msg.toast(hush.cons.cell_revoked)
+                    hush.msg.toast(hush.cons.cell_revoked)
                     return
                 }
                 if (obj.filestate == hush.cons.file_expired) {
-                    hushj.msg.toast(hush.cons.file_expired)
+                    hush.msg.toast(hush.cons.file_expired)
                     return
                 }
                 if (obj.senderid != g_userid) {
-                    hushj.msg.toast("Incoming message won't be handled.")
+                    hush.msg.toast("Incoming message won't be handled.")
                     return
                 }
-                hushj.msg.alert("Do you want revoke(cancel) message already sent to all members in this chat room?", { 
+                hush.msg.alert("Do you want revoke(cancel) message already sent to all members in this chat room?", { 
                     "Yes": function() { 
                         const rq = { msgid : obj.msgid, type : obj.type, senderid : g_userid, roomid : g_roomid }
                         if (hush.webview.ios) {
@@ -671,10 +671,10 @@ const procForCell = (obj) => {
                         } else {
                             hush.sock.send(g_socket, hush.cons.sock_ev_revoke_msgcell, rq, g_roomid, "parent")
                         }                                
-                        hushj.msg.close()
+                        hush.msg.close()
                         showCellMenu(false)
                     }, "No": function() { 
-                        hushj.msg.close()
+                        hush.msg.close()
                         showCellMenu(false) 
                     } 
                 }, "Cancel Send", 200)
@@ -706,7 +706,7 @@ const getMsgList = async (type, keyword, start, end) => {
             rq = { type : "normal", roomid : g_roomid, dt : g_cdt, cnt : cnt }
             withToast = false
         }
-        const rs = await hushj.http.ajax(hush.cons.route + "/qry_msglist", rq, null, withToast)
+        const rs = await hush.http.ajax(hush.cons.route + "/qry_msglist", rq, null, withToast)
         if (rs.code != hush.cons.result_ok && rs.code != hush.cons.result_no_data) {
             await hush.msg.alert("getMsgList:" + rs.msg)
             return
@@ -844,7 +844,7 @@ const getMsgList = async (type, keyword, start, end) => {
                         cursor.continue()                               
                     } else { //console.log("No more entries")
                         if (_arr.length == 0) return
-                        const rs = await hushj.http.ajax(hush.cons.route + "/get_msginfo", { msgids : _arr, kind : "check" })
+                        const rs = await hush.http.ajax(hush.cons.route + "/get_msginfo", { msgids : _arr, kind : "check" })
                         if (rs.code != hush.cons.result_ok) return
                         const _len = rs.list.length //sending failure
                         if (_len == 0) return
@@ -899,13 +899,13 @@ const procFailure = (rq, dtDetails) => { //Request already sent. Retry(resending
     objUnread.removeClass("unread").addClass("failure")
     objUnread.show()
     objUnread.off("click").on("click", function() { 
-        hushj.util.animCall(this.id, true) 
-        hushj.msg.alert(dtDetails, { //hushj.msg.alert(dtDetails) 
+        hush.util.animCall(this.id, true) 
+        hush.msg.alert(dtDetails, { //hush.msg.alert(dtDetails) 
             "Remove Talk": function() { 
                 $("#msg_" + rq.msgid).remove()
-                hushj.msg.close()
+                hush.msg.close()
             }, "Close": function() { 
-                hushj.msg.close()
+                hush.msg.close()
             } 
         }, "Sending Failure", 320)
     })
@@ -927,8 +927,8 @@ const retrySending = (rq) => {
     objUnread.removeClass("unread").addClass("failure")
     objUnread.show()
     objUnread.off("click").on("click", function() {
-        hushj.util.animCall(this.id, true) 
-        hushj.msg.alert("Do you want to retry sending ?", {
+        hush.util.animCall(this.id, true) 
+        hush.msg.alert("Do you want to retry sending ?", {
             "Retry": function() { 
                 $("#msg_" + rq.msgid).remove()
                 const rq1 = initMsg()
@@ -936,13 +936,13 @@ const retrySending = (rq) => {
                 rq1.body = rq.body
                 procSendAndAppend(rq1)
                 deleteLocalMsg(rq.msgid)
-                hushj.msg.close()
+                hush.msg.close()
             }, "Delete": function() { 
                 $("#msg_" + rq.msgid).remove()
                 deleteLocalMsg(rq.msgid)
-                hushj.msg.close()
+                hush.msg.close()
             }, "Close": function() { 
-                hushj.msg.close() 
+                hush.msg.close() 
             } 
         }, hush.cons.retry_sending)
     })
@@ -958,8 +958,8 @@ const prepareForNoResponse = (rq) => {
         objUnread.removeClass("unread").addClass("failure")
         objUnread.show()
         objUnread.off("click").on("click", function() {
-            hushj.util.animCall(this.id, true) 
-            hushj.msg.alert("전송여부를 확인하시겠습니까?", {
+            hush.util.animCall(this.id, true) 
+            hush.msg.alert("전송여부를 확인하시겠습니까?", {
                 "Yes": function() {
                     $("#handling_" + rq.msgid).show()
                     objUnread.hide() 
@@ -973,9 +973,9 @@ const prepareForNoResponse = (rq) => {
                         hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqCheck, g_roomid)
                     }
                     prepareForNoResponse(rq)
-                    hushj.msg.close()
+                    hush.msg.close()
                 }, "No": function() { 
-                    hushj.msg.close() 
+                    hush.msg.close() 
                 } 
             }, hush.cons.no_response)
         })
@@ -1058,7 +1058,7 @@ const sendMsg = (type, blobUrlOrBody, blobOrFilestate) => {
             fd.append("type", rq.type)
             fd.append("reply", getMsgToReply())
             fd.append("file", blobOrFilestate)
-            hushj.http.ajaxFormData(hush.cons.route + "/proc_image", fd, (rs) => {
+            hush.http.ajaxFormData(hush.cons.route + "/proc_image", fd, (rs) => {
                 if (rs.code == hush.cons.result_ok) {
                     const rqNotice = initMsg()
                     rqNotice.type = "notice"
@@ -1087,7 +1087,7 @@ const sendMsg = (type, blobUrlOrBody, blobOrFilestate) => {
             let _body = g_in_chat.val() //while (_body.endsWith(_body, "\n")) { const _len = _body.length; _body = _body.substring(0, _len - 1) } //infinite loop when _len is 0
             if (_body.trim() == "") return
             if (hush.util.utf8StrByteLength(_body) > hush.cons.max_msg_len) {
-                hushj.msg.toast("최대 : " + hush.cons.max_msg_len + " 바이트<br>현재 : " + hush.util.utf8StrByteLength(_body) + " 바이트")
+                hush.msg.toast("최대 : " + hush.cons.max_msg_len + " 바이트<br>현재 : " + hush.util.utf8StrByteLength(_body) + " 바이트")
                 return
             }
             rq.body = _body
@@ -1131,7 +1131,7 @@ const imageSrcEvent = (blobUrl, msgid, kind, type, body) => {
                 _witdh = 500
                 _height = 500
             }
-            let urlStr = hushj.cons.popup + "?type=play&msgid=" + msgid + "&path=" + encodeURIComponent(_path)
+            let urlStr = hush.cons.popup + "?type=play&msgid=" + msgid + "&path=" + encodeURIComponent(_path)
             if (hush.webview.ios) {
             } else if (hush.webview.and) {
                 urlStr += "&" + hush.cons.param_webview_and
@@ -1147,7 +1147,7 @@ const imageSrcEvent = (blobUrl, msgid, kind, type, body) => {
                 _type = "image"
                 fileInfoForMobile = ""
             }
-            let urlStr = hushj.cons.popup + "?type=" + _type + "&msgid=" + msgid + "&body=" + body
+            let urlStr = hush.cons.popup + "?type=" + _type + "&msgid=" + msgid + "&body=" + body
             if (!hush.webview.on) {
                 //const imgWin = hush.util.openWinPop("", 800, 800)
                 //imgWin.document.write("<!DOCTYPE html><html><title>Image Preview</title><body topmargin=0 leftmargin=0 marginheight=0 marginwidth=0><img id=" + _id + " ></body></html>")
@@ -1161,7 +1161,7 @@ const imageSrcEvent = (blobUrl, msgid, kind, type, body) => {
                 //     _type = "image"
                 //     fileInfoForMobile = ""
                 // }
-                //let urlStr = hushj.cons.popup + "?type=" + _type + "&msgid=" + msgid + "&body=" + body
+                //let urlStr = hush.cons.popup + "?type=" + _type + "&msgid=" + msgid + "&body=" + body
                 if (hush.webview.ios) {
                 } else if (hush.webview.and) {
                     urlStr += "&" + hush.cons.param_webview_and
@@ -1181,7 +1181,7 @@ const procOpengraph = async (msgid, kind) => {
     try {
         const _url = $("#openGraph" + msgid).attr("og")
         if (!_url) return
-        const rs = await hushj.http.ajax(hush.cons.route + "/get_opengraph", { msgid : msgid, url : _url }) 
+        const rs = await hush.http.ajax(hush.cons.route + "/get_opengraph", { msgid : msgid, url : _url }) 
         const ret = rs.result
         if (!ret.ogTitle) {
             $("#ogTitle" + ret.msgid).hide()
@@ -1237,7 +1237,7 @@ const handleFileUpload = (files) => {
     try {
         const _len = files.length
         if (_len > hush.cons.max_filecount) {
-            hushj.msg.alert("최대 " + hush.cons.max_filecount + "개 파일까지 한번에 전송 가능합니다.")
+            hush.msg.alert("최대 " + hush.cons.max_filecount + "개 파일까지 한번에 전송 가능합니다.")
             return
         }
         if (!hush.auth.chkRole(g_role, hush.cons.group_admin)) { //Checked on server, too.
@@ -1246,7 +1246,7 @@ const handleFileUpload = (files) => {
                 if (files[i].size > hush.cons.max_filesize) _list += files[i].name + "(" + hush.util.formatBytes(files[i].size) + ") "  
             }
             if (_list != "") {
-                hushj.msg.alert("파일 크기는 최대 " + hush.util.formatBytes(hush.cons.max_filesize) + "입니다.<br>" + _list)
+                hush.msg.alert("파일 크기는 최대 " + hush.util.formatBytes(hush.cons.max_filesize) + "입니다.<br>" + _list)
                 return
             }
         }
@@ -1310,14 +1310,14 @@ const handleFileUpload = (files) => {
                 },
                 error : function(xhr, status, error) { 
                     $("#abort_" + rq.msgid).hide()
-                    const msg = hushj.http.getErrorMsg(status, error)
+                    const msg = hush.http.getErrorMsg(status, error)
                     procFailure(rq, msg)
                 }
             })
             $("#abort_" + rq.msgid).off("click").on("click", function() {
-                hushj.util.animCall(this.id, true) 
+                hush.util.animCall(this.id, true) 
                 if ($(this).html() != "Abort") {
-                    hushj.msg.alert("Can't abort (Upload is being done). Use 'Revoke' on CellMenu")
+                    hush.msg.alert("Can't abort (Upload is being done). Use 'Revoke' on CellMenu")
                     return
                 }
                 if (ajaxObj) ajaxObj.abort()
@@ -1360,7 +1360,7 @@ const procFileLinkIfExists = (obj, kind) => {
     if (_sublink_request) { //request sublink image for file uploaded : data table for file might not be inserted yet.
         if (hush.cons.sublink_ext_image.includes(_extension) || hush.cons.sublink_ext_video.includes(_extension)) {
             const _type = hush.cons.sublink_ext_image.includes(_extension) ? "ext_image" : "ext_video"
-            hushj.http.ajaxCall(hush.cons.route + "/get_msginfo", { msgid : obj.msgid, body : _sublink_request }, "get", function(rsPic) {
+            hush.http.ajaxCall(hush.cons.route + "/get_msginfo", { msgid : obj.msgid, body : _sublink_request }, "get", function(rsPic) {
                 if (rsPic.buffer) {
                     const blobUrl = hush.http.getBlobUrlForImage(rsPic.buffer.data)
                     imageSrcEvent(blobUrl, obj.msgid, kind, _type, _sublink_request) //$("#~").attr("src", "data:image/png;base64," + data)
@@ -1407,9 +1407,9 @@ const toggleResult = (show) => {
 
 const dialogRoomRename = (_type) => {
     const _header = (_type == "all") ? "Change room name for every user" : "Change room name for me"
-    hushj.msg.inputBox("Enter new name for this chat room. <br>Enter blank for deleting room name.", g_title, { 
+    hush.msg.inputBox("Enter new name for this chat room. <br>Enter blank for deleting room name.", g_title, { 
         "OK": function() {                             
-            const _newName = hushj.msg.getInput().trim()                            
+            const _newName = hush.msg.getInput().trim()                            
             if (!hush.util.chkFieldVal(_newName, 100, false, false, "Room Name")) return
             const rq = { type : _type, roomname : _newName, userid : g_userid, roomid : g_roomid } //roomid needed since
             if (hush.webview.ios) { 
@@ -1418,10 +1418,10 @@ const dialogRoomRename = (_type) => {
             } else {
                 hush.sock.send(g_socket, hush.cons.sock_ev_rename_room, rq, g_roomid, "parent") //it should be transferred to parent
             }
-            hushj.msg.close()
+            hush.msg.close()
             if (hush.webview.on) showRoomMenu(false)
         }, "Cancel": function() { 
-            hushj.msg.close()
+            hush.msg.close()
             if (hush.webview.on) showRoomMenu(false)
         } 
     }, _header, 320)
@@ -1543,7 +1543,7 @@ const openRoomWithMobile = () => {
             AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
         }
     } else {
-        hushj.msg.alert("Please close this chat room and open again.")
+        hush.msg.alert("Please close this chat room and open again.")
     }
 }
 
@@ -1555,11 +1555,11 @@ function OnSearch(input) {
 
 var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
     [hush.cons.sock_ev_chk_alive] : (data) => { //[...]
-        for (let item of data) hushj.people.toggleDisplay(item, true)
+        for (let item of data) hush.people.toggleDisplay(item, true)
         if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.funcSockEv[hush.cons.sock_ev_chk_alive].call(null, data)
     },
     [hush.cons.sock_ev_show_off] : (userkey) => { 
-        hushj.people.toggleDisplay(userkey, false)
+        hush.people.toggleDisplay(userkey, false)
         if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.funcSockEv[hush.cons.sock_ev_show_off].call(null, userkey)
     },
     [hush.cons.sock_ev_show_on] : (userkey) => { 
@@ -1572,7 +1572,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
         } else {
             hush.sock.send(g_socket, hush.cons.sock_ev_open_room, rq, g_roomid)
         }
-        hushj.people.toggleDisplay(userkey, true)
+        hush.people.toggleDisplay(userkey, true)
         if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.funcSockEv[hush.cons.sock_ev_show_on].call(null, userkey) 
     },
     [hush.cons.sock_ev_create_room] : (data) => {
@@ -1616,7 +1616,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
     },
     [hush.cons.sock_ev_send_msg] : (data) => {
         if (data.roomid != g_roomid) {
-            hushj.msg.alert("Different RoomID : " + data.roomid + "/" + g_roomid)
+            hush.msg.alert("Different RoomID : " + data.roomid + "/" + g_roomid)
             return
         }
         if (data.senderkey == g_userkey) deleteLocalMsg(data.msgid)
@@ -1648,7 +1648,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                 g_msgUnread = []
             }
         }
-        let _dt = hushj.util.tzDateTime(data.cdt)
+        let _dt = hush.util.tzDateTime(data.cdt)
         _dt = hush.util.formatMsgDt(_dt, g_year)
         if (data.type == "check") { //from socket.emit (not room broadcast)
             if (data.errcd == hush.cons.result_err) {
@@ -1731,7 +1731,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                         const _filelink = procFileLinkIfExists(data)
                         $("#filelink_" + data.msgid).html(_filelink)
                         $("#pb_" + data.msgid).hide()
-                        const _expiry = hushj.util.getExpiryWithTZ(data.filestate, g_year)
+                        const _expiry = hush.util.getExpiryWithTZ(data.filestate, g_year)
                         $("#expiry_" + data.msgid).html(_expiry) //data.filestate == hush.cons.file_expired ? data.filestate : "until " + data.filestate) //expiry comes from server
                     }
                     procForCell(data)
@@ -1759,7 +1759,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
             if (len == 0) return
             let arrUnreads = []
             for (let i = 0; i < len; i++) arrUnreads.push(data.unread_list[i].RECEIVERNM)
-            hushj.msg.alert(arrUnreads.join(hush.cons.memdeli), null, "people unread")
+            hush.msg.alert(arrUnreads.join(hush.cons.memdeli), null, "people unread")
         } else if (data.type == "update") {
             procUnreadCount(data.msgid, data.unread_cnt)
         } else { //query
@@ -1770,13 +1770,13 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
     },
     [hush.cons.sock_ev_qry_msgcell] : (data) => { //when drag&dropped
         if (data.result.length == 0) {
-            hushj.msg.alert("no data for " + data.msgid)
+            hush.msg.alert("no data for " + data.msgid)
             return
         }                 
-        const rs = data.result[0] //console.log(g_roomid+"==="+rs.ROOMID) //hushj.msg.toast("pasting " + rs.TYPE + "..") 
+        const rs = data.result[0] //console.log(g_roomid+"==="+rs.ROOMID) //hush.msg.toast("pasting " + rs.TYPE + "..") 
         if (rs.TYPE == "image") {
             if (rs.BUFFER == null) {
-                hushj.msg.alert("no image data to send")
+                hush.msg.alert("no image data to send")
                 return
             }
             if (hush.webview.ios) {
@@ -1789,11 +1789,11 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                         $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
                         showImgMenu(true)
                         $("#btn_send_img_m").off("click").on("click", function(e) { 
-                            hushj.util.animCall(this.id, true) 
+                            hush.util.animCall(this.id, true) 
                             sendMsg("image", blobUrl, blob) 
                         })
                         $("#btn_cancel_img_m").off("click").on("click", function(e) { 
-                            hushj.util.animCall(this.id, true) 
+                            hush.util.animCall(this.id, true) 
                             showImgMenu(false) 
                         })
                     }
@@ -1805,26 +1805,26 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                 $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
                 showImgMenu(true)
                 $("#btn_send_img").off("click").on("click", function(e) { 
-                    hushj.util.animCall(this.id, true) 
+                    hush.util.animCall(this.id, true) 
                     sendMsg("image", blobUrl, blob) 
                 })
                 $("#btn_cancel_img").off("click").on("click", function(e) { 
-                    hushj.util.animCall(this.id, true) 
+                    hush.util.animCall(this.id, true) 
                     showImgMenu(false) 
                 })
             }                    
         } else if (rs.TYPE == "file" || rs.TYPE == "flink") {
-            hushj.msg.alert("파일을 전송할까요? " + hush.util.extractFileFromTalkBody(rs.BODY), {  
+            hush.msg.alert("파일을 전송할까요? " + hush.util.extractFileFromTalkBody(rs.BODY), {  
                 "Send": function() { 
-                    hushj.msg.close() 
+                    hush.msg.close() 
                     sendMsg("flink", rs.BODY, rs.FILESTATE)
                 }, "Cancel": function() { 
-                    hushj.msg.close()
+                    hush.msg.close()
                 } 
             }, "Confirm")
         } else {
             if (rs.BODY.trim() == "") {
-                hushj.msg.alert("no text data to send")
+                hush.msg.alert("no text data to send")
                 return
             }
             g_in_chat.val(rs.BODY)
@@ -1835,7 +1835,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
     },
     [hush.cons.sock_ev_delete_msg] : (data) => {
         if (data.type == "all") {
-            hushj.msg.toast("all messages in this chat room deleted")
+            hush.msg.toast("all messages in this chat room deleted")
             g_list_msg.empty()                    
         } else {
             const _msgidArr = data.msgidArr
@@ -1846,7 +1846,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
     },
     [hush.cons.sock_ev_invite_user] : (data) => {
         if (data.invitedUserids.length == 0) {
-            hushj.msg.toast("초대된 멤버가 없거나 이미 초대된 멤버입니다.")
+            hush.msg.toast("초대된 멤버가 없거나 이미 초대된 멤버입니다.")
             return
         }
         const rq = initMsg()
@@ -1883,15 +1883,15 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
     },
     [hush.cons.sock_ev_disconnect] : (data) => { //mobile only
         sockConnected = false
-        $("#img_disconn").show() //hushj.msg.toast("disconnected", false, true)
+        $("#img_disconn").show() //hush.msg.toast("disconnected", false, true)
     },
     [hush.cons.sock_ev_mark_as_connect] : (data) => { //mobile only
-        $("#img_disconn").hide() //hushj.msg.toastEnd()
+        $("#img_disconn").hide() //hush.msg.toastEnd()
     },
     [hush.cons.sock_ev_connect] : (data) => { //mobile only
         try {
             sockConnected = true
-            $("#img_disconn").hide() //hushj.msg.toastEnd()
+            $("#img_disconn").hide() //hush.msg.toastEnd()
             const arr = $(".talk").last()
             if (arr.length == 0) return
             getMsgList("after", $(arr[0]).attr("id").substring(4)) //msgid. after = after reconnect
@@ -1905,8 +1905,8 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
 ////////////////////////////////////////////////////////////////////////mobile webview
 const startFromWebView = async (from, obj, rs) => {
     try {
-        hushj.auth.setCookieForUser(obj, "Y", true)
-        hush.user = hushj.auth.setUser()
+        hush.auth.setCookieForUser(obj, "Y", true)
+        hush.user = hush.auth.setUser()
         g_userkey = hush.user.key 
         g_userid = hush.user.id
         g_usernm = hush.user.nm
