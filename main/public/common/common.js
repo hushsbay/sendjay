@@ -487,7 +487,7 @@
                 if (nicknm) return nicknm //각 멤버들이 만들기 가능
                 if (mainnm) return mainnm //Owner(Master=Creator)만 만들기 가능
                 const _roomnmObj = (typeof roomnm == "string") ? JSON.parse(roomnm) : roomnm
-                return hush.room.procRoomName(_roomnmObj, g_userid) //Or member's name are displayed with some delimeter.
+                return hush.sock.procRoomName(_roomnmObj, g_userid) //Or member's name are displayed with some delimeter.
             },
             getWinId : () => { //xxxxxx20241231010159
                 return hush.util.getRnd().toString() + "_" + hush.util.getCurDateTimeStr()
