@@ -54,6 +54,11 @@
 			sock_ev_set_env : 'set_env',
 			sock_ev_chk_typing : 'chk_typing',
 			sock_ev_cut_mobile : 'cut_mobile',
+            fetch_cnt_list : 100, //At least, this should be the count which exceeds minimum rows with y-scroll .
+            fetch_cnt : 100, //At least, this should be the count which exceeds minimum rows with y-scroll.
+            fetch_first_cnt : 15, //At least, this should be the count which exceeds minimum rows with y-scroll.
+            fetch_cnt_oneshot : 10000, //like search result
+            sec_for_webview_func : 100,
         },
         socket : null,
         user : null,
