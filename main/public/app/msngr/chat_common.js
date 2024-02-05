@@ -120,9 +120,9 @@ const setMembers = async (data) => {
         const list = $("#people_sub")
         list.empty()                
         const rq = { type : "userids", keyword : data.receiverid.join(hush.cons.indeli) }
-        const rs = await hushj.http.ajax(hush.cons.route + "/qry_userlist", rq)
-        if (rs.code != hush.cons.result_ok) {
-            hushj.msg.toast(rs.msg)
+        const rs = await hush.http.ajax("/msngr/qry_userlist", rq)
+        if (rs.code != hush.cons.CODE_OK) {
+            hush.msg.showMsg(rs.msg, rs.code)
             return
         }
         const _len = rs.list.length
