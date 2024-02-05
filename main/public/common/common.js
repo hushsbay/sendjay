@@ -8,6 +8,7 @@
             CODE_ERR : '-1',
             CODE_NO_DATA : '-100',
             MSG_NO_DATA : '데이터가 없습니다.',
+            MSG_NO_MORE_DATA : '더 이상 데이터가 없습니다.',
             toast_prefix : "##$$", 
             ///////////////////////////////////위는 서버와 동일
             erp_portal : "index.html",
@@ -59,6 +60,16 @@
             fetch_first_cnt : 15, //At least, this should be the count which exceeds minimum rows with y-scroll.
             fetch_cnt_oneshot : 10000, //like search result
             sec_for_webview_func : 100,
+            max_member_for_org : 16, //temporary. same as server's
+            max_filecount : 5, //uploading files
+            max_filesize : 1110485760,//max_filesize : 10485760, //10MB
+            max_picture_size : 5242880, //5MB
+            max_nicknm_len : 100, //same as server's
+            max_msg_len : 4000, //bytes. check body field length same as server's
+            max_size_to_sublink : 5242880, //5MB. same as server's
+            unread_max_check : 1000,
+            max_add_count : 100, //when connect after disconnect
+            send_timeout_sec : 5,
         },
         socket : null,
         user : null,

@@ -582,7 +582,7 @@ const procForCell = (obj) => {
         const checked = $(".chkboxSel:checked")
         const len = checked.length
         if (len == 0) {
-            hushj.msg.toast(hush.cons.msg.no_data)
+            hushj.msg.toast(hush.cons.MSG_NO_DATA)
             return
         }
         hushj.msg.alert("Continue to delete ? (" + len + ")", {
@@ -708,13 +708,13 @@ const getMsgList = async (type, keyword, start, end) => {
         }
         const rs = await hushj.http.ajax(hush.cons.route + "/qry_msglist", rq, null, withToast)
         if (rs.code != hush.cons.result_ok && rs.code != hush.cons.result_no_data) {
-            hushj.msg.alert("getMsgList:" + rs.msg)
+            await hush.msg.alert("getMsgList:" + rs.msg)
             return
         }
         const _len = rs.list.length
         if (rq.type == "search" || rq.type == "etc") {
             if (_len == 0) {
-                hushj.msg.toast(hush.cons.msg.no_data)
+                hush.msg.toast(hush.cons.MSG_NO_DATA)
                 $("#result_cnt").html(_len) 
                 return
             }
@@ -727,9 +727,9 @@ const getMsgList = async (type, keyword, start, end) => {
                 } 
                 if ($("#getmore").length > 0) $("#getmore").remove()
                 if (g_cdt == FIRST_QUERIED) {
-                    hushj.msg.toast(hush.cons.msg.no_data)
+                    hush.msg.toast(hush.cons.MSG_NO_DATA)
                 } else {
-                    hushj.msg.toast(hush.cons.msg.no_more_data)
+                    hush.msg.toast(hush.cons.msg.MSG_NO_MORE_DATA)
                 }
                 return
             } else if (rq.type == "after" && _len > hush.cons.max_add_count) { //in case of large add, you'd better refresh(open_room)
