@@ -31,6 +31,7 @@
             w_key : 'W__', //Web userkey
             m_key : 'M__', //Mobile userkey
             prefix : '$$', //for redis, socket
+            indeli : "','", //use this for sql where in clause
             memdeli : " / ",
             idb_tbl : "msngr", //indexedDB
             sock_ev_alert : 'alert',
