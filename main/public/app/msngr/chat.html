@@ -41,7 +41,6 @@
                 try {
                     await $.getScript("/common/common.js")
                     await $.getScript("chat_common.js")
-                    debugger
                     const param = new URLSearchParams(location.search)
                     hush.webview.chk(param)
                     g_in_chat = $("#in_chat")

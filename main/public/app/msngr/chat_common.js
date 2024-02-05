@@ -196,7 +196,7 @@ const setMembers = async (data) => {
             hush.sock.send(g_socket, hush.cons.sock_ev_chk_alive, dataObj, g_roomid)
         }
     } catch (ex) {
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 
@@ -264,7 +264,7 @@ const setResult = (data) => {
             setTimeout(() => $("#getprev").hide(), 500)
         })
     } catch (ex) {
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 
@@ -320,7 +320,7 @@ const procQueryUnread = () => {
             hush.sock.send(g_socket, hush.cons.sock_ev_read_msg, rq, g_roomid)
         }
     } catch (ex) {
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 
@@ -886,7 +886,7 @@ const getMsgList = async (type, keyword, start, end) => {
             }
         }
     } catch (ex) {
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 
@@ -1095,7 +1095,7 @@ const sendMsg = (type, blobUrlOrBody, blobOrFilestate) => {
             procSendAndAppend(rq)
         }
     } catch (ex) {
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 
@@ -1229,7 +1229,7 @@ const procOpengraph = async (msgid, kind) => {
             }
         }
     } catch (ex) { 
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 
@@ -1326,7 +1326,7 @@ const handleFileUpload = (files) => {
             })
         }
     } catch (ex) { 
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 
@@ -1897,7 +1897,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
             getMsgList("after", $(arr[0]).attr("id").substring(4)) //msgid. after = after reconnect
             AndroidCom.reconnectDone()
         } catch (ex) {
-            hush.util.showException(ex)
+            hush.util.showEx(ex)
         }
     }
 }
@@ -1933,7 +1933,7 @@ const startFromWebView = async (from, obj, rs) => {
         chkTyping()
         AndroidRoom.doneLoad()
     } catch (ex) {
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 
@@ -1942,7 +1942,7 @@ const getFromWebViewSocket = (from, json) => {
         if (!funcSockEv || !funcSockEv[json.ev]) return //Every event data object comes here even if it is not defined in this page. 
         funcSockEv[json.ev].call(null, json.data)
     } catch (ex) {
-        hush.util.showException(ex)
+        hush.util.showEx(ex)
     }
 }
 
