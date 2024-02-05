@@ -67,12 +67,12 @@
                                     AndroidPopup.procAfterOpenPopup()
                                 }
                             } catch (exAnd) {
-                                hushj.msg.alert("모바일웹은 지원되지 않습니다.<br>앱을 설치하시기 바랍니다.", {  
+                                hush.msg.alert("모바일웹은 지원되지 않습니다.<br>앱을 설치하시기 바랍니다.", {  
                                     "설치페이지로 이동": function() { 
-                                        hushj.msg.close() 
+                                        hush.msg.close() 
                                         location.replace("/jquery/appdown.html?nocache=" + Math.random())
                                     }, "닫기": function() { 
-                                        hushj.msg.close()
+                                        hush.msg.close()
                                     } 
                                 })
                             }
@@ -110,7 +110,7 @@
                         if (!result) return
                         $(".coNav").on("click", function() { procMenuTop(this.id) })
                         $("#btn_team, #btn_company").on("click", function() {
-                            hushj.util.animCall(this.id, true)
+                            hush.util.animCall(this.id, true)
                             procMenuPeople(this.id) 
                         })
                         $("#btn_new").on("click", function() { 
@@ -144,9 +144,9 @@
                             }
                         })
                         $("#btn_me").on("click", async function() {
-                            hushj.util.animCall(this.id, true)
+                            hush.util.animCall(this.id, true)
                             if (!hush.webview.on) {
-                                hush.room.create(hushj.cons.chat, "me", g_token10)
+                                hush.room.create(hush.cons.chat, "me", g_token10)
                             } else {
                                 const new_roomid = hush.util.createId(g_token10)
                                 const rq = { masterid : g_userid, masternm : g_usernm, userids : [g_userid] }
@@ -157,10 +157,10 @@
                             }
                         })
                         $("#btn_noti").on("click", function() { 
-                            hushj.util.animCall(this.id, true)
+                            hush.util.animCall(this.id, true)
                             const checked = $(".chkbox_portal:checked")
                             if (checked.length == 0) {
-                                hushj.msg.toast(hush.cons.msg.row_not_selected)
+                                hush.msg.toast(hush.cons.msg.row_not_selected)
                                 return
                             }
                             checked.each(function(idx, item) {
@@ -176,10 +176,10 @@
                             })
                         })
                         $("#btn_read").on("click", function() { 
-                            hushj.util.animCall(this.id, true)
+                            hush.util.animCall(this.id, true)
                             const checked = $(".chkbox_portal:checked")
                             if (checked.length == 0) {
-                                hushj.msg.toast(hush.cons.msg.row_not_selected)
+                                hush.msg.toast(hush.cons.msg.row_not_selected)
                                 return
                             }
                             checked.each(function(idx, item) {
@@ -198,13 +198,13 @@
                             //Since when every member don't open chat room, no one can't be joined to that room, so real-time 'leave' message won't be delivered.
                             //work-around => calling hush.cons.sock_ev_open_room before hush.cons.sock_ev_send_msg with 'leave' on response for sock_ev_open_room ("before_leave" below)
                             //서버 리스타트후 바로 목록에서 나가기 할 경우 롬조인이 안되서 다른 멤버들에게 전달이 안될 수 있는데 먼저 sock_ev_open_room을 호출하여 처리하면 됨. ("before_leave" below)
-                            hushj.util.animCall(this.id, true)
+                            hush.util.animCall(this.id, true)
                             const checked = $(".chkbox_portal:checked")
                             if (checked.length == 0) {
-                                hushj.msg.toast(hush.cons.msg.row_not_selected)
+                                hush.msg.toast(hush.cons.msg.row_not_selected)
                                 return
                             }
-                            hushj.msg.alert("선택된 채팅방내 본인이 주고 받은 모든 톡이 삭제됩니다. 계속할까요??", { 
+                            hush.msg.alert("선택된 채팅방내 본인이 주고 받은 모든 톡이 삭제됩니다. 계속할까요??", { 
                                 "Yes": function() {                                 
                                     checked.each(function(idx, item) {
                                         const _roomid = item.id.substring(4)
@@ -216,25 +216,25 @@
                                             hush.sock.send(hush.socket, hush.cons.sock_ev_open_room, rq, _roomid, "parent")
                                         }
                                     })
-                                    hushj.msg.close()
+                                    hush.msg.close()
                                     $("#chk_selectall").prop("checked", false)
                                 }, "No": function() { 
-                                    hushj.msg.close()
+                                    hush.msg.close()
                                 } 
                             }, "Leave Room", 200)
                         })
                     }
                     $("#btn_refresh").on("click", function() { //mobile only
-                        hushj.util.animCall(this.id, true)
+                        hush.util.animCall(this.id, true)
                         AndroidMain.reload()
                     })
                     $("#btn_logout").on("click", function() { //mobile only
-                        hushj.util.animCall(this.id, true)
-                        hushj.msg.alert("로그아웃할까요?", { 
+                        hush.util.animCall(this.id, true)
+                        hush.msg.alert("로그아웃할까요?", { 
                             "Yes": function() {                                 
                                 AndroidMain.logout()
                             }, "No": function() { 
-                                hushj.msg.close()
+                                hush.msg.close()
                             } 
                         }, "Logout", 200)
                     })
@@ -255,11 +255,11 @@
                     })
                     $("#in_search").keyup(function(e) { if (e.keyCode === 13) procSearch() })
                     $("#btn_search").on("click", function() {
-                        hushj.util.animCall(this.id, true)  
+                        hush.util.animCall(this.id, true)  
                         procSearch() 
                     })
                     $("#remove_selected_people").on("click", function() {
-                        hushj.util.animCall(this.id, true)
+                        hush.util.animCall(this.id, true)
                         $("#select_people_sub").empty()
                         $(".orgsel").prop("checked", false)
                         $(".orgsel").css("opacity", "1.0")
@@ -268,20 +268,20 @@
                         procMemPanel()
                     })
                     $("#pict_browse").on("click", function() {
-                        hushj.util.animCall(this.id, true)
+                        hush.util.animCall(this.id, true)
                         $("#file_upload").val("")
                         $("#file_upload").trigger("click")
                     })
                     $("#pict_upload").on("click", function() {
-                        hushj.util.animCall(this.id, true)
+                        hush.util.animCall(this.id, true)
                         const blobUrl = $("#img_pict").attr("src")
                         if (!blobUrl) {
-                            hushj.msg.toast("Image file needed.")
+                            hush.msg.toast("Image file needed.")
                             return
                         }
                         const objUrl = hush.http.parseBlobUrl(blobUrl)
                         if (!objUrl) {
-                            hushj.msg.toast("Mime type not found.")
+                            hush.msg.toast("Mime type not found.")
                             return
                         }
                         const xhr = new XMLHttpRequest()
@@ -295,21 +295,21 @@
                                 fd.append("type", "U") //U(Update Picture), D(Delete Picture)
                                 fd.append("mimetype", objUrl.mimetype)
                                 fd.append("file", blob)
-                                hushj.http.ajaxFormData(hush.cons.route + "/proc_picture", fd, (rs) => {
-                                    hushj.msg.toast("Upload done.")
+                                hush.http.ajaxFormData(hush.cons.route + "/proc_picture", fd, (rs) => {
+                                    hush.msg.toast("Upload done.")
                                 })
                             }
                         }
                         xhr.send()
                     })
                     $("#pict_delete").on("click", function() {
-                        hushj.util.animCall(this.id, true)
+                        hush.util.animCall(this.id, true)
                         const fd = new FormData()
                         fd.append("userid", g_userid)
                         fd.append("type", "D") //U(Update Picture), D(Delete Picture)
-                        hushj.http.ajaxFormData(hush.cons.route + "/proc_picture", fd, (rs) => {
+                        hush.http.ajaxFormData(hush.cons.route + "/proc_picture", fd, (rs) => {
                             $("#img_pict").attr("src", hush.cons.img_noperson)
-                            hushj.msg.toast("Delete done.")
+                            hush.msg.toast("Delete done.")
                         })
                     })
                     $("#file_upload").change(function() {
@@ -317,11 +317,11 @@
                             const file = this.files[0]
                             const obj = hush.util.getFileNameAndExtension(file.name)
                             if (obj.ext == "" || !hush.cons.sublink_ext_image.includes(obj.ext)) {
-                                hushj.msg.alert("Image file needed. (" + hush.cons.sublink_ext_image + ")")
+                                hush.msg.alert("Image file needed. (" + hush.cons.sublink_ext_image + ")")
                                 return
                             }
                             if (file.size > hush.cons.max_picture_size) {
-                                hushj.msg.alert("File size up to " + hush.util.formatBytes(hush.cons.max_picture_size) + "(" + hush.cons.max_picture_size + "). Now is " + file.size + " bytes.")
+                                hush.msg.alert("File size up to " + hush.util.formatBytes(hush.cons.max_picture_size) + "(" + hush.cons.max_picture_size + "). Now is " + file.size + " bytes.")
                                 return
                             }
                             const reader = new FileReader()
@@ -334,24 +334,24 @@
                         }
                     })
                     $("#btn_reset_auth").on("click", function() { //displays in Web Only
-                        hushj.util.animCall(this.id, true)
-                        hushj.msg.alert("You're going to reset authentication (including mobile). Continue?", { 
+                        hush.util.animCall(this.id, true)
+                        hush.msg.alert("You're going to reset authentication (including mobile). Continue?", { 
                             "Yes": async function() { 
                                 try {
                                     const rq = { mode : "passkey", userid : g_userid }
-                                    const rs = await hushj.http.ajax(hush.cons.route + "/proc_user", rq, "POST") //See in proc_user.js and login.js, too.
+                                    const rs = await hush.http.ajax(hush.cons.route + "/proc_user", rq, "POST") //See in proc_user.js and login.js, too.
                                     if (rs.code != hush.cons.result_ok) {
-                                        hushj.msg.alert(rs.msg)
+                                        hush.msg.alert(rs.msg)
                                         return
                                     }
                                     const dataObj = { userid : g_userid } //disconnect mobile socket
                                     hush.sock.send(hush.socket, hush.cons.sock_ev_cut_mobile, dataObj)
-                                    hushj.msg.close()
+                                    hush.msg.close()
                                 } catch (ex) {
-                                    hushj.msg.alert("btn_reset_auth: " + ex.message)
+                                    hush.msg.alert("btn_reset_auth: " + ex.message)
                                 }
                             }, "No": function() { 
-                                hushj.msg.close()
+                                hush.msg.close()
                             } 
                         }, "Reset Authentication", 200)
                     })
@@ -359,7 +359,7 @@
                         g_setting_changed = true 
                     })   
                     $("#spn_clear").on("click", function() {  
-                        hushj.util.animCall(this.id, true)
+                        hush.util.animCall(this.id, true)
                         if ($("#in_fr").val().trim() != "") {
                             $("#in_fr").val("")
                             g_setting_changed = true 
@@ -370,7 +370,7 @@
                         }
                     })
                     $("#btn_ok").on("click", async function() {
-                        hushj.util.animCall(this.id, true)
+                        hush.util.animCall(this.id, true)
                         try {
                             if (g_win_type == "invite") {
                                 let useridArr = [], usernmArr = []
@@ -380,7 +380,7 @@
                                     usernmArr.push($("#addnm_" + _userid).html())
                                 }).promise().done(function() {
                                     if (useridArr.length == 0) {
-                                        hushj.msg.toast(hush.msg.need_one_row_selected)
+                                        hush.msg.toast(hush.msg.need_one_row_selected)
                                         return
                                     } 
                                     if (!hush.webview.on) {
@@ -397,7 +397,7 @@
                                     useridArr.push(_userid)
                                 }).promise().done(function() { 
                                     if (useridArr.length == 0) {
-                                        hushj.msg.toast("No selection.")
+                                        hush.msg.toast("No selection.")
                                         return
                                     } 
                                     if (!hush.webview.on) {
@@ -420,23 +420,23 @@
                                 }).promise().done(function() { 
                                     if (orgcd != "") {
                                         if (i > 1) {
-                                            hushj.msg.alert("Single Select Only")
+                                            hush.msg.alert("Single Select Only")
                                             return
                                         }
                                         opener.procOrgFromPopup(orgcd, orgnm)
                                         window.close()
                                     } else {
-                                        hushj.msg.toast("None selected.")
+                                        hush.msg.toast("None selected.")
                                     }
                                 })
                             } else { //setting
                                 if (!g_setting_changed) {
-                                    hushj.msg.toast("Nothing changed.")
+                                    hush.msg.toast("Nothing changed.")
                                     return
                                 }           
-                                const overlay = hushj.msg.toast("saving..", false)
+                                const overlay = hush.msg.toast("saving..", false)
                                 if (!procSetting("save")) return
-                                setTimeout(() => { hushj.msg.toastEnd(overlay) }, 1000)
+                                setTimeout(() => { hush.msg.toastEnd(overlay) }, 1000)
                                 g_setting_changed = false
                             }
                         } catch (ex) {
@@ -444,7 +444,7 @@
                         }
                     })
                     $("#btn_cancel").on("click", function() {
-                        hushj.util.animCall(this.id, true)
+                        hush.util.animCall(this.id, true)
                         if (g_win_type) {
                             if (!hush.webview.on) {
                                 window.close()
@@ -453,7 +453,7 @@
                             }
                         } else {
                             if (!g_setting_changed) {
-                                hushj.msg.toast("Nothing changed.")
+                                hush.msg.toast("Nothing changed.")
                                 return
                             }
                             procSetting("cancel")
