@@ -687,7 +687,6 @@ const procForCell = (obj) => {
 
 const getMsgList = async (type, keyword, start, end) => {
     try {
-        debugger
         g_year = (new Date()).getFullYear().toString()
         let rq, withToast = true, includeInviteOrLeave = false
         if (type == "search") {
@@ -706,6 +705,8 @@ const getMsgList = async (type, keyword, start, end) => {
             rq = { type : "normal", roomid : g_roomid, dt : g_cdt, cnt : cnt }
             withToast = false
         }
+debugger       
+
         const rs = await hush.http.ajax(hush.cons.route + "/qry_msglist", rq, null, withToast)
         if (rs.code != hush.cons.result_ok && rs.code != hush.cons.result_no_data) {
             await hush.msg.alert("getMsgList:" + rs.msg)
@@ -1600,12 +1601,12 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
     },
     [hush.cons.sock_ev_open_room] : (data) => { //from=after,create,dupchk,portal,noti,rename_room,hush.cons.sock_ev_show_on
         setTimeout(function() {
-            debugger
             sockConnected = true //for mobile only
             if (data.from == hush.cons.sock_ev_show_on) return
             setMembers(data) //console.log(JSON.stringify(data)+"===")
             toggleDispMem(data.dispmem)
             if (data.from == "rename_room" || data.from == "after") return
+            debugger
             hush.idb.connect(() => {
                 getMsgList() //setTimeout(() => getMsgList(), 3000) //set for debugging
             })
