@@ -55,6 +55,7 @@
 			sock_ev_set_env : 'set_env',
 			sock_ev_chk_typing : 'chk_typing',
 			sock_ev_cut_mobile : 'cut_mobile',
+            tz_seoul : "Asia/Seoul", //for korean
             fetch_cnt_list : 100, //At least, this should be the count which exceeds minimum rows with y-scroll .
             fetch_cnt : 100, //At least, this should be the count which exceeds minimum rows with y-scroll.
             fetch_first_cnt : 15, //At least, this should be the count which exceeds minimum rows with y-scroll.
@@ -72,6 +73,7 @@
             send_timeout_sec : 5,
         },
         socket : null,
+        tz : Intl.DateTimeFormat().resolvedOptions().timeZone, //eg) Asia/Seoul, America/Toronto
         user : null,
         ////////////////////////////////////////////////////////////////////////////////////////
         auth : {
@@ -562,6 +564,10 @@
             },            
         },        
         util : {
+            chkSeoulTz : () => {
+                if (hush.tz == hush.cons.tz_seoul) return true
+                return false
+            },
             isvoid : (obj) => {
                 if (typeof obj == "undefined" || obj == null) return true
                 return false
@@ -734,6 +740,38 @@
             getDateTimeDiff(_prev, _cur) { //_prev = yyyy-mm-dd hh:MM:dd
                 const dtPrev = hush.util.getTimeStamp(_prev)
                 return parseInt((_cur - dtPrev) / 1000) //return seconds
+            },
+            formatMsgDt : (_dt, _year, onlyDate) => { //yyyy-mm-dd hh:mm:ss => consider tzDateTime first
+                let dt 
+                if (_dt.substr(0, 4) == _year) {
+                    dt = _dt.substr(5, 11)
+                 } else {
+                    if (onlyDate) {
+                        dt = _dt.substr(0, 10)
+                    } else {
+                        dt = _dt.substr(0, 16) //up to minutes
+                    }
+                 }
+                 return dt
+            },
+            tzDateTime : (dt, dispSec) => { //see moment.js about timezone handling
+                let _dt = ((dt.length > 19) ? dt.substr(0, 19) : dt) + "Z" //dt = UTC (YYYY-MM-DD hh:MM:ss or YYYY-MM-DD hh:MM:ssZ or YYYY-MM-DDThh:MM:ssZ)
+                _dt = moment(_dt).tz(hush.tz).format() //returns 2020-07-19T11:07:00+09:00
+                if (dispSec) {
+                    return _dt.substr(0, 10) + " " + _dt.substr(11, 8)
+                } else {
+                    return _dt.substr(0, 10) + " " + _dt.substr(11, 5)
+                }
+            },
+            getExpiryWithTZ : (filestate, cur_year) => {
+                let _expiry
+                if (filestate == "" || filestate == hush.cons.file_expired) {
+                    _expiry = filestate
+                } else {
+                    _expiry = hush.util.tzDateTime(filestate, true)
+                    _expiry = "until " + hush.util.formatMsgDt(_expiry, cur_year) //daemon kills periodically
+                }
+                return _expiry
             },
             displayOnOff : (userkey, on) => {
                 if (on) {

@@ -399,7 +399,8 @@ const addRow = (obj, kind) => {
             if (obj.body == hush.cons.cell_revoked) {
                 _body = obj.body
             } else { 
-                _body = hush.util.removeTag(obj.body)
+                //_body = hush.util.removeTag(obj.body) //.html() 대신에 .text()로 변경 검토해야 함
+                _body = obj.body
             }
             _boderpx = "1px"
             const _pattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi //two more bytes parameter not working
@@ -505,12 +506,12 @@ const addRow = (obj, kind) => {
             if (_sublink) {
                 procOpengraph(obj.msgid, kind)
             } else if (obj.body.length == 2) { //to make display one emoji big
-                const korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/; //needs nice solution : temporary way to avoid conflict korean and emoji like 'ㅋㅋ'
-                if (!korean.test(obj.body) && hush.util.chkEmoji(obj.body)) $("#body_" + obj.msgid).css("font-size", "48px")
+                //const korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/; //needs nice solution : temporary way to avoid conflict korean and emoji like 'ㅋㅋ'
+                //if (!korean.test(obj.body) && hush.util.chkEmoji(obj.body)) $("#body_" + obj.msgid).css("font-size", "48px")
             }
         }
         $("#unread_" + obj.msgid).off("click").on("click", function() {
-            hush.util.animCall(this.id, true) 
+            //hush.util.animCall(this.id, true) 
             const rq = { type : "getmembers", msgid : obj.msgid }
             if (hush.webview.ios) { 
             } else if (hush.webview.and) {
@@ -534,7 +535,7 @@ const addRow = (obj, kind) => {
             // $("#save_" + obj.msgid).hide()
         })
         $("#reply_" + obj.msgid).off("click").on("click", function() {
-            hush.util.animCall(this.id, true) 
+            //hush.util.animCall(this.id, true) 
             // if ($("#cancelreply").length > 0) {
             //     setTitleToFrTip(true)
             //     return
@@ -549,7 +550,7 @@ const addRow = (obj, kind) => {
             })
         })
         $("#save_" + obj.msgid).off("click").on("click", function() {
-            hush.util.animCall(this.id, true) 
+            //hush.util.animCall(this.id, true) 
             if (obj.filestate == hush.cons.file_expired || $("#body_" + obj.msgid).html() == hush.cons.cell_revoked) return
             if (obj.type == "image") {
                 hush.http.fileDownload("imagetofile", obj.msgid)
@@ -958,27 +959,41 @@ const prepareForNoResponse = (rq) => {
         objUnread.html(hush.cons.no_response)
         objUnread.removeClass("unread").addClass("failure")
         objUnread.show()
-        objUnread.off("click").on("click", function() {
-            hush.util.animCall(this.id, true) 
-            hush.msg.alert("전송여부를 확인하시겠습니까?", {
-                "Yes": function() {
-                    $("#handling_" + rq.msgid).show()
-                    objUnread.hide() 
-                    const rqCheck = initMsg()
-                    rqCheck.type = "check"
-                    rqCheck.prevmsgid = rq.msgid
-                    if (hush.webview.ios) {
-                    } else if (hush.webview.and) {
-                        AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rqCheck), g_roomid, null, true) //procMsg=true
-                    } else {
-                        hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqCheck, g_roomid)
-                    }
-                    prepareForNoResponse(rq)
-                    hush.msg.close()
-                }, "No": function() { 
-                    hush.msg.close() 
-                } 
-            }, hush.cons.no_response)
+        objUnread.off("click").on("click", async function() {
+            //hush.util.animCall(this.id, true)
+            const ret = await hush.msg.confirm("전송여부를 확인하시겠습니까?")
+			if (!ret) return 
+            $("#handling_" + rq.msgid).show()
+            objUnread.hide() 
+            const rqCheck = initMsg()
+            rqCheck.type = "check"
+            rqCheck.prevmsgid = rq.msgid
+            if (hush.webview.ios) {
+            } else if (hush.webview.and) {
+                AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rqCheck), g_roomid, null, true) //procMsg=true
+            } else {
+                hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqCheck, g_roomid)
+            }
+            prepareForNoResponse(rq)
+            // hush.msg.alert("전송여부를 확인하시겠습니까?", {
+            //     "Yes": function() {
+            //         $("#handling_" + rq.msgid).show()
+            //         objUnread.hide() 
+            //         const rqCheck = initMsg()
+            //         rqCheck.type = "check"
+            //         rqCheck.prevmsgid = rq.msgid
+            //         if (hush.webview.ios) {
+            //         } else if (hush.webview.and) {
+            //             AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rqCheck), g_roomid, null, true) //procMsg=true
+            //         } else {
+            //             hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqCheck, g_roomid)
+            //         }
+            //         prepareForNoResponse(rq)
+            //         hush.msg.close()
+            //     }, "No": function() { 
+            //         hush.msg.close() 
+            //     } 
+            // }, hush.cons.no_response)
         })
     }, hush.cons.send_timeout_sec * 1000)
 }
