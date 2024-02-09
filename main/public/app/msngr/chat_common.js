@@ -984,6 +984,7 @@ const prepareForNoResponse = (rq) => {
 }
 
 const procSendAndAppend = (rq, blobUrl) => {
+    debugger
     const _focused = hush.webview.screenHeightOnLoad == $(window).height() ? false : true //g_in_chat.is(":focus") ? true : false
     addRow(rq)
     if (rq.type == "image") { //sent by ajax and should be noticed to all members
@@ -1087,8 +1088,8 @@ const sendMsg = (type, blobUrlOrBody, blobOrFilestate) => {
             rq.type = "talk"
             let _body = g_in_chat.val() //while (_body.endsWith(_body, "\n")) { const _len = _body.length; _body = _body.substring(0, _len - 1) } //infinite loop when _len is 0
             if (_body.trim() == "") return
-            if (hush.util.utf8StrByteLength(_body) > hush.cons.max_msg_len) {
-                hush.msg.toast("최대 : " + hush.cons.max_msg_len + " 바이트<br>현재 : " + hush.util.utf8StrByteLength(_body) + " 바이트")
+            if (hush.util.strLen(_body) > hush.cons.max_msg_len) {
+                hush.msg.toast("최대 : " + hush.cons.max_msg_len + " 바이트<br>현재 : " + hush.util.strLen(_body) + " 바이트")
                 return
             }
             rq.body = _body
@@ -1520,7 +1521,7 @@ const chkTyping = () => {
 }
 
 const calcBytes = () => {
-    const cnt = hush.util.utf8StrByteLength(g_in_chat.val())
+    const cnt = hush.util.strLen(g_in_chat.val())
     $("#fr_byte").html(cnt + "/" + hush.cons.max_msg_len)
     if (cnt >= hush.cons.max_msg_len) {
         if ($("#fr_byte").css("color") != "red") $("#fr_byte").css("color", "red")
