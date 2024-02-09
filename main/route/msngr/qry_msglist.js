@@ -17,15 +17,6 @@ router.post('/', async function(req, res) {
 		let { type, roomid, keyword, dt, start, end, senderid, cnt } = req.body
 		keyword = decodeURIComponent(keyword) || ''
 		cnt = parseInt(cnt)
-		//const type = req.query.type
-		//const _userid = req.cookies.userid
-		//const roomid = req.query.roomid
-		//const keyword = decodeURIComponent(req.query.keyword) || ''
-		// let dt = req.query.dt
-		// const start = req.query.start
-		// const end = req.query.end
-		// const senderid = req.query.senderid
-		// const cnt = parseInt(req.query.cnt)
 		conn = await wsmysql.getConnFromPool(global.pool)
 		userid = await ws.jwt.chkToken(req, res, conn) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
 		if (!userid) return
@@ -33,10 +24,12 @@ router.post('/', async function(req, res) {
 			sql = "SELECT CDT FROM A_MSGMST_TBL WHERE MSGID = ? AND ROOMID = ? "
 			data = await wsmysql.query(conn, sql, [keyword, roomid])
 			if (data.length == 0) {
-				rs.code = ws.cons.CODE_NO_DATA
-				rs.msg = ws.cons.MSG_NO_DATA
-				ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
+				ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true)
 				return
+				//rs.code = ws.cons.CODE_NO_DATA
+				//rs.msg = ws.cons.MSG_NO_DATA
+				//ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
+				//return
 			}
 			dt = data[0].CDT
 		}

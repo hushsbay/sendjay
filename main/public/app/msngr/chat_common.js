@@ -708,8 +708,12 @@ const getMsgList = async (type, keyword, start, end) => {
 debugger       
 
         const rs = await hush.http.ajax("/msngr/qry_msglist", rq, null, withToast)
-        if (rs.code != hush.cons.result_ok && rs.code != hush.cons.result_no_data) {
-            await hush.msg.alert("getMsgList:" + rs.msg)
+        // if (rs.code != hush.cons.result_ok && rs.code != hush.cons.result_no_data) {
+        //     await hush.msg.alert("getMsgList:" + rs.msg)
+        //     return
+        // }
+        if (rs.code != hush.cons.CODE_OK) {
+            hush.msg.showMsg(rs.msg, rs.code)
             return
         }
         const _len = rs.list.length
@@ -1606,7 +1610,6 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
             setMembers(data) //console.log(JSON.stringify(data)+"===")
             toggleDispMem(data.dispmem)
             if (data.from == "rename_room" || data.from == "after") return
-            debugger
             hush.idb.connect(() => {
                 getMsgList() //setTimeout(() => getMsgList(), 3000) //set for debugging
             })
