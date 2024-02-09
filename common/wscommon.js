@@ -409,6 +409,17 @@ module.exports = (function() {
 					}
 				}
 			}),
+			sendToMyOtherSocket : async (socket, param) => {
+				param.data.userid = socket.userid //see ChatService.kt
+				const otherUserkeySocket = await ws.redis.getMyOtherSocket(socket)
+				if (otherUserkeySocket) com.pub('sendto_myother_socket', { socketid : socket.id, otherkey : otherUserkeySocket, param : param }) //call pmessage()
+			},
+			sendToRoom : (socket, roomid, param) => {
+				//global.jay.to(roomid).emit(com.cons.sock_ev_common, param) //to all inside room. socket oneself included
+				//global.jay.to(roomid).emit => TypeError: opts.except is not iterable (from socket.io 3.0)
+				socket.to(roomid).emit(ws.cons.sock_ev_common, param) //본인 소켓 제외
+				socket.emit(ws.cons.sock_ev_common, param) //본인 소켓에게 보냄
+			},
 			setRoomnmWithUsernm : (data, fieldUserNm, fieldUserId) => {
 				let _roomnm = '', _userid = ''
 				const len = data.length
