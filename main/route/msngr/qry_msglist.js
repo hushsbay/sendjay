@@ -30,16 +30,18 @@ router.post('/', async function(req, res) {
 		userid = await ws.jwt.chkToken(req, res, conn) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
 		if (!userid) return
 		if (_type == 'after') {
-			const qryA = "SELECT CDT FROM A_MSGMST_TBL WHERE MSGID = ? AND ROOMID = ? "
-			const dataA = await wsmysql.query(conn, qryA, [_keyword, _roomid])
-			if (dataA.length == 0) {
-				rs.code = ws.cons.WARN_NOT_EXIST
+			sql = "SELECT CDT FROM A_MSGMST_TBL WHERE MSGID = ? AND ROOMID = ? "
+			data = await wsmysql.query(conn, sql, [_keyword, _roomid])
+			if (data.length == 0) {
+				rs.code = ws.cons.CODE_NO_DATA
 				rs.msg = ws.cons.MSG_NO_DATA
-				resolve(rs)
+				ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
+				return
 			}
-			_dt = dataA[0].CDT
+			_dt = data[0].CDT
 		}
-		let arg //console.log(dateFr, _type, userid, _roomid, _keyword, _dt, _start, _end, _senderid, _cnt)
+		let arg 
+		console.log(dateFr, _type, userid, _roomid, _keyword, _dt, _start, _end, _senderid, _cnt)
 		sql = "SELECT A.MSGID, A.CDT, A.SENDERID, A.SENDERNM, B.RECEIVERID, A.BODY, A.BUFFER, A.REPLY, A.TYP TYPE, B.STATE, A.FILESTATE, "
 		sql += "		  CASE WHEN A.BUFFER IS NULL THEN NULL ELSE 'Y' END BUFFERSTR, " 
 		sql += "          (SELECT COUNT(*) FROM A_MSGDTL_TBL WHERE MSGID = B.MSGID AND ROOMID = B.ROOMID AND STATE = '') CNT "
@@ -74,6 +76,7 @@ router.post('/', async function(req, res) {
 			sql += "ORDER BY A.CDT DESC LIMIT 0, ? "
 			arg = [_roomid, userid, dateFr, _dt, _cnt]
 		}
+		console.log("==============")
 		data = await wsmysql.query(conn, sql, arg)
 		len = data.length
 		if (data.length == 0) {
