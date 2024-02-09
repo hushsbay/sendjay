@@ -207,7 +207,6 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
         } else {
             list.empty()
         }
-        debugger
         const rq = { type : type, keyword : encodeURIComponent(keyword) }
         const rs = await hush.http.ajax("/msngr/qry_userlist", rq)
         if (rs.code != hush.cons.CODE_OK) {

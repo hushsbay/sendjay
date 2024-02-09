@@ -707,7 +707,7 @@ const getMsgList = async (type, keyword, start, end) => {
         }
 debugger       
 
-        const rs = await hush.http.ajax(hush.cons.route + "/qry_msglist", rq, null, withToast)
+        const rs = await hush.http.ajax("/msngr/qry_msglist", rq, null, withToast)
         if (rs.code != hush.cons.result_ok && rs.code != hush.cons.result_no_data) {
             await hush.msg.alert("getMsgList:" + rs.msg)
             return
