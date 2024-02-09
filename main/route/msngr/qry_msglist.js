@@ -14,9 +14,9 @@ router.post('/', async function(req, res) {
 	try {
 		const rs = ws.http.resInit()
 		const dateFr = ws.util.setDateAdd(new Date(), ws.cons.max_days_to_fetch)
-		let { _type, _roomid, _keyword, _dt, _start, _end, _senderid, _cnt } = req.body
-		_keyword = decodeURIComponent(_keyword) || ''
-		_cnt = parseInt(_cnt)
+		const { _type, _roomid, keyword, _dt, _start, _end, _senderid, cnt } = req.body
+		const _keyword = decodeURIComponent(keyword) || ''
+		const _cnt = parseInt(cnt)
 		//const _type = req.query.type
 		//const _userid = req.cookies.userid
 		//const _roomid = req.query.roomid
