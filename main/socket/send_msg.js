@@ -156,39 +156,39 @@ module.exports = async function(socket, param) {
 					if (sdata[0].OS_INUSE == 'ios' && sdata[0].PUSH_IOS != ws.cons.invalid_push_token) {
 						//later
 					} else if (sdata[0].OS_INUSE == 'and' && sdata[0].PUSH_AND != ws.cons.invalid_push_token) {
-						let msg = {
-							data: { //Every key name should be equal to socket's data (param.data) since Android app use these things for notification.
-								msgid : param.data.msgid, 
-								senderkey : param.data.senderkey, 
-								senderid : param.data.senderid, 
-								body : 'fcm) ' + param.data.body, //fcm) is temporary test for distinguish it from socket message.  
-								type : param.data.type, 
-								userkeyArr : param.data.userkeyArr.toString(), 
-								roomid : param.data.roomid,
-								cdt : param.data.cdt
-							},
-							android: {
-								priority: "high"
-							},
-							token: sdata[0].PUSH_AND
-						} //https://noonestaysthesame.tistory.com/m/17
-                        const dsql = "UPDATE A_MSGDTL_TBL SET PUSH_ERR = ? WHERE MSGID = ? AND ROOMID = ? "
-						global.fcm.messaging().send(msg, false) //dryRun=false callback not found on google's sdk document
-						.then(async (rs) => { //rs=projects/sendjay-d712c/messages/0:1619162645061012%3a7eb762f9fd7ecd
-							await wsmysql.query(conn, dsql, ['fcm_ok', param.data.msgid, param.data.roomid])
-						}).catch(async (err) => { //Error Code : https://firebase.google.com/docs/cloud-messaging/send-message?hl=ko	
-							//const dsql = "UPDATE A_MSGDTL_TBL SET PUSH_ERR = ? WHERE MSGID = ? AND ROOMID = ? " //100byte
-							let code = (err.errorInfo) ? err.errorInfo.code : err.code
-							let msg = (err.errorInfo) ? err.errorInfo.message : 'Unknown Error'
-							let _msg = 'fcm_err/' + code  + '/' + msg
-							_msg = _msg.length > 100 ? _msg.substr(0, 100) : _msg //max 100byte
-							console.log(userid, _msg)
-							await wsmysql.query(conn, dsql, [_msg, param.data.msgid, param.data.roomid]) //Even if error occurs, talk will be sent.
-							if (_msg.includes('The registration token is not a valid')) {
-								const usql = "UPDATE Z_USER_TBL SET PUSH_AND = ? WHERE USER_ID = ? "
-								await wsmysql.query(conn, usql, [ws.cons.invalid_push_token, userid])
-							}
-						})						
+						// let msg = {
+						// 	data: { //Every key name should be equal to socket's data (param.data) since Android app use these things for notification.
+						// 		msgid : param.data.msgid, 
+						// 		senderkey : param.data.senderkey, 
+						// 		senderid : param.data.senderid, 
+						// 		body : 'fcm) ' + param.data.body, //fcm) is temporary test for distinguish it from socket message.  
+						// 		type : param.data.type, 
+						// 		userkeyArr : param.data.userkeyArr.toString(), 
+						// 		roomid : param.data.roomid,
+						// 		cdt : param.data.cdt
+						// 	},
+						// 	android: {
+						// 		priority: "high"
+						// 	},
+						// 	token: sdata[0].PUSH_AND
+						// } //https://noonestaysthesame.tistory.com/m/17
+                        // const dsql = "UPDATE A_MSGDTL_TBL SET PUSH_ERR = ? WHERE MSGID = ? AND ROOMID = ? "
+						// global.fcm.messaging().send(msg, false) //dryRun=false callback not found on google's sdk document
+						// .then(async (rs) => { //rs=projects/sendjay-d712c/messages/0:1619162645061012%3a7eb762f9fd7ecd
+						// 	await wsmysql.query(conn, dsql, ['fcm_ok', param.data.msgid, param.data.roomid])
+						// }).catch(async (err) => { //Error Code : https://firebase.google.com/docs/cloud-messaging/send-message?hl=ko	
+						// 	//const dsql = "UPDATE A_MSGDTL_TBL SET PUSH_ERR = ? WHERE MSGID = ? AND ROOMID = ? " //100byte
+						// 	let code = (err.errorInfo) ? err.errorInfo.code : err.code
+						// 	let msg = (err.errorInfo) ? err.errorInfo.message : 'Unknown Error'
+						// 	let _msg = 'fcm_err/' + code  + '/' + msg
+						// 	_msg = _msg.length > 100 ? _msg.substr(0, 100) : _msg //max 100byte
+						// 	console.log(userid, _msg)
+						// 	await wsmysql.query(conn, dsql, [_msg, param.data.msgid, param.data.roomid]) //Even if error occurs, talk will be sent.
+						// 	if (_msg.includes('The registration token is not a valid')) {
+						// 		const usql = "UPDATE Z_USER_TBL SET PUSH_AND = ? WHERE USER_ID = ? "
+						// 		await wsmysql.query(conn, usql, [ws.cons.invalid_push_token, userid])
+						// 	}
+						// })						
 					}
 				}
 			}
