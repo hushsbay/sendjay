@@ -705,17 +705,12 @@ const getMsgList = async (type, keyword, start, end) => {
             rq = { type : "normal", roomid : g_roomid, dt : g_cdt, cnt : cnt }
             withToast = false
         }
-debugger       
-
         const rs = await hush.http.ajax("/msngr/qry_msglist", rq, null, withToast)
-        // if (rs.code != hush.cons.result_ok && rs.code != hush.cons.result_no_data) {
-        //     await hush.msg.alert("getMsgList:" + rs.msg)
-        //     return
-        // }
         if (rs.code != hush.cons.CODE_OK) {
             hush.msg.showMsg(rs.msg, rs.code)
             return
         }
+        debugger
         const _len = rs.list.length
         if (rq.type == "search" || rq.type == "etc") {
             if (_len == 0) {
