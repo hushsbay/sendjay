@@ -1572,11 +1572,11 @@ function OnSearch(input) {
 
 var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
     [hush.cons.sock_ev_chk_alive] : (data) => { //[...]
-        for (let item of data) hush.people.toggleDisplay(item, true)
+        for (let item of data) hush.util.displayOnOff(item, true)
         if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.funcSockEv[hush.cons.sock_ev_chk_alive].call(null, data)
     },
     [hush.cons.sock_ev_show_off] : (userkey) => { 
-        hush.people.toggleDisplay(userkey, false)
+        hush.util.displayOnOff(userkey, false)
         if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.funcSockEv[hush.cons.sock_ev_show_off].call(null, userkey)
     },
     [hush.cons.sock_ev_show_on] : (userkey) => { 
@@ -1589,7 +1589,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
         } else {
             hush.sock.send(g_socket, hush.cons.sock_ev_open_room, rq, g_roomid)
         }
-        hush.people.toggleDisplay(userkey, true)
+        hush.util.displayOnOff(userkey, true)
         if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.funcSockEv[hush.cons.sock_ev_show_on].call(null, userkey) 
     },
     [hush.cons.sock_ev_create_room] : (data) => {
