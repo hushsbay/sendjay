@@ -1606,6 +1606,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
             setMembers(data) //console.log(JSON.stringify(data)+"===")
             toggleDispMem(data.dispmem)
             if (data.from == "rename_room" || data.from == "after") return
+            debugger
             hush.idb.connect(() => {
                 getMsgList() //setTimeout(() => getMsgList(), 3000) //set for debugging
             })
