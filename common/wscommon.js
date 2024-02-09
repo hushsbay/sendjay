@@ -74,6 +74,11 @@ module.exports = (function() {
 			max_filesize : 1110485760, //10MB //max_filesize : 10485760, //10MB
 			max_filecount : 5, //per user
 			max_size_to_sublink : 5242880, //5MB. same as client's
+			cell_revoked : 'message cancelled',
+			file_expired : 'expired', //Used in daemon and client too.
+			sublink_ext_image : 'png,gif,jpg,jpeg,ico',
+			sublink_ext_video : 'mp4', //File format which supports html5 streaming.
+			sublink_result_img : '.png', //ffmpeg converts screenshot to png.
 		},
 
 		http : {
