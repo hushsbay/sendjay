@@ -312,6 +312,7 @@
         idb : { //for mobile only
             db : null, 
             connect : (callback) => {
+                debugger
                 if (!hush.idb.db) {
                     let conn = indexedDB.open("jay_mobile", 1) //Increment will trigger conn.onupgradeneeded (add version number if upgrade needed)
                     conn.onerror = function() {	

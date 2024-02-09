@@ -107,12 +107,12 @@ module.exports = async function(socket, param) {
 					await wsmysql.query(conn, _sql, null)
 				}
 				let bodyForInsert
-				if (obj.type == 'talk' && ws.util.chkEmoji(obj.body)) {
-					bodyForInsert = emoji.unemojify(obj.body)
-					if (ws.util.utf8StrByteLength(bodyForInsert) > ws.cons.max_msg_len) throw new Error('Max size of talk is ' + ws.cons.max_msg_len + '. Now is ' + ws.util.utf8StrByteLength(bodyForInsert) + '.') 
-				} else {
+				//if (obj.type == 'talk' && ws.util.chkEmoji(obj.body)) {
+				//	bodyForInsert = emoji.unemojify(obj.body)
+				//	if (ws.util.strLen(bodyForInsert) > ws.cons.max_msg_len) throw new Error('Max size of talk is ' + ws.cons.max_msg_len + '. Now is ' + ws.util.strLen(bodyForInsert) + '.') 
+				//} else {
 					bodyForInsert = obj.body
-				}
+				//}
 				let iqry = "INSERT INTO A_MSGMST_TBL (MSGID, ROOMID, SENDERID, SENDERNM, BODY, REPLY, TYP, CDT, FILESTATE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) "
 				await wsmysql.query(conn, iqry, [obj.msgid, _roomid, useridToProc, obj.sendernm, bodyForInsert, obj.reply, obj.type, param.data.cdt, obj.filestate])
 				const _state = (obj.type == 'leave') ? 'R' : '' //Inserting R to 'STATE' field in advance for 'leave' message gives good sql performance in qry_unread.js
