@@ -117,7 +117,7 @@ for (let i = 0; i < rt.length; i++) app.use('/user/' + rt[i], require('./route/u
 rt = ['orgtree', 'empsearch', 'deptsearch']
 for (let i = 0; i < rt.length; i++) app.use('/org/' + rt[i], require('./route/org/' + rt[i])) 
 
-rt = ['chk_redis', 'qry_unread', 'qry_userlist'] 
+rt = ['chk_redis', 'qry_unread', 'qry_userlist', 'qry_msglist'] 
 for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/msngr/' + rt[i])) 
 
 proc()
