@@ -266,6 +266,24 @@ module.exports = (function() {
 				const _socketid = arr[1]
 				return { userkey : _userkey, socketid : _socketid }
 			},
+			getUserkeySocketsFromMulti : async (userkeys) => { 
+				let usArr = []
+				for (let userkey of userkeys) { //[userkey1,userkey2..]
+					const arr = await ws.redis.getUserkeySocket(userkey)			
+					if (arr.length > 0) usArr = usArr.concat(arr)
+				}
+				return usArr
+			},
+			getUserkeysInSocket : async (userkeys) => {
+				let ukArr = []
+				const resultArr = await ws.redis.getUserkeySocketsFromMulti(userkeys)
+				const sockets = await global.jay.adapter.sockets(new Set())
+				for (let key of resultArr) {
+					const _obj = ws.redis.getUserkeySocketIdFromKey(key)
+					if (sockets.has(_obj.socketid)) ukArr.push(_obj.userkey)
+				}
+				return ukArr
+			},
 			pub : (pubKey, obj) => { //obj needs 1 depth object like { id : "aa", userkey : "bb" }
 				global.pub.publish(ws.cons.prefix + pubKey, JSON.stringify(obj))
 			},	
@@ -402,10 +420,38 @@ module.exports = (function() {
 					resolve()
 				} catch (ex) {
 					if (_obj) {
-						global.logger.error('joinRoomWithUserkeySocketArr', _obj.userkey + '/' + _obj.socketid + '\n' + ex.stack)
+						global.logger.error('joinRoomWithUserkeySocketArr..' + _obj.userkey + '/' + _obj.socketid + '\n' + ex.stack)
 						reject(new Error(_obj.userkey + '/' + ex.message))
 					} else {
 						resolve()
+					}
+				}
+			}),
+			leaveRoomWithUserkeySocketArr : (userkeySocketArr, _roomid) => new Promise(async (resolve, reject) => {
+				let _userkey, _socketid
+				try {
+					for (let key of userkeySocketArr) {
+						const arr = key.split(com.cons.easydeli)
+						_userkey = arr[0].replace(com.cons.key_str_socket, '')
+						_socketid = arr[1]
+						try {
+							await global.jay.adapter.remoteLeave(_socketid, _roomid)
+						} catch (ex) { //reject(new Error('cannot connect to specific server when remoteLeaving with ' + _obj.userkey))
+							if (ex.message.includes('timeout')) { //timeout reached while waiting for remoteLeave response (specific server down)
+								//Same as joinRoomWithUserkeySocketArr(), one thing different is that re join will not be happened because it was already left.
+								//joinRoomWithUserkeySocketArr() 경우와 같지만 한가지 다른 점은 이미 leave하였기 때문에 opening room시 다시 join되지 않을 것임
+							} else {
+								throw new Error(ex.message)
+							}
+						}
+					}
+					if (_userkey && _socketid) resolve()
+				} catch (ex) { 
+					if (_userkey && _socketid) {
+						global.logger.error('leaveRoomWithUserkeySocketArr..' + _userkey + '/' + _socketid + '\n' + ex.stack)
+						reject(new Error(_userkey + '/' + ex.message))
+					} else {
+						reject(new Error('No one left in this room : ') + userkeySocketArr.toString() + '\n' + ex.message)
 					}
 				}
 			}),
