@@ -39,7 +39,7 @@ router.post('/', async function(req, res) {
 			}
 			_dt = dataA[0].CDT
 		}
-		let arg //console.log(dateFr, _type, _userid, _roomid, _keyword, _dt, _start, _end, _senderid, _cnt)
+		let arg //console.log(dateFr, _type, userid, _roomid, _keyword, _dt, _start, _end, _senderid, _cnt)
 		sql = "SELECT A.MSGID, A.CDT, A.SENDERID, A.SENDERNM, B.RECEIVERID, A.BODY, A.BUFFER, A.REPLY, A.TYP TYPE, B.STATE, A.FILESTATE, "
 		sql += "		  CASE WHEN A.BUFFER IS NULL THEN NULL ELSE 'Y' END BUFFERSTR, " 
 		sql += "          (SELECT COUNT(*) FROM A_MSGDTL_TBL WHERE MSGID = B.MSGID AND ROOMID = B.ROOMID AND STATE = '') CNT "
@@ -49,30 +49,30 @@ router.post('/', async function(req, res) {
 		if (_type == 'search') {
 			sql += "  AND A.BODY LIKE '%" + _keyword + "%' "
 			sql += "ORDER BY A.CDT LIMIT 0, ? "
-			arg = [_roomid, _userid, dateFr, _cnt]
-			console.log(sql, _roomid, _userid, dateFr, _cnt)
+			arg = [_roomid, userid, dateFr, _cnt]
+			console.log(sql, _roomid, userid, dateFr, _cnt)
 		} else if (_type == 'etc') {
 			sql += "  AND (A.TYP IN ('file', 'flink', 'image') OR (A.TYP = 'talk' AND (A.BODY LIKE '%http://%' OR A.BODY LIKE '%https://%'))) "
 			sql += "  AND A.BODY <> '" + ws.cons.cell_revoked + "' "
 			sql += "ORDER BY A.CDT LIMIT 0, ? "
-			arg = [_roomid, _userid, dateFr, _cnt]
+			arg = [_roomid, userid, dateFr, _cnt]
 		} else if (_type == 'result') {
 			sql += "  AND A.CDT >= ? AND A.CDT < ? "
 			sql += "ORDER BY A.CDT DESC "
-			arg = [_roomid, _userid, dateFr, _start, _end]
+			arg = [_roomid, userid, dateFr, _start, _end]
 		} else if (_type == 'onlyone') {
 			sql += "  AND A.CDT < ? "
 			sql += "  AND B.SENDERID = ? "
 			sql += "ORDER BY A.CDT DESC LIMIT 0, ? "
-			arg = [_roomid, _userid, dateFr, _dt, _senderid, _cnt]
+			arg = [_roomid, userid, dateFr, _dt, _senderid, _cnt]
 		} else if (_type == 'after') { //from mobile (before noti). UDT needed for checking revoked msg when connect after disconnect
 			sql += "  AND (A.CDT > ? OR A.UDT > ?) "
 			sql += "ORDER BY A.CDT "
-			arg = [_roomid, _userid, dateFr, _dt, _dt]			
+			arg = [_roomid, userid, dateFr, _dt, _dt]			
 		} else { //normal
 			sql += "  AND A.CDT < ? "
 			sql += "ORDER BY A.CDT DESC LIMIT 0, ? "
-			arg = [_roomid, _userid, dateFr, _dt, _cnt]
+			arg = [_roomid, userid, dateFr, _dt, _cnt]
 		}
 		data = await wsmysql.query(conn, sql, arg)
 		len = data.length
