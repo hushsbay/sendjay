@@ -406,7 +406,8 @@ module.exports = (function() {
 					for (let key of userkeySocketArr) { //Garbage of socketid might be in userkeySocketArr.
 						_obj = ws.redis.getUserkeySocketIdFromKey(key)
 						try {
-							await global.jay.adapter.remoteJoin(_obj.socketid, _roomid)
+							//await global.jay.adapter.remoteJoin(_obj.socketid, _roomid)
+							await global.jay.in(_obj.socketid).socketsJoin(_roomid) //https://socket.io/docs/v4/server-api/#serversocketsjoinrooms
 						} catch (ex) { //reject(new Error('cannot connect to specific server when remoteJoinging with ' + _obj.userkey))
 							if (ex.message.includes('timeout')) { //timeout reached while waiting for remoteJoin response (specific server down)
 								//특정 서버 다운시 그 서버내 연결이 끊어진 소켓이 포함된 톡방을 열 때 이 오류가 발생함
@@ -435,7 +436,10 @@ module.exports = (function() {
 						_userkey = arr[0].replace(com.cons.key_str_socket, '')
 						_socketid = arr[1]
 						try {
-							await global.jay.adapter.remoteLeave(_socketid, _roomid)
+							//await global.jay.adapter.remoteLeave(_socketid, _roomid)
+							console.log("1111111111111111")
+							await global.jay.in(_obj.socketid).socketsLeave(_roomid)
+							console.log("3333333333333333")
 						} catch (ex) { //reject(new Error('cannot connect to specific server when remoteLeaving with ' + _obj.userkey))
 							if (ex.message.includes('timeout')) { //timeout reached while waiting for remoteLeave response (specific server down)
 								//Same as joinRoomWithUserkeySocketArr(), one thing different is that re join will not be happened because it was already left.
