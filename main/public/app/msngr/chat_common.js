@@ -835,8 +835,8 @@ const getMsgList = async (type, keyword, start, end) => {
             if (rq.type == "normal" && g_page == 0) {
                 const _arr = []
                 let _brr
-                const tx = hush.idb.db.transaction(hush.cons.tbl, "readonly") //readonly
-                const os = tx.objectStore(hush.cons.tbl) //if (!os) os = ~ error occurs
+                const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readonly") //readonly
+                const os = tx.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
                 const index = os.index("roomid") //let req = os.openCursor() //req = os.count(); req.onsuccess = function(evt) { console.log("====" + evt.target.result) }
                 let req = index.openCursor(IDBKeyRange.only(g_roomid))
                 req.onsuccess = async function(evt) {
@@ -851,8 +851,8 @@ const getMsgList = async (type, keyword, start, end) => {
                         const _len = rs.list.length //sending failure
                         if (_len == 0) return
                         _brr = rs.list
-                        const tx1 = hush.idb.db.transaction(hush.cons.tbl, "readonly")
-                        const os = tx1.objectStore(hush.cons.tbl) //if (!os) os = ~ error occurs
+                        const tx1 = hush.idb.db.transaction(hush.cons.idb_tbl, "readonly")
+                        const os = tx1.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
                         for (let i = 0; i < _len; i++) {
                             const _msgid = _brr[i] //If _msgid is undefined, 'The transaction has finished' error occurs for 'os.get(_msgid).onsuccess' below.
                             os.get(_msgid).onsuccess = function(e) {
@@ -914,8 +914,8 @@ const procFailure = (rq, dtDetails) => { //Request already sent. Retry(resending
 }
 
 const deleteLocalMsg = (msgid) => {
-    const tx = hush.idb.db.transaction(hush.cons.tbl, "readwrite")
-    const os = tx.objectStore(hush.cons.tbl) //if (!os) os = ~ error occurs
+    const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readwrite")
+    const os = tx.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
     os.get(msgid).onsuccess = function(e) {
         if (e.target.result) os.delete(msgid)
     }
@@ -1020,8 +1020,8 @@ const procSendAndAppend = (rq, blobUrl) => {
     if (_focused) g_in_chat.focus()       
     if (rq.type != "file") prepareForNoResponse(rq)
     if (rq.type == "talk") {
-        const tx = hush.idb.db.transaction(hush.cons.tbl, "readwrite")
-        const os = tx.objectStore(hush.cons.tbl) //if (!os) os = ~ error occurs
+        const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readwrite")
+        const os = tx.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
         const os_req = os.get(rq.msgid)
         os_req.onsuccess = function(e) {
             if (os_req.result) return //const rec = os_req.result
