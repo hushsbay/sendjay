@@ -606,7 +606,7 @@ const getPortalList = async (obj) => {
         for (let i = 0; i < _len; i++) {
             const row = rs.list[i]
             const _roomid = row.ROOMID
-            const _roomnm = hush.room.getRoomName(row.NICKNM, row.MAINNM, row.ROOMNM)
+            const _roomnm = hush.sock.getRoomName(row.NICKNM, row.MAINNM, row.ROOMNM)
             const _memcnt = row.MEMCNT
             const _noti = row.NOTI
             hush.room.map[_roomid] = { nm: _roomnm, noti: _noti }
