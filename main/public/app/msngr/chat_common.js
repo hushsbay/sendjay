@@ -1151,7 +1151,7 @@ const imageSrcEvent = (blobUrl, msgid, kind, type, body) => {
                 _witdh = 500
                 _height = 500
             }
-            let urlStr = hush.cons.popup + "?type=play&msgid=" + msgid + "&path=" + encodeURIComponent(_path)
+            let urlStr = "/app/msngr/popup.html?type=play&msgid=" + msgid + "&path=" + encodeURIComponent(_path)
             if (hush.webview.ios) {
             } else if (hush.webview.and) {
                 urlStr += "&" + hush.cons.param_webview_and
@@ -1253,14 +1253,14 @@ const procOpengraph = async (msgid, kind) => {
     }
 }
 
-const handleFileUpload = (files) => {		
+const handleFileUpload = async (files) => {		
     try {
         const _len = files.length
         if (_len > hush.cons.max_filecount) {
-            hush.msg.alert("최대 " + hush.cons.max_filecount + "개 파일까지 한번에 전송 가능합니다.")
+            await hush.msg.alert("최대 " + hush.cons.max_filecount + "개 파일까지 한번에 전송 가능합니다.")
             return
         }
-        if (!hush.auth.chkRole(g_role, hush.cons.group_admin)) { //Checked on server, too.
+        //if (!hush.auth.chkRole(g_role, hush.cons.group_admin)) { //Checked on server, too.
             let _list = ""
             for (let i = 0; i < _len; i++) {
                 if (files[i].size > hush.cons.max_filesize) _list += files[i].name + "(" + hush.util.formatBytes(files[i].size) + ") "  
@@ -1269,7 +1269,7 @@ const handleFileUpload = (files) => {
                 hush.msg.alert("파일 크기는 최대 " + hush.util.formatBytes(hush.cons.max_filesize) + "입니다.<br>" + _list)
                 return
             }
-        }
+        //}
         for (let i = 0; i < _len; i++) {
             const rq = initMsg()
             rq.type = "file"
@@ -1287,7 +1287,8 @@ const handleFileUpload = (files) => {
             fd.append("type", rq.type)
             fd.append("reply", getMsgToReply())
             fd.append("file", files[i])
-            const ajaxObj = $.ajax({url: hush.cons.route + "/proc_file",
+            const ajaxObj = $.ajax({
+                url: "/msngr/proc_file",
                 data : fd,
                 processData : false,
                 enctype : "multipart/form-data",
@@ -1313,7 +1314,7 @@ const handleFileUpload = (files) => {
                 success : function(rs) {
                     $("#abort_" + rq.msgid).hide()
                     if (!$("#sel_" + rq.msgid).hasClass("chkboxSel")) $("#sel_" + rq.msgid).addClass("chkboxSel")
-                    if (rs.code == hush.cons.result_ok) {
+                    if (rs.code == hush.cons.CODE_OK) {
                         const rqNotice = initMsg()
                         rqNotice.type = "notice"
                         rqNotice.body = rq.type
@@ -1330,14 +1331,15 @@ const handleFileUpload = (files) => {
                 },
                 error : function(xhr, status, error) { 
                     $("#abort_" + rq.msgid).hide()
-                    const msg = hush.http.getErrorMsg(status, error)
+                    //const msg = hush.http.getErrorMsg(status, error)
+                    const msg = (typeof error == "string") ? error : error.toString()
                     procFailure(rq, msg)
                 }
             })
-            $("#abort_" + rq.msgid).off("click").on("click", function() {
+            $("#abort_" + rq.msgid).off("click").on("click", async function() {
                 //hush.util.animCall(this.id, true) 
                 if ($(this).html() != "Abort") {
-                    hush.msg.alert("Can't abort (Upload is being done). Use 'Revoke' on CellMenu")
+                    await hush.msg.alert("Can't abort (Upload is being done). Use 'Revoke' on CellMenu")
                     return
                 }
                 if (ajaxObj) ajaxObj.abort()
@@ -1380,9 +1382,9 @@ const procFileLinkIfExists = (obj, kind) => {
     if (_sublink_request) { //request sublink image for file uploaded : data table for file might not be inserted yet.
         if (hush.cons.sublink_ext_image.includes(_extension) || hush.cons.sublink_ext_video.includes(_extension)) {
             const _type = hush.cons.sublink_ext_image.includes(_extension) ? "ext_image" : "ext_video"
-            hush.http.ajaxCall(hush.cons.route + "/get_msginfo", { msgid : obj.msgid, body : _sublink_request }, "get", function(rsPic) {
+            hush.http.ajaxCall("/msngr/get_msginfo", { msgid : obj.msgid, body : _sublink_request }, "get", function(rsPic) {
                 if (rsPic.buffer) {
-                    const blobUrl = hush.http.getBlobUrlForImage(rsPic.buffer.data)
+                    const blobUrl = hush.blob.getBlobUrlForImage(rsPic.buffer.data)
                     imageSrcEvent(blobUrl, obj.msgid, kind, _type, _sublink_request) //$("#~").attr("src", "data:image/png;base64," + data)
                 }
             }, false)

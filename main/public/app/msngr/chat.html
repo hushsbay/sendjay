@@ -104,7 +104,7 @@
                         if (e.keyCode == 13 && !e.shiftKey) $("#btn_search").click()
                     })
                     $("#btn_search").on("click", function() {
-                        hushj.util.animCall(this.id, true) 
+                        //hush.util.animCall(this.id, true) 
                         const _keyword = $("#in_search").val().trim()
                         if (_keyword == "") return
                         toggleResult(true)
@@ -154,7 +154,7 @@
                             if (clipboardItem.type.includes("image")) {
                                 const blob = clipboardItem.getAsFile()
                                 if (blob.size > hush.cons.max_size_to_sublink) { //see get_sublink.js
-                                    hushj.msg.toast("Image too big : " + blob.size + "<br>max : " + hush.util.formatBytes(hush.cons.max_size_to_sublink) + "(" + hush.cons.max_size_to_sublink + "bytes)")
+                                    hush.msg.toast("Image too big : " + blob.size + "<br>max : " + hush.util.formatBytes(hush.cons.max_size_to_sublink) + "(" + hush.cons.max_size_to_sublink + "bytes)")
                                     return
                                 }
                                 const blobUrl = URL.createObjectURL(blob)
@@ -195,7 +195,7 @@
                         sendMsg() 
                     })
                     $("#btn_file, #btn_file_m").on("click", function() {
-                        hushj.util.animCall(this.id, true) 
+                        //hushj.util.animCall(this.id, true) 
                         $("#file_upload").val("") //btn_file_m : see webview setting
                         $("#file_upload").trigger("click")
                     })
@@ -203,8 +203,8 @@
                         handleFileUpload(this.files)		    	   	
                     })
                     $("#btn_invite, #btn_invite_m").on("click", function() {
-                        hushj.util.animCall(this.id, true) 
-                        let urlStr = hushj.cons.main + "?type=invite" 
+                        //hushj.util.animCall(this.id, true) 
+                        let urlStr = "/app/msngr/main.html?type=invite" 
                         if (!hush.webview.on) { 
                             g_inviteWin = hush.util.openWinPop(urlStr, 740, 650)
                         } else {                            
@@ -216,27 +216,39 @@
                             }
                         }
                     })
-                    $("#btn_delete_all, #btn_delete_all_m").on("click", function() { 
-                        hushj.util.animCall(this.id, true) 
-                        hushj.msg.alert("Do you want delete all messages in this chat room?", { 
-                            "Yes": function() { 
-                                const rq = { type : "all", receiverid : g_userid, roomid : g_roomid }
-                                if (hush.webview.ios) {
-                                } else if (hush.webview.and) {
-                                    AndroidCom.send(hush.cons.sock_ev_delete_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
-                                } else {
-                                    hush.sock.send(g_socket, hush.cons.sock_ev_delete_msg, rq, g_roomid, "parent")
-                                }
-                                hushj.msg.close()
-                                showCellMenu(false)
-                            }, "No": function() { 
-                                hushj.msg.close()
-                                showCellMenu(false) 
-                            } 
-                        }, "Delete All", 200)
+                    $("#btn_delete_all, #btn_delete_all_m").on("click", async function() { 
+                        //hushj.util.animCall(this.id, true) 
+                        //hushj.msg.alert("Do you want delete all messages in this chat room?", { 
+                        //     "Yes": function() { 
+                        //         const rq = { type : "all", receiverid : g_userid, roomid : g_roomid }
+                        //         if (hush.webview.ios) {
+                        //         } else if (hush.webview.and) {
+                        //             AndroidCom.send(hush.cons.sock_ev_delete_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
+                        //         } else {
+                        //             hush.sock.send(g_socket, hush.cons.sock_ev_delete_msg, rq, g_roomid, "parent")
+                        //         }
+                        //         hushj.msg.close()
+                        //         showCellMenu(false)
+                        //     }, "No": function() { 
+                        //         hushj.msg.close()
+                        //         showCellMenu(false) 
+                        //     } 
+                        // }, "Delete All", 200)
+                        const ret = await hush.msg.confirm("Do you want delete all messages in this chat room?")
+                        showCellMenu(false)
+                        if (!ret) return
+                        const rq = { type : "all", receiverid : g_userid, roomid : g_roomid }
+                        if (hush.webview.ios) {
+                        } else if (hush.webview.and) {
+                            AndroidCom.send(hush.cons.sock_ev_delete_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
+                        } else {
+                            hush.sock.send(g_socket, hush.cons.sock_ev_delete_msg, rq, g_roomid, "parent")
+                        }                        
                     })
                     $("#btn_rename, #btn_rename_m").on("click", function() {
-                        hushj.util.animCall(this.id, true) 
+                        //hushj.util.animCall(this.id, true) 
+                        alert("개발 필요....")
+                        return
                         if (g_masterid == g_userid) {
                             hushj.msg.alert("You are owner of this chat room.<br>Decide range for changing of room name.", { 
                                 "To every user": function() { 
@@ -254,33 +266,45 @@
                             dialogRoomRename("one")
                         }
                     })
-                    $("#btn_exit, #btn_exit_m").on("click", function() { 
-                        hushj.util.animCall(this.id, true) 
-                        hushj.msg.alert("채팅방내 본인이 주고 받은 모든 톡이 삭제됩니다. 계속할까요?", { 
-                            "Yes": function() { 
-                                const rq = initMsg()
-                                rq.type = "leave"
-                                rq.body = g_usernm + "<br>" + hush.cons.left //when 3 people above
-                                if (hush.webview.ios) {
-                                } else if (hush.webview.and) {
-                                    AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
-                                } else {
-                                    hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
-                                }
-                                hushj.msg.close()
-                                if (hush.webview.on) showRoomMenu(false)                           
-                            }, "No": function() { 
-                                hushj.msg.close()
-                                if (hush.webview.on) showRoomMenu(false)
-                            } 
-                        }, "나가기", 200)
+                    $("#btn_exit, #btn_exit_m").on("click", async function() { 
+                        //hushj.util.animCall(this.id, true) 
+                        // hushj.msg.alert("채팅방내 본인이 주고 받은 모든 톡이 삭제됩니다. 계속할까요?", { 
+                        //     "Yes": function() { 
+                        //         const rq = initMsg()
+                        //         rq.type = "leave"
+                        //         rq.body = g_usernm + "<br>" + hush.cons.left //when 3 people above
+                        //         if (hush.webview.ios) {
+                        //         } else if (hush.webview.and) {
+                        //             AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
+                        //         } else {
+                        //             hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
+                        //         }
+                        //         hushj.msg.close()
+                        //         if (hush.webview.on) showRoomMenu(false)                           
+                        //     }, "No": function() { 
+                        //         hushj.msg.close()
+                        //         if (hush.webview.on) showRoomMenu(false)
+                        //     } 
+                        // }, "나가기", 200)
+                        const ret = await hush.msg.confirm("채팅방내 본인이 주고 받은 모든 톡이 삭제됩니다. 계속할까요?")
+                        if (hush.webview.on) showRoomMenu(false)
+                        if (!ret) return
+                        const rq = initMsg()
+                        rq.type = "leave"
+                        rq.body = g_usernm + "<br>" + hush.cons.left //when 3 people above
+                        if (hush.webview.ios) {
+                        } else if (hush.webview.and) {
+                            AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
+                        } else {
+                            hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
+                        }
                     })
                     $("#send_copy").on("click", function() {
-                        hushj.util.animCall(this.id, true) 
+                        //hushj.util.animCall(this.id, true) 
                         AndroidRoom.paste()
                     })
                     $("#cancel_copy").on("click", function() {
-                        hushj.util.animCall(this.id, true) 
+                        //hushj.util.animCall(this.id, true) 
                         AndroidRoom.copy("")
                         $("#fr_tip").show()
                         $("#fr_sendcopy").hide()
@@ -294,7 +318,7 @@
                         e.stopPropagation()
                         e.preventDefault()
                     })
-                    $("#main_pg").on("drop", function(e) {
+                    $("#main_pg").on("drop", async function(e) {
                         e.preventDefault()
                         try {
                             const _data = e.originalEvent.dataTransfer.getData("text") //"image##2023021015343534000076787542LOrtKxoR##20230223151253235000695133ZOwDPVZr1w"
@@ -306,7 +330,7 @@
                                 const _arr = _data.split(hush.cons.deli)
                                 if (_arr[1] == g_roomid) return //dragging on same room does no action
                                 if (g_in_chat.val().trim() != "") {
-                                    hushj.msg.alert("이미 작성중인 챗데이터가 있습니다.")
+                                    await hush.msg.alert("이미 작성중인 톡이 있습니다.")
                                     return
                                 }
                                 const rq = { msgid : _arr[2] }

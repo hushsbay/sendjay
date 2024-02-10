@@ -71,6 +71,13 @@
             unread_max_check : 1000,
             max_add_count : 100, //when connect after disconnect
             send_timeout_sec : 5,
+            result_bgcolor : 'orange', 
+            result_highlight : 'yellow',
+            chat_handled : "file,flink,image,talk",
+            cell_revoked : "message cancelled",
+            file_expired : "expired", 
+            sublink_ext_image : "png,gif,jpg,jpeg,ico",
+            sublink_ext_video : "mp4", //file format which supports html5 streaming
             handling : ".. ", //handling..
             no_response : "no response",
             retry_sending : "retry sending",
