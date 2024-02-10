@@ -504,7 +504,7 @@
                 noti.msgid = obj.msgid
                 hush.noti.notis[roomid] = noti
                 noti.onclick = function () {
-                    hush.room.open("/app/msngr/chat.html", roomid, "noti")
+                    hush.sock.openRoom("/app/msngr/chat.html", roomid, "noti")
                     noti.close()
                 }
                 noti.onclose = function () {
