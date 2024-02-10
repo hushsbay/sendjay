@@ -478,7 +478,7 @@
                     _from = hush.sock.roomMap[roomid].nm
                     if (hush.sock.roomMap[roomid].noti == "X") return
                 } else {
-                    const rs = await hush.http.ajax(hush.cons.route + "/get_roominfo", { roomid : roomid })                
+                    const rs = await hush.http.ajax("/msngr/get_roominfo", { roomid : roomid })                
                     if (rs.code == hush.cons.result_ok) {
                         _from = hush.room.getRoomName(rs.list[0].NICKNM, rs.list[0].MAINNM, rs.list[0].ROOMNM)
                         hush.sock.roomMap[roomid] = { nm: _from, noti: rs.list[0].NOTI }
