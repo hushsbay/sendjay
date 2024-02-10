@@ -609,7 +609,7 @@ const getPortalList = async (obj) => {
             const _roomnm = hush.sock.getRoomName(row.NICKNM, row.MAINNM, row.ROOMNM)
             const _memcnt = row.MEMCNT
             const _noti = row.NOTI
-            hush.room.map[_roomid] = { nm: _roomnm, noti: _noti }
+            hush.sock.map[_roomid] = { nm: _roomnm, noti: _noti }
             const _lastmsg = (row.LASTMSG) ? dispCustom(row.LASTMSG) : "No Message"
             g_cdt = row.LASTDT
             if (i == 0) {

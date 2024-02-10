@@ -460,9 +460,61 @@
                 }
             }
         },
+        noti : {
+            notis : { },
+            procNoti : async (roomid, obj) => { //This function should be called from index.html only or hush.user has to be replaced with another.
+                if (hush.webview.on) return //covered at app notification
+                if (hush.http.getCookie("notioff") == "Y") return //see setting tab
+                if (obj.senderid == hush.user.id) return //skip for oneself when mobile
+                if (obj.type == "leave") return //no need to be notified
+                if (obj.type == "invite") {
+                    const userids = hush.cons.memdeli + obj.body.split(hush.cons.deli)[1] + hush.cons.memdeli
+                    const myuserid = hush.cons.memdeli + hush.http.getCookie("userid") + hush.cons.memdeli
+                    if (!userids.includes(myuserid)) return //means that myuserid not invited and exists already in chat room
+                }
+                let _body, _from
+                if (hush.room.map[roomid]) {
+                    _from = hush.room.map[roomid].nm
+                    if (hush.room.map[roomid].noti == "X") return
+                } else {
+                    const rs = await hush.http.ajax(hush.cons.route + "/get_roominfo", { roomid : roomid })                
+                    if (rs.code == hush.cons.result_ok) {
+                        _from = hush.room.getRoomName(rs.list[0].NICKNM, rs.list[0].MAINNM, rs.list[0].ROOMNM)
+                        hush.room.map[roomid] = { nm: _from, noti: rs.list[0].NOTI }
+                        if (hush.room.map[roomid].noti == "X") return
+                    } else {
+                        let _people = obj.receivernm.join(",") + ","
+                        _people = _people.replace(hush.user.nm + ",", "")
+                        if (_people.endsWith(",")) _people = _people.substr(0, _people.length - 1)
+                        _from = _people
+                    }
+                }
+                const msgArrived = "New message arrived."
+                if (hush.http.getCookie("bodyoff") == "Y" && hush.http.getCookie("senderoff") == "Y") { //see setting tab
+                    _body = msgArrived
+                } else if (hush.http.getCookie("bodyoff") == "Y") {
+                    _body = "[" + _from + "]\n" + msgArrived
+                } else if (hush.http.getCookie("senderoff") == "Y") {
+                    _body = hush.util.displayTalkBodyCustom(obj.type, obj.body)
+                } else {
+                    _body = "[" + _from + "]\n" + hush.util.displayTalkBodyCustom(obj.type, obj.body)
+                }                 
+                const noti = new window.Notification("", { body : _body, dir : "auto", lang : "EN", tag : roomid, icon : hush.cons.logo_darkblue, requireInteraction : true })
+                noti.msgid = obj.msgid
+                hush.noti.notis[roomid] = noti
+                noti.onclick = function () {
+                    hush.room.open(hush.cons.chat, roomid, "noti")
+                    noti.close()
+                }
+                noti.onclose = function () {
+                    delete hush.noti.notis[roomid]
+                }
+            }            
+        },
         sock : {
             roomMap : { }, //{ nm: 'xxx', noti: true/false }
-            rooms : { }, //sock.connect => https://socket.io/docs/v3/client-initialization         
+            rooms : { }, //sock.connect => https://socket.io/docs/v3/client-initialization        
+            map : { }, //{ nm: 'xxx', noti: true/false } 
             connect : (io, query) => new Promise((resolve, reject) => { //this will be occurred only on index.html
                 const socket = io(hush.cons.socket_url, { forceNew: false, reconnection: false, query: query }) //forceNew=false //See 'disconnect_prev_sock' in pmessage.js (on server)
         		socket.off("connect_error").on("connect_error", async (e) => { await hush.msg.alert("connect_error\n" + e.toString()) })
