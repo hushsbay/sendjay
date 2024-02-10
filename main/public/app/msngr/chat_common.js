@@ -154,7 +154,7 @@ const setMembers = async (data) => {
         }                
         $("#people_cnt").html(_len)
         $(".mem").off("click").on("click", function() {
-            hush.util.animCall(this.id, true) 
+            //hush.util.animCall(this.id, true) 
             const _userid = this.id.substring(4)
             const _abnm = $(this).data("abnm") ? " / " + $(this).data("abnm") : ""
             const _usernm = $(this).data("nm")
@@ -234,7 +234,7 @@ const setResult = (data) => {
         $("#result_cnt").html(_len) 
         list.scrollTop(list.prop("scrollHeight")) 
         $(".result").off("click").on("click", function(e) { 
-            hush.util.animCall(this.id, true) 
+            //hush.util.animCall(this.id, true) 
             procHighlight($(this))
             const start = $(this).data("cdt")
             if (start >= g_cdt) {
@@ -258,7 +258,7 @@ const setResult = (data) => {
         })
         $("#res_" + data.list[_len - 1].MSGID).click()
         $("#getprev").off("click").on("click", function(e) { 
-            hush.util.animCall(this.id, true) 
+            //hush.util.animCall(this.id, true) 
             g_cdt = $(this).data("cdt")
             getMsgList()
             setTimeout(() => $("#getprev").hide(), 500)
@@ -579,7 +579,7 @@ const procForCell = (obj) => {
         }
     })
     $("#btn_delete_cell, #btn_delete_cell_m").off("click").on("click", function(e) { 
-        hush.util.animCall(this.id, true) 
+        //hush.util.animCall(this.id, true) 
         const checked = $(".chkboxSel:checked")
         const len = checked.length
         if (len == 0) {
@@ -606,7 +606,7 @@ const procForCell = (obj) => {
         })                
     })
     $("#btn_cancel_cell, #btn_cancel_cell_m").off("click").on("click", function(e) { 
-        hush.util.animCall(this.id, true) 
+        //hush.util.animCall(this.id, true) 
         showCellMenu(false) 
     })
     if (!hush.webview.on) $("#msg_" + obj.msgid).on("contextmenu", function(e) { $("#menu_" + obj.msgid).click() })
@@ -616,11 +616,11 @@ const procForCell = (obj) => {
         e.originalEvent.dataTransfer.effectAllowed = "copy"
     })
     $("#menu_" + obj.msgid + ", #cellmenu_" + obj.msgid).off("click").on("click", function(e) { 
-        hush.util.animCall(this.id, true) 
+        //hush.util.animCall(this.id, true) 
         if ($("#btn_delete_cell").css("display") == "none") {
             showCellMenu(true, obj)
             $("#btn_copy_cell, #btn_copy_cell_m").off("click").on("click", function(e) { 
-                hush.util.animCall(this.id, true) 
+                //hush.util.animCall(this.id, true) 
                 if (obj.type == "" || !hush.cons.chat_handled.includes(obj.type)) return 
                 if ($("#body_" + obj.msgid).html() == hush.cons.cell_revoked) {
                     hush.msg.toast(hush.cons.cell_revoked)
@@ -649,7 +649,7 @@ const procForCell = (obj) => {
                 showCellMenu(false)
             })
             $("#btn_revoke_cell, #btn_revoke_cell_m").off("click").on("click", function(e) {   
-                hush.util.animCall(this.id, true)                  
+                //hush.util.animCall(this.id, true)                  
                 if (obj.type == "" || !hush.cons.chat_handled.includes(obj.type)) return 
                 if ($("#body_" + obj.msgid).html() == hush.cons.cell_revoked) {
                     hush.msg.toast(hush.cons.cell_revoked)
@@ -900,16 +900,19 @@ const procFailure = (rq, dtDetails) => { //Request already sent. Retry(resending
     objUnread.html(hush.cons.sending_failure)
     objUnread.removeClass("unread").addClass("failure")
     objUnread.show()
-    objUnread.off("click").on("click", function() { 
-        hush.util.animCall(this.id, true) 
-        hush.msg.alert(dtDetails, { //hush.msg.alert(dtDetails) 
-            "Remove Talk": function() { 
-                $("#msg_" + rq.msgid).remove()
-                hush.msg.close()
-            }, "Close": function() { 
-                hush.msg.close()
-            } 
-        }, "Sending Failure", 320)
+    objUnread.off("click").on("click", async function() { 
+        //hush.util.animCall(this.id, true) 
+        // hush.msg.alert(dtDetails, { //hush.msg.alert(dtDetails) 
+        //     "Remove Talk": function() { 
+        //         $("#msg_" + rq.msgid).remove()
+        //         hush.msg.close()
+        //     }, "Close": function() { 
+        //         hush.msg.close()
+        //     } 
+        // }, "Sending Failure", 320)
+        const ret = await hush.msg.confirm(dtDetails)
+        if (!ret) return 
+        $("#msg_" + rq.msgid).remove()
     })
 }
 
@@ -929,7 +932,7 @@ const retrySending = (rq) => {
     objUnread.removeClass("unread").addClass("failure")
     objUnread.show()
     objUnread.off("click").on("click", function() {
-        hush.util.animCall(this.id, true) 
+        //hush.util.animCall(this.id, true) 
         hush.msg.alert("Do you want to retry sending ?", {
             "Retry": function() { 
                 $("#msg_" + rq.msgid).remove()
@@ -1332,7 +1335,7 @@ const handleFileUpload = (files) => {
                 }
             })
             $("#abort_" + rq.msgid).off("click").on("click", function() {
-                hush.util.animCall(this.id, true) 
+                //hush.util.animCall(this.id, true) 
                 if ($(this).html() != "Abort") {
                     hush.msg.alert("Can't abort (Upload is being done). Use 'Revoke' on CellMenu")
                     return
@@ -1632,7 +1635,6 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
         toggleDispMem(data.value)
     },
     [hush.cons.sock_ev_send_msg] : (data) => {
-        debugger
         if (data.roomid != g_roomid) {
             hush.msg.alert("Different RoomID : " + data.roomid + "/" + g_roomid)
             return
@@ -1669,7 +1671,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
         let _dt = hush.util.tzDateTime(data.cdt)
         _dt = hush.util.formatMsgDt(_dt, g_year)
         if (data.type == "check") { //from socket.emit (not room broadcast)
-            if (data.errcd == hush.cons.result_err) {
+            if (data.errcd == hush.cons.CODE_ERR) {
                 procFailure(data, "check failure : " + data.errmsg)
                 return
             }
@@ -1689,7 +1691,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                 }
             }
         } else if (data.type == "invite") {
-            if (data.errcd == hush.cons.result_err) {
+            if (data.errcd == hush.cons.CODE_ERR) {
                 procFailure(data, data.errmsg)
                 return
             }
@@ -1698,7 +1700,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
             addRow(data)
             if (!_isStickyNeeded) scrollToTarget()
         } else if (data.type == "leave") {                    
-            if (data.errcd == hush.cons.result_err) {
+            if (data.errcd == hush.cons.CODE_ERR) {
                 procFailure(data, data.errmsg)
                 return
             }
@@ -1732,7 +1734,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                 }
             }
         } else {
-            if (data.errcd == hush.cons.result_err) {
+            if (data.errcd == hush.cons.CODE_ERR) {
                 procFailure(data, data.errmsg)
                 return
             }
@@ -1807,11 +1809,11 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                         $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
                         showImgMenu(true)
                         $("#btn_send_img_m").off("click").on("click", function(e) { 
-                            hush.util.animCall(this.id, true) 
+                            //hush.util.animCall(this.id, true) 
                             sendMsg("image", blobUrl, blob) 
                         })
                         $("#btn_cancel_img_m").off("click").on("click", function(e) { 
-                            hush.util.animCall(this.id, true) 
+                            //hush.util.animCall(this.id, true) 
                             showImgMenu(false) 
                         })
                     }
@@ -1823,11 +1825,11 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                 $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
                 showImgMenu(true)
                 $("#btn_send_img").off("click").on("click", function(e) { 
-                    hush.util.animCall(this.id, true) 
+                    //hush.util.animCall(this.id, true) 
                     sendMsg("image", blobUrl, blob) 
                 })
                 $("#btn_cancel_img").off("click").on("click", function(e) { 
-                    hush.util.animCall(this.id, true) 
+                    //hush.util.animCall(this.id, true) 
                     showImgMenu(false) 
                 })
             }                    

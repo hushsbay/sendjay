@@ -71,6 +71,11 @@
             unread_max_check : 1000,
             max_add_count : 100, //when connect after disconnect
             send_timeout_sec : 5,
+            handling : ".. ", //handling..
+            no_response : "no response",
+            retry_sending : "retry sending",
+            sending_failure : "check failure",
+            left : " left this room",
         },
         socket : null,
         tz : Intl.DateTimeFormat().resolvedOptions().timeZone, //eg) Asia/Seoul, America/Toronto
