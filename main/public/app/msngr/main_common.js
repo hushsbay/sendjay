@@ -557,8 +557,7 @@ const dispCustom = (body) => {
 }
 
 const getPortalList = async (obj) => {
-    try {
-        debugger
+    try {        
         if (portalListBeingQueried) return
         portalListBeingQueried = true
         let rq = { type : obj.type }
@@ -610,6 +609,7 @@ const getPortalList = async (obj) => {
             const _roomnm = hush.sock.getRoomName(row.NICKNM, row.MAINNM, row.ROOMNM)
             const _memcnt = row.MEMCNT
             const _noti = row.NOTI
+            debugger
             hush.sock.map[_roomid] = { nm: _roomnm, noti: _noti }
             const _lastmsg = (row.LASTMSG) ? dispCustom(row.LASTMSG) : "No Message"
             g_cdt = row.LASTDT
