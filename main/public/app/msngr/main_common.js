@@ -557,7 +557,8 @@ const dispCustom = (body) => {
 }
 
 const getPortalList = async (obj) => {
-    try {        
+    try {  
+        debugger      
         if (portalListBeingQueried) return
         portalListBeingQueried = true
         let rq = { type : obj.type }
@@ -931,6 +932,7 @@ var funcSockEv = { //needs to be public
                     getPortalList({ type: "row", roomid : data.roomid, replace: true })
                 }
             } else {
+                //if (runFromStandalone) getPortalList({ type: "row", roomid : data.roomid })
                 const _win = hush.sock.rooms[data.roomid]
                 if (_win && !_win.closed) {
                     if (!_win.document.hasFocus()) hush.noti.procNoti(data.roomid, data)
@@ -938,7 +940,8 @@ var funcSockEv = { //needs to be public
                     hush.noti.procNoti(data.roomid, data)
                 }
                 if (!runFromStandalone) return
-                setTimeout(() => getPortalList({ type: "row", roomid : data.roomid }), 3000)
+                debugger
+                getPortalList({ type: "row", roomid : data.roomid })
             }
         } catch (ex) {
             await hush.msg.alert("[main]sock_ev_send_msg: " + ex.message)
