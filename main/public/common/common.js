@@ -463,7 +463,6 @@
         noti : {
             notis : { },
             procNoti : async (roomid, obj) => { //This function should be called from index.html only or hush.user has to be replaced with another.
-                debugger
                 if (hush.webview.on) return //covered at app notification
                 if (hush.http.getCookie("notioff") == "Y") return //see setting tab
                 if (obj.senderid == hush.user.id) return //skip for oneself when mobile
@@ -500,7 +499,6 @@
                 } else {
                     _body = "[" + _from + "]\n" + hush.util.displayTalkBodyCustom(obj.type, obj.body)
                 }  
-                debugger               
                 const noti = new window.Notification("", { body : _body, dir : "auto", lang : "EN", tag : roomid, icon : hush.cons.logo_darkblue, requireInteraction : true })
                 noti.msgid = obj.msgid
                 hush.noti.notis[roomid] = noti

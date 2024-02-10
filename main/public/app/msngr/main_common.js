@@ -558,7 +558,6 @@ const dispCustom = (body) => {
 
 const getPortalList = async (obj) => {
     try {  
-        debugger      
         if (portalListBeingQueried) return
         portalListBeingQueried = true
         let rq = { type : obj.type }
@@ -655,7 +654,8 @@ const getPortalList = async (obj) => {
                     g_list.prepend(_html) //To the top of list
                 }
             }
-            getUnreadPerEachRoom(_roomid, true) //Or you can check unreads at a time by using 'group by roomid' sql in qry_unread.js
+            const _closeNoti = (obj.type == "row") ? false : true
+            getUnreadPerEachRoom(_roomid, _closeNoti) //Or you can check unreads at a time by using 'group by roomid' sql in qry_unread.js
         }
         //if (obj.type == "normal" && g_cdt != FIRST_QUERIED && lastRoomid != "") hush.util.animCall(lastRoomid, true) //tells if next fetch exists
         const _tag = (obj.roomid) ? "#div_" + obj.roomid : ".div_row" //const _tag = (obj.roomid) ? "#subdiv_" + obj.roomid : ".row_portal"
@@ -932,7 +932,6 @@ var funcSockEv = { //needs to be public
                     getPortalList({ type: "row", roomid : data.roomid, replace: true })
                 }
             } else {
-                //if (runFromStandalone) getPortalList({ type: "row", roomid : data.roomid })
                 const _win = hush.sock.rooms[data.roomid]
                 if (_win && !_win.closed) {
                     if (!_win.document.hasFocus()) hush.noti.procNoti(data.roomid, data)
@@ -940,7 +939,6 @@ var funcSockEv = { //needs to be public
                     hush.noti.procNoti(data.roomid, data)
                 }
                 if (!runFromStandalone) return
-                debugger
                 getPortalList({ type: "row", roomid : data.roomid })
             }
         } catch (ex) {
