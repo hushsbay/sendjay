@@ -596,7 +596,7 @@ const getPortalList = async (obj) => {
                 hush.msg.toast(hush.cons.MSG_NO_DATA)
             } else {
                 $("#getmore").html(hush.cons.MSG_NO_MORE_DATA)
-                setTimeout(() => $("#getmore").remove(), 1000)
+                setTimeout(() => $("#getmore").remove(), 1000)    
             }
             portalListBeingQueried = false
             return
@@ -608,9 +608,8 @@ const getPortalList = async (obj) => {
             const _roomid = row.ROOMID
             const _roomnm = hush.sock.getRoomName(row.NICKNM, row.MAINNM, row.ROOMNM)
             const _memcnt = row.MEMCNT
-            const _noti = row.NOTI
-            debugger
-            hush.sock.map[_roomid] = { nm: _roomnm, noti: _noti }
+            const _noti = row.NOTI 
+            hush.sock.roomMap[_roomid] = { nm: _roomnm, noti: _noti }
             const _lastmsg = (row.LASTMSG) ? dispCustom(row.LASTMSG) : "No Message"
             g_cdt = row.LASTDT
             if (i == 0) {
