@@ -729,6 +729,28 @@
                 obj.ext = (arr.length == 1) ? "" : arr[arr.length - 1]
 				return obj
             },
+            extractFileFromTalkBody : (body) => { //from hush.A_MSGMS_TBL BODY Field value for file upload (xxroomid/xxuserid/realfilenamebody~~tempfilenamebody.extension##filesize)
+                const _arr = body.split("/")
+                const _brr = (_arr.length == 1) ? _arr[0].split(hush.cons.subdeli) : _arr[2].split(hush.cons.subdeli)
+                const _crr = (_brr.length == 1) ? _brr[0].split(hush.cons.deli) : _brr[1].split(hush.cons.deli)
+                return _brr[0] + hush.util.getFileNameAndExtension(_crr[0]).extDot
+            },
+            displayTalkBodyCustom : (type, body) => { //See ChatService.kt too.
+                let _body
+                if (body == hush.cons.cell_revoked) {
+                    _body = body
+                } else if (type == "invite") {
+                    const _arr = body.split(hush.cons.deli)
+                    _body = _arr[0] + " invited by " + _arr[2]
+                } else if (type == "image") {
+                    _body = type
+                } else if (type == "file" || type == "flink") {
+                    _body = hush.util.extractFileFromTalkBody(body)
+                } else {
+                    _body = body
+                }
+                return _body
+            },
             formatBytes : (bytes) => {
                 let units = ["B", "KB", "MB", "GB", "TB"], i
                 for (i = 0; bytes >= 1024 && i < 4; i++) bytes /= 1024
