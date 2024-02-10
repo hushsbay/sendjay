@@ -1632,6 +1632,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
         toggleDispMem(data.value)
     },
     [hush.cons.sock_ev_send_msg] : (data) => {
+        debugger
         if (data.roomid != g_roomid) {
             hush.msg.alert("Different RoomID : " + data.roomid + "/" + g_roomid)
             return
