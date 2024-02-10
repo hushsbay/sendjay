@@ -5,7 +5,7 @@ const express = require('express')
 const router = express.Router()
 
 router.use(function(req, res, next) {
-	req.title = 'qry_poral'
+	req.title = 'qry_portal'
 	next() //next('error') for going to ws.util.watchRouterError() below
 })
 
@@ -14,16 +14,9 @@ router.post('/', async function(req, res) {
 	try {
 		const rs = ws.http.resInit()	
 		const dateFr = ws.util.setDateAdd(new Date(), ws.cons.max_days_to_fetch)
-
 		let { type, roomid, keyword, dt, cnt } = req.body
 		keyword = decodeURIComponent(keyword) || ''
 		cnt = parseInt(cnt)
-
-		//const _type = req.query.type
-		//const _keyword = decodeURIComponent(req.query.keyword) || ''
-		//const _roomid = req.query.roomid			
-		//const _dt = req.query.dt
-		//const _cnt = parseInt(req.query.cnt)
 		conn = await wsmysql.getConnFromPool(global.pool)
 		userid = await ws.jwt.chkToken(req, res, conn) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
 		if (!userid) return
