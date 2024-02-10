@@ -938,7 +938,7 @@ var funcSockEv = { //needs to be public
                     hush.noti.procNoti(data.roomid, data)
                 }
                 if (!runFromStandalone) return
-                setTimeout(() => getPortalList({ type: "row", roomid : data.roomid }), 10)
+                setTimeout(() => getPortalList({ type: "row", roomid : data.roomid }), 3000)
             }
         } catch (ex) {
             await hush.msg.alert("[main]sock_ev_send_msg: " + ex.message)
