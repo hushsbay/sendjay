@@ -51,7 +51,7 @@ router.post('/', async function(req, res) {
 			sql += "WHERE LASTDT >= '" + dateFr + "' AND LASTDT < '" + dt + "' "
 			sql += "ORDER BY LASTDT DESC LIMIT 0, " + cnt
 		}
-		data = await wsmysql.query(conn, sql, arg)
+		data = await wsmysql.query(conn, sql, null)
 		len = data.length
 		if (data.length == 0) {
 			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true)
