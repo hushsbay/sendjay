@@ -667,7 +667,7 @@ const getPortalList = async (obj) => {
             } else if (hush.webview.and) {
                 setTimeout(() => AndroidMain.openRoom("open", _roomid, "portal", ""), hush.cons.sec_for_webview_func) //setTimeout없이 Android 함수 호출하면 animCall 동작안함
             } else {
-                hush.room.open(hush.cons.chat, _roomid, "portal")
+                hush.sock.openRoom("/app/msngr/chat.html", _roomid, "portal")
             }
         })
         portalListBeingQueried = false
@@ -765,7 +765,7 @@ const initMsg = (_roomid) => { //differ from chat.html
 function procNewChatFromPopup(useridArr) { //invoked from index.html (member) popup : Web Only
     if (useridArr.length == 0) return
     g_useridArr = useridArr
-    hush.room.create(hush.cons.chat, "newFromPopup", g_token10)            
+    hush.room.create("/app/msngr/chat.html", "newFromPopup", g_token10)            
 }
 
 const chkTime = async (tm) => {
