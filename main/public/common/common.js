@@ -463,6 +463,7 @@
         noti : {
             notis : { },
             procNoti : async (roomid, obj) => { //This function should be called from index.html only or hush.user has to be replaced with another.
+                debugger
                 if (hush.webview.on) return //covered at app notification
                 if (hush.http.getCookie("notioff") == "Y") return //see setting tab
                 if (obj.senderid == hush.user.id) return //skip for oneself when mobile
@@ -473,15 +474,15 @@
                     if (!userids.includes(myuserid)) return //means that myuserid not invited and exists already in chat room
                 }
                 let _body, _from
-                if (hush.room.map[roomid]) {
-                    _from = hush.room.map[roomid].nm
-                    if (hush.room.map[roomid].noti == "X") return
+                if (hush.sock.roomMap[roomid]) {
+                    _from = hush.sock.roomMap[roomid].nm
+                    if (hush.sock.roomMap[roomid].noti == "X") return
                 } else {
                     const rs = await hush.http.ajax(hush.cons.route + "/get_roominfo", { roomid : roomid })                
                     if (rs.code == hush.cons.result_ok) {
                         _from = hush.room.getRoomName(rs.list[0].NICKNM, rs.list[0].MAINNM, rs.list[0].ROOMNM)
-                        hush.room.map[roomid] = { nm: _from, noti: rs.list[0].NOTI }
-                        if (hush.room.map[roomid].noti == "X") return
+                        hush.sock.roomMap[roomid] = { nm: _from, noti: rs.list[0].NOTI }
+                        if (hush.sock.roomMap[roomid].noti == "X") return
                     } else {
                         let _people = obj.receivernm.join(",") + ","
                         _people = _people.replace(hush.user.nm + ",", "")
@@ -514,7 +515,6 @@
         sock : {
             roomMap : { }, //{ nm: 'xxx', noti: true/false }
             rooms : { }, //sock.connect => https://socket.io/docs/v3/client-initialization        
-            map : { }, //{ nm: 'xxx', noti: true/false } 
             connect : (io, query) => new Promise((resolve, reject) => { //this will be occurred only on index.html
                 const socket = io(hush.cons.socket_url, { forceNew: false, reconnection: false, query: query }) //forceNew=false //See 'disconnect_prev_sock' in pmessage.js (on server)
         		socket.off("connect_error").on("connect_error", async (e) => { await hush.msg.alert("connect_error\n" + e.toString()) })
