@@ -33,7 +33,7 @@ const procScreenShot = (req, filename, filepath, filedir) => {
 				}
 			})
 		} catch (ex) {
-			ws.log.ex(req, ex, 'procScreenShot', filepath)
+			ws.util.loge(req, ex) //ws.log.ex(req, ex, 'procScreenShot', filepath)
 			resolve()
 		}
 	})
@@ -53,7 +53,7 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 			await fs.ensureDir(_dir_room) //It's possible that empty dir occurrs.
 			await fs.ensureDir(_dir) //It's possible that empty dir occurrs.
 			cb(null, _dir)
-		} catch (err) {
+		} catch (ex) {
 			ws.util.loge(req, ex) //ws.log.ex(req, err, 'destination', _dir)
 			cb(err)
 		}
