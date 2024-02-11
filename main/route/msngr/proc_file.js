@@ -46,8 +46,8 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 			_dir_room = config.app.uploadPath + '/' + req.body.roomid
 			_dir = _dir_room + '/' + req.body.senderid
 			if (_dir.includes('undefined')) {
-				const errStr = '_dir undefined - ' + _dir
-				ws.log.ex(req, errStr, 'upload-multer', file.originalname)
+				const errStr = '_dir undefined - ' + _dir + '-' + file.originalname
+				ws.util.loge(req, errStr)
 				cb(errStr)
 			}
 			await fs.ensureDir(_dir_room) //It's possible that empty dir occurrs.
@@ -55,7 +55,7 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 			cb(null, _dir)
 		} catch (ex) {
 			ws.util.loge(req, ex) //ws.log.ex(req, err, 'destination', _dir)
-			cb(err)
+			cb(ex)
 		}
 	},
 	filename : async function(req, file, cb) { //file={"fieldname":"file","originalname":"제목 없음.png","encoding":"7bit","mimetype":"image/png"} : no file size here
