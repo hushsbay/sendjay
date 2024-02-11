@@ -87,7 +87,7 @@ const procMulter = (req) => {
 	return new Promise(async (resolve, reject) => {
 		let conn, sql, data, len, userid
 		try {	
-			const rs = ws.http.rsInit()
+			const rs = ws.http.resInit()
 			let expiry = ws.util.setHourAdd(new Date(), ws.cons.max_hours_to_filesave) //ws.util.setDateAdd(new Date(), ws.cons.max_days_to_filesave)
 			const ridArr = req.body.receiverid.split(ws.cons.easydeli)
 			const rnmArr = req.body.receivernm.split(ws.cons.easydeli)
