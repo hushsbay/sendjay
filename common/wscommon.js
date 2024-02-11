@@ -607,6 +607,11 @@ module.exports = (function() {
 				decrypted = Buffer.concat([decrypted, decipher.final()])
 				return decrypted.toString()
 			},
+			getRnd : (_min, _max) => {
+                min = (!_min) ? 100000 : _min
+                max = (!_max) ? 999999 : _max
+                return Math.floor(Math.random() * (max - min)) + min //return min(inclusive) ~ max(exclusive) Integer only 
+			},
 			getCurDateTimeStr : (deli) => {
 				const now = new Date()
 				if (deli) {
