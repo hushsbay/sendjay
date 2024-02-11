@@ -657,6 +657,19 @@ module.exports = (function() {
                 // return b
                 return s.length //mySql 필드인 경우에는 한글이 1바이트로 계산되어 입력되고 있으므로 그냥 .length를 사용하고 있음 (다른 DB는 체크 필요)
             },
+			getFileNameAndExtension : (fileStr) => {
+				const obj = { }
+				const arr = fileStr.split('.')
+				obj.name = arr[0]
+				if (arr.length == 1) {
+					obj.ext = ''
+					obj.extDot = ''	
+				} else {
+					obj.ext = arr[arr.length - 1]
+					obj.extDot = '.' + arr[arr.length - 1]
+				}
+				return obj
+			},
 		}
 
 	}
