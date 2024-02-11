@@ -79,16 +79,20 @@ module.exports = (function() {
 		})
 
 		,txRollback : (conn) => new Promise((resolve, reject) => {
-			if (conn) {
-				conn.rollback(function(err) {
-					if (err) {
-						reject(err)
-					} else {
-						resolve()
-					}
-				})
-			} else {
-				reject(new Error('wsmysql.txRollback : No Conn'))
+			try {
+				if (conn) {
+					conn.rollback(function(err) {
+						if (err) {
+							reject(err)
+						} else {
+							resolve()
+						}
+					})
+				} else {
+					resolve()
+				}
+			} catch (ex) {
+				reject(ex)
 			}
 		})
 
