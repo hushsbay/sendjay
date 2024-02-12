@@ -324,6 +324,18 @@
             deleteCookie : (name) => { //actually 'return' needed
                 $.removeCookie(name, { path: '/' })
             },
+            fileDownload : (_path, msgid) => {
+                debugger
+                let _fileUrl
+                if ($("#ifr").length > 0) $("#ifr").remove()
+                if (_path == "imagetofile") {
+                    _fileUrl = "/msngr/get_msginfo?type=" + _path + "&msgid=" + msgid + "&suffix=" + hush.util.getCurDateTimeStr(false, true) //suffix used in mobile app
+                } else {
+                    _fileUrl = "/msngr/proc_file/" + decodeURIComponent(_path) + "?msgid=" + msgid
+                }
+                $("<iframe id=ifr src='" + _fileUrl + "' style='display:none;width:0px;height:0px;' />").appendTo("body") 
+                hush.msg.toast("downloading..")
+            }
         },
         idb : { //for mobile only
             db : null, 
