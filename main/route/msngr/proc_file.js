@@ -43,6 +43,7 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 	destination : async function(req, file, cb) {
 		let _dir_room, _dir
 		try {
+			console.log(file.originalname+'///////////////')
 			_dir_room = config.app.uploadPath + '/' + req.body.roomid
 			_dir = _dir_room + '/' + req.body.senderid
 			if (_dir.includes('undefined')) {
@@ -61,10 +62,8 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 	filename : async function(req, file, cb) { //file={"fieldname":"file","originalname":"제목 없음.png","encoding":"7bit","mimetype":"image/png"} : no file size here
 		let conn, sql, data, len
 		try {
-			console.log(file.originalname+'///////////////')
 			const fileStrObj = ws.util.getFileNameAndExtension(file.originalname) //file size => req.body.body
 			req.filename = fileStrObj.name + ws.cons.subdeli + ws.util.getCurDateTimeStr() + ws.util.getRnd() + fileStrObj.extDot
-			console.log(req.filename+'///////////////')
 			conn = await wsmysql.getConnFromPool(global.pool)
 			//const role = await ws.getRole(req.cookies.userid, conn)
 			//if (!ws.chkRole(role, ws.cons.group_admin)) {
