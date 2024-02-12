@@ -1642,6 +1642,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
             hush.msg.alert("Different RoomID : " + data.roomid + "/" + g_roomid)
             return
         }
+        debugger
         if (data.senderkey == g_userkey) deleteLocalMsg(data.msgid)
         let _isStickyNeeded
         if (data.senderkey && data.senderkey != g_userkey) { 
@@ -1737,8 +1738,6 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                 }
             }
         } else {
-            
-            debugger
             if (data.errcd == hush.cons.CODE_ERR) {
                 procFailure(data, data.errmsg)
                 return
