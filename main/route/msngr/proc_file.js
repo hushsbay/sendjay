@@ -42,8 +42,7 @@ const procScreenShot = (req, filename, filepath, filedir) => {
 const upload = multer({ storage: multer.diskStorage({ //order : destination -> filename (all the time regardless coding position)
 	destination : async function(req, file, cb) {
 		let _dir_room, _dir
-		try {
-			console.log(file.originalname+'///////////////')
+		try {			
 			_dir_room = config.app.uploadPath + '/' + req.body.roomid
 			_dir = _dir_room + '/' + req.body.senderid
 			if (_dir.includes('undefined')) {
@@ -94,8 +93,9 @@ const procMulter = (req) => {
 			const rnmArr = req.body.receivernm.split(ws.cons.easydeli)
 			const filedir = config.app.uploadPath + '/' + req.body.roomid + '/' + req.body.senderid
 			const filepath = filedir + '/' + req.filename
-			let fileInfo = filepath + ws.cons.deli + req.body.body //req.file.filename
+			let fileInfo = filepath + ws.cons.deli + req.body.body
 			fileInfo = fileInfo.replace(config.app.uploadPath + '/', '') //hide parent folder for file upload
+			console.log(fileInfo+'@@@@@@@@@@@@')
 			conn = await wsmysql.getConnFromPool(global.pool)			
 			await wsmysql.txBegin(conn)
 			sql = "INSERT INTO A_MSGMST_TBL (MSGID, ROOMID, SENDERID, SENDERNM, BODY, REPLY, TYP, FILESTATE, CDT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
