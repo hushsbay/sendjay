@@ -3,9 +3,9 @@ const ws = require(config.app.ws)
 const wsmysql = require(config.app.wsmysql)
 const fs = require('fs-extra') //not fs
 const url = require('url')
-const mime = require('mime')
+const mime = require('mime') //@4.x는 require()시 오류 발생 (@3.0.0 사용함)
 const express = require('express')
-const multer  = require('multer') //@1.4.5는 한글 깨짐 (@1.4.4로 사용해야 함)
+const multer  = require('multer') //@1.4.5는 한글 깨짐 (@1.4.4로 사용함)
 const ffmpeg = require('fluent-ffmpeg')
 const router = express.Router()
 
