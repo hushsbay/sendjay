@@ -5,7 +5,7 @@ const fs = require('fs-extra') //not fs
 const url = require('url')
 const mime = require('mime')
 const express = require('express')
-const multer  = require('multer')
+const multer  = require('multer') //@1.4.5는 한글 깨짐 (@1.4.4로 사용해야 함)
 const ffmpeg = require('fluent-ffmpeg')
 const router = express.Router()
 

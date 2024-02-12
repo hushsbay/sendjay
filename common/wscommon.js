@@ -72,7 +72,7 @@ module.exports = (function() {
 			max_nicknm_len : 100, //same as client's
 			max_msg_len : 4000, //same as client's
 			max_filesize : 1110485760, //10MB //max_filesize : 10485760, //10MB
-			max_filecount : 5, //per user
+			max_filecount : 50, //per user
 			max_size_to_sublink : 5242880, //5MB. same as client's
 			cell_revoked : 'message cancelled',
 			file_expired : 'expired', //Used in daemon and client too.
