@@ -12,8 +12,8 @@ const proc = (req) => {
 		try {			
 			let rs = ws.http.resInit()
 			const buf = Buffer.from(new Uint8Array(req.files[0].buffer))
-			const ridArr = req.body.receiverid.split(com.cons.easydeli)
-			const rnmArr = req.body.receivernm.split(com.cons.easydeli)
+			const ridArr = req.body.receiverid.split(ws.cons.easydeli)
+			const rnmArr = req.body.receivernm.split(ws.cons.easydeli)
 			conn = await wsmysql.getConnFromPool(global.pool)
 			await wsmysql.txBegin(conn)
 			sql = "INSERT INTO A_MSGMST_TBL (MSGID, ROOMID, SENDERID, SENDERNM, BODY, BUFFER, REPLY, TYP, CDT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
@@ -37,7 +37,7 @@ const proc = (req) => {
 router.post('/', upload.any(), async (req, res) => {
 	req.title = 'proc_image.post'
 	try {
-		//const result = await com.verifyWithRestUserId(req, res, req.body.senderid, _logTitle)
+		//const result = await ws.verifyWithRestUserId(req, res, req.body.senderid, _logTitle)
 		//if (!result) return //ws.http.resCodeMsg() 사용하지 않음을 유의
 		const rs = await proc(req)
 		res.json(rs)
