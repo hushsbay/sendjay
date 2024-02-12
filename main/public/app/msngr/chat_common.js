@@ -503,7 +503,6 @@ const addRow = (obj, kind) => {
                 //     imageSrcEvent(blobUrl, obj.msgid, kind, obj.type, obj.body) //$("#~").attr("src", "data:image/png;base64," + data)
                 // }
                 if (rsPic.list[0].BUFFER) {
-                    debugger
                     const blobUrl = hush.blob.getBlobUrlForImage(rsPic.list[0].BUFFER.data)
                     imageSrcEvent(blobUrl, obj.msgid, kind, obj.type, obj.body) //$("#~").attr("src", "data:image/png;base64," + data)
                 }
@@ -1143,6 +1142,7 @@ const imageSrcEvent = (blobUrl, msgid, kind, type, body) => {
     }
     _img.on("click", function(e) {
         //const _id = this.id
+        debugger
         let fileInfoForMobile = $("#ahref_" + msgid).attr("param1") + hush.cons.deli + $("#ahref_" + msgid).attr("param2")
         if (type == "ext_video") {
             const _arr = body.split(hush.cons.deli)
