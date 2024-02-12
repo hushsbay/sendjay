@@ -32,8 +32,12 @@
             w_key : 'W__', //Web userkey
             m_key : 'M__', //Mobile userkey
             prefix : '$$', //for redis, socket
+            deli : "##",
+            subdeli : "$$",
             indeli : "','", //use this for sql where in clause
+            easydeli : ";", //use this for absolutely safe place
             memdeli : " / ",
+            deli_key : "__", //for setUser()
             idb_tbl : "msngr", //indexedDB
             sock_ev_alert : 'alert',
 			sock_ev_toast : 'toast',
