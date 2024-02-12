@@ -497,15 +497,14 @@ const addRow = (obj, kind) => {
             g_list_msg.append(_html)
         }
         if (obj.bufferStr != null) { //only for image
-            debugger
             hush.http.ajaxCall("/msngr/get_msginfo", { msgid : obj.msgid, body : obj.body }, function(rsPic) {
                 // if (rsPic.buffer) {
                 //     const blobUrl = hush.blob.getBlobUrlForImage(rsPic.buffer.data)
                 //     imageSrcEvent(blobUrl, obj.msgid, kind, obj.type, obj.body) //$("#~").attr("src", "data:image/png;base64," + data)
                 // }
-                debugger
                 if (rsPic.list[0].BUFFER) {
-                    const blobUrl = hush.blob.getBlobUrlForImage(rsPic.list[0].BUFFER)
+                    debugger
+                    const blobUrl = hush.blob.getBlobUrlForImage(rsPic.list[0].BUFFER.data)
                     imageSrcEvent(blobUrl, obj.msgid, kind, obj.type, obj.body) //$("#~").attr("src", "data:image/png;base64," + data)
                 }
             })
@@ -1008,7 +1007,6 @@ const prepareForNoResponse = (rq) => {
 }
 
 const procSendAndAppend = (rq, blobUrl) => {
-    debugger
     const _focused = hush.webview.screenHeightOnLoad == $(window).height() ? false : true //g_in_chat.is(":focus") ? true : false
     addRow(rq)
     if (rq.type == "image") { //sent by ajax and should be noticed to all members
