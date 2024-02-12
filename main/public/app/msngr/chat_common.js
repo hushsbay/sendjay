@@ -497,12 +497,18 @@ const addRow = (obj, kind) => {
             g_list_msg.append(_html)
         }
         if (obj.bufferStr != null) { //only for image
-            hush.http.ajaxCall(hush.cons.route + "/get_msginfo", { msgid : obj.msgid, body : obj.body }, "get", function(rsPic) {
-                if (rsPic.buffer) {
-                    const blobUrl = hush.http.getBlobUrlForImage(rsPic.buffer.data)
+            debugger
+            hush.http.ajaxCall("/msngr/get_msginfo", { msgid : obj.msgid, body : obj.body }, function(rsPic) {
+                // if (rsPic.buffer) {
+                //     const blobUrl = hush.blob.getBlobUrlForImage(rsPic.buffer.data)
+                //     imageSrcEvent(blobUrl, obj.msgid, kind, obj.type, obj.body) //$("#~").attr("src", "data:image/png;base64," + data)
+                // }
+                debugger
+                if (rsPic.list[0].BUFFER) {
+                    const blobUrl = hush.blob.getBlobUrlForImage(rsPic.list[0].BUFFER)
                     imageSrcEvent(blobUrl, obj.msgid, kind, obj.type, obj.body) //$("#~").attr("src", "data:image/png;base64," + data)
                 }
-            }, false)
+            })
         }
         if (obj.type == "talk") {
             if (_sublink) {
