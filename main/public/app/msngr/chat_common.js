@@ -1077,8 +1077,8 @@ const sendMsg = (type, blobUrlOrBody, blobOrFilestate) => {
             fd.append("type", rq.type)
             fd.append("reply", getMsgToReply())
             fd.append("file", blobOrFilestate)
-            hush.http.ajaxFormData(hush.cons.route + "/proc_image", fd, (rs) => {
-                if (rs.code == hush.cons.result_ok) {
+            hush.http.ajaxFormData("/msngr/proc_image", fd, (rs) => {
+                if (rs.code == hush.cons.CODE_OK) {
                     const rqNotice = initMsg()
                     rqNotice.type = "notice"
                     rqNotice.body = rq.type
