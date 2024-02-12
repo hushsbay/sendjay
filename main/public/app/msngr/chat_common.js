@@ -372,6 +372,7 @@ const addRow = (obj, kind) => {
             }
             _boderpx = "0px"
         } else if (obj.type == "file" || obj.type == "flink") {
+            debugger
             if (obj.body == hush.cons.cell_revoked) {
                 _body = obj.body
             } else { 
