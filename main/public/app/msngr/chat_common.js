@@ -364,6 +364,7 @@ const addRow = (obj, kind) => {
         const _replied = obj.reply || ""
         const _dispReplied = obj.reply ? "" : "display:none;"
         if (obj.type == "image") {
+            debugger
             if (obj.body == hush.cons.cell_revoked) {
                 _body = obj.body
                 obj.bufferStr = null //obj.buffer = null
@@ -687,8 +688,8 @@ const procForCell = (obj) => {
     })
 }
 
-const getMsgList = async (type, keyword, start, end) => {
-    try {
+const getMsgList = async (type, keyword, start, end) => {    try {
+
         g_year = (new Date()).getFullYear().toString()
         let rq, withToast = true, includeInviteOrLeave = false
         if (type == "search") {
