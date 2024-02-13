@@ -1,6 +1,8 @@
 const config = require('../../config')
 const ws = require(config.app.ws)
 const wsmysql = require(config.app.wsmysql)
+const fs = require('fs')
+const mime = require('mime')
 const express = require('express')
 const router = express.Router()
 //1) Image downloading 2) Checking sending failure
