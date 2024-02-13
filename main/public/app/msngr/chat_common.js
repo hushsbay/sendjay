@@ -1171,7 +1171,7 @@ const imageSrcEvent = (blobUrl, msgid, kind, type, body) => {
                 _type = "image"
                 fileInfoForMobile = ""
             }
-            let urlStr = hush.cons.popup + "?type=" + _type + "&msgid=" + msgid + "&body=" + body
+            let urlStr = "/app/msngr/popup.html?type=" + _type + "&msgid=" + msgid + "&body=" + body
             if (!hush.webview.on) {
                 //const imgWin = hush.util.openWinPop("", 800, 800)
                 //imgWin.document.write("<!DOCTYPE html><html><title>Image Preview</title><body topmargin=0 leftmargin=0 marginheight=0 marginwidth=0><img id=" + _id + " ></body></html>")
