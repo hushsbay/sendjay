@@ -2,11 +2,11 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <link id=favicon href="/img/sendjay_darkblue.png" rel="shortcut icon" type="image/x-icon"/>
+    <link id=favicon href="/img/hushsbay.png" rel="shortcut icon" type="image/x-icon"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-    <title>Sendjay2 Popup</title>
+    <title>Popup::Sendjay</title>
     <link rel="stylesheet" href="/plugin/jquery-ui-smoothness-1.12.1.min.css">
-    <link rel="stylesheet" href="/common/common.css">
+    <link rel="stylesheet" href="common.css">
     <style>
         .save { position:relative;bottom:12px;left:15px;width:32px;height:32px }
     </style>
@@ -18,13 +18,13 @@
         $.when($.ready).done(async function() {
             try {
                 await $.getScript("/common/common.js")
-                await $.getScript("/jquery/jquery_common.js") 
-                await $.getScript("/jquery/msngr/popup_common.js")
-                hush.webview.chk() 
-                const param = hush.http.getParamsFromLocation()                
-                g_type = param.type
-                g_path = encodeURIComponent(param.path)
-                g_msgid = param.msgid
+                await $.getScript("popup_common.js")
+                debugger
+                const param = new URLSearchParams(location.search)
+                hush.webview.chk(param)
+                g_type = param.get("type")
+                g_path = encodeURIComponent(param.get("path"))
+                g_msgid = param.get("msgid")
                 if (g_type == "play") { //for pc web and mobile
                     g_videoTab = $("#videoTab")
                     g_videoTab.show()
@@ -39,7 +39,7 @@
                         AndroidPopup.procAfterOpenPopup()
                     }
                 } else if (g_type == "image" || g_type == "ext_image") { //for mobile only
-                    g_body = param.body
+                    g_body = param.get("body")
                     if (!hush.webview.on) {
                         previewImage()
                     } else {
@@ -49,11 +49,11 @@
                 hush.webview.ready = true
                 $("#btn_save").on("click", function() { //called from mobile app
                     if (g_type == "image") {
-                        hushj.http.fileDownload("imagetofile", g_msgid)
+                        hush.http.fileDownload("imagetofile", g_msgid)
                     } else {
                         const arr = g_added.added.split(hush.cons.deli)
                         if (arr.length != 2) throw new Error("fileDownload Error : " + arr.length)
-                        hushj.http.fileDownload(arr[0], arr[1])
+                        hush.http.fileDownload(arr[0], arr[1])
                     }
                 })
                 $("#main_pg").on("click", function() {
@@ -63,10 +63,10 @@
                     }
                 }) 
             } catch (ex) {
-                hush.util.showException(ex)
+                hush.util.showEx(ex)
             }
         }).fail(function(ex) {
-            hush.util.showException(ex)
+            hush.util.showEx(ex)
         })
     </script>
 </head>
