@@ -2,22 +2,22 @@ let g_type, g_path, g_msgid, g_body, g_added
 let g_videoTab
 
 const play = () => {
-    g_videoTab.attr("src", hush.cons.route + "/proc_file/" + g_path + "?msgid=" + g_msgid)
+    g_videoTab.attr("src", "/msngr/proc_file/" + g_path + "?msgid=" + g_msgid)
 }
 
 const fileDownload = () => {
     $("#fileDownload").show()
-    location.href = "/proc_file/" + g_path + "?msgid=" + g_msgid
+    location.href = "/msngr/proc_file/" + g_path + "?msgid=" + g_msgid
 }
 
 const previewImage = async () => {   
     const imageBody = $("#imgbody")
     const image = $("#img")
     let rq = { msgid : g_msgid, body : g_body }
-    const rs = await hushj.http.ajax(hush.cons.route + "/get_msginfo", rq)
+    const rs = await hush.http.ajax("/msngr/get_msginfo", rq)
     imageBody.show()
-    if (rs.code == hush.cons.result_ok) {
-        image.attr("src", hush.http.getBlobUrlForImage(rs.buffer.data)) //image.attr("src", hush.http.addPrefixForBlobUrl() + rs.bufferStr)
+    if (rs.code == hush.cons.CODE_OK) {
+        image.attr("src", hush.blob.getBlobUrlForImage(rs.list[0].BUFFER.data)) //image.attr("src", hush.blob.getBlobUrlForImage(rs.buffer.data)) //image.attr("src", hush.http.addPrefixForBlobUrl() + rs.bufferStr)
         image.on("load", function() {
             if (this.naturalWidth > screen.width || this.naturalHeight > screen.height) {
                 if (this.naturalWidth > this.naturalHeight) {
@@ -43,8 +43,8 @@ var funcSockEv = { //needs to be public
 ////////////////////////////////////////////////////////////////////////mobile webview
 const startFromWebView = (from, obj, rs) => {
     try {
-        hushj.auth.setCookieForUser(obj, "Y", true)
-        hush.user = hushj.auth.setUser()
+        hush.auth.setCookieForUser(obj, "Y", true)
+        hush.user = hush.auth.setUser()
         g_added = rs
         if (g_type == "play") {
             play()
@@ -56,12 +56,12 @@ const startFromWebView = (from, obj, rs) => {
     }
 }
 
-const getFromWebViewSocket = (from, json) => {
+const getFromWebViewSocket = async (from, json) => {
     try {
         if (!funcSockEv || !funcSockEv[json.ev]) return //Every event data object comes here which is not defined in this page. 
         funcSockEv[json.ev].call(null, json.data)
     } catch (ex) { //hush.util.showException(ex)
-        hushj.msg.alert("popup:getFromWebViewSocket: (" + JSON.stringify(json) + ")\n" + ex.message)
+        await hush.msg.alert("popup:getFromWebViewSocket: (" + JSON.stringify(json) + ")\n" + ex.message)
     }
 }
 
