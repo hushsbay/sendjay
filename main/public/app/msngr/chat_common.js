@@ -1386,12 +1386,16 @@ const procFileLinkIfExists = (obj, kind) => {
     if (_sublink_request) { //request sublink image for file uploaded : data table for file might not be inserted yet.
         if (hush.cons.sublink_ext_image.includes(_extension) || hush.cons.sublink_ext_video.includes(_extension)) {
             const _type = hush.cons.sublink_ext_image.includes(_extension) ? "ext_image" : "ext_video"
-            hush.http.ajaxCall("/msngr/get_msginfo", { msgid : obj.msgid, body : _sublink_request }, "get", function(rsPic) {
-                if (rsPic.buffer) {
-                    const blobUrl = hush.blob.getBlobUrlForImage(rsPic.buffer.data)
+            hush.http.ajaxCall("/msngr/get_msginfo", { msgid : obj.msgid, body : _sublink_request }, function(rsPic) {
+                // if (rsPic.buffer) {
+                //     const blobUrl = hush.blob.getBlobUrlForImage(rsPic.buffer.data)
+                //     imageSrcEvent(blobUrl, obj.msgid, kind, _type, _sublink_request) //$("#~").attr("src", "data:image/png;base64," + data)
+                // }
+                if (rsPic.list[0].BUFFER) {
+                    const blobUrl = hush.blob.getBlobUrlForImage(rsPic.list[0].BUFFER.data)
                     imageSrcEvent(blobUrl, obj.msgid, kind, _type, _sublink_request) //$("#~").attr("src", "data:image/png;base64," + data)
                 }
-            }, false)
+            })
         }
     }
     return _filelink
@@ -1807,9 +1811,9 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
             }
             if (hush.webview.ios) {
             } else if (hush.webview.and) { //rs.BUFFER not good since it is transmitted through Android App->WebView.
-                hush.http.ajaxCall(hush.cons.route + "/get_msginfo", { msgid : data.msgid }, "get", function(rsPic) {
-                    if (rsPic.buffer) {
-                        const uInt8Array = new Uint8Array(rsPic.buffer.data)
+                hush.http.ajaxCall("/msngr/get_msginfo", { msgid : data.msgid }, function(rsPic) {
+                    if (rsPic.list[0].BUFFER) { //if (rsPic.buffer) {
+                        const uInt8Array = new Uint8Array(rsPic.list[0].BUFFER.data) //new Uint8Array(rsPic.buffer.data)
                         const blob = new Blob([uInt8Array], { type: "image/png" })
                         const blobUrl = URL.createObjectURL(blob)
                         $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
@@ -1823,7 +1827,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                             showImgMenu(false) 
                         })
                     }
-                }, false)
+                })
             } else { 
                 const uInt8Array = new Uint8Array(rs.BUFFER)
                 const blob = new Blob([uInt8Array], { type: "image/png" })
