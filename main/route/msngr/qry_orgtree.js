@@ -13,7 +13,7 @@ router.post('/', async function(req, res) {
 	let conn, sql, data, len, userid
 	try {
 		const rs = ws.http.resInit()
-		const _keyword = decodeURIComponent(req.query.keyword) || ''
+		const _keyword = decodeURIComponent(req.body.keyword) || ''
 		conn = await wsmysql.getConnFromPool(global.pool)
 		userid = await ws.jwt.chkToken(req, res, conn) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
 		if (!userid) return
