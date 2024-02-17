@@ -22,6 +22,7 @@ module.exports = {
 		corsSocket : 'https://hushsbay.com', //Non-array type. Same origin should be here
 		wslogger : process.env.MODULE_LOGGER,
 		logPath : process.env.LOG_PATH,
-		uploadPath : process.env.UPLOAD_PATH
+		uploadPath : process.env.UPLOAD_PATH,
+		ffmpegPath : process.env.FFMPEG_PATH,
 	}
 }

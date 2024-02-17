@@ -1143,7 +1143,6 @@ const imageSrcEvent = (blobUrl, msgid, kind, type, body) => {
     }
     _img.on("click", function(e) {
         //const _id = this.id
-        debugger
         let fileInfoForMobile = $("#ahref_" + msgid).attr("param1") + hush.cons.deli + $("#ahref_" + msgid).attr("param2")
         if (type == "ext_video") {
             const _arr = body.split(hush.cons.deli)
@@ -1636,7 +1635,6 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
             setMembers(data) //console.log(JSON.stringify(data)+"===")
             toggleDispMem(data.dispmem)
             if (data.from == "rename_room" || data.from == "after") return
-            debugger
             hush.idb.connect(() => {
                 getMsgList() //setTimeout(() => getMsgList(), 3000) //set for debugging
             })

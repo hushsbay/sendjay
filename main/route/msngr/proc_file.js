@@ -17,7 +17,8 @@ const procScreenShot = (req, filename, filepath, filedir) => {
 			ffMpeg.setFfmpegPath(config.app.ffmpegPath)
 			ffMpeg.takeScreenshots({ timemarks : ['00:00:03.000'], size : '320x320', filename : new_filename }, filedir)
 			.on('error', function(err) {
-				console.log('ffmpeg error : ' + err + ' ==> ' + filepath)
+				console.log('ffmpeg error : ' + err + ' ==> ' + filepath) //나중에 제거
+				ws.util.loge(req, 'ffmpeg error : ' + err + ' ==> ' + filepath)
 				resolve() //오류가 나도 resolve()
 			}).on('end', function() {
 				if (filename.endsWith(ws.cons.sublink_ext_video)) {
