@@ -10,12 +10,15 @@ const proc = (req) => {
 			const rs = ws.http.resInit()
 			let _ret = { msgid : req.body.msgid, url : req.body.url, ogImg : '', ogTitle : '', ogDesc : '' }
 			const option = { url : req.body.url, timeout : 5000, encoding : 'utf-8', followAllRedirects : true, maxRedirects : 5, blacklist : [ ] }
+			console.log("!!!!!!!!!!!!!!!4")
 			ogs(option, function (error, result) {
 				if (error) { //true. The error it self is inside the results object.
+					console.log("!!!!!!!!!!!!!!!2")
 					rs.result = _ret			
 					resolve(rs)
 				} else {  
 					try {
+						console.log("!!!!!!!!!!!!!!!3")
 						_ret.ogImg = result.ogImage.url
 						_ret.ogTitle = result.ogTitle
 						_ret.ogDesc = result.ogDescription
@@ -36,6 +39,7 @@ const proc = (req) => {
 router.post('/', async (req, res) => {
 	req.title = 'get_opengraph.post'
 	try {
+		console.log("!!!!!!!!!!!!!!!1")
 		const rs = await proc(req)
 		res.json(rs)
 	} catch (ex) {
