@@ -328,6 +328,7 @@ const addRow = (obj, kind) => {
     if (!kind) resetEnvForScroll()
     let _dt = (obj.cnt == -1) ? obj.cdt : hush.util.tzDateTime(obj.cdt) //cnt=-1 means local data
     _dt = hush.util.formatMsgDt(_dt, g_year)
+    if (obj.type == "file") debugger
     if (obj.type == "invite" || obj.type == "leave") {
         let _desc                
         if (obj.type == "invite") {

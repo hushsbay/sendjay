@@ -18,7 +18,7 @@ const procScreenShot = (req, filename, filepath, filedir) => {
 			ffMpeg.takeScreenshots({ timemarks : ['00:00:03.000'], size : '320x320', filename : new_filename }, filedir)
 			.on('error', function(err) {
 				console.log('ffmpeg error : ' + err + ' ==> ' + filepath)
-				resolve()
+				resolve() //오류가 나도 resolve()
 			}).on('end', function() {
 				if (filename.endsWith(ws.cons.sublink_ext_video)) {
 					ffmpeg.ffprobe(filepath, function(err, metadata) { //You can remove this coding if performance issue exists
