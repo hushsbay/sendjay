@@ -348,13 +348,13 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
                 }
             }
             if (level > 0 && _objUpperLevel[level - 1]) parentid = _objUpperLevel[level - 1]
-            const expcolImg = (expanded.includes("=Y")) ? "gray_minus" : "gray_plus"                    
+            const expcolImg = (expanded.includes("=Y")) ? "minus_1" : "plus_1"                    
             const paddingLeft = 10 + level * g_nodeIndent
             let _html = "<div id=orgrow_" + i + " class=orgrow orgcd=" + orgcd + " dispstate=" + disp + " haschild=" + hasChild + " level=" + level + expanded + " memcnt=" + memcnt
             _html += "      memdownloaded=N parent='" + parentid + "' z-index=0 "
             _html += "      style='height:50px;display:" + disp + ";align-items:center;cursor:pointer;border-bottom:1px solid lightgray;padding-left:" + paddingLeft + "px'>"
             _html += "      <input type=checkbox id=orgsel_" + i + " class=orgsel z-index=1 style='" + chkDisp + "margin-left:10px' />"
-            _html += "      <img src='/img/gray_folder.png' class=coImg32 style='margin-left:8px' />"
+            _html += "      <img src='/img/ico_dept.png' class=coImg32 style='margin-left:8px' />"
             _html += "      <div id=orgbody_" + i + " class='coDotDot orgbody' style='height:100%;flex:1;min-width:0;display:flex;align-items:center;margin-left:8px'>" //flex:1;min-width:0 used instead of width:calc
             _html += "          <div id=orgnm_" + i + " class='coDotDot mq_node' style='font-weight:bold'>" + orgnm + "</div>"
             let dispCnt = (memcnt <= 0) ? "" : "(" + memcnt + ")"
@@ -530,10 +530,10 @@ const procExpCol = (_expanded, _tag, _idx, _obj) => {
     if (_tagExpcol.css("display") == "none") _tagExpcol.show()
     if (_expanded == "Y") {
         _tag.attr("expanded", "N")
-        _tagExpcol.attr("src", "/img/gray_plus.png")
+        _tagExpcol.attr("src", "/img/plus_1.png")
     } else {
         _tag.attr("expanded", "Y")
-        _tagExpcol.attr("src", "/img/gray_minus.png")
+        _tagExpcol.attr("src", "/img/minus_1.png")
     }
     if (_obj.withMember) {
         if (parseInt(_tag.attr("memcnt")) >= 2 && _tag.attr("expanded") == "Y") {
