@@ -312,11 +312,12 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
         const list = $("#list_people")
         list.empty()
         let rq = { keyword : encodeURIComponent(obj.keyword) }
-        const rs = await hush.http.ajax(hush.cons.route + "/qry_orgtree", rq) //without members
-        if (rs.code != hush.cons.result_ok) {
-            hush.msg.toast(rs.msg)
+        const rs = await hush.http.ajax("/msngr/qry_orgtree", rq) //without members
+        if (rs.code != hush.cons.CODE_OK) {
+            hush.msg.showMsg(rs.msg, rs.code)
             return
         }
+        debugger
         const _len = rs.list.length
         const _objUpperLevel = {} //used for deciding child node's parent tag id
         for (let i = 0; i < _len; i++) {
@@ -838,7 +839,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
                         abcd : encodeURIComponent(_abcd), abnm : encodeURIComponent(_abnm), standalone : _standalone, notioff : _notioff,
                         soundoff : _soundoff, fr : _fr, to : _to, bodyoff : _bodyoff, senderoff : _senderoff }
             const rs = await hush.http.ajax(hush.cons.route + "/proc_env", rq, "POST")
-            if (rs.code != hush.cons.result_ok) throw new Error(rs.msg)
+            if (rs.code != hush.cons.CODE_OK) throw new Error(rs.msg)
             $("#header_title").html(g_usernm + ((_nicknm != "") ? " [" + _nicknm + "]" : ""))
             g_setting.nicknm = _nicknm            
             g_setting.job = _job
