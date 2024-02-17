@@ -10,7 +10,7 @@ const proc = (req) => {
 			const rs = ws.http.resInit()
 			let _ret = { msgid : req.body.msgid, url : req.body.url, ogImg : '', ogTitle : '', ogDesc : '' }
 			const option = { url : req.body.url, timeout : 5000, encoding : 'utf-8', followAllRedirects : true, maxRedirects : 5, blacklist : [ ] }
-			console.log("!!!!!!!!!!!!!!!4")
+			console.log("!!!!!!!!!!!!!!!4", req.body.url, req.body.msgid)
 			ogs(option, function (error, result) {
 				if (error) { //true. The error it self is inside the results object.
 					console.log("!!!!!!!!!!!!!!!2")
