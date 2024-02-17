@@ -157,21 +157,21 @@ const procSelect = (_userid) => {
             const _useridTag = $("#add_" + _userid)
             _useridTag.effect("highlight", { color: hush.cons.fadein }, 100)
             _useridTag.off("click").on("click", function() {
-                hush.util.animAction(_useridTag, () => { 
+                //hush.util.animAction(_useridTag, () => { 
                     $(this).remove()
                     $("#sel_" + _userid).prop("checked", false)
                     procMemPanel()    
-                })                            
+                //})                            
             })
             _useridTag.off("mouseover").on("mouseover", function() { $(this).addClass("memSel") })
             _useridTag.off("mouseleave").on("mouseleave", function() { $(this).removeClass("memSel") })
             procMemPanel()
         } else {
             const _useridTag = $("#add_" + _userid)
-            hush.util.animAction(_useridTag, () => { 
+            //hush.util.animAction(_useridTag, () => { 
                 _useridTag.remove()
                 procMemPanel()
-            })
+            //})
         }
     } catch (ex) {
         hush.util.showEx(ex)
@@ -354,7 +354,7 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
             _html += "      memdownloaded=N parent='" + parentid + "' z-index=0 "
             _html += "      style='height:50px;display:" + disp + ";align-items:center;cursor:pointer;border-bottom:1px solid lightgray;padding-left:" + paddingLeft + "px'>"
             _html += "      <input type=checkbox id=orgsel_" + i + " class=orgsel z-index=1 style='" + chkDisp + "margin-left:10px' />"
-            _html += "      <img src='/img/ico_dept.png' class=coImg32 style='margin-left:8px' />"
+            _html += "      <img src='/img/ico_dept.png' class=coImg16 style='margin-left:8px' />"
             _html += "      <div id=orgbody_" + i + " class='coDotDot orgbody' style='height:100%;flex:1;min-width:0;display:flex;align-items:center;margin-left:8px'>" //flex:1;min-width:0 used instead of width:calc
             _html += "          <div id=orgnm_" + i + " class='coDotDot mq_node' style='font-weight:bold'>" + orgnm + "</div>"
             let dispCnt = (memcnt <= 0) ? "" : "(" + memcnt + ")"
