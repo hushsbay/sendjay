@@ -346,7 +346,7 @@
                                 $("#img_pict").attr("src", reader.result) //$("#img_pict").on("load", function() { $("#pict_upload").click() }).attr("src", reader.result)
                             }, false)
                         } catch (ex) { 
-                            hush.util.showException(ex)
+                            hush.util.showEx(ex)
                         }
                     })
                     $("#btn_reset_auth").on("click", function() { //displays in Web Only
@@ -387,6 +387,7 @@
                     })
                     $("#btn_ok").on("click", async function() {
                         //hush.util.animCall(this.id, true)
+                        debugger
                         try {
                             if (g_win_type == "invite") {
                                 let useridArr = [], usernmArr = []
@@ -396,7 +397,7 @@
                                     usernmArr.push($("#addnm_" + _userid).html())
                                 }).promise().done(function() {
                                     if (useridArr.length == 0) {
-                                        hush.msg.toast(hush.msg.need_one_row_selected)
+                                        hush.msg.toast(hush.msg.warn_need_one_row_selected)
                                         return
                                     } 
                                     if (!hush.webview.on) {
@@ -456,7 +457,7 @@
                                 g_setting_changed = false
                             }
                         } catch (ex) {
-                            hush.util.showException(ex)
+                            hush.util.showEx(ex)
                         }
                     })
                     $("#btn_cancel").on("click", function() {
