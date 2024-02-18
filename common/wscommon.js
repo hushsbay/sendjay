@@ -432,8 +432,8 @@ module.exports = (function() {
 				let _userkey, _socketid
 				try {
 					for (let key of userkeySocketArr) {
-						const arr = key.split(com.cons.easydeli)
-						_userkey = arr[0].replace(com.cons.key_str_socket, '')
+						const arr = key.split(ws.cons.easydeli)
+						_userkey = arr[0].replace(ws.cons.key_str_socket, '')
 						_socketid = arr[1]
 						try {
 							//await global.jay.adapter.remoteLeave(_socketid, _roomid)
@@ -462,7 +462,7 @@ module.exports = (function() {
 			sendToMyOtherSocket : async (socket, param) => {
 				param.data.userid = socket.userid //see ChatService.kt
 				const otherUserkeySocket = await ws.redis.getMyOtherSocket(socket)
-				if (otherUserkeySocket) com.pub('sendto_myother_socket', { socketid : socket.id, otherkey : otherUserkeySocket, param : param }) //call pmessage()
+				if (otherUserkeySocket) ws.redis.pub('sendto_myother_socket', { socketid : socket.id, otherkey : otherUserkeySocket, param : param }) //call pmessage()
 			},
 			sendToRoom : (socket, roomid, param) => {
 				//global.jay.to(roomid).emit(com.cons.sock_ev_common, param) //to all inside room. socket oneself included
