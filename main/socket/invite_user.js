@@ -1,4 +1,5 @@
 const config = require('../config')
+const ws = require(config.app.ws)
 const wsmysql = require(config.app.wsmysql)
 
 module.exports = async function(socket, param) {
