@@ -559,6 +559,7 @@ const dispCustom = (body) => {
 
 const getPortalList = async (obj) => {
     try {  
+        debugger
         if (portalListBeingQueried) return
         portalListBeingQueried = true
         let rq = { type : obj.type }
