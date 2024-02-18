@@ -767,7 +767,7 @@ const initMsg = (_roomid) => { //differ from chat.html
 function procNewChatFromPopup(useridArr) { //invoked from index.html (member) popup : Web Only
     if (useridArr.length == 0) return
     g_useridArr = useridArr
-    hush.room.create("/app/msngr/chat.html", "newFromPopup", g_token10)            
+    hush.sock.createRoom("/app/msngr/chat.html", "newFromPopup", g_token10)            
 }
 
 const chkTime = async (tm) => {
