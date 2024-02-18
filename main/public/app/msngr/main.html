@@ -165,9 +165,7 @@
                                 hush.msg.toast(hush.cons.warn_no_row_selected)
                                 return
                             }
-                            debugger
                             checked.each(function(idx, item) {
-                                debugger
                                 const _roomid = item.id.substring(4)
                                 const _toggle = ($("#alarm_" + _roomid).css("display") == "none") ? "X" : ""
                                 const rq = { kind : "noti", value : _toggle, userid : g_userid, roomid : _roomid }

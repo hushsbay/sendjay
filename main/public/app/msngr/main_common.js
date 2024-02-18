@@ -971,6 +971,7 @@ var funcSockEv = { //needs to be public
         getRoomInfo(data.roomid)
     },
     [hush.cons.sock_ev_set_env] : async (data) => {
+        debugger
         if (data.kind == "noti") { //emit
             getRoomInfo(data.roomid)
         } else if (data.kind == "userinfo") { //broadcast inside namespace
