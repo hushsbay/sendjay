@@ -438,7 +438,7 @@ module.exports = (function() {
 						try {
 							//await global.jay.adapter.remoteLeave(_socketid, _roomid)
 							console.log("1111111111111111")
-							await global.jay.in(_obj.socketid).socketsLeave(_roomid)
+							await global.jay.in(_socketid).socketsLeave(_roomid)
 							console.log("3333333333333333")
 						} catch (ex) { //reject(new Error('cannot connect to specific server when remoteLeaving with ' + _obj.userkey))
 							if (ex.message.includes('timeout')) { //timeout reached while waiting for remoteLeave response (specific server down)
