@@ -560,7 +560,7 @@ const dispCustom = (body) => {
 const getPortalList = async (obj) => {
     try {  
         debugger
-        if (portalListBeingQueried) return
+        if (portalListBeingQueried && obj.type != "row") return
         portalListBeingQueried = true
         let rq = { type : obj.type }
         if (obj.type == "search") {
@@ -879,9 +879,9 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
     }
 }
 
-const getRoomInfo = async (roomid) => {
+const getRoomInfo = (roomid) => {
     $("#chk_selectall").prop("checked", false)
-    if ($("#div_" + roomid).length > 0) await getPortalList({ type: "row", roomid : roomid, replace: true })
+    if ($("#div_" + roomid).length > 0) getPortalList({ type: "row", roomid : roomid, replace: true })
 }
 
 function OnSearch(input) {
@@ -974,7 +974,7 @@ var funcSockEv = { //needs to be public
     [hush.cons.sock_ev_set_env] : async (data) => {
         debugger
         if (data.kind == "noti") { //emit
-            await getRoomInfo(data.roomid)
+            getRoomInfo(data.roomid)
         } else if (data.kind == "userinfo") { //broadcast inside namespace
             if (data.userid == g_userid && data.userkey != g_userkey) {
                 const rs = await hush.auth.verifyLogin()
