@@ -326,7 +326,6 @@
                 $.removeCookie(name, { path: '/' })
             },
             fileDownload : (_path, msgid) => {
-                debugger
                 let _fileUrl
                 if ($("#ifr").length > 0) $("#ifr").remove()
                 if (_path == "imagetofile") {
@@ -341,7 +340,6 @@
         idb : { //for mobile only
             db : null, 
             connect : (callback) => {
-                debugger
                 if (!hush.idb.db) {
                     let conn = indexedDB.open("jay_mobile", 1) //Increment will trigger conn.onupgradeneeded (add version number if upgrade needed)
                     conn.onerror = function() {	
@@ -555,7 +553,7 @@
                     console.log("socket connected " + hush.util.getCurDateTimeStr(true, true))
                     hush.sock.on(socket, (rs) => {
                         console.log("hush.sock.on => " + JSON.stringify(rs))
-                        if (rs.data.type == "talk") debugger
+                        //if (rs.data.type == "talk") debugger
                         if (rs.returnTo == "parent" || rs.returnTo == "all") {
                             funcSockEv[rs.ev].call(null, rs.data)
                             if (rs.returnTo == "all") { //call from app.js or disconnect.js on server

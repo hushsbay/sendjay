@@ -44,7 +44,6 @@
                     g_year = (new Date()).getFullYear().toString()
                     g_nodeIndent = hush.webview.on ? 15 : 30
                     g_win_type = param.get("type") //invite, member, org 또는 빈값
-                    debugger
                     if (hush.webview.on) {
                         if (!g_win_type) { //메인은 모바일앱에서도 마찬가지로 빈값
                             //$("#in_search").width(80)
@@ -149,7 +148,7 @@
                         $("#btn_me").on("click", async function() {
                             //hush.util.animCall(this.id, true)
                             if (!hush.webview.on) {
-                                hush.room.create("/app/msngr/chat.html", "me", g_token10)
+                                hush.sock.createRoom("/app/msngr/chat.html", "me", g_token10)
                             } else {
                                 const new_roomid = hush.util.createId(g_token10)
                                 const rq = { masterid : g_userid, masternm : g_usernm, userids : [g_userid] }
@@ -163,7 +162,7 @@
                             //hush.util.animCall(this.id, true)
                             const checked = $(".chkbox_portal:checked")
                             if (checked.length == 0) {
-                                hush.msg.toast(hush.cons.msg.row_not_selected)
+                                hush.msg.toast(hush.cons.warn_no_row_selected)
                                 return
                             }
                             checked.each(function(idx, item) {
