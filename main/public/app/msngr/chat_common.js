@@ -1205,7 +1205,6 @@ const procOpengraph = async (msgid, kind) => {
     try {
         const _url = $("#openGraph" + msgid).attr("og")
         if (!_url) return
-        debugger
         const rs = await hush.http.ajax("/msngr/get_opengraph", { msgid : msgid, url : _url }) 
         const ret = rs.result
         if (!ret.ogTitle) {
