@@ -818,6 +818,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
                 }
             }
         } else if (type == "save") {
+            debugger
             const _nicknm = $("#in_nicknm").val().trim()
             const _job = $("#in_job").val().trim()
             const _abcd = $("#in_abcd").val().trim()
@@ -839,7 +840,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             const rq = { nicknm : encodeURIComponent(_nicknm), job : encodeURIComponent(_job), //type : "common", 
                         abcd : encodeURIComponent(_abcd), abnm : encodeURIComponent(_abnm), standalone : _standalone, notioff : _notioff,
                         soundoff : _soundoff, fr : _fr, to : _to, bodyoff : _bodyoff, senderoff : _senderoff }
-            const rs = await hush.http.ajax(hush.cons.route + "/proc_env", rq, "POST")
+            const rs = await hush.http.ajax("/msngr/proc_env", rq)
             if (rs.code != hush.cons.CODE_OK) throw new Error(rs.msg)
             $("#header_title").html(g_usernm + ((_nicknm != "") ? " [" + _nicknm + "]" : ""))
             g_setting.nicknm = _nicknm            
@@ -977,8 +978,8 @@ var funcSockEv = { //needs to be public
             getRoomInfo(data.roomid)
         } else if (data.kind == "userinfo") { //broadcast inside namespace
             if (data.userid == g_userid && data.userkey != g_userkey) {
-                const rs = await hush.auth.verifyLogin()
-                if (rs.code == hush.cons.result_ok) procSetting("load", rs)
+                const rs = await hush.auth.verifyUser()
+                if (rs.code == hush.cons.CODE_OK) procSetting("load", rs)
             }
             const _nicknm = data.nicknm ? "[" + data.nicknm + "]" : ""
             $("#nick_" + data.userid).html(_nicknm)
