@@ -73,7 +73,7 @@ const procMenuTop = async (_mode, _mode_people) => {
             $("#fr_chat").hide()
             $("#fr_setting").css("display", "flex")
             $(".setting").show()
-            const rs = await hush.auth.verifyLogin()
+            const rs = await hush.auth.verifyUser()
             if (rs.code == hush.cons.result_ok) procSetting("load", rs, true)
         }
         $("#" + g_mode).addClass("coNavSelected")
@@ -780,7 +780,7 @@ const chkTime = async (tm) => {
     return true
 }
 
-const procSettingOnLoad = (rs) => { //rs = await hush.auth.verifyLogin()
+const procSettingOnLoad = (rs) => { //rs = await hush.auth.verifyUser()
     g_setting.nicknm = (rs.nicknm) ? rs.nicknm : ""
     g_setting.job = (rs.job) ? rs.job : ""
     g_setting.abcd = (rs.abcd) ? rs.abcd : ""
@@ -794,7 +794,7 @@ const procSettingOnLoad = (rs) => { //rs = await hush.auth.verifyLogin()
     hush.http.setCookie("senderoff", rs.senderoff)
 }
 
-const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) rs = await hush.auth.verifyLogin()
+const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) rs = await hush.auth.verifyUser()
     try {
         if (type == "load") {
             procSettingOnLoad(rs)
