@@ -781,17 +781,17 @@ const chkTime = async (tm) => {
 }
 
 const procSettingOnLoad = (rs) => { //rs = await hush.auth.verifyUser()
-    g_setting.nicknm = (rs.NICKNM) ? rs.NICKNM : ""
+    g_setting.nicknm = (rs.NICK_NM) ? rs.NICK_NM : ""
     g_setting.job = (rs.JOB) ? rs.JOB : ""
-    g_setting.abcd = (rs.ABCD) ? rs.ABCD : ""
-    g_setting.abnm = (rs.ABNM) ? rs.ABNM : ""
-    hush.http.setCookie("standalone", rs.STANDALONE)
-    hush.http.setCookie("notioff", rs.NOTIOFF)
-    hush.http.setCookie("soundoff", rs.SOUNDOFF)
-    g_setting.fr = (rs.FR) ? rs.FR : ""
-    g_setting.to = (rs.TO) ? rs.TO : ""
-    hush.http.setCookie("bodyoff", rs.BODYOFF)
-    hush.http.setCookie("senderoff", rs.SENDEROFF)
+    g_setting.abcd = (rs.AB_CD) ? rs.AB_CD : ""
+    g_setting.abnm = (rs.AB_NM) ? rs.AB_NM : ""
+    //hush.http.setCookie("standalone", rs.STANDALONE)
+    hush.http.setCookie("notioff", rs.NOTI_OFF)
+    hush.http.setCookie("soundoff", rs.SOUND_OFF)
+    g_setting.fr = (rs.TM_FR) ? rs.TM_FR : ""
+    g_setting.to = (rs.TM_TO) ? rs.TM_TO : ""
+    hush.http.setCookie("bodyoff", rs.BODY_OFF)
+    hush.http.setCookie("senderoff", rs.SENDER_OFF)
 }
 
 const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) rs = await hush.auth.verifyUser()
