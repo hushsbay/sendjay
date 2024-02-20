@@ -26,8 +26,9 @@ router.post('/', async function(req, res) {
 			userid = uid
 		}
 		conn = await wsmysql.getConnFromPool(global.pool)
-		sql =  "SELECT USER_ID, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM "
-		sql += "  FROM JAY.Z_USER_TBL "
+		sql =  "SELECT USER_ID, PWD, USER_NM, PASSKEY, ORG_CD, ORG_NM, NICK_NM, JOB, AB_CD, AB_NM, STANDALONE, NOTI_OFF, "
+		sql += "       SOUND_OFF, TM_FR, TM_TO, BODY_OFF, SENDER_OFF "
+		sql += "  FROM Z_USER_TBL "
 		sql += " WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [userid])
 		if (data.length == 0) {
