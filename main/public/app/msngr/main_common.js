@@ -785,7 +785,7 @@ const procSettingOnLoad = (rs) => { //rs = await hush.auth.verifyUser()
     g_setting.job = (rs.JOB) ? rs.JOB : ""
     g_setting.abcd = (rs.AB_CD) ? rs.AB_CD : ""
     g_setting.abnm = (rs.AB_NM) ? rs.AB_NM : ""
-    //hush.http.setCookie("standalone", rs.STANDALONE)
+    hush.http.setCookie("standalone", rs.STANDALONE)
     hush.http.setCookie("notioff", rs.NOTI_OFF)
     hush.http.setCookie("soundoff", rs.SOUND_OFF)
     g_setting.fr = (rs.TM_FR) ? rs.TM_FR : ""
@@ -804,13 +804,13 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             $("#in_job").val(g_setting.job)
             $("#in_abcd").val(g_setting.abcd)
             $("#in_abnm").val(g_setting.abnm)
-            $("#chk_standalone").prop("checked", (rs.standalone == "Y" ? true : false))
-            $("#chk_notioff").prop("checked", (rs.notioff == "Y" ? true : false))  
-            $("#chk_soundoff").prop("checked", (rs.soundoff == "Y" ? true : false))  
+            $("#chk_standalone").prop("checked", (rs.STANDALONE == "Y" ? true : false))
+            $("#chk_notioff").prop("checked", (rs.NOTI_OFF == "Y" ? true : false))  
+            $("#chk_soundoff").prop("checked", (rs.SOUND_OFF == "Y" ? true : false))  
             $("#in_fr").val(g_setting.fr)
             $("#in_to").val(g_setting.to)
-            $("#chk_bodyoff").prop("checked", (rs.bodyoff == "Y" ? true : false))
-            $("#chk_senderoff").prop("checked", (rs.senderoff == "Y" ? true : false))            
+            $("#chk_bodyoff").prop("checked", (rs.BODY_OFF == "Y" ? true : false))
+            $("#chk_senderoff").prop("checked", (rs.SENDER_OFF == "Y" ? true : false))            
             if (needPicture) {
                 if (rs.picture != null) {
                     hush.auth.getUserPic(g_userid, "img_pict")
