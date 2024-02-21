@@ -310,7 +310,7 @@
                                 fd.append("type", "U") //U(Update Picture), D(Delete Picture)
                                 fd.append("mimetype", objUrl.mimetype)
                                 fd.append("file", blob)
-                                hush.http.ajaxFormData(hush.cons.route + "/proc_picture", fd, (rs) => {
+                                hush.http.ajaxFormData("/msngr/proc_picture", fd, (rs) => {
                                     hush.msg.toast("Upload done.")
                                 })
                             }
@@ -322,7 +322,7 @@
                         const fd = new FormData()
                         fd.append("userid", g_userid)
                         fd.append("type", "D") //U(Update Picture), D(Delete Picture)
-                        hush.http.ajaxFormData(hush.cons.route + "/proc_picture", fd, (rs) => {
+                        hush.http.ajaxFormData("/msngr/proc_picture", fd, (rs) => {
                             $("#img_pict").attr("src", hush.cons.img_noperson)
                             hush.msg.toast("Delete done.")
                         })

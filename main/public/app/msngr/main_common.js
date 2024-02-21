@@ -796,7 +796,6 @@ const procSettingOnLoad = (rs) => { //rs = await hush.auth.verifyUser()
 
 const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) rs = await hush.auth.verifyUser()
     try {
-        debugger
         if (type == "load") {
             procSettingOnLoad(rs)
             $("#in_nicknm").val(g_setting.nicknm)
