@@ -210,7 +210,7 @@
 				return dataUrl
             },
             ////////////////////////////////////////////////////////////////////////////////////////
-            parseBlobUrl : (objUrl) => { //eg) data:image/png;base64,~
+            parseDataUrl : (objUrl) => { //eg) data:image/png;base64,~
                 let _ret = { mimetype : "", body : "" }
                 var _header = objUrl.split(";base64,")
                 if (_header.length == 2) {

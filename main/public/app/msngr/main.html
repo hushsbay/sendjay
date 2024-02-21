@@ -294,7 +294,7 @@
                             hush.msg.toast("이미지가 없습니다.")
                             return
                         }
-                        const objUrl = hush.http.parseBlobUrl(url)
+                        const objUrl = hush.blob.parseDataUrl(url)
                         if (!objUrl) {
                             hush.msg.toast("마임타입에 문제가 있습니다.")
                             return
