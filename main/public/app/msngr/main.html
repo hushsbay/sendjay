@@ -287,35 +287,56 @@
                         $("#file_upload").val("")
                         $("#file_upload").trigger("click")
                     })
-                    $("#pict_upload").on("click", function() {
-                        //hush.util.animCall(this.id, true)
-                        const blobUrl = $("#img_pict").attr("src")
-                        if (!blobUrl) {
-                            hush.msg.toast("Image file needed.")
+                    $("#pict_upload").on("click", async function() {
+                        debugger
+                        const url = $("#img_pict").attr("src")
+                        if (!url) {
+                            hush.msg.toast("이미지가 없습니다.")
                             return
                         }
-                        const objUrl = hush.http.parseBlobUrl(blobUrl)
+                        const objUrl = hush.http.parseBlobUrl(url)
                         if (!objUrl) {
-                            hush.msg.toast("Mime type not found.")
+                            hush.msg.toast("마임타입에 문제가 있습니다.")
                             return
                         }
-                        const xhr = new XMLHttpRequest()
-                        xhr.open("GET", blobUrl, true) //since blobUrl might be just blob without any infomation for base64 and contentType eg) blob:https://~
-                        xhr.responseType = "blob"
-                        xhr.onload = function(e) {
-                            if (this.status == 200) {
-                                const blob = this.response
-                                const fd = new FormData()
-                                fd.append("userid", g_userid)
-                                fd.append("type", "U") //U(Update Picture), D(Delete Picture)
-                                fd.append("mimetype", objUrl.mimetype)
-                                fd.append("file", blob)
-                                hush.http.ajaxFormData("/msngr/proc_picture", fd, (rs) => {
-                                    hush.msg.toast("Upload done.")
-                                })
-                            }
-                        }
-                        xhr.send()
+                        const blob = await hush.blob.get(url)
+                        //const mimetype = $("#img_pict").attr("mimetype")
+                        const fd = new FormData()
+                        fd.append("file", blob)
+                        fd.append("mimetype", objUrl.mimetype)
+                        fd.append("userid", g_userid)
+                        fd.append("type", "U") //U(Update Picture), D(Delete Picture)
+                        hush.http.ajaxFormData("/msngr/proc_picture", fd, (rs) => {
+                            hush.msg.toast("Upload done.")
+                        })
+                        //hush.util.animCall(this.id, true)
+                        //const blobUrl = $("#img_pict").attr("src")
+                        //if (!blobUrl) {
+                        //    hush.msg.toast("Image file needed.")
+                        //    return
+                        //}
+                        // const objUrl = hush.http.parseBlobUrl(blobUrl)
+                        // if (!objUrl) {
+                        //     hush.msg.toast("Mime type not found.")
+                        //     return
+                        // }
+                        // const xhr = new XMLHttpRequest()
+                        // xhr.open("GET", blobUrl, true) //since blobUrl might be just blob without any infomation for base64 and contentType eg) blob:https://~
+                        // xhr.responseType = "blob"
+                        // xhr.onload = function(e) {
+                        //     if (this.status == 200) {
+                        //         const blob = this.response
+                        //         const fd = new FormData()
+                        //         fd.append("userid", g_userid)
+                        //         fd.append("type", "U") //U(Update Picture), D(Delete Picture)
+                        //         fd.append("mimetype", objUrl.mimetype)
+                        //         fd.append("file", blob)
+                        //         hush.http.ajaxFormData("/msngr/proc_picture", fd, (rs) => {
+                        //             hush.msg.toast("Upload done.")
+                        //         })
+                        //     }
+                        // }
+                        // xhr.send()
                     })
                     $("#pict_delete").on("click", function() {
                         //hush.util.animCall(this.id, true)

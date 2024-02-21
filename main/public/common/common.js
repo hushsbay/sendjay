@@ -208,7 +208,24 @@
             setDataUrl : (base64, mimetype) => { //base64는 노드 서버에서 Buffer.from(data[0].PICTURE, 'binary').toString('base64')로 처리된 것을 전제로 함
                 const dataUrl = "data:" + mimetype + ";base64," + base64
 				return dataUrl
-            },            
+            },
+            ////////////////////////////////////////////////////////////////////////////////////////
+            parseBlobUrl : (objUrl) => { //eg) data:image/png;base64,~
+                let _ret = { mimetype : "", body : "" }
+                var _header = objUrl.split(";base64,")
+                if (_header.length == 2) {
+                    const _data = _header[0].split(":")
+                    if (_data[0] == "data") {
+                        _ret.mimetype = _data[1] //eg) image/png
+                        _ret.body = _header[1]
+                    } else {
+                        _ret = null
+                    }
+                } else {
+                    _ret = null
+                }
+                return _ret
+            },
         },
         http : {
             handleNoCache: (url) => {
