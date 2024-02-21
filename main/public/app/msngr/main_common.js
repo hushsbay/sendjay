@@ -74,7 +74,7 @@ const procMenuTop = async (_mode, _mode_people) => {
             $("#fr_setting").css("display", "flex")
             $(".setting").show()
             const rs = await hush.auth.verifyUser()
-            if (rs.code == hush.cons.result_ok) procSetting("load", rs, true)
+            if (rs.code == hush.cons.CODE_OK) procSetting("load", rs, true)
         }
         $("#" + g_mode).addClass("coNavSelected")
         $("#fr_menu_bottom").css("display", "flex")
@@ -268,7 +268,7 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             }
             userkeyArr.push(w_userkey)
             userkeyArr.push(m_userkey)
-            hush.auth.getUserPic(_userid, "img_" + _userid) //$("#per_" + _userid).off("click").on("click", async function(e) {
+            hush.http.getUserPic(_userid, "img_" + _userid) //$("#per_" + _userid).off("click").on("click", async function(e) {
             $("#mem_" + _userid).off("click").on("click", async function(e) {
                 if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 event가 먹히도록 함
                 //hush.util.animCall(this.id, true)
@@ -812,11 +812,11 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             $("#chk_bodyoff").prop("checked", (rs.BODY_OFF == "Y" ? true : false))
             $("#chk_senderoff").prop("checked", (rs.SENDER_OFF == "Y" ? true : false))            
             if (needPicture) {
-                if (rs.picture != null) {
-                    hush.auth.getUserPic(g_userid, "img_pict")
-                } else {
-                    $("#img_pict").attr("src", hush.cons.img_noperson)
-                }
+                //if (rs.picture != null) {
+                    hush.http.getUserPic(g_userid, "img_pict")
+                //} else {
+                //    $("#img_pict").attr("src", hush.cons.img_noperson)
+                //}
             }
         } else if (type == "save") {
             debugger
@@ -1103,7 +1103,7 @@ const initMain = async (launch, winid) => {
                 prevType = _type //동일 브라우저내에서 윈도우(탭)끼리 (offline)경합을 벌여 1등이 되면 http call을 통해 각 브라우저의 1등끼리 (online)경합으로 최종 winner를 결정
                 let rq = { type : _type, userkey : hush.cons.w_key + g_userid, winid : e.data.winid }
                 const rs1 = await hush.http.ajax(hush.cons.route + "/chk_redis", rq)
-                if (rs1.code == hush.cons.result_ok) { //console.log(_type+"==="+e.data.winid+"==="+rs1.result+"==="+rs1.ip)
+                if (rs1.code == hush.cons.CODE_OK) { //console.log(_type+"==="+e.data.winid+"==="+rs1.result+"==="+rs1.ip)
                     if (!rs1.result) return //watch out for stream.on('end') in chk_redis.js
                     if (rs1.result == "another") {
                         console.log("Messenger is now running on another tab or browser / " + e.data.msg)

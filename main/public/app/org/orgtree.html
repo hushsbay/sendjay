@@ -347,7 +347,7 @@
 					if (idTag.length == 0 || idTag.position().top >= listHeight) break 
 					const row = g_rs.list[i]
 					if (!row.USER_ID) continue
-					hush.auth.getUserPic(row.USER_ID, "img_" + row.USER_ID)
+					hush.http.getUserPic(row.USER_ID, "img_" + row.USER_ID)
 				}
 			}
 

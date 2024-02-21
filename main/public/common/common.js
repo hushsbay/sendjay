@@ -155,22 +155,7 @@
                 }
                 hush.auth.setUser(_token)
                 return rs
-            }, 
-            getUserPic : (user_id, tag_id) => {
-                if ($("#" + tag_id).attr("downloaded") == "Y") return
-                hush.http.ajaxCall("/user/getuser", { id : user_id, imgOnly : "Y" }, function(rs) {
-                    if (rs.code != hush.cons.CODE_OK) return
-                    const _len = rs.list.length
-                    $("#" + tag_id).attr("downloaded", "Y")
-                    if (_len == 0) return
-                    const row = rs.list[0]
-                    if (row.PICTURE) { //common.js참조 : 노드에서 MySql에 저장된 PICTURE(longblob)값 내리기 (2가지 방법 - 육안으로는 속도 차이 안남)
-                        //const url = hush.blob.setDataUrl(rs.picture, row.MIMETYPE) //방법2) base64로 변환해 내림 (사용시 서버에서도 코딩 변경 필요) + getUrlForFile() false 설정 + 서버 코딩 변경
-                        const url = hush.blob.getBlobUrlForImage(row.PICTURE.data, row.MIMETYPE) //방법1) 특별히 변환하지 않고 그냥 blob으로 내림 + getUrlForFile() true 설정 + 서버 코딩 변경
-                        $("#" + tag_id).attr("src", url)
-                    }
-                })
-            }
+            },             
         },
         blob : { //브라우저에서 이미지 파일 선택후 노드서버에 올리고 다시 내려 표시하는 등 처리는 2가지 방법이 있음 => 1) blob 2) base64인코딩스트링
             getUrlForFile : (file, returnBlob, callback) => {
@@ -223,7 +208,7 @@
             setDataUrl : (base64, mimetype) => { //base64는 노드 서버에서 Buffer.from(data[0].PICTURE, 'binary').toString('base64')로 처리된 것을 전제로 함
                 const dataUrl = "data:" + mimetype + ";base64," + base64
 				return dataUrl
-            }
+            },            
         },
         http : {
             handleNoCache: (url) => {
@@ -335,6 +320,23 @@
                 }
                 $("<iframe id=ifr src='" + _fileUrl + "' style='display:none;width:0px;height:0px;' />").appendTo("body") 
                 hush.msg.toast("downloading..")
+            },
+            getUserPic : (user_id, tag_id) => {
+                if ($("#" + tag_id).attr("downloaded") == "Y") return
+                hush.http.ajaxCall("/user/getuser", { id : user_id, imgOnly : "Y" }, function(rs) {
+                    if (rs.code != hush.cons.CODE_OK) return
+                    const _len = rs.list.length
+                    $("#" + tag_id).attr("downloaded", "Y")
+                    if (_len == 0) return
+                    const row = rs.list[0]
+                    if (row.PICTURE) { //common.js참조 : 노드에서 MySql에 저장된 PICTURE(longblob)값 내리기 (2가지 방법 - 육안으로는 속도 차이 안남)
+                        //const url = hush.blob.setDataUrl(rs.picture, row.MIMETYPE) //방법2) base64로 변환해 내림 (사용시 서버에서도 코딩 변경 필요) + getUrlForFile() false 설정 + 서버 코딩 변경
+                        const url = hush.blob.getBlobUrlForImage(row.PICTURE.data, row.MIMETYPE) //방법1) 특별히 변환하지 않고 그냥 blob으로 내림 + getUrlForFile() true 설정 + 서버 코딩 변경
+                        $("#" + tag_id).attr("src", url)
+                    } else {
+                        $("#" + tag_id).attr("src", hush.cons.img_noperson)
+                    }
+                })
             }
         },
         idb : { //for mobile only
