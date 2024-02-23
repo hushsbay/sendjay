@@ -1797,7 +1797,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
             }
         }
     },
-    [hush.cons.sock_ev_qry_msgcell] : (data) => { //when drag&dropped
+    [hush.cons.sock_ev_qry_msgcell] : async (data) => { //when drag&dropped
         if (data.result.length == 0) {
             hush.msg.alert("no data for " + data.msgid)
             return
@@ -1843,14 +1843,17 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                 })
             }                    
         } else if (rs.TYPE == "file" || rs.TYPE == "flink") {
-            hush.msg.alert("파일을 전송할까요? " + hush.util.extractFileFromTalkBody(rs.BODY), {  
-                "Send": function() { 
-                    hush.msg.close() 
-                    sendMsg("flink", rs.BODY, rs.FILESTATE)
-                }, "Cancel": function() { 
-                    hush.msg.close()
-                } 
-            }, "Confirm")
+            // hush.msg.alert("파일을 전송할까요? " + hush.util.extractFileFromTalkBody(rs.BODY), {  
+            //     "Send": function() { 
+            //         hush.msg.close() 
+            //         sendMsg("flink", rs.BODY, rs.FILESTATE)
+            //     }, "Cancel": function() { 
+            //         hush.msg.close()
+            //     } 
+            // }, "Confirm")
+            const ret = await hush.msg.alert("파일을 전송할까요? " + hush.util.extractFileFromTalkBody(rs.BODY))
+            if (!ret) return
+            sendMsg("flink", rs.BODY, rs.FILESTATE)
         } else {
             if (rs.BODY.trim() == "") {
                 hush.msg.alert("no text data to send")
