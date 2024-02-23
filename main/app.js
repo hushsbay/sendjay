@@ -122,7 +122,7 @@ rt = [
 	'get_msginfo', 'get_opengraph', 'proc_env', 'proc_picture'
 ] 
 //for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/msngr/' + rt[i])) 
-app.use('/msngr/:routing', require('./route/msngr/${:routing}')) 
+app.use('/msngr/:routing', require('./route/msngr/${routing}')) 
 
 proc()
 async function proc() {
