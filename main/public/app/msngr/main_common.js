@@ -317,7 +317,6 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
             hush.msg.showMsg(rs.msg, rs.code)
             return
         }
-        debugger
         const _len = rs.list.length
         const _objUpperLevel = {} //used for deciding child node's parent tag id
         for (let i = 0; i < _len; i++) {
@@ -559,7 +558,6 @@ const dispCustom = (body) => {
 
 const getPortalList = async (obj) => {
     try {  
-        debugger
         if (portalListBeingQueried && obj.type != "row") return
         portalListBeingQueried = true
         let rq = { type : obj.type }
@@ -818,7 +816,6 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
                 //}
             }
         } else if (type == "save") {
-            debugger
             const _nicknm = $("#in_nicknm").val().trim()
             const _job = $("#in_job").val().trim()
             const _abcd = $("#in_abcd").val().trim()
@@ -973,7 +970,6 @@ var funcSockEv = { //needs to be public
         getRoomInfo(data.roomid)
     },
     [hush.cons.sock_ev_set_env] : async (data) => {
-        debugger
         if (data.kind == "noti") { //emit
             getRoomInfo(data.roomid)
         } else if (data.kind == "userinfo") { //broadcast inside namespace
