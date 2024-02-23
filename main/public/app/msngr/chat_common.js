@@ -655,8 +655,9 @@ const procForCell = (obj) => {
                 }
                 showCellMenu(false)
             })
-            $("#btn_revoke_cell, #btn_revoke_cell_m").off("click").on("click", function(e) {   
-                //hush.util.animCall(this.id, true)                  
+            $("#btn_revoke_cell, #btn_revoke_cell_m").off("click").on("click", async function(e) {   
+                //hush.util.animCall(this.id, true)   
+                debugger               
                 if (obj.type == "" || !hush.cons.chat_handled.includes(obj.type)) return 
                 if ($("#body_" + obj.msgid).html() == hush.cons.cell_revoked) {
                     hush.msg.toast(hush.cons.cell_revoked)
@@ -670,22 +671,32 @@ const procForCell = (obj) => {
                     hush.msg.toast("Incoming message won't be handled.")
                     return
                 }
-                hush.msg.alert("Do you want revoke(cancel) message already sent to all members in this chat room?", { 
-                    "Yes": function() { 
-                        const rq = { msgid : obj.msgid, type : obj.type, senderid : g_userid, roomid : g_roomid }
-                        if (hush.webview.ios) {
-                        } else if (hush.webview.and) {
-                            AndroidCom.send(hush.cons.sock_ev_revoke_msgcell, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
-                        } else {
-                            hush.sock.send(g_socket, hush.cons.sock_ev_revoke_msgcell, rq, g_roomid, "parent")
-                        }                                
-                        hush.msg.close()
-                        showCellMenu(false)
-                    }, "No": function() { 
-                        hush.msg.close()
-                        showCellMenu(false) 
-                    } 
-                }, "Cancel Send", 200)
+                // hush.msg.alert("Do you want revoke(cancel) message already sent to all members in this chat room?", { 
+                //     "Yes": function() { 
+                        // const rq = { msgid : obj.msgid, type : obj.type, senderid : g_userid, roomid : g_roomid }
+                        // if (hush.webview.ios) {
+                        // } else if (hush.webview.and) {
+                        //     AndroidCom.send(hush.cons.sock_ev_revoke_msgcell, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
+                        // } else {
+                        //     hush.sock.send(g_socket, hush.cons.sock_ev_revoke_msgcell, rq, g_roomid, "parent")
+                        // }                                
+                //         hush.msg.close()
+                //         showCellMenu(false)
+                //     }, "No": function() { 
+                //         hush.msg.close()
+                //         showCellMenu(false) 
+                //     } 
+                // }, "Cancel Send", 200)
+                const ret = await hush.msg.confirm("Do you want revoke(cancel) message already sent to all members in this chat room?")
+                showCellMenu(false)
+                if (!ret) return
+                const rq = { msgid : obj.msgid, type : obj.type, senderid : g_userid, roomid : g_roomid }
+                if (hush.webview.ios) {
+                } else if (hush.webview.and) {
+                    AndroidCom.send(hush.cons.sock_ev_revoke_msgcell, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
+                } else {
+                    hush.sock.send(g_socket, hush.cons.sock_ev_revoke_msgcell, rq, g_roomid, "parent")
+                } 
             })
         } else {
             showCellMenu(false)
