@@ -777,6 +777,7 @@
             },
             extractFileFromTalkBody : (body) => { //from hush.A_MSGMS_TBL BODY Field value for file upload (xxroomid/xxuserid/realfilenamebody~~tempfilenamebody.extension##filesize)
                 const _arr = body.split("/")
+                debugger
                 const _brr = (_arr.length == 1) ? _arr[0].split(hush.cons.subdeli) : _arr[2].split(hush.cons.subdeli)
                 const _crr = (_brr.length == 1) ? _brr[0].split(hush.cons.deli) : _brr[1].split(hush.cons.deli)
                 return _brr[0] + hush.util.getFileNameAndExtension(_crr[0]).extDot
