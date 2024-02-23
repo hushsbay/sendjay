@@ -585,7 +585,7 @@ const procForCell = (obj) => {
             $(".single").hide()
         }
     })
-    $("#btn_delete_cell, #btn_delete_cell_m").off("click").on("click", function(e) { 
+    $("#btn_delete_cell, #btn_delete_cell_m").off("click").on("click", async function(e) { 
         //hush.util.animCall(this.id, true) 
         const checked = $(".chkboxSel:checked")
         const len = checked.length
@@ -593,24 +593,36 @@ const procForCell = (obj) => {
             hush.msg.toast(hush.cons.MSG_NO_DATA)
             return
         }
-        hush.msg.alert("Continue to delete ? (" + len + ")", {
-            "Yes": function() { 
-                const msgidArr = []
-                for (let i  = 0; i < len; i++) msgidArr.push(checked[i].id.substring(4)) //sel_2019~
-                const rq = { msgidArr : msgidArr, type : "", receiverid : g_userid, roomid : g_roomid }
-                if (hush.webview.ios) {
-                } else if (hush.webview.and) {
-                    AndroidCom.send(hush.cons.sock_ev_delete_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
-                } else {
-                    hush.sock.send(g_socket, hush.cons.sock_ev_delete_msg, rq, g_roomid, "parent")
-                }
-                hush.msg.close()
-                showCellMenu(false)
-            }, "No": function() { 
-                hush.msg.close() 
-                showCellMenu(false)
-            } 
-        })                
+        // hush.msg.alert("Continue to delete ? (" + len + ")", {
+        //     "Yes": function() { 
+        //         const msgidArr = []
+        //         for (let i  = 0; i < len; i++) msgidArr.push(checked[i].id.substring(4)) //sel_2019~
+        //         const rq = { msgidArr : msgidArr, type : "", receiverid : g_userid, roomid : g_roomid }
+        //         if (hush.webview.ios) {
+        //         } else if (hush.webview.and) {
+        //             AndroidCom.send(hush.cons.sock_ev_delete_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
+        //         } else {
+        //             hush.sock.send(g_socket, hush.cons.sock_ev_delete_msg, rq, g_roomid, "parent")
+        //         }
+        //         hush.msg.close()
+        //         showCellMenu(false)
+        //     }, "No": function() { 
+        //         hush.msg.close() 
+        //         showCellMenu(false)
+        //     } 
+        // })    
+        const ret = await hush.msg.confirm("Continue to delete ? (" + len + ")") 
+        showCellMenu(false)
+        if (!ret) return
+        const msgidArr = []
+        for (let i  = 0; i < len; i++) msgidArr.push(checked[i].id.substring(4)) //sel_2019~
+        const rq = { msgidArr : msgidArr, type : "", receiverid : g_userid, roomid : g_roomid }
+        if (hush.webview.ios) {
+        } else if (hush.webview.and) {
+            AndroidCom.send(hush.cons.sock_ev_delete_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
+        } else {
+            hush.sock.send(g_socket, hush.cons.sock_ev_delete_msg, rq, g_roomid, "parent")
+        }
     })
     $("#btn_cancel_cell, #btn_cancel_cell_m").off("click").on("click", function(e) { 
         //hush.util.animCall(this.id, true) 

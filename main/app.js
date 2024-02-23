@@ -121,8 +121,7 @@ rt = [
 	'chk_redis', 'qry_unread', 'qry_userlist', 'qry_orgtree', 'qry_portal', 'qry_msglist', 'get_roominfo', 'proc_file', 'proc_image',
 	'get_msginfo', 'get_opengraph', 'proc_env', 'proc_picture'
 ] 
-//for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/msngr/' + rt[i])) 
-app.use('/msngr/:routing', require('./route/msngr/${routing}')) 
+for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/msngr/' + rt[i])) 
 
 proc()
 async function proc() {
