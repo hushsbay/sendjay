@@ -671,7 +671,7 @@ module.exports = (function() {
 					obj.extDot = ''	
 				} else {
 					obj.ext = arr[arr.length - 1]
-					obj.extDot = '.' + arr[arr.length - 1]
+					obj.extDot = '.' + obj.ext
 				}
 				return obj
 			},

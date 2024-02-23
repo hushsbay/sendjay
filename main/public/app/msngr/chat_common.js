@@ -1851,7 +1851,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
             //         hush.msg.close()
             //     } 
             // }, "Confirm")
-            const ret = await hush.msg.alert("파일을 전송할까요? " + hush.util.extractFileFromTalkBody(rs.BODY))
+            const ret = await hush.msg.confirm("파일을 전송할까요? " + hush.util.extractFileFromTalkBody(rs.BODY))
             if (!ret) return
             sendMsg("flink", rs.BODY, rs.FILESTATE)
         } else {

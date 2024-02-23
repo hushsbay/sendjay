@@ -772,7 +772,13 @@
 				const obj = { }
 				const arr = fileStr.split(".")
 				obj.name = arr[0]
-                obj.ext = (arr.length == 1) ? "" : arr[arr.length - 1]
+                if (arr.length == 1) {
+					obj.ext = ""
+					obj.extDot = ""
+				} else {
+					obj.ext = arr[arr.length - 1]
+					obj.extDot = "." + obj.ext
+				}
 				return obj
             },
             extractFileFromTalkBody : (body) => { //from hush.A_MSGMS_TBL BODY Field value for file upload (xxroomid/xxuserid/realfilenamebody~~tempfilenamebody.extension##filesize)
