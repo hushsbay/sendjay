@@ -716,8 +716,8 @@ const procForCell = (obj) => {
     })
 }
 
-const getMsgList = async (type, keyword, start, end) => {    try {
-
+const getMsgList = async (type, keyword, start, end) => {    
+    try {
         g_year = (new Date()).getFullYear().toString()
         let rq, withToast = true, includeInviteOrLeave = false
         if (type == "search") {
@@ -736,7 +736,7 @@ const getMsgList = async (type, keyword, start, end) => {    try {
             rq = { type : "normal", roomid : g_roomid, dt : g_cdt, cnt : cnt }
             withToast = false
         }
-        const rs = await hush.http.ajax("/msngr/qry_msglist", rq, null, withToast)
+        const rs = await hush.http.ajax("/msngr/qry_msglist", rq)
         if (rs.code != hush.cons.CODE_OK) {
             hush.msg.showMsg(rs.msg, rs.code)
             return
