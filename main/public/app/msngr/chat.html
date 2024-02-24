@@ -111,7 +111,7 @@
                         getMsgList("search", _keyword)
                         setTimeout(() => $("#in_search").blur(), 500)
                     })
-                    $("#btn_close_search").on("click", function() { 
+                    $("#btn_close_search").on("click", function() { //main.html처럼 onSearch()만 사용하기엔 무리가 있어 btn_close_search를 두기로 함
                         $("#txt_msg_added").hide()
                         toggleResult(false)
                         getMsgList()
