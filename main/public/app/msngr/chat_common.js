@@ -162,7 +162,7 @@ const setMembers = async (data) => {
             _html += "  <img id=img_userid src='/img/noperson.png' style='width:64px;height:64px'>"
             _html += "  <span style='margin-top:15px'>" + _usernm + _abnm + "</span>"
             _html += "</div>"
-            hush.msg.alert(_html, { 
+            hush.msg.multiButton(_html, { 
                 "채팅보기": function() { 
                     hush.msg.close()
                     g_list_msg.empty()
