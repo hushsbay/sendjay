@@ -1460,9 +1460,9 @@ const toggleResult = (show) => {
 
 const dialogRoomRename = (_type) => {
     const _header = (_type == "all") ? "Change room name for every user" : "Change room name for me"
-    hush.msg.inputBox("Enter new name for this chat room. <br>Enter blank for deleting room name.", g_title, { 
+    hush.msg.dialogInputBox("Enter new name for this chat room. <br>Enter blank for deleting room name.", g_title, { 
         "OK": function() {                             
-            const _newName = hush.msg.getInput().trim()                            
+            const _newName = hush.msg.dialogGetInput().trim()                            
             if (!hush.util.chkFieldVal(_newName, 100, false, false, "Room Name")) return
             const rq = { type : _type, roomname : _newName, userid : g_userid, roomid : g_roomid } //roomid needed since
             if (hush.webview.ios) { 
@@ -1471,10 +1471,10 @@ const dialogRoomRename = (_type) => {
             } else {
                 hush.sock.send(g_socket, hush.cons.sock_ev_rename_room, rq, g_roomid, "parent") //it should be transferred to parent
             }
-            hush.msg.close()
+            hush.msg.dialogClose()
             if (hush.webview.on) showRoomMenu(false)
         }, "Cancel": function() { 
-            hush.msg.close()
+            hush.msg.dialogClose()
             if (hush.webview.on) showRoomMenu(false)
         } 
     }, _header, 320)

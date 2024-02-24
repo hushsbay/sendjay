@@ -247,18 +247,16 @@
                     })
                     $("#btn_rename, #btn_rename_m").on("click", function() {
                         //hushj.util.animCall(this.id, true) 
-                        alert("개발 필요....")
-                        return
                         if (g_masterid == g_userid) {
-                            hushj.msg.alert("You are owner of this chat room.<br>Decide range for changing of room name.", { 
+                            hushj.msg.dialogMultiButton("You are owner of this chat room.<br>Decide range for changing of room name.", { 
                                 "To every user": function() { 
-                                    hushj.msg.close()
+                                    hush.msg.dialogClose()
                                     dialogRoomRename("all")
                                 }, "To me": function() { 
-                                    hushj.msg.close()
+                                    hush.msg.dialogClose()
                                     dialogRoomRename("one")
                                 }, "Cancel": function() { 
-                                    hushj.msg.close()
+                                    hush.msg.dialogClose()
                                     if (hush.webview.on) showRoomMenu(false)
                                 } 
                             }, "Rename", 320)
