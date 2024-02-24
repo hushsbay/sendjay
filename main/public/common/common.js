@@ -505,8 +505,9 @@
                     }
                 }
             },
-
-            multiButton : (desc, callbackObj, title, width) => { //dialog is from jqueryui               
+            //아래 4개는 jqueryui에서 가져온 dialog 구현이며 위의 hush.msg.*와는 공유하는 것 없음
+            //특수한 경우만 사용하는 것이며 향후 jqueryui 없이 확장할 경우를 대비해 최소한으로 사용하기
+            dialogMultiButton : (desc, callbackObj, title, width) => { //dialog is from jqueryui               
                 const _title = (title) ? title : hush.cons.title
                 const _alertBody = "<div id='hush-dialog-confirm' title='" + _title + "'><p>" + desc + "</p></div>"
                 const _width = (width) ? width : 300
@@ -521,7 +522,7 @@
                     })
                 }
             },
-            inputBox : (desc, val, callbackObj, title, width) => { //dialog is from jqueryui     
+            dialogInputBox : (desc, val, callbackObj, title, width) => { //dialog is from jqueryui     
                 const _val = (val) ? val : ""
                 const _title = (title) ? title : "Inputbox"
                 let _body = "<div id='hush-dialog-confirm' title='" + _title + "'>"
@@ -542,10 +543,10 @@
                     }
                 })                             
             },
-            getInput : () => {
+            dialogGetInput : () => {
                 return $("#hush_in").val()
             },
-            close : () => {
+            dialogClose : () => {
                 $("#hush-dialog-confirm").dialog("destroy")
             }
         },

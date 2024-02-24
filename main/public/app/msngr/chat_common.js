@@ -162,15 +162,15 @@ const setMembers = async (data) => {
             _html += "  <img id=img_userid src='/img/noperson.png' style='width:64px;height:64px'>"
             _html += "  <span style='margin-top:15px'>" + _usernm + _abnm + "</span>"
             _html += "</div>"
-            hush.msg.multiButton(_html, { 
+            hush.msg.dialogMultiButton(_html, { 
                 "채팅보기": function() { 
-                    hush.msg.close()
+                    hush.msg.dialogClose()
                     g_list_msg.empty()
                     $("#btn_close_search").show()
                     resetEnvForScroll() //getMsgList()보다 먼저 실행되어야 함                    
                     getMsgList("onlyone", _userid)
                 }, "강제퇴장": function() { 
-                    hush.msg.close()
+                    hush.msg.dialogClose()
                     const rq = initMsg()
                     rq.type = "leave"
                     rq.reply = _userid
@@ -182,7 +182,7 @@ const setMembers = async (data) => {
                         hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
                     }
                 }, "닫기": function() { 
-                    hush.msg.close()
+                    hush.msg.dialogClose()
                 } 
             }, "Info", 320)
             hush.http.getUserPic(_userid, "img_userid")
@@ -961,7 +961,7 @@ const retrySending = (rq) => {
     objUnread.show()
     objUnread.off("click").on("click", function() {
         //hush.util.animCall(this.id, true) 
-        hush.msg.alert("Do you want to retry sending ?", {
+        hush.msg.dialogMultiButton("Do you want to retry sending ?", {
             "Retry": function() { 
                 $("#msg_" + rq.msgid).remove()
                 const rq1 = initMsg()
@@ -969,13 +969,13 @@ const retrySending = (rq) => {
                 rq1.body = rq.body
                 procSendAndAppend(rq1)
                 deleteLocalMsg(rq.msgid)
-                hush.msg.close()
+                hush.msg.dialogClose()
             }, "Delete": function() { 
                 $("#msg_" + rq.msgid).remove()
                 deleteLocalMsg(rq.msgid)
-                hush.msg.close()
+                hush.msg.dialogClose()
             }, "Close": function() { 
-                hush.msg.close() 
+                hush.msg.dialogClose() 
             } 
         }, hush.cons.retry_sending)
     })
