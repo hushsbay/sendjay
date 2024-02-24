@@ -504,6 +504,49 @@
                         hush.msg.msg(_msg)
                     }
                 }
+            },
+
+            multiButton : (desc, callbackObj, title, width) => { //dialog is from jqueryui               
+                const _title = (title) ? title : hush.cons.title
+                const _alertBody = "<div id='hush-dialog-confirm' title='" + _title + "'><p>" + desc + "</p></div>"
+                const _width = (width) ? width : 300
+                $("#hush-dialog-confirm").remove()
+                if (!callbackObj) {
+                    $(_alertBody).dialog({ resizable: false, height: "auto", width: _width, modal: true, 
+                        buttons: { "Ok": function() { $("#hush-dialog-confirm").dialog("destroy") }}
+                    })
+                } else {
+                    $(_alertBody).dialog({ resizable: false, height: "auto", width: _width, modal: true, 
+                        buttons: callbackObj
+                    })
+                }
+            },
+            inputBox : (desc, val, callbackObj, title, width) => { //dialog is from jqueryui     
+                const _val = (val) ? val : ""
+                const _title = (title) ? title : "Inputbox"
+                let _body = "<div id='hush-dialog-confirm' title='" + _title + "'>"
+                _body += "      <p>" + desc + "</p>"
+                _body += "      <input id='hush_in' value='" + _val + "' spellcheck=false style='width:95%;margin-top:10px' />"
+                _body += "   </div>"
+                const _width = (width) ? width : 300
+                $("#hush-dialog-confirm").remove()                
+                $(_body).dialog({ resizable: false, height: "auto", width: _width, modal: true, 
+                    buttons: callbackObj,
+                    open: function() {
+                        $("#hush_in").select()
+                        $("#hush_in").keyup(function(e) { 
+                            if (e.keyCode == 13 && !e.shiftKey) {
+                                $(this).parent().parent().find("button:eq(1)").trigger("click") //close icon button is at 0 position
+                            }
+                        })
+                    }
+                })                             
+            },
+            getInput : () => {
+                return $("#hush_in").val()
+            },
+            close : () => {
+                $("#hush-dialog-confirm").dialog("destroy")
             }
         },
         noti : {
