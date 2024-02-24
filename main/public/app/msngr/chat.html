@@ -248,7 +248,7 @@
                     $("#btn_rename, #btn_rename_m").on("click", function() {
                         //hushj.util.animCall(this.id, true) 
                         if (g_masterid == g_userid) {
-                            hushj.msg.dialogMultiButton("You are owner of this chat room.<br>Decide range for changing of room name.", { 
+                            hush.msg.dialogMultiButton("You are owner of this chat room.<br>Decide range for changing of room name.", { 
                                 "To every user": function() { 
                                     hush.msg.dialogClose()
                                     dialogRoomRename("all")
