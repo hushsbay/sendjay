@@ -465,9 +465,10 @@
 						if (!opener.procFromOrgTree) {
 							hush.msg.msg("opener에 procFromOrgTree() 함수가 존재하지 않습니다.")
 							return
-						}						
+						}
+						debugger
 						opener.procFromOrgTree(g_from, g_nodeToGet, arr)
-						window.close()
+						//window.close()
                     })
 					$("#btn_cancel").on("click", function() { 
 						window.close()
