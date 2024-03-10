@@ -228,7 +228,7 @@
             },
         },
         http : {
-            handleNoCache: (url) => {
+            handleNoCache : (url) => {
                 let _url = url
                 if (!_url.includes("nocache=")) _url += (_url.includes("?") ? "&" : "?") + "nocache=" + hush.util.getRnd()
                 return _url
