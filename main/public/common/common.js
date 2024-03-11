@@ -288,8 +288,8 @@
                         const msg = (typeof error == "string") ? error : error.toString()
                         reject(new Error(msg))
                     }
-                }
-            )}),
+                })
+            }),
             ajaxFormData : (url, _data, callback, failCallback) => {
                 let data = _data //data.append("tokenInfo", JSON.stringify(hush.http.getTokenInfo()))
                 $.ajax({url : url,
