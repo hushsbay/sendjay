@@ -739,7 +739,7 @@
                     hush.msg.msg(_msg) //기본은 비동기콜백 처리
                 }
             },
-            chkAjaxCode : (rs, showMsgIfNoData) => {
+            chkAjaxCode : (rs, notShowMsgIfNoData) => {
                 if (notShowMsgIfNoData) {
                     if (rs.code != hush.cons.CODE_OK && rs.code != hush.cons.CODE_NO_DATA) {
                         hush.msg.showMsg(rs.msg, rs.code)
