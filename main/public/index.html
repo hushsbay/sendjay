@@ -9,7 +9,7 @@
         <link id=favicon href="/img/hushsbay.png" rel="shortcut icon" type="image/x-icon"/>
         <link rel="stylesheet" href="/plugin/jquery-ui-smoothness-1.12.1.min.css">
         <link rel="stylesheet" href="/common/common.css">
-        <style> /* css grid로 처리시 모바일크롬 등에서 주소창과 하단여백 처리 방법을 찾지 못해 css flex로 처리함 */
+        <style> /* css grid로 처리시 모바일크롬에서 주소창과 하단여백 처리 방법을 찾지 못해 css flex로 처리함 */
             body {     
                 background: black;  
             }
@@ -110,10 +110,10 @@
             }
 
             $.when($.ready).done(async function() {
-                try { //By default, $.getScript() sets the cache setting to false. You can override this with $.ajaxSetup({ cache: true })
-                    await $.getScript("/common/common.js")
+                try {
+                    await $.getScript("/common/common.js") //cache setting to false
                     const _token = hush.http.getCookie("token")  
-                    if (_token) { //jwt는 세션쿠키이므로 있다면 사용자가 인증한 것이 됨. 따라서 jwt를 검증해야 함
+                    if (_token) { //jwt는 세션쿠키이므로 있다면 사용자가 인증한 것이 되므로 jwt를 검증해야 함
                         const _userid = hush.http.getCookie("userid")  
                         const rs = await hush.http.ajax("/auth/login", { token : _token, userid : _userid })
                         if (rs.code != hush.cons.CODE_OK) {
@@ -122,11 +122,11 @@
                         } else {
                             hush.auth.setUser(_token)
                             showLogout(true)
-                            //startMsngr()
+                            //startMsngr() 임시 막음
                         }
                     }
                     $("#btn_user").on("click", function() {
-                        hush.util.openWinPop("/app/user/userlist.html", 550, 700)
+                        hush.util.openWinPop("/app/user/userlist.html", 550)
                     })
                     $("#btn_login").on("click", function() {
                         location.replace("/app/auth/login.html")
@@ -144,16 +144,8 @@
                     $("#btn_msngr").on("click", function() {
                         hush.util.openWinTab("/app/msngr/main.html")
                     })
-                    $("#btn_orgtree").on("click", function() {                        
-                        //from = 호출자 식별을 위한 참고용
-                        //nodeToGet = C(회사), D(부서), U(사용자)
-                        //comp = ALL 또는 회사코드(콤마(,)델리미터) / Default는 ALL
-        				//expandTo = 0 : all collapsed (회사만 보임) / 99 : all expanded)
-				        //expandAllDept = Y이면 임직원만 안보이게 접고 회사/부서는 모두 펼치기 (이 경우 expandTo는 무시됨. nodeToGet=U일 경우만 의미있음)
-                        //singleSelect = Y이면 한개만 선택 가능
-                        //selectOnlyChildDept = Y이면 최하단 부서만 선택 가능 (nodeToGet=D일 경우만 의미있음)
-                        //getImage = Y이면 사죵자정보에 등록된 이미지를 가져옴
-                        const obj = { 
+                    $("#btn_orgtree").on("click", function() {
+                        const obj = { //파라미터 설명은 orgtree.html 참조
                             from : this.id, nodeToGet : "U", comp : "ALL", expandTo : 99, expandAllDept : "", 
                             singleSelect : "", selectOnlyChildDept : "", getImage : "Y"
                         }

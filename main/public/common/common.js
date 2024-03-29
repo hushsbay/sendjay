@@ -498,7 +498,7 @@
                     const _strMsg = (_arr.length >= 2) ? _arr[1] : _arr[0]
                     hush.msg.toast(_strMsg, _sec)	
                 } else {
-                    if (_code.startsWith("-8")) {
+                    if (_code.startsWith("-8")) { //서버에서 -8로 시작시 로그인 관련
                         hush.msg.msg(_msg + "<br>로그인하시기 바랍니다.")
                     } else {
                         hush.msg.msg(_msg)
@@ -543,11 +543,11 @@
                     }
                 })                             
             },
-            dialogGetInput : () => {
+            dialogGetInput : () => { //dialog is from jqueryui
                 return $("#hush_in").val()
             },
             dialogClose : () => {
-                $("#hush-dialog-confirm").dialog("destroy")
+                $("#hush-dialog-confirm").dialog("destroy") //dialog is from jqueryui
             }
         },
         noti : {
@@ -733,9 +733,22 @@
                 if (_msgType == "toast") {
                     hush.msg.toast(_msg, _sec)
                 } else if (_msgType == "alert") {
-                    await hush.msg.alert(_msg)
+                    await hush.msg.alert(_msg) //Promise
                 } else {
                     hush.msg.msg(_msg) //기본은 비동기콜백 처리
+                }
+            },
+            chkAjaxCode : (rs, showMsgIfNoData) => {
+                if (notShowMsgIfNoData) {
+                    if (rs.code != hush.cons.CODE_OK && rs.code != hush.cons.CODE_NO_DATA) {
+                        hush.msg.showMsg(rs.msg, rs.code)
+                        return
+                    }
+                } else {
+                    if (rs.code != hush.cons.CODE_OK) {
+                        hush.msg.showMsg(rs.msg, rs.code)
+                        return
+                    }
                 }
             },
             getRnd : (_min, _max) => {
@@ -762,7 +775,7 @@
             openWinPop : (url, width, height, pos) => { //pos : 1) 없으면 중앙 2) 1~9999면 중앙인데 top만 지정 3) 0이면 (0, 0) 4) random은 랜덤
                 let _left, _top
                 const _width = width ? width : 500
-                const _height = height ? height : screen.availHeight - 100
+                const _height = height ? height : screen.availHeight - 300
                 if (hush.util.isvoid(pos)) {
                     _left = (parseInt(screen.width) - _width) / 2
                     _top = (parseInt(screen.height) - _height) / 2

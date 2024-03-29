@@ -83,7 +83,7 @@ module.exports = (function() {
 
 		http : {
 			resInit : () => {
-				return { code : ws.cons.CODE_OK, msg : '', list : [ ] }
+				return { code : ws.cons.CODE_OK, msg : '', list : [] }
 			},
 			resCodeMsg : (res, code, ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기 (아래처럼 오류 처리에서만 사용중)
 				res.type('application/json')

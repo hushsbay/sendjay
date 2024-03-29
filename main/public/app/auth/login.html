@@ -50,6 +50,8 @@
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
 		<script src="/plugin/jquery.cookie.js"></script>
         <script>
+			let g_target
+
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
@@ -60,7 +62,7 @@
 						$("#chk_save").prop("checked", true)
 						$("#in_userid").val(userid)
 						$("#in_pwd").focus()	
-					} else { //navigator.virtualKeyboard.show() //Calling show is only supported if user has interacted with the page
+					} else { //navigator.virtualKeyboard.show() => Calling show is only supported if user has interacted with the page
 						$("#in_userid").focus()
 					}
 					$("#in_userid,#in_pwd").focus(function() {
@@ -77,10 +79,7 @@
 							if (!hush.util.chkFieldVal(_userid, "아이디", 1)) return
 							if (!hush.util.chkFieldVal(_pwd, "비번", 1)) return
 							const rs = await hush.http.ajax("/auth/login", { uid : _userid, pwd : _pwd })
-							if (rs.code != hush.cons.CODE_OK) {
-								hush.msg.showMsg(rs.msg, rs.code)
-								return
-							}
+							if (!hush.util.chkAjaxCode()) return
 							hush.auth.setCookieForUser(rs, $("#chk_save").prop("checked"))
 							if (opener && opener.showLogout) opener.showLogout(true) //포털(index.html) 
 							const _target = g_target ? decodeURIComponent(g_target) : "/index.html"
@@ -90,7 +89,7 @@
 						}
                     })
 					$("#btn_join").click(async function() {
-						hush.util.openWinPop("/app/user/userlist.html", 550, 700)
+						hush.util.openWinPop("/app/user/userlist.html", 550)
                     })
                 } catch (ex) {
                     hush.util.showEx(ex)
