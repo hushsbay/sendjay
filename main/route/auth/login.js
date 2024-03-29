@@ -1,4 +1,4 @@
-const config = require('/config') //const config = require('../../config')
+const config = require('../../config')
 const ws = require(config.app.ws)
 const wsmysql = require(config.app.wsmysql)
 const express = require('express')
