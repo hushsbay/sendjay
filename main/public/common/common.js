@@ -743,14 +743,15 @@
                 if (notShowMsgIfNoData) {
                     if (rs.code != hush.cons.CODE_OK && rs.code != hush.cons.CODE_NO_DATA) {
                         hush.msg.showMsg(rs.msg, rs.code)
-                        return
+                        return false
                     }
                 } else {
                     if (rs.code != hush.cons.CODE_OK) {
                         hush.msg.showMsg(rs.msg, rs.code)
-                        return
+                        return false
                     }
                 }
+                return true
             },
             getRnd : (_min, _max) => {
                 const min = (!_min && _min != 0) ? 100000 : _min
