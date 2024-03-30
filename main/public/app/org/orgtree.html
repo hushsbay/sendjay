@@ -358,6 +358,8 @@
                     await $.getScript("/common/common.js")
 					g_list = $("#listMain")
 					g_listSel = $("#listSel")
+					const param = new URLSearchParams(location.search)
+					//////////////////////////////////////////////////아래는 조직도 팝업 관련 파라미터 설명임
 					//from = 호출자 식별을 위한 참고용
 					//nodeToGet = C(회사), D(부서), U(사용자)
 					//comp = ALL 또는 회사코드(델리미터:콤마) / Default는 ALL
@@ -366,7 +368,6 @@
 					//singleSelect = Y이면 한개만 선택 가능
 					//selectOnlyChildDept = Y이면 최하단 부서만 선택 가능 (nodeToGet=D일 경우만 의미있음)
 					//getImage = Y이면 사용자정보에 등록된 이미지를 가져옴
-					const param = new URLSearchParams(location.search)
 					g_from = param.get("from")					
 					g_nodeToGet = param.get("nodeToGet")
 					g_nodeToGet = (g_nodeToGet == "C" || g_nodeToGet == "D") ? g_nodeToGet : "U"
@@ -382,8 +383,10 @@
 					g_singleSelect = param.get("singleSelect")
 					g_selectOnlyChildDept = param.get("selectOnlyChildDept")
 					g_getImage = param.get("getImage")
-					if (g_nodeToGet == "U") { //사용자(U)일 경우만 인증체크함
-						if (!(await hush.auth.verifyUser())) return
+					//////////////////////////////////////////////////파라미터 설명 End
+					//hushsbay.com 구조상 사이트 상단 간편등록시 회사/부서를 인증없이 읽어와야 함
+					if (g_nodeToGet == "U") { //그래서, 사용자(U)인 경우만 인증 체크하는 것임
+						if (!(await hush.auth.verifyUser())) return //페이지 로드시 체크하는 루틴임 (ajax 호출시 체크와는 별개)
 					}
 					$("#chk_selectall").on("change", function() { 
 	                	$(".sel").prop("checked", $(this).is(":checked"))
