@@ -28,7 +28,7 @@
             .main {
                 height: 100%; 
                 display: flex; flex: 1;
-                /* Third-party cookie will be blocked. Learn more in the Issues tab. 
+                background-image: url('/img/portal.avif'); /* Third-party cookie will be blocked. Learn more in the Issues tab. 
                 background-image: url('https://images.unsplash.com/photo-1700682593498-a59c21d452f2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDQwfGJvOGpRS1RhRTBZfHxlbnwwfHx8fHw%3D') */
                 background-position: center; background-size: cover;
             }
@@ -157,8 +157,7 @@
                             singleSelect : "", selectOnlyChildDept : "", getImage : "Y"
                         }
                         hush.util.openWinPop("/app/org/orgtree.html?" + $.param(obj))
-                    })
-                    
+                    })                    
                     $(window).bind("unload", function() {//$(window).unload(function() { deprecated as of 1.8
                          if (g_chan) g_chan.close()
                     })
