@@ -89,10 +89,7 @@
 					g_list.empty()
 					const _comp = $("#chk_mycomp").prop("checked") ? hush.user.toporgcd : g_comp
 					const rs = await hush.http.ajax("/org/empsearch", { keyword : _keyword, teamcode : _teamcode, comp : _comp })
-					if (rs.code != hush.cons.CODE_OK) {
-						hush.msg.showMsg(rs.msg, rs.code)
-						return
-					}
+					if (!hush.util.chkAjaxCode(rs)) return
 					g_rs = rs
 					const _len = rs.list.length
 					if (_len == 0) return
@@ -139,10 +136,7 @@
 					g_list.empty()
 					const _comp = (hush.user && $("#chk_mycomp").prop("checked")) ? hush.user.toporgcd : g_comp //편의상 U말고는 hush.user가 null일 수 있음
 					const rs = await hush.http.ajax("/org/deptsearch", { keyword : _keyword, comp : _comp })
-					if (rs.code != hush.cons.CODE_OK) {
-						hush.msg.showMsg(rs.msg, rs.code)
-						return
-					}
+					if (!hush.util.chkAjaxCode(rs)) return
 					g_rs = rs
 					const _len = rs.list.length
 					if (_len == 0) return
@@ -179,10 +173,7 @@
 					$("#spn_depth").html(g_expandTo)			
 					g_list.empty()
 					const rs = await hush.http.ajax("/org/orgtree", { nodeToGet : g_nodeToGet, comp : _comp })
-					if (rs.code != hush.cons.CODE_OK) {
-						hush.msg.showMsg(rs.msg, rs.code)
-						return
-					}
+					if (!hush.util.chkAjaxCode(rs)) return
 					g_rs = rs
 					const _len = rs.list.length
 					if (_len == 0) return
