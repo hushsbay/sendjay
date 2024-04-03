@@ -27,7 +27,7 @@ router.post('/', upload.any(), async function(req, res) {
 			}
 			const _enc = ws.util.encrypt(pwd_1, nodeConfig.crypto.key)
 			sql = "INSERT INTO JAY.Z_USER_TBL (USER_ID, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, PICTURE, MIMETYPE, NICK_NM, ISUDT) "
-			sql += " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
+			sql += "                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
 			await wsmysql.query(conn, sql, [id, _enc, nm, orgcd, orgnm, toporgcd, toporgnm, buf, mimetype, alias])
 		} else {
 			if (data[0].CNT == 0) {

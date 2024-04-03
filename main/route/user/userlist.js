@@ -24,8 +24,7 @@ router.post('/', async function(req, res) {
 			sql += " ORDER BY TOP_ORG_NM, ORG_NM, USER_NM, USER_ID "
 		}
 		data = await wsmysql.query(conn, sql, null)
-		len = data.length
-        if (len == 0) {
+        if (data.length == 0) {
 			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true) //true=toast
 			return
 		}

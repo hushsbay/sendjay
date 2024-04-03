@@ -39,10 +39,7 @@
 					const _keyword = $("#in_search").val().trim()
 					const _sort = $("#rdoName").prop("checked") ? $("#rdoName").val() : $("#rdoOrg").val()
 					const rs = await hush.http.ajax("/user/userlist", { keyword : _keyword, sort : _sort })
-					if (rs.code != hush.cons.CODE_OK) {
-						hush.msg.showMsg(rs.msg, rs.code)
-						return
-					}
+					if (!hush.util.chkAjaxCode(rs)) return
 					g_rs = rs
 					const _len = rs.list.length
 					if (_len == 0) return
@@ -73,10 +70,9 @@
 						const _idx = parseInt(_id.substring(4)) //2
 						const row = g_rs.list[_idx]
 						hush.util.animBgColor(_self, () => { 							
-							hush.util.openWinPop("/app/user/user.html?user_id=" + row.USER_ID, 430, 500)
+							hush.util.openWinPop("/app/user/user.html?user_id=" + row.USER_ID, 430, 470)
         	            })
-					})
-					//아래는 refreshForRow() 관련
+					}) //아래는 refreshForRow() 관련
 					if (cud == "C") {
 						const tag = $(".coRow[userid='" + userid + "']")
 						if (tag.length > 0) {
@@ -104,7 +100,7 @@
 	            		getUserData()
 	            	})
 					$("#btn_new").click(function() {
-	            		hush.util.openWinPop("/app/user/user.html", 430, 500)						
+	            		hush.util.openWinPop("/app/user/user.html", 430, 470)						
 	            	})
 					$("#btn_cancel").on("click", function() { 
 						window.close() 

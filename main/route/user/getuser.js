@@ -19,8 +19,7 @@ router.post('/', async function(req, res) {
 		sql += "  FROM JAY.Z_USER_TBL "
         sql += " WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [id])
-		len = data.length
-        if (len == 0) {
+        if (data.length == 0) {
 			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true) //true=toast
 			return
 		}
