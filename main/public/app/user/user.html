@@ -138,7 +138,7 @@
 							const _orgcd = $("#txt_orgcd").html()
 							const _orgnm = $("#txt_orgnm").html()
 							if (g_mode == "C" || _chkPwd) { //신규모드 또는 수정모드중 비번 변경시
-								if (!hush.util.chkFieldVal(_pwd_1, "새비번", 4, 20, true)) return	
+								if (!await hush.util.chkFieldVal(_pwd_1, "새비번", 4, 20, true)) return	
 								if (_pwd_1 != _pwd_2) {
 									hush.msg.msg("비번과 비번(확인용)이 다릅니다.")
 									return
@@ -146,7 +146,7 @@
 							}
 							debugger
 							if (g_mode == "U") {
-								if (!hush.util.chkFieldVal(_pwd, "비번", 4, MAX_LEN_PWD, true)) return	
+								if (!await hush.util.chkFieldVal(_pwd, "비번", 4, MAX_LEN_PWD, true)) return	
 							}
 							if (!hush.util.chkFieldVal(_id, "아이디", 4, MAX_LEN_ID, true)) return
 							if (!hush.util.chkFieldVal(_nm, "이름", 2, MAX_LEN_NM)) return
