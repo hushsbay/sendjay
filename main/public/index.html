@@ -126,7 +126,7 @@
                             showLogout(true)
                             //startMsngr() 임시 막음
                         }
-                        g_chan = new BroadcastChannel("hushsbay")
+                        g_chan = new BroadcastChannel("hushsbay") //브라우저 시크릿 모드에서는 작동하지 않음을 유의
                         g_chan.postMessage('This is a test message.')
                         g_chan.onmessage = function(e) {
                             console.log('Received', e.data)
