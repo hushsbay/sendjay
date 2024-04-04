@@ -126,8 +126,7 @@
                             debugger
                             const result = await startMsngr("auto", hush.sock.getWinId()) //mobile app(webview)에서는 바로 return true
                             if (!result) return
-                        }
-                        
+                        }                        
                     }
                     $("#btn_user").on("click", function() {
                         hush.util.openWinPop("/app/user/userlist.html", 550)
