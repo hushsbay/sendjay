@@ -113,6 +113,7 @@
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js") //cache setting to false
+                    await $.getScript("/app/msngr/main_common.js")
                     const _token = hush.http.getCookie("token")  
                     if (_token) { //jwt는 세션쿠키이므로 있다면 사용자가 인증한 것이 되므로 jwt를 검증해야 함
                         const rs = await hush.http.ajax("/auth/login") //token과 userid는 쿠키로 전송됨
