@@ -1040,7 +1040,7 @@ var funcSockEv = { //needs to be public
     }
 }
 
-const initMain = async (launch, winid) => {
+const startMsngr = async (launch, winid) => {
     if (hush.webview.on) return true
     if (!window.Notification) { //window.Notification || window.mozNotification || window.webkitNotification
         await hush.msg.alert("This browser does not support window.Notification.")
