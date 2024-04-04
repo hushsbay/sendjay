@@ -1066,26 +1066,13 @@ const startMsngr = async (launch, winid) => {
     const rs = await hush.auth.verifyUser(true)
     if (!rs) return false
     SetUserVar()
-    
-    // if (!winid) winid = hush.sock.getWinId()
-    // const _userid = hush.http.getCookie("userid")  
-    // const rsRedis = await hush.http.ajax("/msngr/chk_redis", { type : "set_new", userkey : hush.cons.w_key + _userid, winid : winid })
-    // if (rsRedis.code != hush.cons.CODE_OK) {
-    //     hush.msg.showMsg(rsRedis.msg, rsRedis.code)
-    //     return
-    // }
-    // hush.socket = await hush.sock.connect(io, { 
-    //     token : hush.user.token, userkey : hush.user.key, userid : hush.user.id, winid : winid, userip : rsRedis.userip 
-    // })
-    // initStandAlone(rs)
-
     const worker = new Worker("/app/msngr/worker.js?" + Math.random()) //offline competition for autolaunch, maintaining winner for manual launch
     worker.onerror = function(err) {
         worker.terminate()
         hush.util.showEx(err)
     }
     worker.onmessage = async function(e) {
-        try { //$("#txt_winid").html(e.data.winid) 
+        try {
             if (e.data.code == "idb_upgraded" || e.data.code == "idb_connected") {
                 worker.postMessage({ code : launch, msg : winid })
             } else if (e.data.code == "winner") { 
@@ -1094,10 +1081,8 @@ const startMsngr = async (launch, winid) => {
                     location.replace("/" + hush.cons.erp_portal) //hush.msg.alert("disconnect") 
                     return
                 }
-                let _type = (winid && prevType == "") ? "set_new" : "chk_embeded" //set_new는 standalone일 때만 처음 한번만 설정됨
+                let _type = (winid && prevType == "") ? "set_new" : "chk_embeded" //set_new는 standalone일 때만 처음 한번만 설정됨. 그 다음부터는 무조건 chk_embeded
                 prevType = _type //동일 브라우저내에서 윈도우(탭)끼리 (offline)경합을 벌여 1등이 되면 http call을 통해 각 브라우저의 1등끼리 (online)경합으로 최종 winner를 결정
-                //let rq = { type : _type, userkey : hush.cons.w_key + g_userid, winid : e.data.winid }
-                //const rs1 = await hush.http.ajax(hush.cons.route + "/chk_redis", rq)
                 const rsRedis = await hush.http.ajax("/msngr/chk_redis", { type : _type, userkey : g_userkey, winid : winid }, true)
                 if (rsRedis.code == hush.cons.CODE_OK) { //console.log(_type+"==="+e.data.winid+"==="+rs1.result+"==="+rs1.ip)
                     if (!rsRedis.result) return //watch out for stream.on('end') in chk_redis.js
@@ -1119,7 +1104,6 @@ const startMsngr = async (launch, winid) => {
                 } else {
                     worker.terminate()
                     console.log("chk_redis: " + rsRedis.msg)
-                    //hush.auth.chk_logout(rsRedis.code, rsRedis.msg)
                 }
             } else if (e.data.code == "0") {	
                 //console.log(e.data.msg) //skip

@@ -93,23 +93,6 @@
                 }
         	}
 
-            // async function startMsngr() {
-            //     try {
-            //         const winid = hush.sock.getWinId()
-            //         const _userid = hush.http.getCookie("userid")  
-            //         const rs = await hush.http.ajax("/msngr/chk_redis", { type : "set_new", userkey : hush.cons.w_key + _userid, winid : winid })
-            //         if (rs.code != hush.cons.CODE_OK) {
-			// 			hush.msg.showMsg(rs.msg, rs.code)
-			// 			return
-			// 		}
-            //         hush.socket = await hush.sock.connect(io, { 
-            //             token : hush.user.token, userkey : hush.user.key, userid : hush.user.id, winid : winid, userip : rs.userip 
-            //         })
-            //     } catch (ex) {
-            //         hush.util.showEx(ex)
-            //     }
-            // }
-
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js") //cache setting to false
@@ -123,7 +106,6 @@
                         } else {
                             hush.auth.setUser(_token)
                             showLogout(true)
-                            //startMsngr() 임시 막음
                             const result = await startMsngr("auto", hush.sock.getWinId()) //mobile app(webview)에서는 바로 return true
                             if (!result) return
                         }                        
