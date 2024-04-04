@@ -1086,7 +1086,6 @@ const startMsngr = async (launch, winid) => {
     }
     worker.onmessage = async function(e) {
         try { //$("#txt_winid").html(e.data.winid) 
-            debugger
             if (e.data.code == "idb_upgraded" || e.data.code == "idb_connected") {
                 worker.postMessage({ code : launch, msg : winid })
             } else if (e.data.code == "winner") { 
@@ -1106,7 +1105,7 @@ const startMsngr = async (launch, winid) => {
                         console.log("Talk is now running on another tab or browser / " + e.data.msg)
                     } else if (rsRedis.result == "same") { //기존 winner 계속. Winner continued
                         console.log("Talk is now running on this tab / " + e.data.msg)
-                    } else { //new. New winner. 새로운 우승자. //console.log(_type+"@@@"+e.data.winid+"@@@"+rs1.result)                            
+                    } else { //new. New winner. 새로운 우승자. //console.log(_type+"@@@"+e.data.winid+"@@@"+rs1.result)      
                         hush.socket = await hush.sock.connect(io, { 
                             token : hush.user.token, userkey : g_userkey, userid : g_userid, winid : e.data.winid, userip : rsRedis.userip 
                         })

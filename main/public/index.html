@@ -124,7 +124,6 @@
                             hush.auth.setUser(_token)
                             showLogout(true)
                             //startMsngr() 임시 막음
-                            debugger
                             const result = await startMsngr("auto", hush.sock.getWinId()) //mobile app(webview)에서는 바로 return true
                             if (!result) return
                         }                        

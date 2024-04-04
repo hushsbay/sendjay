@@ -17,7 +17,8 @@ router.post('/', async function(req, res) {
 		if (!userid) return	
 		const pattern = ws.cons.key_str_winid + userkey + ws.cons.easydeli //eg) $$ + W + W__USERID;
 		const uwKey = pattern + winid //eg) $$WW__USERID;xxxxxx20241231010159
-		const stream = global.store.scanStream({ match : pattern + '*', count : ws.cons.scan_stream_cnt }) //console.log(type, userkey, winid, pattern, uwKey)
+		const stream = global.store.scanStream({ match : pattern + '*', count : ws.cons.scan_stream_cnt }) 
+		console.log(type, userkey, winid, pattern, uwKey)
 		stream.on('data', async (resultKeys) => { //resultKeys is an array of strings representing key names
 			if (type == "chk_embeded") { //웹메신저 자동실행을 위한 마지막 체크임
 				const _dt = ws.util.getCurDateTimeStr(true)
