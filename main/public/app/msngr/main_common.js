@@ -1098,7 +1098,7 @@ const startMsngr = async (launch, winid) => {
                 prevType = _type //동일 브라우저내에서 윈도우(탭)끼리 (offline)경합을 벌여 1등이 되면 http call을 통해 각 브라우저의 1등끼리 (online)경합으로 최종 winner를 결정
                 //let rq = { type : _type, userkey : hush.cons.w_key + g_userid, winid : e.data.winid }
                 //const rs1 = await hush.http.ajax(hush.cons.route + "/chk_redis", rq)
-                const rsRedis = await hush.http.ajax("/msngr/chk_redis", { type : _type, userkey : g_userkey, winid : e.data.winid })
+                const rsRedis = await hush.http.ajax("/msngr/chk_redis", { type : _type, userkey : g_userkey, winid : winid }, true)
                 if (rsRedis.code == hush.cons.CODE_OK) { //console.log(_type+"==="+e.data.winid+"==="+rs1.result+"==="+rs1.ip)
                     if (!rsRedis.result) return //watch out for stream.on('end') in chk_redis.js
                     if (rsRedis.result == "another") {
@@ -1107,7 +1107,7 @@ const startMsngr = async (launch, winid) => {
                         console.log("Talk is now running on this tab / " + e.data.msg)
                     } else { //new. New winner. 새로운 우승자. //console.log(_type+"@@@"+e.data.winid+"@@@"+rs1.result)      
                         hush.socket = await hush.sock.connect(io, { 
-                            token : hush.user.token, userkey : g_userkey, userid : g_userid, winid : e.data.winid, userip : rsRedis.userip 
+                            token : hush.user.token, userkey : g_userkey, userid : g_userid, winid : winid, userip : rsRedis.userip 
                         })
                         if (runFromStandalone) { //main.html
                             initStandAlone(rs) //rsRedis 아님
