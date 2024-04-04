@@ -109,7 +109,8 @@
                             procMenuTop(BTN_MODE_PEOPLE, BTN_PEOPLE_COMPANY)
                         }
                     } else {
-                        const result = await initMain(param.get("launch"), param.get("winid")) //mobile app(webview)에서는 바로 return true
+                        debugger
+                        const result = await startMsngr("manual", hush.sock.getWinId()) //mobile app(webview)에서는 바로 return true
                         if (!result) return
                         $(".coNav").on("click", function() { procMenuTop(this.id) })
                         $("#btn_team, #btn_company").on("click", function() {

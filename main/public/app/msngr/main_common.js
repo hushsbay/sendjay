@@ -1055,7 +1055,7 @@ const initMain = async (launch, winid) => {
         return false
     }
     if (location.protocol != "https:") { //http not allowed for notification with chrome
-        await hush.msg.alert("Https needed (for notification).")
+        await hush.msg.alert("Https needed (for HTML5 Notification).")
         return false
     }    
     const permission = await window.Notification.requestPermission() 
@@ -1066,63 +1066,61 @@ const initMain = async (launch, winid) => {
     const rs = await hush.auth.verifyUser(true)
     if (!rs) return false
     SetUserVar()
-    if (!winid) winid = hush.sock.getWinId()
-    const _userid = hush.http.getCookie("userid")  
-    const rsRedis = await hush.http.ajax("/msngr/chk_redis", { type : "set_new", userkey : hush.cons.w_key + _userid, winid : winid })
-    if (rsRedis.code != hush.cons.CODE_OK) {
-        hush.msg.showMsg(rsRedis.msg, rsRedis.code)
-        return
-    }
-    hush.socket = await hush.sock.connect(io, { 
-        token : hush.user.token, userkey : hush.user.key, userid : hush.user.id, winid : winid, userip : rsRedis.userip 
-    })
-    initStandAlone(rs)
+    
+    // if (!winid) winid = hush.sock.getWinId()
+    // const _userid = hush.http.getCookie("userid")  
+    // const rsRedis = await hush.http.ajax("/msngr/chk_redis", { type : "set_new", userkey : hush.cons.w_key + _userid, winid : winid })
+    // if (rsRedis.code != hush.cons.CODE_OK) {
+    //     hush.msg.showMsg(rsRedis.msg, rsRedis.code)
+    //     return
+    // }
+    // hush.socket = await hush.sock.connect(io, { 
+    //     token : hush.user.token, userkey : hush.user.key, userid : hush.user.id, winid : winid, userip : rsRedis.userip 
+    // })
+    // initStandAlone(rs)
 
-    return true
-    const worker = new Worker(hush.cons.worker_path + "?" + Math.random()) //offline competition for autolaunch, maintaining winner for manual launch
+    const worker = new Worker("/app/msngr/worker.js?" + Math.random()) //offline competition for autolaunch, maintaining winner for manual launch
     worker.onerror = function(err) {
         worker.terminate()
-        hush.util.showException(err) //console.log("worker: " + err.message)			
+        hush.util.showEx(err)
     }
     worker.onmessage = async function(e) {
         try { //$("#txt_winid").html(e.data.winid) 
+            debugger
             if (e.data.code == "idb_upgraded" || e.data.code == "idb_connected") {
                 worker.postMessage({ code : launch, msg : winid })
             } else if (e.data.code == "winner") { 
                 const _token = hush.http.getCookie("token")
-                if (!_token || _token == "") { //메신저가 임베디드되어 있지 않은 웹페이지(탭)에서 로그아웃시키면 임베디드된 페이지에서도 메신저가 종료되게 함 : disconnect보다 아예 포털페이지로 replace함.
+                if (!_token) { //메신저가 임베디드되어 있지 않은 웹페이지(탭)에서 로그아웃시키면 임베디드된 페이지에서도 메신저가 종료되게 함 : disconnect보다 아예 포털페이지로 replace함
                     location.replace("/" + hush.cons.erp_portal) //hush.msg.alert("disconnect") 
                     return
                 }
                 let _type = (winid && prevType == "") ? "set_new" : "chk_embeded" //set_new는 standalone일 때만 처음 한번만 설정됨
                 prevType = _type //동일 브라우저내에서 윈도우(탭)끼리 (offline)경합을 벌여 1등이 되면 http call을 통해 각 브라우저의 1등끼리 (online)경합으로 최종 winner를 결정
-                let rq = { type : _type, userkey : hush.cons.w_key + g_userid, winid : e.data.winid }
-                const rs1 = await hush.http.ajax(hush.cons.route + "/chk_redis", rq)
-                if (rs1.code == hush.cons.CODE_OK) { //console.log(_type+"==="+e.data.winid+"==="+rs1.result+"==="+rs1.ip)
-                    if (!rs1.result) return //watch out for stream.on('end') in chk_redis.js
-                    if (rs1.result == "another") {
-                        console.log("Messenger is now running on another tab or browser / " + e.data.msg)
-                    } else if (rs1.result == "same") { //기존 winner 계속. Winner continued 2.20) end
-                        console.log("Messenger is now running on this tab / " + e.data.msg)
+                //let rq = { type : _type, userkey : hush.cons.w_key + g_userid, winid : e.data.winid }
+                //const rs1 = await hush.http.ajax(hush.cons.route + "/chk_redis", rq)
+                const rsRedis = await hush.http.ajax("/msngr/chk_redis", { type : _type, userkey : g_userkey, winid : e.data.winid })
+                if (rsRedis.code == hush.cons.CODE_OK) { //console.log(_type+"==="+e.data.winid+"==="+rs1.result+"==="+rs1.ip)
+                    if (!rsRedis.result) return //watch out for stream.on('end') in chk_redis.js
+                    if (rsRedis.result == "another") {
+                        console.log("Talk is now running on another tab or browser / " + e.data.msg)
+                    } else if (rsRedis.result == "same") { //기존 winner 계속. Winner continued
+                        console.log("Talk is now running on this tab / " + e.data.msg)
                     } else { //new. New winner. 새로운 우승자. //console.log(_type+"@@@"+e.data.winid+"@@@"+rs1.result)                            
-                        if (runFromStandalone) {
-                            hush.socket = await hush.sock.connect(io, { token : hush.user.token, userkey : hush.user.key, userid : g_userid, winid : e.data.winid, userip : rs1.userip }) 
-                            initStandAlone(rs) //not rs1
-                        } else if (hush.http.getCookie("standalone") == "Y" && hush.http.getCookie("launched_standalone_once") != "Y") { //Auto-Launching standalone messenger
-                            //$("#txt_state").html("Standalone messenger launched in another window")
-                            hush.http.setCookie("launched_standalone_once", "Y") //Standalone도 한번만 자동실행되며 이후 auto에서는 embeded로 자동 실행됨
-                            hush.util.openWinTab(hush.cons.app + "?launch=auto&winid=" + e.data.winid)
-                            //경합이 아닌 실행시에는 StandaloneType은 winid=someValue
-                        } else { //Auto-Launching embeded messenger //$("#txt_state").html("Embeded messenger started at this window tab")
-                            hush.socket = await hush.sock.connect(io, { token : hush.user.token, userkey : hush.user.key, userid : g_userid, winid : e.data.winid, userip : rs1.userip }) 
+                        hush.socket = await hush.sock.connect(io, { 
+                            token : hush.user.token, userkey : g_userkey, userid : g_userid, winid : e.data.winid, userip : rsRedis.userip 
+                        })
+                        if (runFromStandalone) { //main.html
+                            initStandAlone(rs) //rsRedis 아님
+                        } else { //Auto-Launching Embeded Talk
                             getUnreadForAll() 
-                            procSettingOnLoad(rs) //not rs1                       
+                            procSettingOnLoad(rs) //rsRedis 아님
                         }
                     }
                 } else {
                     worker.terminate()
-                    console.log("chk_redis: " + rs1.msg)
-                    hush.auth.chk_logout(rs1.code, rs1.msg)
+                    console.log("chk_redis: " + rsRedis.msg)
+                    //hush.auth.chk_logout(rsRedis.code, rsRedis.msg)
                 }
             } else if (e.data.code == "0") {	
                 //console.log(e.data.msg) //skip

@@ -375,7 +375,7 @@
 					//////////////////////////////////////////////////파라미터 설명 End
 					//hushsbay.com 구조상 사이트 상단 간편등록시 회사/부서를 인증없이 읽어와야 함
 					if (g_nodeToGet == "U") { //그래서, 사용자(U)인 경우만 인증 체크하는 것임
-						if (!(await hush.auth.verifyUser())) return //페이지 로드시 체크하는 루틴임 (ajax 호출시 체크와는 별개)
+						if (!await hush.auth.verifyUser()) return //페이지 로드시 체크하는 루틴임 (ajax 호출시 체크와는 별개)
 					}
 					$("#chk_selectall").on("change", function() { 
 	                	$(".sel").prop("checked", $(this).is(":checked"))

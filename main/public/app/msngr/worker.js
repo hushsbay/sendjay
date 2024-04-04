@@ -1,6 +1,8 @@
 //used as dedicated worker : debugger, console.log supported (and DOM, anonymous function.. are not supported)
-//importScripts("jay_common.js") //jQuery is not defined
+//jQuery is not defined
 //w_winid는 브라우저의 각 윈도우(탭)의 유니크한 ID이며 Redis에도 저장, 사용됨
+//BroadcastChannel로 메신저 구동 경합을 대체해보려 검토하다가 더 복잡하기만 해서 기존의 indexedDB + worker로 구현하기로 함
+//g_chan = new BroadcastChannel("hushsbay") //브라우저 시크릿 모드에서는 작동하지 않음을 유의
 let w_cnt = 0, w_winid
 const SEC = 10
 
