@@ -1082,7 +1082,7 @@ const startMsngr = async (launch, winid) => {
                     location.replace("/" + hush.cons.erp_portal) //hush.msg.alert("disconnect") 
                     return
                 }
-                let _type = (winid && prevType == "") ? "set_new" : "chk_embeded" //set_new는 standalone일 때만 처음 한번만 설정됨. 그 다음부터는 무조건 chk_embeded
+                let _type = (winid && runFromStandalone && prevType == "") ? "set_new" : "chk_embeded" //set_new는 standalone일 때만 처음 한번만 설정됨. 그 다음부터는 무조건 chk_embeded
                 prevType = _type //동일 브라우저내에서 윈도우(탭)끼리 (offline)경합을 벌여 1등이 되면 http call을 통해 각 브라우저의 1등끼리 (online)경합으로 최종 winner를 결정
                 const rsRedis = await hush.http.ajax("/msngr/chk_redis", { type : _type, userkey : g_userkey, winid : winid }, true)
                 if (rsRedis.code == hush.cons.CODE_OK) { //console.log(_type+"==="+e.data.winid+"==="+rs1.result+"==="+rs1.ip)
