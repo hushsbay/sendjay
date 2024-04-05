@@ -33,10 +33,10 @@ router.post('/', async function(req, res) {
 							rs.result = "same" //기존 우승자 계속
 							break
 						} else { //console.log(type, userkey, winid, pattern, uwKey, "====another")
-							//com.cons.max_diff_sec_worker가 지난 것은 닫힌 탭이므로 삭제해야 함 (Web Worker에 의해 업데이트 안되는 가비지 데이터임)
+							//ws.cons.max_diff_sec_worker가 지난 것은 닫힌 탭이므로 삭제해야 함 (Web Worker에 의해 업데이트 안되는 가비지 데이터임)
 							const _dtVal = await global.store.get(item)
 							const _diffSec = ws.util.getDateTimeDiff(_dtVal, new Date())
-							if (_diffSec > com.cons.max_diff_sec_worker) await global.store.del(item)
+							if (_diffSec > ws.cons.max_diff_sec_worker) await global.store.del(item)
 							rs.result = "another"
 						}
 					}

@@ -4,7 +4,7 @@
 //BroadcastChannel로 메신저 구동 경합을 대체해보려 검토하다가 더 복잡하기만 해서 기존의 indexedDB + worker로 구현하기로 함
 //g_chan = new BroadcastChannel("hushsbay") //브라우저 시크릿 모드에서는 작동하지 않음을 유의
 let w_cnt = 0, w_winid
-const SEC = 10
+const SEC = 5 //10
 
 //////////////////////////////////////////start handling IndexedDB
 const DATABASE = "jay", TBL = "winner", ONE_KEY = "just_one" //only 1 table & 1 record handled
