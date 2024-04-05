@@ -607,9 +607,9 @@
                 const socket = io(hush.cons.socket_url, { forceNew: false, reconnection: false, query: query }) //forceNew=false //See 'disconnect_prev_sock' in pmessage.js (on server)
         		socket.off("connect_error").on("connect_error", async (e) => { await hush.msg.alert("connect_error\n" + e.toString()) })
                 socket.off("disconnect").on("disconnect", async () => { 
-                    //location.replace("/" + hush.cons.erp_portal) //현재는 새로고침되면 다시 소켓연결되어 무한루프돌기때문에 임시로 막음
-                    //await hush.msg.alert("socket disconnected " + hush.util.getCurDateTimeStr(true, true))
                     console.log("socket disconnected " + hush.util.getCurDateTimeStr(true, true))
+                    //await hush.msg.alert("socket disconnected " + hush.util.getCurDateTimeStr(true, true))
+                    location.replace("/" + hush.cons.erp_portal) //최초 개발시엔 새로고침되면 다시 소켓연결되어 무한루프돌기때문에 임시로 막았으나 이제 경합로직도 넣었으니 풀어도 됨
                 }) 
                 socket.off("connect").on("connect", () => {
                     console.log("socket connected " + hush.util.getCurDateTimeStr(true, true))
