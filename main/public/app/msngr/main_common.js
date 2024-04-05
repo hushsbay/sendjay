@@ -1018,7 +1018,7 @@ var funcSockEv = { //needs to be public
         await hush.msg.alert("Logout done. (including mobile device)")
     },
     [hush.cons.sock_ev_disconnect] : (data) => { //mobile only
-        console.log("disconn from server..", JSON.stringify(data))
+        console.log("disconnected from server : " + JSON.stringify(data))
         $("#img_disconn").show() //hush.msg.toast("disconnected", false, true)
     },
     [hush.cons.sock_ev_mark_as_connect] : (data) => {//mobile only
