@@ -333,8 +333,7 @@ module.exports = (function() {
 					//console.log("###", arr.toString()) //### ,1,,0
 					//console.log("@@@", JSON.stringify(arr)) //@@@ [[null,1],[null,0]] //위 multi()set()에서는 arr[0][1]이 OK로 나오는데 여기서는 1로 나오고 arr[1][1]은 0로 나옴
 					if (!arr || arr.length < 2) throw Error('multiDelForUserkeySocket : global.store.multi() error') //아래에서 왜 0으로 나오는지 모르겠는데 일단 그대로 두기로 함
-					//if (arr[0][1] != 1 || arr[1][1] != 0) throw Error('multiDelForUserkeySocket : global.store.multi() error : ' + arr[0][1] + '/' + arr[1][1])
-					if (arr[0][1] != 1 || arr[1][1] != 1) throw Error('multiDelForUserkeySocket : global.store.multi() error : ' + arr[0][1] + '/' + arr[1][1])
+					if (arr[0][1] != 1 || arr[1][1] != 0) throw Error('multiDelForUserkeySocket : global.store.multi() error : ' + arr[0][1] + '/' + arr[1][1])
 				} catch(ex) {
 					throw new Error(ex)
 				}

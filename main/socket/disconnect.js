@@ -11,7 +11,6 @@ module.exports = async function(socket, reason) {
 			await ws.redis.multiDelForUserkeySocket(socket)
 		} //ws.sock.warn(null, socket, _logTitle, socket.userkey, socket.winid, socket.id, reason)
 	} catch (ex) {
-		console.log(ex.message)
 		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex) //disconnect이므로 끊어진 클라이언트로 소켓으로 오류가 전달되지 않을 수도 있을 것임
 	}
 }
