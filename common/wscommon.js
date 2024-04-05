@@ -329,7 +329,10 @@ module.exports = (function() {
 					//위를 아래와 같이 수정해 사용
 					//.srem(com.cons.key_set_userkey_socket, usKey)는 아직 쓰임새가 없으므로 막음
 					//multiSet~과는 다르게 지울 때는 uwKey까지 같이 지워야 함
+					console.log(usKey, uwKey)
 					const arr = await global.store.multi().del(usKey).del(uwKey).exec()
+					console.log("###", arr.toString())
+					console.log("@@@", JSON.stringify(arr))
 					if (!arr || arr.length < 2) throw Error('multiDelForUserkeySocket : global.store.multi() error')
 					if (arr[0][1] != 1 || arr[1][1] != 1) throw Error('multiDelForUserkeySocket : global.store.multi() error : ' + arr[0][1] + '/' + arr[1][1])
 				} catch(ex) {
