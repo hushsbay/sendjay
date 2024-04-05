@@ -11,6 +11,7 @@ module.exports = async function(socket, reason) {
 			await ws.redis.multiDelForUserkeySocket(socket)
 		} //ws.sock.warn(null, socket, _logTitle, socket.userkey, socket.winid, socket.id, reason)
 	} catch (ex) {
+		console.log(ex.message)
 		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex)
 	}
 }

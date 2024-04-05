@@ -316,8 +316,8 @@ module.exports = (function() {
 			},	
 			multiDelForUserkeySocket : async (socket) => {
 				try {
-					const usKey = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli + socket.id
-					const uwKey = ws.cons.key_str_winid + socket.userkey + ws.cons.easydeli + socket.winid
+					const usKey = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli + socket.id //$$SW__oldclock;Q5zmRCF2q7d6IJfLAAAB
+					const uwKey = ws.cons.key_str_winid + socket.userkey + ws.cons.easydeli + socket.winid //$$WW__oldclock;874223_20240405154525
 					if (usKey.includes('undefined')) throw Error('multiDelForUserkeySocket : usKey not defined')
 					if (uwKey.includes('undefined')) throw Error('multiDelForUserkeySocket : uwKey not defined')
 					/*const arr = await global.store.multi().del(usKey)
@@ -329,11 +329,11 @@ module.exports = (function() {
 					//위를 아래와 같이 수정해 사용
 					//.srem(com.cons.key_set_userkey_socket, usKey)는 아직 쓰임새가 없으므로 막음
 					//multiSet~과는 다르게 지울 때는 uwKey까지 같이 지워야 함
-					console.log(usKey, uwKey)
 					const arr = await global.store.multi().del(usKey).del(uwKey).exec()
-					console.log("###", arr.toString())
-					console.log("@@@", JSON.stringify(arr))
-					if (!arr || arr.length < 2) throw Error('multiDelForUserkeySocket : global.store.multi() error')
+					//console.log("###", arr.toString()) //### ,1,,0
+					//console.log("@@@", JSON.stringify(arr)) //@@@ [[null,1],[null,0]] //위 multi()set()에서는 arr[0][1]이 OK로 나오는데 여기서는 1로 나오고 arr[1][1]은 0로 나옴
+					if (!arr || arr.length < 2) throw Error('multiDelForUserkeySocket : global.store.multi() error') //아래에서 왜 0으로 나오는지 모르겠는데 일단 그대로 두기로 함
+					//if (arr[0][1] != 1 || arr[1][1] != 0) throw Error('multiDelForUserkeySocket : global.store.multi() error : ' + arr[0][1] + '/' + arr[1][1])
 					if (arr[0][1] != 1 || arr[1][1] != 1) throw Error('multiDelForUserkeySocket : global.store.multi() error : ' + arr[0][1] + '/' + arr[1][1])
 				} catch(ex) {
 					throw new Error(ex)
