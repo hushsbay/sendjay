@@ -35,11 +35,12 @@ conn.onsuccess = function(e) {
 //////////////////////////////////////////end
 
 onmessage = function(e) { //console.log(e.data.code+"@@@@") 
-    if (e.data.code == "auto") {
-        console.log(e.data.msg+"@@@@") 
+    if (e.data.code == "auto") {        
         if (!e.data.msg) { //e.data.msg=null
+            console.log(e.data.msg+"@@@@") 
             competeWinner() //offline competition. offline 경합
         } else {
+            console.log(e.data.msg+"####") 
             w_winid = e.data.msg //e.data.msg=someValue
             setWinner() //Standalone이므로 경합없이 winner로 설정
         }
