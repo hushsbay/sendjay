@@ -1137,10 +1137,10 @@ const SetUserVar = () => { //편의상 한번 더 g_로 set
     g_token10 = hush.user.token.slice(-10)
 }
 
-const initStandAlone = (rs) => {
+const initStandAlone = (rs) => { //임베디드가 아닐 경우임
     procSetting("load", rs, true)
-    procScrollEvent() //not used for embeded
-    procMenuTop(hush.http.getCookie("mode")) //not used for embeded
+    procScrollEvent()
+    procMenuTop(hush.http.getCookie("mode"))
     if (g_mode != BTN_MODE_CHAT) getUnreadForAll() 
     $("#header_title").html(g_usernm + ((rs.nicknm != "") ? " [" + rs.nicknm + "]" : ""))
 }

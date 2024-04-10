@@ -36,8 +36,8 @@
         <script src="https://cdn.socket.io/4.7.3/socket.io.min.js" integrity="sha384-+miq58Ltmjm+SSP5g8Ok6dpMO/6R4n8xe/x1Yj0Bdb9kiEz25LTnWv/GZQTRQamg" crossorigin="anonymous"></script>
         <script>
             $.when($.ready).done(async function() {
-                try { //By default, $.getScript() sets the cache setting to false. You can override this with $.ajaxSetup({ cache: true })
-                    await $.getScript("/common/common.js")
+                try {
+                    await $.getScript("/common/common.js") //cache setting to false
                     await $.getScript("main_common.js")
                     const param = new URLSearchParams(location.search)
                     hush.webview.chk(param)
@@ -92,7 +92,7 @@
                     hush.webview.ready = true
                     //main.html은 아래 5군데에서 호출됨
                     //1) 메인으로서 onLoad 2) invite button from chat.html (invite) 3) newchat button from Chat Tab (member) 4) onRegistering Userid (org)?? 5) Selecting organization code
-                    if (g_win_type) {
+                    if (g_win_type) { //invite, member, org
                         $("#fr_header_bar").hide()
                         $("#fr_header_tab").hide()
                         $(".chat").hide()
@@ -108,9 +108,9 @@
                             g_orgcd = opener.g_orgcd
                             procMenuTop(BTN_MODE_PEOPLE, BTN_PEOPLE_COMPANY)
                         }
-                    } else {
+                    } else { //빈값은 Main인 경우임
                         const result = await startMsngr("manual", hush.sock.getWinId()) //mobile app(webview)에서는 바로 return true
-                        if (!result) return
+                        if (!result) return //오류발생하면 아래 실행해도 의미없음
                         $(".coNav").on("click", function() { procMenuTop(this.id) })
                         $("#btn_team, #btn_company").on("click", function() {
                             //hush.util.animCall(this.id, true)
