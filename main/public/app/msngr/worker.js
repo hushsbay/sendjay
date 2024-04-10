@@ -79,6 +79,7 @@ function competeWinner() {
                     postMessage({ code : "competeWinner_err", msg : _msg })
                 }
             } else {
+                debugger
                 if (rec.winid == w_winid) {
                     rec.udt = udt
                     const up_req = os.put(rec)
