@@ -8,7 +8,6 @@ let g_nodeIndent, portalListBeingQueried = false
 const BTN_MODE_PEOPLE = "btn_people", BTN_MODE_CHAT = "btn_chat" //should be same as button id
 const BTN_PEOPLE_TEAM = "btn_team", BTN_PEOPLE_COMPANY = "btn_company" //should be same as button id
 const FIRST_QUERIED = "9999"
-debugger
 const runFromStandalone = (location.pathname == hush.cons.app) ? true : false //false means embeded talk
 
 const resetEnvForScroll = () => {
