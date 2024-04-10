@@ -16,10 +16,10 @@ router.post('/', async function(req, res) {
 		const dateFr = ws.util.setDateAdd(new Date(), ws.cons.max_days_to_fetch)
 		const { roomid, msgid, type } = req.body
 		conn = await wsmysql.getConnFromPool(global.pool)
-		if (type == 'U') {
+		//if (type == 'U') {
 			userid = await ws.jwt.chkToken(req, res, conn) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
 			if (!userid) return
-		}
+		//}
 		if (roomid) {
 			if (msgid) { //from mobile (before noti)
 				sql = "SELECT COUNT(*) UNREAD "
