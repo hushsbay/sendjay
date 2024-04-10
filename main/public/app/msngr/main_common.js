@@ -1074,6 +1074,7 @@ const startMsngr = async (launch, winid) => {
     }
     worker.onmessage = async function(e) {
         try {
+            debugger
             if (e.data.code == "idb_upgraded" || e.data.code == "idb_connected") {
                 worker.postMessage({ code : launch, msg : winid })
             } else if (e.data.code == "winner") { 
