@@ -1088,9 +1088,9 @@ const startMsngr = async (launch, winid) => {
                 if (rsRedis.code == hush.cons.CODE_OK) { //console.log(_type+"==="+e.data.winid+"==="+rs1.result+"==="+rs1.ip)
                     if (!rsRedis.result) return //watch out for stream.on('end') in chk_redis.js
                     if (rsRedis.result == "another") {
-                        console.log("Talk is now running on another tab or browser / " + e.data.msg)
+                        console.log("Talk running on another tab or browser / " + e.data.msg)
                     } else if (rsRedis.result == "same") { //기존 winner 계속. Winner continued
-                        console.log("Talk is now running on this tab / " + e.data.msg)
+                        console.log("Talk running on this tab / " + e.data.msg)
                     } else { //new. New winner. 새로운 우승자. //console.log(_type+"@@@"+e.data.winid+"@@@"+rs1.result)      
                         hush.socket = await hush.sock.connect(io, { 
                             token : hush.user.token, userkey : g_userkey, userid : g_userid, winid : winid, userip : rsRedis.userip 
@@ -1107,8 +1107,8 @@ const startMsngr = async (launch, winid) => {
                     console.log("chk_redis: " + rsRedis.msg)
                 }
             } else if (e.data.code == "0") {	
-                //console.log(e.data.msg) //skip
-            } else {
+                console.log(e.data.msg) //skip
+            } else { //오류 발생
                 worker.terminate()
                 console.log(e.data.code + "===" + e.data.msg)
             }

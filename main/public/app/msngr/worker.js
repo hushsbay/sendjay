@@ -1,10 +1,10 @@
-//used as dedicated worker : debugger, console.log supported (and DOM, anonymous function.. are not supported)
+//used as dedicated worker : debugger, console.log supported. DOM, anonymous function.. are not supported.
 //jQuery is not defined
 //w_winid는 브라우저의 각 윈도우(탭)의 유니크한 ID이며 Redis에도 저장, 사용됨
 //BroadcastChannel로 메신저 구동 경합을 대체해보려 검토하다가 더 복잡하기만 해서 기존의 indexedDB + worker로 구현하기로 함
-//g_chan = new BroadcastChannel("hushsbay") //브라우저 시크릿 모드에서는 작동하지 않음을 유의
+//g_chan = new BroadcastChannel("hushsbay") //브라우저 시크릿 모드에서는 작동하지 않음 (참고)
 let w_cnt = 0, w_winid
-const SEC = 5 //10
+const SEC = 3 //10
 
 //////////////////////////////////////////start handling IndexedDB
 const DATABASE = "jay", TBL = "winner", ONE_KEY = "just_one" //only 1 table & 1 record handled
@@ -34,22 +34,8 @@ conn.onsuccess = function(e) {
 }
 //////////////////////////////////////////end
 
-onmessage = function(e) { //console.log(e.data.code+"@@@@") 
-    // if (e.data.code == "auto") {        
-    //     if (!e.data.msg) { //e.data.msg=null
-    //         console.log(e.data.msg+"@@@@") 
-    //         competeWinner() //offline competition. offline 경합
-    //     } else {
-    //         console.log(e.data.msg+"####") 
-    //         w_winid = e.data.msg //e.data.msg=someValue
-    //         setWinner() //Standalone이므로 경합없이 winner로 설정
-    //     }
-    // } else if (e.data.code == "manual") {
-    //     w_winid = e.data.msg
-    //     setWinner() //Manual & Standalone이므로 경합없이 winner로 설정
-    // }
+onmessage = function(e) { //console.log(e.data.msg+"@@@@"+e.data.code) 
     w_winid = e.data.msg
-    console.log(e.data.msg+"@@@@"+e.data.code) 
     if (e.data.code == "auto") {        
         competeWinner()
     } else if (e.data.code == "manual") {
@@ -91,10 +77,9 @@ function competeWinner() {
                         postMessage({ code : "competeWinner_err", msg : _msg })
                     }
                 } else {
-                    const _diff = getDateTimeDiff(rec.udt, new Date())
-                    console.log(_diff+"===="+SEC)
+                    const _diff = getDateTimeDiff(rec.udt, new Date()) //console.log(_diff+"===="+SEC)
                     if (_diff > SEC) { //if (_diff > (SEC * 2)) {
-                        rec.winid = w_winid //Old w_winid가 업데이트 안되는 미사용분이므로 점유함. If old w_winid is not being updated, new w_winid is replaced.
+                        rec.winid = w_winid //Old w_winid가 업데이트 안되는 미사용분이므로 점유함
                         rec.udt = udt
                         const up_req1 = os.put(rec)
                         up_req1.onsuccess = function() {
@@ -116,7 +101,7 @@ function competeWinner() {
         }
         tx.oncomplete = function() {
             if (isWinner) {
-                postMessage({ code : "winner", msg : "competeWinner: checking as winner: " + w_cnt, winid : w_winid })
+                postMessage({ code : "winner", msg : "competeWinner: being as winner: " + w_cnt, winid : w_winid })
             } else {
                 postMessage({ code : "0", msg : "competeWinner: competing to be winner: " + w_cnt, winid : w_winid })
             }
@@ -179,8 +164,8 @@ function setWinner() {
 function getCurDateTimeStr() {
     const now = new Date()
     return now.getFullYear().toString() + (now.getMonth() + 1).toString().padStart(2, "0") + now.getDate().toString().padStart(2, "0") + 
-            now.getHours().toString().padStart(2, "0") + now.getMinutes().toString().padStart(2, "0") + now.getSeconds().toString().padStart(2, "0") +
-            now.getMilliseconds().toString()
+           now.getHours().toString().padStart(2, "0") + now.getMinutes().toString().padStart(2, "0") + now.getSeconds().toString().padStart(2, "0") +
+           now.getMilliseconds().toString()
 }
 
 function getTimeStamp(str) { //str = 2012-08-02 14:12:04
