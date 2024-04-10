@@ -79,7 +79,6 @@ function competeWinner() {
                     postMessage({ code : "competeWinner_err", msg : _msg })
                 }
             } else {
-                debugger
                 if (rec.winid == w_winid) {
                     rec.udt = udt
                     const up_req = os.put(rec)
@@ -93,7 +92,8 @@ function competeWinner() {
                     }
                 } else {
                     const _diff = getDateTimeDiff(rec.udt, new Date())
-                    if (_diff > (SEC * 2)) {
+                    console.log(_diff+"===="+SEC)
+                    if (_diff > SEC) { //if (_diff > (SEC * 2)) {
                         rec.winid = w_winid //Old w_winid가 업데이트 안되는 미사용분이므로 점유함. If old w_winid is not being updated, new w_winid is replaced.
                         rec.udt = udt
                         const up_req1 = os.put(rec)
