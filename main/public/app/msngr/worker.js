@@ -35,18 +35,25 @@ conn.onsuccess = function(e) {
 //////////////////////////////////////////end
 
 onmessage = function(e) { //console.log(e.data.code+"@@@@") 
+    // if (e.data.code == "auto") {        
+    //     if (!e.data.msg) { //e.data.msg=null
+    //         console.log(e.data.msg+"@@@@") 
+    //         competeWinner() //offline competition. offline 경합
+    //     } else {
+    //         console.log(e.data.msg+"####") 
+    //         w_winid = e.data.msg //e.data.msg=someValue
+    //         setWinner() //Standalone이므로 경합없이 winner로 설정
+    //     }
+    // } else if (e.data.code == "manual") {
+    //     w_winid = e.data.msg
+    //     setWinner() //Manual & Standalone이므로 경합없이 winner로 설정
+    // }
+    w_winid = e.data.msg
+    console.log(e.data.msg+"@@@@"+e.data.code) 
     if (e.data.code == "auto") {        
-        if (!e.data.msg) { //e.data.msg=null
-            console.log(e.data.msg+"@@@@") 
-            competeWinner() //offline competition. offline 경합
-        } else {
-            console.log(e.data.msg+"####") 
-            w_winid = e.data.msg //e.data.msg=someValue
-            setWinner() //Standalone이므로 경합없이 winner로 설정
-        }
+        competeWinner()
     } else if (e.data.code == "manual") {
-        w_winid = e.data.msg
-        setWinner() //Manual & Standalone이므로 경합없이 winner로 설정
+        setWinner()
     }
 }
 
