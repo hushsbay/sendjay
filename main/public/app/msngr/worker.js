@@ -36,6 +36,7 @@ conn.onsuccess = function(e) {
 
 onmessage = function(e) { //console.log(e.data.code+"@@@@") 
     if (e.data.code == "auto") {
+        console.log(e.data.msg+"@@@@") 
         if (!e.data.msg) { //e.data.msg=null
             competeWinner() //offline competition. offline 경합
         } else {
