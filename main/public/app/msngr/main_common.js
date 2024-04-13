@@ -209,11 +209,8 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
         }
         const rq = { type : type, keyword : encodeURIComponent(keyword) }
         const rs = await hush.http.ajax("/msngr/qry_userlist", rq)
-        if (rs.code != hush.cons.CODE_OK) {
-            hush.msg.showMsg(rs.msg, rs.code)
-            return
-        }
-        let userkeyArr = [ ]
+        if (!hush.util.chkAjaxCode(rs)) return
+        let userkeyArr = []
         const _len = rs.list.length
         for (let i = 0; i < _len; i++) {
             const row = rs.list[i]
@@ -775,7 +772,7 @@ const chkTime = async (tm) => {
     return true
 }
 
-const procSettingOnLoad = (rs) => { //rs = await hush.auth.verifyUser()
+const procSettingOnLoad = (rs) => { //rs from hush.auth.verifyUser(true)
     g_setting.nicknm = (rs.NICK_NM) ? rs.NICK_NM : ""
     g_setting.job = (rs.JOB) ? rs.JOB : ""
     g_setting.abcd = (rs.AB_CD) ? rs.AB_CD : ""
@@ -789,7 +786,7 @@ const procSettingOnLoad = (rs) => { //rs = await hush.auth.verifyUser()
     hush.http.setCookie("senderoff", rs.SENDER_OFF)
 }
 
-const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) rs = await hush.auth.verifyUser()
+const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) //rs from hush.auth.verifyUser(true)
     try {
         if (type == "load") {
             procSettingOnLoad(rs)
@@ -805,13 +802,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             $("#in_to").val(g_setting.to)
             $("#chk_bodyoff").prop("checked", (rs.BODY_OFF == "Y" ? true : false))
             $("#chk_senderoff").prop("checked", (rs.SENDER_OFF == "Y" ? true : false))            
-            if (needPicture) {
-                //if (rs.picture != null) {
-                    hush.http.getUserPic(g_userid, "img_pict")
-                //} else {
-                //    $("#img_pict").attr("src", hush.cons.img_noperson)
-                //}
-            }
+            if (needPicture) hush.http.getUserPic(g_userid, "img_pict")
         } else if (type == "save") {
             const _nicknm = $("#in_nicknm").val().trim()
             const _job = $("#in_job").val().trim()
@@ -1137,7 +1128,7 @@ const SetUserVar = () => { //편의상 한번 더 g_로 set
     g_token10 = hush.user.token.slice(-10)
 }
 
-const initStandAlone = (rs) => { //임베디드가 아닐 경우임
+const initStandAlone = (rs) => { //임베디드가 아닐 경우임. rs from hush.auth.verifyUser(true)
     procSetting("load", rs, true)
     procScrollEvent()
     procMenuTop(hush.http.getCookie("mode"))

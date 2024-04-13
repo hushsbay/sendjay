@@ -253,7 +253,7 @@ module.exports = (function() {
 			getUserkeySocket : (userkey) => {
 				return new Promise((resolve, reject) => {
 					let arr = []
-					const pattern = ws.cons.key_str_socket + userkey + ws.cons.easydeli
+					const pattern = ws.cons.key_str_socket + userkey + ws.cons.easydeli //예) $$SW__xxxx;
 					const stream = global.store.scanStream({ match : pattern + '*', count: ws.cons.scan_stream_cnt })
 					stream.on('data', (resultKeys) => {
 						for (let key of resultKeys) arr.push(key)
@@ -261,10 +261,10 @@ module.exports = (function() {
 					}) //stream.on('end', () => { resolve(arr) }) //'end' does not guarantee rs.result as defined.
 				})
 			},
-			getUserkeySocketIdFromKey : (key) => { //key => $$SD__3;/sendjay#sjkfhsaf8934kmhjsfd8
+			getUserkeySocketIdFromKey : (key) => { //key => $$SW__xxxx;/sendjay#sjkfhsaf8934kmhjsfd8
 				const arr = key.split(ws.cons.easydeli)
-				const _userkey = arr[0].replace(ws.cons.key_str_socket, '')
-				const _socketid = arr[1]
+				const _userkey = arr[0].replace(ws.cons.key_str_socket, '') //W__xxxx
+				const _socketid = arr[1] //=>/sendjay#sjkfhsaf8934kmhjsfd8
 				return { userkey : _userkey, socketid : _socketid }
 			},
 			getUserkeySocketsFromMulti : async (userkeys) => { 
