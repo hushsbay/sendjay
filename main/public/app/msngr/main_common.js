@@ -801,6 +801,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             $("#chk_senderoff").prop("checked", (rs.SENDER_OFF == "Y" ? true : false))            
             if (needPicture) hush.http.getUserPic(g_userid, "img_pict")
         } else if (type == "save") {
+    debugger
             const _nicknm = $("#in_nicknm").val().trim()
             const _job = $("#in_job").val().trim()
             const _abcd = $("#in_abcd").val().trim()
