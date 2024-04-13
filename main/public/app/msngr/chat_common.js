@@ -133,7 +133,7 @@ const setMembers = async (data) => {
             const m_userkey = hush.cons.m_key + _userid            
             const _nm = row.USER_NM //row.JOB ? row.USER_NM + " / " + row.JOB : row.USER_NM
             const _abcd = row.AB_CD.toLowerCase()
-            const _abnm = row.AB_NM
+            const _abnm = encodeURIComponent(row.AB_NM)
             const push_ios = row.PUSH_IOS
             const push_and = row.PUSH_AND
             const state_mob = (push_ios && push_ios != hush.cons.invalid_push_token) || (push_and && push_and != hush.cons.invalid_push_token) ? "coStateMob mobInstalled" : "coStateOff"
