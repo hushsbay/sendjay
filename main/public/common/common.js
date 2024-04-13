@@ -22,7 +22,7 @@
             warn_search_blank : "검색어" + _warn_blank,
             warn_no_row_selected : "선택한 행이 없습니다.",
             warn_no_opener : "opener가 존재하지 않습니다.",
-            warn_char_not_allowed : "한글이나 특수문자 일부(# $ - _ % & + =)는 사용할 수 없습니다.",
+            warn_char_not_allowed : "한글이나 특수문자 일부(# $ - _ % & + =)는 사용할 수 없습니다.", //휴가~`!@#$%^&*()_+=-[]{}\":';<>?/.,
             warn_need_one_row_selected : "One row should be selected.",
             //////////////////////////////////아래는 메신저 관련 : 3050(web ops),3051(mobile ops) and 3060(web dev),3061(mobile dev)
             title : "sendjay",
@@ -638,12 +638,12 @@
                 const _newwin = hush.util.openWinPop(_url + "?type=" + _type + "&roomid=" + roomid)
                 hush.sock.rooms[roomid] = _newwin
             },
-            // getAllRoomsOpen : (callback) => { //예전에 뭣때문에 만들었는지 기억이 안나 일단 막음
-            //     Object.entries(hush.sock.rooms).forEach(([key, value]) => {
-            //         const _win = hush.sock.rooms[key]
-            //         if (_win && !_win.closed) callback(_win)
-            //     })
-            // },
+            getAllRoomsOpen : (callback) => {
+                Object.entries(hush.sock.rooms).forEach(([key, value]) => {
+                    const _win = hush.sock.rooms[key]
+                    if (_win && !_win.closed) callback(_win)
+                })
+            },
             getRoomName : (nicknm, mainnm, roomnm) => {
                 if (nicknm) return nicknm //각 멤버들이 만들기 가능
                 if (mainnm) return mainnm //Owner(Master=Creator)만 만들기 가능

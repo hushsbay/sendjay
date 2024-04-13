@@ -978,15 +978,15 @@ var funcSockEv = { //needs to be public
                 $("#abcd_" + data.userid).hide()
                 $("#abnm_" + data.userid).hide()
             }
-            // hush.sock.getAllRoomsOpen((win) => { //예전에 뭣때문에 만들었는지 기억이 안나 일단 막음
-            //     const _tag = $("#abcd_" + data.userid, win.document)
-            //     _tag.html(data.abcd)
-            //     if (data.abcd) {
-            //         _tag.show()
-            //     } else {
-            //         _tag.hide()
-            //     }
-            // })
+            hush.sock.getAllRoomsOpen((win) => { //huga라는 코드를 보이게 함
+                const _tag = $("#abcd_" + data.userid, win.document)
+                _tag.html(data.abcd)
+                if (data.abcd) {
+                    _tag.show()
+                } else {
+                    _tag.hide()
+                }
+            })
         }          
     },
     [hush.cons.sock_ev_open_room] : (data) => {
