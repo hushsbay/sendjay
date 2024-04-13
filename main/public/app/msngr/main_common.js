@@ -823,6 +823,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
                         abcd : encodeURIComponent(_abcd), abnm : encodeURIComponent(_abnm), standalone : _standalone, notioff : _notioff,
                         soundoff : _soundoff, fr : _fr, to : _to, bodyoff : _bodyoff, senderoff : _senderoff }
             const rs = await hush.http.ajax("/msngr/proc_env", rq)
+            debugger
             if (rs.code != hush.cons.CODE_OK) throw new Error(rs.msg)
             $("#header_title").html(g_usernm + ((_nicknm != "") ? " [" + _nicknm + "]" : ""))
             g_setting.nicknm = _nicknm            
