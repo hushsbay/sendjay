@@ -544,7 +544,7 @@
                         <div id=pict_browse class='picBtn mq_text'>찾기</div>
                         <div id=pict_upload class='picBtn mq_text' style="margin-left:10px">저장</div>
                         <div id=pict_delete class='picBtn mq_text' style="margin-left:10px">삭제</div>
-                        <div id=btn_reset_auth class='picBtn mq_text' style="display:none;margin-left:20px">Reset Authentication</div>
+                        <div id=btn_reset_auth class='picBtn mq_text' style="display:none;margin-left:20px">자동로그인해제(Mobile)</div>
                         <input id=file_upload type=file accept="image/*" style="display:none">
                     </div>
                 </div>
@@ -568,11 +568,11 @@
                     <div class='coSettingLabel mq_node'>시작시<br>(Web)</div>
                     <label for=chk_standalone class=coSettingWrap>
                         <input type=checkbox id=chk_standalone name=chk_standalone class=coSettingChkbox />
-                        <span class='coSettingSpan mq_node'>Run standalone</span>
+                        <span class='coSettingSpan mq_node'>별도 브라우저탭에서 실행</span>
                     </label>
                 </div>
                 <div class=coSettingRow>
-                    <div class='coSettingLabel mq_node'>알림 On/Off</div>
+                    <div class='coSettingLabel mq_node'>알림설정</div>
                     <label for=chk_notioff class=coSettingWrap>
                         <input type=checkbox id=chk_notioff name=chk_notioff class=coSettingChkbox />
                         <span class='coSettingSpan mq_node'>모두 끄기</span>
@@ -586,7 +586,7 @@
                     </label>
                 </div>
                 <div class=coSettingRow>
-                    <div class='coSettingLabel mq_node'>알림음<br>(Mobile)</div>
+                    <div class='coSettingLabel mq_node'>알림시간<br>(Mobile)</div>
                     <input id=in_fr data-role=none spellcheck=false placeholder='0900' style="width:60px;text-align:center;border:1px solid darkgray;margin-right:3px" /> ~
                     <input id=in_to data-role=none spellcheck=false placeholder='1800' style="width:60px;text-align:center;border:1px solid darkgray;margin-left:3px" />
                     <span id=spn_clear class='coSettingSpan mq_node' style="color:#0082AD;cursor:pointer">Clear</span>
@@ -605,12 +605,12 @@
                         <span class='coSettingSpan mq_node'>발신자 숨김</span>
                     </label>
                 </div>
-                <div class=coSettingRow>  
+                <!-- <div class=coSettingRow>  
                     <div class='coSettingLabel mq_node'>Log File<br>(Mobile)</div>
                     <input id=in_showlog type=number data-role=none spellcheck=false value="0" style="width:30px;text-align:center;border:1px solid darkgray;margin:0px 5px" />
                     <div id=btn_showlog class='picBtn mq_node' style="background:lightgray;margin-left:5px">ShowLog</div>
                     <div id=btn_deletelog class='picBtn mq_node' style="background:lightgray;margin-left:5px">DelLog</div>
-                </div>            
+                </div> -->
             </div>
             <div class=coMenuBottom>
                 <div id=btn_new class="coMenuBtn people chat" style="display:none"><img src="/img/white_chat.png" class=coImgMenu /><span class=mq_text>새채팅</span></div>

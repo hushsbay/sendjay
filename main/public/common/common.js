@@ -14,7 +14,7 @@
             erp_portal : "index.html",
             failOnLoad : "failOnLoad",
             restful_timeout : 10000,
-            pattern : /^[A-Za-z0-9!@^*(),.]*$/, //do not include # $ - _ % & + = ( //uri malforming, jquery selector 고려. encodeURIComponent도 미사용
+            pattern : /^[A-Za-z0-9!@#$=]*$/, //들어있는 항목 이외는 사용 금지
             color_fadein : "#b2e2f8",
             ext_image : "png,gif,jpg,jpeg,ico",
             max_image : 5242880, //5MB
@@ -22,7 +22,7 @@
             warn_search_blank : "검색어" + _warn_blank,
             warn_no_row_selected : "선택한 행이 없습니다.",
             warn_no_opener : "opener가 존재하지 않습니다.",
-            warn_char_not_allowed : "한글이나 특수문자 일부(# $ - _ % & + =)는 사용할 수 없습니다.", //휴가~`!@#$%^&*()_+=-[]{}\":';<>?/.,
+            warn_char_not_allowed : "영문,숫자,!@#$=만 사용할 수 있습니다.", //비번 및 아이디 등 고려
             warn_need_one_row_selected : "One row should be selected.",
             //////////////////////////////////아래는 메신저 관련 : 3050(web ops),3051(mobile ops) and 3060(web dev),3061(mobile dev)
             title : "sendjay",
@@ -877,12 +877,12 @@
             },
             chkFieldVal : async (_val, _nm, _min, _max, _pattern) => { //크리티컬한 내용은 서버에서 체크하고 그렇지 않은 것은 클라이언트에서 체크해도 무방할 것임
                 const nm = (_nm) ? "[" + _nm + "]<br>" : ""
-                // if (_pattern) {
-                //     if (!hush.cons.pattern.test(_val)) {
-                //         await hush.msg.alert(nm + hush.cons.warn_char_not_allowed)
-                //         return false
-                //     }
-                // }
+                if (_pattern) { //비번 및 아이디에 한글 및 일부 특수문자 사용금지 
+                    if (!hush.cons.pattern.test(_val)) {
+                        await hush.msg.alert(nm + hush.cons.warn_char_not_allowed)
+                        return false
+                    }
+                }
                 const _len = hush.util.strLen(_val)
                 if (_max) {
                     if (_len > _max) {

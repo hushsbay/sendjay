@@ -22,7 +22,7 @@ module.exports = async function(socket, param) {
 				await wsmysql.query(conn, "UPDATE A_ROOMDTL_TBL SET DISPMEM = ? WHERE ROOMID = ? AND USERID = ? ", [_value, _roomid, _userid])
 				socket.emit(ws.cons.sock_ev_common, param)	 
 			}					
-		} else if (_kind == 'userinfo') { //No need to update table since it was already updated. You just broadcast it inside namespace.
+		} else if (_kind == 'userinfo') {
 			ws.sock.broadcast(socket, ws.cons.sock_ev_set_env, param.data, 'all')
 		} //ws.sock.warn(null, socket, _logTitle, com.cons.rs + JSON.stringify(param))
 	} catch (ex) {

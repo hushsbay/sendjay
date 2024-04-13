@@ -805,10 +805,10 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             const _job = $("#in_job").val().trim()
             const _abcd = $("#in_abcd").val().trim()
             const _abnm = $("#in_abnm").val().trim()
-            if (!hush.util.chkFieldVal(_nicknm, hush.cons.max_nicknm_len, false, false, "Nick Name")) return false
-            if (!hush.util.chkFieldVal(_job, 50, false, false, "Job Description")) return false
-            if (!hush.util.chkFieldVal(_abcd, 7, false, false, "Absence Code")) return false
-            if (!hush.util.chkFieldVal(_abnm, 50, false, false, "Absence Period")) return false    
+            if (!hush.util.chkFieldVal(_nicknm, "별칭/상태", 0, hush.cons.max_nicknm_len)) return false
+            if (!hush.util.chkFieldVal(_job, "직무", 0, 50)) return false
+            if (!hush.util.chkFieldVal(_abcd, "부재코드", 0, 7)) return false
+            if (!hush.util.chkFieldVal(_abnm, "부재내용/기간", 0, 50)) return false    
             const _standalone = $("#chk_standalone").is(":checked") ? "Y" : ""
             const _notioff = $("#chk_notioff").is(":checked") ? "Y" : ""
             const _soundoff = $("#chk_soundoff").is(":checked") ? "Y" : ""
@@ -816,14 +816,13 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             const _to = $("#in_to").val().trim()
             if (!chkTime(_fr)) return false
             if (!chkTime(_to)) return false
-            if ((_fr == "" && _to != "") || (_fr != "" && _to == "")) throw new Error("Both of Noti Time field should be filled.")
+            if ((_fr == "" && _to != "") || (_fr != "" && _to == "")) throw new Error("알림시간이 빈칸입니다.")
             const _bodyoff = $("#chk_bodyoff").is(":checked") ? "Y" : ""                       
             const _senderoff = $("#chk_senderoff").is(":checked") ? "Y" : ""              
             const rq = { nicknm : encodeURIComponent(_nicknm), job : encodeURIComponent(_job), //type : "common", 
                         abcd : encodeURIComponent(_abcd), abnm : encodeURIComponent(_abnm), standalone : _standalone, notioff : _notioff,
                         soundoff : _soundoff, fr : _fr, to : _to, bodyoff : _bodyoff, senderoff : _senderoff }
             const rs = await hush.http.ajax("/msngr/proc_env", rq)
-            debugger
             if (rs.code != hush.cons.CODE_OK) throw new Error(rs.msg)
             $("#header_title").html(g_usernm + ((_nicknm != "") ? " [" + _nicknm + "]" : ""))
             g_setting.nicknm = _nicknm            

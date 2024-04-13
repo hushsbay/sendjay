@@ -1463,7 +1463,7 @@ const dialogRoomRename = (_type) => {
     hush.msg.dialogInputBox("Enter new name for this chat room. <br>Enter blank for deleting room name.", g_title, { 
         "OK": function() {                             
             const _newName = hush.msg.dialogGetInput().trim()                            
-            if (!hush.util.chkFieldVal(_newName, 100, false, false, "Room Name")) return
+            if (!hush.util.chkFieldVal(_newName, "병명", 1, 100)) return
             const rq = { type : _type, roomname : _newName, userid : g_userid, roomid : g_roomid } //roomid needed since
             if (hush.webview.ios) { 
             } else if (hush.webview.and) {
