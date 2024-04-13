@@ -801,22 +801,21 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             $("#chk_senderoff").prop("checked", (rs.SENDER_OFF == "Y" ? true : false))            
             if (needPicture) hush.http.getUserPic(g_userid, "img_pict")
         } else if (type == "save") {
-    debugger
             const _nicknm = $("#in_nicknm").val().trim()
             const _job = $("#in_job").val().trim()
             const _abcd = $("#in_abcd").val().trim()
             const _abnm = $("#in_abnm").val().trim()
-            if (!hush.util.chkFieldVal(_nicknm, hush.cons.max_nicknm_len, false, false, "Nick Name")) return
-            if (!hush.util.chkFieldVal(_job, 50, false, false, "Job Description")) return
-            if (!hush.util.chkFieldVal(_abcd, 7, false, false, "Absence Code")) return
-            if (!hush.util.chkFieldVal(_abnm, 50, false, false, "Absence Period")) return    
+            if (!hush.util.chkFieldVal(_nicknm, hush.cons.max_nicknm_len, false, false, "Nick Name")) return false
+            if (!hush.util.chkFieldVal(_job, 50, false, false, "Job Description")) return false
+            if (!hush.util.chkFieldVal(_abcd, 7, false, false, "Absence Code")) return false
+            if (!hush.util.chkFieldVal(_abnm, 50, false, false, "Absence Period")) return false    
             const _standalone = $("#chk_standalone").is(":checked") ? "Y" : ""
             const _notioff = $("#chk_notioff").is(":checked") ? "Y" : ""
             const _soundoff = $("#chk_soundoff").is(":checked") ? "Y" : ""
             const _fr = $("#in_fr").val().trim()
             const _to = $("#in_to").val().trim()
-            if (!chkTime(_fr)) return
-            if (!chkTime(_to)) return
+            if (!chkTime(_fr)) return false
+            if (!chkTime(_to)) return false
             if ((_fr == "" && _to != "") || (_fr != "" && _to == "")) throw new Error("Both of Noti Time field should be filled.")
             const _bodyoff = $("#chk_bodyoff").is(":checked") ? "Y" : ""                       
             const _senderoff = $("#chk_senderoff").is(":checked") ? "Y" : ""              
@@ -860,6 +859,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
         }
     } catch (ex) {
         hush.util.showEx(ex)
+        return false
     }
 }
 

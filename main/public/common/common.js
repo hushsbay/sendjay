@@ -14,7 +14,7 @@
             erp_portal : "index.html",
             failOnLoad : "failOnLoad",
             restful_timeout : 10000,
-            pattern : /^[A-Za-z0-9!@^*(),.]*$/, //do not include # $ - _ % & + = ( //pattern excludes characters concerned with problem of uri malforming and jquery selector, so not worry about encodeURIComponent for that field) 
+            pattern : /^[A-Za-z0-9!@^*(),.]*$/, //do not include # $ - _ % & + = ( //uri malforming, jquery selector 고려. encodeURIComponent도 미사용
             color_fadein : "#b2e2f8",
             ext_image : "png,gif,jpg,jpeg,ico",
             max_image : 5242880, //5MB
