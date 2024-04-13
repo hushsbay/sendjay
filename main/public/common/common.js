@@ -638,12 +638,12 @@
                 const _newwin = hush.util.openWinPop(_url + "?type=" + _type + "&roomid=" + roomid)
                 hush.sock.rooms[roomid] = _newwin
             },
-            getAllRoomsOpen : (callback) => {
-                Object.entries(hush.sock.rooms).forEach(([key, value]) => {
-                    const _win = hush.sock.rooms[key]
-                    if (_win && !_win.closed) callback(_win)
-                })
-            },
+            // getAllRoomsOpen : (callback) => { //예전에 뭣때문에 만들었는지 기억이 안나 일단 막음
+            //     Object.entries(hush.sock.rooms).forEach(([key, value]) => {
+            //         const _win = hush.sock.rooms[key]
+            //         if (_win && !_win.closed) callback(_win)
+            //     })
+            // },
             getRoomName : (nicknm, mainnm, roomnm) => {
                 if (nicknm) return nicknm //각 멤버들이 만들기 가능
                 if (mainnm) return mainnm //Owner(Master=Creator)만 만들기 가능
