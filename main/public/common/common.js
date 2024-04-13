@@ -877,12 +877,12 @@
             },
             chkFieldVal : async (_val, _nm, _min, _max, _pattern) => { //크리티컬한 내용은 서버에서 체크하고 그렇지 않은 것은 클라이언트에서 체크해도 무방할 것임
                 const nm = (_nm) ? "[" + _nm + "]<br>" : ""
-                if (_pattern) {
-                    if (!hush.cons.pattern.test(_val)) {
-                        await hush.msg.alert(nm + hush.cons.warn_char_not_allowed)
-                        return false
-                    }
-                }
+                // if (_pattern) {
+                //     if (!hush.cons.pattern.test(_val)) {
+                //         await hush.msg.alert(nm + hush.cons.warn_char_not_allowed)
+                //         return false
+                //     }
+                // }
                 const _len = hush.util.strLen(_val)
                 if (_max) {
                     if (_len > _max) {
