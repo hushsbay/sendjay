@@ -978,6 +978,7 @@ var funcSockEv = { //needs to be public
                 $("#abcd_" + data.userid).hide()
                 $("#abnm_" + data.userid).hide()
             }
+            debugger
             hush.room.getAllRoomsOpen((win) => {
                 const _tag = $("#abcd_" + data.userid, win.document)
                 _tag.html(data.abcd)
