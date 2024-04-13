@@ -137,6 +137,7 @@ const setMembers = async (data) => {
             const push_ios = row.PUSH_IOS
             const push_and = row.PUSH_AND
             const state_mob = (push_ios && push_ios != hush.cons.invalid_push_token) || (push_and && push_and != hush.cons.invalid_push_token) ? "coStateMob mobInstalled" : "coStateOff"
+            if (_abnm.includes("?")) debugger
             let _html = "<div id=div_" + _userid + " class=mem data-nm='" + _nm + "' data-usernm='" + row.USER_NM + "' data-abnm='" + _abnm + "' style='cursor:pointer'>"
             _html += "      <div style='height:18px;display:flex;align-items:center;margin-left:3px'>"
             _html += "          <div style='white-space:nowrap;overflow:hidden'>"
