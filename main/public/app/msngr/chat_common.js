@@ -157,7 +157,7 @@ const setMembers = async (data) => {
         $(".mem").off("click").on("click", function() {
             //hush.util.animCall(this.id, true) 
             const _userid = this.id.substring(4)
-            const _abnm = $(this).data("abnm") ? " / " + $(this).data("abnm") : ""
+            const _abnm = $(this).data("abnm") ? " / " + decodeURIComponent($(this).data("abnm")) : ""
             const _usernm = $(this).data("nm")
             let _html = "<div style='display:flex;flex-direction:column;align-items:center'>"
             _html += "  <img id=img_userid src='/img/noperson.png' style='width:64px;height:64px'>"
