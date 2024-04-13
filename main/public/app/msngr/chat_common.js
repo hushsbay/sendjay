@@ -133,12 +133,11 @@ const setMembers = async (data) => {
             const m_userkey = hush.cons.m_key + _userid            
             const _nm = row.USER_NM //row.JOB ? row.USER_NM + " / " + row.JOB : row.USER_NM
             const _abcd = row.AB_CD.toLowerCase()
-            const _abnm = encodeURIComponent(row.AB_NM)
+            const _abnm = row.AB_NM
             const push_ios = row.PUSH_IOS
             const push_and = row.PUSH_AND
             const state_mob = (push_ios && push_ios != hush.cons.invalid_push_token) || (push_and && push_and != hush.cons.invalid_push_token) ? "coStateMob mobInstalled" : "coStateOff"
-            if (_abnm.includes("?")) debugger
-            let _html = "<div id=div_" + _userid + " class=mem data-nm='" + _nm + "' data-usernm='" + row.USER_NM + "' data-abnm='" + _abnm + "' style='cursor:pointer'>"
+            let _html = "<div id=div_" + _userid + " class=mem data-nm='" + encodeURIComponent(_nm) + "' data-usernm='" + encodeURIComponent(row.USER_NM) + "' data-abnm='" + encodeURIComponent(_abnm) + "' style='cursor:pointer'>"
             _html += "      <div style='height:18px;display:flex;align-items:center;margin-left:3px'>"
             _html += "          <div style='white-space:nowrap;overflow:hidden'>"
             _html += "              <span id=w_" + w_userkey + " class=coStateOff>W</span>"
@@ -158,7 +157,7 @@ const setMembers = async (data) => {
             //hush.util.animCall(this.id, true) 
             const _userid = this.id.substring(4)
             const _abnm = $(this).data("abnm") ? " / " + decodeURIComponent($(this).data("abnm")) : ""
-            const _usernm = $(this).data("nm")
+            const _usernm = decodeURIComponent($(this).data("nm"))
             let _html = "<div style='display:flex;flex-direction:column;align-items:center'>"
             _html += "  <img id=img_userid src='/img/noperson.png' style='width:64px;height:64px'>"
             _html += "  <span style='margin-top:15px'>" + _usernm + _abnm + "</span>"
@@ -1071,7 +1070,7 @@ const initMsg = () => {
     if (mem.length > 0) {
         for (let item of mem) {
             memberidArr.push(item.id.substring(4))
-            membernmArr.push($(item).data("usernm"))
+            membernmArr.push(decodeURIComponent($(item).data("usernm")))
         }
     }
     const _msgid = hush.util.createId(g_token10)
