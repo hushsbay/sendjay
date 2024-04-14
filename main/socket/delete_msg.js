@@ -4,27 +4,27 @@ const wsmysql = require(config.app.wsmysql)
 
 module.exports = async function(socket, param) {
 	const _logTitle = param.ev, _roomid = param.returnTo
-	let conn, sql, data, len
+	let conn
 	try { //ws.sock.warn(null, socket, _logTitle, ws.cons.rq + JSON.stringify(param), _roomid)	
-		//const resVeri = com.verifyWithSocketUserId(param.data.receiverid, socket.userid)
-		//if (resVeri != '') throw new Error(resVeri)
+		const _receiverid = param.data.receiverid
+		if (_receiverid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- _receiverid')
 		conn = await wsmysql.getConnFromPool(global.pool)
 		await wsmysql.txBegin(conn)	
 		if (param.data.type == 'all') {
-			//const ret = await com.chkAccessUserWithTarget(socket.userid, _roomid, "room")
-			//if (ret != "") throw new Error(ret)
-			const arg = [_roomid, param.data.receiverid]
+			const ret = await ws.util.chkAccessUserWithTarget(conn, socket.userid, _roomid, 'room')
+			if (ret != '') throw new Error(ret)
+			const arg = [_roomid, _receiverid]
 			await wsmysql.query(conn, "UPDATE A_MSGDTL_TBL SET UDT = sysdate(6), STATE = 'D' WHERE ROOMID = ? AND RECEIVERID = ? ", arg)
 		} else {
 			const _msgidArr = param.data.msgidArr
 			const _len = _msgidArr.length
 			for (let i = 0; i < _len; i++) {
-				//const ret = await com.chkAccessUserWithTarget(socket.userid, _msgidArr[i], "")
-				//if (ret != "") throw new Error(ret)
-				const arg = [_msgidArr[i], _roomid, param.data.receiverid]
+				const ret = await ws.util.chkAccessUserWithTarget(conn, socket.userid, _msgidArr[i], '')
+				if (ret != '') throw new Error(ret)
+				const arg = [_msgidArr[i], _roomid, _receiverid]
 				await wsmysql.query(conn, "UPDATE A_MSGDTL_TBL SET UDT = sysdate(6), STATE = 'D' WHERE MSGID = ? AND ROOMID = ? AND RECEIVERID = ? ", arg)
 			}
-		}	
+		}
 		await wsmysql.txCommit(conn)	
 		socket.emit(ws.cons.sock_ev_common, param)
 		ws.sock.sendToMyOtherSocket(socket, param)

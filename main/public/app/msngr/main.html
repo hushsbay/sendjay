@@ -351,8 +351,9 @@
                                         hush.msg.alert(rs.msg)
                                         return
                                     }
-                                    const dataObj = { userid : g_userid } //disconnect mobile socket
-                                    hush.sock.send(hush.socket, hush.cons.sock_ev_cut_mobile, dataObj)
+                                    //const dataObj = { userid : g_userid } //disconnect mobile socket
+                                    //hush.sock.send(hush.socket, hush.cons.sock_ev_cut_mobile, dataObj)
+                                    hush.sock.send(hush.socket, hush.cons.sock_ev_cut_mobile)
                                     hush.msg.close()
                                 } catch (ex) {
                                     hush.msg.alert("btn_reset_auth: " + ex.message)

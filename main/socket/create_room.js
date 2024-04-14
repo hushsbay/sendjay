@@ -8,6 +8,9 @@ module.exports = async function(socket, param) {
 	let conn, sql, data, len
 	try { //ws.sock.warn(null, socket, _logTitle, JSON.stringify(param), _roomid)
 		const _useridArr = param.data.userids
+		const _masterid = param.data.masterid
+		const _masternm = param.data.masternm
+		if (_masterid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- masterid')
 		const _chkSameMembers = _useridArr.length <= ws.cons.max_check_same_members ? true : false
 		_useridArr.sort((a, b) => { return (a > b) ? 1 : (b > a) ? -1 : 0 }) //alphabetical 순서로 sql 조회
 		const _useridJoinedEasy = _useridArr.join(ws.cons.easydeli)
@@ -32,7 +35,7 @@ module.exports = async function(socket, param) {
 				await wsmysql.query(conn, iqry, [_roomid, _userid, _usernm])
 			}
 			const iqry = "INSERT INTO A_ROOMMST_TBL (ROOMID, ROOMNM, MASTERID, MASTERNM, MEMCNT, CDT) VALUES (?, ?, ?, ?, ?, sysdate(6)) "
-			await wsmysql.query(conn, iqry, [_roomid, JSON.stringify(roomnmObj), param.data.masterid, param.data.masternm, len])
+			await wsmysql.query(conn, iqry, [_roomid, JSON.stringify(roomnmObj), _masterid, _masternm, len])
 			if (_chkSameMembers) await wsmysql.query(conn, "INSERT INTO A_ROOMMEM_TBL (ROOMID, MEMBERS, CDT) VALUES (?, ?, sysdate(6)) ", [_roomid, _useridJoinedEasy])
 		} 
 		await wsmysql.txCommit(conn)

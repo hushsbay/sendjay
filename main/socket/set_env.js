@@ -6,10 +6,9 @@ module.exports = async function(socket, param) {
 	const _logTitle = param.ev
 	let conn, sql, data, len
 	try { //ws.sock.warn(null, socket, _logTitle, com.cons.rq + JSON.stringify(param))
-		//const resVeri = com.verifyWithSocketUserId(param.data.userid, socket.userid)
-		//if (resVeri != '') throw new Error(resVeri)	
 		const _kind = param.data.kind		
 		const _userid = param.data.userid
+		if (_userid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- _userid')
 		conn = await wsmysql.getConnFromPool(global.pool)
 		if (_kind == 'noti' || _kind == 'dispmem') {
 			const _value = param.data.value

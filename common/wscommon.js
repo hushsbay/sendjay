@@ -23,6 +23,7 @@ module.exports = (function() {
 			MSG_ALREADY_EXISTS : '이미 존재하는 데이터입니다.',
 			CODE_NO_DATA : '-100',
 			MSG_NO_DATA : '데이터가 없습니다.',
+			MSG_MISMATCH_WITH_USERID : 'Userid Mismatch ', //'- 변수'가 추가되어 사용될 것임
 			CODE_TOKEN_NEEDED : '-81', //jwt : -8로 시작하는 오류코드는 클라이언트에서 로그인이 필요하다는 안내에 의미있게 쓰이고 있음
 			CODE_TOKEN_MISMATCH : '-82', //jwt payload not equal to decoded
 			CODE_USERINFO_MISMATCH : '-83',
@@ -195,31 +196,30 @@ module.exports = (function() {
 			chkToken : async (req, res, conn) => {
 				const { token, userid, orgcd, toporgcd } = req.cookies
 				const tokenInfo = { userid : userid, token : token, orgcd : orgcd, toporgcd : toporgcd } //login.html을 제외하고 웹 또는 앱에서 항상 넘어오는 쿠키
-				if (req && req.clientIp) Object.assign(tokenInfo, { ip : req.clientIp })
+				if (req && req.clientIp) tokenInfo.ip = req.clientIp
 				const jwtRet = await ws.jwt.verify(tokenInfo)
-				if (jwtRet.code == ws.cons.CODE_OK) { //실수로 await 빼고 chkToken() 호출할 때 대비해 if절 구성
-					if (conn) { //userid뿐만 아니라 부서정보 등 위변조도 체크 필요 (문제 발생시 로깅. 겸직 코딩은 제외되어 있음)
-						const sql = "SELECT ORG_CD, TOP_ORG_CD FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
-						const data = await wsmysql.query(conn, sql, [tokenInfo.userid])
-						if (data.length == 0) {
-							const msg = ws.cons.MSG_NO_DATA + '/' + tokenInfo.userid
-							ws.util.loge(req, msg)
-							ws.http.resWarn(res, msg, false, ws.cons.CODE_NO_DATA, 'chkToken')
-							return null
-						}
-						if (data[0].ORG_CD != tokenInfo.orgcd || data[0].TOP_ORG_CD != tokenInfo.toporgcd) {
-							const msg = '사용자쿠키값에 문제가 있습니다 : ' + tokenInfo.userid + '/' + tokenInfo.orgcd + '/' + tokenInfo.toporgcd
-							ws.util.loge(req, msg)
-							ws.http.resWarn(res, msg, false, ws.cons.CODE_USERCOOKIE_MISMATCH, 'chkToken')
-							return null
-						}
-					}
-					return tokenInfo.userid
-				} else {	
+				if (jwtRet.code != ws.cons.CODE_OK) { //실수로 await 빼고 chkToken() 호출할 때 대비해 if절 구성
 					ws.util.loge(req, jwtRet.msg)
 					ws.http.resWarn(res, jwtRet.msg, false, jwtRet.code)
 					return null
 				}
+				if (conn) { //userid뿐만 아니라 부서정보 등 위변조도 체크 필요 (문제 발생시 로깅. 겸직 코딩은 제외되어 있음)
+					const sql = "SELECT ORG_CD, TOP_ORG_CD FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
+					const data = await wsmysql.query(conn, sql, [tokenInfo.userid])
+					if (data.length == 0) {
+						const msg = ws.cons.MSG_NO_DATA + '/' + tokenInfo.userid
+						ws.util.loge(req, msg)
+						ws.http.resWarn(res, msg, false, ws.cons.CODE_NO_DATA, 'chkToken')
+						return null
+					}
+					if (data[0].ORG_CD != tokenInfo.orgcd || data[0].TOP_ORG_CD != tokenInfo.toporgcd) {
+						const msg = '사용자쿠키값에 문제가 있습니다 : ' + tokenInfo.userid + '/' + tokenInfo.orgcd + '/' + tokenInfo.toporgcd
+						ws.util.loge(req, msg)
+						ws.http.resWarn(res, msg, false, ws.cons.CODE_USERCOOKIE_MISMATCH, 'chkToken')
+						return null
+					}
+				}
+				return tokenInfo.userid
 			}
 		},
 
@@ -375,14 +375,14 @@ module.exports = (function() {
 				socket.broadcast.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //socket oneself excluded
 				socket.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
 			},
-			compareUserId : (idToCompare, socket_userid) => { //for socket only
-				//대부분의 경우는 idToCompare와 socket_userid는 일치해야 하는 경우가 많음
-				if (!idToCompare || (idToCompare != socket_userid)) {
-					return 'Mismatch between UserID(' + idToCompare + ') and SocketUserID(' + socket_userid + ')'
-				} else {
-					return ''
-				}
-			},
+			// compareUserId : (idToCompare, socket_userid) => { //for socket only
+			// 	//대부분의 경우는 idToCompare와 socket_userid는 일치해야 하는 경우가 많음
+			// 	if (!idToCompare || (idToCompare != socket_userid)) {
+			// 		return 'Mismatch between UserID(' + idToCompare + ') and SocketUserID(' + socket_userid + ')'
+			// 	} else {
+			// 		return ''
+			// 	}
+			// },
 			getLogMsg : (_socket, ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기
 				let _msg = ''
 				if (_socket) {
@@ -677,6 +677,32 @@ module.exports = (function() {
 					obj.extDot = '.' + obj.ext
 				}
 				return obj
+			},
+			chkAccessUserWithTarget : async (conn, userid, uid, type, target) => { //for socket or rest
+				let ret = '대상에 대한 권한이 없습니다.'
+				if (type == 'file' || type == '') { //'' means general type for msgid
+					const data = await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND RECEIVERID = ? ", [uid, userid])
+					if (data[0].CNT > 0) {
+						if (type == 'file') {
+							const dataM = await wsmysql.query(conn, "SELECT TYP TYPE, BODY FROM A_MSGMST_TBL WHERE MSGID = ? ", [uid])
+							if (dataM.length > 0) {
+								const _file = dataM[0].BODY.split(com.cons.deli)[0] //console.log(_file, dataM[0].TYPE, target, "===")
+								if (dataM[0].TYPE == 'flink' || target.includes(_file)) ret = "" //The filepath is in msgid
+							} else {
+								ret = 'No data for A_MSGMST_TBL'
+							}
+						} else {
+							ret = ''
+						}
+					} else {
+						const dataM = await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM A_MSGMST_TBL WHERE MSGID = ? ", [uid])
+						if (dataM[0].CNT == 0) ret = ''
+					}
+				} else if (type == 'room') { //예를 들어, 해당 채팅방의 멤버가 아닐 때는 그 사용자는 권한이 없어야 함
+					const data = await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM A_ROOMDTL_TBL WHERE ROOMID = ? AND USERID = ? ", [uid, userid])
+					if (data[0].CNT > 0) ret = ''
+				}
+				return ret
 			},
 		}
 
