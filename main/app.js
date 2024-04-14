@@ -47,15 +47,13 @@ global.jay.on('connection', async (socket) => {
 	const _logTitle = 'connect'	
 	try {
 		const queryParam = socket.handshake.query
-		if (queryParam && queryParam.userid && queryParam.orgcd && queryParam.toporgcd && queryParam.userkey && queryParam.winid && queryParam.userip) {
+		if (queryParam && queryParam.userid && queryParam.userkey && queryParam.winid && queryParam.userip) {
 			socket.userid = queryParam.userid
-			socket.orgcd = queryParam.orgcd
-			socket.toporgcd = queryParam.toporgcd
 			socket.userkey = queryParam.userkey
 			socket.winid = queryParam.winid
 			socket.userip = queryParam.userip
 		} else {
-			ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, 'userid/orgcd/toporgcd/userkey/winid/userip 모두 필요합니다.')
+			ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, 'userid/userkey/winid/userip 모두 필요합니다.')
 			socket.disconnect()
 			return
 		}

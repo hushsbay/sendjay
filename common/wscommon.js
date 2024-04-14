@@ -375,14 +375,6 @@ module.exports = (function() {
 				socket.broadcast.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //socket oneself excluded
 				socket.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
 			},
-			// compareUserId : (idToCompare, socket_userid) => { //for socket only
-			// 	//대부분의 경우는 idToCompare와 socket_userid는 일치해야 하는 경우가 많음
-			// 	if (!idToCompare || (idToCompare != socket_userid)) {
-			// 		return 'Mismatch between UserID(' + idToCompare + ') and SocketUserID(' + socket_userid + ')'
-			// 	} else {
-			// 		return ''
-			// 	}
-			// },
 			getLogMsg : (_socket, ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기
 				let _msg = ''
 				if (_socket) {

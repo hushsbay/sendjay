@@ -1,4 +1,4 @@
-var g_memWin, g_token10, g_userkey, g_userid, g_usernm, g_orgcd, g_toporgcd, g_useridArr, g_unread = {}
+var g_memWin, g_token10, g_userkey, g_userid, g_usernm, g_orgcd, g_useridArr, g_unread = {}
 
 let g_mode, g_mode_people, g_win_type, g_setting = {}
 let g_list, g_page, g_cdt, g_searchmode, g_year, g_lastdt_for_toprow //g_lastdt_for_toprow = for mobil only
@@ -1080,8 +1080,7 @@ const startMsngr = async (launch, winid) => {
                         console.log("Talk running on this tab / " + e.data.msg)
                     } else { //new. New winner. 새로운 우승자. //console.log(_type+"@@@"+e.data.winid+"@@@"+rs1.result)      
                         hush.socket = await hush.sock.connect(io, { 
-                            token : hush.user.token, userid : g_userid, orgcd : g_orgcd, toporgcd : g_toporgcd,
-                            userkey : g_userkey, winid : winid, userip : rsRedis.userip 
+                            token : hush.user.token, userid : g_userid, userkey : g_userkey, winid : winid, userip : rsRedis.userip 
                         })
                         if (runFromStandalone) { //main.html
                             initStandAlone(rs) //rsRedis 아님
@@ -1124,7 +1123,6 @@ const SetUserVar = () => { //편의상 한번 더 g_로 set
     g_userid = hush.user.id
     g_usernm = hush.user.nm
     g_orgcd = hush.user.orgcd
-    g_toporgcd = hush.user.toporgcd
     g_token10 = hush.user.token.slice(-10)
 }
 
