@@ -13,11 +13,13 @@ router.use(function(req, res, next) {
 })
 
 router.post('/', async function(req, res) {
-	let conn, sql, data, len
+	let conn, sql, data, len, userid
 	try {
 		const rs = ws.http.resInit()
 		const { msgid, body, kind, msgids } = req.body
-		conn = await wsmysql.getConnFromPool(global.pool) //의도적으로 인증체크하지 않음??
+		conn = await wsmysql.getConnFromPool(global.pool)
+		userid = await ws.jwt.chkToken(req, res, conn) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
+		if (!userid) return
 		if (kind == 'check') {
 			const _arr = []
 			for (let _msgid of msgids) {
@@ -35,10 +37,10 @@ router.post('/', async function(req, res) {
 				return
 			}
 			if (data[0].TYPE == 'image') {
-				//const ret = await ws.chkAccessUserWithTarget(req.cookies.userid, msgid, '')
-				//if (ret != '') throw new Error(ret)
 				//rs.buffer = data[0].BUFFER //rs.bufferStr = (data[0].BUFFER) ? Buffer.from(data[0].BUFFER, 'binary').toString('base64') : null
 				//resolve(rs)
+				const ret = await ws.util.chkAccessUserWithTarget(conn, userid, msgid, '')
+				if (ret != '') throw new Error(ret)
 				rs.list = data
 				ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
 			} else if (data[0].TYPE == 'file' || data[0].TYPE == 'flink') { //almost same as get_sublink.js 
@@ -54,8 +56,8 @@ router.post('/', async function(req, res) {
 					ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
 					return
 				}
-				//const ret = await ws.chkAccessUserWithTarget(req.cookies.userid, msgid, 'file', _fileStr[0])
-				//if (ret != '') throw new Error(ret)
+				const ret = await ws.util.chkAccessUserWithTarget(conn, userid, msgid, 'file', _fileStr[0])
+				if (ret != '') throw new Error(ret)
 				const _filepath = config.app.uploadPath + '/' + fileToProc
 				fs.stat(_filepath, function(err, stat) {
 					if (err) {
@@ -75,6 +77,8 @@ router.post('/', async function(req, res) {
 					}					
 				})
 			} else {
+				const ret = await ws.util.chkAccessUserWithTarget(conn, userid, msgid, '')
+				if (ret != '') throw new Error(ret)
 				rs.list = data
 				ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
 			}

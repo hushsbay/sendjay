@@ -65,6 +65,8 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 			const fileStrObj = ws.util.getFileNameAndExtension(file.originalname) //file size => req.body.body
 			req.filename = fileStrObj.name + ws.cons.subdeli + ws.util.getCurDateTimeStr() + ws.util.getRnd() + fileStrObj.extDot
 			conn = await wsmysql.getConnFromPool(global.pool)
+			const ret = await ws.util.chkAccessUserWithTarget(conn, req.body.senderid, req.body.roomid, 'room')
+			if (ret != '') throw new Error(ret)
 			//const role = await ws.getRole(req.cookies.userid, conn)
 			//if (!ws.chkRole(role, ws.cons.group_admin)) {
 				if (req.body.body > ws.cons.max_filesize) throw new Error('파일크기 초과 (최대:' + ws.cons.max_filesize + ', 현재:' + req.body.body + ')')
@@ -131,8 +133,9 @@ router.post('/', (req, res) => { //router.post('/', upload.single('file'), async
 	upload.single('file')(req, res, async (err) => { //업로드 처리 순서 : upload(multer(destination) -> multer(filename)) -> procMulter()
 		try {
 			if (err) throw new Error(err.toString())
-			//const result = await ws.verifyWithRestUserId(req, res, req.body.senderid, _logTitle)
-			//if (!result) return //ws.http.resCodeMsg() 사용하지 않음을 유의
+			const userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
+			if (!userid) return
+			if (req.body.senderid != userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- req.body.senderid')
 			const rs = await procMulter(req)
 			res.json(rs)
 		} catch (ex) {
@@ -144,14 +147,15 @@ router.post('/', (req, res) => { //router.post('/', upload.single('file'), async
 router.get('/*', async (req, res) => { //asterisk(*) needed
 	req.title = 'proc_file.get'
 	try {	
-		//const result = await ws.verifyWithRestUserId(req, res, null, _logTitle)
-		//if (!result) return //ws.http.resCodeMsg() 사용하지 않음을 유의
+		const userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
+		if (!userid) return
 		let _path = url.parse(req.url).pathname.replace('/proc_file/', '')
 		_path = decodeURIComponent(_path)
 		const _idx = _path.indexOf('?')
 		if (_idx > -1) _path = _path.substr(0, _idx)
-		//const ret = await ws.chkAccessUserWithTarget(req.cookies.userid, req.query.msgid, "file", _path)
-		//if (ret != "") throw new Error(ret)
+		conn = await wsmysql.getConnFromPool(global.pool)
+		const ret = await ws.util.chkAccessUserWithTarget(conn, userid, req.query.msgid, "file", _path)
+		if (ret != '') throw new Error(ret)
 		const _filename = config.app.uploadPath + _path //C:/nodeops/upload/sendjay~/20210214124957779000571393Q59/aaa$$2023~.png => _path starts with roomid        
 		const mimetype = mime.getType(_filename) //mimetype = mime.lookup(_filename)
 		res.setHeader('Content-type', mimetype) //res.header("Content-Type", "video/mp4; charset=utf-8")
@@ -162,7 +166,9 @@ router.get('/*', async (req, res) => { //asterisk(*) needed
 		res.download(_filename, newName)
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
-	}	
+	} finally {
+		wsmysql.closeConn(conn, req.title)
+	}
 })
 
 ws.util.watchRouterError(router)

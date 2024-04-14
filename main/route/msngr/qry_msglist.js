@@ -20,6 +20,8 @@ router.post('/', async function(req, res) {
 		conn = await wsmysql.getConnFromPool(global.pool)
 		userid = await ws.jwt.chkToken(req, res, conn) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
 		if (!userid) return
+		const ret = await ws.util.chkAccessUserWithTarget(conn, userid, roomid, 'room')
+		if (ret != '') throw new Error(ret)
 		if (type == 'after') {
 			sql = "SELECT CDT FROM A_MSGMST_TBL WHERE MSGID = ? AND ROOMID = ? "
 			data = await wsmysql.query(conn, sql, [keyword, roomid])
