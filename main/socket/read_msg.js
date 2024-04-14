@@ -8,11 +8,12 @@ module.exports = async function(socket, param) {
 	try { //ws.sock.warn(null, socket, _logTitle, JSON.stringify(param), _roomid)
 		const obj = param.data	
 		if (obj.type == 'updateall' || obj.type == 'update') {
-			//const resVeri = com.verifyWithSocketUserId(obj.receiverid, socket.userid)
-			//if (resVeri != '') throw new Error(resVeri)		
+			if (obj.receiverid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- obj.receiverid')	
 		}
 		param.data.userid = socket.userid //1) see ChatService.kt 2) in order to sendToMyOtherSocket for mobile noti cancelling	
 		conn = await wsmysql.getConnFromPool(global.pool)
+		const ret = await ws.util.chkAccessUserWithTarget(conn, obj.receiverid, _roomid, 'room')
+		if (ret != '') throw new Error(ret)
 		const dateFr = ws.util.setDateAdd(new Date(), ws.cons.max_days_to_fetch)	
 		await wsmysql.txBegin(conn)		
 		if (obj.type == 'updateall') {

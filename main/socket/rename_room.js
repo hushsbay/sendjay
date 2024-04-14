@@ -6,15 +6,14 @@ module.exports = async function(socket, param) {
 	const _logTitle = param.ev, _roomid = param.returnTo
 	let conn, sql, data, len
 	try { //ws.sock.warn(null, socket, _logTitle, com.cons.rq + JSON.stringify(param), _roomid)
-		//const resVeri = com.verifyWithSocketUserId(param.data.userid, socket.userid)
-		//if (resVeri != '') throw new Error(resVeri)	
-		//const ret = await com.chkAccessUserWithTarget(socket.userid, _roomid, "room")
-		//if (ret != "") throw new Error(ret)
 		const _type = param.data.type //all or one(self)
 		const _roomname = param.data.roomname
 		const _userid = param.data.userid
-		sql = "UPDATE A_ROOMDTL_TBL SET UDT = sysdate(6), NICKNM = ? WHERE ROOMID = ? AND USERID = ? "
+		if (_userid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- _userid')
 		conn = await wsmysql.getConnFromPool(global.pool)
+		const ret = await ws.util.chkAccessUserWithTarget(conn, _userid, _roomid, 'room')
+		if (ret != '') throw new Error(ret)
+		sql = "UPDATE A_ROOMDTL_TBL SET UDT = sysdate(6), NICKNM = ? WHERE ROOMID = ? AND USERID = ? "		
 		data = await wsmysql.query(conn, "SELECT MASTERID, ROOMNM FROM A_ROOMMST_TBL WHERE ROOMID = ? ", [_roomid])
 		if (_type == 'all') {			
 			if (data[0].MASTERID == _userid) {

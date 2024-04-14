@@ -9,9 +9,9 @@ module.exports = async function(socket, param) {
 		let invitedUseridArr = [], invitedUsernmArr = []
 		const _useridArr = param.data.userids
 		const _usernmArr = param.data.usernms
-		//const ret = await com.chkAccessUserWithTarget(socket.userid, _roomid, "room")
-		//if (ret != "") throw new Error(ret)
 		conn = await wsmysql.getConnFromPool(global.pool)
+		const ret = await ws.util.chkAccessUserWithTarget(conn, socket.userid, _roomid, "room")
+		if (ret != "") throw new Error(ret)
 		await wsmysql.txBegin(conn)		
 		for (let i = 0; i < _useridArr.length; i++) {
 			sql = "SELECT USERID, USERNM, STATE FROM A_ROOMDTL_TBL WHERE ROOMID = ? AND USERID = ? "

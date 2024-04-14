@@ -11,7 +11,7 @@ module.exports = async function(socket, param) {
 		conn = await wsmysql.getConnFromPool(global.pool)
 		await wsmysql.txBegin(conn)	
 		if (param.data.type == 'all') {
-			const ret = await ws.util.chkAccessUserWithTarget(conn, socket.userid, _roomid, 'room')
+			const ret = await ws.util.chkAccessUserWithTarget(conn, _receiverid, _roomid, 'room')
 			if (ret != '') throw new Error(ret)
 			const arg = [_roomid, _receiverid]
 			await wsmysql.query(conn, "UPDATE A_MSGDTL_TBL SET UDT = sysdate(6), STATE = 'D' WHERE ROOMID = ? AND RECEIVERID = ? ", arg)
@@ -19,7 +19,7 @@ module.exports = async function(socket, param) {
 			const _msgidArr = param.data.msgidArr
 			const _len = _msgidArr.length
 			for (let i = 0; i < _len; i++) {
-				const ret = await ws.util.chkAccessUserWithTarget(conn, socket.userid, _msgidArr[i], '')
+				const ret = await ws.util.chkAccessUserWithTarget(conn, _receiverid, _msgidArr[i], '')
 				if (ret != '') throw new Error(ret)
 				const arg = [_msgidArr[i], _roomid, _receiverid]
 				await wsmysql.query(conn, "UPDATE A_MSGDTL_TBL SET UDT = sysdate(6), STATE = 'D' WHERE MSGID = ? AND ROOMID = ? AND RECEIVERID = ? ", arg)

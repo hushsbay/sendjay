@@ -679,7 +679,7 @@ module.exports = (function() {
 				return obj
 			},
 			chkAccessUserWithTarget : async (conn, userid, uid, type, target) => { //for socket or rest
-				let ret = '대상에 대한 권한이 없습니다.'
+				let ret = '대상에 대한 권한이 없습니다. '
 				if (type == 'file' || type == '') { //'' means general type for msgid
 					const data = await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND RECEIVERID = ? ", [uid, userid])
 					if (data[0].CNT > 0) {
@@ -687,20 +687,25 @@ module.exports = (function() {
 							const dataM = await wsmysql.query(conn, "SELECT TYP TYPE, BODY FROM A_MSGMST_TBL WHERE MSGID = ? ", [uid])
 							if (dataM.length > 0) {
 								const _file = dataM[0].BODY.split(com.cons.deli)[0] //console.log(_file, dataM[0].TYPE, target, "===")
-								if (dataM[0].TYPE == 'flink' || target.includes(_file)) ret = "" //The filepath is in msgid
+								if (dataM[0].TYPE == 'flink' || target.includes(_file)) ret = '' //The filepath is in msgid
 							} else {
-								ret = 'No data for A_MSGMST_TBL'
+								ret += uid
 							}
 						} else {
 							ret = ''
 						}
 					} else {
-						const dataM = await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM A_MSGMST_TBL WHERE MSGID = ? ", [uid])
-						if (dataM[0].CNT == 0) ret = ''
+						//const dataM = await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM A_MSGMST_TBL WHERE MSGID = ? ", [uid])
+						//if (dataM[0].CNT == 0) ret = ''
+						ret += uid
 					}
 				} else if (type == 'room') { //예를 들어, 해당 채팅방의 멤버가 아닐 때는 그 사용자는 권한이 없어야 함
 					const data = await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM A_ROOMDTL_TBL WHERE ROOMID = ? AND USERID = ? ", [uid, userid])
-					if (data[0].CNT > 0) ret = ''
+					if (data[0].CNT > 0) {
+						ret = ''
+					} else {
+						ret += uid
+					}
 				}
 				return ret
 			},

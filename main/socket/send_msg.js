@@ -8,11 +8,10 @@ module.exports = async function(socket, param) {
 	try { //ws.sock.warn(null, socket, _logTitle, JSON.stringify(param), _roomid)
 		obj = param.data
 		_roomid = obj.roomid
-		//const resVeri = com.verifyWithSocketUserId(obj.senderid, socket.userid)
-		//if (resVeri != '') throw new Error(resVeri)
-		//const ret = await com.chkAccessUserWithTarget(socket.userid, _roomid, "room")
-		//if (ret != "") throw new Error(ret)
+		if (obj.senderid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- obj.senderid')
 		conn = await wsmysql.getConnFromPool(global.pool)
+		const ret = await ws.util.chkAccessUserWithTarget(conn, obj.senderid, _roomid, 'room')
+		if (ret != '') throw new Error(ret)
 		await wsmysql.txBegin(conn)	
 		let useridToProc = obj.senderid
 		if (obj.type == 'check') {

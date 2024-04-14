@@ -8,7 +8,10 @@ module.exports = async function(socket, param) {
 	let conn, sql, data, len, _nicknm
 	try { //ws.sock.warn(null, socket, _logTitle, JSON.stringify(param), _roomid)
 		const userid = param.data.userid
+		if (userid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- userid')
 		conn = await wsmysql.getConnFromPool(global.pool)
+		const ret = await ws.util.chkAccessUserWithTarget(conn, userid, _roomid, "room")
+		if (ret != "") throw new Error(ret)
 		sql = "SELECT B.USERID, B.USERNM, B.NICKNM, A.ROOMNM, A.NICKNM MAINNM, A.MASTERID "
 		sql += " FROM A_ROOMDTL_TBL B "
 		sql += "INNER JOIN A_ROOMMST_TBL A ON B.ROOMID = A.ROOMID AND B.STATE <> 'L' "
