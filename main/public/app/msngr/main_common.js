@@ -1082,6 +1082,7 @@ const startMsngr = async (launch, winid) => {
                         hush.socket = await hush.sock.connect(io, { 
                             token : hush.user.token, userid : g_userid, userkey : g_userkey, winid : winid, userip : rsRedis.userip 
                         })
+                        debugger
                         if (runFromStandalone) { //main.html
                             initStandAlone(rs) //rsRedis 아님
                         } else { //Auto-Launching Embeded Talk
