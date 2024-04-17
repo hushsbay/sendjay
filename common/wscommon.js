@@ -140,6 +140,7 @@ module.exports = (function() {
 						const userid = tokenInfo.userid
 						const key = _key || global.nodeConfig.jwt.key			
 						let rs = ws.http.resInit()
+						console.log(rs, "==========")
 						if (!token) {
 							rs.code = ws.cons.CODE_TOKEN_NEEDED
 							rs.msg = '인증(토큰)이 없습니다.'
@@ -303,12 +304,12 @@ module.exports = (function() {
 					console.log(arr[2][1], "===")
 					return arr[2][1]*/ //arr = [[빈값, 'OK'], [빈값, 'OK'], [빈값, 99]] => return 99 //for sadd count. smembers $$US for query list
 					//redis-cli에서 keys *로 모두 검색. smembers $$US로 검색하면 $$S + W__userid + ; + XYZ~ 등으로 목록이 나옴			
-					//위를 아래와 같이 수정해 사용
+					///////////////////////////////////////////////////////////////////////////////위를 아래와 같이 수정해 사용
 					//.set(uwKey, ws.util.getCurDateTimeStr(true))는 chk_redis.js에서 처리되므로 막음
 					//.sadd(ws.cons.key_set_userkey_socket, usKey)는 아직 쓰임새가 없으므로 막음
 					const usKey = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli + socket.id //예) $$S + W__userid + ; + XYZ~
 					if (usKey.includes('undefined')) throw Error('multiSetForUserkeySocket : usKey not defined')
-					const arr = await global.store.multi().set(usKey, socket.id).exec() //한개 항목이면 멀티로 안해도 되나 추가 고려해 유지함
+					const arr = await global.store.multi().set(usKey, socket.id).exec() //한개 항목이면 멀티로 안해도 되나, 추가 고려해 유지함
 					if (!arr || arr.length < 1) throw Error('multiSetForUserkeySocket : global.store.multi() error')
 					if (arr[0][1] != 'OK') throw Error('multiSetForUserkeySocket : global.store.multi() error : ' + arr[0][1])
 				} catch(ex) {
@@ -327,7 +328,7 @@ module.exports = (function() {
 														  .exec()
 					if (!arr || arr.length < 3) throw Error('multiDelForUserkeySocket : global.store.multi() error')
 					return arr[2][1]*/ //for srem count. smembers $$US for query list
-					//위를 아래와 같이 수정해 사용
+					///////////////////////////////////////////////////////////////////////////위를 아래와 같이 수정해 사용
 					//.srem(com.cons.key_set_userkey_socket, usKey)는 아직 쓰임새가 없으므로 막음
 					//multiSet~과는 다르게 지울 때는 uwKey까지 같이 지워야 함
 					const arr = await global.store.multi().del(usKey).del(uwKey).exec()
@@ -372,7 +373,7 @@ module.exports = (function() {
 				const _returnTo = returnTo ? returnTo : 'parent' //'all' used in most cases
 				//global.jay.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //to all inside namaspace. socket oneself included
 				//global.jay.emit => TypeError: opts.except is not iterable (from socket.io 3.0)
-				socket.broadcast.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //socket oneself excluded
+				socket.broadcast.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //자기자신 제외
 				socket.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
 			},
 			getLogMsg : (_socket, ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기

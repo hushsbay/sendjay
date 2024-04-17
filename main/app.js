@@ -3,7 +3,7 @@ const nodeConfig = require(config.app.nodeConfig)
 const ws = require(config.app.ws)
 const wsmysql = require(config.app.wsmysql)
 const wslogger = require(config.app.wslogger)(config.app.logPath, 'hushsbay')
-const Redis = require('ioredis') //not redis npm => redisAdapter로 할 수 없는 과업을 각 서버별로 store.publish를 통해 모두 처리하는 개념임
+const Redis = require('ioredis') //not redis npm => redisAdapter로 할 수 없는 것들을 각 서버별로 store.publish를 통해 모두 처리하는 개념임
 const { Server } = require('socket.io')
 const redisAdapter = require('@socket.io/redis-adapter') //특히, sockets set에서 각 socket을 바로 뽑기 힘들어 ioredis의 global.store.scanStream으로 처리
 
@@ -21,7 +21,7 @@ console.log('jwtExpiry:', nodeConfig.jwt.expiry)
 
 //1. Was Server
 const app = ws.util.initExpressApp('public')
-const wasServer = ws.util.createWas(app, config.http.method) //프로젝트 hushsbay는 aws 기반(https는 로드밸런서CLB 이용)이므로 여기서는 https가 아닌 http로 설정
+const wasServer = ws.util.createWas(app, config.http.method) //프로젝트 hushsbay는 aws 기반(https는 로드밸런서 CLB 이용)이므로 여기서는 https가 아닌 http로 설정
 wasServer.listen(config.http.port, () => { console.log('wasServer listening on ' + config.http.port) })
 
 //2. Redis(ioredis) Server
@@ -74,13 +74,13 @@ global.jay.on('connection', async (socket) => {
 			return
 		}
 		await ws.redis.multiSetForUserkeySocket(socket)
-		const pattern = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli
+		const pattern = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli //예) $$SW__userid;
 		const stream = store.scanStream({ match : pattern + '*', count : ws.cons.scan_stream_cnt })
 		stream.on('data', (resultKeys) => { //아래는 비동기처리됨. //call pmessage()
 			for (let item of resultKeys) {
 				const _sockid = item.split(ws.cons.easydeli)[1]
 				if (_sockid != socket.id) { //PC웹과 모바일 구분 (모바일이라면 모바일 userkey로만 찾아 현재 소켓이 아니면 이전 소켓이므로 모두 kill)
-					//adapter.remoteDisconnect 사용하지 않음 : 추가로 처리할 내용이 있어서 그대로 사용하기로 함
+					//기존 소켓 연결 끊기. adapter.remoteDisconnect 사용하지 않음 : 추가로 처리할 내용이 있어서 그대로 사용하기로 함
 					ws.redis.pub('disconnect_prev_sock', { prevkey : item, socketid : socket.id, userkey : socket.userkey, userip : socket.userip }) //call pmessage()
 				}
 			}
@@ -134,7 +134,7 @@ async function proc() {
 			const obj = ws.redis.getUserkeySocketIdFromKey(key)
 			if (sockets.has(obj.socketid)) {
 				const socket = global.jay.sockets.get(obj.socketid)
-				//console.log('socket :', socket.id, socket.userkey, socket.userip, socket.winid)
+				console.log('socket :', socket.id, socket.userkey, socket.userip, socket.winid)
 			}
 		}
 	})

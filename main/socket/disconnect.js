@@ -1,6 +1,6 @@
 const config = require('../config')
 const ws = require(config.app.ws)
-//normal reason : 1. server namespace disconnect (from server) 2. client namespace disconnect (from client) 3. transport close (browser's page closed)
+//normal reason   : 1. server namespace disconnect (from server) 2. client namespace disconnect (from client) 3. transport close (browser's page closed)
 //abnormal reason : 1. ping timeout 2. transport error
 
 module.exports = async function(socket, reason) {	
