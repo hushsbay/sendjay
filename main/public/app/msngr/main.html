@@ -113,7 +113,8 @@
                         if (!result) return //오류발생하면 아래 실행해도 의미없음
                         $(".coNav").on("click", function() { procMenuTop(this.id) })
                         $("#btn_team, #btn_company").on("click", function() {
-                            //hush.util.animCall(this.id, true)
+                            debugger
+                            hush.util.anim(this.id)
                             procMenuPeople(this.id) 
                         })
                         $("#btn_new").on("click", function() { 
