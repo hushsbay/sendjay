@@ -16,7 +16,8 @@ router.post('/', async function(req, res) {
 		const _keyword = decodeURIComponent(req.body.keyword) || ''
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
-		if (!objToken.userid) return
+		const userid = objToken.userid
+		if (!userid) return
 		sql = "SELECT ORG_CD, ORG_NM, LVL, (SELECT COUNT(*) FROM Z_USER_TBL WHERE ORG_CD = A.ORG_CD) MEMCNT FROM Z_ORG_TBL A "		
         if (_keyword) sql += "AND ORG_CD = '" + _keyword + "' "
 		sql += "ORDER BY SEQ "
