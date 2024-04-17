@@ -193,34 +193,6 @@ module.exports = (function() {
 			},
 			//app.use(), router.use()에서 ws.jwt.verify()로 사용해도 되지만, 래핑된 chkToken()로 체크 : 코딩 약간 수월
 			//클라이언트에 code, msg 전달해야 하는데 app.use(), router.use()보다는 손이 더 갈 수도 있지만 더 유연하게 사용 가능
-			// chkToken : async (req, res, conn) => {
-			// 	const { token, userid, orgcd, toporgcd } = req.cookies
-			// 	const tokenInfo = { userid : userid, token : token, orgcd : orgcd, toporgcd : toporgcd } //login.html을 제외하고 웹 또는 앱에서 항상 넘어오는 쿠키
-			// 	if (req && req.clientIp) tokenInfo.ip = req.clientIp
-			// 	const jwtRet = await ws.jwt.verify(tokenInfo)
-			// 	if (jwtRet.code != ws.cons.CODE_OK) { //실수로 await 빼고 chkToken() 호출할 때 대비해 if절 구성
-			// 		ws.util.loge(req, jwtRet.msg)
-			// 		ws.http.resWarn(res, jwtRet.msg, false, jwtRet.code)
-			// 		return null
-			// 	}
-			// 	if (conn) { //userid뿐만 아니라 부서정보 등 위변조도 체크 필요 (문제 발생시 로깅. 겸직 코딩은 제외되어 있음)
-			// 		const sql = "SELECT ORG_CD, TOP_ORG_CD FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
-			// 		const data = await wsmysql.query(conn, sql, [tokenInfo.userid])
-			// 		if (data.length == 0) {
-			// 			const msg = ws.cons.MSG_NO_DATA + '/' + tokenInfo.userid
-			// 			ws.util.loge(req, msg)
-			// 			ws.http.resWarn(res, msg, false, ws.cons.CODE_NO_DATA, 'chkToken')
-			// 			return null
-			// 		}
-			// 		if (data[0].ORG_CD != tokenInfo.orgcd || data[0].TOP_ORG_CD != tokenInfo.toporgcd) {
-			// 			const msg = '사용자쿠키값에 문제가 있습니다 : ' + tokenInfo.userid + '/' + tokenInfo.orgcd + '/' + tokenInfo.toporgcd
-			// 			ws.util.loge(req, msg)
-			// 			ws.http.resWarn(res, msg, false, ws.cons.CODE_USERCOOKIE_MISMATCH, 'chkToken')
-			// 			return null
-			// 		}
-			// 	}
-			// 	return tokenInfo.userid
-			// } 아래 chkToken 잘되면 위 지우기 (위의 내용에서 바로 브라우저로 내려주는 코딩만 뺀 것임)
 			chkToken : async (req, res, conn) => {
 				const _title = 'chkToken'
 				const { token, userid, orgcd, toporgcd } = req.cookies
@@ -469,9 +441,7 @@ module.exports = (function() {
 						_socketid = arr[1]
 						try {
 							//await global.jay.adapter.remoteLeave(_socketid, _roomid)
-							console.log("1111111111111111")
 							await global.jay.in(_socketid).socketsLeave(_roomid)
-							console.log("3333333333333333")
 						} catch (ex) { //reject(new Error('cannot connect to specific server when remoteLeaving with ' + _obj.userkey))
 							if (ex.message.includes('timeout')) { //timeout reached while waiting for remoteLeave response (specific server down)
 								//Same as joinRoomWithUserkeySocketArr(), one thing different is that re join will not be happened because it was already left.

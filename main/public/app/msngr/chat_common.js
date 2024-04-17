@@ -327,8 +327,7 @@ const procQueryUnread = () => {
 const addRow = (obj, kind) => {
     if (!kind) resetEnvForScroll()
     let _dt = (obj.cnt == -1) ? obj.cdt : hush.util.tzDateTime(obj.cdt) //cnt=-1 means local data
-    _dt = hush.util.formatMsgDt(_dt, g_year)
-    //if (obj.type == "file") debugger
+    _dt = hush.util.formatMsgDt(_dt, g_year) //if (obj.type == "file") debugger
     if (obj.type == "invite" || obj.type == "leave") {
         let _desc                
         if (obj.type == "invite") {
@@ -365,7 +364,6 @@ const addRow = (obj, kind) => {
         const _replied = obj.reply || ""
         const _dispReplied = obj.reply ? "" : "display:none;"
         if (obj.type == "image") {
-            //debugger
             if (obj.body == hush.cons.cell_revoked) {
                 _body = obj.body
                 obj.bufferStr = null //obj.buffer = null
@@ -374,7 +372,6 @@ const addRow = (obj, kind) => {
             }
             _boderpx = "0px"
         } else if (obj.type == "file" || obj.type == "flink") {
-            //debugger
             if (obj.body == hush.cons.cell_revoked) {
                 _body = obj.body
             } else { 
