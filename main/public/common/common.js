@@ -810,9 +810,9 @@
             },
             anim : (tag, callback) => { //jqueryui
                 if (callback) {
-                	tag.animate({ opacity : 0.2 }, 150).animate({ opacity : 1 }, 300, null, callback)
+                	tag.animate({ opacity : 0.2 }, 100).animate({ opacity : 1 }, 200, null, callback)
                 } else {
-                	tag.animate({ opacity : 1 }, 150).animate({ opacity : 1 }, 300)
+                	tag.animate({ opacity : 1 }, 100).animate({ opacity : 1 }, 200)
                 }                
             },
             animBgColor : (tag, callback, bgColor) => { //jqueryui

@@ -117,6 +117,7 @@
                             procMenuPeople(this.id) 
                         })
                         $("#btn_new").on("click", function() { 
+                            hush.util.animBgColor($(this))
                             if (g_mode == BTN_MODE_PEOPLE) {
                                 const mem = $(".mem")
                                 if (mem.length == 0) {
@@ -147,7 +148,7 @@
                             }
                         })
                         $("#btn_me").on("click", async function() {
-                            //hush.util.animCall(this.id, true)
+                            hush.util.animBgColor($(this))
                             if (!hush.webview.on) {
                                 hush.sock.createRoom("/app/msngr/chat.html", "me", g_token10)
                             } else {
@@ -160,7 +161,7 @@
                             }
                         })
                         $("#btn_noti").on("click", function() { 
-                            //hush.util.animCall(this.id, true)
+                            hush.util.animBgColor($(this))
                             const checked = $(".chkbox_portal:checked")
                             if (checked.length == 0) {
                                 hush.msg.toast(hush.cons.warn_no_row_selected)
@@ -179,7 +180,7 @@
                             })
                         })
                         $("#btn_read").on("click", function() { 
-                            //hush.util.animCall(this.id, true)
+                            hush.util.animBgColor($(this))
                             const checked = $(".chkbox_portal:checked")
                             if (checked.length == 0) {
                                 hush.msg.toast(hush.cons.msg.row_not_selected)
@@ -201,7 +202,7 @@
                             //Since when every member don't open chat room, no one can't be joined to that room, so real-time 'leave' message won't be delivered.
                             //work-around => calling hush.cons.sock_ev_open_room before hush.cons.sock_ev_send_msg with 'leave' on response for sock_ev_open_room ("before_leave" below)
                             //서버 리스타트후 바로 목록에서 나가기 할 경우 롬조인이 안되서 다른 멤버들에게 전달이 안될 수 있는데 먼저 sock_ev_open_room을 호출하여 처리하면 됨. ("before_leave" below)
-                            //hush.util.animCall(this.id, true)
+                            hush.util.animBgColor($(this))
                             const checked = $(".chkbox_portal:checked")
                             if (checked.length == 0) {
                                 hush.msg.toast(hush.cons.msg.row_not_selected)
@@ -241,11 +242,11 @@
                         })
                     }
                     $("#btn_refresh").on("click", function() { //mobile only
-                        //hush.util.animCall(this.id, true)
+                        hush.util.animBgColor($(this))
                         AndroidMain.reload()
                     })
                     $("#btn_logout").on("click", function() { //mobile only
-                        //hush.util.animCall(this.id, true)
+                        hush.util.animBgColor($(this))
                         hush.msg.alert("로그아웃할까요?", { 
                             "Yes": function() {                                 
                                 AndroidMain.logout()
@@ -271,11 +272,11 @@
                     })
                     $("#in_search").keyup(function(e) { if (e.keyCode === 13) procSearch() })
                     $("#btn_search").on("click", function() {
-                        //hush.util.animCall(this.id, true)  
+                        hush.util.animBgColor($(this))
                         procSearch() 
                     })
                     $("#remove_selected_people").on("click", function() {
-                        //hush.util.animCall(this.id, true)
+                        hush.util.animBgColor($(this))
                         $("#select_people_sub").empty()
                         $(".orgsel").prop("checked", false)
                         $(".orgsel").css("opacity", "1.0")
@@ -284,11 +285,12 @@
                         procMemPanel()
                     })
                     $("#pict_browse").on("click", function() {
-                        //hush.util.animCall(this.id, true)
+                        hush.util.animBgColor($(this))
                         $("#file_upload").val("")
                         $("#file_upload").trigger("click")
                     })
                     $("#pict_upload").on("click", async function() {
+                        hush.util.animBgColor($(this))
                         const url = $("#img_pict").attr("src")
                         if (!url) {
                             hush.msg.toast("이미지가 없습니다.")
@@ -310,7 +312,7 @@
                         })
                     })
                     $("#pict_delete").on("click", function() {
-                        //hush.util.animCall(this.id, true)
+                        hush.util.animBgColor($(this))
                         const fd = new FormData()
                         fd.append("userid", g_userid)
                         fd.append("type", "D") //U(Update Picture), D(Delete Picture)
@@ -341,7 +343,7 @@
                         }
                     })
                     $("#btn_reset_auth").on("click", function() { //displays in Web Only
-                        //hush.util.animCall(this.id, true)
+                        hush.util.animBgColor($(this))
                         hush.msg.alert("You're going to reset authentication (including mobile). Continue?", { 
                             "Yes": async function() { 
                                 try {
@@ -367,7 +369,7 @@
                         g_setting_changed = true 
                     })   
                     $("#spn_clear").on("click", function() {  
-                        //hush.util.animCall(this.id, true)
+                        hush.util.animBgColor($(this))
                         if ($("#in_fr").val().trim() != "") {
                             $("#in_fr").val("")
                             g_setting_changed = true 
@@ -378,7 +380,7 @@
                         }
                     })
                     $("#btn_ok").on("click", async function() {
-                        //hush.util.animCall(this.id, true)
+                        hush.util.animBgColor($(this))
                         try {
                             if (g_win_type == "invite") {
                                 let useridArr = [], usernmArr = []
@@ -452,7 +454,7 @@
                         }
                     })
                     $("#btn_cancel").on("click", function() {
-                        //hush.util.animCall(this.id, true)
+                        hush.util.animBgColor($(this))
                         if (g_win_type) {
                             if (!hush.webview.on) {
                                 window.close()
@@ -469,14 +471,14 @@
                             g_setting_changed = false
                         }
                     })
-                    $("#btn_showlog").on("click", function() {
-                        let num = $("#in_showlog").val()
-                        num = parseInt(num) || 0
-                        AndroidMain.showLog(num)
-                    })
-                    $("#btn_deletelog").on("click", function() {
-                        AndroidMain.deleteLog()
-                    })
+                    // $("#btn_showlog").on("click", function() {
+                    //     let num = $("#in_showlog").val()
+                    //     num = parseInt(num) || 0
+                    //     AndroidMain.showLog(num)
+                    // })
+                    // $("#btn_deletelog").on("click", function() {
+                    //     AndroidMain.deleteLog()
+                    // })
                     $(window).bind("unload", function() { //$(window).unload(function() { deprecated as of 1.8
                         procUnload()
                         if (g_memWin && !g_memWin.closed) g_memWin.close()

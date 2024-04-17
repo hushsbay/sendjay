@@ -50,6 +50,7 @@
                 } //if (hush.webview.on) AndroidPopup.procAfterOpenPopup()
                 hush.webview.ready = true
                 $("#btn_save").on("click", function() { //called from mobile app
+                    hush.util.animBgColor($(this))
                     if (g_type == "image") {
                         hush.http.fileDownload("imagetofile", g_msgid)
                     } else {

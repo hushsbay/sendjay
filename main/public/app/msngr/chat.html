@@ -105,7 +105,7 @@
                         if (e.keyCode == 13 && !e.shiftKey) $("#btn_search").click()
                     })
                     $("#btn_search").on("click", function() {
-                        //hush.util.animCall(this.id, true) 
+                        hush.util.animBgColor($(this))
                         const _keyword = $("#in_search").val().trim()
                         if (_keyword == "") return
                         toggleResult(true)
@@ -113,6 +113,7 @@
                         setTimeout(() => $("#in_search").blur(), 500)
                     })
                     $("#btn_close_search").on("click", function() { //main.html처럼 onSearch()만 사용하기엔 무리가 있어 btn_close_search를 두기로 함
+                        hush.util.animBgColor($(this))
                         $("#txt_msg_added").hide()
                         toggleResult(false)
                         getMsgList()
@@ -120,10 +121,12 @@
                         setTimeout(() => $("#in_search").blur(), 500)
                     })
                     $("#btn_qry_etc").on("click", function() { 
+                        hush.util.animBgColor($(this))
                         toggleResult(true)
                         getMsgList("etc")
                     })
                     $("#btn_people_m").on("click", function() { 
+                        hush.util.animBgColor($(this))
                         const _toggle = (g_show_list_people == "") ? "X" : ""
                         const rq = { kind : "dispmem", value : _toggle, roomid : g_roomid }
                         if (hush.webview.ios) {
@@ -132,6 +135,7 @@
                         }
                     })
                     $("#btn_menu_m").on("click", function() {
+                        hush.util.animBgColor($(this))
                         if ($("#list_menu_m").css("display") == "none") {
                             showCellMenu(false)
                             showRoomMenu(true)
@@ -139,7 +143,10 @@
                             showRoomMenu(false)
                         }
                     })
-                    $("#btn_cancel_room_m").on("click", function(e) { showCellMenu(false) })
+                    $("#btn_cancel_room_m").on("click", function(e) { 
+                        hush.util.animBgColor($(this))
+                        showCellMenu(false) 
+                    })
                     g_in_chat.keyup(function(e) {
                         if (!hush.webview.on && e.keyCode == 13 && !e.shiftKey) {
                             sendMsg()
@@ -193,10 +200,11 @@
                         }
                     })
                     $("#btn_send, #btn_send_m").on("click", function() { 
+                        hush.util.animBgColor($(this))
                         sendMsg() 
                     })
                     $("#btn_file, #btn_file_m").on("click", function() {
-                        //hushj.util.animCall(this.id, true) 
+                        hush.util.animBgColor($(this))
                         $("#file_upload").val("") //btn_file_m : see webview setting
                         $("#file_upload").trigger("click")
                     })
@@ -204,7 +212,7 @@
                         handleFileUpload(this.files)		    	   	
                     })
                     $("#btn_invite, #btn_invite_m").on("click", function() {
-                        //hushj.util.animCall(this.id, true) 
+                        hush.util.animBgColor($(this))
                         let urlStr = "/app/msngr/main.html?type=invite" 
                         if (!hush.webview.on) { 
                             g_inviteWin = hush.util.openWinPop(urlStr, 740, 650)
@@ -218,7 +226,7 @@
                         }
                     })
                     $("#btn_delete_all, #btn_delete_all_m").on("click", async function() { 
-                        //hushj.util.animCall(this.id, true) 
+                        hush.util.animBgColor($(this))
                         //hushj.msg.alert("Do you want delete all messages in this chat room?", { 
                         //     "Yes": function() { 
                         //         const rq = { type : "all", receiverid : g_userid, roomid : g_roomid }
@@ -247,7 +255,7 @@
                         }                        
                     })
                     $("#btn_rename, #btn_rename_m").on("click", function() {
-                        //hushj.util.animCall(this.id, true) 
+                        hush.util.animBgColor($(this))
                         if (g_masterid == g_userid) {
                             hush.msg.dialogMultiButton("You are owner of this chat room.<br>Decide range for changing of room name.", { 
                                 "To every user": function() { 
@@ -266,7 +274,7 @@
                         }
                     })
                     $("#btn_exit, #btn_exit_m").on("click", async function() { 
-                        //hushj.util.animCall(this.id, true) 
+                        hush.util.animBgColor($(this))
                         // hushj.msg.alert("채팅방내 본인이 주고 받은 모든 톡이 삭제됩니다. 계속할까요?", { 
                         //     "Yes": function() { 
                         //         const rq = initMsg()
@@ -299,11 +307,11 @@
                         }
                     })
                     $("#send_copy").on("click", function() {
-                        //hushj.util.animCall(this.id, true) 
+                        hush.util.animBgColor($(this))
                         AndroidRoom.paste()
                     })
                     $("#cancel_copy").on("click", function() {
-                        //hushj.util.animCall(this.id, true) 
+                        hush.util.animBgColor($(this))
                         AndroidRoom.copy("")
                         $("#fr_tip").show()
                         $("#fr_sendcopy").hide()
