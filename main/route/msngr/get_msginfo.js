@@ -13,12 +13,13 @@ router.use(function(req, res, next) {
 })
 
 router.post('/', async function(req, res) {
-	let conn, sql, data, len, userid
+	let conn, sql, data, len
 	try {
 		const rs = ws.http.resInit()
 		const { msgid, body, kind, msgids } = req.body
 		conn = await wsmysql.getConnFromPool(global.pool)
-		userid = await ws.jwt.chkToken(req, res, conn) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
+		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
+		const userid = objToken.userid
 		if (!userid) return
 		if (kind == 'check') {
 			const _arr = []
@@ -42,7 +43,7 @@ router.post('/', async function(req, res) {
 				const ret = await ws.util.chkAccessUserWithTarget(conn, userid, msgid, '')
 				if (ret != '') throw new Error(ret)
 				rs.list = data
-				ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
+				ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
 			} else if (data[0].TYPE == 'file' || data[0].TYPE == 'flink') { //almost same as get_sublink.js 
 				let fileToProc
 				const _fileStr = body.split(ws.cons.deli)
@@ -53,7 +54,7 @@ router.post('/', async function(req, res) {
 					fileToProc = _fileStr[0]
 				} else {
 					rs.list = data
-					ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
+					ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
 					return
 				}
 				const ret = await ws.util.chkAccessUserWithTarget(conn, userid, msgid, 'file', _fileStr[0])
@@ -62,17 +63,17 @@ router.post('/', async function(req, res) {
 				fs.stat(_filepath, function(err, stat) {
 					if (err) {
 						rs.list = data
-						ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
+						ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
 					} else {
 						if (stat && stat.isFile() && stat.size <= ws.cons.max_size_to_sublink) { 
 							fs.readFile(_filepath, function(err1, result) {
 								if (!err1) data[0].BUFFER = result									
 								rs.list = data
-								ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
+								ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
 							})
 						} else {
 							rs.list = data
-							ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
+							ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
 						}
 					}					
 				})
@@ -80,7 +81,7 @@ router.post('/', async function(req, res) {
 				const ret = await ws.util.chkAccessUserWithTarget(conn, userid, msgid, '')
 				if (ret != '') throw new Error(ret)
 				rs.list = data
-				ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
+				ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
 			}
 		}
 	} catch (ex) {

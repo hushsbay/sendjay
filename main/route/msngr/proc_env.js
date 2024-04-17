@@ -10,11 +10,12 @@ router.use(function(req, res, next) {
 })
 
 router.post('/', async function(req, res) {
-	let conn, sql, data, len, userid
+	let conn, sql, data, len
 	try {
 		const rs = ws.http.resInit()	
 		conn = await wsmysql.getConnFromPool(global.pool)
-		userid = await ws.jwt.chkToken(req, res, conn) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
+		const objToken = await ws.jwt.chkToken(req, res, conn) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
+		const userid = objToken.userid
 		if (!userid) return
 		sql = "SELECT COUNT(*) CNT FROM Z_USER_TBL WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [userid])
@@ -38,7 +39,7 @@ router.post('/', async function(req, res) {
 		sql += "      SOUND_OFF = ?, TM_FR = ?, TM_TO = ?, BODY_OFF = ?, SENDER_OFF = ?, MODR = ?, MODDT = sysdate(6) "
 		sql += "WHERE USER_ID = ? "
 		await wsmysql.query(conn, sql, [_nicknm, _job, _abcd, _abnm, _standalone, _notioff, _soundoff, _fr, _to, _bodyoff, _senderoff, userid, userid])
-		ws.http.resJson(res, rs, userid) //세번째 인자가 있으면 token 생성(갱신)해 내림
+		ws.http.resJson(res, rs, userid) //세번째 인자(userid) 있으면 token 갱신
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
 	} finally {

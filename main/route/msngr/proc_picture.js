@@ -42,9 +42,6 @@ const proc = (req) => {
 router.post('/', upload.any(), async (req, res) => {
 	req.title = 'proc_picture.post'
 	try {
-		//const userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
-		//if (!userid) return
-		//if (req.body.userid != userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- req.body.userid')
 		const rs = await proc(req)
 		ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
 	} catch (ex) {
