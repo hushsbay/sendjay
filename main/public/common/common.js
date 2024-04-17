@@ -819,9 +819,9 @@
                 const _prevBackcolor = tag.css("background-color")
                 const _bgColor = bgColor ? bgColor : hush.cons.color_fadein
                 if (callback) {
-                	tag.animate({ backgroundColor : _bgColor }, 150).animate({ backgroundColor : _prevBackcolor }, 300, null, callback)
+                	tag.animate({ backgroundColor : _bgColor }, 100).animate({ backgroundColor : _prevBackcolor }, 200, null, callback)
                 } else {
-                	tag.animate({ backgroundColor : _bgColor }, 150).animate({ backgroundColor : _prevBackcolor }, 300)
+                	tag.animate({ backgroundColor : _bgColor }, 100).animate({ backgroundColor : _prevBackcolor }, 200)
                 }                
             },
             getFileNameAndExtension : (fileStr) => {
