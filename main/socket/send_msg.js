@@ -8,7 +8,8 @@ module.exports = async function(socket, param) {
 	try { //ws.sock.warn(null, socket, _logTitle, JSON.stringify(param), _roomid)
 		obj = param.data
 		_roomid = obj.roomid
-		if (obj.senderid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- obj.senderid')
+		obj.senderid = socket.userid
+		//if (obj.senderid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- obj.senderid')
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const ret = await ws.util.chkAccessUserWithTarget(conn, obj.senderid, _roomid, 'room')
 		if (ret != '') throw new Error(ret)
@@ -46,7 +47,7 @@ module.exports = async function(socket, param) {
 				userkeyCrr.push(ws.cons.m_key + param.data.receiverid[i])
 			}
 			param.data.userkeyArr = await ws.redis.getUserkeysInSocket(userkeyBrr) //See ChatService.kt
-			param.data.userid = socket.userid //in order for sendToMyOtherSocket and sendToRoom
+			param.data.userid = obj.senderid //in order for sendToMyOtherSocket and sendToRoom
 			await wsmysql.txCommit(conn)
 			ws.sock.sendToRoom(socket, _roomid, param) //global.jay.to(_roomid).emit(ws.cons.sock_ev_common, param)
 		} else { //type = talk,flink,invite,leave

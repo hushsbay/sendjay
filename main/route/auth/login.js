@@ -17,7 +17,8 @@ router.post('/', async function(req, res) {
 		const device = ws.http.deviceFrom(req) //console.log(uid, pwd, autologin, device)
 		if (device == 'web') { //웹에서는 맨 처음 로그인시 uid,pwd가 넘어 오거나 이미 로그인 상태에서 쿠키(token,userid)가 넘어와 체크하면 됨
 			if (!uid) {
-				userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
+				const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
+				userid = objToken.userid
 				if (!userid) return
 				alreadyAuthenticated = true		
 			} else {

@@ -103,7 +103,7 @@ const showCellMenu = (show, obj) => {
 }
 
 const updateAllUnreads = (first_queried) => { //first_queried is dummy for prevent two times call of read_msg(query) event in 'updateall' and scroll event.
-    const rq = { type : "updateall", senderkey : g_userkey, receiverid : g_userid, roomid : g_roomid, first_queried : first_queried }
+    const rq = { type : "updateall", senderkey : g_userkey, roomid : g_roomid, first_queried : first_queried }
     if (hush.webview.ios) { 
     } else if (hush.webview.and) {
         AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, "parent", false) //procMsg=false
@@ -616,7 +616,7 @@ const procForCell = (obj) => {
         if (!ret) return
         const msgidArr = []
         for (let i  = 0; i < len; i++) msgidArr.push(checked[i].id.substring(4)) //sel_2019~
-        const rq = { msgidArr : msgidArr, type : "", receiverid : g_userid, roomid : g_roomid }
+        const rq = { msgidArr : msgidArr, type : "", roomid : g_roomid }
         if (hush.webview.ios) {
         } else if (hush.webview.and) {
             AndroidCom.send(hush.cons.sock_ev_delete_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
@@ -702,7 +702,7 @@ const procForCell = (obj) => {
                 const ret = await hush.msg.confirm("Do you want revoke(cancel) message already sent to all members in this chat room?")
                 showCellMenu(false)
                 if (!ret) return
-                const rq = { msgid : obj.msgid, type : obj.type, senderid : g_userid, roomid : g_roomid }
+                const rq = { msgid : obj.msgid, type : obj.type, roomid : g_roomid }
                 if (hush.webview.ios) {
                 } else if (hush.webview.and) {
                     AndroidCom.send(hush.cons.sock_ev_revoke_msgcell, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
@@ -853,7 +853,7 @@ const getMsgList = async (type, keyword, start, end) => {
                 g_stopAutoScrollDown = false
             }
             if (includeInviteOrLeave) { //mobile only : in order to refresh members => setMembers()
-                const rq = { from : "after", userid : g_userid }
+                const rq = { from : "after" }
                 if (hush.webview.ios) { 
                 } else if (hush.webview.and) {
                     AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
@@ -1075,7 +1075,7 @@ const initMsg = () => {
     }
     const _msgid = hush.util.createId(g_token10)
     const _curdt = hush.util.getCurDateTimeStr(true) //local backup in a sense
-    return { 
+    return { //senderid는 서버에서 socket.userid로 바로 받아 사용하므로 미사용이나 로컬에서 쓸 수도 있는 생각에 그냥 둠
         msgid : _msgid, senderkey : g_userkey, senderid : g_userid, sendernm : g_usernm, cdt : _curdt,
         filestate : "", body : "", buffer : null, reply : "", type : "", receiverid : memberidArr, receivernm : membernmArr,
         prevmsgid : "", roomid : g_roomid, roomnm : "", 
@@ -1464,7 +1464,7 @@ const dialogRoomRename = (_type) => {
         "OK": function() {                             
             const _newName = hush.msg.dialogGetInput().trim()                            
             if (!hush.util.chkFieldVal(_newName, "병명", 1, 100)) return
-            const rq = { type : _type, roomname : _newName, userid : g_userid, roomid : g_roomid } //roomid needed since
+            const rq = { type : _type, roomname : _newName, roomid : g_roomid } //roomid needed since
             if (hush.webview.ios) { 
             } else if (hush.webview.and) {
                 AndroidCom.send(hush.cons.sock_ev_rename_room, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
@@ -1590,7 +1590,7 @@ const updateAsRevoked = (msgid) => {
 
 const openRoomWithMobile = () => {
     if (g_type == "open") {
-        const rq = { from : g_origin, userid : g_userid }
+        const rq = { from : g_origin }
         if (hush.webview.ios) {
         } else if (hush.webview.and) {
             AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
@@ -1618,7 +1618,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
     [hush.cons.sock_ev_show_on] : (userkey) => { 
         //If User A's chatroom is already open and User B(as same room member) just connected, room_join needed.
         //A사용자 채팅창이 이미 열려 있고 B(같은 방 멤버)가 이제 막 연결된 경우 room_join이 필요.
-        const rq = { from : hush.cons.sock_ev_show_on, userid : g_userid }                 
+        const rq = { from : hush.cons.sock_ev_show_on }                 
         if (hush.webview.ios) {
         } else if (hush.webview.and) {
             AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, false) //procMsg=false
@@ -1640,9 +1640,9 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                 delete opener.hush.sock.rooms[data.prevroomid]
                 opener.hush.sock.rooms[g_roomid] = g_self //this window object
             }
-            rq = { from : data.from, userid : g_userid }
+            rq = { from : data.from }
         } else {
-            rq = { from : "create", userid : g_userid }
+            rq = { from : "create" }
         }
         if (hush.webview.ios) {
         } else if (hush.webview.and) {
@@ -1714,7 +1714,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                 $("#msg_" + data.msgid).addClass("needCheckUnread")
                 $("#dt_" + data.msgid).html(_dt)
                 $("#unread_" + data.msgid).removeClass("failure").addClass("unread")
-                const rq = { type : "update", msgid : data.msgid, receiverid : g_userid }
+                const rq = { type : "update", msgid : data.msgid }
                 if (hush.webview.ios) { 
                 } else if (hush.webview.and) {
                     AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, null, false) //procMsg=false
@@ -1791,7 +1791,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                 }
             }
             if (!_isStickyNeeded && _msgArrived && (document.hasFocus() || g_focus_for_webview)) { //type = update or query
-                const rq = { type : "update", roomid : g_roomid, msgid : data.msgid, receiverid : g_userid }
+                const rq = { type : "update", roomid : g_roomid, msgid : data.msgid }
                 if (hush.webview.ios) { 
                 } else if (hush.webview.and) { 
                     AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, "parent", false) //procMsg=false
@@ -1919,7 +1919,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
         }
     },
     [hush.cons.sock_ev_rename_room] : (data) => {
-        const rq = { from : "rename_room", userid : g_userid }
+        const rq = { from : "rename_room" }
         if (hush.webview.ios) {
         } else if (hush.webview.and) {
             AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, true) //procMsg=true

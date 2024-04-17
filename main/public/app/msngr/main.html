@@ -169,7 +169,7 @@
                             checked.each(function(idx, item) {
                                 const _roomid = item.id.substring(4)
                                 const _toggle = ($("#alarm_" + _roomid).css("display") == "none") ? "X" : ""
-                                const rq = { kind : "noti", value : _toggle, userid : g_userid, roomid : _roomid }
+                                const rq = { kind : "noti", value : _toggle, roomid : _roomid }
                                 if (hush.webview.ios) {
                                 } else if (hush.webview.and) { 
                                     AndroidCom.send(hush.cons.sock_ev_set_env, JSON.stringify(rq), "parent", null, false) //procMsg=false
@@ -187,7 +187,7 @@
                             }
                             checked.each(function(idx, item) {
                                 const _roomid = item.id.substring(4)
-                                const rq = { type : "updateall", senderkey : g_userkey, receiverid : g_userid, roomid : _roomid, first_queried : "Y" }
+                                const rq = { type : "updateall", senderkey : g_userkey, roomid : _roomid, first_queried : "Y" }
                                 if (hush.webview.ios) {
                                 } else if (hush.webview.and) { 
                                     AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), _roomid, "parent", false) //procMsg=false
@@ -229,7 +229,7 @@
                             if (!ret) return
                             checked.each(function(idx, item) {
                                 const _roomid = item.id.substring(4)
-                                const rq = { from : "before_leave", userid : g_userid } //"before_leave" is not practically used at server (just dummy)
+                                const rq = { from : "before_leave" } //"before_leave" is not practically used at server (just dummy)
                                 if (hush.webview.ios) {
                                 } else if (hush.webview.and) {
                                     AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), _roomid, "parent", false) //procMsg=false

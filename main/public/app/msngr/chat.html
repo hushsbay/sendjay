@@ -93,7 +93,7 @@
                             hush.sock.send(g_socket, hush.cons.sock_ev_create_room, rq, g_roomid)
                         } else if (g_type == "open") {
                             if (opener.procUnreadTitle) opener.procUnreadTitle(g_roomid)
-                            const rq = { from : param.from, userid : g_userid }
+                            const rq = { from : param.from }
                             hush.sock.send(g_socket, hush.cons.sock_ev_open_room, rq, g_roomid)
                         }
                         procScrollEvent()
@@ -125,7 +125,7 @@
                     })
                     $("#btn_people_m").on("click", function() { 
                         const _toggle = (g_show_list_people == "") ? "X" : ""
-                        const rq = { kind : "dispmem", value : _toggle, userid : g_userid, roomid : g_roomid }
+                        const rq = { kind : "dispmem", value : _toggle, roomid : g_roomid }
                         if (hush.webview.ios) {
                         } else if (hush.webview.and) {
                             AndroidCom.send(hush.cons.sock_ev_set_env, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
@@ -238,7 +238,7 @@
                         const ret = await hush.msg.confirm("Do you want delete all messages in this chat room?")
                         showCellMenu(false)
                         if (!ret) return
-                        const rq = { type : "all", receiverid : g_userid, roomid : g_roomid }
+                        const rq = { type : "all", roomid : g_roomid }
                         if (hush.webview.ios) {
                         } else if (hush.webview.and) {
                             AndroidCom.send(hush.cons.sock_ev_delete_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true

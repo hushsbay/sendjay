@@ -836,7 +836,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             g_setting.to = _to
             hush.http.setCookie("bodyoff", _bodyoff)
             hush.http.setCookie("senderoff", _senderoff)
-            const rq1 = { kind : "userinfo", userid : g_userid, userkey : g_userkey, nicknm : _nicknm, job : _job, abcd : _abcd, abnm : _abnm, notioff : _notioff,  
+            const rq1 = { kind : "userinfo", userkey : g_userkey, nicknm : _nicknm, job : _job, abcd : _abcd, abnm : _abnm, notioff : _notioff,  
             soundoff : _soundoff, fr : _fr, to : _to, bodyoff : _bodyoff, senderoff : _senderoff }
             if (hush.webview.ios) {
             } else if (hush.webview.and) {
@@ -1078,7 +1078,7 @@ const startMsngr = async (launch, winid) => {
                         console.log("Talk running on another tab or browser / " + e.data.msg)
                     } else if (rsRedis.result == "same") { //기존 winner 계속. Winner continued
                         console.log("Talk running on this tab / " + e.data.msg)
-                    } else { //new. 새로운 위너 //console.log(_type+"@@@"+e.data.winid+"@@@"+rs1.result)      
+                    } else { //new. 새로운 위너. //console.log(_type+"@@@"+e.data.winid+"@@@"+rs1.result)      
                         hush.socket = await hush.sock.connect(io, { 
                             token : hush.user.token, userid : g_userid, userkey : g_userkey, winid : winid, userip : rsRedis.userip 
                         })

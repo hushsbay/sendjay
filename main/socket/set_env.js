@@ -7,18 +7,19 @@ module.exports = async function(socket, param) {
 	let conn, sql, data, len
 	try { //ws.sock.warn(null, socket, _logTitle, com.cons.rq + JSON.stringify(param))
 		const _kind = param.data.kind		
-		const _userid = param.data.userid
-		if (_userid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- _userid')
+		const userid = socket.userid //param.data.userid
+		//if (userid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- _userid')
 		conn = await wsmysql.getConnFromPool(global.pool)
+		param.data.userid = userid
 		if (_kind == 'noti' || _kind == 'dispmem') {
 			const _value = param.data.value
 			const _roomid = param.data.roomid
 			if (_kind == 'noti') {
-				await wsmysql.query(conn, "UPDATE A_ROOMDTL_TBL SET NOTI = ? WHERE ROOMID = ? AND USERID = ? ", [_value, _roomid, _userid]) 
+				await wsmysql.query(conn, "UPDATE A_ROOMDTL_TBL SET NOTI = ? WHERE ROOMID = ? AND USERID = ? ", [_value, _roomid, userid]) 
 				socket.emit(ws.cons.sock_ev_common, param)	
 				ws.sock.sendToMyOtherSocket(socket, param)
 			} else { //mobile only
-				await wsmysql.query(conn, "UPDATE A_ROOMDTL_TBL SET DISPMEM = ? WHERE ROOMID = ? AND USERID = ? ", [_value, _roomid, _userid])
+				await wsmysql.query(conn, "UPDATE A_ROOMDTL_TBL SET DISPMEM = ? WHERE ROOMID = ? AND USERID = ? ", [_value, _roomid, userid])
 				socket.emit(ws.cons.sock_ev_common, param)	 
 			}					
 		} else if (_kind == 'userinfo') {

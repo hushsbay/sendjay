@@ -8,24 +8,24 @@ module.exports = async function(socket, param) {
 	try { //ws.sock.warn(null, socket, _logTitle, com.cons.rq + JSON.stringify(param), _roomid)
 		const _type = param.data.type //all or one(self)
 		const _roomname = param.data.roomname
-		const _userid = param.data.userid
-		if (_userid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- _userid')
+		const userid = socket.userid //param.data.userid
+		//if (_userid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- _userid')
 		conn = await wsmysql.getConnFromPool(global.pool)
-		const ret = await ws.util.chkAccessUserWithTarget(conn, _userid, _roomid, 'room')
+		const ret = await ws.util.chkAccessUserWithTarget(conn, userid, _roomid, 'room')
 		if (ret != '') throw new Error(ret)
 		sql = "UPDATE A_ROOMDTL_TBL SET UDT = sysdate(6), NICKNM = ? WHERE ROOMID = ? AND USERID = ? "		
 		data = await wsmysql.query(conn, "SELECT MASTERID, ROOMNM FROM A_ROOMMST_TBL WHERE ROOMID = ? ", [_roomid])
 		if (_type == 'all') {			
-			if (data[0].MASTERID == _userid) {
-				await wsmysql.query(conn, sql, [_roomname, _roomid, _userid])
+			if (data[0].MASTERID == userid) {
+				await wsmysql.query(conn, sql, [_roomname, _roomid, userid])
 				await wsmysql.query(conn, "UPDATE A_ROOMMST_TBL SET UDT = sysdate(6), NICKNM = ? WHERE ROOMID = ? ", [_roomname, _roomid]) 
 				ws.sock.sendToRoom(socket, _roomid, param)
 			} else {
 				throw new Error('방 맴버전체에게 적용되는 방명 변경은 방장만 가능합니다.')
 			}			
 		} else {
-			await wsmysql.query(conn, sql, [_roomname, _roomid, _userid])
-			if (data[0].MASTERID == _userid) {
+			await wsmysql.query(conn, sql, [_roomname, _roomid, userid])
+			if (data[0].MASTERID == userid) {
 				await wsmysql.query(conn, "UPDATE A_ROOMMST_TBL SET UDT = sysdate(6), NICKNM = '' WHERE ROOMID = ? ", [_roomid]) 
 				ws.sock.sendToRoom(socket, _roomid, param)
 			} else {

@@ -6,22 +6,22 @@ module.exports = async function(socket, param) {
 	const _logTitle = param.ev, _roomid = param.returnTo
 	let conn
 	try { //ws.sock.warn(null, socket, _logTitle, ws.cons.rq + JSON.stringify(param), _roomid)	
-		const _receiverid = param.data.receiverid
-		if (_receiverid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- _receiverid')
+		const userid = socket.userid //param.data.receiverid
+		//if (_receiverid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- _receiverid')
 		conn = await wsmysql.getConnFromPool(global.pool)
 		await wsmysql.txBegin(conn)	
 		if (param.data.type == 'all') {
-			const ret = await ws.util.chkAccessUserWithTarget(conn, _receiverid, _roomid, 'room')
+			const ret = await ws.util.chkAccessUserWithTarget(conn, userid, _roomid, 'room')
 			if (ret != '') throw new Error(ret)
-			const arg = [_roomid, _receiverid]
+			const arg = [_roomid, userid]
 			await wsmysql.query(conn, "UPDATE A_MSGDTL_TBL SET UDT = sysdate(6), STATE = 'D' WHERE ROOMID = ? AND RECEIVERID = ? ", arg)
 		} else {
 			const _msgidArr = param.data.msgidArr
 			const _len = _msgidArr.length
 			for (let i = 0; i < _len; i++) {
-				const ret = await ws.util.chkAccessUserWithTarget(conn, _receiverid, _msgidArr[i], '')
+				const ret = await ws.util.chkAccessUserWithTarget(conn, userid, _msgidArr[i], '')
 				if (ret != '') throw new Error(ret)
-				const arg = [_msgidArr[i], _roomid, _receiverid]
+				const arg = [_msgidArr[i], _roomid, userid]
 				await wsmysql.query(conn, "UPDATE A_MSGDTL_TBL SET UDT = sysdate(6), STATE = 'D' WHERE MSGID = ? AND ROOMID = ? AND RECEIVERID = ? ", arg)
 			}
 		}
