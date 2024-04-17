@@ -1042,12 +1042,12 @@ const startMsngr = async (launch, winid) => {
         return false
     }
     if (location.protocol != "https:") { //http not allowed for notification with chrome
-        await hush.msg.alert("Https needed (for HTML5 Notification).")
+        await hush.msg.alert("Https가 필요합니다. (HTML5 Notification 등)")
         return false
     }    
     const permission = await window.Notification.requestPermission() 
     if (permission != "granted") {                        
-        await hush.msg.alert("Notification permission should be granted for this site.")
+        await hush.msg.alert("Notification 권한이 필요합니다.")
         return false
     }
     const rs = await hush.auth.verifyUser(true)
@@ -1082,7 +1082,6 @@ const startMsngr = async (launch, winid) => {
                         hush.socket = await hush.sock.connect(io, { 
                             token : hush.user.token, userid : g_userid, userkey : g_userkey, winid : winid, userip : rsRedis.userip 
                         })
-                        debugger
                         if (runFromStandalone) { //main.html
                             initStandAlone(rs) //rsRedis 아님
                         } else { //Auto-Launching Embeded Talk

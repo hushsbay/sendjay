@@ -8,7 +8,7 @@ const upload = multer({ storage: multer.memoryStorage() })
 
 router.use(function(req, res, next) {
 	req.title = 'setuser'
-	next() //next('error') for going to ws.util.watchRouterError() below
+	next() //next('error')는 아래 ws.util.watchRouterError()로 연결
 })
 
 router.post('/', upload.any(), async function(req, res) {

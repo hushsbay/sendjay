@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.use(function(req, res, next) {
 	req.title = 'qry_unread'
-	next() //next('error') for going to ws.util.watchRouterError() below
+	next() //next('error')는 아래 ws.util.watchRouterError()로 연결
 })
 
 router.post('/', async function(req, res) {
@@ -16,10 +16,8 @@ router.post('/', async function(req, res) {
 		const dateFr = ws.util.setDateAdd(new Date(), ws.cons.max_days_to_fetch)
 		const { roomid, msgid, type } = req.body
 		conn = await wsmysql.getConnFromPool(global.pool)
-		//if (type == 'U') {
-			userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
-			if (!userid) return
-		//}
+		userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
+		if (!userid) return
 		if (roomid) {
 			if (msgid) { //from mobile (before noti)
 				sql = "SELECT COUNT(*) UNREAD "

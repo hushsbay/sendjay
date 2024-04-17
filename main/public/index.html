@@ -106,7 +106,7 @@
                         } else {
                             hush.auth.setUser(_token)
                             showLogout(true)
-                            const result = await startMsngr("auto", hush.sock.getWinId()) //mobile app(webview)에서는 바로 return true
+                            const result = await startMsngr("auto", hush.sock.getWinId()) //mobile app(webview)에서는 바로 return
                             //if (!result) return 오류나도 아래가 실행되도록 함
                         }                        
                     }
@@ -136,7 +136,7 @@
                         }
                         hush.util.openWinPop("/app/org/orgtree.html?" + $.param(obj))
                     })                    
-                    $(window).bind("unload", function() {//$(window).unload(function() { deprecated as of 1.8
+                    $(window).bind("unload", function() {//$(window).unload(function() -> deprecated as of 1.8
                         if (g_chan) g_chan.close()
                     })
                 } catch (ex) {

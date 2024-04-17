@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.use(function(req, res, next) {
 	req.title = 'qry_userlist'
-	next() //next('error') for going to ws.util.watchRouterError() below
+	next() //next('error')는 아래 ws.util.watchRouterError()로 연결
 })
 
 router.post('/', async function(req, res) {
