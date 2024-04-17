@@ -12,9 +12,15 @@ const proc = (req) => {
 		try {			
 			let rs = ws.http.resInit()
 			conn = await wsmysql.getConnFromPool(global.pool)
+			const objToken = await ws.jwt.chkToken(req) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
+			const userid = objToken.userid
+			if (!userid) {
+				resolve(objToken)
+				return
+			}
 			if (req.body.type == 'R') { //검색해서 발견 못함 (체크해보기 - getUser에서 처리)
 				sql = "SELECT PICTURE, MIMETYPE FROM Z_USER_TBL WHERE USER_ID = ? "
-				data = await wsmysql.query(conn, sql, [req.body.userid])
+				data = await wsmysql.query(conn, sql, [userid])
 				if (data.length == 0) throw new Error(ws.cons.MSG_NO_DATA)
 				rs.picture = data[0].PICTURE //rs.picture = data[0].PICTURE ? Buffer.from(data[0].PICTURE, 'binary').toString('base64') : null
 				rs.mimetype = data[0].MIMETYPE
@@ -22,7 +28,7 @@ const proc = (req) => {
 				const buf = (req.body.type == 'U') ? Buffer.from(new Uint8Array(req.files[0].buffer)) : null //null when req.body.type == 'D'
                 const _mime = (req.body.type == 'U') ? req.body.mimetype : ""
 				const uqry = "UPDATE Z_USER_TBL SET PICTURE = ?, MIMETYPE = ?, MODR = ?, MODDT = sysdate(6) WHERE USER_ID = ? "
-				await wsmysql.query(conn, uqry, [buf, _mime, req.body.userid, req.body.userid])
+				await wsmysql.query(conn, uqry, [buf, _mime, userid, userid])
 			}			
 			resolve(rs)
 		} catch (ex) {
@@ -36,11 +42,11 @@ const proc = (req) => {
 router.post('/', upload.any(), async (req, res) => {
 	req.title = 'proc_picture.post'
 	try {
-		const userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
-		if (!userid) return
-		if (req.body.userid != userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- req.body.userid')
+		//const userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
+		//if (!userid) return
+		//if (req.body.userid != userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- req.body.userid')
 		const rs = await proc(req)
-		res.json(rs)
+		ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
 	}

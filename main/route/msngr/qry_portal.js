@@ -10,7 +10,7 @@ router.use(function(req, res, next) {
 })
 
 router.post('/', async function(req, res) {
-	let conn, sql, data, len, userid
+	let conn, sql, data, len
 	try {
 		const rs = ws.http.resInit()	
 		const dateFr = ws.util.setDateAdd(new Date(), ws.cons.max_days_to_fetch)
@@ -18,7 +18,8 @@ router.post('/', async function(req, res) {
 		keyword = decodeURIComponent(keyword) || ''
 		cnt = parseInt(cnt)
 		conn = await wsmysql.getConnFromPool(global.pool)
-		userid = await ws.jwt.chkToken(req, res, conn) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
+		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
+		const userid = objToken.userid
 		if (!userid) return
 		const subqry = "(SELECT CDT FROM A_MSGDTL_TBL WHERE ROOMID = A.ROOMID AND RECEIVERID = '" + userid + "' AND STATE IN ('', 'R') ORDER BY CDT DESC LIMIT 1) "
 		sql = "SELECT ROOMID, ROOMNM, MASTERID, MASTERNM, MEMCNT, MAINNM, NOTI, STATE, NICKNM, LASTMSG, LASTDT "
@@ -26,8 +27,8 @@ router.post('/', async function(req, res) {
 		sql += "   SELECT A.ROOMID, A.ROOMNM, A.MASTERID, A.MASTERNM, A.MEMCNT, A.NICKNM MAINNM, B.NOTI, B.STATE, B.NICKNM, "
 		sql += "		  (SELECT CONCAT(TYP, '" + ws.cons.subdeli + "', BODY) "
 		sql += "		     FROM A_MSGMST_TBL WHERE MSGID = (SELECT MSGID FROM A_MSGDTL_TBL "
-		sql += "		     								             WHERE ROOMID = A.ROOMID AND RECEIVERID = '" + userid + "' AND STATE IN ('', 'R') " 
-		sql += "		     								             ORDER BY CDT DESC LIMIT 1)) LASTMSG, "
+		sql += "		     							       WHERE ROOMID = A.ROOMID AND RECEIVERID = '" + userid + "' AND STATE IN ('', 'R') " 
+		sql += "		     							       ORDER BY CDT DESC LIMIT 1)) LASTMSG, "
 		sql += "		  IF(" + subqry + " IS NULL, (SELECT CDT FROM A_MSGMST_TBL WHERE ROOMID = A.ROOMID ORDER BY CDT DESC LIMIT 1), " + subqry + ") LASTDT " //Consider in case all mesaages deleted since it's order is important.
 		sql += "     FROM A_ROOMMST_TBL A, A_ROOMDTL_TBL B "
 		sql += "    WHERE A.ROOMID = B.ROOMID "

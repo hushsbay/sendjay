@@ -1078,7 +1078,7 @@ const startMsngr = async (launch, winid) => {
                         console.log("Talk running on another tab or browser / " + e.data.msg)
                     } else if (rsRedis.result == "same") { //기존 winner 계속. Winner continued
                         console.log("Talk running on this tab / " + e.data.msg)
-                    } else { //new. New winner. 새로운 우승자. //console.log(_type+"@@@"+e.data.winid+"@@@"+rs1.result)      
+                    } else { //new. 새로운 위너 //console.log(_type+"@@@"+e.data.winid+"@@@"+rs1.result)      
                         hush.socket = await hush.sock.connect(io, { 
                             token : hush.user.token, userid : g_userid, userkey : g_userkey, winid : winid, userip : rsRedis.userip 
                         })

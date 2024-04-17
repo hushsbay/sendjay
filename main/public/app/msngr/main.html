@@ -303,7 +303,7 @@
                         const fd = new FormData()
                         fd.append("file", blob)
                         fd.append("mimetype", objUrl.mimetype)
-                        fd.append("userid", g_userid)
+                        //fd.append("userid", g_userid)
                         fd.append("type", "U") //U(Update Picture), D(Delete Picture)
                         hush.http.ajaxFormData("/msngr/proc_picture", fd, (rs) => {
                             hush.msg.toast("Upload done.")

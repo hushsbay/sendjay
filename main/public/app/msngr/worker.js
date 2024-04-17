@@ -37,9 +37,9 @@ conn.onsuccess = function(e) {
 onmessage = function(e) { //console.log(e.data.msg+"@@@@"+e.data.code) 
     w_winid = e.data.msg
     if (e.data.code == "auto") {        
-        competeWinner()
+        competeWinner() //자동으로 백그라운드로 임베디드되는 것이므로 어느 브라우저탭이 위너가 될 지 경하해서 하나가 위너가 됨 
     } else if (e.data.code == "manual") {
-        setWinner()
+        setWinner() //사용자가 클릭해서 실행할 때는 경합할 이유없이 본인이 위너가 되면 돔
     }
 }
 

@@ -9,12 +9,11 @@ router.use(function(req, res, next) {
 })
 
 router.post('/', async function(req, res) {
-	let userid
 	try {
 		const rs = ws.http.resInit()
 		const { type, userkey, winid } = req.body
-		userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
-		if (!userid) return	
+		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
+		if (!objToken.userid) return
 		const pattern = ws.cons.key_str_winid + userkey + ws.cons.easydeli //$$ + W + W__USERID;
 		const uwKey = pattern + winid //$$WW__USERID;winid
 		const _dt = ws.util.getCurDateTimeStr(true)
@@ -47,7 +46,7 @@ router.post('/', async function(req, res) {
 				rs.result = "new" //새로운 winner		
 			}
 			rs.userip = req.clientIp //소켓서버에서 파악이 힘들어 미리 클라이언트로 내려 요청시 포함하도록 하려 함
-			ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
+			ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
 		}) //stream.on('end', function() { resolve(rs) }) //'end' does not guarantee rs.result as defined.
 	} catch (ex) {
 		ws.http.resException(req, res, ex)

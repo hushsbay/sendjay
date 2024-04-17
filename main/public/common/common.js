@@ -105,7 +105,7 @@
             }, //위 아래 함수는 verifyUser() in common.js와 앱의 UserInfo 클래스내 항목과 같아야 함
             deleteCookieForUser : () => {
                 hush.http.deleteCookie('token')
-                hush.http.deleteCookie('userid')
+                //hush.http.deleteCookie('userid')
                 hush.http.deleteCookie('usernm')
                 hush.http.deleteCookie('orgcd')
                 hush.http.deleteCookie('orgnm')
