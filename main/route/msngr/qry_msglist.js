@@ -10,7 +10,7 @@ router.use(function(req, res, next) {
 })
 
 router.post('/', async function(req, res) {
-	let conn, sql, data, len, userid
+	let conn, sql, data, len
 	try {
 		const rs = ws.http.resInit()
 		const dateFr = ws.util.setDateAdd(new Date(), ws.cons.max_days_to_fetch)
@@ -18,7 +18,8 @@ router.post('/', async function(req, res) {
 		keyword = decodeURIComponent(keyword) || ''
 		cnt = parseInt(cnt)
 		conn = await wsmysql.getConnFromPool(global.pool)
-		userid = await ws.jwt.chkToken(req, res, conn) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
+		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
+		const userid = objToken.userid
 		if (!userid) return
 		const ret = await ws.util.chkAccessUserWithTarget(conn, userid, roomid, 'room')
 		if (ret != '') throw new Error(ret)
@@ -28,15 +29,10 @@ router.post('/', async function(req, res) {
 			if (data.length == 0) {
 				ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true)
 				return
-				//rs.code = ws.cons.CODE_NO_DATA
-				//rs.msg = ws.cons.MSG_NO_DATA
-				//ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
-				//return
 			}
 			dt = data[0].CDT
 		}
-		let arg 
-		console.log(dateFr, type, userid, roomid, keyword, dt, start, end, senderid, cnt)
+		let arg //console.log(dateFr, type, userid, roomid, keyword, dt, start, end, senderid, cnt)
 		sql = "SELECT A.MSGID, A.CDT, A.SENDERID, A.SENDERNM, B.RECEIVERID, A.BODY, A.BUFFER, A.REPLY, A.TYP TYPE, B.STATE, A.FILESTATE, "
 		sql += "		  CASE WHEN A.BUFFER IS NULL THEN NULL ELSE 'Y' END BUFFERSTR, " 
 		sql += "          (SELECT COUNT(*) FROM A_MSGDTL_TBL WHERE MSGID = B.MSGID AND ROOMID = B.ROOMID AND STATE = '') CNT "
@@ -78,7 +74,7 @@ router.post('/', async function(req, res) {
 			return
 		}
 		rs.list = data
-		ws.http.resJson(res, rs, userid) //세번째 인자가 있으면 token 생성(갱신)해 내림
+		ws.http.resJson(res, rs, userid) //세번째 인자(userid) 있으면 token 갱신
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
 	} finally {

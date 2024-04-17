@@ -43,7 +43,7 @@ router.post('/', upload.any(), async (req, res) => {
 	req.title = 'proc_picture.post'
 	try {
 		const rs = await proc(req)
-		ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
+		ws.http.resJson(res, rs, userid) //세번째 인자(userid) 있으면 token 갱신
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
 	}

@@ -133,11 +133,11 @@ router.post('/', (req, res) => { //router.post('/', upload.single('file'), async
 	upload.single('file')(req, res, async (err) => { //업로드 처리 순서 : upload(multer(destination) -> multer(filename)) -> procMulter()
 		try {
 			if (err) throw new Error(err.toString())
-			const userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
-			if (!userid) return
-			if (req.body.senderid != userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- req.body.senderid')
+			const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
+			if (!objToken.userid) return //각각의 함수에 쿠키를 읽어서 처리해도 되는데 그냥 편의상 아래서 req.body.userid 사용하므로 userid와 비교하는 것임
+			if (req.body.senderid != objToken.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- senderid')
 			const rs = await procMulter(req)
-			res.json(rs)
+			ws.http.resJson(res, rs, objToken.userid) //세번째 인자(userid) 있으면 token 갱신
 		} catch (ex) {
 			ws.http.resException(req, res, ex)
 		}
@@ -147,13 +147,14 @@ router.post('/', (req, res) => { //router.post('/', upload.single('file'), async
 router.get('/*', async (req, res) => { //asterisk(*) needed
 	req.title = 'proc_file.get'
 	try {	
-		const userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
-		if (!userid) return
 		let _path = url.parse(req.url).pathname.replace('/proc_file/', '')
 		_path = decodeURIComponent(_path)
 		const _idx = _path.indexOf('?')
 		if (_idx > -1) _path = _path.substr(0, _idx)
 		conn = await wsmysql.getConnFromPool(global.pool)
+		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
+		const userid = objToken.userid
+		if (!userid) return
 		const ret = await ws.util.chkAccessUserWithTarget(conn, userid, req.query.msgid, "file", _path)
 		if (ret != '') throw new Error(ret)
 		const _filename = config.app.uploadPath + _path //C:/nodeops/upload/sendjay~/20210214124957779000571393Q59/aaa$$2023~.png => _path starts with roomid        

@@ -10,13 +10,14 @@ router.use(function(req, res, next) {
 })
 
 router.post('/', async function(req, res) {
-	let conn, sql, data, len, userid
+	let conn, sql, data, len
 	try {
 		const rs = ws.http.resInit()
 		const dateFr = ws.util.setDateAdd(new Date(), ws.cons.max_days_to_fetch)
 		const { roomid, msgid, type } = req.body
 		conn = await wsmysql.getConnFromPool(global.pool)
-		userid = await ws.jwt.chkToken(req, res) //사용자 부서 위변조체크 필요없으면 세번째 인자인 conn을 빼면 됨
+		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
+		const userid = objToken.userid
 		if (!userid) return
 		if (roomid) {
 			if (msgid) { //from mobile (before noti)
@@ -44,7 +45,7 @@ router.post('/', async function(req, res) {
 			sql += "GROUP BY ROOMID "
 			rs.list = await wsmysql.query(conn, sql, [userid, dt]) //console.log(rs.list.length+"====qry_unread====reconnect")
 		}
-		ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
+		ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
 	} finally {
