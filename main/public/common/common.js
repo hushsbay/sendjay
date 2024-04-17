@@ -131,7 +131,7 @@
                     rs = await hush.http.ajax("/auth/login")
                     if (rs.code != hush.cons.CODE_OK) {
                         if (verbose) {
-                            await hush.msg.alert(rs.msg + "<br>다시 로그인해 주시기 바랍니다.")
+                            await hush.msg.alert(rs.msg + "<br>로그인이 필요합니다.")
                         } else {
                             if (rs.code.startsWith("-8")) {
                                 await hush.msg.alert(rs.msg + "<br>로그인 페이지로 이동합니다.")
@@ -145,7 +145,7 @@
                     }
                 } else {
                     if (verbose) {
-                        await hush.msg.alert(rs.msg + "<br>다시 로그인해 주시기 바랍니다.")
+                        await hush.msg.alert("로그인이 필요합니다.")
                     } else {
                         const _target = encodeURIComponent(location.pathname + location.search)
                         hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)

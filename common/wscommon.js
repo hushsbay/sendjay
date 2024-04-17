@@ -140,7 +140,6 @@ module.exports = (function() {
 						const userid = tokenInfo.userid
 						const key = _key || global.nodeConfig.jwt.key			
 						let rs = ws.http.resInit()
-						console.log(rs, "==========")
 						if (!token) {
 							rs.code = ws.cons.CODE_TOKEN_NEEDED
 							rs.msg = '인증(토큰)이 없습니다.'
