@@ -1050,7 +1050,7 @@ const startMsngr = async (launch, winid) => {
         await hush.msg.alert("Notification 권한이 필요합니다.")
         return false
     }
-    const rs = await hush.auth.verifyUser(true)
+    const rs = await hush.auth.verifyUser()
     if (!rs) return false
     SetUserVar()
     ///////////////////////////////////////////////////////////////////////////////////
