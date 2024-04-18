@@ -1762,6 +1762,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                 }
             }
         } else {
+            debugger
             if (data.errcd == hush.cons.CODE_ERR) {
                 procFailure(data, data.errmsg)
                 return
