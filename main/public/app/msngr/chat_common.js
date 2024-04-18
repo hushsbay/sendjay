@@ -857,20 +857,21 @@ const getMsgList = async (type, keyword, start, end) => {
                 const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readonly") //readonly
                 const os = tx.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
                 const index = os.index("roomid") //let req = os.openCursor() //req = os.count(); req.onsuccess = function(evt) { console.log("====" + evt.target.result) }
-                let req = index.openCursor(IDBKeyRange.only(g_roomid))
-                req.onsuccess = async function(evt) {
-                    debugger
-                    const cursor = evt.target.result
+                let req = index.openCursor(IDBKeyRange.only(g_roomid)) //1)
+                req.onsuccess = async function(evt) { //2)
+                    const cursor = evt.target.result //3)
                     if (cursor) { //console.log("cursor:", cursor) //cursor.key = cursor.value.roomid in this case
                         //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 (정상적이지 않은 경우만 로컬에 있을 것임)
-                        //따라서, 아래 담기는 건 전송 실패건만임
+                        //따라서, 아래 담기는 건 전송 실패건만임. 
+                        //indexedDB는 일반적인 rest 형식의 데이터 읽어오기와는 다름. 복수의 데이터를 읽어오는 것은 아래 순서대로 읽어옴
+                        //1) -> 2) -> 3)까지 한개의 데이터를 읽음. 그 다음 데이터는 다시 1) -> 2) -> 3)을 거치고 더 이상 없으면 아래의 4)를 지나 5)로 넘어가서 종료하게 됨
                         _arr.push(cursor.value.msgid)
                         cursor.continue()                               
-                    } else { //console.log("No more entries")
+                    } else { //4) console.log("No more entries")
                         if (_arr.length == 0) return 
                         const rs = await hush.http.ajax(hush.cons.route + "/msngr/get_msginfo", { msgids : _arr, kind : "check" })
                         if (!hush.util.chkAjaxCode(rs)) return
-                        const _len = rs.list.length //sending failure
+                        const _len = rs.list.length //sending failure 실패난 것만 내려옴
                         if (_len == 0) return
                         _brr = rs.list
                         const tx1 = hush.idb.db.transaction(hush.cons.idb_tbl, "readonly")
@@ -898,10 +899,10 @@ const getMsgList = async (type, keyword, start, end) => {
                                 }
                             }
                         }
-                        tx1.oncomplete = function() {
+                        tx1.oncomplete = function() { //5)
                             scrollToTarget()
                             if (_arr.length > 0) {
-                                const _crr = _arr.filter(x => !_brr.includes(x)) //_arr - _brr = _crr
+                                const _crr = _arr.filter(x => !_brr.includes(x)) //_arr - _brr(서버에서 실패난 것 제외) = _crr (발송 성공은 제거해야 함)
                                 for (msgid of _crr) deleteLocalMsg(msgid)
                             }
                         }
@@ -1666,7 +1667,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
             hush.msg.alert("Different RoomID : " + data.roomid + "/" + g_roomid)
             return
         }
-        //if (data.senderkey == g_userkey) deleteLocalMsg(data.msgid) 테스트로 임시 막음
+        if (data.senderkey == g_userkey) deleteLocalMsg(data.msgid)
         let _isStickyNeeded
         if (data.senderkey && data.senderkey != g_userkey) { 
             _isStickyNeeded = chkStickyNeeded()                   

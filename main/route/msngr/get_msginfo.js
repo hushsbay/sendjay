@@ -26,7 +26,7 @@ router.post('/', async function(req, res) {
 			for (let _msgid of msgids) {
 				sql = "SELECT COUNT(*) CNT FROM A_MSGMST_TBL WHERE MSGID = ? "
 				data = await wsmysql.query(conn, sql, [_msgid])
-				if (data[0].CNT == 0) _arr.push(_msgid) //sending failure
+				if (data[0].CNT == 0) _arr.push(_msgid) //sending failure 실패난 것만 클라이언트로 내림
 			}
 			rs.list = _arr
 			ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
