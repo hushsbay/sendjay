@@ -235,7 +235,7 @@
                                 // } else {
                                 //     hush.sock.send(hush.socket, hush.cons.sock_ev_open_room, rq, _roomid, "parent")
                                 // }
-                                const rq = initMsg()
+                                const rq = initMsg(_roomid)
                                 rq.type = "leave"
                                 rq.body = g_usernm + "<br>" + hush.cons.left
                                 if (hush.webview.ios) { 

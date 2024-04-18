@@ -3,11 +3,11 @@ const ws = require(config.app.ws)
 const wsmysql = require(config.app.wsmysql)
 
 module.exports = async function(socket, param) { 
-	const _logTitle = param.ev, _roomid = param.returnTo
-	let conn, sql, data, len, obj, _cnt, userkeyBrr = [], userkeyCrr = [] //userkeyBrr(Web), userkeyCrr(Mobile)
+	const _logTitle = param.ev//, _roomid = param.returnTo
+	let conn, sql, data, len, obj, _cnt, _roomid, userkeyBrr = [], userkeyCrr = [] //userkeyBrr(Web), userkeyCrr(Mobile)
 	try { //ws.sock.warn(null, socket, _logTitle, JSON.stringify(param), _roomid)
 		obj = param.data
-		//_roomid = obj.roomid
+		_roomid = obj.roomid
 		obj.senderid = socket.userid
 		//if (obj.senderid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- obj.senderid')
 		conn = await wsmysql.getConnFromPool(global.pool)

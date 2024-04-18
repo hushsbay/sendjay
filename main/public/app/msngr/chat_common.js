@@ -1664,7 +1664,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
     },
     [hush.cons.sock_ev_send_msg] : (data) => {
         if (data.roomid != g_roomid) {
-            hush.msg.alert("Different RoomID : " + data.roomid + "/" + g_roomid)
+            hush.msg.alert("Different RoomID : " + data.roomid + "/" + g_roomid) //개발자오류
             return
         }
         if (data.senderkey == g_userkey) deleteLocalMsg(data.msgid)
