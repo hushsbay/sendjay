@@ -679,7 +679,7 @@ const getUnreadPerEachRoom = async (roomid, chkCloseNoti) => { //no unread displ
     if (_unread == 0) {
         $("#unread_" + roomid).hide() //for positioning problem
         $("#unread_" + roomid).html("0") //for calculation
-        if (chkCloseNoti) closeNoti(roomid, null, true)
+        if (chkCloseNoti) closeNoti(roomid, true) //closeNoti(roomid, null, true)
     } else {
         $("#unread_" + roomid).show()
         $("#unread_" + roomid).html(_unread)
@@ -720,31 +720,30 @@ const getUnreadForAll = async () => {
             handleDocTitle(0)
         } else {
             handleDocTitle(1)
-            for (let i = 0; i < len; i++) g_unread[rs.list[i].ROOMID] = rs.list[i].UNREAD
+            for (let i = 0; i < _len; i++) g_unread[rs.list[i].ROOMID] = rs.list[i].UNREAD
         }
     } catch (ex) {
         hush.util.showEx(ex)
     }
 }
 
-const closeNoti = (roomid, msgid, skipGetUnreadPerEachRoom) => {
+const closeNoti = (roomid, skipGetUnreadPerEachRoom) => { //const closeNoti = (roomid, msgid, skipGetUnreadPerEachRoom) => {
     if (!hush.webview.on) {
-        debugger
         const noti = hush.noti.notis[roomid]
         if (noti) noti.close()
         procUnreadTitle(roomid)
         if (!skipGetUnreadPerEachRoom) getUnreadPerEachRoom(roomid)
-        if (msgid) { //see [hush.cons.sock_ev_read_msg]
-            //setTimeout(function() {
-                debugger
-                const noti = hush.noti.notis[roomid]
-                if (noti && noti.msgid && msgid == noti.msgid) {
-                    noti.close()
-                    procUnreadTitle(roomid)
-                    if (!skipGetUnreadPerEachRoom) getUnreadPerEachRoom(roomid)
-                }
-            //}, 3000)        
-        }
+        // if (msgid) { //see [hush.cons.sock_ev_read_msg]
+        //     //setTimeout(function() {
+        //         debugger
+        //         const noti = hush.noti.notis[roomid]
+        //         if (noti && noti.msgid && msgid == noti.msgid) {
+        //             noti.close()
+        //             procUnreadTitle(roomid)
+        //             if (!skipGetUnreadPerEachRoom) getUnreadPerEachRoom(roomid)
+        //         }
+        //     //}, 3000)        
+        // }
     } else {
         procUnreadTitle(roomid)
         if (!skipGetUnreadPerEachRoom) getUnreadPerEachRoom(roomid)
@@ -944,11 +943,11 @@ var funcSockEv = { //needs to be public
             objUnread.hide()
             objUnread.html("0")
         }
-        if (data.type == "update") {
-            closeNoti(data.roomid, data.msgid)
-        } else {
+        //if (data.type == "update") {
+        //    closeNoti(data.roomid, data.msgid)
+        //} else {
             closeNoti(data.roomid)
-        }
+        //}
     },
     [hush.cons.sock_ev_rename_room] : (data) => {
         getRoomInfo(data.roomid)
