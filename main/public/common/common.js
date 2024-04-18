@@ -595,11 +595,12 @@
                 hush.noti.notis[roomid] = noti
                 noti.onclick = function () {
                     hush.sock.openRoom("/app/msngr/chat.html", roomid, "noti")
+                    delete hush.noti.notis[roomid]
                     noti.close()
                 }
-                noti.onclose = function () {
-                    delete hush.noti.notis[roomid]
-                }
+                //noti.onclose = function () {
+                //    delete hush.noti.notis[roomid] //여기서 delete하면 procNoti()다음에 read_msg()가 일어나는데 read_msg()에서 delete되어버려 꼬임
+                //}
             }
         },
         sock : {
