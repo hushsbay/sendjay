@@ -19,8 +19,7 @@ module.exports = async function(socket, param) {
 		await wsmysql.txBegin(conn)		
 		if (obj.type == 'updateall') {
 			sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
-			data = await wsmysql.query(conn, sql, [_roomid, userid, dateFr])
-			console.log(_roomid, userid, dateFr)
+			data = await wsmysql.query(conn, sql, [_roomid, userid, dateFr]) //console.log(_roomid, userid, dateFr)
 			if (data[0].CNT > 0) {
 				data = "UPDATE A_MSGDTL_TBL SET STATE = 'R' WHERE ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
 				await wsmysql.query(conn, data, [_roomid, userid, dateFr]) //update all

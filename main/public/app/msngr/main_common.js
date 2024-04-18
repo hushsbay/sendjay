@@ -932,7 +932,7 @@ var funcSockEv = { //needs to be public
         }
     },
     [hush.cons.sock_ev_read_msg] : (data) => {        
-        if (data.receiverid != g_userid) return
+        if (data.userid != g_userid) return
         $("#chk_selectall").prop("checked", false)
         $(".chkbox_portal:checked").prop("checked", false)
         if (data.type == "updateall") { //socket.emit for both Desktop/Mobile
