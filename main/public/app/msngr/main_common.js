@@ -674,6 +674,7 @@ const getPortalList = async (obj) => {
 
 const getUnreadPerEachRoom = async (roomid, chkCloseNoti) => { //no unread display in case of invite/leave msg    
     const rs = await hush.http.ajax("/msngr/qry_unread", { roomid : roomid })
+    if (!hush.util.chkAjaxCode(rs, true)) return
     const _unread = rs.list[0].UNREAD
     if (_unread == 0) {
         $("#unread_" + roomid).hide() //for positioning problem
