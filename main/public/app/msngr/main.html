@@ -198,32 +198,15 @@
                             })
                         })
                         $("#btn_exit").on("click", async function() { 
-                            //서버 리스타트후 바로 목록에서 나가기 할 경우 롬조인이 안되서 다른 멤버들에게 전달이 안될 수 있는데 
-                            //먼저 sock_ev_open_room을 호출하여 살아 있는 방멤버에 대해 룸 조인을 처리. ("before_leave" below)
+                            //서버 리스타트후 바로 목록에서 나가기 할 경우 롬조인이 안되서 다른 멤버들에게 전달 안 될 수 있는데 (목록 아닌 채팅방에서 열면 조인되므로 문제없음)
+                            //먼저 sock_ev_open_room을 호출하여 살아 있는 방멤버에 대해 룸 조인을 처리하는 방법도 있지만 
+                            //굳이 그리 하지 않고, 나중에라도 방을 열어 보면 퇴장처리된 정보만 보이면 무방하므로, 그냥 아래처럼 일반적으로 처리함 
                             hush.util.animBgColor($(this))
                             const checked = $(".chkbox_portal:checked")
                             if (checked.length == 0) {
                                 hush.msg.toast(hush.cons.msg.row_not_selected)
                                 return
                             }
-                            // hush.msg.alert("선택된 채팅방내 본인이 주고 받은 모든 톡이 삭제됩니다. 계속할까요??", { 
-                            //     "Yes": function() {                                 
-                                    // checked.each(function(idx, item) {
-                                    //     const _roomid = item.id.substring(4)
-                                    //     const rq = { from : "before_leave", userid : g_userid } //"before_leave" is not practically used at server (just dummy)
-                                    //     if (hush.webview.ios) {
-                                    //     } else if (hush.webview.and) {
-                                    //         AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), _roomid, "parent", false) //procMsg=false
-                                    //     } else {
-                                    //         hush.sock.send(hush.socket, hush.cons.sock_ev_open_room, rq, _roomid, "parent")
-                                    //     }
-                                    // })
-                                    // hush.msg.close()
-                                    // $("#chk_selectall").prop("checked", false)
-                            //     }, "No": function() { 
-                            //         hush.msg.close()
-                            //     } 
-                            // }, "Leave Room", 200)
                             const ret = await hush.msg.alert("선택된 채팅방내 본인이 주고 받은 모든 톡이 삭제됩니다. 계속할까요?")
                             if (!ret) return
                             checked.each(function(idx, item) {
