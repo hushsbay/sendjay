@@ -1042,18 +1042,18 @@ const procSendAndAppend = (rq, blobUrl) => {
     if (_focused) g_in_chat.focus()       
     if (rq.type != "file") prepareForNoResponse(rq)
     if (rq.type == "talk") {
-        debugger
         const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readwrite")
         const os = tx.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
         const os_req = os.get(rq.msgid)
         os_req.onsuccess = function(e) {
+            debugger
             if (os_req.result) return //const rec = os_req.result
             const add_req = os.add({ roomid : g_roomid, msgid : rq.msgid, body : rq.body, cdt : hush.util.getCurDateTimeStr(true) })
             add_req.onsuccess = function() { /*do nothing*/ }
-            add_req.onerror = function(e) { /*console.log("add_req error: " + e.srcElement.error)*/ }
+            add_req.onerror = function(e) { console.log("add_req error: " + e.srcElement.error) }
             tx.oncomplete = function() { /*console.log("all done")*/ }  
         }
-        os_req.onerror = function(e) { /*console.log("os_req error: " + e.srcElement.error)*/ }   
+        os_req.onerror = function(e) { console.log("os_req error: " + e.srcElement.error) }   
     }
 }
 
