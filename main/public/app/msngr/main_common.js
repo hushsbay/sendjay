@@ -268,7 +268,7 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             hush.http.getUserPic(_userid, "img_" + _userid) //$("#per_" + _userid).off("click").on("click", async function(e) {
             $("#mem_" + _userid).off("click").on("click", async function(e) {
                 if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 event가 먹히도록 함
-                //hush.util.animCall(this.id, true)
+                hush.util.animBgColor($(this))
                 await hush.msg.alert("이름 : " + _nm + "<br><br>전화 : <a href=tel:'" + _tel + "'>" + _tel + "</a><br>부서 : " + _org + "<br>직무 : " + _job + "<br><br>" + _abcd + " " + _abnm, null, "Info")
             })
         }
@@ -405,7 +405,7 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
             const _hasChild = _tag.attr("haschild") //Y or ~
             const _memcnt = parseInt(_tag.attr("memcnt"))
             const _memDownloaded = _tag.attr("memdownloaded") //Y or ~ => withMember option needed
-            //hush.util.animCall(_id, true) //PC 브라우저에서는 문제없음. android webview에서는 행전체 effect와 .orgbody의 animcall이 같이 실행되는데 .orgbody가 높이가 더 커서 부자연스러움
+            hush.util.animBgColor($(this)) //PC 브라우저에서는 문제없음. android webview에서는 행전체 effect와 .orgbody의 animcall이 같이 실행되는데 .orgbody가 높이가 더 커서 부자연스러움
             //원래 의도는 webview에서도 animCall만 먹었으면 좋겠는데 webview 자체의 efffect가 그것도 높낮이가 다른 두개의 effect가 보이는 것이 문제임 .orgbody의 height:100%로 해결함
             if (_hasChild == "Y") {
                 const _nextTag = $("#orgrow_" + (_idx + 1))
@@ -654,9 +654,9 @@ const getPortalList = async (obj) => {
         //if (obj.type == "normal" && g_cdt != FIRST_QUERIED && lastRoomid != "") hush.util.animCall(lastRoomid, true) //tells if next fetch exists
         const _tag = (obj.roomid) ? "#div_" + obj.roomid : ".div_row" //const _tag = (obj.roomid) ? "#subdiv_" + obj.roomid : ".row_portal"
         $(_tag).off("click").on("click", function(e) {
+            hush.util.animBgColor($(this))
             if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 event가 먹히도록 함
-            const _id = this.id
-            //hush.util.animCall(_id, true)
+            const _id = this.id            
             const _roomid = _id.substring(4) //const _roomid = _id.substring(7)
             if (hush.webview.ios) {
             } else if (hush.webview.and) {

@@ -602,7 +602,7 @@
         },
         sock : {
             roomMap : { }, //{ nm: 'xxx', noti: true/false }
-            rooms : { }, //sock.connect => https://socket.io/docs/v3/client-initialization        
+            rooms : { }, //window 객체가 저장됨. sock.connect => https://socket.io/docs/v3/client-initialization        
             connect : (io, query) => new Promise((resolve, reject) => { //this will be occurred only on index.html
                 const socket = io(hush.cons.socket_url, { forceNew: false, reconnection: false, query: query }) //forceNew=false //See 'disconnect_prev_sock' in pmessage.js (on server)
         		socket.off("connect_error").on("connect_error", async (e) => { await hush.msg.alert("connect_error\n" + e.toString()) })
@@ -760,8 +760,9 @@
                 arr.sort(function() { return 0.5 - Math.random() })
                 return arr.join("")
             },
-            createId : (uniqueStr) => {
-                return hush.util.getCurDateTimeStr(false, true) + hush.util.getRnd().toString().padStart(6, "0") + (uniqueStr ? hush.util.shuffleChar(uniqueStr) : "")
+            createId : (uniqueStr) => { //uniqueStr 제거하기 : 과하게 길어서 불편하기만 함. 결국, g_token10도 모두 제거하기
+                //return hush.util.getCurDateTimeStr(false, true) + hush.util.getRnd().toString().padStart(6, "0") + (uniqueStr ? hush.util.shuffleChar(uniqueStr) : "")
+                return hush.util.getCurDateTimeStr(false, true) + hush.util.getRnd().toString().padStart(6, "0")
             },
             openWinTab : (url, replace) => {
                 const _url = hush.http.handleNoCache(url)

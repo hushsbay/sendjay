@@ -121,10 +121,7 @@ const setMembers = async (data) => {
         list.empty()                
         const rq = { type : "userids", keyword : data.receiverid.join(hush.cons.indeli) }
         const rs = await hush.http.ajax("/msngr/qry_userlist", rq)
-        if (rs.code != hush.cons.CODE_OK) {
-            hush.msg.showMsg(rs.msg, rs.code)
-            return
-        }
+        if (!hush.util.chkAjaxCode(rs, true)) return
         const _len = rs.list.length
         for (let i = 0; i < _len; i++) {
             const row = rs.list[i]
@@ -154,7 +151,7 @@ const setMembers = async (data) => {
         }                
         $("#people_cnt").html(_len)
         $(".mem").off("click").on("click", function() {
-            //hush.util.animCall(this.id, true) 
+            hush.util.animBgColor($(this))
             const _userid = this.id.substring(4)
             const _abnm = $(this).data("abnm") ? " / " + decodeURIComponent($(this).data("abnm")) : ""
             const _usernm = decodeURIComponent($(this).data("nm"))
@@ -234,7 +231,7 @@ const setResult = (data) => {
         $("#result_cnt").html(_len) 
         list.scrollTop(list.prop("scrollHeight")) 
         $(".result").off("click").on("click", function(e) { 
-            //hush.util.animCall(this.id, true) 
+            hush.util.animBgColor($(this))
             procHighlight($(this))
             const start = $(this).data("cdt")
             if (start >= g_cdt) {
@@ -258,7 +255,7 @@ const setResult = (data) => {
         })
         $("#res_" + data.list[_len - 1].MSGID).click()
         $("#getprev").off("click").on("click", function(e) { 
-            //hush.util.animCall(this.id, true) 
+            hush.util.animBgColor($(this))
             g_cdt = $(this).data("cdt")
             getMsgList()
             setTimeout(() => $("#getprev").hide(), 500)
@@ -515,7 +512,7 @@ const addRow = (obj, kind) => {
             }
         }
         $("#unread_" + obj.msgid).off("click").on("click", function() {
-            //hush.util.animCall(this.id, true) 
+            hush.util.animBgColor($(this))
             const rq = { type : "getmembers", msgid : obj.msgid }
             if (hush.webview.ios) { 
             } else if (hush.webview.and) {
@@ -539,7 +536,7 @@ const addRow = (obj, kind) => {
             // $("#save_" + obj.msgid).hide()
         })
         $("#reply_" + obj.msgid).off("click").on("click", function() {
-            //hush.util.animCall(this.id, true) 
+            hush.util.animBgColor($(this))
             // if ($("#cancelreply").length > 0) {
             //     setTitleToFrTip(true)
             //     return
@@ -554,7 +551,7 @@ const addRow = (obj, kind) => {
             })
         })
         $("#save_" + obj.msgid).off("click").on("click", function() {
-            //hush.util.animCall(this.id, true) 
+            hush.util.animBgColor($(this))
             if (obj.filestate == hush.cons.file_expired || $("#body_" + obj.msgid).html() == hush.cons.cell_revoked) return
             if (obj.type == "image") {
                 hush.http.fileDownload("imagetofile", obj.msgid)
@@ -583,7 +580,7 @@ const procForCell = (obj) => {
         }
     })
     $("#btn_delete_cell, #btn_delete_cell_m").off("click").on("click", async function(e) { 
-        //hush.util.animCall(this.id, true) 
+        hush.util.animBgColor($(this))
         const checked = $(".chkboxSel:checked")
         const len = checked.length
         if (len == 0) {
@@ -622,7 +619,7 @@ const procForCell = (obj) => {
         }
     })
     $("#btn_cancel_cell, #btn_cancel_cell_m").off("click").on("click", function(e) { 
-        //hush.util.animCall(this.id, true) 
+        hush.util.animBgColor($(this))
         showCellMenu(false) 
     })
     if (!hush.webview.on) $("#msg_" + obj.msgid).on("contextmenu", function(e) { $("#menu_" + obj.msgid).click() })
@@ -632,11 +629,11 @@ const procForCell = (obj) => {
         e.originalEvent.dataTransfer.effectAllowed = "copy"
     })
     $("#menu_" + obj.msgid + ", #cellmenu_" + obj.msgid).off("click").on("click", function(e) { 
-        //hush.util.animCall(this.id, true) 
+        hush.util.animBgColor($(this))
         if ($("#btn_delete_cell").css("display") == "none") {
             showCellMenu(true, obj)
             $("#btn_copy_cell, #btn_copy_cell_m").off("click").on("click", function(e) { 
-                //hush.util.animCall(this.id, true) 
+                hush.util.animBgColor($(this))
                 if (obj.type == "" || !hush.cons.chat_handled.includes(obj.type)) return 
                 if ($("#body_" + obj.msgid).html() == hush.cons.cell_revoked) {
                     hush.msg.toast(hush.cons.cell_revoked)
@@ -665,7 +662,7 @@ const procForCell = (obj) => {
                 showCellMenu(false)
             })
             $("#btn_revoke_cell, #btn_revoke_cell_m").off("click").on("click", async function(e) {   
-                //hush.util.animCall(this.id, true)   
+                hush.util.animBgColor($(this)) 
                 debugger               
                 if (obj.type == "" || !hush.cons.chat_handled.includes(obj.type)) return 
                 if ($("#body_" + obj.msgid).html() == hush.cons.cell_revoked) {
@@ -734,10 +731,7 @@ const getMsgList = async (type, keyword, start, end) => {
             withToast = false
         }
         const rs = await hush.http.ajax("/msngr/qry_msglist", rq)
-        if (rs.code != hush.cons.CODE_OK) {
-            hush.msg.showMsg(rs.msg, rs.code)
-            return
-        }
+        if (!hush.util.chkAjaxCode(rs)) return
         const _len = rs.list.length
         if (rq.type == "search" || rq.type == "etc") {
             if (_len == 0) {
@@ -778,7 +772,7 @@ const getMsgList = async (type, keyword, start, end) => {
             }
             let _first_msgid = "", _prev_read = "R"
             for (let i = 0; i < _len; i++) {
-                const obj = { } //should be the same as obj when send_msg. send_msg때의 obj로 만들어야 렌더링때 문제없음
+                const obj = {} //send_msg때의 obj로 만들어야 렌더링때 문제없음
                 const row = rs.list[i]
                 obj.msgid = row.MSGID
                 obj.cdt = row.CDT
@@ -858,6 +852,7 @@ const getMsgList = async (type, keyword, start, end) => {
             }
             if (!hush.webview.on) g_in_chat.focus()
             if (rq.type == "normal" && g_page == 0) {
+                debugger
                 const _arr = []
                 let _brr
                 const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readonly") //readonly
@@ -871,8 +866,8 @@ const getMsgList = async (type, keyword, start, end) => {
                         cursor.continue()                               
                     } else { //console.log("No more entries")
                         if (_arr.length == 0) return
-                        const rs = await hush.http.ajax(hush.cons.route + "/get_msginfo", { msgids : _arr, kind : "check" })
-                        if (rs.code != hush.cons.result_ok) return
+                        const rs = await hush.http.ajax(hush.cons.route + "/msngr/get_msginfo", { msgids : _arr, kind : "check" })
+                        if (!hush.util.chkAjaxCode(rs)) return
                         const _len = rs.list.length //sending failure
                         if (_len == 0) return
                         _brr = rs.list
@@ -926,7 +921,7 @@ const procFailure = (rq, dtDetails) => { //Request already sent. Retry(resending
     objUnread.removeClass("unread").addClass("failure")
     objUnread.show()
     objUnread.off("click").on("click", async function() { 
-        //hush.util.animCall(this.id, true) 
+        hush.util.animBgColor($(this))
         // hush.msg.alert(dtDetails, { //hush.msg.alert(dtDetails) 
         //     "Remove Talk": function() { 
         //         $("#msg_" + rq.msgid).remove()
@@ -957,7 +952,7 @@ const retrySending = (rq) => {
     objUnread.removeClass("unread").addClass("failure")
     objUnread.show()
     objUnread.off("click").on("click", function() {
-        //hush.util.animCall(this.id, true) 
+        hush.util.animBgColor($(this))
         hush.msg.dialogMultiButton("Do you want to retry sending ?", {
             "Retry": function() { 
                 $("#msg_" + rq.msgid).remove()
@@ -988,7 +983,7 @@ const prepareForNoResponse = (rq) => {
         objUnread.removeClass("unread").addClass("failure")
         objUnread.show()
         objUnread.off("click").on("click", async function() {
-            //hush.util.animCall(this.id, true)
+            hush.util.animBgColor($(this))
             const ret = await hush.msg.confirm("전송여부를 확인하시겠습니까?")
 			if (!ret) return 
             $("#handling_" + rq.msgid).show()
@@ -1361,7 +1356,7 @@ const handleFileUpload = async (files) => {
                 }
             })
             $("#abort_" + rq.msgid).off("click").on("click", async function() {
-                //hush.util.animCall(this.id, true) 
+                hush.util.animBgColor($(this))
                 if ($(this).html() != "Abort") {
                     await hush.msg.alert("Can't abort (Upload is being done). Use 'Revoke' on CellMenu")
                     return
@@ -1838,11 +1833,11 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                         $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
                         showImgMenu(true)
                         $("#btn_send_img_m").off("click").on("click", function(e) { 
-                            //hush.util.animCall(this.id, true) 
+                            hush.util.animBgColor($(this))
                             sendMsg("image", blobUrl, blob) 
                         })
                         $("#btn_cancel_img_m").off("click").on("click", function(e) { 
-                            //hush.util.animCall(this.id, true) 
+                            hush.util.animBgColor($(this))
                             showImgMenu(false) 
                         })
                     }
@@ -1854,11 +1849,11 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                 $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
                 showImgMenu(true)
                 $("#btn_send_img").off("click").on("click", function(e) { 
-                    //hush.util.animCall(this.id, true) 
+                    hush.util.animBgColor($(this))
                     sendMsg("image", blobUrl, blob) 
                 })
                 $("#btn_cancel_img").off("click").on("click", function(e) { 
-                    //hush.util.animCall(this.id, true) 
+                    hush.util.animBgColor($(this))
                     showImgMenu(false) 
                 })
             }                    

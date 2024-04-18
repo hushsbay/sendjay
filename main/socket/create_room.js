@@ -8,11 +8,11 @@ module.exports = async function(socket, param) {
 	let conn, sql, data, len
 	try { //ws.sock.warn(null, socket, _logTitle, JSON.stringify(param), _roomid)
 		const _useridArr = param.data.userids
-		const _masterid = param.data.masterid //socket.userid를 사용해도 되는데 문맥 편의상 그냥 파라미터로 받음 (아래 비교 필요)
+		const _masterid = param.data.masterid //socket.userid를 사용해도 되는데 문맥 편의상 그냥 파라미터로 받음 (따라서, socket.userid와 비교 필요)
 		const _masternm = param.data.masternm
 		if (_masterid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- masterid')
 		const _chkSameMembers = _useridArr.length <= ws.cons.max_check_same_members ? true : false
-		_useridArr.sort((a, b) => { return (a > b) ? 1 : (b > a) ? -1 : 0 }) //alphabetical 순서로 sql 조회
+		_useridArr.sort((a, b) => { return (a > b) ? 1 : (b > a) ? -1 : 0 }) //alphabetical 순서
 		const _useridJoinedEasy = _useridArr.join(ws.cons.easydeli)
 		conn = await wsmysql.getConnFromPool(global.pool)
 		await wsmysql.txBegin(conn)

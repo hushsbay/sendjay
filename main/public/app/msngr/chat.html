@@ -42,15 +42,16 @@
         <script>
             $.when($.ready).done(async function() {
                 try {
+                    document.oncontextmenu = new Function("return false") //for context menu (prevent mouse right click for pc web only)
                     await $.getScript("/common/common.js")
                     await $.getScript("chat_common.js")
                     const param = new URLSearchParams(location.search)
                     hush.webview.chk(param)
-                    g_in_chat = $("#in_chat")
-                    g_list_msg = $("#list_msg")
                     g_type = param.get("type")
                     g_roomid = param.get("roomid")
                     g_origin = param.get("origin")
+                    g_in_chat = $("#in_chat")
+                    g_list_msg = $("#list_msg")
                     if (hush.webview.on) {
                         g_focus_for_webview = true
                         $("#fr_menu_top_right_m").css("display", "flex")
@@ -60,8 +61,7 @@
                         $("#btn_send_m").css("display", "flex")
                         //g_in_chat.css("padding", "0px 40px 0px 45px")
                         AndroidRoom.procAfterOpenRoom()
-                    } else {
-                        document.oncontextmenu = new Function("return false") //for context menu (prevent mouse right click for pc web only)
+                    } else {                        
                         g_focus_for_webview = false
                         $("#in_search").width(100)
                         $("#fr_main").height("calc(100% - 190px)")
@@ -97,7 +97,7 @@
                             hush.sock.send(g_socket, hush.cons.sock_ev_open_room, rq, g_roomid)
                         }
                         procScrollEvent()
-                        //chkTyping()
+                        chkTyping()
                     }
                     if (localStorage[g_roomid]) g_in_chat.val(localStorage[g_roomid])
                     hush.webview.ready = true

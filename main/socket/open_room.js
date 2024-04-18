@@ -23,7 +23,7 @@ module.exports = async function(socket, param) {
 		let userkeyArr = [], userkeySocketArr = [], arrUseridSortedByUsernm = [], arrUsernmSortedByUsernm = []
 		for (let i = 0; i < len; i++) {
 			const _userid = data[i].USERID
-			if (_userid == param.data.userid) _nicknm = data[i].NICKNM				
+			if (_userid == userid) _nicknm = data[i].NICKNM				
 			const _usernm = data[i].USERNM
 			arrUseridSortedByUsernm.push(_userid)
 			arrUsernmSortedByUsernm.push(_usernm)
