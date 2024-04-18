@@ -599,6 +599,7 @@
                     noti.close()
                 }
                 noti.onclose = function () {
+                    debugger
                     delete hush.noti.notis[roomid]
                 }
             }            
