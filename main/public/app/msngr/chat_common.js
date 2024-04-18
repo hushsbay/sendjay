@@ -852,7 +852,6 @@ const getMsgList = async (type, keyword, start, end) => {
             }
             if (!hush.webview.on) g_in_chat.focus()
             if (rq.type == "normal" && g_page == 0) {
-                debugger
                 const _arr = []
                 let _brr
                 const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readonly") //readonly
@@ -860,12 +859,15 @@ const getMsgList = async (type, keyword, start, end) => {
                 const index = os.index("roomid") //let req = os.openCursor() //req = os.count(); req.onsuccess = function(evt) { console.log("====" + evt.target.result) }
                 let req = index.openCursor(IDBKeyRange.only(g_roomid))
                 req.onsuccess = async function(evt) {
+                    debugger
                     const cursor = evt.target.result
                     if (cursor) { //console.log("cursor:", cursor) //cursor.key = cursor.value.roomid in this case
+                        //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 (정상적이지 않은 경우만 로컬에 있을 것임)
+                        //따라서, 아래 담기는 건 전송 실패건만임
                         _arr.push(cursor.value.msgid)
                         cursor.continue()                               
                     } else { //console.log("No more entries")
-                        if (_arr.length == 0) return
+                        if (_arr.length == 0) return 
                         const rs = await hush.http.ajax(hush.cons.route + "/msngr/get_msginfo", { msgids : _arr, kind : "check" })
                         if (!hush.util.chkAjaxCode(rs)) return
                         const _len = rs.list.length //sending failure
@@ -898,7 +900,6 @@ const getMsgList = async (type, keyword, start, end) => {
                         }
                         tx1.oncomplete = function() {
                             scrollToTarget()
-                            debugger
                             if (_arr.length > 0) {
                                 const _crr = _arr.filter(x => !_brr.includes(x)) //_arr - _brr = _crr
                                 for (msgid of _crr) deleteLocalMsg(msgid)
@@ -1047,12 +1048,12 @@ const procSendAndAppend = (rq, blobUrl) => {
         const os = tx.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
         const os_req = os.get(rq.msgid)
         os_req.onsuccess = function(e) {
-            debugger
             if (os_req.result) return //const rec = os_req.result
+            //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 : deleteLocalMsg(data.msgid) (정상적이지 않은 경우만 로컬에 있을 것임)
             const add_req = os.add({ roomid : g_roomid, msgid : rq.msgid, body : rq.body, cdt : hush.util.getCurDateTimeStr(true) })
             add_req.onsuccess = function() { /*do nothing*/ }
             add_req.onerror = function(e) { console.log("add_req error: " + e.srcElement.error) }
-            tx.oncomplete = function() { /*console.log("all done")*/ }  
+            tx.oncomplete = function() { /*do nothing*/ }  
         }
         os_req.onerror = function(e) { console.log("os_req error: " + e.srcElement.error) }   
     }
