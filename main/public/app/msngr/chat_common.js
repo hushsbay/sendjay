@@ -1042,6 +1042,7 @@ const procSendAndAppend = (rq, blobUrl) => {
     if (_focused) g_in_chat.focus()       
     if (rq.type != "file") prepareForNoResponse(rq)
     if (rq.type == "talk") {
+        debugger
         const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readwrite")
         const os = tx.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
         const os_req = os.get(rq.msgid)
