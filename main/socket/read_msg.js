@@ -7,22 +7,22 @@ module.exports = async function(socket, param) {
 	let conn, sql, data, len
 	try { //ws.sock.warn(null, socket, _logTitle, JSON.stringify(param), _roomid)
 		const obj = param.data	
-		//const userid = socket.userid
+		const userid = socket.userid
 		//if (obj.type == 'updateall' || obj.type == 'update') {
 			//if (obj.receiverid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- obj.receiverid')	
 		//}
-		param.data.userid = socket.userid //1) see ChatService.kt 2) in order to sendToMyOtherSocket for mobile noti cancelling	
+		param.data.userid = userid //1) see ChatService.kt 2) in order to sendToMyOtherSocket for mobile noti cancelling	
 		conn = await wsmysql.getConnFromPool(global.pool)
-		const ret = await ws.util.chkAccessUserWithTarget(conn, socket.userid, _roomid, 'room')
+		const ret = await ws.util.chkAccessUserWithTarget(conn, userid, _roomid, 'room')
 		if (ret != '') throw new Error(ret)
 		const dateFr = ws.util.setDateAdd(new Date(), ws.cons.max_days_to_fetch)	
 		await wsmysql.txBegin(conn)		
 		if (obj.type == 'updateall') {
 			sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
-			data = await wsmysql.query(conn, sql, [_roomid, obj.receiverid, dateFr])
+			data = await wsmysql.query(conn, sql, [_roomid, userid, dateFr])
 			if (data[0].CNT > 0) {
 				data = "UPDATE A_MSGDTL_TBL SET STATE = 'R' WHERE ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
-				await wsmysql.query(conn, data, [_roomid, obj.receiverid, dateFr]) //update all
+				await wsmysql.query(conn, data, [_roomid, userid, dateFr]) //update all
 			}
 			await wsmysql.txCommit(conn)
 			if (data[0].CNT > 0) { //need to update unread count for all members
@@ -44,7 +44,7 @@ module.exports = async function(socket, param) {
 				param.data.unread_cnt = -1
 			} else {
 				data = "UPDATE A_MSGDTL_TBL SET STATE = 'R' WHERE MSGID = ? AND ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
-				await wsmysql.query(conn, data, [obj.msgid, _roomid, obj.receiverid, dateFr])
+				await wsmysql.query(conn, data, [obj.msgid, _roomid, userid, dateFr])
 				sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND ROOMID = ? AND STATE = '' AND CDT >= ? "
 				data = await wsmysql.query(conn, sql, [obj.msgid, _roomid, dateFr])
 				param.data.unread_cnt = data[0].CNT
