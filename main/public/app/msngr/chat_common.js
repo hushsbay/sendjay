@@ -898,6 +898,7 @@ const getMsgList = async (type, keyword, start, end) => {
                         }
                         tx1.oncomplete = function() {
                             scrollToTarget()
+                            debugger
                             if (_arr.length > 0) {
                                 const _crr = _arr.filter(x => !_brr.includes(x)) //_arr - _brr = _crr
                                 for (msgid of _crr) deleteLocalMsg(msgid)
@@ -1651,7 +1652,6 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
             setMembers(data) //console.log(JSON.stringify(data)+"===")
             toggleDispMem(data.dispmem)
             if (data.from == "rename_room" || data.from == "after") return
-            debugger
             hush.idb.connect(() => {
                 getMsgList() //setTimeout(() => getMsgList(), 3000) //set for debugging
             })
@@ -1665,6 +1665,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
             hush.msg.alert("Different RoomID : " + data.roomid + "/" + g_roomid)
             return
         }
+        debugger
         if (data.senderkey == g_userkey) deleteLocalMsg(data.msgid)
         let _isStickyNeeded
         if (data.senderkey && data.senderkey != g_userkey) { 
