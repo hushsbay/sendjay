@@ -720,7 +720,7 @@ const getUnreadForAll = async () => {
             handleDocTitle(0)
         } else {
             handleDocTitle(1)
-            for (let i = 0; i < len; i++) g_unread[rs.list[i].ROOMID] = rs.list[i].UNREAD
+            for (let i = 0; i < _len; i++) g_unread[rs.list[i].ROOMID] = rs.list[i].UNREAD
         }
     } catch (ex) {
         hush.util.showEx(ex)
