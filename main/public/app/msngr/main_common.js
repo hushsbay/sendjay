@@ -992,18 +992,18 @@ var funcSockEv = { //needs to be public
             })
         }          
     },
-    [hush.cons.sock_ev_open_room] : (data) => {
-        if (data.from != "before_leave") return //see $("#btn_exit") in index.html
-        const rq = initMsg(data.roomid)
-        rq.type = "leave"
-        rq.body = g_usernm + hush.cons.left
-        if (hush.webview.ios) { 
-        } else if (hush.webview.and) {
-            AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), data.roomid, "parent", true) //procMsg=false 
-        } else {
-            hush.sock.send(hush.socket, hush.cons.sock_ev_send_msg, rq, data.roomid, "parent")
-        }
-    },
+    // [hush.cons.sock_ev_open_room] : (data) => {
+    //     if (data.from != "before_leave") return //see $("#btn_exit") in main.html
+    //     const rq = initMsg(data.roomid)
+    //     rq.type = "leave"
+    //     rq.body = g_usernm + hush.cons.left
+    //     if (hush.webview.ios) { 
+    //     } else if (hush.webview.and) {
+    //         AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), data.roomid, "parent", true) //procMsg=false 
+    //     } else {
+    //         hush.sock.send(hush.socket, hush.cons.sock_ev_send_msg, rq, data.roomid, "parent")
+    //     }
+    // },
     [hush.cons.sock_ev_cut_mobile] : async (data) => {
         await hush.msg.alert("Logout done. (including mobile device)")
     },

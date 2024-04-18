@@ -198,10 +198,8 @@
                             })
                         })
                         $("#btn_exit").on("click", async function() { 
-                            //There might be a certain possibility 'leave' message cannot be reached to room members if every member don't open chat room at all after server restart.
-                            //Since when every member don't open chat room, no one can't be joined to that room, so real-time 'leave' message won't be delivered.
-                            //work-around => calling hush.cons.sock_ev_open_room before hush.cons.sock_ev_send_msg with 'leave' on response for sock_ev_open_room ("before_leave" below)
-                            //서버 리스타트후 바로 목록에서 나가기 할 경우 롬조인이 안되서 다른 멤버들에게 전달이 안될 수 있는데 먼저 sock_ev_open_room을 호출하여 처리하면 됨. ("before_leave" below)
+                            //서버 리스타트후 바로 목록에서 나가기 할 경우 롬조인이 안되서 다른 멤버들에게 전달이 안될 수 있는데 
+                            //먼저 sock_ev_open_room을 호출하여 살아 있는 방멤버에 대해 룸 조인을 처리. ("before_leave" below)
                             hush.util.animBgColor($(this))
                             const checked = $(".chkbox_portal:checked")
                             if (checked.length == 0) {
@@ -226,16 +224,25 @@
                             //         hush.msg.close()
                             //     } 
                             // }, "Leave Room", 200)
-                            const ret = await hush.msg.alert("선택된 채팅방내 본인이 주고 받은 모든 톡이 삭제됩니다. 계속할까요??")
+                            const ret = await hush.msg.alert("선택된 채팅방내 본인이 주고 받은 모든 톡이 삭제됩니다. 계속할까요?")
                             if (!ret) return
                             checked.each(function(idx, item) {
                                 const _roomid = item.id.substring(4)
-                                const rq = { from : "before_leave" } //"before_leave" is not practically used at server (just dummy)
-                                if (hush.webview.ios) {
+                                // const rq = { from : "before_leave" } //"before_leave" is just dummy
+                                // if (hush.webview.ios) {
+                                // } else if (hush.webview.and) {
+                                //     AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), _roomid, "parent", false) //procMsg=false
+                                // } else {
+                                //     hush.sock.send(hush.socket, hush.cons.sock_ev_open_room, rq, _roomid, "parent")
+                                // }
+                                const rq = initMsg()
+                                rq.type = "leave"
+                                rq.body = g_usernm + "<br>" + hush.cons.left
+                                if (hush.webview.ios) { 
                                 } else if (hush.webview.and) {
-                                    AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), _roomid, "parent", false) //procMsg=false
+                                    AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), _roomid, "parent", true) //procMsg=false 
                                 } else {
-                                    hush.sock.send(hush.socket, hush.cons.sock_ev_open_room, rq, _roomid, "parent")
+                                    hush.sock.send(hush.socket, hush.cons.sock_ev_send_msg, rq, _roomid, "parent")
                                 }
                             })
                             $("#chk_selectall").prop("checked", false)
