@@ -600,7 +600,7 @@
                 noti.onclose = function () {
                     delete hush.noti.notis[roomid]
                 }
-            }            
+            }
         },
         sock : {
             roomMap : { }, //{ nm: 'xxx', noti: true/false }

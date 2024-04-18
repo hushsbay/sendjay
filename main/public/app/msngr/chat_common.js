@@ -1762,7 +1762,6 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                 }
             }
         } else {
-            debugger
             if (data.errcd == hush.cons.CODE_ERR) {
                 procFailure(data, data.errmsg)
                 return
@@ -1787,7 +1786,6 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                     _msgArrived = true
                 }
             }
-            debugger
             if (!_isStickyNeeded && _msgArrived && (document.hasFocus() || g_focus_for_webview)) { //type = update or query
                 const rq = { type : "update", roomid : g_roomid, msgid : data.msgid }
                 if (hush.webview.ios) { 
