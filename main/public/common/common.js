@@ -592,6 +592,7 @@
                 }  
                 const noti = new window.Notification("", { body : _body, dir : "auto", lang : "EN", tag : roomid, icon : hush.cons.logo_darkblue, requireInteraction : true })
                 noti.msgid = obj.msgid
+                debugger
                 hush.noti.notis[roomid] = noti
                 noti.onclick = function () {
                     hush.sock.openRoom("/app/msngr/chat.html", roomid, "noti")
