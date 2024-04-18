@@ -734,7 +734,7 @@ const closeNoti = (roomid, msgid, skipGetUnreadPerEachRoom) => {
         procUnreadTitle(roomid)
         if (!skipGetUnreadPerEachRoom) getUnreadPerEachRoom(roomid)
         if (msgid) { //see [hush.cons.sock_ev_read_msg]
-            setTimeout(function() {
+            //setTimeout(function() {
                 debugger
                 const noti = hush.noti.notis[roomid]
                 if (noti && noti.msgid && msgid == noti.msgid) {
@@ -742,7 +742,7 @@ const closeNoti = (roomid, msgid, skipGetUnreadPerEachRoom) => {
                     procUnreadTitle(roomid)
                     if (!skipGetUnreadPerEachRoom) getUnreadPerEachRoom(roomid)
                 }
-            }, 3000)        
+            //}, 3000)        
         }
     } else {
         procUnreadTitle(roomid)
