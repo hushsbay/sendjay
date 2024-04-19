@@ -934,7 +934,7 @@ var funcSockEv = { //needs to be public
         }
     },
     [hush.cons.sock_ev_read_msg] : (data) => {  
-        debugger
+        if (data.type != "updateall") debugger
         if (data.userid != g_userid) return //새 메시지 도착시에는 return되고 새로 도착한 노티 클릭시에는 다음으로 넘어감
         $("#chk_selectall").prop("checked", false)
         $(".chkbox_portal:checked").prop("checked", false)
