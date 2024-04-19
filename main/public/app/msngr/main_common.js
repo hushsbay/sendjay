@@ -730,7 +730,10 @@ const getUnreadForAll = async () => {
 const closeNoti = (roomid, skipGetUnreadPerEachRoom) => { //const closeNoti = (roomid, msgid, skipGetUnreadPerEachRoom) => {
     if (!hush.webview.on) {
         const noti = hush.noti.notis[roomid]
-        if (noti) noti.close()
+        if (noti) {
+            noti.close()
+            delete hush.noti.notis[roomid]
+        }
         procUnreadTitle(roomid)
         if (!skipGetUnreadPerEachRoom) getUnreadPerEachRoom(roomid)
         // if (msgid) { //see [hush.cons.sock_ev_read_msg]
