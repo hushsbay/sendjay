@@ -257,14 +257,14 @@
                     $("#btn_rename, #btn_rename_m").on("click", function() {
                         hush.util.animBgColor($(this))
                         if (g_masterid == g_userid) {
-                            hush.msg.dialogMultiButton("You are owner of this chat room.<br>Decide range for changing of room name.", { 
-                                "To every user": function() { 
+                            hush.msg.dialogMultiButton("이 방의 관리자입니다.<br>방명 변경시 적용범위를 선택하시기 바랍니다.", { 
+                                "모두에게 적용": function() { 
                                     hush.msg.dialogClose()
                                     dialogRoomRename("all")
-                                }, "To me": function() { 
+                                }, "나에게만 적용": function() { 
                                     hush.msg.dialogClose()
                                     dialogRoomRename("one")
-                                }, "Cancel": function() { 
+                                }, "취소": function() { 
                                     hush.msg.dialogClose()
                                     if (hush.webview.on) showRoomMenu(false)
                                 } 
