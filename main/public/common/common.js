@@ -581,22 +581,26 @@
                     }
                 }
                 const msgArrived = "새 메시지 도착"
-                if (hush.http.getCookie("bodyoff") == "Y" && hush.http.getCookie("senderoff") == "Y") { //see setting tab
+                const _bodyoff = hush.http.getCookie("bodyoff")
+                const _senderoff = hush.http.getCookie("senderoff")
+                if (_bodyoff == "Y" && _senderoff == "Y") { //see setting tab
                     _body = msgArrived
-                } else if (hush.http.getCookie("bodyoff") == "Y") {
+                } else if (_bodyoff == "Y") {
                     _body = "[" + _from + "]\n" + msgArrived
-                } else if (hush.http.getCookie("senderoff") == "Y") {
+                } else if (_senderoff == "Y") {
                     _body = hush.util.displayTalkBodyCustom(obj.type, obj.body)
                 } else {
                     _body = "[" + _from + "]\n" + hush.util.displayTalkBodyCustom(obj.type, obj.body)
                 }
-                const noti = new window.Notification("", { body : _body, dir : "auto", lang : "EN", tag : roomid, icon : hush.cons.logo_darkblue, requireInteraction : true })
+                const noti = new window.Notification("", { 
+                    body : _body, dir : "auto", lang : "EN", tag : roomid, icon : hush.cons.logo_darkblue, requireInteraction : true 
+                })
                 noti.msgid = obj.msgid
                 hush.noti.notis[roomid] = noti
                 noti.onclick = function () {
                     hush.sock.openRoom("/app/msngr/chat.html", roomid, "noti")
-                    delete hush.noti.notis[roomid] //여기서 delete해야 함. 이 경우, hush.noti.notis 객체가 안지워져서 가비지 메모리가 문제가 될 수도 있음
-                    noti.close() //아래 on.close에서 delete하면 procNoti()다음에 read_msg()가 일어나는데 read_msg()에서 delete되어버려 꼬임
+                    delete hush.noti.notis[roomid] //2) 여기서 delete해야 함. 그런데 이 경우, main_common.js의 read_msg()에서 closeNoti()해도 hush.noti.notis 객체가 안 지워져서 가비지가 될 수도 있음
+                    noti.close() //1) 아래 on.close에서 delete하면 procNoti()다음에 read_msg()가 일어나는데 read_msg()에서 미리 hush.noti.notis[roomid]가 delete되어버려 꼬임
                 } //noti.onclose = function () { delete hush.noti.notis[roomid] }
             }
         },
@@ -840,7 +844,6 @@
             },
             extractFileFromTalkBody : (body) => { //from hush.A_MSGMS_TBL BODY Field value for file upload (xxroomid/xxuserid/realfilenamebody~~tempfilenamebody.extension##filesize)
                 const _arr = body.split("/")
-                debugger
                 const _brr = (_arr.length == 1) ? _arr[0].split(hush.cons.subdeli) : _arr[2].split(hush.cons.subdeli)
                 const _crr = (_brr.length == 1) ? _brr[0].split(hush.cons.deli) : _brr[1].split(hush.cons.deli)
                 return _brr[0] + hush.util.getFileNameAndExtension(_crr[0]).extDot

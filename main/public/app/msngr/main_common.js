@@ -934,6 +934,7 @@ var funcSockEv = { //needs to be public
         }
     },
     [hush.cons.sock_ev_read_msg] : (data) => {  
+        debugger
         if (data.userid != g_userid) return
         $("#chk_selectall").prop("checked", false)
         $(".chkbox_portal:checked").prop("checked", false)
