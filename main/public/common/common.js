@@ -580,7 +580,7 @@
                         _from = _people
                     }
                 }
-                const msgArrived = "메시지 도착."
+                const msgArrived = "새 메시지 도착"
                 if (hush.http.getCookie("bodyoff") == "Y" && hush.http.getCookie("senderoff") == "Y") { //see setting tab
                     _body = msgArrived
                 } else if (hush.http.getCookie("bodyoff") == "Y") {

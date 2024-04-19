@@ -1437,7 +1437,7 @@ const toggleResult = (show) => {
 }
 
 const dialogRoomRename = (_type) => {
-    const _header = (_type == "all") ? "모두에게 적용" : "나에게만 적용"
+    const _header = (_type == "all") ? "모두 적용" : "나만 적용"
     hush.msg.dialogInputBox("새로운 방명을 입력하시기 바랍니다.<br>기존 방명을 지우려면 빈칸을 입력하면 됩니다.", g_title, { 
         "확인": async function() {                             
             const _newName = hush.msg.dialogGetInput().trim()
