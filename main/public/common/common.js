@@ -599,9 +599,10 @@
                 hush.noti.notis[roomid] = noti
                 noti.onclick = function () {
                     hush.sock.openRoom("/app/msngr/chat.html", roomid, "noti")
-                    delete hush.noti.notis[roomid] //2) 여기서 delete해야 함. 그런데 이 경우, main_common.js의 read_msg()에서 closeNoti()해도 hush.noti.notis 객체가 안 지워져서 가비지가 될 수도 있음
+                    //delete hush.noti.notis[roomid] //2) 여기서 delete해야 함. 그런데 이 경우, main_common.js의 read_msg()에서 closeNoti()해도 hush.noti.notis 객체가 안 지워져서 가비지가 될 수도 있음
                     noti.close() //1) 아래 on.close에서 delete하면 procNoti()다음에 read_msg()가 일어나는데 read_msg()에서 미리 hush.noti.notis[roomid]가 delete되어버려 꼬임
-                } //noti.onclose = function () { delete hush.noti.notis[roomid] }
+                } 
+                noti.onclose = function () { delete hush.noti.notis[roomid] }
             }
         },
         sock : {
