@@ -27,8 +27,8 @@ module.exports = async function(socket, param) {
 			await wsmysql.query(conn, sql, [_roomname, _roomid, userid])
 			if (data[0].MASTERID == userid) {
 				await wsmysql.query(conn, "UPDATE A_ROOMMST_TBL SET UDT = sysdate(6), NICKNM = '' WHERE ROOMID = ? ", [_roomid]) 
-				ws.sock.sendToRoom(socket, _roomid, param)
-			} else {
+				ws.sock.sendToRoom(socket, _roomid, param) //모두에게 보냄
+			} else { //나에게만 보냄
 				socket.emit(ws.cons.sock_ev_common, param)
 				ws.sock.sendToMyOtherSocket(socket, param)
 			}
