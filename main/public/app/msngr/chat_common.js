@@ -1437,11 +1437,11 @@ const toggleResult = (show) => {
 }
 
 const dialogRoomRename = (_type) => {
-    const _header = (_type == "all") ? "Change room name for every user" : "Change room name for me"
-    hush.msg.dialogInputBox("Enter new name for this chat room. <br>Enter blank for deleting room name.", g_title, { 
-        "OK": function() {                             
-            const _newName = hush.msg.dialogGetInput().trim()                            
-            if (!hush.util.chkFieldVal(_newName, "병명", 1, 100)) return
+    const _header = (_type == "all") ? "모두에게 적용" : "나에게만 적용"
+    hush.msg.dialogInputBox("새로운 방명을 입력하시기 바랍니다.<br>기존 방명을 지우려면 빈칸을 입력하면 됩니다.", g_title, { 
+        "확인": function() {                             
+            const _newName = hush.msg.dialogGetInput().trim()
+            if (!hush.util.chkFieldVal(_newName, "병명", 0, 100)) return
             const rq = { type : _type, roomname : _newName, roomid : g_roomid } //roomid needed since
             if (hush.webview.ios) { 
             } else if (hush.webview.and) {
@@ -1451,7 +1451,7 @@ const dialogRoomRename = (_type) => {
             }
             hush.msg.dialogClose()
             if (hush.webview.on) showRoomMenu(false)
-        }, "Cancel": function() { 
+        }, "취소": function() { 
             hush.msg.dialogClose()
             if (hush.webview.on) showRoomMenu(false)
         } 
