@@ -594,15 +594,15 @@
                 }
                 const noti = new window.Notification("", { 
                     body : _body, dir : "auto", lang : "EN", tag : roomid, icon : hush.cons.logo_darkblue, requireInteraction : true 
-                })
+                }) //1) 이 때 noti.onclose()도 실행되어 아래 2)가 실행되어 delete hush.noti.notis[roomid]가 제거되어 
+                //정작 hush.noti.notis[roomid]를 참조해 noti를 가져오려 할 때 문제가 됨
                 noti.msgid = obj.msgid
                 hush.noti.notis[roomid] = noti
                 noti.onclick = function () {
                     hush.sock.openRoom("/app/msngr/chat.html", roomid, "noti")                   
-                    noti.close() //1) 아래 on.close에서 delete하면 procNoti()다음에 read_msg()가 일어나는데 read_msg()에서 미리 hush.noti.notis[roomid]가 delete되어버려 꼬임
-                    delete hush.noti.notis[roomid] //2) 여기서 delete해야 함. 그런데 이 경우, main_common.js의 read_msg()에서 closeNoti()해도 hush.noti.notis 객체가 안 지워져서 가비지가 될 수도 있음
-                } 
-                //noti.onclose = function () { delete hush.noti.notis[roomid] }
+                    noti.close()
+                    delete hush.noti.notis[roomid] //3) 따라서, 여기와 closeNoti()에서 delete해야 함
+                } //2) noti.onclose = function () { delete hush.noti.notis[roomid] }
             }
         },
         sock : {

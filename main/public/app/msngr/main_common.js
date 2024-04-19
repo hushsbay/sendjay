@@ -727,30 +727,16 @@ const getUnreadForAll = async () => {
     }
 }
 
-const closeNoti = (roomid, skipGetUnreadPerEachRoom) => { //const closeNoti = (roomid, msgid, skipGetUnreadPerEachRoom) => {
+const closeNoti = (roomid, skipGetUnreadPerEachRoom) => {
     if (!hush.webview.on) {
         const noti = hush.noti.notis[roomid]
         if (noti) {
             noti.close()
-            delete hush.noti.notis[roomid]
+            delete hush.noti.notis[roomid] //common.js의 procNoti() 1)2)3) 참고하기
         }
-        procUnreadTitle(roomid)
-        if (!skipGetUnreadPerEachRoom) getUnreadPerEachRoom(roomid)
-        // if (msgid) { //see [hush.cons.sock_ev_read_msg]
-        //     //setTimeout(function() {
-        //         debugger
-        //         const noti = hush.noti.notis[roomid]
-        //         if (noti && noti.msgid && msgid == noti.msgid) {
-        //             noti.close()
-        //             procUnreadTitle(roomid)
-        //             if (!skipGetUnreadPerEachRoom) getUnreadPerEachRoom(roomid)
-        //         }
-        //     //}, 3000)        
-        // }
-    } else {
-        procUnreadTitle(roomid)
-        if (!skipGetUnreadPerEachRoom) getUnreadPerEachRoom(roomid)
     } 
+    procUnreadTitle(roomid)
+    if (!skipGetUnreadPerEachRoom) getUnreadPerEachRoom(roomid)
 }
 
 const initMsg = (_roomid) => { //differ from chat.html
