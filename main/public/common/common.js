@@ -553,7 +553,7 @@
         },
         noti : {
             notis : { },
-            procNoti : async (roomid, obj) => { //This function should be called from index.html only or hush.user has to be replaced with another.
+            procNoti : async (roomid, obj) => { //This function should be called from main.html only
                 if (hush.webview.on) return //covered at app notification
                 if (hush.http.getCookie("notioff") == "Y") return //see setting tab
                 if (obj.senderid == hush.user.id) return //skip for oneself when mobile
@@ -565,8 +565,8 @@
                 }
                 let _body, _from
                 if (hush.sock.roomMap[roomid]) {
-                    _from = hush.sock.roomMap[roomid].nm
                     if (hush.sock.roomMap[roomid].noti == "X") return
+                    _from = hush.sock.roomMap[roomid].nm                    
                 } else {
                     const rs = await hush.http.ajax("/msngr/get_roominfo", { roomid : roomid })                
                     if (rs.code == hush.cons.result_ok) {
@@ -580,7 +580,7 @@
                         _from = _people
                     }
                 }
-                const msgArrived = "New message arrived."
+                const msgArrived = "메시지 도착."
                 if (hush.http.getCookie("bodyoff") == "Y" && hush.http.getCookie("senderoff") == "Y") { //see setting tab
                     _body = msgArrived
                 } else if (hush.http.getCookie("bodyoff") == "Y") {
@@ -589,13 +589,13 @@
                     _body = hush.util.displayTalkBodyCustom(obj.type, obj.body)
                 } else {
                     _body = "[" + _from + "]\n" + hush.util.displayTalkBodyCustom(obj.type, obj.body)
-                }  
+                }
                 const noti = new window.Notification("", { body : _body, dir : "auto", lang : "EN", tag : roomid, icon : hush.cons.logo_darkblue, requireInteraction : true })
                 noti.msgid = obj.msgid
                 hush.noti.notis[roomid] = noti
                 noti.onclick = function () {
                     hush.sock.openRoom("/app/msngr/chat.html", roomid, "noti")
-                    delete hush.noti.notis[roomid] //여기서 delete해야 함
+                    delete hush.noti.notis[roomid] //여기서 delete해야 함. 이 경우, hush.noti.notis 객체가 안지워져서 가비지 메모리가 문제가 될 수도 있음
                     noti.close() //아래 on.close에서 delete하면 procNoti()다음에 read_msg()가 일어나는데 read_msg()에서 delete되어버려 꼬임
                 } //noti.onclose = function () { delete hush.noti.notis[roomid] }
             }

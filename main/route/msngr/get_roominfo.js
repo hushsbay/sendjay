@@ -19,9 +19,9 @@ router.post('/', async function(req, res) {
 		const userid = objToken.userid
 		if (!userid) return
 		sql = "SELECT A.NICKNM MAINNM, B.NICKNM NICKNM, A.ROOMNM, B.NOTI "
-		sql += "     FROM A_ROOMMST_TBL A, A_ROOMDTL_TBL B "
-		sql += "    WHERE A.ROOMID = B.ROOMID "
-		sql += "  	  AND A.ROOMID = '" + roomid + "' AND B.USERID = '" + userid + "' "
+		sql += " FROM A_ROOMMST_TBL A, A_ROOMDTL_TBL B "
+		sql += "WHERE A.ROOMID = B.ROOMID "
+		sql += "  AND A.ROOMID = '" + roomid + "' AND B.USERID = '" + userid + "' "
 		data = await wsmysql.query(conn, sql, null)
 		len = data.length
 		if (data.length == 0) {

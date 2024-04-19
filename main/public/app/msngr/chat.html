@@ -91,7 +91,7 @@
                         } else if (g_type == "me") {    
                             const rq = { masterid : g_userid, masternm : g_usernm, userids : [g_userid] }
                             hush.sock.send(g_socket, hush.cons.sock_ev_create_room, rq, g_roomid)
-                        } else if (g_type == "open") {
+                        } else if (g_type == "open") { //노티에서 오픈되는 것도 포함
                             if (opener.procUnreadTitle) opener.procUnreadTitle(g_roomid)
                             const rq = { from : param.from }
                             hush.sock.send(g_socket, hush.cons.sock_ev_open_room, rq, g_roomid)

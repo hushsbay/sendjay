@@ -1001,25 +1001,6 @@ const prepareForNoResponse = (rq) => {
                 hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqCheck, g_roomid)
             }
             prepareForNoResponse(rq)
-            // hush.msg.alert("전송여부를 확인하시겠습니까?", {
-            //     "Yes": function() {
-            //         $("#handling_" + rq.msgid).show()
-            //         objUnread.hide() 
-            //         const rqCheck = initMsg()
-            //         rqCheck.type = "check"
-            //         rqCheck.prevmsgid = rq.msgid
-            //         if (hush.webview.ios) {
-            //         } else if (hush.webview.and) {
-            //             AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rqCheck), g_roomid, null, true) //procMsg=true
-            //         } else {
-            //             hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqCheck, g_roomid)
-            //         }
-            //         prepareForNoResponse(rq)
-            //         hush.msg.close()
-            //     }, "No": function() { 
-            //         hush.msg.close() 
-            //     } 
-            // }, hush.cons.no_response)
         })
     }, hush.cons.send_timeout_sec * 1000)
 }
@@ -1050,7 +1031,8 @@ const procSendAndAppend = (rq, blobUrl) => {
         const os_req = os.get(rq.msgid)
         os_req.onsuccess = function(e) {
             if (os_req.result) return //const rec = os_req.result
-            //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 : deleteLocalMsg(data.msgid) (정상적이지 않은 경우만 로컬에 있을 것임)
+            //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 : deleteLocalMsg(data.msgid)
+            //결국, 정상적이지 않은 경우만 로컬에 있을 것임
             const add_req = os.add({ roomid : g_roomid, msgid : rq.msgid, body : rq.body, cdt : hush.util.getCurDateTimeStr(true) })
             add_req.onsuccess = function() { /*do nothing*/ }
             add_req.onerror = function(e) { console.log("add_req error: " + e.srcElement.error) }
@@ -1698,15 +1680,15 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
         }
         let _dt = hush.util.tzDateTime(data.cdt)
         _dt = hush.util.formatMsgDt(_dt, g_year)
-        if (data.type == "check") { //from socket.emit (not room broadcast)
+        if (data.type == "check") { //from socket.emit (not room broadcast) //전송여부 단순 확인
             if (data.errcd == hush.cons.CODE_ERR) {
                 procFailure(data, "check failure : " + data.errmsg)
                 return
             }
-            if (data.body == 0) { //this almost means that sending failed
+            if (data.body == 0) {
                 procFailure(data, "전송 실패")
                 return
-            } else { //In fact, this line should not be executed since socket already returns result for this former request
+            } else {
                 $("#msg_" + data.msgid).addClass("needCheckUnread")
                 $("#dt_" + data.msgid).html(_dt)
                 $("#unread_" + data.msgid).removeClass("failure").addClass("unread")

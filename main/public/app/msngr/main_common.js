@@ -906,7 +906,7 @@ var funcSockEv = { //needs to be public
         try {
             if (data.type == "leave") {
                 if (!runFromStandalone) return
-                const who = data.reply ? data.reply : data.senderid //data.reply = make someone leave. 강제퇴장
+                const who = data.reply ? data.reply : data.senderid //data.reply = 강제퇴장
                 if (who == g_userid) {
                     $("#div_" + data.roomid).remove()
                     if (!hush.webview.on) {
@@ -934,7 +934,6 @@ var funcSockEv = { //needs to be public
         }
     },
     [hush.cons.sock_ev_read_msg] : (data) => {  
-        debugger      
         if (data.userid != g_userid) return
         $("#chk_selectall").prop("checked", false)
         $(".chkbox_portal:checked").prop("checked", false)

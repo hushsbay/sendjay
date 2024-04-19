@@ -15,7 +15,7 @@ module.exports = async function(socket, param) {
 		if (ret != '') throw new Error(ret)
 		await wsmysql.txBegin(conn)	
 		let useridToProc = obj.senderid
-		if (obj.type == 'check') {
+		if (obj.type == 'check') { //전송여부 단순 확인
 			data = await wsmysql.query(conn, "SELECT COUNT(*) CNT, CDT FROM A_MSGMST_TBL WHERE MSGID = ? ", [obj.prevmsgid])
 			param.data.msgid = obj.prevmsgid
 			param.data.body = data[0].CNT
@@ -56,13 +56,13 @@ module.exports = async function(socket, param) {
 			param.data.cdt = data[0].CURDT //dateStrings:'date' in mysql npm //? data[0].CURDT : ws.util.getCurDateTimeStr(true) //for timezone
 			let _sql
 			if (obj.type == 'leave') {				
-				if (obj.reply && obj.reply != obj.senderid) { //make someone leave. 강제퇴장
+				if (obj.reply && obj.reply != obj.senderid) { //강제퇴장
 					useridToProc = obj.reply
 					//const dataA = await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM " + com.tbl.user + " WHERE USER_ID = ? ", [useridToProc])
 					//if (dataA[0].CNT > 0) throw new Error('Only unregistered user can be processed : ' + useridToProc) 
                     await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM Z_USER_TBL WHERE USER_ID = ? ", [useridToProc])
 				}
-				if (_cnt == 2) {
+				if (_cnt == 2) { //챗방에 2명인 경우는 한명이 나가도 퇴장 표시 안함
 					_sql = "UPDATE A_ROOMDTL_TBL SET STATE = '2' WHERE ROOMID = '" + _roomid + "' AND USERID = '" + useridToProc + "' "
 				} else {
 					_sql = "UPDATE A_ROOMDTL_TBL SET STATE = 'L', UDT = ? WHERE ROOMID = '" + _roomid + "' AND USERID = '" + useridToProc + "' "
@@ -143,7 +143,7 @@ module.exports = async function(socket, param) {
 				}, 1000)
 			}
 		}
-		if (obj.type != 'check' && obj.type != 'leave') { //push(fcm/apns) sending to userkeys who are not connected
+		/*if (obj.type != 'check' && obj.type != 'leave') { //push(fcm/apns) sending to userkeys who are not connected
 			const userkeyArrInSocket = await ws.redis.getUserkeysInSocket(userkeyCrr)
 			const userkeyArrNotInSocket = userkeyCrr.filter(item => !userkeyArrInSocket.includes(item))
 			const _len = userkeyArrNotInSocket.length
@@ -192,7 +192,7 @@ module.exports = async function(socket, param) {
 					}
 				}
 			}
-		}
+		}*/
 	} catch (ex) { //ws.sock.warn(null, socket, _logTitle, JSON.stringify(param), _roomid)
 		if (conn) await wsmysql.txRollback(conn)
 		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex, _roomid)
