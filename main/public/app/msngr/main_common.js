@@ -807,10 +807,10 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             const _job = $("#in_job").val().trim()
             const _abcd = $("#in_abcd").val().trim()
             const _abnm = $("#in_abnm").val().trim()
-            if (!hush.util.chkFieldVal(_nicknm, "별칭/상태", 0, hush.cons.max_nicknm_len)) return false
-            if (!hush.util.chkFieldVal(_job, "직무", 0, 50)) return false
-            if (!hush.util.chkFieldVal(_abcd, "부재코드", 0, 7)) return false
-            if (!hush.util.chkFieldVal(_abnm, "부재내용/기간", 0, 50)) return false    
+            if (!await hush.util.chkFieldVal(_nicknm, "별칭/상태", 0, hush.cons.max_nicknm_len)) return false
+            if (!await hush.util.chkFieldVal(_job, "직무", 0, 50)) return false
+            if (!await hush.util.chkFieldVal(_abcd, "부재코드", 0, 7)) return false
+            if (!await hush.util.chkFieldVal(_abnm, "부재내용/기간", 0, 50)) return false    
             const _standalone = $("#chk_standalone").is(":checked") ? "Y" : ""
             const _notioff = $("#chk_notioff").is(":checked") ? "Y" : ""
             const _soundoff = $("#chk_soundoff").is(":checked") ? "Y" : ""

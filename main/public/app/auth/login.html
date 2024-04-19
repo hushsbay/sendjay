@@ -76,8 +76,8 @@
 						try {							
 							const _userid = $("#in_userid").val().trim()
 							const _pwd = $("#in_pwd").val().trim()
-							if (!hush.util.chkFieldVal(_userid, "아이디", 1)) return
-							if (!hush.util.chkFieldVal(_pwd, "비번", 1)) return
+							if (!await hush.util.chkFieldVal(_userid, "아이디", 1)) return
+							if (!await hush.util.chkFieldVal(_pwd, "비번", 1)) return
 							const rs = await hush.http.ajax("/auth/login", { uid : _userid, pwd : _pwd }, true)
 							if (!hush.util.chkAjaxCode(rs)) return
 							hush.auth.setCookieForUser(rs, $("#chk_save").prop("checked"))

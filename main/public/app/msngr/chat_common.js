@@ -1439,10 +1439,9 @@ const toggleResult = (show) => {
 const dialogRoomRename = (_type) => {
     const _header = (_type == "all") ? "모두에게 적용" : "나에게만 적용"
     hush.msg.dialogInputBox("새로운 방명을 입력하시기 바랍니다.<br>기존 방명을 지우려면 빈칸을 입력하면 됩니다.", g_title, { 
-        "확인": function() {                             
+        "확인": async function() {                             
             const _newName = hush.msg.dialogGetInput().trim()
-            if (!hush.util.chkFieldVal(_newName, "병명", 1, 100)) return
-            debugger
+            if (!await hush.util.chkFieldVal(_newName, "병명", 1, 100)) return
             const rq = { type : _type, roomname : _newName, roomid : g_roomid } //roomid needed since
             if (hush.webview.ios) { 
             } else if (hush.webview.and) {
