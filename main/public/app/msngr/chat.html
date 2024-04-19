@@ -227,23 +227,7 @@
                     })
                     $("#btn_delete_all, #btn_delete_all_m").on("click", async function() { 
                         hush.util.animBgColor($(this))
-                        //hushj.msg.alert("Do you want delete all messages in this chat room?", { 
-                        //     "Yes": function() { 
-                        //         const rq = { type : "all", receiverid : g_userid, roomid : g_roomid }
-                        //         if (hush.webview.ios) {
-                        //         } else if (hush.webview.and) {
-                        //             AndroidCom.send(hush.cons.sock_ev_delete_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
-                        //         } else {
-                        //             hush.sock.send(g_socket, hush.cons.sock_ev_delete_msg, rq, g_roomid, "parent")
-                        //         }
-                        //         hushj.msg.close()
-                        //         showCellMenu(false)
-                        //     }, "No": function() { 
-                        //         hushj.msg.close()
-                        //         showCellMenu(false) 
-                        //     } 
-                        // }, "Delete All", 200)
-                        const ret = await hush.msg.confirm("Do you want delete all messages in this chat room?")
+                        const ret = await hush.msg.confirm("모든 메시지를 삭제합니다. 계속할까요?")
                         showCellMenu(false)
                         if (!ret) return
                         const rq = { type : "all", roomid : g_roomid }
@@ -276,7 +260,7 @@
                     $("#btn_exit, #btn_exit_m").on("click", async function() { 
                         hush.util.animBgColor($(this))
                         if (hush.webview.on) showRoomMenu(false)
-                        const ret = await hush.msg.confirm("채팅방내 본인이 주고 받은 모든 톡이 삭제됩니다. 계속할까요?")
+                        const ret = await hush.msg.confirm("퇴장시 모든 메시지가 삭제됩니다. 계속할까요?")
                         if (!ret) return
                         const rq = initMsg(g_roomid)
                         rq.type = "leave"

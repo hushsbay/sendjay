@@ -207,7 +207,7 @@
                                 hush.msg.toast(hush.cons.msg.row_not_selected)
                                 return
                             }
-                            const ret = await hush.msg.alert("선택된 채팅방내 본인이 주고 받은 모든 톡이 삭제됩니다. 계속할까요?")
+                            const ret = await hush.msg.alert("퇴장시 선택된 방내 본인이 주고 받은 모든 메시지가 삭제됩니다. 계속할까요?")
                             if (!ret) return
                             checked.each(function(idx, item) {
                                 const _roomid = item.id.substring(4)

@@ -674,7 +674,7 @@ const procForCell = (obj) => {
                     return
                 }
                 if (obj.senderid != g_userid) {
-                    hush.msg.toast("Incoming message won't be handled.")
+                    hush.msg.toast("받은 메시지는 처리할 수 없습니다.")
                     return
                 }
                 // hush.msg.alert("Do you want revoke(cancel) message already sent to all members in this chat room?", { 
@@ -693,7 +693,7 @@ const procForCell = (obj) => {
                 //         showCellMenu(false) 
                 //     } 
                 // }, "Cancel Send", 200)
-                const ret = await hush.msg.confirm("Do you want revoke(cancel) message already sent to all members in this chat room?")
+                const ret = await hush.msg.confirm("이미 보낸 메시지를 삭제(취소)합니다. 계속할까요?")
                 showCellMenu(false)
                 if (!ret) return
                 const rq = { msgid : obj.msgid, type : obj.type, roomid : g_roomid }
