@@ -595,6 +595,7 @@
                 const noti = new window.Notification("", { 
                     body : _body, dir : "auto", lang : "EN", tag : roomid, icon : hush.cons.logo_darkblue, requireInteraction : true 
                 })
+                debugger
                 noti.msgid = obj.msgid
                 hush.noti.notis[roomid] = noti
                 noti.onclick = function () {
