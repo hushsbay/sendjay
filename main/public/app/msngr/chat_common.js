@@ -1268,7 +1268,7 @@ const handleFileUpload = async (files) => {
         //if (!hush.auth.chkRole(g_role, hush.cons.group_admin)) { //Checked on server, too.
             let _list = ""
             for (let i = 0; i < _len; i++) {
-                if (files[i].size > hush.cons.max_filesize) _list += files[i].name + "(" + hush.util.formatBytes(files[i].size) + ") "  
+                if (files[i].size > hush.cons.max_filesize) _list += files[i].name + " (" + hush.util.formatBytes(files[i].size) + ") "  
             }
             if (_list != "") {
                 hush.msg.alert("파일 크기는 최대 " + hush.util.formatBytes(hush.cons.max_filesize) + "입니다.<br>" + _list)

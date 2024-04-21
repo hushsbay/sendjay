@@ -73,7 +73,7 @@ module.exports = (function() {
 			max_hours_to_filesave : 1, //max_days_to_filesave : 1, //File's expiry
 			max_nicknm_len : 100, //same as client's
 			max_msg_len : 4000, //same as client's
-			max_filesize : 1110485760, //10MB //max_filesize : 10485760, //10MB
+			max_filesize : 5000000000, //10MB //max_filesize : 10485760, //10MB
 			max_filecount : 50, //per user
 			max_size_to_sublink : 5242880, //5MB. same as client's
 			cell_revoked : 'message cancelled',
