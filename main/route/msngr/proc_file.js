@@ -112,7 +112,7 @@ const procMulter = (req) => {
 			if (ws.cons.sublink_ext_video.includes(objFileStr.ext)) {
 				const meta = await procScreenShot(req, req.filename, filepath, filedir)
 				if (meta) {
-					const _added = ws.cons.deli + meta.streams[0].width + ws.cons.deli + meta.streams[0].height 
+					const _added = ws.cons.deli + meta.streams[0].width + com.deli + meta.streams[0].height 
 					sql = "UPDATE A_MSGMST_TBL SET BODY = CONCAT(BODY, ?) WHERE MSGID = ? AND ROOMID = ? "
 					await wsmysql.query(conn, sql, [_added, req.body.msgid, req.body.roomid])
 				}
@@ -139,6 +139,7 @@ router.post('/', (req, res) => { //router.post('/', upload.single('file'), async
 			const rs = await procMulter(req)
 			ws.http.resJson(res, rs, objToken.userid) //세번째 인자(userid) 있으면 token 갱신
 		} catch (ex) {
+			console.log("@@@@", ex.stack)
 			ws.http.resException(req, res, ex)
 		}
 	})
