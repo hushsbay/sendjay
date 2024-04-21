@@ -69,6 +69,7 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 			req.filename = fileStrObj.name + ws.cons.subdeli + ws.util.getCurDateTimeStr() + ws.util.getRnd() + fileStrObj.extDot
 			conn = await wsmysql.getConnFromPool(global.pool)
 			const ret = await ws.util.chkAccessUserWithTarget(conn, req.body.senderid, req.body.roomid, 'room')
+			console.log("@@@@$$$$0000000", ret)
 			if (ret != '') throw new Error(ret)
 			//const role = await ws.getRole(req.cookies.userid, conn)
 			//if (!ws.chkRole(role, ws.cons.group_admin)) {
