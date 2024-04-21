@@ -34,8 +34,10 @@ const procScreenShot = (req, filename, filepath, filedir) => {
 				}
 			})
 		} catch (ex) {
+			console.log("@@@@****", ex.stack)
 			ws.util.loge(req, ex) //ws.log.ex(req, ex, 'procScreenShot', filepath)
-			resolve()
+			//resolve() //오류가 나도 resolve()
+			reject()
 		}
 	})
 }
@@ -55,6 +57,7 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 			await fs.ensureDir(_dir) //It's possible that empty dir occurrs.
 			cb(null, _dir)
 		} catch (ex) {
+			console.log("@@@@^^^^", ex.stack)
 			ws.util.loge(req, ex) //ws.log.ex(req, err, 'destination', _dir)
 			cb(ex)
 		}
@@ -78,6 +81,7 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 			await wsmysql.query(conn, sql, [req.body.msgid, req.body.roomid, req.body.senderid, req.filename])
 			cb(null, req.filename)
 		} catch (ex) {
+			console.log("@@@@$$$$", ex.stack)
 			ws.util.loge(req, ex) //ws.log.ex(req, ex, 'filename', req.filename)
 			cb(ex)
 		} finally {
@@ -120,6 +124,7 @@ const procMulter = (req) => {
 			await wsmysql.txCommit(conn)
 			resolve(rs)
 		} catch (ex) {
+			console.log("@@@@####", ex.stack)
 			await wsmysql.txRollback(conn)
 			reject(ex)
 		} finally {
