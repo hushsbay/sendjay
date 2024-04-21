@@ -34,10 +34,8 @@ const procScreenShot = (req, filename, filepath, filedir) => {
 				}
 			})
 		} catch (ex) {
-			console.log("@@@@****", ex.stack)
 			ws.util.loge(req, ex) //ws.log.ex(req, ex, 'procScreenShot', filepath)
-			//resolve() //오류가 나도 resolve()
-			reject()
+			resolve() //오류가 나도 resolve()
 		}
 	})
 }
@@ -57,7 +55,6 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 			await fs.ensureDir(_dir) //It's possible that empty dir occurrs.
 			cb(null, _dir)
 		} catch (ex) {
-			console.log("@@@@^^^^", ex.stack)
 			ws.util.loge(req, ex) //ws.log.ex(req, err, 'destination', _dir)
 			cb(ex)
 		}
@@ -69,7 +66,6 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 			req.filename = fileStrObj.name + ws.cons.subdeli + ws.util.getCurDateTimeStr() + ws.util.getRnd() + fileStrObj.extDot
 			conn = await wsmysql.getConnFromPool(global.pool)
 			const ret = await ws.util.chkAccessUserWithTarget(conn, req.body.senderid, req.body.roomid, 'room')
-			console.log("@@@@$$$$0000000", ret)
 			if (ret != '') throw new Error(ret)
 			//const role = await ws.getRole(req.cookies.userid, conn)
 			//if (!ws.chkRole(role, ws.cons.group_admin)) {
@@ -82,7 +78,6 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 			await wsmysql.query(conn, sql, [req.body.msgid, req.body.roomid, req.body.senderid, req.filename])
 			cb(null, req.filename)
 		} catch (ex) {
-			console.log("@@@@$$$$", ex.stack)
 			ws.util.loge(req, ex) //ws.log.ex(req, ex, 'filename', req.filename)
 			cb(ex)
 		} finally {
@@ -103,7 +98,6 @@ const procMulter = (req) => {
 			const filepath = filedir + '/' + req.filename
 			let fileInfo = filepath + ws.cons.deli + req.body.body
 			fileInfo = fileInfo.replace(config.app.uploadPath + '/', '') //hide parent folder for file upload
-			console.log(fileInfo+'@@@@@@@@@@@@')
 			conn = await wsmysql.getConnFromPool(global.pool)			
 			await wsmysql.txBegin(conn)
 			sql = "INSERT INTO A_MSGMST_TBL (MSGID, ROOMID, SENDERID, SENDERNM, BODY, REPLY, TYP, FILESTATE, CDT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
@@ -117,7 +111,7 @@ const procMulter = (req) => {
 			if (ws.cons.sublink_ext_video.includes(objFileStr.ext)) {
 				const meta = await procScreenShot(req, req.filename, filepath, filedir)
 				if (meta) {
-					const _added = ws.cons.deli + meta.streams[0].width + com.deli + meta.streams[0].height 
+					const _added = ws.cons.deli + meta.streams[0].width + ws.cons.deli + meta.streams[0].height 
 					sql = "UPDATE A_MSGMST_TBL SET BODY = CONCAT(BODY, ?) WHERE MSGID = ? AND ROOMID = ? "
 					await wsmysql.query(conn, sql, [_added, req.body.msgid, req.body.roomid])
 				}
@@ -125,7 +119,6 @@ const procMulter = (req) => {
 			await wsmysql.txCommit(conn)
 			resolve(rs)
 		} catch (ex) {
-			console.log("@@@@####", ex.stack)
 			await wsmysql.txRollback(conn)
 			reject(ex)
 		} finally {
@@ -145,7 +138,6 @@ router.post('/', (req, res) => { //router.post('/', upload.single('file'), async
 			const rs = await procMulter(req)
 			ws.http.resJson(res, rs, objToken.userid) //세번째 인자(userid) 있으면 token 갱신
 		} catch (ex) {
-			console.log("@@@@", ex.stack)
 			ws.http.resException(req, res, ex)
 		}
 	})
