@@ -1301,20 +1301,20 @@ const handleFileUpload = async (files) => {
                 cache : false,
                 type : "POST",
                 xhr: function() { //XMLHttpRequest redefine
-                    const xhr = $.ajaxSettings.xhr()
-                    let _started = false
-                    xhr.upload.onprogress = function(e) {
-                        const percent = e.loaded * 100 / e.total
-                        $("#pb_" + rq.msgid).val(percent)
-                        const _percent = parseInt(percent)
-                        $("#expiry_" + rq.msgid).html(_percent.toString() + "%")
-                        if (!_started) {
-                            _started = true
-                            $("#abort_" + rq.msgid).show()
-                            $("#sel_" + rq.msgid).removeClass("chkboxSel")
-                        }
-                    }
-                    return xhr
+                    // const xhr = $.ajaxSettings.xhr()
+                    // let _started = false
+                    // xhr.upload.onprogress = function(e) {
+                    //     const percent = e.loaded * 100 / e.total
+                    //     $("#pb_" + rq.msgid).val(percent)
+                    //     const _percent = parseInt(percent)
+                    //     $("#expiry_" + rq.msgid).html(_percent.toString() + "%")
+                    //     if (!_started) {
+                    //         _started = true
+                    //         $("#abort_" + rq.msgid).show()
+                    //         $("#sel_" + rq.msgid).removeClass("chkboxSel")
+                    //     }
+                    // }
+                    // return xhr
                 },
                 success : function(rs) {
                     $("#abort_" + rq.msgid).hide()
