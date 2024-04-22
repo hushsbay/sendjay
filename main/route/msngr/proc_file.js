@@ -132,6 +132,7 @@ const procMulter = (req) => {
 
 router.post('/', (req, res) => { //router.post('/', upload.single('file'), async (req, res) => {
 	req.title = 'proc_file.post'
+	console.log("upload.post=============")	
 	upload.single('file')(req, res, async (err) => { //업로드 처리 순서 : upload(multer(destination) -> multer(filename)) -> procMulter()
 		try {
 			console.log("upload.single=============")	
