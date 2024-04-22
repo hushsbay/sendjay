@@ -1292,7 +1292,6 @@ const handleFileUpload = async (files) => {
             fd.append("type", rq.type)
             fd.append("reply", getMsgToReply())
             fd.append("file", files[i])
-            debugger
             const ajaxObj = $.ajax({
                 url: "/msngr/proc_file",
                 data : fd,
@@ -1302,7 +1301,6 @@ const handleFileUpload = async (files) => {
                 cache : false,
                 type : "POST",
                 xhr: function() { //XMLHttpRequest redefine
-                    debugger
                     const xhr = $.ajaxSettings.xhr()
                     let _started = false
                     xhr.upload.onprogress = function(e) {
@@ -1319,7 +1317,6 @@ const handleFileUpload = async (files) => {
                     return xhr
                 },
                 success : function(rs) {
-                    debugger
                     $("#abort_" + rq.msgid).hide()
                     if (!$("#sel_" + rq.msgid).hasClass("chkboxSel")) $("#sel_" + rq.msgid).addClass("chkboxSel")
                     if (rs.code == hush.cons.CODE_OK) {
