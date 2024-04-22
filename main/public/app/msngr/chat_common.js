@@ -1292,6 +1292,7 @@ const handleFileUpload = async (files) => {
             fd.append("type", rq.type)
             fd.append("reply", getMsgToReply())
             fd.append("file", files[i])
+            debugger
             const ajaxObj = $.ajax({
                 url: "/msngr/proc_file",
                 data : fd,
@@ -1301,22 +1302,24 @@ const handleFileUpload = async (files) => {
                 cache : false,
                 type : "POST",
                 xhr: function() { //XMLHttpRequest redefine
-                    // const xhr = $.ajaxSettings.xhr()
-                    // let _started = false
-                    // xhr.upload.onprogress = function(e) {
-                    //     const percent = e.loaded * 100 / e.total
-                    //     $("#pb_" + rq.msgid).val(percent)
-                    //     const _percent = parseInt(percent)
-                    //     $("#expiry_" + rq.msgid).html(_percent.toString() + "%")
-                    //     if (!_started) {
-                    //         _started = true
-                    //         $("#abort_" + rq.msgid).show()
-                    //         $("#sel_" + rq.msgid).removeClass("chkboxSel")
-                    //     }
-                    // }
-                    // return xhr
+                    debugger
+                    const xhr = $.ajaxSettings.xhr()
+                    let _started = false
+                    xhr.upload.onprogress = function(e) {
+                        const percent = e.loaded * 100 / e.total
+                        $("#pb_" + rq.msgid).val(percent)
+                        const _percent = parseInt(percent)
+                        $("#expiry_" + rq.msgid).html(_percent.toString() + "%")
+                        if (!_started) {
+                            _started = true
+                            $("#abort_" + rq.msgid).show()
+                            $("#sel_" + rq.msgid).removeClass("chkboxSel")
+                        }
+                    }
+                    return xhr
                 },
                 success : function(rs) {
+                    debugger
                     $("#abort_" + rq.msgid).hide()
                     if (!$("#sel_" + rq.msgid).hasClass("chkboxSel")) $("#sel_" + rq.msgid).addClass("chkboxSel")
                     if (rs.code == hush.cons.CODE_OK) {
