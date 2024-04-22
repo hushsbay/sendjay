@@ -43,7 +43,8 @@ const procScreenShot = (req, filename, filepath, filedir) => {
 const upload = multer({ storage: multer.diskStorage({ //order : destination -> filename (all the time regardless coding position)
 	destination : async function(req, file, cb) {
 		let _dir_room, _dir
-		try {			
+		try {
+			console.log("destination=============")			
 			_dir_room = config.app.uploadPath + '/' + req.body.roomid
 			_dir = _dir_room + '/' + req.body.senderid
 			if (_dir.includes('undefined')) {
@@ -62,6 +63,7 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 	filename : async function(req, file, cb) { //file={"fieldname":"file","originalname":"제목 없음.png","encoding":"7bit","mimetype":"image/png"} : no file size here
 		let conn, sql, data, len
 		try {
+			console.log("filename=============")			
 			const fileStrObj = ws.util.getFileNameAndExtension(file.originalname) //file size => req.body.body
 			req.filename = fileStrObj.name + ws.cons.subdeli + ws.util.getCurDateTimeStr() + ws.util.getRnd() + fileStrObj.extDot
 			conn = await wsmysql.getConnFromPool(global.pool)
@@ -132,6 +134,7 @@ router.post('/', (req, res) => { //router.post('/', upload.single('file'), async
 	req.title = 'proc_file.post'
 	upload.single('file')(req, res, async (err) => { //업로드 처리 순서 : upload(multer(destination) -> multer(filename)) -> procMulter()
 		try {
+			console.log("upload.single=============")	
 			if (err) throw new Error(err.toString())
 			const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
 			if (!objToken.userid) return //각각의 함수에 쿠키를 읽어서 처리해도 되는데 그냥 편의상 아래서 req.body.userid 사용하므로 userid와 비교하는 것임
