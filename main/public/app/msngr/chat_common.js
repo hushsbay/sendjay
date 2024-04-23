@@ -1312,6 +1312,7 @@ const handleFileUpload = async (files) => {
                         if (!_started) {
                             _started = true
                             $("#abort_" + rq.msgid).show()
+                            if (_percent > 95) $("#abort_" + rq.msgid).html("<span style='color:red'>완료처리중</span>")
                             $("#sel_" + rq.msgid).removeClass("chkboxSel")
                         }
                     }
@@ -1345,7 +1346,7 @@ const handleFileUpload = async (files) => {
             $("#abort_" + rq.msgid).off("click").on("click", async function() {
                 hush.util.animBgColor($(this))
                 if ($(this).html() != "Abort") {
-                    await hush.msg.alert("Can't abort (Upload is being done). Use 'Revoke' on CellMenu")
+                    await hush.msg.alert("업로드 완료중이므로 처리불가능합니다.")
                     return
                 }
                 if (ajaxObj) ajaxObj.abort()

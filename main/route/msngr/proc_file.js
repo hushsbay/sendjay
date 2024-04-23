@@ -15,7 +15,7 @@ const procScreenShot = (req, filename, filepath, filedir) => {
 			const new_filename = filename + ws.cons.sublink_result_img
 			const ffMpeg = new ffmpeg({ source: filepath, nolog: true })
 			ffMpeg.setFfmpegPath(config.app.ffmpegPath)
-			ffMpeg.takeScreenshots({ timemarks : ['00:00:10.000'], size : '320x320', filename : new_filename }, filedir)
+			ffMpeg.takeScreenshots({ timemarks : ['00:00:05.000'], size : '320x320', filename : new_filename }, filedir)
 			.on('error', function(err) {
 				console.log('ffmpeg error : ' + err + ' ==> ' + filepath) //나중에 제거
 				ws.util.loge(req, 'ffmpeg error : ' + err + ' ==> ' + filepath)
@@ -87,7 +87,7 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 			wsmysql.closeConn(conn, req.title)
 		}
 	}
-}), limits : { fileSize: 10000000000 }}) //about 10GB : 설정 이후에는 chat_common.js의 handleFileUpload()so ### 오류가 발생하지 않고 있음
+}), limits : { fileSize : 10000000000 }}) //about 10GB : 설정 이후에는 chat_common.js의 handleFileUpload()내 ### 오류가 발생하지 않고 있음
 
 const procMulter = (req) => {
 	return new Promise(async (resolve, reject) => {

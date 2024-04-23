@@ -68,7 +68,7 @@
             sec_for_webview_func : 100,
             max_member_for_org : 16, //temporary. same as server's
             max_filecount : 5, //uploading files
-            max_filesize : 5000000000,//max_filesize : 10485760, //10MB
+            max_filesize : 10000000000,//about 10GB
             max_picture_size : 5242880, //5MB
             max_nicknm_len : 100, //same as server's
             max_msg_len : 4000, //bytes. check body field length same as server's
