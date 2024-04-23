@@ -1314,7 +1314,7 @@ const handleFileUpload = async (files) => {
                             $("#abort_" + rq.msgid).show()
                             $("#sel_" + rq.msgid).removeClass("chkboxSel")
                         } else {
-                            if (_percent >= 98) $("#abort_" + rq.msgid).html("<span style='color:red'>완료처리중..</span>")
+                            if (_percent >= 98) $("#abort_" + rq.msgid).html("<span class=mq_tiny style='color:red'>완료처리중..</span>")
                         }
                     }
                     return xhr
