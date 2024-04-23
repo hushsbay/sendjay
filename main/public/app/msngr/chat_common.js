@@ -1299,7 +1299,7 @@ const handleFileUpload = async (files) => {
                 enctype : "multipart/form-data",
                 contentType : false,
                 cache : false,
-                timeout : 60000 * 60, //1 hour => 이 시간이 충분하지 않으면 서버(proc_file.js)에서 POST가 두번 동일 호출되어 문제 발생 (구글링하면 ECONNRESET도 발생한다고 함) => 그래도 여전히 오류남
+                timeout : 60000 * 60, //1 hour => ### 서버(proc_file.js)에서 POST가 두번 동일 호출되어 문제 발생 (구글링하면 ECONNRESET도 발생한다고 함) => 그래도 여전히 오류남 => proc_file.js의 ### 방안 참조
                 type : "POST",
                 xhr: function() { //XMLHttpRequest redefine
                     const xhr = $.ajaxSettings.xhr()

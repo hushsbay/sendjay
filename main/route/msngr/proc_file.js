@@ -87,7 +87,7 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 			wsmysql.closeConn(conn, req.title)
 		}
 	}
-}), limits : { fileSize: 10000000000 }})
+}), limits : { fileSize: 10000000000 }}) //about 10GB : 설정 이후에는 chat_common.js의 handleFileUpload()so ### 오류가 발생하지 않고 있음
 
 const procMulter = (req) => {
 	return new Promise(async (resolve, reject) => {
