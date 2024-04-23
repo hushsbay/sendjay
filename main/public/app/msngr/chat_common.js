@@ -1299,6 +1299,7 @@ const handleFileUpload = async (files) => {
                 enctype : "multipart/form-data",
                 contentType : false,
                 cache : false,
+                timeout : 60000 * 60, //1 hour
                 type : "POST",
                 xhr: function() { //XMLHttpRequest redefine
                     const xhr = $.ajaxSettings.xhr()
