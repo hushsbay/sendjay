@@ -7,7 +7,7 @@ module.exports = async function(socket, param) {
 	let conn, sql, data, len
 	try { //ws.sock.warn(null, socket, _logTitle, com.cons.rq + JSON.stringify(param), _roomid)	
 		const _msgid = param.data.msgid
-		//const _senderid = socket.userid //param.data.senderid
+		const _senderid = socket.userid //param.data.senderid
 		//if (_senderid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- _senderid')
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const ret = await ws.util.chkAccessUserWithTarget(conn, socket.userid, _roomid, 'room')

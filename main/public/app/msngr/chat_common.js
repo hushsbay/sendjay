@@ -677,22 +677,6 @@ const procForCell = (obj) => {
                     hush.msg.toast("받은 메시지는 처리할 수 없습니다.")
                     return
                 }
-                // hush.msg.alert("Do you want revoke(cancel) message already sent to all members in this chat room?", { 
-                //     "Yes": function() { 
-                        // const rq = { msgid : obj.msgid, type : obj.type, senderid : g_userid, roomid : g_roomid }
-                        // if (hush.webview.ios) {
-                        // } else if (hush.webview.and) {
-                        //     AndroidCom.send(hush.cons.sock_ev_revoke_msgcell, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
-                        // } else {
-                        //     hush.sock.send(g_socket, hush.cons.sock_ev_revoke_msgcell, rq, g_roomid, "parent")
-                        // }                                
-                //         hush.msg.close()
-                //         showCellMenu(false)
-                //     }, "No": function() { 
-                //         hush.msg.close()
-                //         showCellMenu(false) 
-                //     } 
-                // }, "Cancel Send", 200)
                 const ret = await hush.msg.confirm("이미 보낸 메시지를 삭제(취소)합니다. 계속할까요?")
                 showCellMenu(false)
                 if (!ret) return
