@@ -515,7 +515,7 @@ module.exports = (function() {
 				_app.use(bodyParser.json()) //app.use(express.json())
 				_app.use(bodyParser.urlencoded({ extended: true })) //req.body : { array : { key1 : { key2 : '123' } } } //when false => req.body : { 'array[key1][key2]' :'123' }
 				_app.use(cookieParser())
-				_app.use(express.limit('10G'))
+				//_app.use(express.limit('10G'))
 				if (public) _app.use(express.static(public))
 				return _app
 			},
