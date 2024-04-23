@@ -127,7 +127,7 @@ proc()
 async function proc() {
     const sockets = await global.jay.adapter.sockets(new Set()) //https://socket.io/docs/v4/adapter/
 	//const sockets1 = await global.jay.sockets //위 아래 둘 다 각 서버의 소켓 카운트만 가능
-    console.log('socket count :', sockets.size) //, sockets1.size)
+    //console.log('socket count :', sockets.size) //, sockets1.size)
 	const stream = global.store.scanStream({ match : ws.cons.key_str_socket + '*', count: ws.cons.scan_stream_cnt })
 	stream.on('data', (resultKeys) => {
 		for (let key of resultKeys) {

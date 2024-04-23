@@ -605,7 +605,7 @@ const procForCell = (obj) => {
         //         showCellMenu(false)
         //     } 
         // })    
-        const ret = await hush.msg.confirm("Continue to delete ? (" + len + ")") 
+        const ret = await hush.msg.confirm("삭제를 진행할까요? (" + len + "개)") 
         showCellMenu(false)
         if (!ret) return
         const msgidArr = []
@@ -1869,7 +1869,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
     },
     [hush.cons.sock_ev_delete_msg] : (data) => {
         if (data.type == "all") {
-            hush.msg.toast("all messages in this chat room deleted")
+            hush.msg.toast("방의 모든 메시지가 삭제되었습니다.")
             g_list_msg.empty()                    
         } else {
             const _msgidArr = data.msgidArr
