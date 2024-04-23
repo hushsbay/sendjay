@@ -514,6 +514,7 @@ module.exports = (function() {
 				_app.use(requestIp.mw()) //req.clientIp => X-Forwarded-For header info in AWS checked (req.headers['x-forwarded-for'] || req.connection.remoteAddress)
 				_app.use(bodyParser.json()) //app.use(express.json())
 				_app.use(bodyParser.urlencoded({ extended: true })) //req.body : { array : { key1 : { key2 : '123' } } } //when false => req.body : { 'array[key1][key2]' :'123' }
+				_app.use(bodyParser({ maxFieldsSize : '10000000000' }))
 				_app.use(cookieParser())
 				if (public) _app.use(express.static(public))
 				return _app
