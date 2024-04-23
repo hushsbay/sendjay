@@ -87,7 +87,7 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 			wsmysql.closeConn(conn, req.title)
 		}
 	}
-}), limits : { fileSize: 0 }})
+}), limits : { fileSize: 1000000000 }})
 
 const procMulter = (req) => {
 	return new Promise(async (resolve, reject) => {
