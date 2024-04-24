@@ -717,8 +717,8 @@ const getMsgList = async (type, keyword, start, end) => {
             withToast = false
         }
         const rs = await hush.http.ajax("/msngr/qry_msglist", rq)
-        if (!hush.util.chkAjaxCode(rs)) return
         debugger
+        if (!hush.util.chkAjaxCode(rs)) return        
         const _len = rs.list.length
         if (rq.type == "search" || rq.type == "etc") {
             if (_len == 0) {
