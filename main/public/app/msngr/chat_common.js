@@ -717,7 +717,7 @@ const getMsgList = async (type, keyword, start, end) => {
             withToast = false
         }
         const rs = await hush.http.ajax("/msngr/qry_msglist", rq)
-        debugger
+        if ($("#getmore").length > 0) $("#getmore").remove()
         if (!hush.util.chkAjaxCode(rs)) return        
         const _len = rs.list.length
         if (rq.type == "search" || rq.type == "etc") {
@@ -794,7 +794,7 @@ const getMsgList = async (type, keyword, start, end) => {
                         //이전페이지에서 가져올 데이터가 없으므로 #getmore가 필요없음
                     } else {
                         if (i == _len - 1 && _first_msgid != "") {
-                            if ($("#getmore").length > 0) $("#getmore").remove()
+                            //if ($("#getmore").length > 0) $("#getmore").remove()
                             const _first = $("#msg_" + _first_msgid) //not appended but prepended
                             if (_first && _first.length > 0) {  //console.log(_first.position().top + _first.height() + 1, "=====", g_list_msg.height())
                                 //hush.cons.fetch_cnt가 너무 작은 값이면 아래 'if'에 안걸릴 수도 있음 (이미지다운로드가 비동기인 것도 감안)
