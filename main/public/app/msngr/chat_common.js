@@ -718,6 +718,7 @@ const getMsgList = async (type, keyword, start, end) => {
         }
         const rs = await hush.http.ajax("/msngr/qry_msglist", rq)
         if (!hush.util.chkAjaxCode(rs)) return
+        debugger
         const _len = rs.list.length
         if (rq.type == "search" || rq.type == "etc") {
             if (_len == 0) {
@@ -805,8 +806,7 @@ const getMsgList = async (type, keyword, start, end) => {
                         } else if (i == 0) {
                             _first_msgid = obj.msgid
                         }
-                    }
-                    setTimeout(function() { if ($("#getmore").length > 0) $("#getmore").remove() }, 2000)
+                    }                    
                 }
                 _prev_read = obj.state
             }
