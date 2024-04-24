@@ -134,7 +134,8 @@ const setMembers = async (data) => {
             const push_ios = row.PUSH_IOS
             const push_and = row.PUSH_AND
             const state_mob = (push_ios && push_ios != hush.cons.invalid_push_token) || (push_and && push_and != hush.cons.invalid_push_token) ? "coStateMob mobInstalled" : "coStateOff"
-            let _html = "<div id=div_" + _userid + " class=mem data-nm='" + encodeURIComponent(_nm) + "' data-usernm='" + encodeURIComponent(row.USER_NM) + "' data-abnm='" + encodeURIComponent(_abnm) + "' style='cursor:pointer'>"
+            let _html = "<div id=div_" + _userid + " class=mem data-nm='" + encodeURIComponent(_nm) + "' data-usernm='" + encodeURIComponent(row.USER_NM) + "' "
+            _html += "                                         data-abcd='" + _abcd + "' data-abnm='" + encodeURIComponent(_abnm) + "' style='cursor:pointer'>"
             _html += "      <div style='height:18px;display:flex;align-items:center;margin-left:3px'>"
             _html += "          <div style='white-space:nowrap;overflow:hidden'>"
             _html += "              <span id=w_" + w_userkey + " class=coStateOff>W</span>"
@@ -153,11 +154,12 @@ const setMembers = async (data) => {
         $(".mem").off("click").on("click", function() {
             hush.util.animBgColor($(this))
             const _userid = this.id.substring(4)
-            const _abnm = $(this).data("abnm") ? " / " + decodeURIComponent($(this).data("abnm")) : ""
+            const _abcd = $(this).data("abcd") ? $(this).data("abcd") + " " : ""
+            const _abnm = $(this).data("abnm") ? decodeURIComponent($(this).data("abnm")) : ""
             const _usernm = decodeURIComponent($(this).data("nm"))
             let _html = "<div style='display:flex;flex-direction:column;align-items:center'>"
             _html += "  <img id=img_userid src='/img/noperson.png' style='width:64px;height:64px'>"
-            _html += "  <span style='margin-top:15px'>" + _usernm + _abnm + "</span>"
+            _html += "  <span style='margin-top:15px'>" + _usernm + "<br>" + _abcd + _abnm + "</span>"
             _html += "</div>"
             hush.msg.dialogMultiButton(_html, { 
                 "채팅보기": function() { 
@@ -652,10 +654,10 @@ const procForCell = (obj) => {
                     document.execCommand('copy')
                     document.body.removeChild(t)
                     showCellMenu(false)
-                    hush.msg.toast("Now " + obj.type + " will be sent with Ctrl+V.") //image, file, flink will be ok too
+                    hush.msg.toast("복사 완료. Ctrl+V로 붙이면 됩니다. (" + obj.type + ")") //image, file, flink will be ok too
                 } else { //mobile
                     AndroidRoom.copy(obj.msgid)
-                    hush.msg.toast("Now " + obj.type + " will be sent with SendCopy button.") //image, file, flink will be ok too
+                    hush.msg.toast("복사 완료. SendCopy 버튼으로 보내면 됩니다. (" + obj.type + ")") //image, file, flink will be ok too
                     $("#fr_tip").hide()
                     $("#fr_sendcopy").show()
                 }
