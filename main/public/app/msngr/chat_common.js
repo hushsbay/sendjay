@@ -806,6 +806,7 @@ const getMsgList = async (type, keyword, start, end) => {
                             _first_msgid = obj.msgid
                         }
                     }
+                    setTimeout(function() { if ($("#getmore").length > 0) $("#getmore").remove() }, 2000)
                 }
                 _prev_read = obj.state
             }
