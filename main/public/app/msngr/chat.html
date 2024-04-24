@@ -162,7 +162,7 @@
                             if (clipboardItem.type.includes("image")) {
                                 const blob = clipboardItem.getAsFile()
                                 if (blob.size > hush.cons.max_size_to_sublink) { //see get_sublink.js
-                                    hush.msg.toast("Image too big : " + blob.size + "<br>max : " + hush.util.formatBytes(hush.cons.max_size_to_sublink) + "(" + hush.cons.max_size_to_sublink + "bytes)")
+                                    hush.msg.toast("이미지가 너무 큽니다 : " + blob.size + "<br>max : " + hush.util.formatBytes(hush.cons.max_size_to_sublink) + "(" + hush.cons.max_size_to_sublink + "bytes)")
                                     return
                                 }
                                 const blobUrl = URL.createObjectURL(blob)

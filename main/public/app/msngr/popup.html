@@ -21,7 +21,6 @@
             try {
                 await $.getScript("/common/common.js")
                 await $.getScript("popup_common.js")
-                debugger
                 const param = new URLSearchParams(location.search)
                 hush.webview.chk(param)
                 g_type = param.get("type")

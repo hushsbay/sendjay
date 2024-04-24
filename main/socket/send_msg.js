@@ -22,7 +22,7 @@ module.exports = async function(socket, param) {
 			param.data.cdt = data[0].CDT
 			await wsmysql.txCommit(conn)
 			socket.emit(ws.cons.sock_ev_common, param)
-		} else if (obj.type == 'notice') {
+		} else if (obj.type == 'notice') { //이미지, 파일 전송후 notice
 			const kind = obj.body
 			if (kind == 'image') { //get image which was uploaded with ajax. arraybuffer sent with blank on socket.io-redis npm
 				data = await wsmysql.query(conn, "SELECT CDT, BUFFER FROM A_MSGMST_TBL WHERE MSGID = ? ", [obj.prevmsgid])

@@ -649,7 +649,7 @@ const procForCell = (obj) => {
                 if (_id == "btn_copy_cell") {
                     const t = document.createElement("input")
                     document.body.appendChild(t)
-                    t.value = "btn_copy_cell" + hush.cons.deli + obj.type + hush.cons.deli + g_roomid + hush.cons.deli + obj.msgid
+                    t.value = _id + hush.cons.deli + obj.type + hush.cons.deli + g_roomid + hush.cons.deli + obj.msgid
                     t.select()
                     document.execCommand('copy')
                     document.body.removeChild(t)
@@ -665,7 +665,6 @@ const procForCell = (obj) => {
             })
             $("#btn_revoke_cell, #btn_revoke_cell_m").off("click").on("click", async function(e) {   
                 hush.util.animBgColor($(this)) 
-                debugger               
                 if (obj.type == "" || !hush.cons.chat_handled.includes(obj.type)) return 
                 if ($("#body_" + obj.msgid).html() == hush.cons.cell_revoked) {
                     hush.msg.toast(hush.cons.cell_revoked)
@@ -912,14 +911,6 @@ const procFailure = (rq, dtDetails) => { //Request already sent. Retry(resending
     objUnread.show()
     objUnread.off("click").on("click", async function() { 
         hush.util.animBgColor($(this))
-        // hush.msg.alert(dtDetails, { //hush.msg.alert(dtDetails) 
-        //     "Remove Talk": function() { 
-        //         $("#msg_" + rq.msgid).remove()
-        //         hush.msg.close()
-        //     }, "Close": function() { 
-        //         hush.msg.close()
-        //     } 
-        // }, "Sending Failure", 320)
         const ret = await hush.msg.confirm(dtDetails)
         if (!ret) return 
         $("#msg_" + rq.msgid).remove()
@@ -1252,16 +1243,14 @@ const handleFileUpload = async (files) => {
             await hush.msg.alert("최대 " + hush.cons.max_filecount + "개 파일까지 한번에 전송 가능합니다.")
             return
         }
-        //if (!hush.auth.chkRole(g_role, hush.cons.group_admin)) { //Checked on server, too.
-            let _list = ""
-            for (let i = 0; i < _len; i++) {
-                if (files[i].size > hush.cons.max_filesize) _list += files[i].name + " (" + hush.util.formatBytes(files[i].size) + ") "  
-            }
-            if (_list != "") {
-                hush.msg.alert("파일 크기는 최대 " + hush.util.formatBytes(hush.cons.max_filesize) + "입니다.<br>" + _list)
-                return
-            }
-        //}
+        let _list = ""
+        for (let i = 0; i < _len; i++) {
+            if (files[i].size > hush.cons.max_filesize) _list += files[i].name + " (" + hush.util.formatBytes(files[i].size) + ") "  
+        }
+        if (_list != "") {
+            hush.msg.alert("파일 크기는 최대 " + hush.util.formatBytes(hush.cons.max_filesize) + "입니다.<br>" + _list)
+            return
+        }
         for (let i = 0; i < _len; i++) {
             const rq = initMsg()
             rq.type = "file"
@@ -1286,7 +1275,7 @@ const handleFileUpload = async (files) => {
                 enctype : "multipart/form-data",
                 contentType : false,
                 cache : false,
-                timeout : 60000 * 60, //1 hour => ### 서버(proc_file.js)에서 POST가 두번 동일 호출되어 문제 발생 (구글링하면 ECONNRESET도 발생한다고 함) => 그래도 여전히 오류남 => proc_file.js의 ### 방안 참조
+                timeout : 60000 * 60, //### timeout없이 서버(proc_file.js)에서 POST가 두번 동일 호출되어 문제 발생 (구글링하면 ECONNRESET도 발생한다고 함) => 추가해도 여전히 오류 => proc_file.js의 ### 방안 참조
                 type : "POST",
                 xhr: function() { //XMLHttpRequest redefine
                     const xhr = $.ajaxSettings.xhr()
@@ -1326,7 +1315,6 @@ const handleFileUpload = async (files) => {
                 },
                 error : function(xhr, status, error) { 
                     $("#abort_" + rq.msgid).hide()
-                    //const msg = hush.http.getErrorMsg(status, error)
                     const msg = (typeof error == "string") ? error : error.toString()
                     procFailure(rq, msg)
                 }
@@ -1339,7 +1327,7 @@ const handleFileUpload = async (files) => {
                 }
                 if (ajaxObj) ajaxObj.abort()
                 setTimeout(() => { $("#msg_" + rq.msgid).remove() }, 1000)
-                //원래 전송중취소시 생긴 파일도 삭제해야 하나 브라우저창 닫기로 인한 가비지는 데몬으로 처리해야 하므로 모두 합쳐서 데몬으로 처리하기로 함
+                //원래 전송중취소시 생긴 파일도 삭제해야 하나 브라우저창 닫기로 인한 가비지는 데몬으로 처리하기로 함
             })
         }
     } catch (ex) { 
@@ -1705,7 +1693,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                 return
             }
             if (data.reply) {
-                if (data.reply == g_userid) { //make leave
+                if (data.reply == g_userid) { //강제퇴장 (make leave)
                     if (hush.webview.ios) {
                     } else if (hush.webview.and) {
                         AndroidRoom.closeRoom()
@@ -1719,7 +1707,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                     if (!_isStickyNeeded) scrollToTarget()
                 }
             } else {
-                if (data.senderid == g_userid) { //leave
+                if (data.senderid == g_userid) { //퇴장 (leave)
                     if (hush.webview.ios) {
                     } else if (hush.webview.and) {
                         AndroidRoom.closeRoom()
@@ -1836,7 +1824,6 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
         } else if (rs.TYPE == "file" || rs.TYPE == "flink") {
             const ret = await hush.msg.confirm("파일을 전송할까요? " + hush.util.extractFileFromTalkBody(rs.BODY))
             if (!ret) return
-            debugger
             sendMsg("flink", rs.BODY, rs.FILESTATE)
         } else {
             if (rs.BODY.trim() == "") {
