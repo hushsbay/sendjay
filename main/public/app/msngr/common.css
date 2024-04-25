@@ -3,7 +3,7 @@
 /* emphasizing background : something orange (#FD760B), khaki (BDB76B) */
 
 * { font-family:arial;font-size:14px }
-html, body { height:100%;margin:0px }
+html, body { height:100%;margin:0px;overscroll-behavior: contain } /* disable pull_to_refresh 화면 끌어 내리면 새로고침되는 것 막음. iOS는 안됨. 크롬/삼성브라우저 OK */
 input[type="search"] { -webkit-appearance:textfield;box-sizing:content-box } /* solution for search type not worked with height */
 input { height:28px;padding-left:5px;padding-right:5px }
 input::placeholder { font-size:13px;color:lightgray }
