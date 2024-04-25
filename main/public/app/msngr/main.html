@@ -539,8 +539,7 @@
                         <div id=pict_browse class='picBtn mq_text'>찾기</div>
                         <div id=pict_upload class='picBtn mq_text' style="margin-left:10px">저장</div>
                         <div id=pict_delete class='picBtn mq_text' style="margin-left:10px">삭제</div>
-                        <div style="clear:both"></div>
-                        <div id=btn_reset_auth class='picBtn mq_text' style="display:none;margin-left:20px">자동로그인해제(Mobile)</div>
+                        <!-- <div id=btn_reset_auth class='picBtn mq_text' style="display:none;margin-left:20px">자동로그인해제(Mobile)</div> -->
                         <input id=file_upload type=file accept="image/*" style="display:none">
                     </div>
                 </div>
@@ -597,7 +596,11 @@
                     <input id=in_fr data-role=none spellcheck=false placeholder='0900' style="width:60px;text-align:center;border:1px solid darkgray;margin-right:3px" /> ~
                     <input id=in_to data-role=none spellcheck=false placeholder='1800' style="width:60px;text-align:center;border:1px solid darkgray;margin-left:3px" />
                     <span id=spn_clear class='coSettingSpan mq_node' style="color:#0082AD;cursor:pointer">Clear</span>
-                </div>                
+                </div> 
+                <div class=coSettingRow>
+                    <div class='coSettingLabel mq_node'>자동로그인<br>해제(Mobile)</div>
+                    <div id=btn_reset_auth class='picBtn mq_text' style="display:none;margin-left:20px">해제시 로그인시 비번을 요구합니다.</div>
+                </div> 
                 <!-- <div class=coSettingRow>  
                     <div class='coSettingLabel mq_node'>Log File<br>(Mobile)</div>
                     <input id=in_showlog type=number data-role=none spellcheck=false value="0" style="width:30px;text-align:center;border:1px solid darkgray;margin:0px 5px" />
