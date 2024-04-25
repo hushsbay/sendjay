@@ -1,4 +1,4 @@
-var g_type, g_roomid, g_origin, g_userkey, g_userid, g_usernm, g_token10 //var => also referred in child window popup
+var g_type, g_roomid, g_origin, g_userkey, g_userid, g_usernm //var => also referred in child window popup
 let g_list_msg, g_in_chat, g_year, g_self = this
 let g_masterid, g_title, g_socket, g_inviteWin
 let g_page, g_cdt, g_imgPromiseArr, g_stopAutoScrollDown
@@ -1029,7 +1029,7 @@ const initMsg = () => {
             membernmArr.push(decodeURIComponent($(item).data("usernm")))
         }
     }
-    const _msgid = hush.util.createId(g_token10)
+    const _msgid = hush.util.createId()
     const _curdt = hush.util.getCurDateTimeStr(true) //local backup in a sense
     return { //senderid는 서버에서 socket.userid로 바로 받아 사용하므로 미사용이나 로컬에서 쓸 수도 있는 생각에 그냥 둠
         msgid : _msgid, senderkey : g_userkey, senderid : g_userid, sendernm : g_usernm, cdt : _curdt,
@@ -1914,7 +1914,7 @@ const startFromWebView = async (from, obj, rs) => {
         g_userid = hush.user.id
         g_usernm = hush.user.nm
         g_orgcd = hush.user.orgcd
-        g_token10 = hush.user.token.slice(-10)
+        //g_token10 = hush.user.token.slice(-10)
         g_role = hush.user.role
         if (g_type == "newFromMain") {
             if (hush.webview.ios) { 

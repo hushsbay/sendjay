@@ -637,8 +637,8 @@
                     resolve(socket)
                 })
             }),
-            createRoom : (_url, _type, uniqueStr) => { //newFromMain, newFromPopup, me
-                const roomid = hush.util.createId(uniqueStr)
+            createRoom : (_url, _type) => { //newFromMain, newFromPopup, me
+                const roomid = hush.util.createId()
                 const _newwin = hush.util.openWinPop(_url + "?type=" + _type + "&roomid=" + roomid)
                 hush.sock.rooms[roomid] = _newwin
             },
@@ -765,8 +765,10 @@
                 arr.sort(function() { return 0.5 - Math.random() })
                 return arr.join("")
             },
-            createId : (uniqueStr) => { //uniqueStr 제거하기 : 과하게 길어서 불편하기만 함. 결국, g_token10도 모두 제거하기
-                //return hush.util.getCurDateTimeStr(false, true) + hush.util.getRnd().toString().padStart(6, "0") + (uniqueStr ? hush.util.shuffleChar(uniqueStr) : "")
+            // createId : (uniqueStr) => { //uniqueStr 제거하기 : 과하게 길어서 불편하기만 함. 결국, g_token10도 모두 제거하기
+            //     return hush.util.getCurDateTimeStr(false, true) + hush.util.getRnd().toString().padStart(6, "0") + (uniqueStr ? hush.util.shuffleChar(uniqueStr) : "")
+            // },
+            createId : () => {
                 return hush.util.getCurDateTimeStr(false, true) + hush.util.getRnd().toString().padStart(6, "0")
             },
             openWinTab : (url, replace) => {

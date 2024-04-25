@@ -1,4 +1,4 @@
-var g_memWin, g_token10, g_userkey, g_userid, g_usernm, g_orgcd, g_useridArr, g_unread = {}
+var g_memWin, g_userkey, g_userid, g_usernm, g_orgcd, g_useridArr, g_unread = {}
 
 let g_mode, g_mode_people, g_win_type, g_setting = {}
 let g_list, g_page, g_cdt, g_searchmode, g_year, g_lastdt_for_toprow //g_lastdt_for_toprow = for mobil only
@@ -740,7 +740,7 @@ const closeNoti = (roomid, skipGetUnreadPerEachRoom) => {
 }
 
 const initMsg = (_roomid) => { //differ from chat.html
-    const _msgid = hush.util.createId(g_token10)
+    const _msgid = hush.util.createId()
     const _curdt = hush.util.getCurDateTimeStr(true) //local backup in a sence
     return { msgid : _msgid, senderkey : g_userkey, senderid : g_userid, sendernm : g_usernm, cdt : _curdt, filestate : "", body : "", type : "", reply : "", roomid : _roomid, roomnm : "" }
 }
@@ -748,7 +748,7 @@ const initMsg = (_roomid) => { //differ from chat.html
 function procNewChatFromPopup(useridArr) { //invoked from index.html (member) popup : Web Only
     if (useridArr.length == 0) return
     g_useridArr = useridArr
-    hush.sock.createRoom("/app/msngr/chat.html", "newFromPopup", g_token10)            
+    hush.sock.createRoom("/app/msngr/chat.html", "newFromPopup")            
 }
 
 const chkTime = async (tm) => {
@@ -1116,7 +1116,7 @@ const SetUserVar = () => { //편의상 한번 더 g_로 set
     g_userid = hush.user.id
     g_usernm = hush.user.nm
     g_orgcd = hush.user.orgcd
-    g_token10 = hush.user.token.slice(-10)
+    //g_token10 = hush.user.token.slice(-10)
 }
 
 const initStandAlone = (rs) => { //임베디드가 아닐 경우임. rs from hush.auth.verifyUser(true)
@@ -1128,7 +1128,7 @@ const initStandAlone = (rs) => { //임베디드가 아닐 경우임. rs from hus
 }
 
 function procNewChat(useridArr) { //invoked from index.html and jay_main.js : Mobile Only
-    const new_roomid = hush.util.createId(g_token10)
+    const new_roomid = hush.util.createId()
     if (useridArr.indexOf(g_userid) == -1) useridArr.push(g_userid) //me included
     const rq = { masterid : g_userid, masternm : g_usernm, userids : useridArr }
     if (hush.webview.ios) {

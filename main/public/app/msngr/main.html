@@ -125,7 +125,7 @@
                                     return
                                 }
                                 if (!hush.webview.on) {
-                                    hush.sock.createRoom("/app/msngr/chat.html", "newFromMain", g_token10)
+                                    hush.sock.createRoom("/app/msngr/chat.html", "newFromMain")
                                 } else {
                                     const useridArr = []
                                     for (let item of mem) {
@@ -150,9 +150,9 @@
                         $("#btn_me").on("click", async function() {
                             hush.util.animBgColor($(this))
                             if (!hush.webview.on) {
-                                hush.sock.createRoom("/app/msngr/chat.html", "me", g_token10)
+                                hush.sock.createRoom("/app/msngr/chat.html", "me")
                             } else {
-                                const new_roomid = hush.util.createId(g_token10)
+                                const new_roomid = hush.util.createId()
                                 const rq = { masterid : g_userid, masternm : g_usernm, userids : [g_userid] }
                                 if (hush.webview.ios) {
                                 } else if (hush.webview.and) { 
