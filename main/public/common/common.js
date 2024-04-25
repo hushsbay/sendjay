@@ -378,7 +378,6 @@
                         }
                     }
                     conn.onsuccess = function(e) {
-                        debugger
                         hush.idb.db = conn.result
                         if (callback) callback({ code : hush.cons.result_ok, msg : "IndexedDB connected" })
                     }
