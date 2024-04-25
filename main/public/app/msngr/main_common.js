@@ -1123,8 +1123,9 @@ const initStandAlone = (rs) => { //임베디드가 아닐 경우임. rs from hus
     procSetting("load", rs, true)
     procScrollEvent()
     procMenuTop(hush.http.getCookie("mode"))
-    if (g_mode != BTN_MODE_CHAT) getUnreadForAll() 
-    $("#header_title").html(g_usernm + ((rs.nicknm != "") ? " [" + rs.nicknm + "]" : ""))
+    if (g_mode != BTN_MODE_CHAT) getUnreadForAll()
+    debugger 
+    $("#header_title").html(g_usernm + ((rs.NICK_NM != "") ? " [" + rs.NICK_NM + "]" : ""))
 }
 
 function procNewChat(useridArr) { //invoked from index.html and jay_main.js : Mobile Only
