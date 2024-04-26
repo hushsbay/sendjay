@@ -107,21 +107,21 @@ const toggleForBtnCompany = (show) => {
             $("#btn_collapseall").show()
             $("#btn_expandall").show()
         }
-        if (!g_win_type) { 
+        //if (!g_win_type) { 
             $("#chk_selectall").css("visibility", "hidden")
-        } else {
-            $("#chk_selectall").hide()
-        }
+        //} else {
+            //$("#chk_selectall").hide()
+        //}
     } else {
         if (!hush.webview.on) {
             $("#btn_collapseall").hide()
             $("#btn_expandall").hide()
         }
-        if (!g_win_type) { 
+        //if (!g_win_type) { 
             $("#chk_selectall").css("visibility", "visible")
-        } else {
-            $("#chk_selectall").show()
-        }        
+        //} else {
+        //    $("#chk_selectall").show()
+        //}        
     }
     $("#chk_selectall").prop("checked", false)
 }
