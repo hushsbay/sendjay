@@ -14,7 +14,7 @@
             /* .mq_title { font-size:16px }
             .mq_node { font-size:14px }
             .mq_text { font-size:14px } */
-            @media screen and (max-device-width: 500px) { /* 모바일 기기중 width가 그리 크지 않는 경우 화면이 좁아 보이므로 폰트 줄이기 */
+            @media screen and (max-device-width: 500px) {
                 /* .mq_title { font-size:12px }
                 .mq_node { font-size:12px }
                 .mq_text { font-size:10px }
@@ -22,6 +22,7 @@
                 .mq_tiny { font-size:10px }
                 input { font-size:12px }*/
                 /* .coImgMenu { display:none }  */
+                .mq_tiny { font-size:10px }
             }
             @media screen and (min-device-width: 501px) {
                 /* .mq_title { font-size:16px }
@@ -30,6 +31,7 @@
                 .mq_cell { font-size:12px }
                 .mq_tiny { font-size:12px }
                 input { font-size:12px }*/
+                .mq_tiny { font-size:12px }
             }
             .mem { display:flex;flex-direction:column;background:#fdf5f6;border:1px solid lightgray;overflow:auto;margin:4px 4px 0px 4px }
             .menuBtn { display:flex;flex-direction:column;background:#0082AD;color:white;border:1px solid lightgray;border-radius:5px;overflow:hidden;padding:10px 5px;margin:15px 4px 0px 4px }
@@ -353,7 +355,7 @@
                     <input id=in_search type=search spellcheck=false onsearch="OnSearch(this)" />
                     <div id=btn_search class=coImgBtn><img src="/img/white_search.png" class=coImg24 /></div>
                     <div id=btn_close_search class=coMenuFlat style="display:none"><img src="/img/close.png" class=coImg16 /></div>
-                    <div id=btn_qry_etc class='coMenuFlat mq_node'>파일/이미지</div>
+                    <div id=btn_qry_etc class=coMenuFlat>파일/이미지</div>
                     <span id=txt_unread_notice style="display:none;color:red;cursor:pointer;margin-left:10px">안읽은톡이 너무 많습니다.</span>
                 </div>
                 <div id=fr_menu_top_right_m style="display:none;align-items:center;margin-right:8px">
@@ -374,15 +376,15 @@
                     <div id=result_sub style="display:none;height:calc(100% - 24px);overflow:auto"></div>
                 </div>
                 <div id=list_menu_m style="display:none;width:88px;overflow:hidden;background-color:white;border:1px solid darkgray;margin-left:auto">
-                    <div id=btn_invite_m class="menuBtn mq_node chat">초대1</div>
-                    <div id=btn_delete_all_m class="menuBtn mq_node chat">모두삭제1</div>
-                    <div id=btn_rename_m class="menuBtn mq_node chat">방명변경1</div>
-                    <div id=btn_exit_m class="menuBtn mq_node chat">퇴장1</div>
-                    <div id=btn_cancel_room_m class="menuBtn mq_node chat">취소1</div>
-                    <div id=btn_copy_cell_m class="menuBtnCell mq_node cell single">복사1</div>
-                    <div id=btn_revoke_cell_m class="menuBtnCell mq_node cell single">전송취소1</div>
-                    <div id=btn_delete_cell_m class="menuBtnCell mq_node cell">삭제1</div>
-                    <div id=btn_cancel_cell_m class="menuBtnCell mq_node cell">취소2</div>
+                    <div id=btn_invite_m class="menuBtn chat">초대1</div>
+                    <div id=btn_delete_all_m class="menuBtn chat">모두삭제1</div>
+                    <div id=btn_rename_m class="menuBtn chat">방명변경1</div>
+                    <div id=btn_exit_m class="menuBtn chat">퇴장1</div>
+                    <div id=btn_cancel_room_m class="menuBtn chat">취소1</div>
+                    <div id=btn_copy_cell_m class="menuBtnCell cell single">복사1</div>
+                    <div id=btn_revoke_cell_m class="menuBtnCell cell single">전송취소1</div>
+                    <div id=btn_delete_cell_m class="menuBtnCell cell">삭제1</div>
+                    <div id=btn_cancel_cell_m class="menuBtnCell cell">취소2</div>
                 </div>
             </div>
             <!-- <div style="position:relative;height:20px;display:flex;margin:3px 3px 0px 3px">
@@ -400,13 +402,13 @@
             <div style="height:20px;display:flex;align-items:center;justify-content:space-between;margin:3px 5px">
                 <div id=fr_tip class=coDotDot style="height:100%;width:calc(100% - 80px);display:flex;align-items:center"></div>
                 <div id=fr_sendcopy style="display:none">
-                    <span class=mq_text style="margin-right:5px">전송할까요?</span>
-                    <span id=send_copy class=mq_text style='background:#005192;color:white;border-radius:5px;padding:5px'>예</span>
-                    <span id=cancel_copy class=mq_text style='background:#005192;color:white;border-radius:5px;padding:5px'>아니오</span>
-                    <span id=btn_send_img_m class=mq_text style='display:none;background:#005192;color:white;border-radius:5px;padding:5px'>예</span>
-                    <span id=btn_cancel_img_m class=mq_text style='display:none;background:#005192;color:white;border-radius:5px;padding:5px'>아니오</span>
+                    <span style="margin-right:5px">전송할까요?</span>
+                    <span id=send_copy style='background:#005192;color:white;border-radius:5px;padding:5px'>예</span>
+                    <span id=cancel_copy style='background:#005192;color:white;border-radius:5px;padding:5px'>아니오</span>
+                    <span id=btn_send_img_m style='display:none;background:#005192;color:white;border-radius:5px;padding:5px'>예</span>
+                    <span id=btn_cancel_img_m style='display:none;background:#005192;color:white;border-radius:5px;padding:5px'>아니오</span>
                 </div>
-                <div id=fr_byte class="mq_text"></div>
+                <div id=fr_byte></div>
             </div>
             <!-- <div id=fr_in style="position:relative;height:70px;display:flex;align-items:stretch;margin:3px 3px 0px 3px">
                 <textarea id=in_chat spellcheck=false style="width:100%;height:100%;resize:none;border:1px solid darkgray"></textarea>

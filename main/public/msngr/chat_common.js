@@ -141,11 +141,11 @@ const setMembers = async (data) => {
             _html += "              <span id=w_" + w_userkey + " class=coStateOff>W</span>"
             _html += "              <span id=m_" + m_userkey + " class='" + state_mob + "'>M</span>"
             _html += "              <span id=abcd_" + _userid + " class=coStateOut style='display:none'>" + _abcd + "</span>"
-            _html += "              <span id=typing_" + _userid + " class=mq_text style='display:none;font-size:11px;color:red'>typing</span>"
+            _html += "              <span id=typing_" + _userid + " style='display:none;font-size:11px;color:red'>typing</span>"
             _html += "          </div>"
             _html += "      </div>"
             const _master = (g_masterid == _userid) ? ";font-weight:bold" : ""
-            _html += "      <div class='coDotDot mq_node' style='height:20px;color:#005192;margin-top:2px;margin-left:3px" + _master + "'>" + _nm + "</div>"
+            _html += "      <div class=coDotDot style='height:20px;color:#005192;margin-top:2px;margin-left:3px" + _master + "'>" + _nm + "</div>"
             _html += "   </div>"
             list.append(_html)
             if (_abcd) $("#abcd_" + _userid).show()
@@ -331,9 +331,9 @@ const addRow = (obj, kind) => {
         let _desc                
         if (obj.type == "invite") {
             const _arr = obj.body.split(hush.cons.deli)
-            _desc = "<span class=mq_cell>" + _arr[0] + "</span><br><span class=mq_cell>invited by " + _arr[2] + "<br>at " + _dt + "</span>"
+            _desc = "<span class=mq_tiny>" + _arr[0] + "</span><br><span class=mq_tiny>invited by " + _arr[2] + "<br>at " + _dt + "</span>"
         } else {
-            _desc = "<span class=mq_cell>" + obj.body + "</span><br><span class=mq_cell>at " + _dt + "</span>"
+            _desc = "<span class=mq_tiny>" + obj.body + "</span><br><span class=mq_tiny>at " + _dt + "</span>"
         }
         const _html = "<div id=msg_" + obj.msgid + " style='text-align:center;background:lightgray;border:1px solid lightgray;border-radius:8px;padding:3px 10px;margin:10px auto'>" + _desc + "</div>"
         if (kind) {
@@ -379,7 +379,7 @@ const addRow = (obj, kind) => {
                 const _filesize = hush.util.formatBytes(parseInt(_fileStr[1]))
                 const _expiry = hush.util.getExpiryWithTZ(obj.filestate, g_year)
                 const _color = obj.filestate == hush.cons.file_expired ? "darkgray" : "#005192"
-                _body = "<span id=filelink_" + obj.msgid + " class=mq_cell style='color:" + _color + ";cursor:default'>" + _filelink + "</span><br>"
+                _body = "<span id=filelink_" + obj.msgid + " class=mq_tiny style='color:" + _color + ";cursor:default'>" + _filelink + "</span><br>"
                 _body += "<span class=mq_tiny style='color:darkgray;cursor:default'>" + ((obj.type == "flink") ? "Filelink" : "File") + "</span> "
                 _body += "<span class=mq_tiny style='color:#005192;cursor:default'>" + _filesize + "</span> "
                 _body += "<span class=mq_tiny id=expiry_" + obj.msgid + " style='color:darkgreen;cursor:default'>" + _expiry + "</span>"
@@ -409,8 +409,8 @@ const addRow = (obj, kind) => {
                 _sublink = "<div style='clear:both'></div>"
                 _sublink = "<div id=openGraph" + obj.msgid + " og=" + _http[0] + " style='display:none;cursor:pointer;width:150px;height:150px;border:1px solid lightgray;" + _submargin + "'>"
                 _sublink += "   <div style='width:100%;text-align:center'><img id=ogImg" + obj.msgid + " style='max-width:150px;max-height:150px' /></div>"
-                _sublink += "   <div id=ogTitle" + obj.msgid + " class=mq_cell style='width:100%;height:20px;color:darkgreen;font-weight:bold;text-align:left;vertical-align:middle;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;margin-left:3px'></div>"
-                _sublink += "   <div id=ogDesc" + obj.msgid + " class=mq_cell style='width:100%;height:20px;text-align:left;vertical-align:middle;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;margin-left:3px'></div>"
+                _sublink += "   <div id=ogTitle" + obj.msgid + " class=mq_tiny style='width:100%;height:20px;color:darkgreen;font-weight:bold;text-align:left;vertical-align:middle;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;margin-left:3px'></div>"
+                _sublink += "   <div id=ogDesc" + obj.msgid + " class=mq_tiny style='width:100%;height:20px;text-align:left;vertical-align:middle;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;margin-left:3px'></div>"
                 _sublink += "</div>"
             }
         }
@@ -432,8 +432,8 @@ const addRow = (obj, kind) => {
             _html += "          <input type=checkbox id=sel_" + obj.msgid + " class=chkboxSel style='display:none;margin-left:10px' />"
             _html += "      </div>"
             _html += "      <div id=high_" + obj.msgid + " style='max-width:80%;background-color:" + _backcolor + ";border:" + _boderpx + " solid lightgray;border-radius:8px;padding:3px;margin-right:4px'>"
-            _html += "	        <div id=replied_" + obj.msgid + " class=mq_cell style='" + _dispReplied + "color:darkgray;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;cursor:default'>" + _replied + "</div>"
-            _html += "	        <div id=body_" + obj.msgid + " class=mq_cell style='text-align:left;white-space:pre-wrap;word-break:break-all'>" + _body + "</div>"
+            _html += "	        <div id=replied_" + obj.msgid + " class=mq_tiny style='" + _dispReplied + "color:darkgray;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;cursor:default'>" + _replied + "</div>"
+            _html += "	        <div id=body_" + obj.msgid + " class=mq_tiny style='text-align:left;white-space:pre-wrap;word-break:break-all'>" + _body + "</div>"
             _html += "      </div>"
             _html += "  </div>"
             if (_sublink) _html += _sublink
@@ -461,8 +461,8 @@ const addRow = (obj, kind) => {
             _html += "  </div>"
             _html += "  <div style='width:100%;display:flex;align-items:center;justify-content:space-between'>"
             _html += "      <div id=high_" + obj.msgid + " style='max-width:80%;background-color:" + _backcolor + ";border:" + _boderpx + " solid lightgray;border-radius:8px;padding:3px;margin-left:4px'>"
-            _html += "	        <div id=replied_" + obj.msgid + " class=mq_cell style='" + _dispReplied + "color:darkgray;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;cursor:default'>" + _replied + "</div>"
-            _html += "	        <div id=body_" + obj.msgid + " type='" + obj.type + "' class=mq_cell style='white-space:pre-wrap;word-break:break-all'>" + _body + "</div>"
+            _html += "	        <div id=replied_" + obj.msgid + " class=mq_tiny style='" + _dispReplied + "color:darkgray;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;cursor:default'>" + _replied + "</div>"
+            _html += "	        <div id=body_" + obj.msgid + " type='" + obj.type + "' class=mq_tiny style='white-space:pre-wrap;word-break:break-all'>" + _body + "</div>"
             _html += "      </div>"
             _html += "      <div style='width:10%;text-align:right'>"
             _html += "          <input type=checkbox id=sel_" + obj.msgid + " class=chkboxSel style='display:none;margin-right:10px' />"
@@ -1355,7 +1355,7 @@ const procFileLinkIfExists = (obj, kind) => {
             for (let i = 0; i < _filepath.length - 1; i++) _dir_prefix += _filepath[i] + "/"
             const _attr = "target='_self' style='text-decoration:none;color:#005192;cursor:pointer'"
             const _path = _dir_prefix + encodeURIComponent(_filenameLong)
-            _filelink = "<a id=ahref_" + obj.msgid + " href='' onclick='return false;' class=mq_cell param1='" + _path + "' param2='" + obj.msgid + "' " + _attr + ">" + _filename + "</a>"
+            _filelink = "<a id=ahref_" + obj.msgid + " href='' onclick='return false;' class=mq_tiny param1='" + _path + "' param2='" + obj.msgid + "' " + _attr + ">" + _filename + "</a>"
         }
         _sublink_request = obj.body //_fileStr[0]
         _extension = _crr[1]
@@ -1474,7 +1474,7 @@ const chkStickyNeeded = () => {
 
 const setTitleToFrTip = (doItNow) => { //for mobile only
     const frTip = $("#fr_tip")
-    if (doItNow ||frTip.html() == "" || frTip.html().includes("방명 :")) frTip.html("<span class=mq_node>방명 : " + g_title + "</span>")
+    if (doItNow ||frTip.html() == "" || frTip.html().includes("방명 :")) frTip.html("<span>방명 : " + g_title + "</span>")
 }
 
 const showRoomMenu = (show) => { //for mobile only
