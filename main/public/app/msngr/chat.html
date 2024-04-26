@@ -68,7 +68,7 @@
                         AndroidRoom.procAfterOpenRoom()
                     } else {                        
                         g_focus_for_webview = false
-                        $("#in_search").width(100)
+                        //$("#in_search").width(100)
                         $("#fr_main").height("calc(100% - 190px)")
                         g_in_chat.attr("placeholder", "줄바꿈 (Shift+Enter)")
                         $("#fr_menu_bottom").css("display", "flex")
@@ -350,7 +350,7 @@
         <div id=main_pg style="width:100%;height:100%;display:flex;flex-direction:column;background-color:#eaeaea">
             <div id=fr_menu_top style="height:45px;display:flex;justify-content:space-between;margin:0px 3px">    
                 <div style="display:flex;align-items:center">
-                    <input id=in_search type=search spellcheck=false onsearch="OnSearch(this)" style="width:80px" />
+                    <input id=in_search type=search spellcheck=false onsearch="OnSearch(this)" style="width:150px" />
                     <div id=btn_search class=coImgBtn><img src="/img/white_search.png" class=coImg24 /></div>
                     <div id=btn_close_search class=coMenuFlat style="display:none"><img src="/img/close.png" class=coImg16 /></div>
                     <div id=btn_qry_etc class='coMenuFlat mq_node'>파일/이미지</div>
