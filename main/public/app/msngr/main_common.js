@@ -109,9 +109,9 @@ const toggleForBtnCompany = (show) => {
         }
         alert("111")
         //if (!g_win_type) { 
-            $("#chk_selectall").css("visibility", "hidden")
+            //$("#chk_selectall").css("visibility", "hidden")
         //} else {
-            //$("#chk_selectall").hide()
+            $("#chk_selectall").hide()
         //}
     } else {
         if (!hush.webview.on) {
@@ -119,9 +119,9 @@ const toggleForBtnCompany = (show) => {
             $("#btn_expandall").hide()
         }
         //if (!g_win_type) { 
-            $("#chk_selectall").css("visibility", "visible")
+            //$("#chk_selectall").css("visibility", "visible")
         //} else {
-        //    $("#chk_selectall").show()
+            $("#chk_selectall").show()
         //}        
     }
     $("#chk_selectall").prop("checked", false)
