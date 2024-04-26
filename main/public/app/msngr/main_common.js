@@ -107,7 +107,7 @@ const toggleForBtnCompany = (show) => {
             $("#btn_collapseall").show()
             $("#btn_expandall").show()
         }
-        alert("111")
+        //alert("111")
         //if (!g_win_type) { 
             //$("#chk_selectall").css("visibility", "hidden")
         //} else {
