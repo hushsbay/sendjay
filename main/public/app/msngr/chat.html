@@ -46,6 +46,7 @@
         <script src="/plugin/lodash.min.js"></script><!--for debounce (scroll event)-->
         <script src="/plugin/moment.min.js"></script>
         <script src="/plugin/moment-timezone-with-data-1970-2030.min.js"></script>
+        <script src="/common/common.js"></script>
         <script>
             var g_type, g_roomid, g_origin, g_userkey, g_userid, g_usernm //var => also referred in child window popup
             let g_list_msg, g_in_chat, g_year, g_self = this
@@ -2025,7 +2026,7 @@
             $.when($.ready).done(async function() {
                 try {
                     document.oncontextmenu = new Function("return false") //for context menu (prevent mouse right click for pc web only)
-                    await $.getScript("/common/common.js")
+                    //await $.getScript("/common/common.js")
                     //await $.getScript("chat_common.js")
                     const param = new URLSearchParams(location.search)
                     hush.webview.chk(param)

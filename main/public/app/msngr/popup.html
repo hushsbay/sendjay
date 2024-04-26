@@ -16,6 +16,7 @@
     <script src="/plugin/jquery-3.4.1.min.js"></script>
     <script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
     <script src="/plugin/jquery.cookie.js"></script>
+    <script src="/common/common.js"></script>
     <script>
         let toggleSaveVisible = false
         let g_type, g_path, g_msgid, g_body, g_added
@@ -92,7 +93,7 @@
 
         $.when($.ready).done(async function() {
             try {
-                await $.getScript("/common/common.js")
+                //await $.getScript("/common/common.js")
                 //await $.getScript("popup_common.js")
                 const param = new URLSearchParams(location.search)
                 hush.webview.chk(param)
