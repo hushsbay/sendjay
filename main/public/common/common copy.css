@@ -18,11 +18,9 @@ div, span, img {
     user-select: none; /* Standard syntax */
 }
 
-input { height:28px;padding-left:5px;padding-right:5px }
-input::placeholder { font-size:13px;color:lightgray }
-input[type="search"] { -webkit-appearance:textfield;box-sizing:content-box } /* solution for search type not worked with height */
-input[type="checkbox"] { width:16px;height:16px;-webkit-appearance:none;-moz-appearance:none;-o-appearance:none;appearance:none;background-size:16px 16px;outline:1px solid darkgray }
-input[type="checkbox"]:checked { width:16px;height:16px;background:white url('/img/selecton_orange.png') no-repeat;background-size:16px 16px;background-position:50% 50%;outline:none }
+input {
+    height: 28px; margin-left: 5px
+}
 
 button {
     margin-left: 5px
@@ -39,19 +37,11 @@ button {
 .coImg24 { width: 24px; height: 24px; vertical-align: middle; cursor:pointer }
 .coImg32 { width: 32px; height: 32px; vertical-align: middle; cursor:pointer }
 
-.coNav { flex-grow:1;display:flex;align-items:center;justify-content:center;background-color:white;border-right:1px solid #cccccc;font-weight:bold;text-shadow:none;cursor:pointer }
-.coNavSelected { background:#005192;color:white }
-
-.coMainPage { max-width:800px;width:100%;height:100%;display:flex;flex-direction:column;background-color:#eaeaea;margin:0 auto } 
-.coMenuTop { height:50px;display:flex;align-items:center;margin:0px 5px }   
 .coMenuBtn { 
     height: 32px; padding:0px 5px; margin-left: 8px;
     display: flex; flex: none; align-items: center; 
     background-color: #0082AD; color: white; border-radius: 4px; cursor: pointer; 
 }
-.coFrList { flex:1;display:flex;overflow-y:auto;margin:0px 5px } /* coFrList안에 아래 coList말고 다른 것도 있을 수 있다는 가정하에 만들어 놓은 것임 */
-/* .coList { flex:1;background-color:white;border:1px solid darkgray;overflow-y:auto } */
-.coMenuBottom { height:50px;display:flex;align-items:center;margin-top:auto;margin-right:5px;margin-left:5px }
 
 .coSpanWithImg { /* 이미지와 span사이의 간격 지원 */
     margin-left: 3px;
@@ -60,9 +50,6 @@ button {
 .coDotDot { 
     overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
 }
-
-.coImgMenu { width:24px;height:24px;vertical-align:middle;cursor:pointer;margin-right:5px } /* 0086cd(more blue) */
-.coImgBtn { display:flex;align-items:center;justify-content:center;width:32px;height:32px;background-color:#0082AD;border-radius:4px;cursor:pointer;margin-left:10px }
 
 .coRow {
     width: 100%; min-height: 50px; padding-left:3px;
@@ -85,20 +72,6 @@ button {
     display: flex; align-items: center; flex: none; 
     overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
 }
-
-.coSubMenuBtn { display:flex;align-items:center;height:32px;background-color:steelblue;color:white;border-radius:4px;padding:0px 5px;cursor:pointer;margin-left:10px }
-.coMenuFlat { color:#0082AD;cursor:pointer;margin-left:10px }
-
-.coSettingWrap { height:33px;display:flex;align-items:center;border:1px solid darkgray;border-radius:4px;cursor:pointer;padding-right:5px }
-.coSettingChkbox { width:16px;height:16px;background:lightgray;outline:none;margin-left:10px } /* login dialog */
-.coSettingSpan { font-size:16px;margin-left:5px }
-.coSettingRow { display:flex;align-items:center;margin:20px 10px 0px 10px }
-.coSettingLabel { width:100px;color:dimgray }
-
-.coStateOut { border-radius:3px;background-color:#FD760B;font-size:10px;color:white;padding:0px 2px }
-.coStateOn { border-radius:3px;background-color:#0085CD;font-size:10px;color:white;padding:0px 2px }
-.coStateOff { border-radius:3px;background-color:#BDB76B;font-size:10px;color:white;padding:0px 2px }
-.coStateMob { border-radius:3px;background-color:darkgreen;font-size:10px;color:white;padding:0px 2px }
 
 @media screen and (max-device-width: 500px) { 
     .coLogin { padding-top: 50px; display: flex; flex-direction: column; justify-content: flex-start; } /* login.html : 모바일인 경우 키보드 올라오는 경우 대비해 상단 배치 */
