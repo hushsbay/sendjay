@@ -8,26 +8,8 @@
         <title>Main::Sendjay</title>
         <link id=favicon href="/img/hushsbay.png" rel="shortcut icon" type="image/x-icon"/>
         <link rel="stylesheet" href="/plugin/jquery-ui-smoothness-1.12.1.min.css">
-        <!-- <link rel="stylesheet" href="common.css">  -->
         <link rel="stylesheet" href="/common/common.css?001">
         <style> 
-            /* .mq_title { font-size:16px } */
-            /* .mq_node { font-size:14px }
-            .mq_text { font-size:14px }            */
-            @media screen and (max-device-width: 500px) {
-                /* .mq_title { font-size:12px }
-                .mq_node { font-size:12px }
-                .mq_text { font-size:12px }
-                input { font-size:12px } */
-                /* #in_search { width:80px } */
-            }
-            @media screen and (min-device-width: 501px) {
-                /* .mq_title { font-size:16px }
-                .mq_node { font-size:14px }
-                .mq_text { font-size:14px }                
-                input { font-size:12px } */
-                /* #in_search { width:150px } */
-            }
             .mem { display:flex;flex-direction:column;background-color:#fdf5f6;border:1px solid lightgray;overflow:auto;padding-top:4px;margin:4px 4px 0px 4px }
             .memNm { height:20px;font-size:12px;color:#005192;cursor:pointer;margin-left:3px }
             .memTeam { height:20px;font-size:12px;cursor:pointer;margin-left:3px }
@@ -44,7 +26,6 @@
         <script>
             $.when($.ready).done(async function() {
                 try {
-                    //await $.getScript("/common/common.js")
                     await $.getScript("main_common.js") //cache setting to false
                     const param = new URLSearchParams(location.search)
                     hush.webview.chk(param)
@@ -53,20 +34,14 @@
                     g_nodeIndent = hush.webview.on ? 15 : 30
                     g_win_type = param.get("type") //invite, member, org 또는 빈값
                     if (hush.webview.on) {
-                        if (!g_win_type) { //메인은 모바일앱에서도 마찬가지로 빈값
-                            //$("#in_search").width(80)
-                            //$("#btn_collapseall").hide()
-                            //$("#btn_expandall").hide()
+                        if (!g_win_type) {
+                            //메인은 모바일앱에서도 마찬가지로 빈값
                         } else {
-                            //$("#in_search").width(150)
                             $("#btn_collapseall").show()
                             $("#btn_expandall").show()
                         }
-                        //$("#btn_reset_auth").hide()
-                        //$("#selected_people").width(100)
                         $("#btn_refresh").show()
                         $("#btn_logout").show()
-                        //const _warn = "모바일웹은 지원되지 않습니다. 앱을 설치하시기 바랍니다."
                         if (hush.webview.ios) {
                             //아직 미개발
                         } else if (hush.webview.and) {
@@ -91,7 +66,6 @@
                             return
                         }
                     } else {
-                        //$("#in_search").width(150)
                         $("#btn_collapseall").show()
                         $("#btn_expandall").show()
                         $("#btn_reset_auth").show()
@@ -218,13 +192,6 @@
                             if (!ret) return
                             checked.each(function(idx, item) {
                                 const _roomid = item.id.substring(4)
-                                // const rq = { from : "before_leave" } //"before_leave" is just dummy
-                                // if (hush.webview.ios) {
-                                // } else if (hush.webview.and) {
-                                //     AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), _roomid, "parent", false) //procMsg=false
-                                // } else {
-                                //     hush.sock.send(hush.socket, hush.cons.sock_ev_open_room, rq, _roomid, "parent")
-                                // }
                                 const rq = initMsg(_roomid)
                                 rq.type = "leave"
                                 rq.body = g_usernm + "<br>" + hush.cons.left
@@ -302,7 +269,6 @@
                         const fd = new FormData()
                         fd.append("file", blob)
                         fd.append("mimetype", objUrl.mimetype)
-                        //fd.append("userid", g_userid)
                         fd.append("type", "U") //U(Update Picture), D(Delete Picture)
                         hush.http.ajaxFormData("/msngr/proc_picture", fd, (rs) => {
                             hush.msg.toast("Upload done.")
@@ -522,8 +488,6 @@
                 <div id=list_people style="flex-grow:1;background-color:white;border:1px solid darkgray;overflow-y:auto"></div>
                 <div id=selected_people style="display:none;flex-direction:column;min-width:100px;max-width:100px;overflow:hidden;background-color:white;border:1px solid darkgray;border-left:0px;margin-left:auto">
                     <div style="height:24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid darkgray">
-                        <!-- <div style="position:relative;float:left;margin:2px;padding:2px;color:red">선택 : <span id=selected_people_cnt>0</span></div>
-                        <div id=remove_selected_people style="position:relative;float:right;padding:4px"><img src="/img/close.png" class=coImg16 /></div>  -->
                         <div style="color:red;margin-left:3px">선택 : <span id=selected_people_cnt>0</span></div>
                         <img id=remove_selected_people src="/img/close.png" style="margin-right:3px" class=coImg16 />
                     </div>
@@ -544,7 +508,6 @@
                         <div id=pict_browse class='picBtn mq_text'>찾기</div>
                         <div id=pict_upload class='picBtn mq_text' style="margin-left:10px">저장</div>
                         <div id=pict_delete class='picBtn mq_text' style="margin-left:10px">삭제</div>
-                        <!-- <div id=btn_reset_auth class='picBtn mq_text' style="display:none;margin-left:20px">자동로그인해제(Mobile)</div> -->
                         <input id=file_upload type=file accept="image/*" style="display:none">
                     </div>
                 </div>

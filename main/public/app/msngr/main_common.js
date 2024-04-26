@@ -109,22 +109,13 @@ const toggleForBtnCompany = (show) => {
             $("#btn_collapseall").show()
             $("#btn_expandall").show()
         }
-        //alert("111")
-        //if (!g_win_type) { 
-            //$("#chk_selectall").css("visibility", "hidden")
-        //} else {
-            $("#chk_selectall").hide()
-        //}
+        $("#chk_selectall").hide()
     } else {
         if (!hush.webview.on) {
             $("#btn_collapseall").hide()
             $("#btn_expandall").hide()
         }
-        //if (!g_win_type) { 
-            //$("#chk_selectall").css("visibility", "visible")
-        //} else {
-            $("#chk_selectall").show()
-        //}        
+        $("#chk_selectall").show()
     }
     $("#chk_selectall").prop("checked", false)
 }
@@ -160,21 +151,17 @@ const procSelect = (_userid) => {
             const _useridTag = $("#add_" + _userid)
             _useridTag.effect("highlight", { color: hush.cons.fadein }, 100)
             _useridTag.off("click").on("click", function() {
-                //hush.util.animAction(_useridTag, () => { 
-                    $(this).remove()
-                    $("#sel_" + _userid).prop("checked", false)
-                    procMemPanel()    
-                //})                            
+                $(this).remove()
+                $("#sel_" + _userid).prop("checked", false)
+                procMemPanel()    
             })
             _useridTag.off("mouseover").on("mouseover", function() { $(this).addClass("memSel") })
             _useridTag.off("mouseleave").on("mouseleave", function() { $(this).removeClass("memSel") })
             procMemPanel()
         } else {
             const _useridTag = $("#add_" + _userid)
-            //hush.util.animAction(_useridTag, () => { 
-                _useridTag.remove()
-                procMemPanel()
-            //})
+            _useridTag.remove()
+            procMemPanel()
         }
     } catch (ex) {
         hush.util.showEx(ex)
@@ -926,7 +913,6 @@ var funcSockEv = { //needs to be public
         }
     },
     [hush.cons.sock_ev_read_msg] : (data) => {  
-        //if (data.type != "updateall") 
         if (data.userid != g_userid) return //새 메시지 도착시에는 return되고 새로 도착한 노티 클릭시에는 다음으로 넘어감
         $("#chk_selectall").prop("checked", false)
         $(".chkbox_portal:checked").prop("checked", false)
@@ -935,11 +921,7 @@ var funcSockEv = { //needs to be public
             objUnread.hide()
             objUnread.html("0")
         }
-        //if (data.type == "update") {
-        //    closeNoti(data.roomid, data.msgid)
-        //} else {
-            closeNoti(data.roomid)
-        //}
+        closeNoti(data.roomid)
     },
     [hush.cons.sock_ev_rename_room] : (data) => {
         getRoomInfo(data.roomid)
@@ -983,18 +965,6 @@ var funcSockEv = { //needs to be public
             })
         }          
     },
-    // [hush.cons.sock_ev_open_room] : (data) => {
-    //     if (data.from != "before_leave") return //see $("#btn_exit") in main.html
-    //     const rq = initMsg(data.roomid)
-    //     rq.type = "leave"
-    //     rq.body = g_usernm + hush.cons.left
-    //     if (hush.webview.ios) { 
-    //     } else if (hush.webview.and) {
-    //         AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), data.roomid, "parent", true) //procMsg=false 
-    //     } else {
-    //         hush.sock.send(hush.socket, hush.cons.sock_ev_send_msg, rq, data.roomid, "parent")
-    //     }
-    // },
     [hush.cons.sock_ev_cut_mobile] : async (data) => {
         await hush.msg.alert("Logout done. (including mobile device)")
     },
@@ -1118,7 +1088,6 @@ const SetUserVar = () => { //편의상 한번 더 g_로 set
     g_userid = hush.user.id
     g_usernm = hush.user.nm
     g_orgcd = hush.user.orgcd
-    //g_token10 = hush.user.token.slice(-10)
 }
 
 const initStandAlone = (rs) => { //임베디드가 아닐 경우임. rs from hush.auth.verifyUser(true)

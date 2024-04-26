@@ -8,29 +8,12 @@
         <title>Chat::Sendjay</title>
         <link id=favicon href="/img/hushsbay.png" rel="shortcut icon" type="image/x-icon"/>  
         <link rel="stylesheet" href="/plugin/jquery-ui-smoothness-1.12.1.min.css">
-        <!-- <link rel="stylesheet" href="common.css">  -->
-        <link rel="stylesheet" href="/common/common.css?001">
+        <link rel="stylesheet" href="/common/common.css">
         <style>
-            /* .mq_title { font-size:16px }
-            .mq_node { font-size:14px }
-            .mq_text { font-size:14px } */
             @media screen and (max-device-width: 500px) {
-                /* .mq_title { font-size:12px }
-                .mq_node { font-size:12px }
-                .mq_text { font-size:10px }
-                .mq_cell { font-size:12px }
-                .mq_tiny { font-size:10px }
-                input { font-size:12px }*/
-                /* .coImgMenu { display:none }  */
                 .mq_tiny { font-size:10px }
             }
             @media screen and (min-device-width: 501px) {
-                /* .mq_title { font-size:16px }
-                .mq_node { font-size:14px }
-                .mq_text { font-size:14px }  
-                .mq_cell { font-size:12px }
-                .mq_tiny { font-size:12px }
-                input { font-size:12px }*/
                 .mq_tiny { font-size:12px }
             }
             .mem { display:flex;flex-direction:column;background:#fdf5f6;border:1px solid lightgray;overflow:auto;margin:4px 4px 0px 4px }
@@ -46,7 +29,7 @@
         <script src="/plugin/lodash.min.js"></script><!--for debounce (scroll event)-->
         <script src="/plugin/moment.min.js"></script>
         <script src="/plugin/moment-timezone-with-data-1970-2030.min.js"></script>
-        <script src="/common/common.js"></script>
+        <script src="/common/common.js"></script><!--await $.getScript()로 읽으면 var funcSockEv()내 hush가 읽히지 않아 문제가 됨-->
         <script>
             var g_type, g_roomid, g_origin, g_userkey, g_userid, g_usernm //var => also referred in child window popup
             let g_list_msg, g_in_chat, g_year, g_self = this
@@ -475,7 +458,6 @@
                         _html += "      <span id=handling_" + obj.msgid + " class=mq_tiny class=unread" + handlingDisp + ">" + hush.cons.handling + "</span>"    
                         _html += "      <span id=unread_" + obj.msgid + " class='unread mq_tiny' " + unreadDisp + ">" + cnt + "</span>"
                         _html += "      <span id=dt_" + obj.msgid + " class=mq_tiny style='color:darkgray;cursor:default;margin-left:6px'>" + _dt + "</span>"
-                        //_html += "      <img id=menu_" + obj.msgid + " src='" + hush.cons.logo_darkblue + "' style='width:20px;height:20px;cursor:pointer;margin:0px 4px 0px 6px'>"                
                         _html += "  </div>"
                         _html += "  <div style='width:100%;display:flex;align-items:center;justify-content:space-between'>"
                         _html += "      <div style='width:10%'>"
@@ -487,20 +469,11 @@
                         _html += "      </div>"
                         _html += "  </div>"
                         if (_sublink) _html += _sublink
-                        // _html += "  <div style='display:flex;align-items:center;justify-content:flex-end;height:20px;padding-top:4px;margin-bottom:4px'>"
-                        // _html += "      <img id=cellmenu_" + obj.msgid + " src='/img/menu.png' class=coImg12 style='display:none;margin:0px 4px 0px 0px'>"
-                        // _html += "      <img id=reply_" + obj.msgid + " src='/img/reply.png' class=coImg12 style='display:none;margin:0px 4px 0px 0px'>"
-                        // _html += "      <img id=save_" + obj.msgid + " src='/img/download.png' class=coImg12 style='display:none;margin:0px 4px 0px 0px'>"
-                        //_html += "      <span id=save_" + obj.msgid + " class=mq_tiny style='display:none;cursor:pointer;background:#005192;color:white;border-radius:5px;padding:5px'>저장</span>" 
-                        //_html += "      <span id=reply_" + obj.msgid + " class=mq_tiny style='display:none;cursor:pointer;background:#005192;color:white;border-radius:5px;padding:5px'>답장</span>"   
-                        //_html += "      <span id=cellmenu_" + obj.msgid + " class=mq_tiny style='display:none;cursor:pointer;background:#005192;color:white;border-radius:5px;padding:5px'>메뉴</span>"   
-                        //_html += "  </div>"
                         _html += "</div>"
                     } else { //received
                         _backcolor = (obj.type == "image") ? "white" : "mintcream"
                         _html = "<div id=msg_" + obj.msgid + " class='talk" + needCheckUnread + "' style='display:flex;flex-direction:column;cursor:pointer;margin:20px 0px 10px 0px'>"
                         _html += "  <div style='height:20px;display:flex;align-items:center;margin-bottom:4px;margin-left:4px'>"
-                        //_html += "      <img id=menu_" + obj.msgid + " src='" + hush.cons.logo_darkblue + "' style='width:20px;height:20px;cursor:pointer;margin:0px 6px 0px 4px'>"
                         _html += "      <span class=mq_tiny style='color:#063470;cursor:default;margin-right:6px'>" + obj.sendernm + "</span>"
                         _html += "      <span class=mq_tiny style='color:darkgray;cursor:default;margin-right:4px'>" + _dt + "</span>"
                         _html += "      <span id=unread_" + obj.msgid + " class='unread" + unreadDisp + " mq_tiny'>" + cnt + "</span>"
@@ -519,14 +492,6 @@
                         _html += "      </div>"
                         _html += "  </div>"
                         if (_sublink) _html += _sublink
-                        //_html += "  <div style='display:flex;align-items:center;height:20px;padding-top:4px;margin-bottom:4px'>"
-                        // _html += "      <img id=cellmenu_" + obj.msgid + " src='/img/menu.png' class=coImg12 style='margin:0px 0px 0px 4px'>"
-                        // _html += "      <img id=reply_" + obj.msgid + " src='/img/reply.png' class=coImg12 style='margin:0px 0px 0px 4px'>"
-                        // _html += "      <img id=save_" + obj.msgid + " src='/img/download.png' class=coImg12 style='margin:0px 0px 0px 4px'>"
-                        //_html += "      <span id=cellmenu_" + obj.msgid + " class=mq_tiny style='display:none;cursor:pointer;background:#005192;color:white;border-radius:5px;padding:5px'>메뉴</span>"   
-                        //_html += "      <span id=reply_" + obj.msgid + " class=mq_tiny style='display:none;cursor:pointer;background:#005192;color:white;border-radius:5px;padding:5px'>답장</span>"   
-                        //_html += "      <span id=save_" + obj.msgid + " class=mq_tiny style='display:none;cursor:pointer;background:#005192;color:white;border-radius:5px;padding:5px'>저장</span>"
-                        //_html += "  </div>"
                         _html += "</div>"
                     }
                     if (kind) {
@@ -575,24 +540,12 @@
                     })
                     $("#msg_" + obj.msgid).off("mouseenter").on("mouseenter", function(e) {	
                         showCellIcon(true, obj)					
-                        // $("#cellmenu_" + obj.msgid).show()
-                        // if (obj.filestate == hush.cons.file_expired || $("#body_" + obj.msgid).html() == hush.cons.cell_revoked) return
-                        // $("#reply_" + obj.msgid).show()
-                        // if (obj.type != "file" && obj.type != "flink" && obj.type != "image") return
-                        // $("#save_" + obj.msgid).show()
                     })
                     $("#msg_" + obj.msgid).off("mouseleave").on("mouseleave", function(e) {
                         showCellIcon(false, obj) 
-                        // $("#reply_" + obj.msgid).hide()
-                        // $("#cellmenu_" + obj.msgid).hide()
-                        // $("#save_" + obj.msgid).hide()
                     })
                     $("#reply_" + obj.msgid).off("click").on("click", function() {
                         hush.util.animBgColor($(this))
-                        // if ($("#cancelreply").length > 0) {
-                        //     setTitleToFrTip(true)
-                        //     return
-                        // }
                         if (obj.filestate == hush.cons.file_expired || $("#body_" + obj.msgid).html() == hush.cons.cell_revoked) return
                         let _msg = obj.sendernm + " - " + hush.util.displayTalkBodyCustom(obj.type, obj.body)
                         let _html = "<span id=cancelreply class=mq_tiny style='background:#005192;color:white;border-radius:8px;cursor:pointer;padding:3px'>취소</span> "
@@ -639,24 +592,6 @@
                         hush.msg.toast(hush.cons.MSG_NO_DATA)
                         return
                     }
-                    // hush.msg.alert("Continue to delete ? (" + len + ")", {
-                    //     "Yes": function() { 
-                    //         const msgidArr = []
-                    //         for (let i  = 0; i < len; i++) msgidArr.push(checked[i].id.substring(4)) //sel_2019~
-                    //         const rq = { msgidArr : msgidArr, type : "", receiverid : g_userid, roomid : g_roomid }
-                    //         if (hush.webview.ios) {
-                    //         } else if (hush.webview.and) {
-                    //             AndroidCom.send(hush.cons.sock_ev_delete_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
-                    //         } else {
-                    //             hush.sock.send(g_socket, hush.cons.sock_ev_delete_msg, rq, g_roomid, "parent")
-                    //         }
-                    //         hush.msg.close()
-                    //         showCellMenu(false)
-                    //     }, "No": function() { 
-                    //         hush.msg.close() 
-                    //         showCellMenu(false)
-                    //     } 
-                    // })    
                     const ret = await hush.msg.confirm("삭제를 진행할까요? (" + len + "개)") 
                     showCellMenu(false)
                     if (!ret) return
@@ -1171,7 +1106,6 @@
                     })
                 }
                 _img.on("click", function(e) {
-                    //const _id = this.id
                     let fileInfoForMobile = $("#ahref_" + msgid).attr("param1") + hush.cons.deli + $("#ahref_" + msgid).attr("param2")
                     if (type == "ext_video") {
                         const _arr = body.split(hush.cons.deli)
@@ -1202,19 +1136,8 @@
                         }
                         let urlStr = "/app/msngr/popup.html?type=" + _type + "&msgid=" + msgid + "&body=" + body
                         if (!hush.webview.on) {
-                            //const imgWin = hush.util.openWinPop("", 800, 800)
-                            //imgWin.document.write("<!DOCTYPE html><html><title>Image Preview</title><body topmargin=0 leftmargin=0 marginheight=0 marginwidth=0><img id=" + _id + " ></body></html>")
-                            //imgWin.document.getElementById(_id).setAttribute("src", this.src)
                             hush.util.openWinPop(urlStr)
                         } else {
-                            // let _type
-                            // if (type == "ext_image") {
-                            //     _type = type
-                            // } else {
-                            //     _type = "image"
-                            //     fileInfoForMobile = ""
-                            // }
-                            //let urlStr = hush.cons.popup + "?type=" + _type + "&msgid=" + msgid + "&body=" + body
                             if (hush.webview.ios) {
                             } else if (hush.webview.and) {
                                 urlStr += "&" + hush.cons.param_webview_and
@@ -1622,7 +1545,6 @@
                     if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.funcSockEv[hush.cons.sock_ev_show_off].call(null, userkey)
                 },
                 [hush.cons.sock_ev_show_on] : (userkey) => { 
-                    //If User A's chatroom is already open and User B(as same room member) just connected, room_join needed.
                     //A사용자 채팅창이 이미 열려 있고 B(같은 방 멤버)가 이제 막 연결된 경우 room_join이 필요.
                     const rq = { from : hush.cons.sock_ev_show_on }                 
                     if (hush.webview.ios) {
@@ -1964,7 +1886,6 @@
                     g_userid = hush.user.id
                     g_usernm = hush.user.nm
                     g_orgcd = hush.user.orgcd
-                    //g_token10 = hush.user.token.slice(-10)
                     g_role = hush.user.role
                     if (g_type == "newFromMain") {
                         if (hush.webview.ios) { 
@@ -2026,8 +1947,6 @@
             $.when($.ready).done(async function() {
                 try {
                     document.oncontextmenu = new Function("return false") //for context menu (prevent mouse right click for pc web only)
-                    //await $.getScript("/common/common.js")
-                    //await $.getScript("chat_common.js")
                     const param = new URLSearchParams(location.search)
                     hush.webview.chk(param)
                     g_type = param.get("type")
@@ -2042,11 +1961,9 @@
                         $("#btn_file").hide()
                         $("#btn_file_m").css("display", "flex")
                         $("#btn_send_m").css("display", "flex")
-                        //g_in_chat.css("padding", "0px 40px 0px 45px")
                         AndroidRoom.procAfterOpenRoom()
                     } else {                        
                         g_focus_for_webview = false
-                        //$("#in_search").width(100)
                         $("#fr_main").height("calc(100% - 190px)")
                         g_in_chat.attr("placeholder", "줄바꿈 (Shift+Enter)")
                         $("#fr_menu_bottom").css("display", "flex")
@@ -2055,7 +1972,6 @@
                         g_userid = opener.hush.user.id
                         g_usernm = opener.hush.user.nm
                         g_orgcd = opener.hush.user.orgcd
-                        //g_token10 = opener.hush.user.token.slice(-10)
                         g_role = opener.hush.user.role
                         if (g_type == "newFromMain") {
                             const mem = $(".mem", opener.document)
@@ -2363,18 +2279,6 @@
                     <div id=btn_cancel_cell_m class="menuBtnCell cell">취소2</div>
                 </div>
             </div>
-            <!-- <div style="position:relative;height:20px;display:flex;margin:3px 3px 0px 3px">
-                <div id=fr_tip class=coDotDot style="width:calc(100% - 80px);height:100%;float:left;color:#005192;margin-left:3px"></div>
-                <div id=fr_sendcopy style="display:none;width:calc(100% - 80px);height:100%;float:left;margin-left:5px">
-                    <span id=send_copy style='line-height:20px;color:#FD760B;cursor:pointer;margin-left:40px'>[SendCopy]</span>
-                    <span id=cancel_copy style='line-height:20px;color:#FD760B;cursor:pointer;margin-left:5px'>[CancelCopy]</span>
-                    <span id=btn_send_img_m style='display:none;line-height:20px;color:#005192;cursor:pointer;margin-left:40px'>[Send]</span>
-                    <span id=btn_cancel_img_m style='display:none;line-height:20px;color:#005192;cursor:pointer;margin-left:5px'>[Cancel]</span>
-                </div>
-                <div style="width:70px;height:100%;float:right;text-align:right;margin-right:5px">
-                    <span id=fr_byte style='line-height:20px'></span>
-                </div>
-            </div> -->
             <div style="height:20px;display:flex;align-items:center;justify-content:space-between;margin:3px 5px">
                 <div id=fr_tip class=coDotDot style="height:100%;width:calc(100% - 80px);display:flex;align-items:center"></div>
                 <div id=fr_sendcopy style="display:none">
@@ -2386,15 +2290,6 @@
                 </div>
                 <div id=fr_byte></div>
             </div>
-            <!-- <div id=fr_in style="position:relative;height:70px;display:flex;align-items:stretch;margin:3px 3px 0px 3px">
-                <textarea id=in_chat spellcheck=false style="width:100%;height:100%;resize:none;border:1px solid darkgray"></textarea>
-                <div id=btn_file_m style="position:absolute;top:0px;left:0px;width:40px;height:100%;display:none;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid darkgray">
-                    <img src="/img/white_upload.png" style="width:24px;height:24px" />
-                </div>
-                <div id=btn_send_m style="position:absolute;top:0px;right:0px;width:40px;height:100%;display:none;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid darkgray">
-                    <img src="/img/white_send.png" style="width:24px;height:24px" />
-                </div>
-            </div> -->
             <div id=fr_in style="height:65px;display:flex;align-items:center;justify-content:space-between;margin:0px 3px">
                 <div id=btn_file_m style="width:45px;height:100%;display:none;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
                     <img src="/img/white_upload.png" style="width:24px;height:24px" />
