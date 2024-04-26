@@ -173,7 +173,7 @@ const setMembers = async (data) => {
                     const rq = initMsg()
                     rq.type = "leave"
                     rq.reply = _userid
-                    rq.body = _usernm + "<br>" + hush.cons.left + " by force"
+                    rq.body = _usernm + "<br>" + hush.cons.left //+ " by force"
                     if (hush.webview.ios) {
                     } else if (hush.webview.and) {
                         AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
@@ -335,7 +335,7 @@ const addRow = (obj, kind) => {
         } else {
             _desc = "<span class=mq_tiny>" + obj.body + "</span><br><span class=mq_tiny>at " + _dt + "</span>"
         }
-        const _html = "<div id=msg_" + obj.msgid + " style='text-align:center;background:lightgray;border:1px solid lightgray;border-radius:8px;padding:3px 10px;margin:10px auto'>" + _desc + "</div>"
+        const _html = "<div id=msg_" + obj.msgid + " style='text-align:center;background:lightgray;border:1px solid lightgray;border-radius:8px;padding:3px 5px;margin:10px auto'>" + _desc + "</div>"
         if (kind) {
             if (kind == "after") {
                 g_list_msg.append(_html)
