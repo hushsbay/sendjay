@@ -1,3 +1,5 @@
+//index.html 및 main.html에서 사용됨
+
 var g_memWin, g_userkey, g_userid, g_usernm, g_orgcd, g_useridArr, g_unread = {}
 
 let g_mode, g_mode_people, g_win_type, g_setting = {}
