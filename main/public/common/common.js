@@ -96,12 +96,12 @@
         auth : {
             setCookieForUser : (rs, _persist) => { //token은 서버 쿠키+응답본문으로 자동으로 내려옴
                 const persist = (_persist == true) ? true : false
-                hush.http.setCookie("userid", rs.USER_ID, persist) //persistent cookie - _persist는 아이디를 화면에 저장할 지에만 사용
-                hush.http.setCookie("usernm", rs.USER_NM)
-                hush.http.setCookie("orgcd", rs.ORG_CD)
-                hush.http.setCookie("orgnm", rs.ORG_NM)
-                hush.http.setCookie("toporgcd", rs.TOP_ORG_CD)
-                hush.http.setCookie("toporgnm", rs.TOP_ORG_NM)
+                hush.http.setCookie("userid", rs.USER_ID || rs.userid, persist) //persistent cookie - _persist는 아이디를 화면에 저장할 지에만 사용
+                hush.http.setCookie("usernm", rs.USER_NM || rs.usernm) //모바일에서 소문자 붙여서 넘어옴 (이하 동일)
+                hush.http.setCookie("orgcd", rs.ORG_CD || rs.orgcd)
+                hush.http.setCookie("orgnm", rs.ORG_NM || rs.orgnm)
+                hush.http.setCookie("toporgcd", rs.TOP_ORG_CD || rs.toporgcd)
+                hush.http.setCookie("toporgnm", rs.TOP_ORG_NM || rs.toporgnm)
             }, //위 아래 함수는 verifyUser() in common.js와 앱의 UserInfo 클래스내 항목과 같아야 함
             deleteCookieForUser : () => {
                 hush.http.deleteCookie('token')
