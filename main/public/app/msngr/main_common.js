@@ -1111,7 +1111,8 @@ function procNewChat(useridArr) { //invoked from index.html and jay_main.js : Mo
 ////////////////////////////////////////////////////////////////////////mobile webview
 const startFromWebView = async (from, obj, rs) => {
     try {
-        hush.auth.setCookieForUser(obj, "Y", true)
+        debugger
+        hush.auth.setCookieForUser(obj, true)
         SetUserVar()
         if (g_win_type) {
             procMenuTop(BTN_MODE_PEOPLE, BTN_PEOPLE_COMPANY)
