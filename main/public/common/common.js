@@ -96,6 +96,7 @@
         auth : {
             setCookieForUser : (rs, _persist) => { //token은 서버 쿠키+응답본문으로 자동으로 내려옴
                 const persist = (_persist == true) ? true : false
+                hush.http.setCookie("token", rs.token)
                 hush.http.setCookie("userid", rs.USER_ID || rs.userid, persist) //persistent cookie - _persist는 아이디를 화면에 저장할 지에만 사용
                 hush.http.setCookie("usernm", rs.USER_NM || rs.usernm) //모바일에서 소문자 붙여서 넘어옴 (이하 동일)
                 hush.http.setCookie("orgcd", rs.ORG_CD || rs.orgcd)
@@ -113,6 +114,7 @@
                 hush.http.deleteCookie('toporgnm')
             },
             setUser : (_token) => { //바로 아래와 index.html에서 사용됨
+                const token = _token ? _token : hush.http.getCookie("token")
                 const _id = hush.http.getCookie("userid")
                 const _nm = hush.http.getCookie("usernm")
                 const _orgcd = hush.http.getCookie("orgcd")
@@ -120,7 +122,7 @@
                 const _toporgcd = hush.http.getCookie("toporgcd")
                 const _toporgnm = hush.http.getCookie("toporgnm")
                 hush.user = { 
-                    token : _token, id : _id, key : hush.cons.w_key + _id, nm : _nm, 
+                    token : token, id : _id, key : hush.cons.w_key + _id, nm : _nm, 
                     orgcd : _orgcd, orgnm : _orgnm, toporgcd : _toporgcd, toporgnm : _toporgnm 
                 }
             },
