@@ -1111,8 +1111,8 @@ function procNewChat(useridArr) { //invoked from index.html and jay_main.js : Mo
 ////////////////////////////////////////////////////////////////////////mobile webview
 const startFromWebView = async (from, obj, rs) => {
     try {
-        hush.auth.setCookieForUser(obj, true)
         debugger
+        hush.auth.setCookieForUser(obj, true)        
         hush.user = hush.auth.setUser(obj.token)        
         SetUserVar()
         if (g_win_type) {
