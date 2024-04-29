@@ -1909,7 +1909,7 @@ var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
 const startFromWebView = async (from, obj, rs) => {
     try {
         hush.auth.setCookieForUser(obj, "Y", true)
-        hush.user = hush.auth.setUser()
+        hush.auth.setUser()
         g_userkey = hush.user.key 
         g_userid = hush.user.id
         g_usernm = hush.user.nm

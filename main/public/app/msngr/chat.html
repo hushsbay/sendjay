@@ -1880,8 +1880,8 @@
             ////////////////////////////////////////////////////////////////////////mobile webview
             const startFromWebView = async (from, obj, rs) => {
                 try {
-                    hush.auth.setCookieForUser(obj, "Y", true)
-                    hush.user = hush.auth.setUser()
+                    hush.auth.setCookieForUser(obj, true)
+                    hush.auth.setUser(obj.token)
                     g_userkey = hush.user.key 
                     g_userid = hush.user.id
                     g_usernm = hush.user.nm

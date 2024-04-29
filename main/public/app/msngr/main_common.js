@@ -1113,7 +1113,7 @@ const startFromWebView = async (from, obj, rs) => {
     try {
         debugger
         hush.auth.setCookieForUser(obj, true)        
-        hush.user = hush.auth.setUser(obj.token)        
+        hush.auth.setUser(obj.token)        
         SetUserVar()
         if (g_win_type) {
             procMenuTop(BTN_MODE_PEOPLE, BTN_PEOPLE_COMPANY)

@@ -44,7 +44,7 @@ var funcSockEv = { //needs to be public
 const startFromWebView = (from, obj, rs) => {
     try {
         hush.auth.setCookieForUser(obj, "Y", true)
-        hush.user = hush.auth.setUser()
+        hush.auth.setUser()
         g_added = rs
         if (g_type == "play") {
             play()
