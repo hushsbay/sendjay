@@ -39,8 +39,6 @@ button {
 .coImg24 { width: 24px; height: 24px; vertical-align: middle; cursor:pointer }
 .coImg32 { width: 32px; height: 32px; vertical-align: middle; cursor:pointer }
 
-.coTitle { font-size:16px }
-
 .coNav { flex-grow:1;display:flex;align-items:center;justify-content:center;background-color:white;border-right:1px solid #cccccc;font-weight:bold;text-shadow:none;cursor:pointer }
 .coNavSelected { background:#005192;color:white }
 
@@ -104,10 +102,12 @@ button {
 
 @media screen and (max-device-width: 500px) { 
     .coLogin { padding-top: 50px; display: flex; flex-direction: column; justify-content: flex-start; } /* login.html : 모바일인 경우 키보드 올라오는 경우 대비해 상단 배치 */
+    .coTitle { font-size:14px }
     .coMenuBtn>img { display: none } /* 모바일중에 가로가 작은 것은 이미지 제외하고 표시 (>의 앞뒤는 붙여야 함을 유의) */    
     .coImgMenu { display: none }
     #in_search { width: 80px } 
 }
 @media screen and (min-device-width: 501px) { 
+    .coTitle { font-size:16px }
     #in_search { width: 150px } 
 }
