@@ -69,7 +69,7 @@
                     } else {
                         $("#btn_collapseall").show()
                         $("#btn_expandall").show()
-                        $("#btn_reset_auth").show()
+                        $("#div_reset_auth").show()
                     }
                     hush.webview.ready = true
                     //main.html은 아래 5군데에서 호출됨
@@ -531,7 +531,7 @@
                 <div class=coSettingRow>
                     <div class='coSettingLabel coText'>시작시<br>(Web)</div>
                     <label for=chk_standalone class=coSettingWrap>
-                        <input type=checkbox id=chk_standalone name=chk_standalone class='inputSetting coSettingChkbox' />
+                        <input type=checkbox id=chk_standalone name=chk_standalone class=coSettingChkbox />
                         <span class='coSettingSpan coText'>별도 브라우저탭에서 실행</span>
                     </label>
                 </div>
@@ -566,9 +566,9 @@
                     <input id=in_to data-role=none spellcheck=false placeholder='1800' class=coText style="width:60px;text-align:center;border:1px solid darkgray;margin-left:3px" />
                     <span id=spn_clear class='coSettingSpan coText' style="color:#0082AD;cursor:pointer">Clear</span>
                 </div> 
-                <div class=coSettingRow>
+                <div class=coSettingRow id="div_reset_auth" style="display:none">
                     <div class='coSettingLabel coText'>자동로그인<br>해제(Mobile)</div>
-                    <div id=btn_reset_auth class='picBtn coText' style="display:none;margin-right:10px">해제</div>
+                    <div id=btn_reset_auth class='picBtn coText' style="margin-right:10px">해제</div>
                 </div> 
                 <!-- <div class=coSettingRow>  
                     <div class='coSettingLabel coText'>Log File<br>(Mobile)</div>

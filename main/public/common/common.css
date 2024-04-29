@@ -19,7 +19,7 @@ div, span, img {
 }
 
 input { height:28px;padding-left:5px;padding-right:5px }
-input::placeholder { font-size:13px;color:lightgray }
+/* input::placeholder { font-size:13px;color:lightgray } */
 input[type="search"] { -webkit-appearance:textfield;box-sizing:content-box } /* solution for search type not worked with height */
 input[type="checkbox"] { width:16px;height:16px;-webkit-appearance:none;-moz-appearance:none;-o-appearance:none;appearance:none;background-size:16px 16px;outline:1px solid darkgray }
 input[type="checkbox"]:checked { width:16px;height:16px;background:white url('/img/selecton_orange.png') no-repeat;background-size:16px 16px;background-position:50% 50%;outline:none }
@@ -106,10 +106,12 @@ button {
     .coText { font-size:10px }
     .coMenuBtn>img { display: none } /* 모바일중에 가로가 작은 것은 이미지 제외하고 표시 (>의 앞뒤는 붙여야 함을 유의) */    
     .coImgMenu { display: none }
+    input::placeholder { font-size:10px;color:lightgray }
     #in_search { width: 80px } 
 }
 @media screen and (min-device-width: 501px) { 
     .coTitle { font-size:16px }
     .coText { font-size:14px }
+    input::placeholder { font-size:12px;color:lightgray }
     #in_search { width: 150px } 
 }
