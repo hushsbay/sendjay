@@ -339,7 +339,7 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
             _html += "      <input type=checkbox id=orgsel_" + i + " class=orgsel z-index=1 style='" + chkDisp + "margin-left:10px' />"
             _html += "      <img src='/img/ico_dept.png' class=coImg16 style='margin-left:8px' />"
             _html += "      <div id=orgbody_" + i + " class='coDotDot orgbody' style='height:100%;flex:1;min-width:0;display:flex;align-items:center;margin-left:8px'>" //flex:1;min-width:0 used instead of width:calc
-            _html += "          <div id=orgnm_" + i + " class=coDotDot style='font-weight:bold'>" + orgnm + "</div>"
+            _html += "          <div id=orgnm_" + i + " class='coDotDot coText' style='font-weight:bold'>" + orgnm + "</div>"
             let dispCnt = (memcnt <= 0) ? "" : "(" + memcnt + ")"
             _html += "          <div style='font-size:10px;color:darkgray;margin-left:10px'>" + dispCnt + "</div>"
             _html += "      </div>"
