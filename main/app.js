@@ -43,7 +43,6 @@ const io = new Server(socketServer, { allowEIO3: false, autoConnect: true, pingT
 io.adapter(redisAdapter(global.pub, sub))
 io.listen(config.sock.port)
 global.jay = io.of('/' + config.sock.namespace)
-global.jayAdapter = io.of('/' + config.sock.namespace).adapter
 global.jay.on('connection', async (socket) => {
 	const _logTitle = 'connect'	
 	try {
