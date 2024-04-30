@@ -43,7 +43,9 @@ const io = new Server(socketServer, { allowEIO3: false, autoConnect: true, pingT
 io.adapter(redisAdapter(global.pub, sub))
 io.listen(config.sock.port)
 global.jay = io.of('/' + config.sock.namespace)
-global.jay.adpater.on('connection', async (socket) => {
+global.jay.on('connection', async (socket) => {
+	const sockets = await io.of('/' + config.sock.namespace).adapter.sockets(new Set())
+	console.log(sockets);
 	const _logTitle = 'connect'	
 	try {
 		const queryParam = socket.handshake.query
