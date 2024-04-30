@@ -14,9 +14,12 @@ module.exports = async function(socket, param) {
 		for (let key of userkeySocketArr) { //redis에 있는 특정 userkey들의 소켓 정보를 읽어 와서
 			const _obj = ws.redis.getUserkeySocketIdFromKey(key) //userkey와 socketid를 분리
 			console.log(key, _obj.socketid, "============")
-			if (sockets.has(_obj.socketid)) userkeyArr.push(_obj.userkey) //해당 socketid가 연결되어 있는 소켓목록에 있으면 userkey 담아서 리턴하면 됨
+			if (sockets.has(_obj.socketid)) {
+				userkeyArr.push(_obj.userkey) //해당 socketid가 연결되어 있는 소켓목록에 있으면 userkey 담아서 리턴하면 됨
+				console.log(_obj.userkey, "@@@@@@@@")
+			}
 		}
-		param.data = userkeyArr
+		param.data = userkeyArr		
 		socket.emit(ws.cons.sock_ev_common, param)	
 	} catch (ex) {
 		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex)
