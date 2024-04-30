@@ -45,8 +45,8 @@ io.listen(config.sock.port)
 global.jay = io.of('/' + config.sock.namespace)
 global.jay.on('connection', async (socket) => {
 	//const sockets = await io.of('/' + config.sock.namespace).adapter.fetchSockets()
-	const sockets = await redisAdapter.fetchSockets()
-	console.log(sockets); //////////////////////////////////////////////////////////////////////
+	//const sockets = await redisAdapter.fetchSockets()
+	//console.log(sockets); //////////////////////////////////////////////////////////////////////
 	const _logTitle = 'connect'	
 	try {
 		const queryParam = socket.handshake.query
