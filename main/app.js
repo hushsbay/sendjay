@@ -125,7 +125,7 @@ for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/
 
 proc()
 async function proc() {
-    const sockets = await global.jay.adapter.sockets(new Set()) //https://socket.io/docs/v4/adapter/
+    const sockets = await global.jay.sockets(new Set()) //const sockets = await global.jay.adapter.sockets(new Set()) //https://socket.io/docs/v4/adapter/
 	//const sockets1 = await global.jay.sockets //위 아래 둘 다 각 서버의 소켓 카운트만 가능
     //console.log('socket count :', sockets.size) //, sockets1.size)
 	const stream = global.store.scanStream({ match : ws.cons.key_str_socket + '*', count: ws.cons.scan_stream_cnt })
