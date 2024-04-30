@@ -284,13 +284,22 @@ module.exports = (function() {
 				}
 				return usArr
 			},
+			// getUserkeysInSocket : async (userkeys) => { //chk_alive()의 sockets를 막은 이유와 동일함
+			// 	let ukArr = []
+			// 	const resultArr = await ws.redis.getUserkeySocketsFromMulti(userkeys)
+			// 	const sockets = await global.jay.adapter.sockets(new Set())
+			// 	for (let key of resultArr) {
+			// 		const _obj = ws.redis.getUserkeySocketIdFromKey(key)
+			// 		if (sockets.has(_obj.socketid)) ukArr.push(_obj.userkey)
+			// 	}
+			// 	return ukArr
+			// },
 			getUserkeysInSocket : async (userkeys) => {
 				let ukArr = []
 				const resultArr = await ws.redis.getUserkeySocketsFromMulti(userkeys)
-				const sockets = await global.jay.adapter.sockets(new Set())
 				for (let key of resultArr) {
 					const _obj = ws.redis.getUserkeySocketIdFromKey(key)
-					if (sockets.has(_obj.socketid)) ukArr.push(_obj.userkey)
+					if (_obj && _obj.userkey) ukArr.push(_obj.userkey)
 				}
 				return ukArr
 			},
