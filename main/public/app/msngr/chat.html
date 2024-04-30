@@ -173,12 +173,12 @@
                         _html += "          <div style='white-space:nowrap;overflow:hidden'>"
                         _html += "              <span id=w_" + w_userkey + " class=coStateOff>W</span>"
                         _html += "              <span id=m_" + m_userkey + " class='" + state_mob + "'>M</span>"
-                        _html += "              <span id=abcd_" + _userid + " class=coStateOut style='display:none'>" + _abcd + "</span>"
-                        _html += "              <span id=typing_" + _userid + " style='display:none;font-size:11px;color:red'>typing</span>"
+                        _html += "              <span id=abcd_" + _userid + " class='coStateOut coText' style='display:none'>" + _abcd + "</span>"
+                        _html += "              <span id=typing_" + _userid + " style='display:none;font-size:10px;color:red'>typing</span>"
                         _html += "          </div>"
                         _html += "      </div>"
                         const _master = (g_masterid == _userid) ? ";font-weight:bold" : ""
-                        _html += "      <div class=coDotDot style='height:20px;color:#005192;margin-top:2px;margin-left:3px" + _master + "'>" + _nm + "</div>"
+                        _html += "      <div class='coDotDot coText' style='height:20px;color:#005192;margin-top:2px;margin-left:3px" + _master + "'>" + _nm + "</div>"
                         _html += "   </div>"
                         list.append(_html)
                         if (_abcd) $("#abcd_" + _userid).show()
@@ -1447,7 +1447,7 @@
 
             const setTitleToFrTip = (doItNow) => { //for mobile only
                 const frTip = $("#fr_tip")
-                if (doItNow ||frTip.html() == "" || frTip.html().includes("방명 :")) frTip.html("<span>방명 : " + g_title + "</span>")
+                if (doItNow ||frTip.html() == "" || frTip.html().includes("방명 :")) frTip.html("<span class=coText>방명 : " + g_title + "</span>")
             }
 
             const showRoomMenu = (show) => { //for mobile only
@@ -2268,15 +2268,15 @@
                     <div id=result_sub style="display:none;height:calc(100% - 24px);overflow:auto"></div>
                 </div>
                 <div id=list_menu_m style="display:none;width:88px;overflow:hidden;background-color:white;border:1px solid darkgray;margin-left:auto">
-                    <div id=btn_invite_m class="menuBtn chat">초대1</div>
-                    <div id=btn_delete_all_m class="menuBtn chat">모두삭제1</div>
-                    <div id=btn_rename_m class="menuBtn chat">방명변경1</div>
-                    <div id=btn_exit_m class="menuBtn chat">퇴장1</div>
-                    <div id=btn_cancel_room_m class="menuBtn chat">취소1</div>
-                    <div id=btn_copy_cell_m class="menuBtnCell cell single">복사1</div>
-                    <div id=btn_revoke_cell_m class="menuBtnCell cell single">전송취소1</div>
-                    <div id=btn_delete_cell_m class="menuBtnCell cell">삭제1</div>
-                    <div id=btn_cancel_cell_m class="menuBtnCell cell">취소2</div>
+                    <div id=btn_invite_m class="menuBtn chat coText">초대1</div>
+                    <div id=btn_delete_all_m class="menuBtn chat coText">모두삭제</div>
+                    <div id=btn_rename_m class="menuBtn chat coText">방명</div>
+                    <div id=btn_exit_m class="menuBtn chat coText">퇴장</div>
+                    <div id=btn_cancel_room_m class="menuBtn chat coText">취소</div>
+                    <div id=btn_copy_cell_m class="menuBtnCell cell single coText">복사</div>
+                    <div id=btn_revoke_cell_m class="menuBtnCell cell single coText">전송취소</div>
+                    <div id=btn_delete_cell_m class="menuBtnCell cell coText">삭제</div>
+                    <div id=btn_cancel_cell_m class="menuBtnCell cell coText">취소</div>
                 </div>
             </div>
             <div style="height:20px;display:flex;align-items:center;justify-content:space-between;margin:3px 5px">
