@@ -122,8 +122,8 @@
                 const _toporgcd = hush.http.getCookie("toporgcd")
                 const _toporgnm = hush.http.getCookie("toporgnm")
                 hush.user = { 
-                    token : token, id : _id, key : hush.cons.w_key + _id, nm : _nm, 
-                    orgcd : _orgcd, orgnm : _orgnm, toporgcd : _toporgcd, toporgnm : _toporgnm 
+                    token : token, id : _id, key : hush.cons.w_key + _id, 
+                    nm : _nm, orgcd : _orgcd, orgnm : _orgnm, toporgcd : _toporgcd, toporgnm : _toporgnm 
                 }
             },
             verifyUser : async (verbose) => { //index.html 제외한 나머지에서 사용됨
@@ -982,7 +982,11 @@
                         $("#m_" + userkey).removeClass("coStateOn").addClass("coStateOff")
                     }
                 }
-            }
+            },
+            deviceFrom : () => {                
+                if (/Dalvik/i.test(navigator.userAgent)) return "aos"
+                return "web"
+            },
         },
         webview : {
             on : false,
