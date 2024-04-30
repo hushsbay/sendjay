@@ -1595,6 +1595,7 @@
                     toggleDispMem(data.value)
                 },
                 [hush.cons.sock_ev_send_msg] : (data) => {
+                    debugger
                     if (data.roomid != g_roomid) {
                         hush.msg.alert("Different RoomID : " + data.roomid + "/" + g_roomid) //개발자오류
                         return
