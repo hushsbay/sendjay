@@ -88,10 +88,10 @@ button { margin-left: 5px }
 .coSettingRow { display:flex;align-items:center;margin:20px 10px 0px 10px }
 .coSettingLabel { width:100px;color:dimgray }
 
-.coStateOut { border-radius:3px;background-color:#FD760B;font-size:10px;color:white;padding:0px 2px }
-.coStateOn { border-radius:3px;background-color:#0085CD;font-size:10px;color:white;padding:0px 2px }
-.coStateOff { border-radius:3px;background-color:#BDB76B;font-size:10px;color:white;padding:0px 2px }
-.coStateMob { border-radius:3px;background-color:darkgreen;font-size:10px;color:white;padding:0px 2px }
+.coStateOut { border-radius:3px;background-color:#FD760B;font-size:9px;color:white;padding:0px 2px }
+.coStateOn { border-radius:3px;background-color:#0085CD;font-size:9px;color:white;padding:0px 2px }
+.coStateOff { border-radius:3px;background-color:#BDB76B;font-size:9px;color:white;padding:0px 2px }
+.coStateMob { border-radius:3px;background-color:darkgreen;font-size:9px;color:white;padding:0px 2px }
 
 @media screen and (max-device-width: 500px) { 
     .coLogin { padding-top: 50px; display: flex; flex-direction: column; justify-content: flex-start; } /* login.html : 모바일인 경우 키보드 올라오는 경우 대비해 상단 배치 */
