@@ -279,7 +279,6 @@ const sendChkAlive = (userkeyArr) => {
     const dataObj = { userkeys : userkeyArr }
     if (hush.webview.ios) {
     } else if (hush.webview.and) {
-        alert(JSON.stringify(dataObj))
         AndroidCom.send(hush.cons.sock_ev_chk_alive, JSON.stringify(dataObj), null, null, false) //procMsg=false
     } else {
         if (g_win_type == "invite") { //from chat.html
