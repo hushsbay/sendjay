@@ -26,7 +26,6 @@ module.exports = async function(socket, param) {
 		for (let key of userkeySocketArr) { //redis에 있는 특정 userkey들의 소켓 정보를 읽어 와서
 			const _obj = ws.redis.getUserkeySocketIdFromKey(key) //userkey와 socketid를 분리
 			userkeyArr.push(_obj.userkey) //userkey 담아서 리턴하면 됨
-			console.log(_obj.userkey, "@@@@@@@@")
 		}
 		param.data = userkeyArr
 		socket.emit(ws.cons.sock_ev_common, param)
