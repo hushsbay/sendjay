@@ -40,11 +40,10 @@ if (config.redis.flush == 'Y') global.store.flushdb(function(err, result) { cons
 const appSocket = ws.util.initExpressApp()
 const socketServer = ws.util.createWas(appSocket, config.http.method) //not https (because of aws elastic load balancer)
 const io = new Server(socketServer, { allowEIO3: false, autoConnect: true, pingTimeout: PING_TIMEOUT, pingInterval: PING_INTERVAL, cors: { origin: config.app.corsSocket, methods: ["GET", "POST"] }})
-//io.adapter(redisAdapter(global.pub, sub))
+io.adapter(redisAdapter(global.pub, sub))
 io.listen(config.sock.port)
 global.jay = io.of('/' + config.sock.namespace)
-global.jay11 = io.of('/' + config.sock.namespace).adapter(redisAdapter(global.pub, sub))
-global.jay.on('connection', async (socket) => {
+global.jay.adpater.on('connection', async (socket) => {
 	const _logTitle = 'connect'	
 	try {
 		const queryParam = socket.handshake.query
