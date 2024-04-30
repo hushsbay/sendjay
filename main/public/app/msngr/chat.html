@@ -171,8 +171,8 @@
                         _html += "                                         data-abcd='" + _abcd + "' data-abnm='" + encodeURIComponent(_abnm) + "' style='cursor:pointer'>"
                         _html += "      <div style='height:18px;display:flex;align-items:center;margin-left:3px'>"
                         _html += "          <div style='white-space:nowrap;overflow:hidden'>"
-                        _html += "              <span id=w_" + w_userkey + " class=coStateOff>W</span>"
-                        _html += "              <span id=m_" + m_userkey + " class='" + state_mob + "'>M</span>"
+                        _html += "              <span id=w_" + w_userkey + " class='coStateOff coText'>W</span>"
+                        _html += "              <span id=m_" + m_userkey + " class='" + state_mob + " coText'>M</span>"
                         _html += "              <span id=abcd_" + _userid + " class='coStateOut coText' style='display:none'>" + _abcd + "</span>"
                         _html += "              <span id=typing_" + _userid + " style='display:none;font-size:10px;color:red'>typing</span>"
                         _html += "          </div>"
@@ -2262,13 +2262,13 @@
                 <span id=txt_msg_added style="position:absolute;display:none;left:0;bottom:0;height:32px;line-height:32px;cursor:pointer;background:steelblue;color:white;border-top:1px solid darkgray;padding:0px 5px"></span>
                 <div id=list_people style="display:none;width:88px;overflow:hidden;background-color:white;border:1px solid darkgray;margin-left:auto">
                     <div style="height:24px;display:flex;align-items:center;color:darkgray;border-bottom:1px solid lightgray;padding-left:3px">
-                        <span style="margin-right:5px">count :</span><span id=people_cnt>0</span><span id=result_cnt style="display:none">0</span>
+                        <span style="font-size:10px;margin-right:5px">count :</span><span id=people_cnt style="font-size:10px">0</span><span id=result_cnt style="display:none;font-size:10px">0</span>
                     </div>
                     <div id=people_sub style="height:calc(100% - 24px);overflow:auto"></div>
                     <div id=result_sub style="display:none;height:calc(100% - 24px);overflow:auto"></div>
                 </div>
                 <div id=list_menu_m style="display:none;width:88px;overflow:hidden;background-color:white;border:1px solid darkgray;margin-left:auto">
-                    <div id=btn_invite_m class="menuBtn chat coText">초대1</div>
+                    <div id=btn_invite_m class="menuBtn chat coText">초대</div>
                     <div id=btn_delete_all_m class="menuBtn chat coText">모두삭제</div>
                     <div id=btn_rename_m class="menuBtn chat coText">방명</div>
                     <div id=btn_exit_m class="menuBtn chat coText">퇴장</div>
