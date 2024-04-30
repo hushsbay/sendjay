@@ -20,8 +20,7 @@ module.exports = async function(socket, param) {
 			}
 		}
 		param.data = userkeyArr		
-		//socket.emit(ws.cons.sock_ev_common, param)
-		ws.sock.broadcast(socket, ws.cons.sock_ev_show_on, socket.userkey, 'all') //서버로 들어오는 것이 없고 클라이언트로 나가는 것만 있을 것임	
+		socket.emit(ws.cons.sock_ev_common, param)
 	} catch (ex) {
 		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex)
 	}
