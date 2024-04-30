@@ -9,13 +9,13 @@ module.exports = async (pattern, channel, message) => {
 	let obj //const obj = JSON.parse(message) //{"prevkey":"$$SD__q;/sendjay#fNVceK6CERrueMCpAAAC","socketid":"/sendjay#7psRJ_F6lf6_FB6nAAAA",~}
 
 	try {
-		console.log("pmessage string :", message) //obj = JSON.parse(message) 여기 넣으면 다른 메시지도 전달되므로 파싱이 안되는 오류 발생       
+		//console.log("pmessage string :", message) //obj = JSON.parse(message) 여기 넣으면 다른 메시지도 전달되므로 파싱이 안되는 오류 발생       
 		if (_chan == 'disconnect_prev_sock') { //adapter.remoteDisconnect 사용하지 않음 : 아래 코딩처럼 처리할 내용이 있어서 그대로 사용하기로 함
 			obj = JSON.parse(message)
 			const prevsocketid = obj.prevkey.split(ws.cons.easydeli)[1]
 			const prevSocket = global.jay.sockets.get(prevsocketid)
 			if (prevSocket) { //Previous socket for current userkey exists in this server. 해당서버에 이전 소켓이 있으므로 연결 끊기.
-				console.log("prevSocket found", prevsocketid)
+				//console.log("prevSocket found", prevsocketid)
 				if (prevSocket.userkey.startsWith(ws.cons.m_key)) { //Mobile App
 					if (prevSocket.userip != obj.userip) { //obj.userip might be undefined when it comes from worker01.js
 						const param = { ev : ws.cons.sock_ev_cut_mobile, data : { userid : prevSocket.userid }, returnTo : "parent" }
