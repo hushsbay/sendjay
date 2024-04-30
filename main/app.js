@@ -42,7 +42,7 @@ const socketServer = ws.util.createWas(appSocket, config.http.method) //not http
 const io = new Server(socketServer, { allowEIO3: false, autoConnect: true, pingTimeout: PING_TIMEOUT, pingInterval: PING_INTERVAL, cors: { origin: config.app.corsSocket, methods: ["GET", "POST"] }})
 io.adapter(redisAdapter(global.pub, sub))
 io.listen(config.sock.port)
-global.jay = io.of('/' + config.sock.namespace)
+global.jay = io.of('/' + config.sock.namespace).adapter //global.jay = io.of('/' + config.sock.namespace)
 global.jay.on('connection', async (socket) => {
 	const _logTitle = 'connect'	
 	try {

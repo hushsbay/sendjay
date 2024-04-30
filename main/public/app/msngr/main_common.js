@@ -870,7 +870,6 @@ var procUnreadTitle = (roomid) => { //call from chat.html
 
 var funcSockEv = { //needs to be public
     [hush.cons.sock_ev_chk_alive] : (data) => { //[...]
-        debugger
         for (let item of data) hush.util.displayOnOff(item, true)
         if (g_memWin && !g_memWin.closed) g_memWin.funcSockEv[hush.cons.sock_ev_chk_alive].call(null, data)
     },
