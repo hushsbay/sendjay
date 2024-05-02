@@ -20,19 +20,15 @@ module.exports = async function(socket, param) {
 		if (obj.type == 'updateall') { //모두 읽은 것으로 하기
 			sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
 			data = await wsmysql.query(conn, sql, [_roomid, userid, dateFr])
-			const cntUnread = data[0].CNT
-			console.log(_roomid, userid, dateFr, cntUnread, "-------")
+			const cntUnread = data[0].CNT //console.log(_roomid, userid, dateFr, cntUnread, "-------")
 			if (cntUnread > 0) {
 				data = "UPDATE A_MSGDTL_TBL SET STATE = 'R' WHERE ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
 				await wsmysql.query(conn, data, [_roomid, userid, dateFr]) //update all
 			}
-			await wsmysql.txCommit(conn)
-			console.log(_roomid, userid, dateFr, cntUnread, "*******")
-			if (cntUnread > 0) { //need to update unread count for all members
-				console.log(JSON.stringify(param), "=====")
+			await wsmysql.txCommit(conn) //console.log(_roomid, userid, dateFr, cntUnread, "*******")
+			if (cntUnread > 0) { //need to update unread count for all members //console.log(JSON.stringify(param), "=====")
 				ws.sock.sendToRoom(socket, _roomid, param) //모두에게 보냄. global.jay.to(_roomid).emit(com.cons.sock_ev_common, param)
-			} else { //나에게만 보냄
-				console.log(JSON.stringify(param), "@@@@@")
+			} else { //나에게만 보냄 //console.log(JSON.stringify(param), "@@@@@")
 				socket.emit(ws.cons.sock_ev_common, param)
 				ws.sock.sendToMyOtherSocket(socket, param)
 			}

@@ -544,12 +544,13 @@ const getPortalList = async (obj) => {
     try {  
         if (portalListBeingQueried && obj.type != "row") return
         portalListBeingQueried = true
-        let rq = { type : obj.type }
+        let noToast = false, rq = { type : obj.type }
         if (obj.type == "search") {
             g_list.empty()
             rq.keyword = encodeURIComponent(obj.keyword)
         } else if (obj.type == "row") {
             rq.roomid = obj.roomid
+            noToast = true
         } else if (obj.type == "reconnect") {
             rq.dt = FIRST_QUERIED
             rq.cnt = 1
@@ -557,7 +558,7 @@ const getPortalList = async (obj) => {
             rq.dt = g_cdt
             rq.cnt = hush.cons.fetch_cnt_list //if (g_cdt == FIRST_QUERIED) g_list.empty()
         }
-        const rs = await hush.http.ajax("/msngr/qry_portal", rq)
+        const rs = await hush.http.ajax("/msngr/qry_portal", rq, noToast)
         if (rs.code != hush.cons.CODE_OK && rs.code != hush.cons.CODE_NO_DATA) {
             hush.msg.toast("getPortalList: " + rs.msg)
             if ($("#getmore").length > 0) $("#getmore").remove()
