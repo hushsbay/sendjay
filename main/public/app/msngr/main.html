@@ -215,13 +215,6 @@
                         const ret = await hush.msg.confirm("로그아웃할까요?")
                         if (!ret) return
                         AndroidMain.logout()
-                        // hush.msg.alert("로그아웃할까요?", { 
-                        //     "Yes": function() {                                 
-                        //         AndroidMain.logout()
-                        //     }, "No": function() { 
-                        //         hush.msg.close()
-                        //     } 
-                        // }, "Logout", 200)
                     })
                     $("#chk_selectall").on("change", function() { 
                         if (g_mode == BTN_MODE_PEOPLE) {
@@ -492,7 +485,7 @@
                 <div id=list_people style="flex-grow:1;background-color:white;border:1px solid darkgray;overflow-y:auto"></div>
                 <div id=selected_people style="display:none;flex-direction:column;min-width:100px;max-width:100px;overflow:hidden;background-color:white;border:1px solid darkgray;border-left:0px;margin-left:auto">
                     <div style="height:24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid darkgray">
-                        <div style="color:red;margin-left:3px">선택 : <span id=selected_people_cnt>0</span></div>
+                        <div class=coText style="color:red;margin-left:3px">선택 : <span id=selected_people_cnt class=coText>0</span></div>
                         <img id=remove_selected_people src="/img/close.png" style="margin-right:3px" class=coImg16 />
                     </div>
                     <div id=select_people_sub style="overflow:auto"></div>
