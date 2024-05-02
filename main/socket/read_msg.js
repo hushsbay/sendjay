@@ -50,6 +50,7 @@ module.exports = async function(socket, param) {
 				param.data.unread_cnt = data[0].CNT
 			}
 			await wsmysql.txCommit(conn)
+			console.log("11111111111111")
 			ws.sock.sendToRoom(socket, _roomid, param) //global.jay.to(_roomid).emit(com.cons.sock_ev_common, param)
 		} else if (obj.type == 'query') {
 			let unreadArr = []
