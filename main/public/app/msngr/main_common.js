@@ -912,8 +912,7 @@ var funcSockEv = { //needs to be public
             await hush.msg.alert("[main]sock_ev_send_msg: " + ex.message)
         }
     },
-    [hush.cons.sock_ev_read_msg] : (data) => {  
-        if (data.type != "updateall") debugger //창 포커싱때 updateall이 일어나는데 그 때 debug하려면 chat.html로 갈 수가 없어 updateall은 제외
+    [hush.cons.sock_ev_read_msg] : (data) => { //if (data.type != "updateall") debugger //창 포커싱때 updateall이 일어나는데 그 때 debug하려면 chat.html로 갈 수가 없어 updateall은 제외
         if (data.userid != g_userid) return //새 메시지 도착시에는 return되고 새로 도착한 노티 클릭시에는 다음으로 넘어감
         $("#chk_selectall").prop("checked", false)
         $(".chkbox_portal:checked").prop("checked", false)

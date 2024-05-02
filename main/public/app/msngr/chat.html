@@ -1742,8 +1742,10 @@
                         for (let i = 0; i < len; i++) arrUnreads.push(data.unread_list[i].RECEIVERNM)
                         hush.msg.alert(arrUnreads.join(hush.cons.memdeli), null, "people unread")
                     } else if (data.type == "update") {
+                        debugger
                         procUnreadCount(data.msgid, data.unread_cnt)
                     } else { //query
+                        debugger
                         for (let i = 0; i < data.msgidArr.length; i++) {
                             procUnreadCount(data.msgidArr[i], data.unreadArr[i])
                         }
