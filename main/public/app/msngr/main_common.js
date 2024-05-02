@@ -545,6 +545,7 @@ const getPortalList = async (obj) => {
         if (portalListBeingQueried && obj.type != "row") return
         portalListBeingQueried = true
         let noToast = false, rq = { type : obj.type }
+        alert(obj.type+"====")
         if (obj.type == "search") {
             g_list.empty()
             rq.keyword = encodeURIComponent(obj.keyword)
