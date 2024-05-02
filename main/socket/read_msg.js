@@ -20,11 +20,13 @@ module.exports = async function(socket, param) {
 		if (obj.type == 'updateall') { //모두 읽은 것으로 하기
 			sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
 			data = await wsmysql.query(conn, sql, [_roomid, userid, dateFr]) //console.log(_roomid, userid, dateFr)
+			console.log(_roomid, userid, dateFr, data[0].CNT, "-------")
 			if (data[0].CNT > 0) {
 				data = "UPDATE A_MSGDTL_TBL SET STATE = 'R' WHERE ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
 				await wsmysql.query(conn, data, [_roomid, userid, dateFr]) //update all
 			}
 			await wsmysql.txCommit(conn)
+			console.log(_roomid, userid, dateFr, data[0].CNT, "*******")
 			if (data[0].CNT > 0) { //need to update unread count for all members
 				console.log(JSON.stringify(param), "=====")
 				ws.sock.sendToRoom(socket, _roomid, param) //모두에게 보냄. global.jay.to(_roomid).emit(com.cons.sock_ev_common, param)
