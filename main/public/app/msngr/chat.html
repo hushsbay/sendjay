@@ -2116,18 +2116,21 @@
                         handleFileUpload(this.files)		    	   	
                     })
                     $("#btn_invite, #btn_invite_m").on("click", function() {
-                        debugger
-                        hush.util.animBgColor($(this))
-                        let urlStr = "/app/msngr/main.html?type=invite" 
-                        if (!hush.webview.on) { 
-                            g_inviteWin = hush.util.openWinPop(urlStr, 740, 650)
-                        } else {                            
-                            if (hush.webview.ios) { 
-                            } else if (hush.webview.and) {
-                                urlStr += "&" + param_webview_and
-                                AndroidRoom.openPopup(urlStr, "")
-                                setTimeout(() => showCellMenu(false), 200)
+                        try {
+                            hush.util.animBgColor($(this))
+                            let urlStr = "/app/msngr/main.html?type=invite" 
+                            if (!hush.webview.on) { 
+                                g_inviteWin = hush.util.openWinPop(urlStr, 740, 650)
+                            } else {                            
+                                if (hush.webview.ios) { 
+                                } else if (hush.webview.and) {
+                                    urlStr += "&" + param_webview_and
+                                    AndroidRoom.openPopup(urlStr, "")
+                                    setTimeout(() => showCellMenu(false), 200)
+                                }
                             }
+                        } catch (ex) { 
+                            hush.util.showEx(ex)
                         }
                     })
                     $("#btn_delete_all, #btn_delete_all_m").on("click", async function() { 
