@@ -19,7 +19,7 @@ module.exports = async function(socket, param) {
 		await wsmysql.txBegin(conn)		
 		if (obj.type == 'updateall') { //모두 읽은 것으로 하기
 			sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
-			data = await wsmysql.query(conn, sql, [_roomid, userid, dateFr]) //console.log(_roomid, userid, dateFr)
+			data = await wsmysql.query(conn, sql, [_roomid, userid, dateFr])
 			const cntUnread = data[0].CNT
 			console.log(_roomid, userid, dateFr, cntUnread, "-------")
 			if (cntUnread > 0) {
