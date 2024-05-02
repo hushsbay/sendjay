@@ -1118,7 +1118,6 @@ function procNewChat(useridArr) { //invoked from index.html and jay_main.js : Mo
 ////////////////////////////////////////////////////////////////////////mobile webview
 const startFromWebView = async (from, obj, rs) => {
     try { //alert(navigator.userAgent) - 안드로이드 웹뷰인데도 Dalvik이라고 나오지는 않음
-        alert("333333")
         hush.auth.setCookieForUser(obj, true)        
         hush.auth.setUser(obj.token)        
         SetUserVar()
