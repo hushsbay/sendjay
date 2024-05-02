@@ -47,9 +47,11 @@
                             //아직 미개발
                         } else if (hush.webview.and) {
                             try {
-                                if (!g_win_type) { 
+                                if (!g_win_type) { //메인은 모바일앱에서도 마찬가지로 빈값
+                                    alert("2222")
                                     AndroidMain.procAfterOpenMain()
                                 } else {
+                                    alert("1111")
                                     AndroidPopup.procAfterOpenPopup()
                                 }
                             } catch (exAnd) {
@@ -342,7 +344,6 @@
                     $("#btn_ok").on("click", async function() {
                         hush.util.animBgColor($(this))
                         try {
-                            debugger
                             if (g_win_type == "invite") {
                                 let useridArr = [], usernmArr = []
                                 $(".mem").each(function(idx, item) { 
