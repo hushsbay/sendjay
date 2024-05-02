@@ -88,6 +88,8 @@
             retry_sending : "retry sending",
             sending_failure : "check failure",
             left : " left this room",
+            param_webview_and : "webview=and",
+            param_webview_ios : "webview=ios",
         },
         socket : null,
         tz : Intl.DateTimeFormat().resolvedOptions().timeZone, //eg) Asia/Seoul, America/Toronto
