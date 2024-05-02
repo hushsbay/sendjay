@@ -201,7 +201,9 @@
                                 $("#btn_close_search").show()
                                 resetEnvForScroll() //getMsgList()보다 먼저 실행되어야 함                    
                                 getMsgList("onlyone", _userid)
-                            }, "강제퇴장": function() { 
+                            }, "강제퇴장": async function() { 
+                                const ret = await hush.msg.confirm("강제퇴장처리를 계속 진행할까요?")
+                                if (!ret) return
                                 hush.msg.dialogClose()
                                 const rq = initMsg()
                                 rq.type = "leave"
