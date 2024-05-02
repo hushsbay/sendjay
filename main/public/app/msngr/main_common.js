@@ -545,7 +545,6 @@ const getPortalList = async (obj) => {
         if (portalListBeingQueried && obj.type != "row") return
         portalListBeingQueried = true
         let noToast = false, rq = { type : obj.type }
-        alert(obj.type+"====")
         if (obj.type == "search") {
             g_list.empty()
             rq.keyword = encodeURIComponent(obj.keyword)
@@ -561,7 +560,7 @@ const getPortalList = async (obj) => {
         }
         const rs = await hush.http.ajax("/msngr/qry_portal", rq, noToast)
         if (rs.code != hush.cons.CODE_OK && rs.code != hush.cons.CODE_NO_DATA) {
-            hush.msg.toast("getPortalList: " + rs.msg)
+            await hush.msg.alert("getPortalList: " + rs.msg)
             if ($("#getmore").length > 0) $("#getmore").remove()
             portalListBeingQueried = false
             return
