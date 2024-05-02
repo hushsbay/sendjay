@@ -342,6 +342,7 @@
                     $("#btn_ok").on("click", async function() {
                         hush.util.animBgColor($(this))
                         try {
+                            debugger
                             if (g_win_type == "invite") {
                                 let useridArr = [], usernmArr = []
                                 $(".mem").each(function(idx, item) { 
@@ -357,7 +358,10 @@
                                         opener.procInvite(useridArr, usernmArr)
                                         window.close()
                                     } else {
-                                        AndroidPopup.invite(useridArr.join(hush.cons.deli), usernmArr.join(hush.cons.deli))
+                                        if (hush.webview.ios) { 
+                                        } else if (hush.webview.and) {
+                                            AndroidPopup.invite(useridArr.join(hush.cons.deli), usernmArr.join(hush.cons.deli))
+                                        }
                                     }
                                 })
                             } else if (g_win_type == "member") {
@@ -374,7 +378,10 @@
                                         opener.procNewChatFromPopup(useridArr)
                                         window.close()
                                     } else {
-                                        AndroidPopup.invite(useridArr.join(hush.cons.deli), "")
+                                        if (hush.webview.ios) { 
+                                        } else if (hush.webview.and) {
+                                            AndroidPopup.invite(useridArr.join(hush.cons.deli), "")
+                                        }
                                     }
                                 })
                             } else if (g_win_type == "org") {
