@@ -144,7 +144,7 @@ const procSelect = (_userid) => {
             const _team = $("#team_" + _userid).html()
             let _html = "<div id=add_" + _userid + " class=mem>"
             _html += "      <div id=addnm_" + _userid + " class='coDotDot memNm coText'>" + _nm + "</div>"
-            if (_team) _html += "  <div class='coDotDot memTeam coText'>@@@" + _team.replace(/\s/g, "") + "</div>"
+            if (_team) _html += "  <div class='coDotDot memTeam coText'>" + _team.replace(/\s/g, "") + "</div>"
             _html += "   </div>"
             _list.append(_html)
             _list.scrollTop(_list.prop("scrollHeight"))
