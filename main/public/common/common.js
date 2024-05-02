@@ -621,7 +621,6 @@
                     console.log("socket connected " + hush.util.getCurDateTimeStr(true, true))
                     hush.sock.on(socket, (rs) => {
                         console.log("hush.sock.on => " + JSON.stringify(rs)) //if (rs.data.type == "talk") debugger
-                        debugger
                         if (rs.returnTo == "parent" || rs.returnTo == "all") {
                             funcSockEv[rs.ev].call(null, rs.data)
                             if (rs.returnTo == "all") { //call from app.js or disconnect.js on server
