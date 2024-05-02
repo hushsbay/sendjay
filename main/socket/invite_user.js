@@ -11,6 +11,7 @@ module.exports = async function(socket, param) {
 		const _usernmArr = param.data.usernms
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const ret = await ws.util.chkAccessUserWithTarget(conn, socket.userid, _roomid, "room")
+		console.log(_useridArr, socket.userid, "==========")
 		if (ret != "") throw new Error(ret)
 		await wsmysql.txBegin(conn)		
 		for (let i = 0; i < _useridArr.length; i++) {
@@ -61,6 +62,7 @@ module.exports = async function(socket, param) {
 			await ws.sock.joinRoomWithUserkeySocketArr(userkeySocketArr, _roomid)
 			param.data.roomnm = JSON.stringify(roomnmObj)
 		}
+		console.log(invitedUseridArr.toString(), userkeyArr.toString(), "==========")
 		param.data.roomid = _roomid		
 		param.data.receiverid = arrUseridSortedByUsernm
 		param.data.receivernm = arrUsernmSortedByUsernm
