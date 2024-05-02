@@ -2116,6 +2116,7 @@
                         handleFileUpload(this.files)		    	   	
                     })
                     $("#btn_invite, #btn_invite_m").on("click", function() {
+                        debugger
                         hush.util.animBgColor($(this))
                         let urlStr = "/app/msngr/main.html?type=invite" 
                         if (!hush.webview.on) { 
