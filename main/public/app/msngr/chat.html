@@ -2122,7 +2122,7 @@
                                 if (hush.webview.ios) { 
                                 } else if (hush.webview.and) {
                                     urlStr += "&" + hush.cons.param_webview_and
-                                    AndroidRoom.openPopup(urlStr, "")
+                                    AndroidRoom.openPopup(urlStr, "") //PopupActivity.kt를 열어 그 안에서 main.html을 load하는 것임
                                     setTimeout(() => showCellMenu(false), 200)
                                 }
                             }

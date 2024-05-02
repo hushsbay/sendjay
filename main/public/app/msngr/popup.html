@@ -63,7 +63,7 @@
         ////////////////////////////////////////////////////////////////////////mobile webview
         const startFromWebView = (from, obj, rs) => {
             try {
-                hush.auth.setCookieForUser(obj, "Y", true)
+                hush.auth.setCookieForUser(obj, true)
                 hush.auth.setUser(obj.token)
                 g_added = rs
                 if (g_type == "play") {

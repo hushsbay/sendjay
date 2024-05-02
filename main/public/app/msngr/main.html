@@ -48,11 +48,9 @@
                         } else if (hush.webview.and) {
                             try {
                                 if (!g_win_type) { //메인은 모바일앱에서도 마찬가지로 빈값
-                                    alert("2222")
-                                    AndroidMain.procAfterOpenMain()
-                                } else {
-                                    alert("1111")
-                                    AndroidPopup.procAfterOpenPopup()
+                                    AndroidMain.procAfterOpenMain() //안드로이드에서 Web의 startFromWebView()를 호출하고 있음
+                                } else { //예) chat.html의 btn_invite_m 버튼에서 AndroidRoom.openPopup(urlStr, "") //PopupActivity.kt를 열어 그 안에서 main.html을 load하는 것임
+                                    AndroidPopup.procAfterOpenPopup() //결국, Web의 startFromWebView() 호출
                                 }
                             } catch (exAnd) {
                                 hush.msg.alert("모바일웹은 지원되지 않습니다.<br>앱을 설치하시기 바랍니다.", {  
