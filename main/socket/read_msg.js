@@ -26,8 +26,10 @@ module.exports = async function(socket, param) {
 			}
 			await wsmysql.txCommit(conn)
 			if (data[0].CNT > 0) { //need to update unread count for all members
+				console.log(JSON.stringify(param), "=====")
 				ws.sock.sendToRoom(socket, _roomid, param) //모두에게 보냄. global.jay.to(_roomid).emit(com.cons.sock_ev_common, param)
 			} else { //나에게만 보냄
+				console.log(JSON.stringify(param), "@@@@@")
 				socket.emit(ws.cons.sock_ev_common, param)
 				ws.sock.sendToMyOtherSocket(socket, param)
 			}
@@ -50,7 +52,6 @@ module.exports = async function(socket, param) {
 				param.data.unread_cnt = data[0].CNT
 			}
 			await wsmysql.txCommit(conn)
-			console.log("11111111111111")
 			ws.sock.sendToRoom(socket, _roomid, param) //global.jay.to(_roomid).emit(com.cons.sock_ev_common, param)
 		} else if (obj.type == 'query') {
 			let unreadArr = []

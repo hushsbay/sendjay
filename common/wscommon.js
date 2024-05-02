@@ -478,7 +478,6 @@ module.exports = (function() {
 			sendToRoom : (socket, roomid, param) => {
 				//global.jay.to(roomid).emit(com.cons.sock_ev_common, param) //to all inside room. socket oneself included
 				//global.jay.to(roomid).emit => TypeError: opts.except is not iterable (from socket.io 3.0)
-				console.log(JSON.stringify(param), "=====")
 				socket.to(roomid).emit(ws.cons.sock_ev_common, param) //본인 소켓 제외
 				socket.emit(ws.cons.sock_ev_common, param) //본인 소켓에게 보냄
 			},
