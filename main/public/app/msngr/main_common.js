@@ -971,13 +971,19 @@ var funcSockEv = { //needs to be public
     [hush.cons.sock_ev_disconnect] : (data) => { //mobile only
         console.log("disconnected from server : " + JSON.stringify(data))
         $("#img_disconn").show() //hush.msg.toast("disconnected", false, true)
+        $("#btn_refresh").hide()
+        $("#btn_logout").hide()
     },
     [hush.cons.sock_ev_mark_as_connect] : (data) => {//mobile only
         $("#img_disconn").hide() //hush.msg.toastEnd()
+        $("#btn_refresh").show()
+        $("#btn_logout").show()
     },
     [hush.cons.sock_ev_connect] : (data) => { //mobile only (reconnect event in actual)
         //Be careful that Socket.EVENT_CONNECT occurred many times at a moment. => from ChatService.kt
         $("#img_disconn").hide() //hush.msg.toastEnd()
+        $("#btn_refresh").show()
+        $("#btn_logout").show()
         if (g_mode == BTN_MODE_PEOPLE) {
             const userkeyArr = []
             $(".state").each(function(idx, item) {

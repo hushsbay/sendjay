@@ -210,15 +210,18 @@
                         hush.util.animBgColor($(this))
                         AndroidMain.reload()
                     })
-                    $("#btn_logout").on("click", function() { //mobile only
+                    $("#btn_logout").on("click", async function() { //mobile only
                         hush.util.animBgColor($(this))
-                        hush.msg.alert("로그아웃할까요?", { 
-                            "Yes": function() {                                 
-                                AndroidMain.logout()
-                            }, "No": function() { 
-                                hush.msg.close()
-                            } 
-                        }, "Logout", 200)
+                        const ret = await hush.msg.confirm("로그아웃할까요?")
+                        if (!ret) return
+                        AndroidMain.logout()
+                        // hush.msg.alert("로그아웃할까요?", { 
+                        //     "Yes": function() {                                 
+                        //         AndroidMain.logout()
+                        //     }, "No": function() { 
+                        //         hush.msg.close()
+                        //     } 
+                        // }, "Logout", 200)
                     })
                     $("#chk_selectall").on("change", function() { 
                         if (g_mode == BTN_MODE_PEOPLE) {
