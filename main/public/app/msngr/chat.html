@@ -1826,6 +1826,7 @@
                         hush.msg.toast("초대된 멤버가 없거나 이미 초대된 멤버입니다.")
                         return
                     }
+                    debugger
                     const rq = initMsg()
                     rq.type = "invite"
                     rq.body = data.invitedUsernms.join(hush.cons.memdeli) + hush.cons.deli + data.invitedUserids.join(hush.cons.memdeli) + hush.cons.deli + data.sendernm
@@ -1934,7 +1935,7 @@
                 scrollToTarget()
             }
 
-            const invite = (from, obj) => { 
+            const invite = (from, obj) => {                 
                 procInvite(obj.userids.split(hush.cons.deli), obj.usernms.split(hush.cons.deli))
             }
                 
