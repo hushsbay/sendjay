@@ -1415,7 +1415,8 @@
                 if (useridArr.length == 0) return
                 const rq = { userids : useridArr, usernms : usernmArr, sendernm : g_usernm }
                 if (hush.webview.ios) { 
-                } else if (hush.webview.and) { //alert(JSON.stringify(rq))
+                } else if (hush.webview.and) { 
+                    alert(JSON.stringify(rq))
                     AndroidCom.send(hush.cons.sock_ev_invite_user, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
                 } else {
                     hush.sock.send(g_socket, hush.cons.sock_ev_invite_user, rq, g_roomid)
