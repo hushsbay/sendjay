@@ -1415,12 +1415,11 @@
                 try {
                     if (useridArr.length == 0) return
                     const rq = { userids : useridArr, usernms : usernmArr, sendernm : g_usernm }
-                    if (hush.webview.ios) { 
-                    } else if (hush.webview.and) { //alert(JSON.stringify(rq))
-                        //await hush.webview.callAppFunc(AndroidCom.send) //callAppFunc()에 설명 달아 놓았음
-                        setTimeout(function() { 
+                    if (hush.webview.ios) { //alert(JSON.stringify(rq))
+                    } else if (hush.webview.and) { //await hush.webview.callAppFunc(AndroidCom.send) //callAppFunc()에 설명 달아 놓았음
+                        setTimeout(function() {
                             AndroidCom.send(hush.cons.sock_ev_invite_user, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
-                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작함                        
+                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작                     
                     } else {
                         hush.sock.send(g_socket, hush.cons.sock_ev_invite_user, rq, g_roomid)
                     }
