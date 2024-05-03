@@ -1419,9 +1419,9 @@
                     //alert(JSON.stringify(rq))
                     //debugger
                     //await hush.webview.callAppFunc(AndroidCom)
-                    setTimout(function() {
+                    setTimeout(function() {
                         AndroidCom.send(hush.cons.sock_ev_invite_user, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
-                    }, 500)
+                    }, 1000)
                 } else {
                     hush.sock.send(g_socket, hush.cons.sock_ev_invite_user, rq, g_roomid)
                 }
