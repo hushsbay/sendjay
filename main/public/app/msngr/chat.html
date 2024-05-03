@@ -1838,7 +1838,7 @@
                         } else if (hush.webview.and) {
                             alert("1111111")
                             debugger
-                            await hush.webview.callAppFunc(AndroidCom)
+                            //await hush.webview.callAppFunc(AndroidCom)
                             AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
                         } else {
                             hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
