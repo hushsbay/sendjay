@@ -1415,9 +1415,7 @@
                 if (useridArr.length == 0) return
                 const rq = { userids : useridArr, usernms : usernmArr, sendernm : g_usernm }
                 if (hush.webview.ios) { 
-                } else if (hush.webview.and) { 
-                    //debugger
-                    alert(JSON.stringify(rq))
+                } else if (hush.webview.and) { //alert(JSON.stringify(rq))
                     AndroidCom.send(hush.cons.sock_ev_invite_user, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
                 } else {
                     hush.sock.send(g_socket, hush.cons.sock_ev_invite_user, rq, g_roomid)
@@ -1823,24 +1821,28 @@
                         showCellMenu(false)                    
                     }
                 },
-                [hush.cons.sock_ev_invite_user] : (data) => {
-                    if (data.invitedUserids.length == 0) {
-                        hush.msg.toast("초대된 멤버가 없거나 이미 초대된 멤버입니다.")
-                        return
-                    }
-                    debugger
-                    const rq = initMsg()
-                    rq.type = "invite"
-                    rq.body = data.invitedUsernms.join(hush.cons.memdeli) + hush.cons.deli + data.invitedUserids.join(hush.cons.memdeli) + hush.cons.deli + data.sendernm
-                    rq.receiverid = data.receiverid
-                    rq.receivernm = data.receivernm
-                    rq.userkeys = data.userkeys
-                    rq.roomnm = data.roomnm
-                    if (hush.webview.ios) {
-                    } else if (hush.webview.and) {
-                        AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
-                    } else {
-                        hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
+                [hush.cons.sock_ev_invite_user] : async (data) => {
+                    try {
+                        if (data.invitedUserids.length == 0) {
+                            hush.msg.toast("초대된 멤버가 없거나 이미 초대된 멤버입니다.")
+                            return
+                        }
+                        const rq = initMsg()
+                        rq.type = "invite"
+                        rq.body = data.invitedUsernms.join(hush.cons.memdeli) + hush.cons.deli + data.invitedUserids.join(hush.cons.memdeli) + hush.cons.deli + data.sendernm
+                        rq.receiverid = data.receiverid
+                        rq.receivernm = data.receivernm
+                        rq.userkeys = data.userkeys
+                        rq.roomnm = data.roomnm
+                        if (hush.webview.ios) {
+                        } else if (hush.webview.and) {
+                            await hush.webview.callAppFunc(AndroidCom)
+                            AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
+                        } else {
+                            hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
+                        }
+                    } catch (ex) {
+                        hush.util.showEx(ex)
                     }
                 },
                 [hush.cons.sock_ev_rename_room] : (data) => {

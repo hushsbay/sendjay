@@ -989,6 +989,7 @@
             on : false,
             ios : false,
             and : false,
+            ready : false,
             screenHeightOnLoad : null, //모바일 키보드 올라오면서 높이 조정
             chk : (param) => { //const param = new URLSearchParams(location.search)
                 const _os = param.get("webview")
@@ -1008,7 +1009,40 @@
                     hush.webview.and = false
                 }
             },
-            ready : false
+            callAppFunc : (WebInterface, elapsed) => {
+                try {
+                    let _elapsed = elapsed ? elapsed : 0
+                    if (_elapsed >= 3000) throw new Error("모바일앱 함수 호출 타임아웃입니다.")
+                    if (!WebInterface) {
+                        _elapsed += 100
+                        setTimeout(() => callAppFunc(WebInterface, _elapsed))
+                        return
+                    }
+
+                    //AndroidCom.send(hush.cons.sock_ev_invite_user, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
+                } catch (ex) {
+                    hush.util.showEx(ex)
+                }
+            },
+            callAppFunc : (WebInterface, elapsed) => new Promise((resolve) => {
+                try {
+                    let _elapsed = elapsed ? elapsed : 0
+                    if (_elapsed >= 1000) throw new Error("모바일앱 함수 호출 타임아웃입니다.")
+                    console.log(_elapsed+" @@@@")
+                    if (!WebInterface) {
+                        _elapsed += 300
+                        setTimeout(() => callAppFunc(WebInterface, _elapsed), _elapsed)
+                        return
+                    }
+                    console.log(_elapsed+" @@@@####")
+                    resolve()
+                    //AndroidCom.send(hush.cons.sock_ev_invite_user, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
+                } catch (ex) {
+                    reject(ex)
+                }
+            }),
+
+
         }      
     }
 })(jQuery)
