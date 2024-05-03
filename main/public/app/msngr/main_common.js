@@ -279,7 +279,9 @@ const sendChkAlive = (userkeyArr) => {
     const dataObj = { userkeys : userkeyArr }
     if (hush.webview.ios) {
     } else if (hush.webview.and) {
-        AndroidCom.send(hush.cons.sock_ev_chk_alive, JSON.stringify(dataObj), null, null, false) //procMsg=false
+        setTimeout(function() {
+            AndroidCom.send(hush.cons.sock_ev_chk_alive, JSON.stringify(dataObj), null, null, false) //procMsg=false
+        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
     } else {
         if (g_win_type == "invite") { //from chat.html
             hush.sock.send(opener.opener.hush.socket, hush.cons.sock_ev_chk_alive, dataObj, opener.g_roomid)
@@ -824,7 +826,9 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             soundoff : _soundoff, fr : _fr, to : _to, bodyoff : _bodyoff, senderoff : _senderoff }
             if (hush.webview.ios) {
             } else if (hush.webview.and) {
-                AndroidCom.send(hush.cons.sock_ev_set_env, JSON.stringify(rq1), "all", null, true) //procMsg=true
+                setTimeout(function() {
+                    AndroidCom.send(hush.cons.sock_ev_set_env, JSON.stringify(rq1), "all", null, true) //procMsg=true
+                }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
             } else {
                 hush.sock.send(hush.socket, hush.cons.sock_ev_set_env, rq1, "all")
             }
@@ -997,7 +1001,9 @@ var funcSockEv = { //needs to be public
         } else if (g_mode == BTN_MODE_CHAT) {
             getPortalList({ type: "reconnect" }) //procMenuTop(hush.http.getCookie("mode"))
         }
-        AndroidCom.reconnectDone()
+        setTimeout(function() {
+            AndroidCom.reconnectDone()
+        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
     }
 }
 
@@ -1113,7 +1119,9 @@ function procNewChat(useridArr) { //invoked from index.html and jay_main.js : Mo
     const rq = { masterid : g_userid, masternm : g_usernm, userids : useridArr }
     if (hush.webview.ios) {
     } else if (hush.webview.and) {
-        AndroidMain.openRoom("newFromMain", new_roomid, "", JSON.stringify(rq))
+        setTimeout(function() {
+            AndroidMain.openRoom("newFromMain", new_roomid, "", JSON.stringify(rq))
+        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
     }
 }
 
@@ -1127,7 +1135,9 @@ const startFromWebView = async (from, obj, rs) => {
             procMenuTop(BTN_MODE_PEOPLE, BTN_PEOPLE_COMPANY)
         } else {
             initStandAlone(rs)
-            AndroidMain.doneLoad()
+            setTimeout(function() {
+                AndroidMain.doneLoad()
+            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작            
         }     
     } catch (ex) {
         hush.util.showEx(ex)

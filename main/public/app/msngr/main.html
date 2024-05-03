@@ -48,9 +48,13 @@
                         } else if (hush.webview.and) {
                             try {
                                 if (!g_win_type) { //메인은 모바일앱에서도 마찬가지로 빈값
-                                    AndroidMain.procAfterOpenMain() //안드로이드에서 Web의 startFromWebView()를 호출하고 있음
+                                    setTimeout(function() {
+                                        AndroidMain.procAfterOpenMain() //안드로이드에서 Web의 startFromWebView()를 호출하고 있음
+                                    }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                                 } else { //예) chat.html의 btn_invite_m 버튼에서 AndroidRoom.openPopup(urlStr, "") //PopupActivity.kt를 열어 그 안에서 main.html을 load하는 것임
-                                    AndroidPopup.procAfterOpenPopup() //결국, Web의 startFromWebView() 호출
+                                    setTimeout(function() {
+                                        AndroidPopup.procAfterOpenPopup() //결국, Web의 startFromWebView() 호출
+                                    }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                                 }
                             } catch (exAnd) {
                                 hush.msg.alert("모바일웹은 지원되지 않습니다.<br>앱을 설치하시기 바랍니다.", {  
@@ -124,7 +128,9 @@
                                     if (hush.webview.ios) {
                                     } else if (hush.webview.and) {
                                         urlStr += "&" + hush.cons.param_webview_and
-                                        AndroidMain.openPopup(urlStr, "")
+                                        setTimeout(function() {
+                                            AndroidMain.openPopup(urlStr, "")
+                                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                                     }
                                 }
                             }
@@ -138,7 +144,9 @@
                                 const rq = { masterid : g_userid, masternm : g_usernm, userids : [g_userid] }
                                 if (hush.webview.ios) {
                                 } else if (hush.webview.and) { 
-                                    AndroidMain.openRoom("newFromMain", new_roomid, "", JSON.stringify(rq))
+                                    setTimeout(function() {
+                                        AndroidMain.openRoom("newFromMain", new_roomid, "", JSON.stringify(rq))
+                                    }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                                 }
                             }
                         })
@@ -154,7 +162,7 @@
                                 const _toggle = ($("#alarm_" + _roomid).css("display") == "none") ? "X" : ""
                                 const rq = { kind : "noti", value : _toggle, roomid : _roomid }
                                 if (hush.webview.ios) {
-                                } else if (hush.webview.and) { 
+                                } else if (hush.webview.and) {                                     
                                     AndroidCom.send(hush.cons.sock_ev_set_env, JSON.stringify(rq), "parent", null, false) //procMsg=false
                                 } else {
                                     hush.sock.send(hush.socket, hush.cons.sock_ev_set_env, rq, "parent")
@@ -359,7 +367,9 @@
                                     } else {
                                         if (hush.webview.ios) { 
                                         } else if (hush.webview.and) {                                            
-                                            AndroidPopup.invite(useridArr.join(hush.cons.deli), usernmArr.join(hush.cons.deli))
+                                            setTimeout(function() {
+                                                AndroidPopup.invite(useridArr.join(hush.cons.deli), usernmArr.join(hush.cons.deli))
+                                            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                                         }
                                     }
                                 })

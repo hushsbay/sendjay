@@ -108,14 +108,18 @@
                     if (!hush.webview.on) {
                         play()
                     } else {
-                        AndroidPopup.procAfterOpenPopup()
+                        setTimeout(function() {
+                            AndroidPopup.procAfterOpenPopup()
+                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                     }
                 } else if (g_type == "image" || g_type == "ext_image") { //for mobile only
                     g_body = param.get("body")
                     if (!hush.webview.on) {
                         previewImage()
                     } else {
-                        AndroidPopup.procAfterOpenPopup()
+                        setTimeout(function() {
+                            AndroidPopup.procAfterOpenPopup()
+                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                     }
                 } //if (hush.webview.on) AndroidPopup.procAfterOpenPopup()
                 hush.webview.ready = true
