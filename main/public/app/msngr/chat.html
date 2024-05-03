@@ -1417,6 +1417,7 @@
                     const rq = { userids : useridArr, usernms : usernmArr, sendernm : g_usernm }
                     if (hush.webview.ios) { 
                     } else if (hush.webview.and) { //alert(JSON.stringify(rq))
+                        debugger
                         await hush.webview.callAppFunc(AndroidCom)
                         AndroidCom.send(hush.cons.sock_ev_invite_user, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
                     } else {
