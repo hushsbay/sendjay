@@ -249,7 +249,7 @@
                         const row = data.list[i]
                         const msgid = row.MSGID
                         const cdt = row.CDT
-                        const cdt1 = cdt.substr(2, 16)
+                        const cdt1 = cdt.substr(2, 14)
                         const type = row.TYPE
                         let body
                         if (type == "image") {
@@ -267,7 +267,7 @@
                         const _top = (i == 0) ? "Y" : ""
                         let _html = "<div id=res_" + msgid + " class=result data-top='" + _top + "' data-cdt='" + cdt + "' style='cursor:pointer'>"
                         _html += "      <div style='height:18px;font-size:8px;display:flex;align-items:center;margin-left:3px'>" + cdt1 + "</div>"
-                        _html += "      <div class='coDotDot coText' style='height:20px;color:#005192;margin-left:3px'>" + body + "</div>"
+                        _html += "      <div class='coDotDot coText1' style='height:20px;color:#005192;margin-left:3px'>" + body + "</div>"
                         _html += "  </div>"
                         list.append(_html)
                     }                
