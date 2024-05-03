@@ -1015,10 +1015,12 @@
                     if (_elapsed >= 1000) return false
                     if (!WebInterface) {
                         _elapsed += 300
-                        setTimeout(function() { 
+                        setTimeout(function() {
+                            $("#in_chat").val($("#in_chat").val()+"==="+_elapsed)
                             return hush.webview.chkAppFunc(WebInterface, _elapsed)
                         }, 300)
                     } else {
+                        $("#in_chat").val("@@@"+_elapsed)
                         return true
                     }
                 } catch (ex) {
