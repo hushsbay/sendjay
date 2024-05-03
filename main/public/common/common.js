@@ -1009,23 +1009,23 @@
                     hush.webview.and = false
                 }
             },
-            // callAppFunc : (WebInterface, elapsed) => new Promise((resolve) => {
-            //     try {
-            //         let _elapsed = elapsed ? elapsed : 0
-            //         if (_elapsed >= 1000) throw new Error("모바일앱 함수 호출 타임아웃입니다.")
-            //         console.log(_elapsed+" @@@@")
-            //         if (!WebInterface) {
-            //             _elapsed += 300
-            //             setTimeout(() => callAppFunc(WebInterface, _elapsed), _elapsed)
-            //             return
-            //         }
-            //         console.log(_elapsed+" @@@@####")
-            //         resolve()
-            //         //AndroidCom.send(hush.cons.sock_ev_invite_user, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
-            //     } catch (ex) {
-            //         reject(ex)
-            //     }
-            // }),
+            callAppFunc : (WebInterface, elapsed) => new Promise((resolve) => {
+                try {
+                    let _elapsed = elapsed ? elapsed : 0
+                    if (_elapsed >= 1000) throw new Error("모바일앱 함수 호출 타임아웃입니다.")
+                    console.log(_elapsed+" @@@@")
+                    if (!WebInterface) {
+                        _elapsed += 300
+                        setTimeout(() => callAppFunc(WebInterface, _elapsed), _elapsed)
+                        return
+                    }
+                    console.log(_elapsed+" @@@@####")
+                    resolve()
+                    //AndroidCom.send(hush.cons.sock_ev_invite_user, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
+                } catch (ex) {
+                    reject(ex)
+                }
+            }),
 
 
         }      
