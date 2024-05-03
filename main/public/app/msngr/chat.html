@@ -653,10 +653,10 @@
                                 document.execCommand('copy')
                                 document.body.removeChild(t)
                                 showCellMenu(false)
-                                hush.msg.toast("복사 완료. Ctrl+V로 붙이면 됩니다. (" + obj.type + ")") //image, file, flink will be ok too
+                                hush.msg.toast("복사 완료. Ctrl+V로 붙이고 전송하면 됩니다. (" + obj.type + ")") //image, file, flink will be ok too
                             } else { //mobile
                                 AndroidRoom.copy(obj.msgid)
-                                hush.msg.toast("복사 완료. SendCopy 버튼으로 보내면 됩니다. (" + obj.type + ")") //image, file, flink will be ok too
+                                hush.msg.toast("복사 완료. '예'를 누르면 전송됩니다.") //image, file, flink will be ok too
                                 $("#fr_tip").hide()
                                 $("#fr_sendcopy").show()
                             }
@@ -2366,11 +2366,11 @@
             <div style="height:20px;display:flex;align-items:center;justify-content:space-between;margin:3px 5px">
                 <div id=fr_tip class=coDotDot style="height:100%;width:calc(100% - 80px);display:flex;align-items:center"></div>
                 <div id=fr_sendcopy style="display:none">
-                    <span style="margin-right:5px">전송할까요?</span>
-                    <span id=send_copy style='background:#005192;color:white;border-radius:5px;padding:5px'>예</span>
-                    <span id=cancel_copy style='background:#005192;color:white;border-radius:5px;padding:5px'>아니오</span>
-                    <span id=btn_send_img_m style='display:none;background:#005192;color:white;border-radius:5px;padding:5px'>예</span>
-                    <span id=btn_cancel_img_m style='display:none;background:#005192;color:white;border-radius:5px;padding:5px'>아니오</span>
+                    <span class=coText style="margin-right:5px">전송할까요?</span>
+                    <span id=send_copy class=coText style='background:#005192;color:white;border-radius:5px;padding:5px'>예</span>
+                    <span id=cancel_copy class=coText style='background:#005192;color:white;border-radius:5px;padding:5px'>아니오</span>
+                    <span id=btn_send_img_m class=coText style='display:none;background:#005192;color:white;border-radius:5px;padding:5px'>예</span>
+                    <span id=btn_cancel_img_m class=coText style='display:none;background:#005192;color:white;border-radius:5px;padding:5px'>아니오</span>
                 </div>
                 <div id=fr_byte class=coText></div>
             </div>
