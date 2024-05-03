@@ -1009,22 +1009,32 @@
                     hush.webview.and = false
                 }
             },
-            callAppFunc : (WebInterface, elapsed) => new Promise((resolve) => {
+            chkAppFunc : (WebInterface, elapsed) => {
                 try {
                     let _elapsed = elapsed ? elapsed : 0
-                    if (_elapsed >= 1000) throw new Error("모바일앱 함수 호출 타임아웃입니다.")
-                    console.log(_elapsed+" @@@@")
+                    if (_elapsed >= 1000) return false
                     if (!WebInterface) {
                         _elapsed += 300
-                        setTimeout(() => callAppFunc(WebInterface, _elapsed), _elapsed)
-                        return
+                        setTimeout(function() { 
+                            return hush.webview.chkAppFunc(WebInterface, _elapsed)
+                        }, 300)
+                    } else {
+                        return true
                     }
-                    console.log(_elapsed+" @@@@####")
+                } catch (ex) {
+                    return ex
+                }                
+            },
+            callAppFunc : (WebInterface, elapsed) => new Promise((resolve) => {
+                try {
+                    const ret = hush.webview.chkAppFunc(WebInterface, elapsed)
+                    if (ret == false) throw new Error("모바일앱 함수 호출 타임아웃입니다.")
+                    if (ret && ret.message) throw new Error("[callAppFunc] " + ret.message)
                     resolve()
                     //AndroidCom.send(hush.cons.sock_ev_invite_user, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
                 } catch (ex) {
                     reject(ex)
-                }
+                }                
             }),
 
 
