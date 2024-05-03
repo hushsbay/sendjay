@@ -243,7 +243,7 @@
             const setResult = (data) => {            
                 try {
                     const list = $("#result_sub")
-                    list.append("<div id=getprev style='display:none;text-align:center;background-color:#005192;color:white;cursor:pointer;padding:2px 0px;margin:4px 4px 0px 4px'>previous</div>")
+                    list.append("<div id=getprev class=coText style='display:none;text-align:center;background-color:#005192;color:white;cursor:pointer;padding:2px 0px;margin:4px 4px 0px 4px'>previous</div>")
                     const _len = data.list.length
                     for (let i = 0; i < _len; i++) {
                         const row = data.list[i]
@@ -267,7 +267,7 @@
                         const _top = (i == 0) ? "Y" : ""
                         let _html = "<div id=res_" + msgid + " class=result data-top='" + _top + "' data-cdt='" + cdt + "' style='cursor:pointer'>"
                         _html += "      <div style='height:18px;font-size:8px;display:flex;align-items:center;margin-left:3px'>" + cdt1 + "</div>"
-                        _html += "      <div class=coDotDot style='height:20px;color:#005192;margin-left:3px'>" + body + "</div>"
+                        _html += "      <div class='coDotDot coText' style='height:20px;color:#005192;margin-left:3px'>" + body + "</div>"
                         _html += "  </div>"
                         list.append(_html)
                     }                
@@ -2340,18 +2340,18 @@
                     <img id=btn_menu_m src="/img/menu.png" class=coImg24 style="margin-left:8px" />
                 </div>
             </div>
-            <div id=fr_main style="position:relative;height:calc(100% - 145px);display:flex;align-items:stretch;margin:0px 3px">
-                <div id=list_msg style="width:calc(100% - 88px);flex-grow:1;position:relative;display:flex;flex-direction:column;background-color:white;border:1px solid darkgray;overflow:auto;margin-right:2px"></div> <!-- <div id=list_msg class=plate></div> -->
+            <div id=fr_main style="position:relative;height:calc(100% - 145px);display:flex;align-items:stretch;margin:0px 3px"><!--88px-->
+                <div id=list_msg style="width:calc(100% - 100px);flex-grow:1;position:relative;display:flex;flex-direction:column;background-color:white;border:1px solid darkgray;overflow:auto;margin-right:2px"></div> <!-- <div id=list_msg class=plate></div> -->
                 <div id=imgplate style="position:absolute;display:none;left:0;bottom:0;width:200px;height:200px;background-color:white;border:1px solid darkgray"></div>
                 <span id=txt_msg_added style="position:absolute;display:none;left:0;bottom:0;height:32px;line-height:32px;cursor:pointer;background:steelblue;color:white;border-top:1px solid darkgray;padding:0px 5px"></span>
-                <div id=list_people style="display:none;width:88px;overflow:hidden;background-color:white;border:1px solid darkgray;margin-left:auto">
+                <div id=list_people style="display:none;width:100px;overflow:hidden;background-color:white;border:1px solid darkgray;margin-left:auto">
                     <div style="height:24px;display:flex;align-items:center;color:darkgray;border-bottom:1px solid lightgray;padding-left:3px">
                         <span class=coText style="margin-right:5px">count :</span><span id=people_cnt class=coText>0</span><span id=result_cnt class=coText style="display:none">0</span>
                     </div>
                     <div id=people_sub style="height:calc(100% - 24px);overflow:auto"></div>
                     <div id=result_sub style="display:none;height:calc(100% - 24px);overflow:auto"></div>
                 </div>
-                <div id=list_menu_m style="display:none;width:88px;overflow:hidden;background-color:white;border:1px solid darkgray;margin-left:auto">
+                <div id=list_menu_m style="display:none;width:100px;overflow:hidden;background-color:white;border:1px solid darkgray;margin-left:auto">
                     <div id=btn_invite_m class="menuBtn chat coText">초대</div>
                     <div id=btn_delete_all_m class="menuBtn chat coText">모두삭제</div>
                     <div id=btn_rename_m class="menuBtn chat coText">방명</div>
