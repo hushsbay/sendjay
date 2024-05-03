@@ -1821,7 +1821,7 @@
                         showCellMenu(false)                    
                     }
                 },
-                [hush.cons.sock_ev_invite_user] : async (data) => {
+                [hush.cons.sock_ev_invite_user] : (data) => {
                     try {
                         if (data.invitedUserids.length == 0) {
                             hush.msg.toast("초대된 멤버가 없거나 이미 초대된 멤버입니다.")
@@ -1836,8 +1836,8 @@
                         rq.roomnm = data.roomnm
                         if (hush.webview.ios) {
                         } else if (hush.webview.and) {
-                            alert("1111111")
-                            debugger
+                            alert(JSON.stringify(rq))
+                            //debugger
                             //await hush.webview.callAppFunc(AndroidCom)
                             AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
                         } else {
