@@ -1009,6 +1009,8 @@
                     hush.webview.and = false
                 }
             },
+            //////////////////////////////////////////chat.html의 procInvite()에서 AndroidCom.send가 안먹히길래 callAppFunc()로 처리하려 했더니 AndroidCom, AndroidCom.send는 잘 가져오고 있었음
+            //결국, 아래 2개는 잘못 짚은 거였고 일단 setTimeout()으로 처리해서 넘어감
             chkAppFunc : (WebInterface, elapsed) => {
                 try {
                     let _elapsed = elapsed ? elapsed : 0
@@ -1037,7 +1039,7 @@
                 } catch (ex) {
                     reject(ex)
                 }                
-            }),
+            }), /////////////////////////////////////////////////////////////////////////////
 
 
         }      

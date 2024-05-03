@@ -651,7 +651,7 @@ const getPortalList = async (obj) => {
             const _roomid = _id.substring(4) //const _roomid = _id.substring(7)
             if (hush.webview.ios) {
             } else if (hush.webview.and) {
-                setTimeout(() => AndroidMain.openRoom("open", _roomid, "portal", ""), hush.cons.sec_for_webview_func) //setTimeout없이 Android 함수 호출하면 animCall 동작안함
+                setTimeout(() => AndroidMain.openRoom("open", _roomid, "portal", ""), hush.cons.sec_for_webview_func) //비동기로 호출해야 동작함
             } else {
                 hush.sock.openRoom("/app/msngr/chat.html", _roomid, "portal")
             }
