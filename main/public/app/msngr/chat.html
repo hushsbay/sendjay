@@ -1836,6 +1836,7 @@
                         rq.roomnm = data.roomnm
                         if (hush.webview.ios) {
                         } else if (hush.webview.and) {
+                            debugger
                             await hush.webview.callAppFunc(AndroidCom)
                             AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
                         } else {
