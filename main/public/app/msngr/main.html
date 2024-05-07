@@ -450,6 +450,7 @@
                     $("#btn_showlog").on("click", function() {
                         let num = $("#in_showlog").val()
                         num = parseInt(num) || 0
+                        alert(num+"@@@@@")
                         AndroidMain.showLog(num)
                     })
                     $("#btn_deletelog").on("click", function() {
