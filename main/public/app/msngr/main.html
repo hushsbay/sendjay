@@ -447,14 +447,14 @@
                             g_setting_changed = false
                         }
                     })
-                    // $("#btn_showlog").on("click", function() {
-                    //     let num = $("#in_showlog").val()
-                    //     num = parseInt(num) || 0
-                    //     AndroidMain.showLog(num)
-                    // })
-                    // $("#btn_deletelog").on("click", function() {
-                    //     AndroidMain.deleteLog()
-                    // })
+                    $("#btn_showlog").on("click", function() {
+                        let num = $("#in_showlog").val()
+                        num = parseInt(num) || 0
+                        AndroidMain.showLog(num)
+                    })
+                    $("#btn_deletelog").on("click", function() {
+                        AndroidMain.deleteLog()
+                    })
                     $(window).bind("unload", function() { //$(window).unload(function() { deprecated as of 1.8
                         procUnload()
                         if (g_memWin && !g_memWin.closed) g_memWin.close()
@@ -582,12 +582,12 @@
                     <div class='coSettingLabel coText'>자동로그인<br>해제(Mobile)</div>
                     <div id=btn_reset_auth class='picBtn coText' style="margin-right:10px">해제</div>
                 </div> 
-                <!-- <div class=coSettingRow>  
+                <div class=coSettingRow>  
                     <div class='coSettingLabel coText'>Log File<br>(Mobile)</div>
                     <input id=in_showlog type=number data-role=none spellcheck=false value="0" style="width:30px;text-align:center;border:1px solid darkgray;margin:0px 5px" />
                     <div id=btn_showlog class='picBtn coText' style="background:lightgray;margin-left:5px">ShowLog</div>
                     <div id=btn_deletelog class='picBtn coText' style="background:lightgray;margin-left:5px">DelLog</div>
-                </div> -->
+                </div>
             </div>
             <div class=coMenuBottom>
                 <div id=btn_new class="coMenuBtn people chat" style="display:none"><img src="/img/white_chat.png" class=coImgMenu /><span class=coText>새채팅</span></div>
