@@ -448,12 +448,13 @@
                         }
                     })
                     $("#btn_showlog").on("click", function() {
+                        hush.util.animBgColor($(this))
                         let num = $("#in_showlog").val()
                         num = parseInt(num) || 0
-                        alert(num+"@@@@@")
                         AndroidMain.showLog(num)
                     })
                     $("#btn_deletelog").on("click", function() {
+                        hush.util.animBgColor($(this))
                         AndroidMain.deleteLog()
                     })
                     $(window).bind("unload", function() { //$(window).unload(function() { deprecated as of 1.8
