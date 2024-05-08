@@ -9,6 +9,7 @@
             CODE_NO_DATA : '-100',
             MSG_NO_DATA : '데이터가 없습니다.',
             MSG_NO_MORE_DATA : '더 이상 데이터가 없습니다.',
+            NETWORK_UNAVAILABLE : '네트워크가 연결되어 있지 않습니다.',
             toast_prefix : "##$$", 
             ///////////////////////////////////위는 서버와 동일
             erp_portal : "index.html",
@@ -233,6 +234,15 @@
             },
         },
         http : {
+            chkOnline : async (verbose) => {
+                if (navigator.onLine) return true
+                if (verbose == "toast") {
+                    await hush.msg.toast(hush.cons.NETWORK_UNAVAILABLE)
+                } else if (verbose == "alert") {
+                    await hush.msg.alert(hush.cons.NETWORK_UNAVAILABLE)
+                }
+                return false
+            },
             handleNoCache : (url) => {
                 let _url = url
                 if (!_url.includes("nocache=")) _url += (_url.includes("?") ? "&" : "?") + "nocache=" + hush.util.getRnd()
@@ -265,6 +275,7 @@
             },
             ajax : async (url, data, noToast, method) => {
                 try {
+                    if (!navigator.onLine) throw new Error(hush.cons.NETWORK_UNAVAILABLE)
                     if (!noToast) hush.msg.toast("waiting..", -1)
                     const rs = await hush.http.ajaxPromise(url, data, method)               
                     if (!noToast) hush.msg.toastEnd()                    
