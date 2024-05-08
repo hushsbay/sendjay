@@ -736,8 +736,14 @@
             },
             showEx : async (ex, title, _msgType, _sec) => {
                 hush.msg.toastEnd() //예외 발생시므로 혹시나 모를 토스트 메시지 제거
+
+                if (ex.message.includes(hush.cons.NETWORK_UNAVAILABLE)) {
+                    hush.msg.toast(hush.cons.NETWORK_UNAVAILABLE)
+                    return
+                }
+
                 const _title = title ? "[" + title + "]<br>" : ""
-                let _msg
+                let _msg                
                 if (typeof ex == "string") {
                     _msg = _title + ex
                 } else if (typeof ex == "object" && ex.stack) {
