@@ -87,8 +87,9 @@ const procMenuTop = async (_mode, _mode_people) => {
     }
 }
 
-const procMenuPeople = (_mode, popup) => {
+const procMenuPeople = async (_mode, popup) => {
     try {
+        if (!await hush.http.chkOnline("toast")) return
         $("#in_search").val("")
         g_mode_people = (_mode) ? _mode : BTN_PEOPLE_TEAM
         if (g_mode_people == BTN_PEOPLE_TEAM) {
@@ -169,7 +170,8 @@ const procSelect = (_userid) => {
     }
 }
 
-const procSearch = () => {
+const procSearch = async () => {
+    if (!await hush.http.chkOnline("toast")) return
     const keyword = $("#in_search").val().trim()
     if (keyword.length == 0) {
         hush.msg.toast(hush.cons.msg.blank_requested)

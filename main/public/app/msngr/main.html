@@ -102,7 +102,8 @@
                             hush.util.animBgColor($(this))
                             procMenuPeople(this.id) 
                         })
-                        $("#btn_new").on("click", function() { 
+                        $("#btn_new").on("click", async function() {
+                            if (!await hush.http.chkOnline("toast")) return
                             hush.util.animBgColor($(this))
                             if (g_mode == BTN_MODE_PEOPLE) {
                                 const mem = $(".mem")
@@ -136,6 +137,7 @@
                             }
                         })
                         $("#btn_me").on("click", async function() {
+                            if (!await hush.http.chkOnline("toast")) return
                             hush.util.animBgColor($(this))
                             if (!hush.webview.on) {
                                 hush.sock.createRoom("/app/msngr/chat.html", "me")
@@ -150,13 +152,14 @@
                                 }
                             }
                         })
-                        $("#btn_noti").on("click", function() { 
+                        $("#btn_noti").on("click", async function() { 
                             hush.util.animBgColor($(this))
                             const checked = $(".chkbox_portal:checked")
                             if (checked.length == 0) {
                                 hush.msg.toast(hush.cons.warn_no_row_selected)
                                 return
                             }
+                            if (!await hush.http.chkOnline("toast")) return
                             checked.each(function(idx, item) {
                                 const _roomid = item.id.substring(4)
                                 const _toggle = ($("#alarm_" + _roomid).css("display") == "none") ? "X" : ""
@@ -169,13 +172,14 @@
                                 }
                             })
                         })
-                        $("#btn_read").on("click", function() { 
+                        $("#btn_read").on("click", async function() { 
                             hush.util.animBgColor($(this))
                             const checked = $(".chkbox_portal:checked")
                             if (checked.length == 0) {
                                 hush.msg.toast(hush.cons.msg.row_not_selected)
                                 return
                             }
+                            if (!await hush.http.chkOnline("toast")) return
                             checked.each(function(idx, item) {
                                 const _roomid = item.id.substring(4)
                                 const rq = { type : "updateall", senderkey : g_userkey, roomid : _roomid, first_queried : "Y" }
@@ -199,6 +203,7 @@
                             }
                             const ret = await hush.msg.confirm("퇴장시 선택된 방내 본인이 주고 받은 모든 메시지가 삭제됩니다. 계속할까요?")
                             if (!ret) return
+                            if (!await hush.http.chkOnline("toast")) return
                             checked.each(function(idx, item) {
                                 const _roomid = item.id.substring(4)
                                 const rq = initMsg(_roomid)
@@ -259,6 +264,7 @@
                         $("#file_upload").trigger("click")
                     })
                     $("#pict_upload").on("click", async function() {
+                        if (!await hush.http.chkOnline("toast")) return
                         hush.util.animBgColor($(this))
                         const url = $("#img_pict").attr("src")
                         if (!url) {
@@ -279,7 +285,8 @@
                             hush.msg.toast("Upload done.")
                         })
                     })
-                    $("#pict_delete").on("click", function() {
+                    $("#pict_delete").on("click", async function() {
+                        if (!await hush.http.chkOnline("toast")) return
                         hush.util.animBgColor($(this))
                         const fd = new FormData()
                         fd.append("userid", g_userid)
@@ -315,6 +322,7 @@
                         hush.msg.alert("You're going to reset authentication (including mobile). Continue?", { 
                             "Yes": async function() { 
                                 try {
+                                    if (!await hush.http.chkOnline("toast")) return
                                     const rq = { mode : "passkey", userid : g_userid }
                                     const rs = await hush.http.ajax(hush.cons.route + "/proc_user", rq, "POST") //See in proc_user.js and login.js, too.
                                     if (rs.code != hush.cons.result_ok) {
@@ -348,6 +356,7 @@
                         }
                     })
                     $("#btn_ok").on("click", async function() {
+                        if (!await hush.http.chkOnline("toast")) return
                         hush.util.animBgColor($(this))
                         try {
                             if (g_win_type == "invite") {
