@@ -977,20 +977,23 @@ var funcSockEv = { //needs to be public
     },
     [hush.cons.sock_ev_disconnect] : (data) => { //mobile only
         console.log("disconnected from server : " + JSON.stringify(data))
-        $("#img_disconn").show() //hush.msg.toast("disconnected", false, true)
-        $("#btn_refresh").hide()
-        $("#btn_logout").hide()
+        // $("#img_disconn").show() //hush.msg.toast("disconnected", false, true)
+        // $("#btn_refresh").hide()
+        // $("#btn_logout").hide()
+        toggleDisconnIcon(true)
     },
     [hush.cons.sock_ev_mark_as_connect] : (data) => {//mobile only
-        $("#img_disconn").hide() //hush.msg.toastEnd()
-        $("#btn_refresh").show()
-        $("#btn_logout").show()
+        // $("#img_disconn").hide() //hush.msg.toastEnd()
+        // $("#btn_refresh").show()
+        // $("#btn_logout").show()
+        toggleDisconnIcon(false)
     },
     [hush.cons.sock_ev_connect] : (data) => { //mobile only (reconnect event in actual)
         //Be careful that Socket.EVENT_CONNECT occurred many times at a moment. => from ChatService.kt
-        $("#img_disconn").hide() //hush.msg.toastEnd()
-        $("#btn_refresh").show()
-        $("#btn_logout").show()
+        // $("#img_disconn").hide() //hush.msg.toastEnd()
+        // $("#btn_refresh").show()
+        // $("#btn_logout").show()
+        toggleDisconnIcon(false)
         if (g_mode == BTN_MODE_PEOPLE) {
             const userkeyArr = []
             $(".state").each(function(idx, item) {
@@ -1155,5 +1158,17 @@ const getFromWebViewSocket = (from, json) => {
 
 const newchat = (from, obj) => { 
     procNewChat(obj.userids.split(hush.cons.deli))
+}
+
+const toggleDisconnIcon = (show) => { //hush.msg.toast("disconnected", false, true)
+    if (show) {
+        $("#img_disconn").show()
+        $("#btn_refresh").hide()
+        $("#btn_logout").hide()
+    } else {
+        $("#img_disconn").hide()
+        $("#btn_refresh").show()
+        $("#btn_logout").show()
+    }
 }
 ////////////////////////////////////////////////////////////////////////
