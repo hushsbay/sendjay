@@ -40,9 +40,11 @@
             memdeli : " / ",
             deli_key : "__", //for setUser()
             idb_tbl : "msngr", //indexedDB
+            sock_ev_connect : 'connect',
+            sock_ev_mark_as_connect : 'mark_as_connect',
+            sock_ev_disconnect : "disconnect",
             sock_ev_alert : 'alert',
-			sock_ev_toast : 'toast',
-			sock_ev_disconnect : "disconnect",
+			sock_ev_toast : 'toast',			
 			sock_ev_common : 'common', //Belows are handled in this sock_ev_common event.
 			sock_ev_chk_alive : 'chk_alive',
 			sock_ev_show_off : 'show_off',
