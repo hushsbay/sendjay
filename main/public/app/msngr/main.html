@@ -216,7 +216,6 @@
                     }
                     $("#btn_refresh").on("click", function() { //mobile only
                         hush.util.animBgColor($(this))
-                        if (!hush.http.chkOnline("toast")) return
                         AndroidMain.reload()
                     })
                     $("#btn_logout").on("click", async function() { //mobile only
