@@ -993,6 +993,7 @@ var funcSockEv = { //needs to be public
         // $("#img_disconn").hide() //hush.msg.toastEnd()
         // $("#btn_refresh").show()
         // $("#btn_logout").show()
+        hush.msg.alert("1111111111")
         toggleDisconnIcon(false)
         if (g_mode == BTN_MODE_PEOPLE) {
             const userkeyArr = []
