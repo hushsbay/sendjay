@@ -649,7 +649,8 @@ const getPortalList = async (obj) => {
         }
         //if (obj.type == "normal" && g_cdt != FIRST_QUERIED && lastRoomid != "") hush.util.animCall(lastRoomid, true) //tells if next fetch exists
         const _tag = (obj.roomid) ? "#div_" + obj.roomid : ".div_row" //const _tag = (obj.roomid) ? "#subdiv_" + obj.roomid : ".row_portal"
-        $(_tag).off("click").on("click", function(e) {
+        $(_tag).off("click").on("click", async function(e) {
+            if (!await hush.http.chkOnline("toast")) return
             hush.util.animBgColor($(this))
             if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 event가 먹히도록 함
             const _id = this.id            
@@ -668,7 +669,8 @@ const getPortalList = async (obj) => {
     }
 }
 
-const getUnreadPerEachRoom = async (roomid, chkCloseNoti) => { //no unread display in case of invite/leave msg    
+const getUnreadPerEachRoom = async (roomid, chkCloseNoti) => { //no unread display in case of invite/leave msg   
+    if (!await hush.http.chkOnline()) return 
     const rs = await hush.http.ajax("/msngr/qry_unread", { roomid : roomid })
     if (!hush.util.chkAjaxCode(rs, true)) return
     if (rs.list[0] && rs.list[0].UNREAD) {
@@ -711,6 +713,7 @@ const handleDocTitle = (unreads) => {
 
 const getUnreadForAll = async () => {
     try { //예를 들어, 안드로이드 ChatService.kt에서 먼저 qry_unread로 LASTCHKDT 필드 업데이트하면 PC브라우저에서는 안읽은 톡 정보 없는 것으로 나타날 것임 
+        if (!await hush.http.chkOnline()) return
         const rs = await hush.http.ajax("/msngr/qry_unread", {})
         if (!hush.util.chkAjaxCode(rs, true)) return
         const _len = rs.list.length
@@ -1057,6 +1060,7 @@ const startMsngr = async (launch, winid) => {
                 }
                 let _type = (winid && runFromStandalone && prevType == "") ? "set_new" : "chk_embeded" //set_new는 standalone일 때만 처음 한번만 설정됨. 그 다음부터는 무조건 chk_embeded
                 prevType = _type //동일 브라우저내에서 윈도우(탭)끼리 (offline)경합을 벌여 1등이 되면 http call을 통해 각 브라우저의 1등끼리 (online)경합으로 최종 winner를 결정
+                if (!await hush.http.chkOnline()) return
                 const rsRedis = await hush.http.ajax("/msngr/chk_redis", { type : _type, userkey : g_userkey, winid : winid }, true)
                 if (rsRedis.code == hush.cons.CODE_OK) { //console.log(_type+"==="+e.data.winid+"==="+rs1.result+"==="+rs1.ip)
                     if (!rsRedis.result) return //watch out for stream.on('end') in chk_redis.js
@@ -1172,7 +1176,8 @@ const getFromWebViewSocket = (from, json) => {
     }
 }
 
-const newchat = (from, obj) => { 
+const newchat = async (from, obj) => { 
+    if (!await hush.http.chkOnline("toast")) return
     procNewChat(obj.userids.split(hush.cons.deli))
 }
 ////////////////////////////////////////////////////////////////////////
