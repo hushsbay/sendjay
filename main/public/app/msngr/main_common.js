@@ -34,6 +34,7 @@ const procScrollEvent = () => {
 
 const procMenuTop = async (_mode, _mode_people) => {
     try {
+        if (!hush.http.chkOnline("toast")) return
         g_mode = (_mode) ? _mode : BTN_MODE_PEOPLE
         $(".coNav").removeClass("coNavSelected")
         $(".coMenuBtn").hide()
@@ -1111,6 +1112,7 @@ const SetUserVar = () => { //편의상 한번 더 g_로 set
 const initStandAlone = (rs) => { //임베디드가 아닐 경우임. rs from hush.auth.verifyUser(true)
     procSetting("load", rs, true)
     procScrollEvent()
+    if (!hush.http.chkOnline("toast")) return
     procMenuTop(hush.http.getCookie("mode"))
     if (g_mode != BTN_MODE_CHAT) getUnreadForAll()
     $("#header_title").html(g_usernm + ((rs.NICK_NM != "") ? " [" + rs.NICK_NM + "]" : ""))
