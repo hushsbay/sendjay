@@ -1128,6 +1128,18 @@ function procNewChat(useridArr) { //invoked from index.html and jay_main.js : Mo
     }
 }
 
+function toggleDisconnIcon(show) { //hush.msg.toast("disconnected", false, true)
+    if (show) {
+        $("#img_disconn").show()
+        $("#btn_refresh").hide()
+        $("#btn_logout").hide()
+    } else {
+        $("#img_disconn").hide()
+        $("#btn_refresh").show()
+        $("#btn_logout").show()
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////mobile webview
 const startFromWebView = async (from, obj, rs) => {
     try { //alert(navigator.userAgent) - 안드로이드 웹뷰인데도 Dalvik이라고 나오지는 않음
@@ -1158,17 +1170,5 @@ const getFromWebViewSocket = (from, json) => {
 
 const newchat = (from, obj) => { 
     procNewChat(obj.userids.split(hush.cons.deli))
-}
-
-const toggleDisconnIcon = (show) => { //hush.msg.toast("disconnected", false, true)
-    if (show) {
-        $("#img_disconn").show()
-        $("#btn_refresh").hide()
-        $("#btn_logout").hide()
-    } else {
-        $("#img_disconn").hide()
-        $("#btn_refresh").show()
-        $("#btn_logout").show()
-    }
 }
 ////////////////////////////////////////////////////////////////////////
