@@ -1919,14 +1919,20 @@
                 [hush.cons.sock_ev_disconnect] : (data) => { //mobile only
                     sockConnected = false
                     $("#img_disconn").show() //hush.msg.toast("disconnected", false, true)
+                    $("#btn_people_m").hide()
+                    $("#btn_menu_m").hide()
                 },
                 [hush.cons.sock_ev_mark_as_connect] : (data) => { //mobile only
                     $("#img_disconn").hide() //hush.msg.toastEnd()
+                    $("#btn_people_m").show()
+                    $("#btn_menu_m").show()
                 },
                 [hush.cons.sock_ev_connect] : (data) => { //mobile only
                     try {
                         sockConnected = true
                         $("#img_disconn").hide() //hush.msg.toastEnd()
+                        $("#btn_people_m").show()
+                        $("#btn_menu_m").show()
                         const arr = $(".talk").last()
                         if (arr.length == 0) return
                         getMsgList("after", $(arr[0]).attr("id").substring(4)) //msgid. after = after reconnect
