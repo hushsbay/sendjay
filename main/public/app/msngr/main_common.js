@@ -980,12 +980,14 @@ var funcSockEv = { //needs to be public
         // $("#img_disconn").show() //hush.msg.toast("disconnected", false, true)
         // $("#btn_refresh").hide()
         // $("#btn_logout").hide()
+        hush.msg.alert("sock_ev_disconnect")
         toggleDisconnIcon(true)
     },
     [hush.cons.sock_ev_mark_as_connect] : (data) => {//mobile only
         // $("#img_disconn").hide() //hush.msg.toastEnd()
         // $("#btn_refresh").show()
         // $("#btn_logout").show()
+        hush.msg.alert("sock_ev_mark_as_connect")
         toggleDisconnIcon(false)
     },
     [hush.cons.sock_ev_connect] : (data) => { //mobile only (reconnect event in actual)
@@ -993,7 +995,7 @@ var funcSockEv = { //needs to be public
         // $("#img_disconn").hide() //hush.msg.toastEnd()
         // $("#btn_refresh").show()
         // $("#btn_logout").show()
-        hush.msg.alert("1111111111")
+        hush.msg.alert("sock_ev_connect")
         toggleDisconnIcon(false)
         if (g_mode == BTN_MODE_PEOPLE) {
             const userkeyArr = []
