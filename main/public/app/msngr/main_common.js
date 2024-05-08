@@ -1151,6 +1151,7 @@ function toggleDisconnIcon(show) { //hush.msg.toast("disconnected", false, true)
 ////////////////////////////////////////////////////////////////////////mobile webview
 const startFromWebView = async (from, obj, rs) => {
     try { //alert(navigator.userAgent) - 안드로이드 웹뷰인데도 Dalvik이라고 나오지는 않음
+        if (!await hush.http.chkOnline("toast")) return
         hush.auth.setCookieForUser(obj, true)        
         hush.auth.setUser(obj.token)        
         SetUserVar()

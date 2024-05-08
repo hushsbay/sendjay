@@ -135,7 +135,8 @@
                 }
             }
 
-            const updateAllUnreads = (first_queried) => { //first_queried is dummy for prevent two times call of read_msg(query) event in 'updateall' and scroll event.
+            const updateAllUnreads = async (first_queried) => { //first_queried is dummy for prevent two times call of read_msg(query) event in 'updateall' and scroll event.
+                if (!await hush.http.chkOnline()) return    
                 const rq = { type : "updateall", senderkey : g_userkey, roomid : g_roomid, first_queried : first_queried }
                 if (hush.webview.ios) { 
                 } else if (hush.webview.and) {
@@ -149,6 +150,7 @@
 
             const setMembers = async (data) => {            
                 try {
+                    if (!await hush.http.chkOnline()) return
                     g_masterid = data.masterid
                     g_title = hush.sock.getRoomName(data.nicknm, data.mainnm, data.roomnm)
                     document.title = g_title + " - " + hush.cons.title
@@ -327,7 +329,7 @@
                 chkImgLoad(_img)
             })
 
-            const procQueryUnread = () => {
+            const procQueryUnread = async () => {
                 try {
                     const len = $(".needCheckUnread").length
                     if (len == 0) return
@@ -352,6 +354,7 @@
                         }
                     }
                     if (arr.length == 0) return
+                    if (!await hush.http.chkOnline()) return
                     const rq = { type : "query", msgidArr : arr }                
                     if (hush.webview.ios) {
                     } else if (hush.webview.and) {
@@ -607,6 +610,7 @@
                     const ret = await hush.msg.confirm("삭제를 진행할까요? (" + len + "개)") 
                     showCellMenu(false)
                     if (!ret) return
+                    if (!await hush.http.chkOnline("toast")) return
                     const msgidArr = []
                     for (let i  = 0; i < len; i++) msgidArr.push(checked[i].id.substring(4)) //sel_2019~
                     const rq = { msgidArr : msgidArr, type : "", roomid : g_roomid }
@@ -680,6 +684,7 @@
                             const ret = await hush.msg.confirm("이미 보낸 메시지를 삭제(취소)합니다. 계속할까요?")
                             showCellMenu(false)
                             if (!ret) return
+                            if (!await hush.http.chkOnline("toast")) return
                             const rq = { msgid : obj.msgid, type : obj.type, roomid : g_roomid }
                             if (hush.webview.ios) {
                             } else if (hush.webview.and) {
@@ -698,6 +703,7 @@
 
             const getMsgList = async (type, keyword, start, end) => {    
                 try {
+                    if (!await hush.http.chkOnline("toast")) return
                     g_year = (new Date()).getFullYear().toString()
                     let rq, withToast = true, includeInviteOrLeave = false
                     if (type == "search") {
@@ -938,7 +944,8 @@
                 objUnread.off("click").on("click", function() {
                     hush.util.animBgColor($(this))
                     hush.msg.dialogMultiButton("Do you want to retry sending ?", {
-                        "Retry": function() { 
+                        "Retry": async function() { 
+                            if (!await hush.http.chkOnline("toast")) return
                             $("#msg_" + rq.msgid).remove()
                             const rq1 = initMsg()
                             rq1.type = "talk"
@@ -970,6 +977,7 @@
                         hush.util.animBgColor($(this))
                         const ret = await hush.msg.confirm("전송여부를 확인하시겠습니까?")
                         if (!ret) return 
+                        if (!await hush.http.chkOnline("toast")) return
                         $("#handling_" + rq.msgid).show()
                         objUnread.hide() 
                         const rqCheck = initMsg()
@@ -1052,8 +1060,9 @@
                 return _msg
             }
 
-            const sendMsg = (type, blobUrlOrBody, blobOrFilestate) => {
+            const sendMsg = async (type, blobUrlOrBody, blobOrFilestate) => {
                 try {
+                    if (!await hush.http.chkOnline("toast")) return
                     const rq = initMsg()
                     if (type == "image") { //ajax used. arraybuffer sent with blank on socket.io-redis npm. download (through socket) is ok                    
                         rq.type = type
@@ -1129,7 +1138,8 @@
                         if (!g_stopAutoScrollDown) scrollToTarget()
                     })
                 }
-                _img.on("click", function(e) {
+                _img.on("click", async function(e) {
+                    if (!await hush.http.chkOnline("toast")) return
                     let fileInfoForMobile = $("#ahref_" + msgid).attr("param1") + hush.cons.deli + $("#ahref_" + msgid).attr("param2")
                     if (type == "ext_video") {
                         const _arr = body.split(hush.cons.deli)
@@ -1179,6 +1189,7 @@
 
             const procOpengraph = async (msgid, kind) => {
                 try {
+                    if (!await hush.http.chkOnline("toast")) return
                     const _url = $("#openGraph" + msgid).attr("og")
                     if (!_url) return
                     const rs = await hush.http.ajax("/msngr/get_opengraph", { msgid : msgid, url : _url }) 
@@ -1419,6 +1430,7 @@
                     "확인": async function() {                             
                         const _newName = hush.msg.dialogGetInput().trim()
                         if (!await hush.util.chkFieldVal(_newName, "방명", 0, 100)) return
+                        if (!await hush.http.chkOnline("toast")) return
                         const rq = { type : _type, roomname : _newName, roomid : g_roomid } //roomid needed since
                         if (hush.webview.ios) { 
                         } else if (hush.webview.and) {
@@ -1440,6 +1452,7 @@
             async function procInvite(useridArr, usernmArr) { //invoked from main.html (invite) popup or mobile //from onActivityResult() in MainActivity.kt
                 try {
                     if (useridArr.length == 0) return
+                    if (!await hush.http.chkOnline("toast")) return
                     const rq = { userids : useridArr, usernms : usernmArr, sendernm : g_usernm }
                     if (hush.webview.ios) { //alert(JSON.stringify(rq))
                     } else if (hush.webview.and) { //await hush.webview.callAppFunc(AndroidCom.send) //callAppFunc()에 설명 달아 놓았음
@@ -1512,8 +1525,9 @@
                 setTitleToFrTip()
             }
 
-            const chkTyping = () => {
+            const chkTyping = async () => {
                 if (sockConnected) { //instead of socket.volatile.emit()
+                    if (!await hush.http.chkOnline()) return
                     const curTyping = g_in_chat.val().trim()
                     const disp = $("#typing_" + g_userid).css("display")
                     let rq
@@ -1963,6 +1977,7 @@
             ////////////////////////////////////////////////////////////////////////mobile webview
             const startFromWebView = async (from, obj, rs) => {
                 try {
+                    if (!await hush.http.chkOnline("toast")) return
                     hush.auth.setCookieForUser(obj, true)
                     hush.auth.setUser(obj.token)
                     g_userkey = hush.user.key 
@@ -2023,7 +2038,8 @@
                 procInvite(obj.userids.split(hush.cons.deli), obj.usernms.split(hush.cons.deli))
             }
                 
-            const pasteFromWebView = (from, obj) => {
+            const pasteFromWebView = async (from, obj) => {
+                if (!await hush.http.chkOnline("toast")) return
                 const rq = { msgid : obj.msgidCopied }
                 if (hush.webview.ios) {
                 } else if (hush.webview.and) { //it's text
@@ -2197,7 +2213,8 @@
                         hush.util.animBgColor($(this))
                         sendMsg() 
                     })
-                    $("#btn_file, #btn_file_m").on("click", function() {
+                    $("#btn_file, #btn_file_m").on("click", async function() {
+                        if (!await hush.http.chkOnline("toast")) return
                         hush.util.animBgColor($(this))
                         $("#file_upload").val("") //btn_file_m : see webview setting
                         $("#file_upload").trigger("click")
@@ -2205,8 +2222,9 @@
                     $("#file_upload").change(function() {
                         handleFileUpload(this.files)		    	   	
                     })
-                    $("#btn_invite, #btn_invite_m").on("click", function() {
+                    $("#btn_invite, #btn_invite_m").on("click", async function() {
                         try {
+                            if (!await hush.http.chkOnline("toast")) return
                             hush.util.animBgColor($(this))
                             let urlStr = "/app/msngr/main.html?type=invite" 
                             if (!hush.webview.on) { 
@@ -2226,6 +2244,7 @@
                     $("#btn_delete_all, #btn_delete_all_m").on("click", async function() { 
                         hush.util.animBgColor($(this))
                         const ret = await hush.msg.confirm("모든 메시지를 삭제합니다. 계속할까요?")
+                        if (!await hush.http.chkOnline("toast")) return
                         showCellMenu(false)
                         if (!ret) return
                         const rq = { type : "all", roomid : g_roomid }
@@ -2242,10 +2261,12 @@
                         hush.util.animBgColor($(this))
                         if (g_masterid == g_userid) {
                             hush.msg.dialogMultiButton("이 방의 관리자입니다.<br>방명 변경시 적용범위를 선택하시기 바랍니다.", { 
-                                "모두 적용": function() { 
+                                "모두 적용": async function() { 
+                                    if (!await hush.http.chkOnline("toast")) return
                                     hush.msg.dialogClose()
                                     dialogRoomRename("all")
-                                }, "나만 적용": function() { 
+                                }, "나만 적용": async function() { 
+                                    if (!await hush.http.chkOnline("toast")) return
                                     hush.msg.dialogClose()
                                     dialogRoomRename("one")
                                 }, "취소": function() { 
@@ -2262,6 +2283,7 @@
                         if (hush.webview.on) showRoomMenu(false)
                         const ret = await hush.msg.confirm("퇴장시 모든 메시지가 삭제됩니다. 계속할까요?")
                         if (!ret) return
+                        if (!await hush.http.chkOnline("toast")) return
                         const rq = initMsg(g_roomid)
                         rq.type = "leave"
                         rq.body = g_usernm + "<br>" + hush.cons.left //when 3 people above
@@ -2274,7 +2296,8 @@
                             hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
                         }
                     })
-                    $("#send_copy").on("click", function() {
+                    $("#send_copy").on("click", async function() {
+                        if (!await hush.http.chkOnline("toast")) return
                         hush.util.animBgColor($(this))
                         AndroidRoom.paste()
                     })
@@ -2295,6 +2318,7 @@
                     })
                     $("#main_pg").on("drop", async function(e) {
                         e.preventDefault()
+                        if (!await hush.http.chkOnline("toast")) return
                         try {
                             const _data = e.originalEvent.dataTransfer.getData("text") //"image##2023021015343534000076787542LOrtKxoR##20230223151253235000695133ZOwDPVZr1w"
                             const _files = e.originalEvent.dataTransfer.files

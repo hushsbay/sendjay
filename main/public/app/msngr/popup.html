@@ -61,15 +61,16 @@
         }
 
         ////////////////////////////////////////////////////////////////////////mobile webview
-        const startFromWebView = (from, obj, rs) => {
+        const startFromWebView = async (from, obj, rs) => {
             try {
+                if (!await hush.http.chkOnline("toast")) return
                 hush.auth.setCookieForUser(obj, true)
                 hush.auth.setUser(obj.token)
                 g_added = rs
                 if (g_type == "play") {
                     play()
                 } else if (g_type == "image" || g_type == "ext_image") {
-                previewImage()
+                    previewImage()
                 }
             } catch (ex) {
                 hush.util.showException(ex)
@@ -123,7 +124,8 @@
                     }
                 } //if (hush.webview.on) AndroidPopup.procAfterOpenPopup()
                 hush.webview.ready = true
-                $("#btn_save").on("click", function() { //called from mobile app
+                $("#btn_save").on("click", async function() { //called from mobile app
+                    if (!await hush.http.chkOnline("toast")) return
                     hush.util.animBgColor($(this))
                     if (g_type == "image") {
                         hush.http.fileDownload("imagetofile", g_msgid)
