@@ -1495,6 +1495,7 @@
 
             const setTitleToFrTip = (doItNow) => {
                 const frTip = $("#fr_tip")
+                debugger
                 if (doItNow ||frTip.html() == "" || frTip.html().includes("방명 :")) frTip.html("<span class=coText>방명 : " + g_title + "</span>")
             }
 
