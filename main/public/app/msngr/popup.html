@@ -61,9 +61,9 @@
         }
 
         ////////////////////////////////////////////////////////////////////////mobile webview
-        const startFromWebView = async (from, obj, rs) => {
+        const startFromWebView = (from, obj, rs) => {
             try {
-                if (!await hush.http.chkOnline("toast")) return
+                if (!hush.http.chkOnline("toast")) return
                 hush.auth.setCookieForUser(obj, true)
                 hush.auth.setUser(obj.token)
                 g_added = rs
@@ -77,12 +77,12 @@
             }
         }
 
-        const getFromWebViewSocket = async (from, json) => {
+        const getFromWebViewSocket = (from, json) => {
             try {
                 if (!funcSockEv || !funcSockEv[json.ev]) return //Every event data object comes here which is not defined in this page. 
                 funcSockEv[json.ev].call(null, json.data)
             } catch (ex) { //hush.util.showException(ex)
-                await hush.msg.alert("popup:getFromWebViewSocket: (" + JSON.stringify(json) + ")\n" + ex.message)
+                hush.msg.alert("popup:getFromWebViewSocket: (" + JSON.stringify(json) + ")\n" + ex.message)
             }
         }
 
@@ -124,8 +124,8 @@
                     }
                 } //if (hush.webview.on) AndroidPopup.procAfterOpenPopup()
                 hush.webview.ready = true
-                $("#btn_save").on("click", async function() { //called from mobile app
-                    if (!await hush.http.chkOnline("toast")) return
+                $("#btn_save").on("click", function() { //called from mobile app
+                    if (!hush.http.chkOnline("toast")) return
                     hush.util.animBgColor($(this))
                     if (g_type == "image") {
                         hush.http.fileDownload("imagetofile", g_msgid)
