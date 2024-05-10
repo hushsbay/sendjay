@@ -2268,7 +2268,7 @@
                     $("#btn_rename, #btn_rename_m").on("click", function() {
                         hush.util.animBgColor($(this))
                         if (g_masterid == g_userid) {
-                            hush.msg.dialogMultiButton("!!이 방의 관리자입니다.<br>방명 변경시 적용범위를 선택하시기 바랍니다.", { 
+                            hush.msg.dialogMultiButton("이 방의 관리자입니다.<br>방명 변경시 적용범위를 선택하시기 바랍니다.", { 
                                 "모두 적용": function() { 
                                     if (!hush.http.chkOnline("toast")) return
                                     hush.msg.dialogClose()
