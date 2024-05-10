@@ -805,7 +805,7 @@
                                         if (_first && _first.length > 0) {  //console.log(_first.position().top + _first.height() + 1, "=====", g_list_msg.height())
                                             //hush.cons.fetch_cnt가 너무 작은 값이면 아래 'if'에 안걸릴 수도 있음 (이미지다운로드가 비동기인 것도 감안)
                                             if (_first.position().top + _first.height() + 100 > g_list_msg.height()) { //g_list_msg position should be relative for checking position().top
-                                                const _html = "<div id=getmore style='display:flex;align-items:center;justify-content:center;background:steelblue;color:white'>getting data..</div>"
+                                                const _html = "<div id=getmore style='display:flex;align-items:center;justify-content:center;background:steelblue;color:white'>데이터 가져오는 중..</div>"
                                                 g_list_msg.prepend(_html)
                                             }
                                         }
@@ -2268,7 +2268,7 @@
                     $("#btn_rename, #btn_rename_m").on("click", function() {
                         hush.util.animBgColor($(this))
                         if (g_masterid == g_userid) {
-                            hush.msg.dialogMultiButton("이 방의 관리자입니다.<br>방명 변경시 적용범위를 선택하시기 바랍니다.", { 
+                            hush.msg.dialogMultiButton("!!이 방의 관리자입니다.<br>방명 변경시 적용범위를 선택하시기 바랍니다.", { 
                                 "모두 적용": function() { 
                                     if (!hush.http.chkOnline("toast")) return
                                     hush.msg.dialogClose()
