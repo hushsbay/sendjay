@@ -1493,10 +1493,14 @@
                 }
             }
 
-            const setTitleToFrTip = (doItNow) => {
+            // const setTitleToFrTip = (doItNow) => {
+            //     const frTip = $("#fr_tip")
+            //     if (doItNow || frTip.html() == "" || frTip.html().includes("방명 :")) frTip.html("<span class=coText>방명 : " + g_title + "</span>")
+            // }
+
+            const setTitleToFrTip = () => {
                 const frTip = $("#fr_tip")
-                debugger
-                if (doItNow ||frTip.html() == "" || frTip.html().includes("방명 :")) frTip.html("<span class=coText>방명 : " + g_title + "</span>")
+                if (frTip.html() == "" || frTip.html().includes("방명 :")) frTip.html("<span class=coText>방명 : " + g_title + "</span>")
             }
 
             const showRoomMenu = (show) => { //for mobile only
@@ -1516,6 +1520,7 @@
             }
 
             const toggleDispMem = (value, notRecall) => { //show = "" or "X"
+            debugger
                 if (value == "" || !hush.webview.on) {
                     $("#list_people").show()
                     $("#list_msg").css("margin-right", "2px") //$(".plate").css("margin-right", "2px")
@@ -1643,6 +1648,7 @@
                     setTimeout(function() { //for debugging
                         sockConnected = true //for mobile only
                         if (data.from == hush.cons.sock_ev_show_on) return
+                        debugger
                         setMembers(data) //console.log(JSON.stringify(data)+"===")
                         toggleDispMem(data.dispmem)
                         if (data.from == "rename_room" || data.from == "after") return
