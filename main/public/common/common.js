@@ -234,12 +234,12 @@
             },
         },
         http : {
-            chkOnline : async (verbose) => {
+            chkOnline : (verbose) => {
                 if (navigator.onLine) return true
                 if (verbose == "toast") {
-                    await hush.msg.toast(hush.cons.NETWORK_UNAVAILABLE)
+                    hush.msg.toast(hush.cons.NETWORK_UNAVAILABLE)
                 } else if (verbose == "alert") {
-                    await hush.msg.alert(hush.cons.NETWORK_UNAVAILABLE)
+                    hush.msg.alert(hush.cons.NETWORK_UNAVAILABLE)
                 }
                 return false
             },
