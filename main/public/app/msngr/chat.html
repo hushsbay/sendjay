@@ -1493,7 +1493,7 @@
                 }
             }
 
-            const setTitleToFrTip = (doItNow) => { //for mobile only
+            const setTitleToFrTip = (doItNow) => {
                 const frTip = $("#fr_tip")
                 if (doItNow ||frTip.html() == "" || frTip.html().includes("방명 :")) frTip.html("<span class=coText>방명 : " + g_title + "</span>")
             }
@@ -1523,7 +1523,7 @@
                     $("#list_msg").css("margin-right", "0px") //$(".plate").css("margin-right", "0px")
                 }
                 if (!notRecall) g_show_list_people = value
-                setTitleToFrTip()
+                setTitleToFrTip(true)
             }
 
             const chkTyping = async () => {
