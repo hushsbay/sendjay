@@ -341,7 +341,7 @@
                             } 
                         }, "Reset Authentication", 200)
                     })
-                    $("#in_nicknm,#in_job,#in_abcd,#in_abnm,#chk_standalone,#chk_notioff,#chk_soundoff,#in_fr,#in_to,#chk_bodyoff,#chk_senderoff").on("change", function() { 
+                    $("#in_nicknm,#in_job,#in_abcd,#in_abnm,#chk_standalone,#chk_notioff,#chk_soundoff,#chk_viboff,#in_fr,#in_to,#chk_bodyoff,#chk_senderoff").on("change", function() { 
                         g_setting_changed = true 
                     })   
                     $("#spn_clear").on("click", function() {  
@@ -577,10 +577,14 @@
                     </label>
                 </div>
                 <div class=coSettingRow>
-                    <div class='coSettingLabel coText'>알림음<br>(Mobile)</div>
+                    <div class='coSettingLabel coText'>알림음/진동<br>(Mobile)</div>
                     <label for=chk_soundoff class=coSettingWrap>
                         <input type=checkbox id=chk_soundoff name=chk_soundoff class=coSettingChkbox />
-                        <span class='coSettingSpan coText'>Off (진동 유지)</span>
+                        <span class='coSettingSpan coText'>소리끄기</span>
+                    </label>
+                    <label for=chk_viboff class=coSettingWrap style="margin-left:10px">
+                        <input type=checkbox id=chk_viboff name=chk_viboff class=coSettingChkbox />
+                        <span class='coSettingSpan coText'>진동끄기</span>
                     </label>
                 </div>
                 <div class=coSettingRow>
@@ -594,10 +598,10 @@
                     <div id=btn_reset_auth class='picBtn coText' style="margin-right:10px">해제</div>
                 </div> 
                 <div class=coSettingRow>  
-                    <div class='coSettingLabel coText'>Log File<br>(Mobile)</div><!--아래 0은 당일 로그-->
-                    <input id=in_showlog type=number data-role=none spellcheck=false value="0" style="width:30px;text-align:center;border:1px solid darkgray;margin:0px 5px" />
-                    <div id=btn_showlog class='picBtn coText' style="background:lightgray;margin-left:5px">ShowLog</div>
-                    <div id=btn_deletelog class='picBtn coText' style="background:lightgray;margin-left:5px">DelLog</div>
+                    <div class='coSettingLabel coText'>모바일로그<br>(관리자용)</div><!--아래 0은 당일 로그-->
+                    <input id=in_showlog type=number data-role=none spellcheck=false value="0" style="width:40px;text-align:center;border:1px solid darkgray;margin:0px 5px" />
+                    <div id=btn_showlog class='picBtn coText' style="margin-left:5px">ShowLog</div>
+                    <div id=btn_deletelog class='picBtn coText' style="margin-left:5px">DelLog</div>
                 </div>
             </div>
             <div class=coMenuBottom>

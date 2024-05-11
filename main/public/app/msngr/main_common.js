@@ -769,10 +769,11 @@ const procSettingOnLoad = (rs) => { //rs from hush.auth.verifyUser(true)
     hush.http.setCookie("standalone", rs.STANDALONE)
     hush.http.setCookie("notioff", rs.NOTI_OFF)
     hush.http.setCookie("soundoff", rs.SOUND_OFF)
-    g_setting.fr = (rs.TM_FR) ? rs.TM_FR : ""
-    g_setting.to = (rs.TM_TO) ? rs.TM_TO : ""
+    hush.http.setCookie("viboff", rs.VIB_OFF)
     hush.http.setCookie("bodyoff", rs.BODY_OFF)
     hush.http.setCookie("senderoff", rs.SENDER_OFF)
+    g_setting.fr = (rs.TM_FR) ? rs.TM_FR : ""
+    g_setting.to = (rs.TM_TO) ? rs.TM_TO : ""
 }
 
 const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) //rs from hush.auth.verifyUser(true)
@@ -787,10 +788,11 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             $("#chk_standalone").prop("checked", (rs.STANDALONE == "Y" ? true : false))
             $("#chk_notioff").prop("checked", (rs.NOTI_OFF == "Y" ? true : false))  
             $("#chk_soundoff").prop("checked", (rs.SOUND_OFF == "Y" ? true : false))  
-            $("#in_fr").val(g_setting.fr)
-            $("#in_to").val(g_setting.to)
+            $("#chk_viboff").prop("checked", (rs.VIB_OFF == "Y" ? true : false))  
             $("#chk_bodyoff").prop("checked", (rs.BODY_OFF == "Y" ? true : false))
-            $("#chk_senderoff").prop("checked", (rs.SENDER_OFF == "Y" ? true : false))            
+            $("#chk_senderoff").prop("checked", (rs.SENDER_OFF == "Y" ? true : false))      
+            $("#in_fr").val(g_setting.fr)
+            $("#in_to").val(g_setting.to)      
             if (needPicture) hush.http.getUserPic(g_userid, "img_pict")
         } else if (type == "save") {
             const _nicknm = $("#in_nicknm").val().trim()
@@ -804,6 +806,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             const _standalone = $("#chk_standalone").is(":checked") ? "Y" : ""
             const _notioff = $("#chk_notioff").is(":checked") ? "Y" : ""
             const _soundoff = $("#chk_soundoff").is(":checked") ? "Y" : ""
+            const _viboff = $("#chk_viboff").is(":checked") ? "Y" : ""
             const _fr = $("#in_fr").val().trim()
             const _to = $("#in_to").val().trim()
             if (!chkTime(_fr)) return false
@@ -813,7 +816,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             const _senderoff = $("#chk_senderoff").is(":checked") ? "Y" : ""              
             const rq = { nicknm : encodeURIComponent(_nicknm), job : encodeURIComponent(_job), //type : "common", 
                         abcd : encodeURIComponent(_abcd), abnm : encodeURIComponent(_abnm), standalone : _standalone, notioff : _notioff,
-                        soundoff : _soundoff, fr : _fr, to : _to, bodyoff : _bodyoff, senderoff : _senderoff }
+                        soundoff : _soundoff, viboff : _viboff, bodyoff : _bodyoff, senderoff : _senderoff, fr : _fr, to : _to }
             const rs = await hush.http.ajax("/msngr/proc_env", rq)
             if (rs.code != hush.cons.CODE_OK) throw new Error(rs.msg)
             $("#header_title").html(g_usernm + ((_nicknm != "") ? " [" + _nicknm + "]" : ""))
@@ -824,12 +827,13 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             hush.http.setCookie("standalone", _standalone)
             hush.http.setCookie("notioff", _notioff)
             hush.http.setCookie("soundoff", _soundoff)
-            g_setting.fr = _fr
-            g_setting.to = _to
+            hush.http.setCookie("viboff", _viboff)
             hush.http.setCookie("bodyoff", _bodyoff)
             hush.http.setCookie("senderoff", _senderoff)
+            g_setting.fr = _fr
+            g_setting.to = _to
             const rq1 = { kind : "userinfo", userkey : g_userkey, nicknm : _nicknm, job : _job, abcd : _abcd, abnm : _abnm, notioff : _notioff,  
-            soundoff : _soundoff, fr : _fr, to : _to, bodyoff : _bodyoff, senderoff : _senderoff }
+            soundoff : _soundoff, viboff : _viboff, bodyoff : _bodyoff, senderoff : _senderoff, fr : _fr, to : _to }
             if (hush.webview.ios) {
             } else if (hush.webview.and) {
                 setTimeout(function() {
@@ -846,10 +850,11 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             $("#chk_standalone").prop("checked", (hush.http.getCookie("standalone") == "Y" ? true : false))
             $("#chk_notioff").prop("checked", (hush.http.getCookie("notioff") == "Y" ? true : false))
             $("#chk_soundoff").prop("checked", (hush.http.getCookie("soundoff") == "Y" ? true : false))
-            $("#in_fr").val(g_setting.fr)  
-            $("#in_to").val(g_setting.to)
+            $("#chk_viboff").prop("checked", (hush.http.getCookie("viboff") == "Y" ? true : false))
             $("#chk_bodyoff").prop("checked", (hush.http.getCookie("bodyoff") == "Y" ? true : false))
             $("#chk_senderoff").prop("checked", (hush.http.getCookie("senderoff") == "Y" ? true : false))
+            $("#in_fr").val(g_setting.fr)  
+            $("#in_to").val(g_setting.to)
         }
     } catch (ex) {
         hush.util.showEx(ex)
