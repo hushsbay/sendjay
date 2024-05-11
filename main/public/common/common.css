@@ -86,7 +86,7 @@ button { margin-left: 5px }
 .coSettingChkbox { width:16px;height:16px;background:lightgray;outline:none;margin-left:10px } /* login dialog */
 .coSettingSpan { font-size:16px;margin-left:5px }
 .coSettingRow { display:flex;align-items:center;margin:20px 10px 0px 10px }
-.coSettingLabel { width:100px;color:dimgray }
+.coSettingLabel { width:90px;color:dimgray }
 
 .coStateOut { border-radius:3px;background-color:#FD760B;font-size:9px;color:white;padding:0px 2px }
 .coStateOn { border-radius:3px;background-color:#0085CD;font-size:9px;color:white;padding:0px 2px }
