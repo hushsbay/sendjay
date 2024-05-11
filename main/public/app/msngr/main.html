@@ -70,6 +70,7 @@
                             hush.msg.alert("Android/iOS만 지원됩니다.")
                             return
                         }
+                        $("#div_log").show()
                     } else {
                         $("#btn_collapseall").show()
                         $("#btn_expandall").show()
@@ -597,7 +598,7 @@
                     <div class='coSettingLabel coText'>자동로그인<br>해제(Mobile)</div>
                     <div id=btn_reset_auth class='picBtn coText' style="margin-right:10px">해제</div>
                 </div> 
-                <div class=coSettingRow>  
+                <div class=coSettingRow id="div_log" style="display:none">  
                     <div class='coSettingLabel coText'>모바일로그<br>(관리자용)</div><!--아래 0은 당일 로그-->
                     <input id=in_showlog type=number data-role=none spellcheck=false value="0" style="width:40px;text-align:center;border:1px solid darkgray;margin:0px 5px" />
                     <div id=btn_showlog class='picBtn coText' style="margin-left:5px">ShowLog</div>
