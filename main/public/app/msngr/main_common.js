@@ -712,6 +712,10 @@ const handleDocTitle = (unreads) => {
 }
 
 const getUnreadForAll = async () => {
+    //유사한 호출을 하는 getUnreadPerEachRoom()는 웹뷰에서 채팅탭을 눌렀을 때 돌아가는 getPortalList()안에서 돌아가는 것이고
+    //여기 getUnreadForAll()는 앱에서는 최초 연결시, 웹에서는 채팅탭이 아닌 다른 탭이 열릴 때 돌아가는 것임
+    //따라서, 앱에서 최초 연결시 결과와 그 외의 결과는 달라야 함. 
+
     try { //예를 들어, 안드로이드 ChatService.kt에서 먼저 qry_unread로 LASTCHKDT 필드 업데이트하면 PC브라우저에서는 안읽은 톡 정보 없는 것으로 나타날 것임 
         if (!hush.http.chkOnline()) return
         const rs = await hush.http.ajax("/msngr/qry_unread", {})
@@ -1162,7 +1166,7 @@ const startFromWebView = (from, obj, rs) => {
         SetUserVar()
         if (g_win_type) {
             procMenuTop(BTN_MODE_PEOPLE, BTN_PEOPLE_COMPANY)
-        } else {
+        } else { //main 화면
             initStandAlone(rs)
             setTimeout(function() {
                 AndroidMain.doneLoad()
