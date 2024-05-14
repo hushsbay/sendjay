@@ -251,13 +251,14 @@ module.exports = (function() {
 			//return await global.store.scard(key) //getSetCount
 			//return await global.store.smembers(key) //getSetAll
 			getMyOtherSocket : async (socket) => {
-				let myOtherUserkey
+				let myOtherUserkey				
 				if (socket.userkey.startsWith(ws.cons.m_key)) {
 					myOtherUserkey = ws.cons.w_key + socket.userkey.replace(ws.cons.m_key, '')
 				} else {
 					myOtherUserkey = ws.cons.m_key + socket.userkey.replace(ws.cons.w_key, '')
-				}
+				}				
 				const arr = await ws.redis.getUserkeySocket(myOtherUserkey)
+				console.log("socket.userkey", socket.userkey, myOtherUserkey, arr[0])
 				return arr[0] //if not, undefined returned
 			},
 			getUserkeySocket : (userkey) => {
@@ -379,11 +380,6 @@ module.exports = (function() {
 					throw new Error(ex)
 				}
 			},
-			// sendToMyOtherSocket : async (socket, param) => { //call pmessage()
-			// 	param.data.userid = socket.userid //see ChatService.kt
-			// 	const otherUserkeySocket = await ws.redis.getMyOtherSocket(socket)
-			// 	if (otherUserkeySocket) ws.redis.pub('sendto_myother_socket', { socketid : socket.id, otherkey : otherUserkeySocket, param : param }) //call pmessage()
-			// },
 		},
 
 		sock : {
@@ -473,6 +469,7 @@ module.exports = (function() {
 			}),
 			sendToMyOtherSocket : async (socket, param) => { //call pmessage()
 				param.data.userid = socket.userid //see ChatService.kt
+				console.log("param.data.userid", param.data.userid)
 				const otherUserkeySocket = await ws.redis.getMyOtherSocket(socket)
 				console.log("otherUserkeySocket", otherUserkeySocket)
 				if (otherUserkeySocket) ws.redis.pub('sendto_myother_socket', { socketid : socket.id, otherkey : otherUserkeySocket, param : param }) //call pmessage()
