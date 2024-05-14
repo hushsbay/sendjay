@@ -38,7 +38,6 @@ module.exports = async (pattern, channel, message) => {
 			obj = JSON.parse(message)
 			const othersocketid = obj.otherkey.split(ws.cons.easydeli)[1]
 			const otherSocket = global.jay.sockets.get(othersocketid)
-			//const otherSocket = await global.jay.adapter.sockets[othersocketid]
 			console.log("othersocketid", othersocketid)
 			if (otherSocket) {
 				console.log("yesyesyes")

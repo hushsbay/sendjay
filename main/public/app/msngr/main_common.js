@@ -872,7 +872,10 @@ const getRoomInfo = (roomid) => {
 }
 
 const chkRoomFocus = () => { //웹에서만 호출. 앱에서의 채팅방이 현재 포커싱되어 있는지 파악해 웹에서 노티를 표시할지 여부를 결정하기 위함
-    if (hush.http.chkOnline()) hush.sock.send(hush.socket, hush.cons.sock_ev_chk_roomfocus, { })
+    if (hush.http.chkOnline()) {
+        hush.sock.send(hush.socket, hush.cons.sock_ev_chk_roomfocus, { })
+        console.log("chkRoomFocus")
+    }
     setTimeout(() => chkRoomFocus(), 3000)
 }
 
