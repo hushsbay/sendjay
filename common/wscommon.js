@@ -253,9 +253,11 @@ module.exports = (function() {
 			getMyOtherSocket : async (socket) => {
 				let myOtherUserkey				
 				if (socket.userkey.startsWith(ws.cons.m_key)) {
-					myOtherUserkey = ws.cons.w_key + socket.userkey.replace(ws.cons.m_key, '')
+					//myOtherUserkey = ws.cons.w_key + socket.userkey.replace(ws.cons.m_key, '')
+					myOtherUserkey = socket.userkey.replace(ws.cons.m_key, ws.cons.w_key)
 				} else {
-					myOtherUserkey = ws.cons.m_key + socket.userkey.replace(ws.cons.w_key, '')
+					//myOtherUserkey = ws.cons.m_key + socket.userkey.replace(ws.cons.w_key, '')
+					myOtherUserkey = socket.userkey.replace(ws.cons.w_key, ws.cons.m_key)
 				}				
 				const arr = await ws.redis.getUserkeySocket(myOtherUserkey)
 				console.log("socket.userkey", socket.userkey, myOtherUserkey, arr[0])

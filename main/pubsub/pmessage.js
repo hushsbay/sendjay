@@ -37,8 +37,8 @@ module.exports = async (pattern, channel, message) => {
 		} else if (_chan == 'sendto_myother_socket') { //from read_msg.js, delete_msg.js
 			obj = JSON.parse(message)
 			const othersocketid = obj.otherkey.split(ws.cons.easydeli)[1]
-			//const otherSocket = global.jay.sockets.get(othersocketid)
-			const otherSocket = await global.jay.adapter.sockets[othersocketid]
+			const otherSocket = global.jay.sockets.get(othersocketid)
+			//const otherSocket = await global.jay.adapter.sockets[othersocketid]
 			console.log("othersocketid", othersocketid)
 			if (otherSocket) {
 				console.log("yesyesyes")
