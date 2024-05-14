@@ -670,7 +670,8 @@ const getPortalList = async (obj) => {
     }
 }
 
-const getUnreadPerEachRoom = async (roomid, chkCloseNoti) => { //no unread display in case of invite/leave msg   
+const getUnreadPerEachRoom = async (roomid, chkCloseNoti) => { //no unread display in case of invite/leave msg  
+    if (roomid == g_focusedRoomid) return 
     if (!hush.http.chkOnline()) return 
     const rs = await hush.http.ajax("/msngr/qry_unread", { roomid : roomid })
     if (!hush.util.chkAjaxCode(rs, true)) return
