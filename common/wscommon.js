@@ -474,6 +474,7 @@ module.exports = (function() {
 			sendToMyOtherSocket : async (socket, param) => {
 				param.data.userid = socket.userid //see ChatService.kt
 				const otherUserkeySocket = await ws.redis.getMyOtherSocket(socket)
+				console.log("otherUserkeySocket", otherUserkeySocket)
 				if (otherUserkeySocket) ws.redis.pub('sendto_myother_socket', { socketid : socket.id, otherkey : otherUserkeySocket, param : param }) //call pmessage()
 			},
 			sendToRoom : (socket, roomid, param) => {
