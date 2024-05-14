@@ -471,7 +471,7 @@ module.exports = (function() {
 					}
 				}
 			}),
-			sendToMyOtherSocket : async (socket, param) => {
+			sendToMyOtherSocket : async (socket, param) => { //call pmessage()
 				param.data.userid = socket.userid //see ChatService.kt
 				const otherUserkeySocket = await ws.redis.getMyOtherSocket(socket)
 				console.log("otherUserkeySocket", otherUserkeySocket)
