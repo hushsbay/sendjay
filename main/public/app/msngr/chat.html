@@ -1533,8 +1533,7 @@
             }
 
             const chkTyping = () => {
-                if (sockConnected) { //instead of socket.volatile.emit()
-                    if (!hush.http.chkOnline()) return
+                if (sockConnected && hush.http.chkOnline()) { //instead of socket.volatile.emit()
                     const curTyping = g_in_chat.val().trim()
                     const disp = $("#typing_" + g_userid).css("display")
                     let rq
@@ -2030,7 +2029,7 @@
                 }
             }
 
-            const setFocusFromWebView = (from, focus) => {
+            const setFocusFromWebView = async (from, focus) => {
                 g_focus_for_webview = focus //when first loaded in webview, document.hasFocus() not working for read_msg(update). g_focus_for_webview is solution for that.
             }
 

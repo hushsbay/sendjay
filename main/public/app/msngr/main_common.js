@@ -871,6 +871,11 @@ const getRoomInfo = (roomid) => {
     if ($("#div_" + roomid).length > 0) getPortalList({ type: "row", roomid : roomid, replace: true })
 }
 
+const chkRoomFocus = () => { //웹에서만 호출. 앱에서의 채팅방이 현재 포커싱되어 있는지 파악해 웹에서 노티를 표시할지 여부를 결정하기 위함
+    if (hush.http.chkOnline()) hush.sock.send(g_socket, hush.cons.sock_ev_chk_roomfocus)
+    setTimeout(() => chkRoomFocus(), 3000)
+}
+
 function OnSearch(input) {
     if (input.value == "") {
         if (g_win_type == "invite" || g_win_type == "member" || g_win_type == "org") {
@@ -1022,7 +1027,10 @@ var funcSockEv = { //needs to be public
         setTimeout(function() {
             AndroidCom.reconnectDone()
         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
-    }
+    },
+    [hush.cons.sock_ev_chk_roomfocus] : (data) => {
+        console.log("2222222222222222222222222222")
+    },
 }
 
 const startMsngr = async (launch, winid) => {
@@ -1087,6 +1095,7 @@ const startMsngr = async (launch, winid) => {
                             getUnreadForAll() 
                             procSettingOnLoad(rs) //rsRedis 아님
                         }
+                        chkRoomFocus()
                     }
                 } else {
                     worker.terminate()
