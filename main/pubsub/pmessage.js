@@ -37,8 +37,13 @@ module.exports = async (pattern, channel, message) => {
 		} else if (_chan == 'sendto_myother_socket') { //from read_msg.js, delete_msg.js
 			obj = JSON.parse(message)
 			const othersocketid = obj.otherkey.split(ws.cons.easydeli)[1]
-			const otherSocket = global.jay.sockets.get(othersocketid)
-			if (otherSocket) otherSocket.emit(ws.cons.sock_ev_common, obj.param)
+			//const otherSocket = global.jay.sockets.get(othersocketid)
+			const otherSocket = await global.jay.adapter.sockets.get(othersocketid)
+			if (otherSocket) {
+				otherSocket.emit(ws.cons.sock_ev_common, obj.param)
+			} else {
+				console.log("nononono")
+			}
 		}
 	} catch (ex) {
 		global.logger.error(ex.stack) //아래 오류날 수 있으므로 미리 찍어두기
