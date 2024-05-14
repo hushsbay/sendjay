@@ -66,6 +66,7 @@ module.exports = (function() {
 			sock_ev_set_env : 'set_env',
 			sock_ev_chk_typing : 'chk_typing',
 			sock_ev_cut_mobile : 'cut_mobile',	
+			sock_ev_chk_roomfocus : 'chk_roomfocus',
 			max_diff_sec_worker : 5 * 2, //SEC in worker.js * 2		
 			max_days_to_fetch : -365, //For sql where
 			max_check_same_members : 50, //Consider up to 50 and no more. max 1500 bytes for members field in z_roommem_tbl. userid(20) + alpha = 21 * 50 = 1050 bytes.
