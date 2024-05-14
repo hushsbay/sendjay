@@ -379,11 +379,11 @@ module.exports = (function() {
 					throw new Error(ex)
 				}
 			},
-			sendToMyOtherSocket : async (socket, param) => { //call pmessage()
-				param.data.userid = socket.userid //see ChatService.kt
-				const otherUserkeySocket = await ws.redis.getMyOtherSocket(socket)
-				if (otherUserkeySocket) ws.redis.pub('sendto_myother_socket', { socketid : socket.id, otherkey : otherUserkeySocket, param : param }) //call pmessage()
-			},
+			// sendToMyOtherSocket : async (socket, param) => { //call pmessage()
+			// 	param.data.userid = socket.userid //see ChatService.kt
+			// 	const otherUserkeySocket = await ws.redis.getMyOtherSocket(socket)
+			// 	if (otherUserkeySocket) ws.redis.pub('sendto_myother_socket', { socketid : socket.id, otherkey : otherUserkeySocket, param : param }) //call pmessage()
+			// },
 		},
 
 		sock : {
