@@ -6,6 +6,7 @@ let g_mode, g_mode_people, g_win_type, g_setting = {}
 let g_list, g_page, g_cdt, g_searchmode, g_year, g_lastdt_for_toprow //g_lastdt_for_toprow = for mobil only
 let prevType = "", g_setting_changed = false
 let g_nodeIndent, portalListBeingQueried = false
+let g_focusedRoomid = ""
 
 const BTN_MODE_PEOPLE = "btn_people", BTN_MODE_CHAT = "btn_chat" //should be same as button id
 const BTN_PEOPLE_TEAM = "btn_team", BTN_PEOPLE_COMPANY = "btn_company" //should be same as button id
@@ -931,9 +932,9 @@ var funcSockEv = { //needs to be public
             } else {
                 const _win = hush.sock.rooms[data.roomid]
                 if (_win && !_win.closed) {
-                    if (!_win.document.hasFocus()) hush.noti.procNoti(data.roomid, data)
+                    if (!_win.document.hasFocus() && data.roomid != g_focusedRoomid) hush.noti.procNoti(data.roomid, data)
                 } else {
-                    hush.noti.procNoti(data.roomid, data)
+                    if (data.roomid != g_focusedRoomid) hush.noti.procNoti(data.roomid, data)
                 }
                 if (!runFromStandalone) return
                 getPortalList({ type: "row", roomid : data.roomid })
@@ -1032,7 +1033,12 @@ var funcSockEv = { //needs to be public
         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
     },
     [hush.cons.sock_ev_chk_roomfocus] : (data) => {
-        console.log("2222222222222222222222222222")
+        console.log("data.focusedRoomid"+"==="+data.focusedRoomid)
+        //focusedRoomid는 웹에서 앱으로 (단방향으로만) 요청하는 소켓정보임
+        //focusedRoomid가 빈칸이 아니면 현재 앱에서 해당 roomid로 챗방이 맨위에 열려 있고 스크린도 On 상태이어서
+        //톡을 보내면 웹과 앱이 모두 접속된 상태에서 앱에서는 계속 메시지가 읽음처리가 되므로 웹에서는 노티가 필요없게 됨. 
+        //그 반대의 경우는 앱에서 노티체크를 1초정도 delay시켜서 하기 때문에 웹에서 챗방에 포커스가 가 있으면 이미 읽음처리되므로 노티가 필요없게 됨
+        g_focusedRoomid = data.focusedRoomid
     },
 }
 

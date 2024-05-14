@@ -31,7 +31,6 @@ module.exports = async (pattern, channel, message) => {
 					prevSocket.disconnect() //redis 데이터 처리(multiDelForUserkeySocket())는 disconnect.js에서 담당
 				} //ws.sock.warn(null, prevSocket, _logTitle, 'telling previous Web socket to disconnect =>', prevsocketid, obj.userkey)
 			} else { //ws.sock.warn(null, null, _logTitle, 'no socket in this server =>', prevsocketid, obj.userkey)
-				console.log("prevSocket not found")
 				await ws.redis.multiDelGarbageForUserkeySocket(obj.prevkey, true) //소켓정보 없으므로 가비지로 처리 (every socket server)
 			}
 		} else if (_chan == 'sendto_myother_socket') { //from read_msg.js, delete_msg.js
