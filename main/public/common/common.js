@@ -418,7 +418,7 @@
             toastSecArr : [],
             toastProcessing : false,
             addHtml : (_type, _text, _callbackOk, _callbackCancel, _obj) => { //_obj (toast에는 미사용) : width, height, backColor, color
-                const maxWidth = (_obj && _obj.width) ? _obj.width : 400
+                const maxWidth = (_obj && _obj.width) ? _obj.width : 300
                 const maxHeight = (_obj && _obj.height) ? _obj.height : 600
                 const backColor = (_obj && _obj.backColor) ? _obj.backColor : "beige"
                 const color = (_obj && _obj.color) ? _obj.color : "black"
