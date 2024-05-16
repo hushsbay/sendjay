@@ -744,7 +744,10 @@
                     hush.msg.toast(hush.cons.NETWORK_UNAVAILABLE)
                     return
                 }
-                if (ex.message.includes("timeout")) { //ajax 타임아웃 : 1) 서버 다운 경우 2) 네트워크는 연결되어 있는데 원할치 못해 연결되지 않은 경우
+                //ajax 타임아웃 : 1) 서버다운 경우 2) 네트워크는 연결되어 있는데 원할치 못해 연결되지 않은 경우
+                //socket의 경우, PC 웹브라우저에서는 네트워크가 특별한 경우가 아니면 항상 연결되어 있는 상태이고 연결이 끊어지면 바로 웹브라우저탭에서 포털로 replace되도록 되어 있음
+                //그러나, 앱에서는 (웹뷰 포함) 네이티브(예: 안드로이드 코틀린)가 socket 통신을 처리하므로 웹뷰 클릭시 소켓이 끊어진 상태라면 오류 핸들링이 섬세하게 필요함
+                if (ex.message.includes("timeout")) {
                     if (title == "alert") {
                         hush.msg.alert(_msg)
                     } else if (title == "none") {
