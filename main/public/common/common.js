@@ -10,7 +10,7 @@
             MSG_NO_DATA : '데이터가 없습니다.',
             MSG_NO_MORE_DATA : '더 이상 데이터가 없습니다.',
             NETWORK_UNAVAILABLE : '네트워크가 연결되어 있지 않습니다.',
-            NETWORK_UNSTABLE : '네트워크가 원할하지 않거나 서버 작업중입니다.', //타임아웃시 (서버 다운 포함해 네트워크는 연결되어 있는데 원할치 못해 연결되지 않은 경우임)
+            NETWORK_UNSTABLE : '네트워크가 원할하지 않거나 서버 작업중입니다.',
             toast_prefix : "##$$", 
             ///////////////////////////////////위는 서버와 동일
             erp_portal : "index.html",
@@ -736,14 +736,20 @@
                 if (typeof obj == "undefined" || obj == null) return true
                 return false
             },
-            showEx : async (ex, title, _msgType, _sec) => {
+            showEx : (ex, title, _msgType, _sec) => {
                 hush.msg.toastEnd() //예외 발생시므로 혹시나 모를 토스트 메시지 제거
-                if (ex.message.includes(hush.cons.NETWORK_UNAVAILABLE)) {
+                if (ex.message.includes(hush.cons.NETWORK_UNAVAILABLE)) { //hush.http.ajax() 참조
                     hush.msg.toast(hush.cons.NETWORK_UNAVAILABLE)
                     return
                 }
-                if (ex.message.includes("timeout")) {
-                    hush.msg.toast(hush.cons.NETWORK_UNSTABLE)
+                if (ex.message.includes("timeout")) { //타임아웃 : 1) 서버 다운 경우 2) 네트워크는 연결되어 있는데 원할치 못해 연결되지 않은 경우
+                    if (title == "alert") {
+                        hush.msg.alert(_msg)
+                    } else if (title == "none") {
+                        //반복적으로 ajax 호출인 경우 timeout시 아무런 오류메시지 안보여줘야 할 때가 있을 때 사용 (예: chk_redis)
+                    } else {
+                        hush.msg.toast(hush.cons.NETWORK_UNSTABLE, 3)
+                    }
                     return
                 }
                 const _title = title ? "[" + title + "]<br>" : ""
@@ -762,7 +768,7 @@
                 if (_msgType == "toast") {
                     hush.msg.toast(_msg, _sec)
                 } else if (_msgType == "alert") {
-                    await hush.msg.alert(_msg) //Promise
+                    hush.msg.alert(_msg) //Promise
                 } else {
                     hush.msg.msg(_msg) //기본은 비동기콜백 처리
                 }
