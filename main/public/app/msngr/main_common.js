@@ -35,7 +35,7 @@ const procScrollEvent = () => {
 
 const procMenuTop = async (_mode, _mode_people) => {
     try {
-        if (!hush.http.chkOnline("toast")) return
+        if (!hush.http.chkOnline()) return
         g_mode = (_mode) ? _mode : BTN_MODE_PEOPLE
         $(".coNav").removeClass("coNavSelected")
         $(".coMenuBtn").hide()
@@ -90,7 +90,7 @@ const procMenuTop = async (_mode, _mode_people) => {
 
 const procMenuPeople = (_mode, popup) => {
     try {
-        if (!hush.http.chkOnline("toast")) return
+        if (!hush.http.chkOnline()) return
         $("#in_search").val("")
         g_mode_people = (_mode) ? _mode : BTN_PEOPLE_TEAM
         if (g_mode_people == BTN_PEOPLE_TEAM) {
@@ -172,7 +172,7 @@ const procSelect = (_userid) => {
 }
 
 const procSearch = () => {
-    if (!hush.http.chkOnline("toast")) return
+    if (!hush.http.chkOnline()) return
     const keyword = $("#in_search").val().trim()
     if (keyword.length == 0) {
         hush.msg.toast(hush.cons.msg.blank_requested)
@@ -651,7 +651,7 @@ const getPortalList = async (obj) => {
         //if (obj.type == "normal" && g_cdt != FIRST_QUERIED && lastRoomid != "") hush.util.animCall(lastRoomid, true) //tells if next fetch exists
         const _tag = (obj.roomid) ? "#div_" + obj.roomid : ".div_row" //const _tag = (obj.roomid) ? "#subdiv_" + obj.roomid : ".row_portal"
         $(_tag).off("click").on("click", function(e) {
-            if (!hush.http.chkOnline("toast")) return
+            if (!hush.http.chkOnline()) return
             hush.util.animBgColor($(this))
             if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 event가 먹히도록 함
             const _id = this.id            
@@ -672,7 +672,7 @@ const getPortalList = async (obj) => {
 
 const getUnreadPerEachRoom = async (roomid, chkCloseNoti) => { //no unread display in case of invite/leave msg  
     if (roomid == g_focusedRoomid) return 
-    if (!hush.http.chkOnline()) return 
+    if (!hush.http.chkOnline("none")) return 
     const rs = await hush.http.ajax("/msngr/qry_unread", { roomid : roomid })
     if (!hush.util.chkAjaxCode(rs, true)) return
     if (rs.list[0] && rs.list[0].UNREAD) {
@@ -718,7 +718,7 @@ const getUnreadForAll = async () => {
     //여기 getUnreadForAll()는 앱에서는 최초 연결시, 웹에서는 채팅탭이 아닌 다른 탭이 열릴 때 돌아가는 것임
     //따라서, 앱에서 최초 연결시 결과와 그 외의 결과는 달라야 함. 
     try { //예를 들어, 안드로이드 ChatService.kt에서 먼저 qry_unread로 LASTCHKDT 필드 업데이트하면 PC브라우저에서는 안읽은 톡 정보 없는 것으로 나타날 것임 
-        if (!hush.http.chkOnline()) return
+        if (!hush.http.chkOnline("none")) return
         const rs = await hush.http.ajax("/msngr/qry_unread", {})
         if (!hush.util.chkAjaxCode(rs, true)) return
         const _len = rs.list.length
@@ -873,7 +873,7 @@ const getRoomInfo = (roomid) => {
 }
 
 const chkRoomFocus = () => { //웹에서만 호출. 앱에서의 채팅방이 현재 포커싱되어 있는지 파악해 웹에서 노티를 표시할지 여부를 결정하기 위함
-    if (hush.http.chkOnline()) {
+    if (hush.http.chkOnline("none")) {
         hush.sock.send(hush.socket, hush.cons.sock_ev_chk_roomfocus, { })
         console.log("chkRoomFocus")
     }
@@ -1086,7 +1086,7 @@ const startMsngr = async (launch, winid) => {
                 }
                 let _type = (winid && runFromStandalone && prevType == "") ? "set_new" : "chk_embeded" //set_new는 standalone일 때만 처음 한번만 설정됨. 그 다음부터는 무조건 chk_embeded
                 prevType = _type //동일 브라우저내에서 윈도우(탭)끼리 (offline)경합을 벌여 1등이 되면 http call을 통해 각 브라우저의 1등끼리 (online)경합으로 최종 winner를 결정
-                if (!hush.http.chkOnline()) return
+                if (!hush.http.chkOnline("none")) return
                 const rsRedis = await hush.http.ajax("/msngr/chk_redis", { type : _type, userkey : g_userkey, winid : winid }, true)
                 if (rsRedis.code == hush.cons.CODE_OK) { //console.log(_type+"==="+e.data.winid+"==="+rs1.result+"==="+rs1.ip)
                     if (!rsRedis.result) return //watch out for stream.on('end') in chk_redis.js
@@ -1145,7 +1145,7 @@ const SetUserVar = () => { //편의상 한번 더 g_로 set
 const initStandAlone = (rs) => { //임베디드가 아닐 경우임. rs from hush.auth.verifyUser(true)
     procSetting("load", rs, true)
     procScrollEvent()
-    if (!hush.http.chkOnline("toast")) return
+    if (!hush.http.chkOnline()) return
     procMenuTop(hush.http.getCookie("mode"))
     if (g_mode != BTN_MODE_CHAT) getUnreadForAll()
     $("#header_title").html(g_usernm + ((rs.NICK_NM != "") ? " [" + rs.NICK_NM + "]" : ""))
@@ -1178,7 +1178,7 @@ function toggleDisconnIcon(show) { //hush.msg.toast("disconnected", false, true)
 ////////////////////////////////////////////////////////////////////////mobile webview
 const startFromWebView = (from, obj, rs) => {
     try { //alert(navigator.userAgent) - 안드로이드 웹뷰인데도 Dalvik이라고 나오지는 않음
-        if (!hush.http.chkOnline("toast")) return
+        if (!hush.http.chkOnline()) return
         hush.auth.setCookieForUser(obj, true)        
         hush.auth.setUser(obj.token)        
         SetUserVar()
@@ -1205,7 +1205,7 @@ const getFromWebViewSocket = (from, json) => {
 }
 
 const newchat = (from, obj) => { 
-    if (!hush.http.chkOnline("toast")) return
+    if (!hush.http.chkOnline()) return
     procNewChat(obj.userids.split(hush.cons.deli))
 }
 ////////////////////////////////////////////////////////////////////////

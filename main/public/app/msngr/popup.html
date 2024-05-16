@@ -63,7 +63,7 @@
         ////////////////////////////////////////////////////////////////////////mobile webview
         const startFromWebView = (from, obj, rs) => {
             try {
-                if (!hush.http.chkOnline("toast")) return
+                if (!hush.http.chkOnline()) return
                 hush.auth.setCookieForUser(obj, true)
                 hush.auth.setUser(obj.token)
                 g_added = rs
@@ -125,7 +125,7 @@
                 } //if (hush.webview.on) AndroidPopup.procAfterOpenPopup()
                 hush.webview.ready = true
                 $("#btn_save").on("click", function() { //called from mobile app
-                    if (!hush.http.chkOnline("toast")) return
+                    if (!hush.http.chkOnline()) return
                     hush.util.animBgColor($(this))
                     if (g_type == "image") {
                         hush.http.fileDownload("imagetofile", g_msgid)

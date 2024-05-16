@@ -15,7 +15,7 @@
             ///////////////////////////////////위는 서버와 동일
             erp_portal : "index.html",
             failOnLoad : "failOnLoad",
-            restful_timeout : 10000,
+            restful_timeout : 8000, //실제로는 1~2초정도의 시간이 추가 소요되는 경험상 8초 정도로 설정해 10초 느낌이 나게 함
             pattern : /^[A-Za-z0-9!@#$=]*$/, //들어있는 항목 이외는 사용 금지
             color_fadein : "#b2e2f8",
             ext_image : "png,gif,jpg,jpeg,ico",
@@ -236,12 +236,14 @@
             },
         },
         http : {
-            chkOnline : (verbose) => {
+            chkOnline : (verbose) => { //소켓과 ajax 모두 적용
                 if (navigator.onLine) return true
-                if (verbose == "toast") {
-                    hush.msg.toast(hush.cons.NETWORK_UNAVAILABLE)
+                if (verbose == "none") {
+                    //반복적으로 호출인 경우 아무런 오류메시지 안보여줘야 할 때가 있을 때 사용
                 } else if (verbose == "alert") {
                     hush.msg.alert(hush.cons.NETWORK_UNAVAILABLE)
+                } else {
+                    hush.msg.toast(hush.cons.NETWORK_UNAVAILABLE, 3)
                 }
                 return false
             },
@@ -742,7 +744,7 @@
                     hush.msg.toast(hush.cons.NETWORK_UNAVAILABLE)
                     return
                 }
-                if (ex.message.includes("timeout")) { //타임아웃 : 1) 서버 다운 경우 2) 네트워크는 연결되어 있는데 원할치 못해 연결되지 않은 경우
+                if (ex.message.includes("timeout")) { //ajax 타임아웃 : 1) 서버 다운 경우 2) 네트워크는 연결되어 있는데 원할치 못해 연결되지 않은 경우
                     if (title == "alert") {
                         hush.msg.alert(_msg)
                     } else if (title == "none") {
