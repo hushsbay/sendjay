@@ -10,6 +10,7 @@
             MSG_NO_DATA : '데이터가 없습니다.',
             MSG_NO_MORE_DATA : '더 이상 데이터가 없습니다.',
             NETWORK_UNAVAILABLE : '네트워크가 연결되어 있지 않습니다.',
+            NETWORK_UNSTABLE : '네트워크가 원할하지 않거나 서버 작업중입니다.', //타임아웃시 (서버 다운 포함해 네트워크는 연결되어 있는데 원할치 못해 연결되지 않은 경우임)
             toast_prefix : "##$$", 
             ///////////////////////////////////위는 서버와 동일
             erp_portal : "index.html",
@@ -739,6 +740,10 @@
                 hush.msg.toastEnd() //예외 발생시므로 혹시나 모를 토스트 메시지 제거
                 if (ex.message.includes(hush.cons.NETWORK_UNAVAILABLE)) {
                     hush.msg.toast(hush.cons.NETWORK_UNAVAILABLE)
+                    return
+                }
+                if (ex.message.includes("timeout")) {
+                    hush.msg.toast(hush.cons.NETWORK_UNSTABLE)
                     return
                 }
                 const _title = title ? "[" + title + "]<br>" : ""
