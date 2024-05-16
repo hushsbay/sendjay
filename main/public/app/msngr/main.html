@@ -154,7 +154,7 @@
                             }
                         })
                         $("#btn_noti").on("click", function() { 
-                            debugger
+                            alert("1111")
                             hush.util.animBgColor($(this))
                             const checked = $(".chkbox_portal:checked")
                             if (checked.length == 0) {
@@ -170,7 +170,7 @@
                                 } else if (hush.webview.and) {                                     
                                     AndroidCom.send(hush.cons.sock_ev_set_env, JSON.stringify(rq), "parent", null, false) //procMsg=false
                                 } else {
-                                    debugger
+                                    alert("11112222")
                                     hush.sock.send(hush.socket, hush.cons.sock_ev_set_env, rq, "parent")
                                 }
                             })
