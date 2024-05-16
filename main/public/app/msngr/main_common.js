@@ -1117,6 +1117,7 @@ const startMsngr = async (launch, winid) => {
                 console.log(e.data.code + "===" + e.data.msg)
             }
         } catch (ex) {
+            console.log("===0000000000000000")
             worker.terminate()
             hush.util.showEx(ex)
         }
