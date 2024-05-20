@@ -14,6 +14,7 @@ router.post('/', async function(req, res) {
 	try {
 		const rs = ws.http.resInit()
 		const { device, work, state, dur, cdt, udt } = req.body
+		console.log(cdt, udt, dur)
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
 		const userid = objToken.userid
