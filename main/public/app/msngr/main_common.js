@@ -183,10 +183,9 @@ const procSearch = () => {
         $("#btn_collapseall").hide()
         $("#btn_expandall").hide()
         getMembers("search", keyword)
-    } else {			
-        getPortalList({ type: "search", keyword : keyword})
-    }
-    $("#btn_close_search").show()
+    } else {
+        getPortalList({ type: "search", keyword : keyword})        
+    }    
     setTimeout(() => $("#in_search").blur(), 500)
 }
 
@@ -594,7 +593,10 @@ const getPortalList = async (obj) => {
             portalListBeingQueried = false
             return
         }
-        if (obj.type == "search") g_searchmode = true
+        if (obj.type == "search") {
+            g_searchmode = true
+            $("#btn_close_search").show()
+        }
         if (obj.type == "normal" && g_cdt == FIRST_QUERIED) g_list.empty()
         for (let i = 0; i < _len; i++) {
             const row = rs.list[i]
