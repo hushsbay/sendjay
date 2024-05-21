@@ -254,7 +254,7 @@
                         hush.util.animBgColor($(this))
                         $("#in_search").val("")
                         $("#btn_close_search").hide()
-                        OnSearch("")
+                        OnSearch(document.getElementById("in_search"))
                     })
                     $("#remove_selected_people").on("click", function() {
                         hush.util.animBgColor($(this))
