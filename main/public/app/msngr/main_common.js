@@ -39,6 +39,7 @@ const procMenuTop = async (_mode, _mode_people) => {
         g_mode = (_mode) ? _mode : BTN_MODE_PEOPLE
         $(".coNav").removeClass("coNavSelected")
         $(".coMenuBtn").hide()
+        $("btn_close_search").hide()
         if (g_mode == BTN_MODE_PEOPLE) {
             $("#fr_menu_top").css("display", "flex")
             $("#fr_people").css("display", "flex")
