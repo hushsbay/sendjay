@@ -555,6 +555,7 @@ const getPortalList = async (obj) => {
         if (obj.type == "search") {
             g_list.empty()
             rq.keyword = encodeURIComponent(obj.keyword)
+            $("#btn_close_search").show()
         } else if (obj.type == "row") {
             rq.roomid = obj.roomid
             noToast = true
@@ -593,10 +594,7 @@ const getPortalList = async (obj) => {
             portalListBeingQueried = false
             return
         }
-        if (obj.type == "search") {
-            g_searchmode = true
-            $("#btn_close_search").show()
-        }
+        if (obj.type == "search") g_searchmode = true
         if (obj.type == "normal" && g_cdt == FIRST_QUERIED) g_list.empty()
         for (let i = 0; i < _len; i++) {
             const row = rs.list[i]
