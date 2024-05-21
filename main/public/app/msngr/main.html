@@ -250,6 +250,12 @@
                         hush.util.animBgColor($(this))
                         procSearch() 
                     })
+                    $("#btn_close_search").on("click", function() {
+                        hush.util.animBgColor($(this))
+                        $("#in_search").val("")
+                        $("#btn_close_search").hide()
+                        setTimeout(() => $("#in_search").blur(), 500)
+                    })
                     $("#remove_selected_people").on("click", function() {
                         hush.util.animBgColor($(this))
                         $("#select_people_sub").empty()
@@ -504,6 +510,7 @@
                 <input type=checkbox id=chk_selectall name=chk_selectall style="margin-left:10px" />
                 <input id=in_search type=search spellcheck=false onsearch="OnSearch(this)" style="font-size:10px;margin-left:10px" />
                 <div id=btn_search class=coImgBtn><img src="/img/white_search.png" class=coImg24 /></div>
+                <div id=btn_close_search class=coMenuFlat style="display:none"><img src="/img/close.png" class=coImg16 /></div>
                 <div id=btn_team class="coMenuBtn people" style="display:none"><img src="/img/white_team.png" class=coImgMenu /><span class=coText>내팀</span></div>            
                 <div id=btn_company class="coMenuBtn people" style="display:none"><img src="/img/white_company.png" class=coImgMenu /><span class=coText>조직</span></div>
                 <div id=btn_collapseall style="display:none;margin-left:10px"><img src="/img/minus.png" class=coImg32 /></div>

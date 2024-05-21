@@ -185,6 +185,7 @@ const procSearch = () => {
     } else {			
         getPortalList({ type: "search", keyword : keyword})
     }
+    $("#btn_close_search").show()
     setTimeout(() => $("#in_search").blur(), 500)
 }
 
@@ -565,9 +566,8 @@ const getPortalList = async (obj) => {
             rq.cnt = hush.cons.fetch_cnt_list //if (g_cdt == FIRST_QUERIED) g_list.empty()
         }
         const rs = await hush.http.ajax("/msngr/qry_portal", rq, noToast)
-        debugger
-        if (rs.code != hush.cons.CODE_OK && rs.code != hush.cons.CODE_NO_DATA) {
-            await hush.msg.alert("getPortalList: " + rs.msg)
+        if (rs.code != hush.cons.CODE_OK) {
+            hush.msg.showMsg(rs.msg, rs.code)
             if ($("#getmore").length > 0) $("#getmore").remove()
             portalListBeingQueried = false
             return
