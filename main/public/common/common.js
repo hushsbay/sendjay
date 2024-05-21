@@ -382,7 +382,6 @@
                 if (!hush.idb.db) {
                     let conn = indexedDB.open("jay_mobile", 1) //Increment will trigger conn.onupgradeneeded (add version number if upgrade needed)
                     conn.onerror = function() {	
-                        debugger
                         if (callback) callback({ code : "idb_conn_err", msg : "IndexedDB connect error: " + conn.errorCode })
                     }
                     conn.onupgradeneeded = function(e) { //field(roomid, msgid, body, sent, cdt)
