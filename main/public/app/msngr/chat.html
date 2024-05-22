@@ -211,7 +211,7 @@
                                     await hush.msg.alert("방장인 경우만 처리 가능합니다.")
                                     return
                                 }
-                                if (_userid != g_userid) {
+                                if (_userid == g_userid) {
                                     await hush.msg.alert("본인을 강제퇴장처리할 수 없습니다.")
                                     return
                                 }
