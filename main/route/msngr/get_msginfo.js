@@ -113,7 +113,7 @@ router.get('/', async function(req, res) {
 			if (ret != '') throw new Error(ret)
 			rs.list = data
 			if (type == 'imagetofile') {
-				const filename = com.cons.title + '_' + suffix + com.cons.sublink_result_img //same as mobile app (file download for webview)
+				const filename = ws.cons.title + '_' + suffix + ws.cons.sublink_result_img //same as mobile app (file download for webview)
 				const buf = Buffer.from(new Uint8Array(rs.buffer))
 				const filePath = config.app.uploadPath + '/' + filename
 				const writer = fs.createWriteStream(filePath)
@@ -123,7 +123,7 @@ router.get('/', async function(req, res) {
 					const mimetype = mime.getType(filename)
 					res.setHeader('Content-type', mimetype)
 					res.download(filePath, filename, (err) => { //res.setHeader('Content-disposition', 'attachment; filename=' + filename)
-						if (err) ws.log.ex(req, err, _logTitle)
+						if (err) ws.util.loge(req, err)
 						fs.unlink(filePath, () => { })
 					})
 				})

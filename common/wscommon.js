@@ -38,6 +38,7 @@ module.exports = (function() {
 			memdeli : ' / ',
 			keydeli : KEYDELI, 
 			/////////////////////////////////////////////아래는 메신저 관련
+			title : 'sendjay',
 			w_key : 'W' + KEYDELI, //Web userkey
 			m_key : 'M' + KEYDELI, //Mobile userkey
 			prefix : PREFIX, //for redis
