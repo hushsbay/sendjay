@@ -291,7 +291,6 @@
                     $(".result").off("click").on("click", function(e) { 
                         hush.util.animBgColor($(this))
                         //procHighlight($(this))    
-                        debugger                    
                         $(this).css("background", hush.cons.result_highlight)
                         const start = $(this).data("cdt")
                         if (start >= g_cdt) {
@@ -307,6 +306,7 @@
                             return
                         }
                         const end = g_cdt
+                        debugger
                         getMsgList("result", null, start, end)
                         if ($(this).data("top") == "Y") {
                             $("#getprev").data("cdt", $(this).data("cdt"))
@@ -834,7 +834,6 @@
                             }
                             _prev_read = obj.state
                         }
-                        debugger
                         if (rq.type == "result") {
                             const msgid = rs.list[rs.list.length - 1].MSGID
                             procHighlight($("#high_" + msgid))
