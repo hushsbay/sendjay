@@ -114,7 +114,7 @@ router.get('/', async function(req, res) {
 			rs.list = data
 			if (type == 'imagetofile') {
 				const filename = ws.cons.title + '_' + suffix + ws.cons.sublink_result_img //same as mobile app (file download for webview)
-				const buf = Buffer.from(new Uint8Array(rs.buffer))
+				const buf = Buffer.from(new Uint8Array(data[0].BUFFER))
 				const filePath = config.app.uploadPath + '/' + filename
 				const writer = fs.createWriteStream(filePath)
 				writer.write(buf)
