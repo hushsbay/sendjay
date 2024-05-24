@@ -280,12 +280,12 @@
                             body = row.BODY
                         }
                         const _top = (i == 0) ? "Y" : ""
-                        let _html = "<div id=res_" + msgid + " class=result data-top='" + _top + "' data-cdt='" + cdt + "' style='cursor:pointer'>"
-                        _html += "      <div style='height:18px;font-size:8px;display:flex;align-items:center;margin-left:3px'>" + (i + 1).toString() + ")" + cdt1 + "</div>"
-                        _html += "      <div class='coDotDot coText1' style='height:20px;color:#005192;margin-left:3px'>" + body + "</div>"
+                        let _html = "<div id=res_" + msgid + " class=result data-top='" + _top + "' data-cdt='" + cdt + "' title='" + body + "' style='cursor:pointer'>"
+                        _html += "      <div style='height:18px;font-size:8px;display:flex;align-items:center;margin-left:3px'>" + cdt1 + "</div>"
+                        _html += "      <div class='coDotDot coText1' style='height:20px;color:#005192;margin-left:3px'>" + (i + 1).toString() + ") " + body + "</div>"
                         _html += "  </div>"
                         list.append(_html)
-                    }                
+                    }
                     $("#result_cnt").html(_len) 
                     list.scrollTop(list.prop("scrollHeight")) 
                     $(".result").off("click").on("click", function(e) { 
