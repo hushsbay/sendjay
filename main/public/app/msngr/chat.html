@@ -291,7 +291,7 @@
                     $(".result").off("click").on("click", function(e) { 
                         hush.util.animBgColor($(this))
                         //procHighlight($(this))
-                        obj.css("background", hush.cons.result_bgcolor)
+                        $(this).css("background", hush.cons.result_bgcolor)
                         const start = $(this).data("cdt")
                         if (start >= g_cdt) {
                             const _id = this.id.substring(4)
