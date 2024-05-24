@@ -290,7 +290,8 @@
                     list.scrollTop(list.prop("scrollHeight")) 
                     $(".result").off("click").on("click", function(e) { 
                         hush.util.animBgColor($(this))
-                        //procHighlight($(this))                        
+                        //procHighlight($(this))    
+                        debugger                    
                         $(this).css("background", hush.cons.result_highlight)
                         const start = $(this).data("cdt")
                         if (start >= g_cdt) {
