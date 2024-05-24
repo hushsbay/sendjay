@@ -5,7 +5,7 @@ const fs = require('fs')
 const mime = require('mime')
 const express = require('express')
 const router = express.Router()
-//1) Image downloading 2) Checking sending failure
+//1) Image downloading 2) Checking sending failure 3) 이미지를 파일로 만들어 다운로드
 
 router.use(function(req, res, next) {
 	req.title = 'get_msginfo'
@@ -91,7 +91,7 @@ router.post('/', async function(req, res) {
 	}
 })
 
-router.get('/', async function(req, res) {
+router.get('/', async function(req, res) { //chat.html의 hush.http.fileDownload("imagetofile", obj.msgid) 참조 : 이미지를 파일로 만들어 다운로드 (PC 및 모바일)
 	let conn, sql, data, len
 	try {
 		const rs = ws.http.resInit()
@@ -106,10 +106,9 @@ router.get('/', async function(req, res) {
 			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true) //true=toast
 			return
 		}
-		if (data[0].TYPE == 'image') {
-			const ret = await ws.util.chkAccessUserWithTarget(conn, userid, msgid, '')
-			if (ret != '') throw new Error(ret)
-			rs.list = data
+		const ret = await ws.util.chkAccessUserWithTarget(conn, userid, msgid, '')
+		if (ret != '') throw new Error(ret)
+		if (data[0].TYPE == 'image') {			
 			if (type == 'imagetofile') {
 				const filename = ws.cons.title + '_' + suffix + ws.cons.sublink_result_img //same as mobile app (file download for webview)
 				const buf = Buffer.from(new Uint8Array(data[0].BUFFER))
@@ -125,10 +124,11 @@ router.get('/', async function(req, res) {
 						fs.unlink(filePath, () => { })
 					})
 				})
-			} else {
+			} else { //현재 여기로 올 일 없음
+				rs.list = data
 				ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
 			}
-		}
+		} //현재 else case 없음
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
 	} finally {
