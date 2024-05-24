@@ -281,7 +281,7 @@
                         }
                         const _top = (i == 0) ? "Y" : ""
                         let _html = "<div id=res_" + msgid + " class=result data-top='" + _top + "' data-cdt='" + cdt + "' style='cursor:pointer'>"
-                        _html += "      <div style='height:18px;font-size:8px;display:flex;align-items:center;margin-left:3px'>" + cdt1 + "</div>"
+                        _html += "      <div style='height:18px;font-size:8px;display:flex;align-items:center;margin-left:3px'>" + (i + 1).toString + ")" + cdt1 + "</div>"
                         _html += "      <div class='coDotDot coText1' style='height:20px;color:#005192;margin-left:3px'>" + body + "</div>"
                         _html += "  </div>"
                         list.append(_html)
@@ -312,7 +312,8 @@
                         }
                     })
                     $("#res_" + data.list[_len - 1].MSGID).click()
-                    $("#getprev").off("click").on("click", function(e) { 
+                    $("#getprev").off("click").on("click", function(e) { //검색결과는 한번에 조회해서 이전 페이지 추가 표시하는 기능 등이 없음
+                        //따라서, 여기 getPrev는 검색결과중 제일 오래된 일시의 톡 이전 내용을 보고자 할 때 누르면 그 내용을 보여 주는 기능임
                         hush.util.animBgColor($(this))
                         g_cdt = $(this).data("cdt")
                         getMsgList()
