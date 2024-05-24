@@ -258,7 +258,7 @@
             const setResult = (data) => {            
                 try {
                     const list = $("#result_sub")
-                    list.append("<div id=getprev class=coText1 style='display:none;text-align:center;background-color:#005192;color:white;cursor:pointer;padding:2px 0px;margin:4px 4px 0px 4px'>이전내용보기</div>")
+                    list.append("<div id=getprev class=coText1 style='display:none;text-align:center;background-color:#005192;color:white;cursor:pointer;padding:2px 0px;margin:4px 4px 0px 4px'>이전톡보기</div>")
                     const _len = data.list.length
                     for (let i = 0; i < _len; i++) {
                         const row = data.list[i]
@@ -308,12 +308,12 @@
                         getMsgList("result", null, start, end)
                         if ($(this).data("top") == "Y") {
                             $("#getprev").data("cdt", $(this).data("cdt"))
-                            setTimeout(() => $("#getprev").show(), 1000)
+                            setTimeout(() => $("#getprev").show(), 500)
                         }
                     })
                     $("#res_" + data.list[_len - 1].MSGID).click()
                     $("#getprev").off("click").on("click", function(e) { //검색결과는 한번에 조회해서 이전 페이지 추가 표시하는 기능 등이 없음
-                        //따라서, 여기 getPrev는 검색결과중 제일 오래된 일시의 톡 이전 내용을 보고자 할 때 누르면 그 내용을 보여 주는 기능임
+                        //따라서, 여기 getPrev는 검색결과중 제일 오래된 톡보다 이전 내용을 보고자 할 때 누르면 그 내용을 보여 주는 기능임
                         hush.util.animBgColor($(this))
                         g_cdt = $(this).data("cdt")
                         getMsgList()
