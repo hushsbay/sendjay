@@ -834,6 +834,7 @@
                             }
                             _prev_read = obj.state
                         }
+                        debugger
                         if (rq.type == "result") {
                             const msgid = rs.list[rs.list.length - 1].MSGID
                             procHighlight($("#high_" + msgid))
