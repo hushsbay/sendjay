@@ -34,7 +34,7 @@ sub.psubscribe(ws.cons.pattern, (err, count) => { console.log('ioredis psubscrib
 sub.on('pmessage', (pattern, channel, message) => { require(DIR_PUBSUB + 'pmessage')(pattern, channel, message) })
 sub.on('error', err => { console.error('ioredis sub error:', err.stack) })
 //현재 Redis가 멀티서버에서의 소켓연결정보 관리에만 사용중이므로 NodeJS 재시작시 해당 redis데이터베이스내 데이터를 모두 지우는 것이 가비지정리 등에도 좋을 것임
-if (config.redis.flush == 'Y') global.store.flushdb(function(err, result) { console.log('redis db flushed :', result) }) //Only one server flushes db (config.redis.flush == 'Y')
+if (config.app.mainserver == 'Y') global.store.flushdb(function(err, result) { console.log('redis db flushed :', result) })
 
 //3. Socket Server (with Redis Adapter)
 const appSocket = ws.util.initExpressApp()
@@ -127,22 +127,25 @@ rt = [
 ] 
 for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/msngr/' + rt[i])) 
 
-//proc()
-// async function proc() { chk_alive()의 sockets를 막은 이유와 동일함
-//     const sockets = await global.jay.adapter.sockets(new Set()) //https://socket.io/docs/v4/adapter/
-// 	//const sockets1 = await global.jay.sockets //위 아래 둘 다 각 서버의 소켓 카운트만 가능
-//     //console.log('socket count :', sockets.size) //, sockets1.size)
-// 	const stream = global.store.scanStream({ match : ws.cons.key_str_socket + '*', count: ws.cons.scan_stream_cnt })
-// 	stream.on('data', (resultKeys) => {
-// 		for (let key of resultKeys) {
-// 			const obj = ws.redis.getUserkeySocketIdFromKey(key)
-// 			if (sockets.has(obj.socketid)) {
-// 				const socket = global.jay.sockets.get(obj.socketid)
-// 				//console.log('socket :', socket.id, socket.userkey, socket.userip, socket.winid)
-// 			}
-// 		}
-// 	})
-//     setTimeout(() => { proc() }, 5000)
-// }
+proc()
+async function proc() {
+    const sockets = await global.jay.adapter.sockets(new Set()) //https://socket.io/docs/v4/adapter/
+	//const sockets1 = await global.jay.sockets //위 아래 둘 다 각 서버의 소켓 카운트만 가능
+    //console.log('socket count :', sockets.size) //, sockets1.size)
+	const stream = global.store.scanStream({ match : ws.cons.key_str_socket + '*', count: ws.cons.scan_stream_cnt })
+	stream.on('data', (resultKeys) => {
+		for (let key of resultKeys) {
+			const obj = ws.redis.getUserkeySocketIdFromKey(key)
+			if (sockets.has(obj.socketid)) {
+				const socket = global.jay.sockets.get(obj.socketid)
+				console.log('socket :', socket.id, socket.userkey, socket.userip, socket.winid)
+			}
+		}
+	})
+	if (config.app.mainserver == 'Y') {
+		
+	}
+    setTimeout(() => { proc() }, 5000)
+}
 
 ws.util.watchProcessError()

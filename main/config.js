@@ -12,7 +12,7 @@ module.exports = {
     },
 	redis : {
 		db : process.env.REDIS_DB,
-		flush : process.env.REDIS_FLUSH_SERVER 
+		//flush : process.env.REDIS_FLUSH_SERVER 
 	},
 	app : {
 		nodeConfig : process.env.NODE_CONFIG,
@@ -22,6 +22,7 @@ module.exports = {
 		corsSocket : 'https://hushsbay.com', //Non-array type. Same origin should be here
 		wslogger : process.env.MODULE_LOGGER,
 		logPath : process.env.LOG_PATH,
+		mainserver : process.env.MAIN_SERVER,
 		uploadPath : process.env.UPLOAD_PATH,
 		ffmpegPath : process.env.FFMPEG_PATH,
 	}
