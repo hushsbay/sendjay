@@ -1197,7 +1197,7 @@ const startFromWebView = (from, obj, rs) => {
     }
 }
 
-const getFromWebViewSocket = (from, json) => {
+const getFromWebViewSocket = (from, json) => { //MainActivity.kt의 procAfterOpenMain() 설명 참조
     try { //모든 event data object는 여기로 (undefined 포함)
         if (!funcSockEv || !funcSockEv[json.ev]) return
         funcSockEv[json.ev].call(null, json.data)
