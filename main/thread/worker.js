@@ -37,10 +37,10 @@ async function proc() {
         data = await wsmysql.query(conn, sql, [ws.cons.max_hours_to_endure_upload])
         _len = data.length
         for (let i = 0; i < _len; i++) {
-            const _msgid = data1[i].MSGID
-            const _roomid = data1[i].ROOMID
-            const _senderid= data1[i].SENDERID
-            const _filename = data1[i].BODY
+            const _msgid = data[i].MSGID
+            const _roomid = data[i].ROOMID
+            const _senderid= data[i].SENDERID
+            const _filename = data[i].BODY
             const _path = config.app.uploadPath + '/' + _roomid + '/' + _senderid + "/" + _filename
             const sql2 = "SELECT COUNT(*) CNT FROM A_MSGMST_TBL WHERE MSGID = ? AND ROOMID = ? AND BODY LIKE '%" + _filename + "%' "
             const data2 = await wsmysql.query(conn, sql2, [_msgid, _roomid])
