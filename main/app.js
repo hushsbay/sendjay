@@ -175,6 +175,7 @@ for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/
 // 		global.logger.error(data.ev + ': error\n' + ex.stack)
 // 	}
 // })
+console.log(config.app.mainserver, "!!!")
 if (config.app.mainserver == 'Y') {
 	const worker = new Worker('./thread/worker.js')
 	//현재 리턴되는 메시지 없음
