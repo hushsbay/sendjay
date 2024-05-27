@@ -6,6 +6,7 @@ const wslogger = require(config.app.wslogger)(config.app.logPath, 'hushsbay')
 const Redis = require('ioredis') //not redis npm => redisAdapter로 할 수 없는 것들을 각 서버별로 store.publish를 통해 모두 처리하는 개념임
 const { Server } = require('socket.io')
 const redisAdapter = require('@socket.io/redis-adapter') //특히, sockets set에서 각 socket을 바로 뽑기 힘들어 ioredis의 global.store.scanStream으로 처리
+const { Worker } = require('worker_threads')
 
 const DIR_PUBSUB = './pubsub/', DIR_SOCKET = './socket/'
 const PING_TIMEOUT = 5000, PING_INTERVAL = 25000 //default
@@ -127,25 +128,57 @@ rt = [
 ] 
 for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/msngr/' + rt[i])) 
 
-proc()
-async function proc() {
-    const sockets = await global.jay.adapter.sockets(new Set()) //https://socket.io/docs/v4/adapter/
-	//const sockets1 = await global.jay.sockets //위 아래 둘 다 각 서버의 소켓 카운트만 가능
-    //console.log('socket count :', sockets.size) //, sockets1.size)
-	const stream = global.store.scanStream({ match : ws.cons.key_str_socket + '*', count: ws.cons.scan_stream_cnt })
-	stream.on('data', (resultKeys) => {
-		for (let key of resultKeys) {
-			const obj = ws.redis.getUserkeySocketIdFromKey(key)
-			if (sockets.has(obj.socketid)) {
-				const socket = global.jay.sockets.get(obj.socketid)
-				console.log('socket :', socket.id, socket.userkey, socket.userip, socket.winid)
-			}
-		}
-	})
-	if (config.app.mainserver == 'Y') {
-		
-	}
-    setTimeout(() => { proc() }, 5000)
+// proc()
+// async function proc() {
+//     const sockets = await global.jay.adapter.sockets(new Set()) //https://socket.io/docs/v4/adapter/
+// 	//const sockets1 = await global.jay.sockets //위 아래 둘 다 각 서버의 소켓 카운트만 가능
+//     //console.log('socket count :', sockets.size) //, sockets1.size)
+// 	const stream = global.store.scanStream({ match : ws.cons.key_str_socket + '*', count: ws.cons.scan_stream_cnt })
+// 	stream.on('data', (resultKeys) => {
+// 		for (let key of resultKeys) {
+// 			const obj = ws.redis.getUserkeySocketIdFromKey(key)
+// 			if (sockets.has(obj.socketid)) {
+// 				const socket = global.jay.sockets.get(obj.socketid)
+// 				console.log('socket :', socket.id, socket.userkey, socket.userip, socket.winid)
+// 			}
+// 		}
+// 	})
+// 	setTimeout(() => { proc() }, 5000) //Test
+// }
+
+//////////////////////////////////////////////////////////////////////////////////////////////Worker
+// if (config.app.mainserver == 'Y') {
+// 	const worker01 = new Worker('./thread/worker01.js') //worker.postMessage('hello')
+// 	worker01.on('message', async (data) => { 
+// 		try {
+// 			if (data.ev == 'del_redis_socket') { //console.log(data.item+"==="+data.userkey)
+// 				const sockInfo = com.getUserkeySocketid(data.item) //$$SD__3;/sendjay#sjkfhsaf8934kmhjsfd8 
+// 				com.pub('disconnect_prev_sock', { prevkey : data.item, socketid : sockInfo.socketid, userkey : data.userkey }) //call pmessage()
+// 			}
+// 		} catch (ex) {
+// 			global.logger.error(data.ev + ': error\n' + ex.stack)
+// 		}
+// 	})
+// }
+// const worker02 = new Worker('./thread/worker02.js')
+// worker02.on('message', async (data) => {
+// 	try {
+// 		if (data.ev = 'chk_sockets_rooms') {
+// 			const sockets = await global.jay.adapter.sockets(new Set())
+// 			const rooms = await global.jay.adapter.allRooms()
+// 			const osMem = ws.util.osMem()
+// 			const totalMem = parseInt(osMem.totalMem)
+// 			const freeMem = parseInt(osMem.freeMem)
+// 			console.log('socket count :', sockets.size, '/ room count :', rooms.size, '/ freeMem :', freeMem, '/ totalMem :', totalMem)
+// 		}
+// 	} catch (ex) {
+// 		global.logger.error(data.ev + ': error\n' + ex.stack)
+// 	}
+// })
+if (config.app.mainserver == 'Y') {
+	const worker = new Worker('./thread/worker.js')
+	//현재 리턴되는 메시지 없음
 }
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 ws.util.watchProcessError()
