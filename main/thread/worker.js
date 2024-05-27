@@ -19,7 +19,7 @@ async function proc() {
         conn = await wsmysql.getConnFromPool(global.pool)
         await wsmysql.txBegin(conn) //1) delete files to be expired 
         //sql = "SELECT MSGID, ROOMID, BODY FROM A_MSGMST_TBL WHERE TYP in ('file', 'flink') AND FILESTATE < sysdate() AND FILESTATE <> ? AND BODY <> ? "
-        sql = "SELECT MSGID, ROOMID, BODY FROM A_MSGMST_TBL WHERE TYP in ('file', 'flink') AND FILESTATE like '2024-05-28%' AND FILESTATE <> ? "
+        sql = "SELECT MSGID, ROOMID, BODY FROM A_MSGMST_TBL WHERE TYP in ('file', 'flink') AND FILESTATE like '2024-05-27%' AND FILESTATE <> ? "
         data = await wsmysql.query(conn, sql, [ws.cons.file_expired])
         _len = data.length
         console.log(_len+"****")
