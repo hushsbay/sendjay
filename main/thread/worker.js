@@ -58,7 +58,7 @@ async function proc() {
         global.logger.error(TITLE + ': error\n' + ex.stack)
     } finally {
         wsmysql.closeConn(conn, TITLE)
-        setTimeout(() => { proc() }, 3000) //Test
+        setTimeout(() => { proc() }, 10000) //Test
     }
 }
 
