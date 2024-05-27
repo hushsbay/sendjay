@@ -73,6 +73,7 @@ module.exports = (function() {
 			max_check_same_members : 50, //Consider up to 50 and no more. max 1500 bytes for members field in z_roommem_tbl. userid(20) + alpha = 21 * 50 = 1050 bytes.
 			max_people_to_display : 3, //Consider up to 10 and no more. max 800 bytes for roomnm field in z_roommst_tbl. usernm(50) + userid(20) + alpha = 80 * 10 = 800 bytes.
 			max_hours_to_filesave : 1, //max_days_to_filesave : 1, //File's expiry
+			max_hours_to_endure_upload : -4, //worker.js 파일업로드 사작후 4시간이 지나도 완료되지 않으면 가비지로 간주하고 제거
 			max_nicknm_len : 100, //same as client's
 			max_msg_len : 4000, //same as client's
 			max_filesize : 5000000000, //10MB //max_filesize : 10485760, //10MB
