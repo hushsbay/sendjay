@@ -18,8 +18,7 @@ async function proc() {
     try {
         conn = await wsmysql.getConnFromPool(global.pool)
         await wsmysql.txBegin(conn) //1) 만기된 파일 삭제
-        //sql = "SELECT MSGID, ROOMID, BODY FROM A_MSGMST_TBL WHERE TYP in ('file', 'flink') AND FILESTATE < sysdate() AND FILESTATE <> ? AND BODY <> ? "
-        sql = "SELECT MSGID, ROOMID, BODY FROM A_MSGMST_TBL WHERE TYP in ('file', 'flink') AND FILESTATE like '2024-05-27%' AND FILESTATE <> ? "
+        sql = "SELECT MSGID, ROOMID, BODY FROM A_MSGMST_TBL WHERE TYP in ('file', 'flink') AND FILESTATE < sysdate() AND FILESTATE <> ? "
         data = await wsmysql.query(conn, sql, [ws.cons.file_expired])
         _len = data.length
         console.log(_len+"****")
@@ -48,7 +47,7 @@ async function proc() {
             if (data2[0].CNT >= 1) {
                 //no garbage
             } else { //garbage : 제거해야 함
-                console.log(_filename+"$$$$$$$$$$")
+                //console.log(_filename+"$$$$$$$$$$")
                 deleteFileAndRemoveEmptyFolderFromChild(_path, _filename, 'garbage')
             }
         }
@@ -58,7 +57,7 @@ async function proc() {
         global.logger.error(TITLE + ': error\n' + ex.stack)
     } finally {
         wsmysql.closeConn(conn, TITLE)
-        setTimeout(() => { proc() }, 10000) //Test
+        setTimeout(() => { proc() }, 1000 * 60 * 5) //5 minutes
     }
 }
 
