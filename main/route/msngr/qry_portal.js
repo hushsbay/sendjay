@@ -25,7 +25,7 @@ router.post('/', async function(req, res) {
 		sql = "SELECT ROOMID, ROOMNM, MASTERID, MASTERNM, MEMCNT, MAINNM, NOTI, STATE, NICKNM, LASTMSG, LASTDT "
 		sql += "	 FROM ("
 		sql += "   SELECT A.ROOMID, A.ROOMNM, A.MASTERID, A.MASTERNM, A.MEMCNT, A.NICKNM MAINNM, B.NOTI, B.STATE, B.NICKNM, "
-		sql += "		  (SELECT CONCAT(TYP, '" + ws.cons.subdeli + "', CASE WHEN STATE2 = 'C' THEN " + ws.cons.cell_revoked + " ELSE BODY END) "
+		sql += "		  (SELECT CONCAT(TYP, '" + ws.cons.subdeli + "', CASE WHEN STATE2 = 'C' THEN " + ws.cons.cell_revoked + " ELSE BODY END BODY) "
 		sql += "		     FROM A_MSGMST_TBL WHERE MSGID = (SELECT MSGID FROM A_MSGDTL_TBL "
 		sql += "		     							       WHERE ROOMID = A.ROOMID AND RECEIVERID = '" + userid + "' AND STATE IN ('', 'R') " 
 		sql += "		     							       ORDER BY CDT DESC LIMIT 1)) LASTMSG, "
