@@ -19,10 +19,14 @@ async function proc() {
         conn = await wsmysql.getConnFromPool(global.pool)
         await wsmysql.txBegin(conn)
         //1) 특정 기간 (예: 1년) 지나면 논리적인 삭제 처리 - 향후 물리적인 삭제 또는 백업(이동) 등은 정책적으로 결정해 처리하는 것으로 진행하기로 함.
-        //   UDT에는 원래 삭제여부를 표시. 하루에 한번만 처리해도 되는 루틴이라 부하시 별도 분리 처리하는 것이 좋을 것임
-        sql = "UPDATE A_MSGDTL_TBL SET UDT = STATE, STATE = 'D' WHERE CDT < DATE_ADD(sysdate(), INTERVAL -" + ws.cons.max_days_to_fetch + " DAY) "
+        //   UDT에는 원래 삭제여부를 표시 (한번에 처리하니 UDT에 모두 D로 들어가서 부득이하게 나눔). 하루에 한번만 처리해도 되는 루틴이라 부하시 별도 분리 처리하는 것이 좋을 것임
+        sql = "UPDATE A_MSGDTL_TBL SET UDT = STATE WHERE STATE IN ('', 'R') AND CDT < DATE_ADD(sysdate(), INTERVAL -" + ws.cons.max_days_to_fetch + " DAY) "
         await wsmysql.query(conn, sql, null)
-        sql = "UPDATE A_MSGMST_TBL SET UDT = STATE, STATE = 'D' WHERE CDT < DATE_ADD(sysdate(), INTERVAL -" + ws.cons.max_days_to_fetch + " DAY) "
+        sql = "UPDATE A_MSGDTL_TBL SET STATE = 'D' WHERE STATE IN ('', 'R') AND CDT < DATE_ADD(sysdate(), INTERVAL -" + ws.cons.max_days_to_fetch + " DAY) "
+        await wsmysql.query(conn, sql, null)
+        sql = "UPDATE A_MSGMST_TBL SET UDT = STATE WHERE STATE IN ('', 'R') AND CDT < DATE_ADD(sysdate(), INTERVAL -" + ws.cons.max_days_to_fetch + " DAY) "
+        await wsmysql.query(conn, sql, null)
+        sql = "UPDATE A_MSGMST_TBL SET STATE = 'D' WHERE STATE IN ('', 'R') AND CDT < DATE_ADD(sysdate(), INTERVAL -" + ws.cons.max_days_to_fetch + " DAY) "
         await wsmysql.query(conn, sql, null)
         //2) MSGDTL 테이블에 모두 D(삭제)인 메시지아이디의 MSGMST 테이블에도 D로 업데이트 (1년 이전 데이터만 해당)
         sql = "UPDATE A_MSGMST_TBL A SET STATE = 'D' WHERE STATE = '' AND (SELECT COUNT(*) FROM A_MSGDTL_TBL WHERE MSGID = A.MSGID AND ROOMID = A.ROOMID AND STATE <> 'D') = 0 "
