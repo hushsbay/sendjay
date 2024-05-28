@@ -25,7 +25,6 @@ async function proc() {
         sql += "  AND FILESTATE <> ? "
         data = await wsmysql.query(conn, sql, [ws.cons.file_expired])
         _len = data.length
-        console.log(_len+"****")
         for (let i = 0; i < _len; i++) {
             const _msgid = data[i].MSGID
             const _roomid = data[i].ROOMID
