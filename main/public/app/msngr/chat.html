@@ -418,7 +418,7 @@
                         handlingDisp = ""
                         unreadDisp = ""
                     }
-                    let _body, _backcolor, _boderpx, _sublink //_sublink can be 1) opengraph for url 2) image for .png/jpg/.. 3) image for mp4
+                    let _body, _backcolor, _boderpx = "1px", _sublink //_sublink can be 1) opengraph for url 2) image for .png/jpg/.. 3) image for mp4
                     const _submargin = (obj.senderid == g_userid) ? "margin:4px 4px 1px 1px" : "margin:4px 1px 1px 4px"
                     const _replied = obj.reply || ""
                     const _dispReplied = obj.reply ? "" : "display:none;"
@@ -445,7 +445,7 @@
                             _body += "<span class=mq_tiny id=expiry_" + obj.msgid + " style='color:darkgreen;cursor:default'>" + _expiry + "</span>"
                             _body += "<span class=mq_tiny id=abort_" + obj.msgid + " style='display:none;color:darkgray;cursor:pointer;margin-left:4px'>Abort</span>"
                             _body += "<progress id=pb_" + obj.msgid + " value=0 max=100 style='display:none;width:100%;height:6px;cursor:default;margin-bottom:3px'></progress>"
-                            _boderpx = "1px"
+                            //_boderpx = "1px"
                             if (obj.filestate != hush.cons.file_expired) {
                                 const _submax = (obj.senderid == g_userid) ? "" : ";max-width:150px;max-height:150px"
                                 _sublink = "<div style='position:relative;cursor:pointer" + _submax + "'>"
@@ -461,7 +461,7 @@
                             //_body = hush.util.removeTag(obj.body) //.html() 대신에 .text()로 변경 검토해야 함
                             _body = obj.body
                         }
-                        _boderpx = "1px"
+                        //_boderpx = "1px"
                         const _pattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi //two more bytes parameter not working
                         const _http = _pattern.exec(_body) //const _pattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9가-힣+&@#\/%?=~_|!:,.;]*[-A-Z0-9가-힣+&@#\/%=~_|])/gi
                         if (_http != null) { //##00 opengraph : get first item
