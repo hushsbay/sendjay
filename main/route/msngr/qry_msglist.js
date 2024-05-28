@@ -33,7 +33,7 @@ router.post('/', async function(req, res) {
 			dt = data[0].CDT
 		}
 		let arg //console.log(dateFr, type, userid, roomid, keyword, dt, start, end, senderid, cnt)
-		sql = "SELECT A.MSGID, A.CDT, A.SENDERID, A.SENDERNM, B.RECEIVERID, CASE WHEN STATE2 = 'C' THEN " + ws.cons.cell_revoked + " ELSE A.BODY END BODY "
+		sql = "SELECT A.MSGID, A.CDT, A.SENDERID, A.SENDERNM, B.RECEIVERID, CASE WHEN STATE2 = 'C' THEN " + ws.cons.cell_revoked + " ELSE A.BODY END BODY, "
 		sql += "      A.BUFFER, A.REPLY, A.TYP TYPE, B.STATE, A.FILESTATE, CASE WHEN A.BUFFER IS NULL THEN NULL ELSE 'Y' END BUFFERSTR, " 
 		sql += "      (SELECT COUNT(*) FROM A_MSGDTL_TBL WHERE MSGID = B.MSGID AND ROOMID = B.ROOMID AND STATE = '') CNT "
 		sql += " FROM A_MSGDTL_TBL B "
