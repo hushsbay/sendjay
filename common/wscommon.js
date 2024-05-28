@@ -262,7 +262,7 @@ module.exports = (function() {
 					myOtherUserkey = socket.userkey.replace(ws.cons.w_key, ws.cons.m_key)
 				}				
 				const arr = await ws.redis.getUserkeySocket(myOtherUserkey)
-				console.log("socket.userkey", socket.userkey, myOtherUserkey, arr[0])
+				//console.log("socket.userkey", socket.userkey, myOtherUserkey, arr[0])
 				return arr[0] //if not, undefined returned
 			},
 			getUserkeySocket : (userkey) => {
@@ -696,7 +696,7 @@ module.exports = (function() {
 					const data = await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND RECEIVERID = ? ", [uid, userid])
 					if (data[0].CNT > 0) {
 						if (type == 'file') {
-							const sqlM = "SELECT TYP TYPE, CASE WHEN STATE2 = 'C' THEN " + ws.cons.cell_revoked + " ELSE BODY END BODY FROM A_MSGMST_TBL WHERE MSGID = ? "
+							const sqlM = "SELECT TYP TYPE, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END BODY FROM A_MSGMST_TBL WHERE MSGID = ? "
 							const dataM = await wsmysql.query(conn, sqlM, [uid])
 							if (dataM.length > 0) {
 								const _file = dataM[0].BODY.split(ws.cons.deli)[0] //console.log(_file, dataM[0].TYPE, target, "===")

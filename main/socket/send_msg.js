@@ -33,7 +33,7 @@ module.exports = async function(socket, param) {
 				param.data.bufferStr = (data[0].BUFFER) ? 'Y' : null //(data[0].BUFFER) ? Buffer.from(data[0].BUFFER, 'binary').toString('base64') : null //see get_sublink.js
 				param.data.type = kind
 			} else if (kind == 'file') { //get image which was uploaded with ajax. arraybuffer sent with blank on socket.io-redis npm
-				data = await wsmysql.query(conn, "SELECT CDT, CASE WHEN STATE2 = 'C' THEN " + ws.cons.cell_revoked + " ELSE BODY END BODY, FILESTATE FROM A_MSGMST_TBL WHERE MSGID = ? ", [obj.prevmsgid])
+				data = await wsmysql.query(conn, "SELECT CDT, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END BODY, FILESTATE FROM A_MSGMST_TBL WHERE MSGID = ? ", [obj.prevmsgid])
 				if (data.length == 0) throw new Error(ws.cons.MSG_NO_DATA + ' : ' + obj.prevmsgid)
 				param.data.msgid = obj.prevmsgid
 				param.data.cdt = data[0].CDT
