@@ -17,11 +17,21 @@ async function proc() {
     let conn, sql, data, _len
     try {
         conn = await wsmysql.getConnFromPool(global.pool)
-        await wsmysql.txBegin(conn) //1) 파일 삭제
+        await wsmysql.txBegin(conn)
+        //1) 특정 기간 (예: 1년) 지나면 논리적인 삭제 처리 - 향후 물리적인 삭제 또는 백업(이동) 등은 정책적으로 결정해 처리하는 것으로 진행하기로 함.
+        //   UDT에는 원래 삭제여부를 표시. 하루에 한번만 처리해도 되는 루틴이라 부하시 별도 분리 처리하는 것이 좋을 것임
+        sql = "UPDATE A_MSGDTL_TBL SET UDT = STATE, STATE = 'D' WHERE CDT < DATE_ADD(sysdate(), INTERVAL -" + ws.cons.max_days_to_fetch + " DAY) "
+        await wsmysql.query(conn, sql, null)
+        sql = "UPDATE A_MSGMST_TBL SET UDT = STATE, STATE = 'D' WHERE CDT < DATE_ADD(sysdate(), INTERVAL -" + ws.cons.max_days_to_fetch + " DAY) "
+        await wsmysql.query(conn, sql, null)
+        //2) MSGDTL 테이블에 모두 D(삭제)인 메시지아이디의 MSGMST 테이블에도 D로 업데이트 (1년 이전 데이터만 해당)
+        sql = "UPDATE A_MSGMST_TBL A SET STATE = 'D' WHERE STATE = '' AND (SELECT COUNT(*) FROM A_MSGDTL_TBL WHERE MSGID = A.MSGID AND ROOMID = A.ROOMID AND STATE <> 'D') = 0 "
+        await wsmysql.query(conn, sql, null)
+        //3) 파일 삭제
         sql = "SELECT MSGID, ROOMID, BODY "
         sql += " FROM A_MSGMST_TBL "
         sql += "WHERE TYP in ('file', 'flink') "
-        sql += "  AND (FILESTATE < sysdate() OR STATE = 'D' OR STATE2 = 'C') " //만료되었거나 메시지가 삭제 또는 전송취소된 것도 물리적삭제 => 모두 만료로 표시
+        sql += "  AND (FILESTATE < sysdate() OR STATE = 'D' OR STATE2 = 'C') " //만료되었거나 메시지가 삭제 또는 전송취소된 것도 파일은 물리적 삭제 => 모두 만료로 표시
         sql += "  AND FILESTATE <> ? "
         data = await wsmysql.query(conn, sql, [ws.cons.file_expired])
         _len = data.length
@@ -33,7 +43,8 @@ async function proc() {
             const _path = config.app.uploadPath + '/' + _filename
             await wsmysql.query(conn, "UPDATE A_MSGMST_TBL SET FILESTATE = ? WHERE MSGID = ? AND ROOMID = ? ", [ws.cons.file_expired, _msgid, _roomid]) 
             deleteFileAndRemoveEmptyFolderFromChild(_path, _filename, 'expiry')
-        } //2) 가비지 파일 삭제 (파일업로드중 브라우저 닫기 등)
+        } 
+        //4) 가비지 파일 삭제 (파일업로드중 브라우저 닫기 등)
         //A_FILELOG_TBL에 insert하는 것은 proc_file.js인데 아래 로직에서 MSGMST에 있다는 것은 정상적으로 파일이 업로드되었다는 의미임
         sql = "SELECT MSGID, ROOMID, SENDERID, BODY FROM A_FILELOG_TBL WHERE UDT = '' AND CDT < DATE_ADD(sysdate(), INTERVAL ? HOUR) " //몇시간이 지나도 업로드완료 안된 것은 가비지로 간주
         data = await wsmysql.query(conn, sql, [ws.cons.max_hours_to_endure_upload])

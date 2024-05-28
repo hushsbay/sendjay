@@ -69,7 +69,7 @@ module.exports = (function() {
 			sock_ev_cut_mobile : 'cut_mobile',	
 			sock_ev_chk_roomfocus : 'chk_roomfocus',
 			max_diff_sec_worker : 5 * 2, //SEC in worker.js * 2		
-			max_days_to_fetch : -365, //For sql where
+			max_days_to_fetch : -365, //For sql where : 조회 및 worker.js에서 함께 사용 (오래된 데이터 물리적인 삭제 아닌 논리적 삭제만 적용함. 더 상세처리는 각자 알아서 정책 만들어 적용하기)
 			max_check_same_members : 50, //Consider up to 50 and no more. max 1500 bytes for members field in z_roommem_tbl. userid(20) + alpha = 21 * 50 = 1050 bytes.
 			max_people_to_display : 3, //Consider up to 10 and no more. max 800 bytes for roomnm field in z_roommst_tbl. usernm(50) + userid(20) + alpha = 80 * 10 = 800 bytes.
 			max_hours_to_filesave : 1, //max_days_to_filesave : 1, //File's expiry
