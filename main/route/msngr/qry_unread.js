@@ -45,7 +45,7 @@ router.post('/', async function(req, res) {
 				//아래 SQL과 위 roomid 있는 경우는 where 조건이 같아야 같은 결과를 낼 것임 (특히, CDT)
 			}
 			sql = "SELECT ROOMID, COUNT(*) UNREAD, " //ADDINFO = for mobile only
-			sql += "	  (SELECT CONCAT(MSGID, '" + com.cons.deli + "', CONCAT(CDT, '" + com.cons.deli + "', CONCAT(TYP, '" + com.cons.deli + "', BODY))) " //STATE='' 인 경우이므로 아래 CASE WHEN 필요없음
+			sql += "	  (SELECT CONCAT(MSGID, '" + ws.cons.deli + "', CONCAT(CDT, '" + ws.cons.deli + "', CONCAT(TYP, '" + ws.cons.deli + "', BODY))) " //STATE='' 인 경우이므로 아래 CASE WHEN 필요없음
 			//sql += "	  (SELECT CONCAT(MSGID, '" + ws.cons.deli + "', CONCAT(CDT, '" + ws.cons.deli + "', CONCAT(TYP, '" + ws.cons.deli + "', CASE WHEN STATE2 = 'C' THEN " + ws.cons.cell_revoked + " ELSE BODY END))) " 
 			sql += "	     FROM A_MSGMST_TBL WHERE ROOMID = A.ROOMID AND STATE = '' AND CDT >= '" + dateFr + "' ORDER BY CDT DESC LIMIT 1) ADDINFO "
 			sql += " FROM A_MSGDTL_TBL A "
