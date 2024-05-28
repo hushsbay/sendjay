@@ -17,8 +17,12 @@ async function proc() {
     let conn, sql, data, _len
     try {
         conn = await wsmysql.getConnFromPool(global.pool)
-        await wsmysql.txBegin(conn) //1) 만기된 파일 삭제
-        sql = "SELECT MSGID, ROOMID, BODY FROM A_MSGMST_TBL WHERE TYP in ('file', 'flink') AND FILESTATE < sysdate() AND FILESTATE <> ? "
+        await wsmysql.txBegin(conn) //1) 파일 삭제
+        sql = "SELECT MSGID, ROOMID, BODY "
+        sql += " FROM A_MSGMST_TBL "
+        sql += "WHERE TYP in ('file', 'flink') "
+        sql += "  AND (FILESTATE < sysdate() OR STATE = 'D' OR STATE2 = 'C') " //만료되었거나 메시지가 삭제 또는 전송취소된 것도 물리적삭제 => 모두 만료로 표시
+        sql += "  AND FILESTATE <> ? "
         data = await wsmysql.query(conn, sql, [ws.cons.file_expired])
         _len = data.length
         console.log(_len+"****")

@@ -696,7 +696,8 @@ module.exports = (function() {
 					const data = await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND RECEIVERID = ? ", [uid, userid])
 					if (data[0].CNT > 0) {
 						if (type == 'file') {
-							const dataM = await wsmysql.query(conn, "SELECT TYP TYPE, BODY FROM A_MSGMST_TBL WHERE MSGID = ? ", [uid])
+							const sqlM = "SELECT TYP TYPE, CASE WHEN STATE2 = 'C' THEN " + ws.cons.cell_revoked + " ELSE BODY END BODY FROM A_MSGMST_TBL WHERE MSGID = ? "
+							const dataM = await wsmysql.query(conn, sqlM, [uid])
 							if (dataM.length > 0) {
 								const _file = dataM[0].BODY.split(ws.cons.deli)[0] //console.log(_file, dataM[0].TYPE, target, "===")
 								if (dataM[0].TYPE == 'flink' || target.includes(_file)) ret = '' //The filepath is in msgid
