@@ -12,7 +12,6 @@ router.use(function(req, res, next) {
 router.post('/', async function(req, res) {
 	let conn, sql, data, len
 	try {
-		console.log("@@@@@@@@@@@@@@@@@@@@@")
 		const rs = ws.http.resInit()	
 		const dateFr = ws.util.setDateAdd(new Date(), ws.cons.max_days_to_fetch)
 		let { type, roomid, keyword, dt, cnt } = req.body
