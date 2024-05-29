@@ -737,7 +737,7 @@
                         const cnt = (g_cdt == FIRST_QUERIED) ? hush.cons.fetch_first_cnt : hush.cons.fetch_cnt
                         rq = { type : "normal", roomid : g_roomid, dt : g_cdt, cnt : cnt }
                         withToast = false
-                    }
+                    }                    
                     const rs = await hush.http.ajax("/msngr/qry_msglist", rq)
                     if ($("#getmore").length > 0) $("#getmore").remove()
                     if (!hush.util.chkAjaxCode(rs)) return        
@@ -1658,7 +1658,7 @@
                     }
                 },
                 [hush.cons.sock_ev_open_room] : (data) => { //from=after,create,dupchk,portal,noti,rename_room,hush.cons.sock_ev_show_on
-                    //setTimeout(function() { //for debugging
+                    setTimeout(function() { //for debugging
                         sockConnected = true //for mobile only
                         if (data.from == hush.cons.sock_ev_show_on) return
                         setMembers(data) //console.log(JSON.stringify(data)+"===")
@@ -1667,7 +1667,7 @@
                         hush.idb.connect(() => {
                             getMsgList()
                         })
-                    //}, 3000)
+                    }, 3000)
                 },
                 [hush.cons.sock_ev_set_env] : async (data) => {
                     toggleDispMem(data.value)
