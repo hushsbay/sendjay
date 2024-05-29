@@ -67,6 +67,7 @@ router.post('/', async function(req, res) {
 			sql += "ORDER BY A.CDT DESC LIMIT 0, ? "
 			arg = [roomid, userid, dateFr, dt, cnt]
 		}
+		console.log(sql+"====")
 		data = await wsmysql.query(conn, sql, arg)
 		len = data.length
 		if (data.length == 0) {
