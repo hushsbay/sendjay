@@ -33,9 +33,14 @@ Here are some ideas to get you started:
 
    <https://hushsbay.com>
 
+
+# 환경 구성
+
 ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_env.png)
 
+
 # 주요 특징
+
 
 
 
