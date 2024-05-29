@@ -11,6 +11,8 @@ Here are some ideas to get you started:
 - ⚡ Fun fact: ...
 -->
 
+현재 80%정도 완료.. 
+
 # Sendjay 소개
 
 # 환경 구성
