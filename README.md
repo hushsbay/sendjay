@@ -35,15 +35,14 @@ Here are some ideas to get you started:
 
 # 환경 구성
 
+![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_env.png)
+
 # 주요 특징
+
+
 
 # 참고사항
 
-
-### https://hushsbay.com
-
 ![image](https://github.com/hushsbay/hushsbay/assets/51398212/b86591c8-f16b-484f-bcf0-1a7d58a90909)
 
-현재는 인증테스트중..
 
-내용 정리중..
