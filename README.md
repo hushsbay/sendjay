@@ -44,7 +44,7 @@ Here are some ideas to get you started:
 
 
 
-# 참고사항
+# 참고 사항
 
 ![image](https://github.com/hushsbay/hushsbay/assets/51398212/b86591c8-f16b-484f-bcf0-1a7d58a90909)
 
