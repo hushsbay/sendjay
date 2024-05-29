@@ -11,7 +11,7 @@ Here are some ideas to get you started:
 - ⚡ Fun fact: ...
 -->
 
-현재 60%정도 완료된 상태입니다.
+현재 60%정도 개발된 상태입니다.
 
 # Sendjay 소개
 
