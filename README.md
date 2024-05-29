@@ -17,8 +17,7 @@ Here are some ideas to get you started:
 
 1. Sendjay는 개인이 만든 메시징 앱/웹 프로그램입니다. (created by hushsbay@gmail.com)
 
-2. Sendjay는 현재 모 기업내 ERP 사이트에서 위 당사자에 의해 개발되어 현재 실사용중인 웹메신저를 좀 더
-   
+2. Sendjay는 현재 모 기업내 ERP 사이트에서 위 당사자에 의해 개발되어 현재 실사용중인 웹메신저를 좀 더   
    확장시켜 멀티소켓서버 환경으로 구성하고 웹뿐만 아니라 앱에서도 사용 가능하도록 만들어졌습니다.
 
 4. Sendjay는 이미 개발된 웹 모듈을 거의 그대로 재사용해 앱내 WebView에서 실행되므로
