@@ -66,7 +66,7 @@ module.exports = (function() {
 			sock_ev_rename_room : 'rename_room',
 			sock_ev_set_env : 'set_env',
 			sock_ev_chk_typing : 'chk_typing',
-			sock_ev_cut_mobile : 'cut_mobile',	
+			//sock_ev_cut_mobile : 'cut_mobile',	
 			sock_ev_chk_roomfocus : 'chk_roomfocus',
 			max_diff_sec_worker : 5 * 2, //SEC in worker.js * 2		
 			max_days_to_fetch : -365, //For sql where : 조회 및 worker.js에서 함께 사용 (오래된 데이터 물리적인 삭제 아닌 논리적 삭제만 적용함. 더 상세처리는 각자 알아서 정책 만들어 적용하기)

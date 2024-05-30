@@ -18,8 +18,8 @@ module.exports = async (pattern, channel, message) => {
 				//console.log("prevSocket found", prevsocketid)
 				if (prevSocket.userkey.startsWith(ws.cons.m_key)) { //Mobile App
 					if (prevSocket.userip != obj.userip) { //obj.userip might be undefined when it comes from worker01.js
-						const param = { ev : ws.cons.sock_ev_cut_mobile, data : { userid : prevSocket.userid }, returnTo : "parent" }
-						prevSocket.emit(ws.cons.sock_ev_common, param) //emit to client directly
+						/*const param = { ev : ws.cons.sock_ev_cut_mobile, data : { userid : prevSocket.userid }, returnTo : "parent" }
+						prevSocket.emit(ws.cons.sock_ev_common, param) //emit to client directly*/
 						//가끔, 'connect - connect - disconnect(ping timeout)' 문제가 발생하며 아직 원인파악이 안됨 (async).
 						//그런데 여기서 emit되어야 할 prevSocket.emit(cut_mobile)은 emit되지 않음. 
 						//1) socket connect option인 forceNew를 false로 변경한 후엔 발생하지 않고는 있으나
