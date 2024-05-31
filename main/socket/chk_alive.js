@@ -28,6 +28,7 @@ module.exports = async function(socket, param) {
 			userkeyArr.push(_obj.userkey) //userkey 담아서 리턴하면 됨
 		}
 		param.data = userkeyArr
+		console.log(userkeyArr.toString()+"====")
 		socket.emit(ws.cons.sock_ev_common, param)
 	} catch (ex) {
 		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex)
