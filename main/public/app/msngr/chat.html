@@ -930,7 +930,7 @@
             const procFailure = (rq, dtDetails) => { //Request already sent. Retry(resending) might not be needed in most cases since error already occurred.
                 if ($("#unread_" + rq.msgid).html() == hush.cons.no_response) return 
                 $("#msg_" + rq.msgid).removeClass("needCheckUnread")
-                $("#handling_" + rq.msgid).hide()
+                $("#handling_" + rq.msgid).html("$$") //$("#handling_" + rq.msgid).hide()
                 const objUnread = $("#unread_" + rq.msgid)
                 objUnread.html(hush.cons.sending_failure)
                 objUnread.removeClass("unread").addClass("failure")
@@ -952,7 +952,7 @@
             }
 
             const retrySending = (rq) => {
-                $("#handling_" + rq.msgid).hide()
+                $("#handling_" + rq.msgid).html("##") //$("#handling_" + rq.msgid).hide()
                 $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                 const objUnread = $("#unread_" + rq.msgid)
                 objUnread.html(hush.cons.retry_sending)
@@ -984,7 +984,7 @@
             const prepareForNoResponse = (rq) => {
                 setTimeout(() => {
                     if ($("#handling_" + rq.msgid).css("display") == "none") return        
-                    $("#handling_" + rq.msgid).hide()
+                    $("#handling_" + rq.msgid).html("^^") //$("#handling_" + rq.msgid).hide()
                     $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                     const objUnread = $("#unread_" + rq.msgid)
                     objUnread.html(hush.cons.no_response)
