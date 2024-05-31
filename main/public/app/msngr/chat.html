@@ -1487,7 +1487,7 @@
             const procUnreadCount = (msgid, unread_cnt) => {
                 if (unread_cnt == -1) return //no record 
                 const objHandling = $("#handling_" + msgid)
-                if (objHandling.css("display") != "none") objHandling.hide()
+                if (objHandling.css("display") != "none") $("#handling_" + msgid).html("@@") //objHandling.hide()
                 const objUnread = $("#unread_" + msgid)
                 if (objUnread.css("display") == "none") objUnread.show()
                 const unreadStr = objUnread.html()
@@ -1817,6 +1817,7 @@
                     }
                 },
                 [hush.cons.sock_ev_read_msg] : (data) => {
+                    $("#handling_" + msgid).html("!!")
                     if (data.type == "updateall") {
                         //data.first_queried means that procQueryUnread() will be occurred in scroll event too, so it should be skipped here.
                         //Since "updateall" is broadcast, procQueryUnread() needed unless it's same userkey.
