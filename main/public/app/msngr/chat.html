@@ -240,6 +240,7 @@
                         }, "Info", 320)
                         hush.http.getUserPic(_userid, "img_userid")
                     })
+                    $("#in_search").val(data.userkeys)
                     if (!data.userkeys) return
                     const dataObj = { userkeys : data.userkeys }
                     if (hush.webview.ios) {
