@@ -1492,7 +1492,7 @@
                     return //no record 
                 }
                 const objHandling = $("#handling_" + msgid)
-                $("#handling_" + msgid).html("@@") //if (objHandling.css("display") != "none") objHandling.hide()
+                if (objHandling.css("display") != "none") objHandling.hide() //$("#handling_" + msgid).html("@@")
                 const objUnread = $("#unread_" + msgid)
                 if (objUnread.css("display") == "none") objUnread.show()
                 const unreadStr = objUnread.html()
