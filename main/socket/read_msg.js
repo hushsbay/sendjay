@@ -58,6 +58,7 @@ module.exports = async function(socket, param) {
 				sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND ROOMID = ? AND CDT >= ? "
 				data = await wsmysql.query(conn, sql, [msgid, _roomid, dateFr])
 				if (data[0].CNT == 0) { //might be no record at first right after sending talk
+					console.log(msgid, _roomid, dateFr, "--------")
 					unreadArr.push(-1)
 				} else {
 					sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND ROOMID = ? AND STATE = '' AND CDT >= ? "
