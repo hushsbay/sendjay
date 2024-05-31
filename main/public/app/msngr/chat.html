@@ -136,10 +136,7 @@
             }
 
             const updateAllUnreads = (first_queried) => { //first_queried is dummy for prevent two times call of read_msg(query) event in 'updateall' and scroll event.
-                if (!hush.http.chkOnline("none")) {
-                    $("#fr_tip").html($("#fr_tip").html()+"000")
-                    return
-                }
+                if (!hush.http.chkOnline("none")) return
                 const rq = { type : "updateall", senderkey : g_userkey, roomid : g_roomid, first_queried : first_queried }
                 if (hush.webview.ios) { 
                 } else if (hush.webview.and) {
@@ -841,7 +838,6 @@
                             scrollToTarget(0)
                         } else if (rq.dt == FIRST_QUERIED || $("#getmore").length == 0) {
                             scrollToTarget()
-                            $("#in_search").val(rq.dt +"=="+$("#getmore").length)
                             updateAllUnreads("Y")
                             //procQueryUnread() //바로 위 updateAll~콜백에서 처리됨
                         } else if (rq.type == "after") {
