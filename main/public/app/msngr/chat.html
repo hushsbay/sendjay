@@ -1967,17 +1967,11 @@
                     toggleDisconnIcon(true)
                 },
                 [hush.cons.sock_ev_mark_as_connect] : (data) => { //mobile only
-                    // $("#img_disconn").hide() //hush.msg.toastEnd()
-                    // $("#btn_people_m").show()
-                    // $("#btn_menu_m").show()
-                    toggleDisconnIcon(false)
+                    toggleDisconnIcon(false) //Util.kt의 connectSockWithCallback() 설명 참조
                 },
                 [hush.cons.sock_ev_connect] : (data) => { //mobile only
                     try {
                         sockConnected = true
-                        // $("#img_disconn").hide() //hush.msg.toastEnd()
-                        // $("#btn_people_m").show()
-                        // $("#btn_menu_m").show()
                         toggleDisconnIcon(false)
                         const arr = $(".talk").last()
                         if (arr.length == 0) return

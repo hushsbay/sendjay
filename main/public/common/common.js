@@ -42,9 +42,9 @@
             memdeli : " / ",
             deli_key : "__", //for setUser()
             idb_tbl : "msngr", //indexedDB
-            sock_ev_connect : 'connect',
-            sock_ev_mark_as_connect : 'mark_as_connect',
-            sock_ev_disconnect : "disconnect",
+            sock_ev_connect : 'connect', //connect로 써야 함 (socket.io event) : 안드로이드에서는 Socket.EVENT_CONNECT
+            sock_ev_disconnect : "disconnect", //disconnect로 써야 함 (socket.io event) : 안드로이드에서는 Socket.EVENT_DISCONNECT
+            sock_ev_mark_as_connect : 'mark_as_connect', //Util.kt의 connectSockWithCallback() 설명 참조           
             sock_ev_alert : 'alert',
 			sock_ev_toast : 'toast',			
 			sock_ev_common : 'common', //Belows are handled in this sock_ev_common event.
@@ -627,15 +627,15 @@
         sock : {
             roomMap : { }, //{ nm: 'xxx', noti: true/false }
             rooms : { }, //window 객체가 저장됨. sock.connect => https://socket.io/docs/v3/client-initialization        
-            connect : (io, query) => new Promise((resolve, reject) => { //this will be occurred only on index.html
+            connect : (io, query) => new Promise((resolve, reject) => { //PC Web only on index.html
                 const socket = io(hush.cons.socket_url, { forceNew: false, reconnection: false, query: query }) //forceNew=false //See 'disconnect_prev_sock' in pmessage.js (on server)
         		socket.off("connect_error").on("connect_error", async (e) => { await hush.msg.alert("connect_error\n" + e.toString()) })
-                socket.off("disconnect").on("disconnect", async () => { 
+                socket.off(hush.cons.sock_ev_disconnect).on(hush.cons.sock_ev_disconnect, async () => { 
                     console.log("socket disconnected " + hush.util.getCurDateTimeStr(true, true))
                     //await hush.msg.alert("socket disconnected " + hush.util.getCurDateTimeStr(true, true))
                     location.replace("/" + hush.cons.erp_portal) //최초 개발시엔 새로고침되면 다시 소켓연결되어 무한루프돌기때문에 임시로 막았으나 이제 경합로직도 넣었으니 풀어도 됨
                 }) 
-                socket.off("connect").on("connect", () => {
+                socket.off(hush.cons.sock_ev_connect).on(hush.cons.sock_ev_connect, () => {
                     console.log("socket connected " + hush.util.getCurDateTimeStr(true, true))
                     hush.sock.on(socket, (rs) => {
                         console.log("hush.sock.on => " + JSON.stringify(rs)) //if (rs.data.type == "talk") debugger

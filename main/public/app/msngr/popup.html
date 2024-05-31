@@ -56,7 +56,7 @@
 
         var funcSockEv = { //needs to be public
             [hush.cons.sock_ev_disconnect] : (data) => { },
-            [hush.cons.sock_ev_mark_as_connect] : (data) => { },
+            [hush.cons.sock_ev_mark_as_connect] : (data) => { }, //Util.kt의 connectSockWithCallback() 설명 참조
             [hush.cons.sock_ev_connect] : (data) => { }
         }
 

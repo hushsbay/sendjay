@@ -1009,17 +1009,10 @@ var funcSockEv = { //needs to be public
         toggleDisconnIcon(true)
     },
     [hush.cons.sock_ev_mark_as_connect] : (data) => {//mobile only
-        // $("#img_disconn").hide() //hush.msg.toastEnd()
-        // $("#btn_refresh").show()
-        // $("#btn_logout").show()
-        toggleDisconnIcon(false)
+        toggleDisconnIcon(false) //Util.kt의 connectSockWithCallback() 설명 참조
     },
-    [hush.cons.sock_ev_connect] : (data) => { //mobile only (reconnect event in actual)
-        //Be careful that Socket.EVENT_CONNECT occurred many times at a moment. => from ChatService.kt
-        // $("#img_disconn").hide() //hush.msg.toastEnd()
-        // $("#btn_refresh").show()
-        // $("#btn_logout").show()
-        alert("reconnect")
+    [hush.cons.sock_ev_connect] : (data) => { //mobile only
+        //Be careful that Socket.EVENT_CONNECT occurred many times at a moment. => from ChatService.kt (socket.io 초기버전 이야기?!)
         toggleDisconnIcon(false)
         if (g_mode == BTN_MODE_PEOPLE) {
             const userkeyArr = []
