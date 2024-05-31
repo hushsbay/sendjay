@@ -842,7 +842,7 @@
                         } else if (rq.dt == FIRST_QUERIED || $("#getmore").length == 0) {
                             scrollToTarget()
                             updateAllUnreads("Y")
-                            procQueryUnread()
+                            //procQueryUnread() //바로 위 updateAll~콜백에서 처리됨
                         } else if (rq.type == "after") {
                             scrollToTarget()
                         } else {
