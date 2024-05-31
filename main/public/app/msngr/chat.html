@@ -175,8 +175,8 @@
                         _html += "                                         data-abcd='" + _abcd + "' data-abnm='" + encodeURIComponent(_abnm) + "' style='cursor:pointer'>"
                         _html += "      <div style='height:18px;display:flex;align-items:center;margin-left:3px'>"
                         _html += "          <div style='white-space:nowrap;overflow:hidden'>"
-                        _html += "              <span id=w_" + w_userkey + " class=coStateOff>W</span>"
-                        _html += "              <span id=m_" + m_userkey + " class='" + state_mob + "'>M</span>"
+                        _html += "              <span id=w_" + w_userkey + " class='state coStateOff'>W</span>"
+                        _html += "              <span id=m_" + m_userkey + " class='state " + state_mob + "'>M</span>"
                         _html += "              <span id=abcd_" + _userid + " class=coStateOut style='display:none'>" + _abcd + "</span>"
                         _html += "              <span id=typing_" + _userid + " style='display:none;font-size:9px;color:red'>typing</span>"
                         _html += "          </div>"
@@ -241,17 +241,30 @@
                         hush.http.getUserPic(_userid, "img_userid")
                     })
                     if (!data.userkeys) return
-                    const dataObj = { userkeys : data.userkeys }
-                    if (hush.webview.ios) {
-                    } else if (hush.webview.and) {
-                        setTimeout(function() {
-                            AndroidCom.send(hush.cons.sock_ev_chk_alive, JSON.stringify(dataObj), g_roomid, null, false) //procMsg=false
-                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
-                    } else {
-                        hush.sock.send(g_socket, hush.cons.sock_ev_chk_alive, dataObj, g_roomid)
-                    }
+                    // const dataObj = { userkeys : data.userkeys }
+                    // if (hush.webview.ios) {
+                    // } else if (hush.webview.and) {
+                    //     setTimeout(function() {
+                    //         AndroidCom.send(hush.cons.sock_ev_chk_alive, JSON.stringify(dataObj), g_roomid, null, false) //procMsg=false
+                    //     }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                    // } else {
+                    //     hush.sock.send(g_socket, hush.cons.sock_ev_chk_alive, dataObj, g_roomid)
+                    // }
+                    sendChkAlive(data.userkeys)
                 } catch (ex) {
                     hush.util.showEx(ex)
+                }
+            }
+
+            const sendChkAlive = (userkeyArr) => {
+                const dataObj = { userkeys : userkeyArr }
+                if (hush.webview.ios) {
+                } else if (hush.webview.and) {
+                    setTimeout(function() {
+                        AndroidCom.send(hush.cons.sock_ev_chk_alive, JSON.stringify(dataObj), g_roomid, null, false) //procMsg=false
+                    }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                } else {
+                    hush.sock.send(g_socket, hush.cons.sock_ev_chk_alive, dataObj, g_roomid)
                 }
             }
 
@@ -730,7 +743,7 @@
                         rq = { type : type, roomid : g_roomid, dt : g_cdt, start : start, end : end }
                     } else if (type == "onlyone") {
                         rq = { type : type, roomid : g_roomid, senderid : keyword, dt : g_cdt, cnt : hush.cons.fetch_cnt_oneshot }
-                    } else if (type == "after") {
+                    } else if (type == "after") { //after reconnect : 재연결후엔 그전에 들어온 메시지 가져와야 함
                         rq = { type : type, roomid : g_roomid, keyword : keyword } //keyword=msgid (after msgid)
                         withToast = false
                     } else {                    
@@ -1973,6 +1986,12 @@
                     try {
                         sockConnected = true
                         toggleDisconnIcon(false)
+                        const userkeyArr = []
+                        $(".state").each(function(idx, item) {
+                            userkeyArr.push(this.id.substring(2))
+                        }).promise().done(function() {
+                            sendChkAlive(userkeyArr)
+                        })
                         const arr = $(".talk").last()
                         if (arr.length == 0) return
                         getMsgList("after", $(arr[0]).attr("id").substring(4)) //msgid. after = after reconnect
