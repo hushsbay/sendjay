@@ -136,7 +136,10 @@
             }
 
             const updateAllUnreads = (first_queried) => { //first_queried is dummy for prevent two times call of read_msg(query) event in 'updateall' and scroll event.
-                if (!hush.http.chkOnline("none")) return    
+                if (!hush.http.chkOnline("none")) {
+                    $("#fr_tip").html($("#fr_tip").html()+"000")
+                    return
+                }
                 const rq = { type : "updateall", senderkey : g_userkey, roomid : g_roomid, first_queried : first_queried }
                 if (hush.webview.ios) { 
                 } else if (hush.webview.and) {
