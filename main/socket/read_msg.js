@@ -42,6 +42,7 @@ module.exports = async function(socket, param) {
 			sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND ROOMID = ? AND CDT >= ? "
 			data = await wsmysql.query(conn, sql, [obj.msgid, _roomid, dateFr])
 			if (data[0].CNT == 0) { //might be no record at first right after sending talk
+				console.log(msgid, _roomid, dateFr, "========")
 				param.data.unread_cnt = -1
 			} else {
 				data = "UPDATE A_MSGDTL_TBL SET STATE = 'R' WHERE MSGID = ? AND ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
