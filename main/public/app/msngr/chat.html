@@ -933,7 +933,7 @@
             const procFailure = (rq, dtDetails) => { //Request already sent. Retry(resending) might not be needed in most cases since error already occurred.
                 if ($("#unread_" + rq.msgid).html() == hush.cons.no_response) return 
                 $("#msg_" + rq.msgid).removeClass("needCheckUnread")
-                $("#handling_" + rq.msgid).html("$$") //$("#handling_" + rq.msgid).hide()
+                $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("$$")
                 const objUnread = $("#unread_" + rq.msgid)
                 objUnread.html(hush.cons.sending_failure)
                 objUnread.removeClass("unread").addClass("failure")
@@ -955,7 +955,7 @@
             }
 
             const retrySending = (rq) => {
-                $("#handling_" + rq.msgid).html("##") //$("#handling_" + rq.msgid).hide()
+                $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("##")
                 $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                 const objUnread = $("#unread_" + rq.msgid)
                 objUnread.html(hush.cons.retry_sending)
@@ -987,7 +987,7 @@
             const prepareForNoResponse = (rq) => {
                 setTimeout(() => {
                     if ($("#handling_" + rq.msgid).css("display") == "none") return        
-                    $("#handling_" + rq.msgid).html("^^") //$("#handling_" + rq.msgid).hide()
+                    $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("^^")
                     $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                     const objUnread = $("#unread_" + rq.msgid)
                     objUnread.html(hush.cons.no_response)
@@ -1489,11 +1489,11 @@
 
             const procUnreadCount = (msgid, unread_cnt) => {
                 if (unread_cnt == -1) {
-                    $("#handling_" + msgid).html("**")
+                    //$("#handling_" + msgid).html("**")
                     return //no record 
                 }
                 const objHandling = $("#handling_" + msgid)
-                if (objHandling.css("display") != "none") $("#handling_" + msgid).html("@@") //objHandling.hide()
+                if (objHandling.css("display") != "none") objHandling.hide() //$("#handling_" + msgid).html("@@")
                 const objUnread = $("#unread_" + msgid)
                 if (objUnread.css("display") == "none") objUnread.show()
                 const unreadStr = objUnread.html()
@@ -1823,12 +1823,12 @@
                     }
                 },
                 [hush.cons.sock_ev_read_msg] : (data) => {
-                    $("#handling_" + data.msgid).html("!!")
+                    //$("#handling_" + data.msgid).html("!!")
                     if (data.type == "updateall") {
                         //data.first_queried means that procQueryUnread() will be occurred in scroll event too, so it should be skipped here.
                         //Since "updateall" is broadcast, procQueryUnread() needed unless it's same userkey.
                         //if (data.senderkey != g_userkey || !data.first_queried) procQueryUnread()
-                        procQueryUnread() //updateall후엔 본인도 다시 읽어야 최신의 정보를 갖고 올 것임
+                        procQueryUnread() //updateall후엔 본인도 다시 읽어야 최신의 정보를 갖고 올 것임 (아무것도 안하면 본인 것 최초시엔 ..이 보일 것임)
                     } else if (data.type == "getmembers") { //socket.emit
                         const len = data.unread_list.length
                         if (len == 0) return
