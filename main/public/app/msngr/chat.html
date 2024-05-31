@@ -1670,7 +1670,11 @@
                         setMembers(data) //console.log(JSON.stringify(data)+"===")
                         toggleDispMem(data.dispmem)
                         if (data.from == "rename_room" || data.from == "after") return
-                        hush.idb.connect(() => {
+                        hush.idb.connect((rs) => {
+                            if (rs.code != hush.cons.result_ok) {
+                                hush.msg.alert(rs.msg)
+                                return
+                            }
                             getMsgList()
                         })
                     //}, 3000)
@@ -1822,7 +1826,7 @@
                     }
                 },
                 [hush.cons.sock_ev_read_msg] : (data) => {
-                    //$("#handling_" + data.msgid).html("!!")
+                    $("#handling_" + data.msgid).html("!!")
                     if (data.type == "updateall") {
                         //data.first_queried means that procQueryUnread() will be occurred in scroll event too, so it should be skipped here.
                         //Since "updateall" is broadcast, procQueryUnread() needed unless it's same userkey.
