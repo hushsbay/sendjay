@@ -766,6 +766,7 @@
                     alert(rq.type+"====")
                     const rs = await hush.http.ajax("/msngr/qry_msglist", rq, noToast)
                     if ($("#getmore").length > 0) $("#getmore").remove()
+                    alert(rq.type+"====000")
                     if (!hush.util.chkAjaxCode(rs, notShowMsgIfNoData)) return        
                     const _len = rs.list.length
                     if (rq.type == "search" || rq.type == "etc") {
