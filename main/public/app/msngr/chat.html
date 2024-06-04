@@ -102,7 +102,7 @@
             const showCellIcon = (show, obj) => {
                 if (show) {				
                     $("#cellmenu_" + obj.msgid).show()
-                    if (obj.filestate == hush.cons.file_expired || $("#body_" + obj.msgid).html() == hush.cons.cell_revoked) return
+                    if (obj.filestate == hush.cons.file_expired || $("#body_" + obj.msgid).text() == hush.cons.cell_revoked) return
                     $("#reply_" + obj.msgid).show()
                     if (obj.type != "file" && obj.type != "flink" && obj.type != "image") return
                     $("#save_" + obj.msgid).show()
@@ -483,7 +483,7 @@
                         if (obj.body == hush.cons.cell_revoked) {
                             _body = obj.body
                         } else { 
-                            //_body = hush.util.removeTag(obj.body) //.html() 대신에 .text()로 변경 검토해야 함
+                            //_body = hush.util.removeTag(obj.body) //.text()로 변경 검토해야 함
                             _body = obj.body
                         }
                         //_boderpx = "1px"
@@ -600,7 +600,7 @@
                     })
                     $("#reply_" + obj.msgid).off("click").on("click", function() {
                         hush.util.animBgColor($(this))
-                        if (obj.filestate == hush.cons.file_expired || $("#body_" + obj.msgid).html() == hush.cons.cell_revoked) return
+                        if (obj.filestate == hush.cons.file_expired || $("#body_" + obj.msgid).text() == hush.cons.cell_revoked) return
                         let _msg = obj.sendernm + " - " + hush.util.displayTalkBodyCustom(obj.type, obj.body)
                         let _html = "<span id=cancelreply class=mq_tiny style='background:#005192;color:white;border-radius:8px;cursor:pointer;padding:3px'>취소</span> "
                         _html += "<span id=msgtoreply class=mq_tiny style='color:#005192;cursor:default;margin-left:4px'>re) " + _msg + "</span> "
@@ -611,7 +611,7 @@
                     })
                     $("#save_" + obj.msgid).off("click").on("click", function() {
                         hush.util.animBgColor($(this))
-                        if (obj.filestate == hush.cons.file_expired || $("#body_" + obj.msgid).html() == hush.cons.cell_revoked) return
+                        if (obj.filestate == hush.cons.file_expired || $("#body_" + obj.msgid).text() == hush.cons.cell_revoked) return
                         if (obj.type == "image") {
                             hush.http.fileDownload("imagetofile", obj.msgid)
                         } else {
@@ -679,7 +679,7 @@
                         $("#btn_copy_cell, #btn_copy_cell_m").off("click").on("click", function(e) { 
                             hush.util.animBgColor($(this))
                             if (obj.type == "" || !hush.cons.chat_handled.includes(obj.type)) return 
-                            if ($("#body_" + obj.msgid).html() == hush.cons.cell_revoked) {
+                            if ($("#body_" + obj.msgid).text() == hush.cons.cell_revoked) {
                                 hush.msg.toast(hush.cons.cell_revoked)
                                 return
                             }
@@ -708,7 +708,7 @@
                         $("#btn_revoke_cell, #btn_revoke_cell_m").off("click").on("click", async function(e) {   
                             hush.util.animBgColor($(this)) 
                             if (obj.type == "" || !hush.cons.chat_handled.includes(obj.type)) return 
-                            if ($("#body_" + obj.msgid).html() == hush.cons.cell_revoked) {
+                            if ($("#body_" + obj.msgid).text() == hush.cons.cell_revoked) {
                                 hush.msg.toast(hush.cons.cell_revoked)
                                 return
                             }
@@ -952,7 +952,7 @@
             }
 
             const procFailure = (rq, dtDetails) => { //Request already sent. Retry(resending) might not be needed in most cases since error already occurred.
-                if ($("#unread_" + rq.msgid).html() == hush.cons.no_response) return 
+                if ($("#unread_" + rq.msgid).text() == hush.cons.no_response) return 
                 $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                 $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("$$")
                 const objUnread = $("#unread_" + rq.msgid)
@@ -1372,7 +1372,7 @@
                         })
                         $("#abort_" + rq.msgid).off("click").on("click", async function() {
                             hush.util.animBgColor($(this))
-                            if ($(this).html() != "Abort") {
+                            if ($(this).text() != "Abort") {
                                 await hush.msg.alert("업로드 완료중이므로 처리불가능합니다.")
                                 return
                             }
@@ -1517,7 +1517,7 @@
                 if (objHandling.css("display") != "none") objHandling.hide() //$("#handling_" + msgid).html("@@")
                 const objUnread = $("#unread_" + msgid)
                 if (objUnread.css("display") == "none") objUnread.show()
-                const unreadStr = objUnread.html()
+                const unreadStr = objUnread.text()
                 const cnt_ori = parseInt(unreadStr) //unreadStr.startsWith("+") ? hush.cons.max_unread_cnt + 1 : parseInt(unreadStr)
                 const cnt = parseInt(unread_cnt)                    
                 if (cnt >= cnt_ori) return //unreads count should not be bigger than old one

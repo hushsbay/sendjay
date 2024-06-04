@@ -371,7 +371,7 @@
                                 $(".mem").each(function(idx, item) { 
                                     const _userid = item.id.substring(4)
                                     useridArr.push(_userid) 
-                                    usernmArr.push($("#addnm_" + _userid).html())
+                                    usernmArr.push($("#addnm_" + _userid).text())
                                 }).promise().done(function() {
                                     if (useridArr.length == 0) {
                                         hush.msg.toast(hush.msg.warn_need_one_row_selected)
@@ -416,7 +416,7 @@
                                         const _id = this.id
                                         const _idx = _id.substring(7)
                                         orgcd = $("#orgrow_" + _idx).attr("orgcd")
-                                        orgnm = $("#orgnm_" + _idx).html()
+                                        orgnm = $("#orgnm_" + _idx).text()
                                         i += 1
                                     }
                                 }).promise().done(function() { 

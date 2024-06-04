@@ -144,8 +144,8 @@ const procSelect = (_userid) => {
                 $("#add_" + _userid).effect("highlight", { color: hush.cons.fadein }, 500)
                 return
             }
-            const _nm = $("#nm_" + _userid).html()
-            const _team = $("#team_" + _userid).html()
+            const _nm = $("#nm_" + _userid).text()
+            const _team = $("#team_" + _userid).text()
             let _html = "<div id=add_" + _userid + " class=mem>"
             _html += "      <div id=addnm_" + _userid + " class='coDotDot memNm coText'>" + _nm + "</div>"
             if (_team) _html += "  <div class='coDotDot memTeam coText'>" + _team.replace(/\s/g, "") + "</div>"
