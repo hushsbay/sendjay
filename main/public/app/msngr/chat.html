@@ -250,13 +250,13 @@
                     // } else {
                     //     hush.sock.send(g_socket, hush.cons.sock_ev_chk_alive, dataObj, g_roomid)
                     // }
-                    sendChkAlive(data.userkeys)
+//                    chkAlive(data.userkeys)
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }
             }
 
-            const sendChkAlive = (userkeyArr) => {
+            const chkAlive = (userkeyArr) => {
                 const dataObj = { userkeys : userkeyArr }
                 if (hush.webview.ios) {
                 } else if (hush.webview.and) {
@@ -266,6 +266,17 @@
                 } else {
                     hush.sock.send(g_socket, hush.cons.sock_ev_chk_alive, dataObj, g_roomid)
                 }
+            }
+            
+            const callPeriodic = () => {
+                const userkeyArr = []
+                $(".state").each(function(idx, item) {
+                    userkeyArr.push(this.id.substring(2))
+                }).promise().done(function() {
+                    chkAlive(userkeyArr)
+                })
+                chkTyping()
+                setTimeout(() => callPeriodic(), 3000)
             }
 
             const setResult = (data) => {            
@@ -1583,7 +1594,7 @@
                         }
                     }
                 }
-                setTimeout(() => chkTyping(), 3000)
+                //setTimeout(() => chkTyping(), 3000)
             }
 
             const calcBytes = () => {
@@ -1990,7 +2001,7 @@
                         $(".state").each(function(idx, item) {
                             userkeyArr.push(this.id.substring(2))
                         }).promise().done(function() {
-                            sendChkAlive(userkeyArr)
+                            chkAlive(userkeyArr)
                         })
                         const arr = $(".talk").last()
                         if (arr.length == 0) return
@@ -2046,7 +2057,7 @@
                         $("#fr_sendcopy").show()
                     }
                     procScrollEvent()
-                    chkTyping()
+                    callPeriodic() //chkTyping()
                     setTimeout(function() {
                         AndroidRoom.doneLoad()
                     }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
@@ -2145,7 +2156,7 @@
                             hush.sock.send(g_socket, hush.cons.sock_ev_open_room, rq, g_roomid)
                         }
                         procScrollEvent()
-                        chkTyping()
+                        callPeriodic() //chkTyping()
                     }
                     if (localStorage[g_roomid]) g_in_chat.val(localStorage[g_roomid])
                     hush.webview.ready = true
