@@ -763,6 +763,7 @@
                         const cnt = (g_cdt == FIRST_QUERIED) ? hush.cons.fetch_first_cnt : hush.cons.fetch_cnt
                         rq = { type : "normal", roomid : g_roomid, dt : g_cdt, cnt : cnt }
                     }                    
+                    alert(rq.type+"====")
                     const rs = await hush.http.ajax("/msngr/qry_msglist", rq, noToast)
                     if ($("#getmore").length > 0) $("#getmore").remove()
                     if (!hush.util.chkAjaxCode(rs, notShowMsgIfNoData)) return        
