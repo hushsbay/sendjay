@@ -778,18 +778,26 @@
                 }
             },
             chkAjaxCode : (rs, notShowMsgIfNoData) => {
-                if (notShowMsgIfNoData) {
-                    if (rs.code != hush.cons.CODE_OK && rs.code != hush.cons.CODE_NO_DATA) {
-                        alert(rs.code +"====" + hush.cons.CODE_NO_DATA)
+                // if (notShowMsgIfNoData) {
+                //     if (rs.code != hush.cons.CODE_OK) {
+                //         alert(rs.code +"====" + hush.cons.CODE_NO_DATA)
+                //         if (rs.code != hush.cons.CODE_NO_DATA) hush.msg.showMsg(rs.msg, rs.code)
+                //         return false
+                //     }
+                // } else {
+                //     if (rs.code != hush.cons.CODE_OK) {
+                //         alert(rs.code +"==00==" + hush.cons.CODE_OK)
+                //         hush.msg.showMsg(rs.msg, rs.code)
+                //         return false
+                //     }
+                // }
+                if (rs.code != hush.cons.CODE_OK) {
+                    if (notShowMsgIfNoData && rs.code == hush.cons.CODE_NO_DATA) {
+                        //데이터 없을 경우에 메시지없이 넘어가야 할 때가 있음
+                    } else {
                         hush.msg.showMsg(rs.msg, rs.code)
-                        return false
                     }
-                } else {
-                    if (rs.code != hush.cons.CODE_OK) {
-                        alert(rs.code +"==00==" + hush.cons.CODE_OK)
-                        hush.msg.showMsg(rs.msg, rs.code)
-                        return false
-                    }
+                    return false
                 }
                 return true
             },
