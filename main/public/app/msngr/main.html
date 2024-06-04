@@ -224,9 +224,9 @@
                         hush.util.animBgColor($(this))
                         AndroidMain.reload()
                     })
-                    $("#btn_logout").on("click", function() { //mobile only
+                    $("#btn_logout").on("click", async function() { //mobile only
                         hush.util.animBgColor($(this))
-                        const ret = hush.msg.confirm("로그아웃할까요?")
+                        const ret = await hush.msg.confirm("로그아웃할까요?")
                         if (!ret) return
                         AndroidMain.logout()
                     })
