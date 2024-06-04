@@ -250,7 +250,7 @@
                     // } else {
                     //     hush.sock.send(g_socket, hush.cons.sock_ev_chk_alive, dataObj, g_roomid)
                     // }
-//                    chkAlive(data.userkeys)
+                    chkAlive(data.userkeys)
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }
@@ -268,7 +268,8 @@
                 }
             }
             
-            const callPeriodic = () => {
+            const callPeriodic = () => { //원래 타이머로 chkTyping()만 실행했는데 최초 페이지 열릴 때 모바일에서
+                //(네트워크 문제인지 아닌지 모르는 문제로) ON/OFF 표시가 안되는 문제가 드물게 나타나 일단 그 보완재로서 타이머에 chkAlive()도 같이 추가해 돌리게 됨
                 const userkeyArr = []
                 $(".state").each(function(idx, item) {
                     userkeyArr.push(this.id.substring(2))
