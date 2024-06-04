@@ -133,10 +133,11 @@
 							const _pwd = $("#in_pwd").val().trim()
 							const _pwd_1 = (g_mode == "C" || _chkPwd) ? $("#in_pwd_1").val().trim() : ""
 							const _pwd_2 = (g_mode == "C" || _chkPwd) ? $("#in_pwd_2").val().trim() : ""
-							const _toporgcd = $("#txt_toporgcd").html()
-							const _toporgnm = $("#txt_toporgnm").html()
-							const _orgcd = $("#txt_orgcd").html()
-							const _orgnm = $("#txt_orgnm").html()
+							const _toporgcd = $("#txt_toporgcd").text()
+							const _toporgnm = $("#txt_toporgnm").text()
+							const _orgcd = $("#txt_orgcd").text()
+							const _orgnm = $("#txt_orgnm").text()
+							debugger
 							if (g_mode == "C" || _chkPwd) { //신규모드 또는 수정모드중 비번 변경시
 								if (!await hush.util.chkFieldVal(_pwd_1, "새비번", 4, 20, true)) return	
 								if (_pwd_1 != _pwd_2) {
