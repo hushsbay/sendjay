@@ -34,6 +34,7 @@
 		$.when($.ready).done(async function() {
             await $.getScript("/common/common.js")
 			$("#btn_sendjay_aos").click(function() { 
+                alert(ush.util.getMobileOSVersion("Android")+"==="+navigator.userAgent)
                 if (hush.util.getMobileOSVersion("Android") < 14) { //Android 14 = API 34 Level
                     hush.msg.alert("안드로이드 버전 14 이상만 지원합니다.")
                     return
