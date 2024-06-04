@@ -1027,6 +1027,20 @@
                     }
                 }
             },
+            isMobile : () => {
+                if (/android|iphone|ipad/i.test(navigator.userAgent)) return true
+                return false
+            },
+            getMobileOSVersion : (os) => { 
+                //os => "Android" : Mozilla/5.0 (Linux; Android 11; SM-G977N) AppleWebkit/537.36 (KHTML, ~
+                //os => iOS : not prepared yet
+                const agent = navigator.userAgent + ";"
+                const pos = agent.indexOf(os)
+                if (pos == -1) return pos
+                const posColon = agent.indexOf(";", pos)
+                const ver = agent.substr(pos + os.length, posColon - (pos + os.length))
+                return parseInt(ver.trim())
+            }
         },
         webview : {
             on : false,

@@ -2,9 +2,11 @@
 <html> 
 <head>
 	<meta charset="UTF-8" />
-    <link id=favicon href="/img/sendjay_darkblue.png" rel="shortcut icon" type="image/x-icon"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Expires" content="-1">
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-    <title>Sendjay App Download</title>
+    <title>App Download</title>
+    <link id=favicon href="/img/hushsbay.png" rel="shortcut icon" type="image/x-icon"/>
     <link rel="stylesheet" href="/plugin/jquery-ui-smoothness-1.12.1.min.css">
     <link rel="stylesheet" href="/common/common.css">
     <style>
@@ -16,41 +18,40 @@
 	<script>
         const procDown = async (id) => {
 			try {
-                const rs = await hushj.http.ajax("/applist.json", null)   
+                const rs = await hush.http.ajax("/applist.json", null)   
                 if (!rs) throw new Error("앱 다운로드에 문제가 있습니다.")
 				const _url = location.protocol + "//" + location.host + rs[id].path + "/"
 				if (id.endsWith("ios")) {
-                    hushj.msg.alert("아직 미개발입니다.") //window.location.href = "itms-services://?action=download-manifest&url=" + _url + rs[id].filename + "&" + Math.randowm()
-				} else { //https://hushsbay.com:444/content/sendjay.apk
-                    window.location.href = _url + rs[id].filename + "?" + Math.random()
+                    hush.msg.alert("아직 미개발입니다.") //location.href = "itms-services://?action=download-manifest&url=" + _url + rs[id].filename + "&" + Math.randowm()
+				} else { //https://hushsbay.com:444/download/sendjay.apk
+                    location.href = _url + rs[id].filename + "?" + Math.random()
 				}
 			} catch (ex) { 
-				hush.util.showException(ex)
+				hush.util.showEx(ex)
 			}								
 		}
 
 		$.when($.ready).done(async function() {
             await $.getScript("/common/common.js")
-            await $.getScript("/jquery/jquery_common.js") 
-			$("#btn_sendjay_and").click(function() { 
-                if (hush.util.getMobileOSVersion("Android") < 9) {
-                    hushj.msg.alert("Android version (minimum level) should be 28(Pie/9.0).")
+			$("#btn_sendjay_aos").click(function() { 
+                if (hush.util.getMobileOSVersion("Android") < 14) { //Android 14 = API 34 Level
+                    hush.msg.alert("Android version (minimum level) should be 14.")
                     return
                 }
-                procDown("sendjay_and") 
+                procDown("sendjay_aos") 
             })
 			$("#btn_sendjay_ios").click(function() { 
                 procDown("sendjay_ios") 
             })
 		}).fail(function(ex) {
-            hush.util.showException(ex)
+            hush.util.showEx(ex)
         })
 	</script>
 </head>
 <body>
 	<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:50px">
-        <div style="color:#005192;font-size:32px;font-weight:bold">sendjay Download</div>
-        <div id=btn_sendjay_and class=btn>Android App</div>
+        <div style="color:#005192;font-size:32px;font-weight:bold">Sendjay Download</div>
+        <div id=btn_sendjay_aos class=btn>Android App</div>
         <div id=btn_sendjay_ios class=btn>iOS App</div>
     </div>
 </body>
