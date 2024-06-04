@@ -18,7 +18,7 @@
 	<script>
         const procDown = async (id) => {
 			try {
-                const rs = await hush.http.ajax("/applist.json", null)   
+                const rs = await hush.http.ajax("/applist.json", null, true, "get")   
                 if (!rs) throw new Error("앱 다운로드에 문제가 있습니다.")
 				const _url = location.protocol + "//" + location.host + rs[id].path + "/"
 				if (id.endsWith("ios")) {
@@ -34,6 +34,7 @@
 		$.when($.ready).done(async function() {
             await $.getScript("/common/common.js")
 			$("#btn_sendjay_aos").click(function() { 
+                debugger
                 if (hush.util.getMobileOSVersion("Android") < 14) { //Android 14 = API 34 Level
                     hush.msg.alert("Android version (minimum level) should be 14.")
                     return
@@ -52,7 +53,7 @@
 	<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:50px">
         <div style="color:#005192;font-size:32px;font-weight:bold">Sendjay Download</div>
         <div id=btn_sendjay_aos class=btn>Android App</div>
-        <div id=btn_sendjay_ios class=btn>iOS App</div>
+        <div id=btn_sendjay_ios class=btn>iOS App (미개발)</div>
     </div>
 </body>
 </html>
