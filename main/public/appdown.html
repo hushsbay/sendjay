@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html> 
+<head>
+	<meta charset="UTF-8" />
+    <link id=favicon href="/img/sendjay_darkblue.png" rel="shortcut icon" type="image/x-icon"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <title>Sendjay App Download</title>
+    <link rel="stylesheet" href="/plugin/jquery-ui-smoothness-1.12.1.min.css">
+    <link rel="stylesheet" href="/common/common.css">
+    <style>
+		.btn { width:150px;text-align:center;background:#005192;color:white;border:1px solid black;font-size:14px;padding:30px;margin-top:50px }
+	</style>
+    <script src="/plugin/jquery-3.4.1.min.js"></script>
+    <script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
+    <script src="/plugin/jquery.cookie.js"></script>
+	<script>
+        const procDown = async (id) => {
+			try {
+                const rs = await hushj.http.ajax("/applist.json", null)   
+                if (!rs) throw new Error("앱 다운로드에 문제가 있습니다.")
+				const _url = location.protocol + "//" + location.host + rs[id].path + "/"
+				if (id.endsWith("ios")) {
+                    hushj.msg.alert("아직 미개발입니다.") //window.location.href = "itms-services://?action=download-manifest&url=" + _url + rs[id].filename + "&" + Math.randowm()
+				} else { //https://hushsbay.com:444/content/sendjay.apk
+                    window.location.href = _url + rs[id].filename + "?" + Math.random()
+				}
+			} catch (ex) { 
+				hush.util.showException(ex)
+			}								
+		}
+
+		$.when($.ready).done(async function() {
+            await $.getScript("/common/common.js")
+            await $.getScript("/jquery/jquery_common.js") 
+			$("#btn_sendjay_and").click(function() { 
+                if (hush.util.getMobileOSVersion("Android") < 9) {
+                    hushj.msg.alert("Android version (minimum level) should be 28(Pie/9.0).")
+                    return
+                }
+                procDown("sendjay_and") 
+            })
+			$("#btn_sendjay_ios").click(function() { 
+                procDown("sendjay_ios") 
+            })
+		}).fail(function(ex) {
+            hush.util.showException(ex)
+        })
+	</script>
+</head>
+<body>
+	<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:50px">
+        <div style="color:#005192;font-size:32px;font-weight:bold">sendjay Download</div>
+        <div id=btn_sendjay_and class=btn>Android App</div>
+        <div id=btn_sendjay_ios class=btn>iOS App</div>
+    </div>
+</body>
+</html>
