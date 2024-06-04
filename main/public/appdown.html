@@ -36,8 +36,8 @@
 			$("#btn_sendjay_aos").click(function() { 
                 debugger
                 if (hush.util.getMobileOSVersion("Android") < 14) { //Android 14 = API 34 Level
-                    hush.msg.alert("Android version (minimum level) should be 14.")
-                    return
+                    hush.msg.alert("안드로이드 버전 14 이상이어야 합니다.")
+                    //return
                 }
                 procDown("sendjay_aos") 
             })
