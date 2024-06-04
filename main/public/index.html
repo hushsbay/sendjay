@@ -126,7 +126,10 @@
                             hush.util.showEx(ex)
                         }
                     })
-                    $("#btn_msngr").on("click", function() {
+                    $("#btn_msngr_app").on("click", function() {
+                        hush.util.openWinTab("/appdown.html")
+                    })
+                    $("#btn_msngr_web").on("click", function() {
                         hush.util.openWinTab("/app/msngr/main.html")
                     })
                     $("#btn_orgtree").on("click", function() {
@@ -163,13 +166,13 @@
             </div>
             <div class="main">
                 <div class="menu">
-                    <div class="menuItem coActive" id="btn_survey">
+                    <div class="menuItem coActive" id="btn_msngr_app">
                         <img class="coImg32" src="/img/white_survey.png"/>
-                        <div class="menuItemText">설문</div>
+                        <div class="menuItemText">메신저(앱)</div>
                     </div>
-                    <div class="menuItem coActive" id="btn_msngr">
+                    <div class="menuItem coActive" id="btn_msngr_web">
                         <img class="coImg32" src="/img/white_chat.png"/>
-                        <div class="menuItemText">웹메신저</div>
+                        <div class="menuItemText">메신저(웹)</div>
                     </div>
                     <div class="menuItem coActive" id="btn_orgtree">
                         <img class="coImg32" src="/img/white_company.png"/>
