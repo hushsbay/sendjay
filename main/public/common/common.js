@@ -780,11 +780,13 @@
             chkAjaxCode : (rs, notShowMsgIfNoData) => {
                 if (notShowMsgIfNoData) {
                     if (rs.code != hush.cons.CODE_OK && rs.code != hush.cons.CODE_NO_DATA) {
+                        alert(rs.code +"====" + hush.cons.CODE_NO_DATA)
                         hush.msg.showMsg(rs.msg, rs.code)
                         return false
                     }
                 } else {
                     if (rs.code != hush.cons.CODE_OK) {
+                        alert(rs.code +"==00==" + hush.cons.CODE_OK)
                         hush.msg.showMsg(rs.msg, rs.code)
                         return false
                     }
