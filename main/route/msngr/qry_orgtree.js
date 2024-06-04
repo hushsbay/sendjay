@@ -23,7 +23,7 @@ router.post('/', async function(req, res) {
 		sql += "ORDER BY SEQ "
 		data = await wsmysql.query(conn, sql, null)
 		if (data.length == 0) {
-			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true)
+			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA)
 			return
 		}
 		rs.list = data

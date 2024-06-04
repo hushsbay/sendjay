@@ -20,7 +20,7 @@ router.post('/', async function(req, res) {
 		sql = "SELECT COUNT(*) CNT FROM Z_USER_TBL WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [userid])
 		if (data.length == 0) {
-			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true)
+			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA)
 			return
 		}
 		let _nicknm = decodeURIComponent(req.body.nicknm) || ''

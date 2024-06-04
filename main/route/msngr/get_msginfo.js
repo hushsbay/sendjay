@@ -34,7 +34,7 @@ router.post('/', async function(req, res) {
 			sql = "SELECT TYP TYPE, BUFFER, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END BODY FROM A_MSGMST_TBL WHERE MSGID = ? "
 			data = await wsmysql.query(conn, sql, [msgid])
 			if (data.length == 0) {
-				ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true) //true=toast
+				ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA) //true=toast
 				return
 			}
 			if (data[0].TYPE == 'image') {
@@ -103,7 +103,7 @@ router.get('/', async function(req, res) { //chat.html의 hush.http.fileDownload
 		sql = "SELECT TYP TYPE, BUFFER, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END BODY FROM A_MSGMST_TBL WHERE MSGID = ? "
 		data = await wsmysql.query(conn, sql, [msgid])
 		if (data.length == 0) {
-			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true) //true=toast
+			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA) //true=toast
 			return
 		}
 		const ret = await ws.util.chkAccessUserWithTarget(conn, userid, msgid, '')

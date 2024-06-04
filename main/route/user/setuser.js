@@ -31,7 +31,7 @@ router.post('/', upload.any(), async function(req, res) {
 			await wsmysql.query(conn, sql, [id, _enc, nm, orgcd, orgnm, toporgcd, toporgnm, buf, mimetype, alias])
 		} else {
 			if (data[0].CNT == 0) {
-				ws.http.resWarn(res, ws.cons.MSG_NO_DATA)
+				ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA)
 				return
 			}
 			const _dec = ws.util.decrypt(data[0].PWD, nodeConfig.crypto.key)

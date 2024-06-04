@@ -27,7 +27,7 @@ router.post('/', async function(req, res) {
 			sql = "SELECT CDT FROM A_MSGMST_TBL WHERE MSGID = ? AND ROOMID = ? "
 			data = await wsmysql.query(conn, sql, [keyword, roomid])
 			if (data.length == 0) {
-				ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true)
+				ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA)
 				return
 			}
 			dt = data[0].CDT
@@ -70,7 +70,7 @@ router.post('/', async function(req, res) {
 		data = await wsmysql.query(conn, sql, arg)
 		len = data.length
 		if (data.length == 0) {
-			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true)
+			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA)
 			return
 		}
 		rs.list = data

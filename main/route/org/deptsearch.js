@@ -27,7 +27,7 @@ router.post('/', async function(req, res) {
 		data = await wsmysql.query(conn, sql, null)
 		len = data.length
         if (len == 0) {
-			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true) //true=toast
+			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA) //true=toast
 			return
 		}
        	rs.list = data
