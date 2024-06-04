@@ -34,11 +34,10 @@
 		$.when($.ready).done(async function() {
             await $.getScript("/common/common.js")
 			$("#btn_sendjay_aos").click(function() { 
-                alert(hush.util.getMobileOSVersion("Android")+"==="+navigator.userAgent)
-                if (hush.util.getMobileOSVersion("Android") < 14) { //Android 14 = API 34 Level
-                    hush.msg.alert("안드로이드 버전 14 이상만 지원합니다.")
-                    return
-                }
+                // if (hush.util.getMobileOSVersion("Android") < 14) { //Android 14 = API 34 Level
+                //     hush.msg.alert("안드로이드 버전 14 이상만 지원합니다.") //navigator.agent에서 14로 나오지 않고 10으로 나와서 사용못함
+                //     return
+                // }
                 procDown("sendjay_aos") 
             })
 			$("#btn_sendjay_ios").click(function() { 
@@ -52,6 +51,7 @@
 <body>
 	<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:50px">
         <div style="color:#005192;font-size:32px;font-weight:bold">Sendjay Download</div>
+        <div style="font-size:14px;margin-top:25px">안드로이드 버전 14 이상 지원</div>
         <div id=btn_sendjay_aos class=btn>Android App</div>
         <div id=btn_sendjay_ios class=btn>iOS App (미개발)</div>
     </div>
