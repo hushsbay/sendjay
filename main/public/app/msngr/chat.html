@@ -1853,6 +1853,7 @@
                         //data.first_queried means that procQueryUnread() will be occurred in scroll event too, so it should be skipped here.
                         //Since "updateall" is broadcast, procQueryUnread() needed unless it's same userkey.
                         //if (data.senderkey != g_userkey || !data.first_queried) procQueryUnread()
+                        $("#in_serach").val("000") //테스트 (가끔 ..가 남아 있는 때가 있음)
                         procQueryUnread() //updateall후엔 본인도 다시 읽어야 최신의 정보를 갖고 올 것임 (아무것도 안하면 본인 것 최초시엔 ..이 보일 것임)
                     } else if (data.type == "getmembers") { //socket.emit
                         const len = data.unread_list.length
