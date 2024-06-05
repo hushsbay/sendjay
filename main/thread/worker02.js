@@ -3,7 +3,7 @@ const nodeConfig = require(config.app.nodeConfig)
 const ws = require(config.app.ws)
 const { parentPort } = require('worker_threads')
 
-//오래된 코딩 (just 참고용)
+//미사용 - 오래된 코딩 (just 참고용)
 
 ws.util.addGlobal({ logPath: config.app.logPath, dirName: __dirname }, nodeConfig)
 
@@ -15,7 +15,7 @@ async function proc() {
     try {
         parentPort.postMessage({ ev : 'chk_sockets_rooms' })
     } catch (ex) {
-        global.log.error(TITLE + ': error: ', ex.stack)
+        global.logger.error(TITLE + ': error: ', ex.stack)
     } finally {
         setTimeout(() => { proc() }, 1000 * 60) //1 minute
     }

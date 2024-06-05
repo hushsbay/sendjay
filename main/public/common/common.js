@@ -761,11 +761,13 @@
                 if (typeof ex == "string") {
                     _msg = _title + ex
                 } else if (typeof ex == "object" && ex.stack) {
-                    const arr = ex.stack.split("\n")
-                    arr.splice(0, 1) //첫번째 아이템 제거
-                    const strAt = arr.join("\n")
+                    // const arr = ex.stack.split("\n")
+                    // arr.splice(0, 1) //첫번째 아이템 제거
+                    // const strAt = arr.join("\n")
+                    // console.log(ex.stack)
+                    // _msg = _title + ex.message + "<br><br>" + strAt
                     console.log(ex.stack)
-                    _msg = _title + ex.message + "<br><br>" + strAt
+                    _msg = _title + ex.message //stack을 사용자에게 보여주기엔 너무 시각적으로 부담이 됨
                 } else {
                     _msg = _title + ex.toString()
                 }

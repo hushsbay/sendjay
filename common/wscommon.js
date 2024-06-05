@@ -92,8 +92,8 @@ module.exports = (function() {
 			},
 			resCodeMsg : (res, code, ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기 (아래처럼 오류 처리에서만 사용중)
 				res.type('application/json')
-				const _msg = ws.util.getLogMsg(null, ex, title)
-				res.json({ code : code, msg : _msg })
+				const _obj = ws.util.getLogMsg(null, ex, title)
+				res.json({ code : code, msg : _obj.msg })
 			},
 			resWarn : (res, msg, withToast, code, title) => { //catch로 넘기지 말고 try 안에서 체크해 return으로 마쳐야 할 때만 사용 (return되어도 finally 사용해 db 등 해제할 건 해제해야 함)
 				const _msg = (withToast ? ws.cons.toast_prefix : '' ) + msg
@@ -394,8 +394,8 @@ module.exports = (function() {
 				socket.broadcast.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //자기자신 제외
 				socket.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
 			},
-			getLogMsg : (_socket, ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기
-				let _msg = ''
+			getLogMsg : (_socket, ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기 (ws에서만 존재해야 함)
+				let _msg = '', _stack = ''
 				if (_socket) {
 					if (_socket.userip) _msg += '[' + _socket.userip + ']'
 					if (_socket.userkey) _msg += '[' + _socket.userkey + ']'
@@ -403,16 +403,17 @@ module.exports = (function() {
 				if (title) _msg += '[' + title + ']'
 				if (typeof ex == 'string') {
 					_msg += ex
+					_stack = _msg
 				} else {
 					if (ex.stack) {
-						_msg += ex.stack	
-					} else if (ex.message) {
-						_msg += ex.message
+						_msg += ex.message //stack을 사용자에게 보여주기엔 너무 시각적으로 부담이 됨
+						_stack += ex.stack //stack은 logger에 저장할 때 쓰기로 함
 					} else {
 						_msg += ex.toString()
+						_stack = _msg
 					}
 				}
-				return _msg
+				return { msg : _msg, stack : _stack }
 			},
 			joinRoomWithUserkeySocketArr : (userkeySocketArr, _roomid) => new Promise(async (resolve, reject) => { //open_room or invite_user
 				let _obj
@@ -509,13 +510,13 @@ module.exports = (function() {
 			},
 			warn : (_type, _socket, _logTitle, _ex, _roomid) => {
 				try { //_type = alert, toast, null(just logging)
-					let _msg = ws.sock.getLogMsg(_socket, _ex, _logTitle)
-					if (_roomid) _msg += '<br>' + _roomid
-					global.logger.info(_msg) //logger는 console.log(a,b,c..)를 지원하지 않음. This line should precede _socket (in the next line)
-					if (_type && _socket) _socket.emit(_type, { code : '-1', msg : _msg, roomid : _roomid })
+					let _obj = ws.sock.getLogMsg(_socket, _ex, _logTitle)
+					if (_roomid) _obj.stack += '<br>' + _roomid
+					global.logger.info(_obj.stack) //logger는 console.log(a,b,c..)를 지원하지 않음. This line should precede _socket (in the next line)
+					if (_type && _socket) _socket.emit(_type, { code : '-1', msg : _obj.msg, roomid : _roomid })
 				} catch (ex) { 
-					let _msg = ws.sock.getLogMsg(_socket, ex, _logTitle)
-					global.logger.error(_msg)
+					let _obj = ws.sock.getLogMsg(_socket, ex, _logTitle)
+					global.logger.error(_obj.stack)
 				}
 			},
 		},
@@ -546,8 +547,8 @@ module.exports = (function() {
                 if (typeof obj == 'undefined' || obj == null) return true
                 return false
             },
-			getLogMsg : (req, ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기
-				let _msg = ''
+			getLogMsg : (req, ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기 (ws에서만 존재해야 함)
+				let _msg = '', _stack = ''
 				if (req) {
 					if (req.clientIp) _msg += '[' + req.clientIp + ']'
 					if (req.cookie && req.cookie.userid) _msg += '[' + req.cookie.userid + ']'
@@ -555,24 +556,25 @@ module.exports = (function() {
 				if (title) _msg += '[' + title + ']'
 				if (typeof ex == 'string') {
 					_msg += ex
+					_stack = _msg
 				} else {
 					if (ex.stack) {
-						_msg += ex.stack	
-					} else if (ex.message) {
-						_msg += ex.message
+						_msg += ex.message //stack을 사용자에게 보여주기엔 너무 시각적으로 부담이 됨
+						_stack += ex.stack //stack은 logger에 저장할 때 쓰기로 함
 					} else {
 						_msg += ex.toString()
+						_stack = _msg
 					}
 				}
-				return _msg
+				return { msg : _msg, stack : _stack }
 			},
 			logi : (req, ex) => {
-				const _msg = ws.util.getLogMsg(req, ex)
-				global.logger.info(_msg)
+				const _obj = ws.util.getLogMsg(req, ex)
+				global.logger.info(_obj.stack)
 			},
 			loge : (req, ex) => { //ex가 catch되는 곳에서 사용하기
-				const _msg = ws.util.getLogMsg(req, ex)
-				global.logger.error(_msg)
+				const _obj = ws.util.getLogMsg(req, ex)
+				global.logger.error(_obj.stack)
 			},
 			watchProcessError : () => {
 				process.on('error', e => {

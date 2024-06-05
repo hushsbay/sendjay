@@ -6,7 +6,7 @@ const com = require('../common')
 const Redis = require('ioredis')
 const { parentPort } = require('worker_threads')
 
-//오래된 코딩 (just 참고용)
+//미사용 - 오래된 코딩 (just 참고용)
 
 ws.util.addGlobal({ logPath: config.app.logPath, dirName: __dirname }, nodeConfig)
 global.pool = wsmysql.createPool(config.mysql.scheme)
@@ -42,7 +42,7 @@ async function proc() {
                     if (obj.data[0].CNT == 0) parentPort.postMessage({ ev : 'del_redis_socket', item : item, userkey : obj.userkey, userid : obj.userid }) 
                 }
             } catch (ex) {
-                global.log.error(TITLE + ': error: ', ex.stack)
+                global.logger.error(TITLE + ': error: ', ex.stack)
             } finally {
                 try { if (conn) wsmysql.closeConn(conn) } catch {}
             }
@@ -66,13 +66,13 @@ async function proc() {
                     }
                 }
             } catch (ex) {
-                global.log.error(TITLE + ': error1: ', ex.stack)
+                global.logger.error(TITLE + ': error1: ', ex.stack)
             } finally {
                 try { if (conn) wsmysql.closeConn(conn) } catch {}
             }
         })
     } catch (ex) {
-        global.log.error(TITLE + ': error2: ', ex.stack)
+        global.logger.error(TITLE + ': error2: ', ex.stack)
     } finally {
         setTimeout(() => { proc() }, 1000 * 60 * 60) //1 hour
     }
