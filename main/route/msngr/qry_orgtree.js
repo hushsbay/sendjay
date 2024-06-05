@@ -19,7 +19,7 @@ router.post('/', async function(req, res) {
 		const userid = objToken.userid
 		if (!userid) return
 		sql = "SELECT ORG_CD, ORG_NM, LVL, (SELECT COUNT(*) FROM Z_USER_TBL WHERE ORG_CD = A.ORG_CD) MEMCNT FROM Z_ORG_TBL A "		
-        if (_keyword) sql += "AND ORG_CD = '" + _keyword + "' "
+        if (_keyword) sql += "AND ORG_CD = '" + _keyword + "' AND INUSE = 'Y' "
 		sql += "ORDER BY SEQ "
 		data = await wsmysql.query(conn, sql, null)
 		if (data.length == 0) {
