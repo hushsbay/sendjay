@@ -1,6 +1,7 @@
 { 
-    "sendjay_aos" : { "version" : "1.1", "filename" : "sendjay.apk", "path" : "/download/" },
-    "sendjay_ios" : { "version" : "1.0", "filename" : "sendjay.plist", "path" : "/download/" },
+    "remark" : "path에 root를 넣을 경우 빈값을 넣어야 함",
+    "sendjay_aos" : { "version" : "1.0", "filename" : "sendjay.apk", "path" : "/download" },
+    "sendjay_ios" : { "version" : "1.0", "filename" : "sendjay.plist", "path" : "/download" },
     "webview_main_version" : "1.1", 
     "webview_chat_version" : "1.1",
     "webview_popup_version" : "1.0",
