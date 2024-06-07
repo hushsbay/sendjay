@@ -171,7 +171,7 @@
                         let _html = "<div id=div_" + _userid + " class=mem data-nm='" + encodeURIComponent(_nm) + "' data-usernm='" + encodeURIComponent(row.USER_NM) + "' "
                         _html += "                                         data-abcd='" + _abcd + "' data-abnm='" + encodeURIComponent(_abnm) + "' style='cursor:pointer'>"
                         _html += "      <div style='height:18px;display:flex;align-items:center;margin-left:3px'>"
-                        _html += "          <div style='display:flex;justify-content:left;white-space:nowrap;overflow:hidden'>"
+                        _html += "          <div style='display:flex;justify-content:left;align-items:center;white-space:nowrap;overflow:hidden'>"
                         _html += "              <span id=w_" + w_userkey + " class='state coStateOff'>W</span>"
                         _html += "              <span id=m_" + m_userkey + " class='state coStateOff' style='margin-left:3px'>M</span>"
                         _html += "              <span id=abcd_" + _userid + " class=coStateOut style='display:none;margin-left:3px'>" + _abcd + "</span>"
@@ -179,7 +179,7 @@
                         _html += "          </div>"
                         _html += "      </div>"
                         const _master = (g_masterid == _userid) ? ";font-weight:bold" : ""
-                        _html += "      <div class='coDotDot coText' style='height:20px;color:#005192;margin-top:2px;margin-left:3px" + _master + "'>" + _nm + "</div>"
+                        _html += "      <div class='coDotDot coText' style='height:20px;display:flex;justify-content:left;align-items:center;color:#005192;margin-top:2px;margin-left:3px" + _master + "'>" + _nm + "</div>"
                         _html += "   </div>"
                         list.append(_html)
                         if (_abcd) $("#abcd_" + _userid).show()
