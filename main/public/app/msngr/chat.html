@@ -168,15 +168,12 @@
                         const _nm = row.USER_NM //row.JOB ? row.USER_NM + " / " + row.JOB : row.USER_NM
                         const _abcd = row.AB_CD.toLowerCase()
                         const _abnm = row.AB_NM
-                        const push_ios = row.PUSH_IOS
-                        const push_and = row.PUSH_AND
-                        const state_mob = (push_ios && push_ios != hush.cons.invalid_push_token) || (push_and && push_and != hush.cons.invalid_push_token) ? "coStateMob mobInstalled" : "coStateOff"
                         let _html = "<div id=div_" + _userid + " class=mem data-nm='" + encodeURIComponent(_nm) + "' data-usernm='" + encodeURIComponent(row.USER_NM) + "' "
                         _html += "                                         data-abcd='" + _abcd + "' data-abnm='" + encodeURIComponent(_abnm) + "' style='cursor:pointer'>"
                         _html += "      <div style='height:18px;display:flex;align-items:center;margin-left:3px'>"
                         _html += "          <div style='white-space:nowrap;overflow:hidden'>"
                         _html += "              <span id=w_" + w_userkey + " class='state coStateOff'>W</span>"
-                        _html += "              <span id=m_" + m_userkey + " class='state " + state_mob + "'>M</span>"
+                        _html += "              <span id=m_" + m_userkey + " class='state coStateOff'>M</span>"
                         _html += "              <span id=abcd_" + _userid + " class=coStateOut style='display:none'>" + _abcd + "</span>"
                         _html += "              <span id=typing_" + _userid + " style='display:none;font-size:9px;color:red'>typing</span>"
                         _html += "          </div>"

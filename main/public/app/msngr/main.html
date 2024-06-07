@@ -324,30 +324,6 @@
                             hush.util.showEx(ex)
                         }
                     })
-                    /*$("#btn_reset_auth").on("click", function() { //displays in Web Only
-                        hush.util.animBgColor($(this))
-                        hush.msg.alert("You're going to reset authentication (including mobile). Continue?", { 
-                            "Yes": async function() { 
-                                try {
-                                    if (!hush.http.chkOnline()) return
-                                    const rq = { mode : "passkey", userid : g_userid }
-                                    const rs = await hush.http.ajax(hush.cons.route + "/proc_user", rq, "POST") //See in proc_user.js and login.js, too.
-                                    if (rs.code != hush.cons.result_ok) {
-                                        hush.msg.alert(rs.msg)
-                                        return
-                                    }
-                                    //const dataObj = { userid : g_userid } //disconnect mobile socket
-                                    //hush.sock.send(hush.socket, hush.cons.sock_ev_cut_mobile, dataObj)
-                                    hush.sock.send(hush.socket, hush.cons.sock_ev_cut_mobile)
-                                    hush.msg.close()
-                                } catch (ex) {
-                                    hush.msg.alert("btn_reset_auth: " + ex.message)
-                                }
-                            }, "No": function() { 
-                                hush.msg.close()
-                            } 
-                        }, "Reset Authentication", 200)
-                    })*/
                     $("#in_nicknm,#in_job,#in_abcd,#in_abnm,#chk_standalone,#chk_notioff,#chk_soundoff,#chk_viboff,#in_fr,#in_to,#chk_bodyoff,#chk_senderoff").on("change", function() { 
                         g_setting_changed = true 
                     })   
@@ -601,10 +577,6 @@
                     <input id=in_to data-role=none spellcheck=false placeholder='1800' class=coText style="width:60px;text-align:center;border:1px solid darkgray;margin-left:3px" />
                     <span id=spn_clear class='coSettingSpan coText' style="color:#0082AD;cursor:pointer">Clear</span>
                 </div> 
-                <!-- <div class=coSettingRow id="div_reset_auth" style="display:none">
-                    <div class='coSettingLabel coText'>자동로그인<br>해제(Mobile)</div>
-                    <div id=btn_reset_auth class='picBtn coText' style="margin-right:10px">해제</div>
-                </div> 그냥 비번 바꾸는 걸로 마무리 함 -->
                 <div class=coSettingRow id="div_log" style="display:none">  
                     <div class='coSettingLabel coText'>모바일로그<br>(관리자용)</div><!--아래 0은 당일 로그-->
                     <input id=in_showlog type=number data-role=none spellcheck=false value="0" style="width:40px;text-align:center;border:1px solid darkgray;margin:0px 5px" />
