@@ -26,6 +26,7 @@ router.post('/', upload.any(), async function(req, res) {
 				return
 			}
 			const _enc = ws.util.encrypt(pwd_1, nodeConfig.crypto.key)
+			//MIMETYPE 필드 : 파일이 아닌 BLOB으로 저장후 꺼내 쓸 때 mimetype을 얻으려면 현재는 파일로 변환해 구해야 하는데 차라리 최초 저장시 필드값으로 저장해 사용하는 것이 효율적인 것으로 판단
 			sql = "INSERT INTO JAY.Z_USER_TBL (USER_ID, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, PICTURE, MIMETYPE, NICK_NM, ISUDT) "
 			sql += "                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
 			await wsmysql.query(conn, sql, [id, _enc, nm, orgcd, orgnm, toporgcd, toporgnm, buf, mimetype, alias])
@@ -48,7 +49,8 @@ router.post('/', upload.any(), async function(req, res) {
 				} else {
 					const _enc = ws.util.encrypt(pwd_1, nodeConfig.crypto.key)
 					_str = "'" + _enc + "'"
-				}				
+				}
+				//MIMETYPE 필드 : 파일이 아닌 BLOB으로 저장후 꺼내 쓸 때 mimetype을 얻으려면 현재는 파일로 변환해 구해야 하는데 차라리 최초 저장시 필드값으로 저장해 사용하는 것이 효율적인 것으로 판단				
 				sql =  "UPDATE JAY.Z_USER_TBL "
 				sql += "   SET USER_NM = ?, PWD = " + _str + ", ORG_CD = ?, ORG_NM = ?, TOP_ORG_CD = ?, TOP_ORG_NM = ?, PICTURE = ?, MIMETYPE = ?, NICK_NM = ? "
 				sql += " WHERE USER_ID = ? "

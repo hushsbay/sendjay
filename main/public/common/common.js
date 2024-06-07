@@ -365,7 +365,6 @@
                     const _len = rs.list.length
                     $("#" + tag_id).attr("downloaded", "Y")
                     if (_len == 0) return
-                    debugger
                     const row = rs.list[0]
                     if (row.PICTURE) { //common.js참조 : 노드에서 MySql에 저장된 PICTURE(longblob)값 내리기 (2가지 방법 - 육안으로는 속도 차이 안남)
                         //const url = hush.blob.setDataUrl(rs.picture, row.MIMETYPE) //방법2) base64로 변환해 내림 (사용시 서버에서도 코딩 변경 필요) + getUrlForFile() false 설정 + 서버 코딩 변경

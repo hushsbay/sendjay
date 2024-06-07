@@ -25,6 +25,7 @@ const proc = (req) => {
 				rs.picture = data[0].PICTURE //rs.picture = data[0].PICTURE ? Buffer.from(data[0].PICTURE, 'binary').toString('base64') : null
 				rs.mimetype = data[0].MIMETYPE
 			} else { //watch out for MySQl Error => ER_NET_PACKET_TOO_LARGE: Got a packet bigger than 'max_allowed_packet' btyes
+				//MIMETYPE 필드 : 파일이 아닌 BLOB으로 저장후 꺼내 쓸 때 mimetype을 얻으려면 현재는 파일로 변환해 구해야 하는데 차라리 최초 저장시 필드값으로 저장해 사용하는 것이 효율적인 것으로 판단
 				const buf = (req.body.type == 'U') ? Buffer.from(new Uint8Array(req.files[0].buffer)) : null //null when req.body.type == 'D'
                 const _mime = (req.body.type == 'U') ? req.body.mimetype : ""
 				const uqry = "UPDATE Z_USER_TBL SET PICTURE = ?, MIMETYPE = ?, MODR = ?, MODDT = sysdate(6) WHERE USER_ID = ? "
