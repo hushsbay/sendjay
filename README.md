@@ -11,8 +11,8 @@ Here are some ideas to get you started:
 - ⚡ Fun fact: ...
 -->
 
-현재 80%정도 개발된 상태입니다.\n
-안드로이드용 소스는 <https://github.com/hushsbay/sendjay_aos> 참조하시면 되며\n
+현재 80%정도 개발된 상태입니다.
+안드로이드용 소스는 <https://github.com/hushsbay/sendjay_aos> 참조하시면 되며
 여기 소스는 was와 web client가 들어 있는 sendjay_was라고 생각하고 보면 됩니다. (나중에 이름 변경 예정)
 
 # Sendjay 소개
