@@ -41,12 +41,17 @@ Here are some ideas to get you started:
 
 # 환경 구성
 
+   포트를 PC와 모바일로 나눈 것은 단순히 테스트 편의를 위한 구분입니다.
+
+   
 ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_env.png)
 
 
-# 주요 특징
+# 주요 특징 (메시징 관점에서)
 
+   1. aaa
 
+   2. bbb
 
 
 # 참고 사항
