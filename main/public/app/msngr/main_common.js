@@ -237,7 +237,7 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             _html += "      <div id=per_" + _userid + " style='flex:1;min-width:0;height:100%;display:flex;flex-direction:column;cursor:pointer;margin-left:10px'>" //flex:1;min-width:0 used instead of width:calc
             _html += "          <div id=first_" + _userid + " style='flex-grow:1;display:flex;align-items:center;overflow:hidden;margin:3px 0px 0px 0px'>"
             _html += "              <span id=w_" + w_userkey + " class='state coStateOff'>W</span>"
-            _html += "              <span id=m_" + m_userkey + " class='state coStateOff'>M</span>"
+            _html += "              <span id=m_" + m_userkey + " class='state coStateOff' style='margin-left:3px'>M</span>"
             _html += "              <span id=nm_" + _userid + " class='coDotDot coText' style='min-width:55px;color:#005192;font-weight:bold;margin-left:5px'>" + _nm + "</span>"
             _html += "              <span id=nick_" + _userid + " class='coDotDot coText' style='" + disp_nick + "margin-left:10px'>[" + _nicknm + "]</span>"
             _html += "              <span id=abcd_" + _userid + " class='coStateOut coText' style='" + disp_abcd + "margin-left:10px'>" + _abcd + "</span>"
