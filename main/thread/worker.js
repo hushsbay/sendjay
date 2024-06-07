@@ -36,8 +36,8 @@ async function proc() {
         sql = "SELECT MSGID, ROOMID, BODY "
         sql += " FROM A_MSGMST_TBL "
         sql += "WHERE TYP in ('file', 'flink') "
-        sql += "  AND (FILESTATE < sysdate() OR STATE = 'D' OR STATE2 = 'C') " //만료되었거나 메시지가 삭제 또는 전송취소된 것도 파일은 물리적 삭제 => 모두 만료로 표시
         sql += "  AND FILESTATE <> ? "
+        sql += "  AND (FILESTATE < sysdate() OR STATE = 'D' OR STATE2 = 'C') " //만료되었거나 메시지가 삭제 또는 전송취소된 것도 파일은 물리적 삭제 => 모두 만료로 표시        
         data = await wsmysql.query(conn, sql, [ws.cons.file_expired])
         _len = data.length
         for (let i = 0; i < _len; i++) {
