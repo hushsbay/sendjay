@@ -11,7 +11,7 @@ Here are some ideas to get you started:
 - ⚡ Fun fact: ...
 -->
 
-현재 80%정도 개발된 상태입니다.
+현재 80%정도 개발된 상태입니다. (안드로이드용은 <https://github.com/hushsbay/sendjay_aos> 참조.
 
 # Sendjay 소개
 
