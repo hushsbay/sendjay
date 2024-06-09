@@ -51,7 +51,7 @@ Here are some ideas to get you started:
 
       웹이든 모바일이든 소켓연결 및 재연결시 사용자가 불편함을 느끼지 않도록 자연스럽게 (자동) 처리하는 것이<br/>
       핵심입니다. 특히, 메신저는 모든 직원이 항상 (웹 관점으로 보면 사내ERP에 들어와 있는 상태에서는 항상)<br/>
-      소켓이 연결되어 있어야 한다는 것입니다. 서로 연결되어 있지 않은 메신저는 의미가 없기 때문입니다.
+      소켓이 연결되어 있어야 한다는 것입니다. 서로 연결되어 있지 않은 메신저는 의미가 없기 때문입니다.<br/>
 
       (1) 웹에서의 소켓 연결
      
@@ -68,7 +68,7 @@ Here are some ideas to get you started:
 
          - 사내ERP탭은 회사의 정책에 따라 하나만 제공될 수도 있으나 일반적으로 여러 개의 탭이 열릴 것인데<br/>
            이 경우 백그라운드 자동실행은 각 탭간의 (로컬에서의) 경합을 통해 한개의 탭에서만 동작하도록 했습니다.<br/>
-           (아래 startMsngr() in index.html 참조)
+           (아래 startMsngr() in index.html 참조)<br/>
          ```
          $.when($.ready).done(async function() {
                 try {
@@ -88,16 +88,16 @@ Here are some ideas to get you started:
                         }                        
                     }
          ```
-         - startMsngr()에서는 아래 2가지를 처리하는데
+         - startMsngr()에서는 아래 2가지를 처리하는데<br/>
            a. 사용자가 클릭해 웹메신저가 Standalone으로 실행<br/>
            b. 브라우저탭에서 백그라운드로 자동실행<br/>
-           백그라운드 자동실행을 위해서 HTML5 Web Worker와 IndexedDB API를 이용하여 경합을 구현했습니다. 
+           백그라운드 자동실행을 위해서 HTML5 Web Worker와 IndexedDB API를 이용하여 경합을 구현했습니다.<br/>
 
       (2) 모바일에서의 소켓 연결
      
          - ㅎㅎㅎㅎㅎ
       
-   1. 하하하
+   2. 하하하
 
 # 구축형(On-Premise) 서버 적용 안내
 
