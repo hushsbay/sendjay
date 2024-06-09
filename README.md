@@ -53,7 +53,7 @@ Here are some ideas to get you started:
       핵심입니다. 특히, 메신저는 모든 직원이 항상 (웹 관점으로 보면 사내ERP에 들어와 있는 상태에서는 항상)<br/>
       소켓이 연결되어 있어야 한다는 것입니다. 서로 연결되어 있지 않은 메신저는 의미가 없기 때문입니다.
 
-      (1) 웹에서의 소켓 (자동) 연결
+      (1) 웹에서의 소켓 연결
      
          ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_erp_portal.png)
 
@@ -68,6 +68,28 @@ Here are some ideas to get you started:
 
          - 사내ERP탭은 회사의 정책에 따라 하나만 제공될 수도 있으나 일반적으로 여러 개의 탭이 열릴 것인데<br/>
            이 경우 백그라운드 자동실행은 각 탭간의 (로컬에서의) 경합을 통해 한개의 탭에서만 동작하도록 했습니다.<br/>
+           (아래 startMsngr() in index.html 참조)
+         ```
+         $.when($.ready).done(async function() {
+                try {
+                    await $.getScript("/common/common.js") //cache setting to false
+                    await $.getScript("/app/msngr/main_common.js")
+                    const _token = hush.http.getCookie("token")  
+                    if (_token) { //jwt는 세션쿠키이므로 있다면 사용자가 인증한 것이 되므로 jwt를 검증해야 함
+                        const rs = await hush.http.ajax("/auth/login") //token과 userid는 쿠키로 전송됨
+                        if (rs.code != hush.cons.CODE_OK) {
+                            hush.msg.showMsg(rs.msg, rs.code)
+                            showLogout(false) //return 하지 말기
+                        } else {
+                            hush.auth.setUser(_token)
+                            showLogout(true)
+                            const result = await startMsngr("auto", hush.sock.getWinId()) //mobile app(webview)에서는 바로 return
+                            //if (!result) return 오류나도 아래가 실행되도록 함
+                        }                        
+                    }
+         ```
+         
+
 
       (2) 모바일에서의 소켓 연결
      
