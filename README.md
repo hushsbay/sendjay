@@ -53,13 +53,15 @@ Here are some ideas to get you started:
 
       (1) 웹에서의 소켓 연결
      
-         
-     
-      3) 모바일에서의 소켓 연결
+         ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_erp_portal.png)
+
+         dkfdfdsl;k
+
+      (2) 모바일에서의 소켓 연결
      
          - ㅎㅎㅎㅎㅎ
       
-   2. 하하하
+   1. 하하하
 
 # 구축형(On-Premise) 서버 적용 안내
 
