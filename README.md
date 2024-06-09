@@ -54,7 +54,7 @@ Here are some ideas to get you started:
 # 구축형(On-Premise) 서버 적용 안내
 
 
-# MySql Table 명세
+# Table 명세 (MySql)
 
    - Z_ORG_TBL     : 조직(회사, 본부, 팀 등) 정보
    - Z_USER_TBL    : 사용자 정보
