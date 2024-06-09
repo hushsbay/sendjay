@@ -89,8 +89,8 @@ Here are some ideas to get you started:
                     }
          ```
          - startMsngr()에서는 아래 2가지를 처리하는데
-           1) 사용자가 클릭해 웹메신저가 Standalone으로 실행
-           2) 브라우저탭에서 백그라운드로 자동실행 
+           a. 사용자가 클릭해 웹메신저가 Standalone으로 실행<br/>
+           b. 브라우저탭에서 백그라운드로 자동실행<br/>
            백그라운드 자동실행을 위해서 HTML5 Web Worker와 IndexedDB API를 이용하여 경합을 구현했습니다. 
 
       (2) 모바일에서의 소켓 연결
