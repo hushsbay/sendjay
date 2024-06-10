@@ -78,6 +78,7 @@ Here are some ideas to get you started:
            (아래 startMsngr() in index.html 참조)<br/>
       
 ``` javascript
+
           $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js") //cache setting to false
@@ -94,8 +95,10 @@ Here are some ideas to get you started:
                             const result = await startMsngr("auto", hush.sock.getWinId()) //mobile app(webview)에서는 바로 return
                             //if (!result) return 오류나도 아래가 실행되도록 함
                         }                        
-                    }```
-      
+                    }
+
+```
+
          - startMsngr()에서는 아래 2가지를 처리하는데<br/>
            a. 사용자가 클릭해 웹메신저가 Standalone으로 실행<br/>
            b. 브라우저탭에서 백그라운드로 자동실행<br/>
