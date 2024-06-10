@@ -74,7 +74,7 @@ Here are some ideas to get you started:
            이 경우 백그라운드 자동실행은 각 탭간의 (로컬에서의) 경합을 통해 한개의 탭에서만 동작하도록 했습니다.<br/>
            (아래 startMsngr() in index.html 참조)<br/>
       
-          ```
+```
           $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js") //cache setting to false
@@ -92,7 +92,7 @@ Here are some ideas to get you started:
                             //if (!result) return 오류나도 아래가 실행되도록 함
                         }                        
                     }
-          ```
+```
       
          - startMsngr()에서는 아래 2가지를 처리하는데<br/>
            a. 사용자가 클릭해 웹메신저가 Standalone으로 실행<br/>
@@ -101,7 +101,7 @@ Here are some ideas to get you started:
 
       (2) 모바일에서의 소켓 연결
 
-         모바일 기기에서는 일반적으로 자주 네트워크가 끊어질 수도 있고 사용자에 의해 앱이 강제종료될 수도 있을 것입니다.<br/>
+         모바일에서는 일반적으로 자주 네트워크가 끊어질 수도 있고 사용자에 의해 앱이 강제종료될 수도 있을 것입니다.<br/>
          따라서, 재연결이 아주 중요한데 아래와 같은 경우를 대비해야 할 것입니다. (안드로이드 기준)<br/>
 
          - 사용자에 의한 앱 강제 종료시<br/>
@@ -110,16 +110,16 @@ Here are some ideas to get you started:
          - 네트워크가 연결은 되어 있으나 원할하지 못할 경우<br/>
          - 서버 다운시<br/>
 
-         이럴 경우, (안드로이드 기준으로 보면) 결국 서비스가 죽거나 네트워크가 끊어지거나 타임아웃 상태가 됩니다.<br/>
+         이럴 경우, 결국 서비스가 죽거나 네트워크가 끊어지거나 타임아웃 상태가 됩니다.<br/>
 
          - 서비스가 죽을 경우, 종료 직전 onDestroy()에서 AlarmManager를 이용해 다시 ChatService를 구동시킵니다.<br/>
-           (Worker를 이용하면 최소주기가 15분이므로 Term이 너무 길고 FCM을 적용하려면 효과 대비 노력이 많이 소요)<br/>
-         - 네트워크가 끊어진 경우는 ChatService의 데몬이 돌면서 상태를 체크해 다시 연결되면 그동안 도착한 톡이<br/>
+           (Worker를 이용하면 최소주기가 15분이므로 Term이 길고 FCM을 적용하려면 효과 대비 노력이 많이 소요)<br/>
+         - 네트워크가 끊어진 경우는 ChatService의 데몬이 돌면서 상태를 체크해 다시 연결될 때 그동안 도착한 톡이<br/>
            있으면 바로 알려 줍니다.<br/>
       
-   2. 하하하
+   2. (웹/모바일) 앱과 웹뷰간의 메시지 플로우 : 핵심은 웹모듈 재사용. 유지보수 효율성 극대화
 
-
+      (1) 
 
 # 구축형(On-Premise) 서버 적용 안내
 
