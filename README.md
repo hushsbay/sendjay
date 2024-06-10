@@ -73,8 +73,9 @@ Here are some ideas to get you started:
           - 사내ERP탭은 회사의 정책에 따라 하나만 제공될 수도 있으나 일반적으로 여러 개의 탭이 열릴 것인데<br/>
             이 경우 백그라운드 자동실행은 각 탭간의 (로컬에서의) 경합을 통해 한개의 탭에서만 동작하도록 했습니다.<br/>
             (아래 startMsngr() in index.html 참조)<br/>
-         ```
-         $.when($.ready).done(async function() {
+      
+          ```
+          $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js") //cache setting to false
                     await $.getScript("/app/msngr/main_common.js")
@@ -91,7 +92,8 @@ Here are some ideas to get you started:
                             //if (!result) return 오류나도 아래가 실행되도록 함
                         }                        
                     }
-         ```
+          ```
+      
           - startMsngr()에서는 아래 2가지를 처리하는데<br/>
             a. 사용자가 클릭해 웹메신저가 Standalone으로 실행<br/>
             b. 브라우저탭에서 백그라운드로 자동실행<br/>
