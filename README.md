@@ -42,26 +42,26 @@ Here are some ideas to get you started:
 
 # 환경 구성
 
-   포트를 PC와 모바일로 나눈 것은 단순히 테스트 편의를 위한 구분입니다.
+포트를 PC와 모바일로 나눈 것은 단순히 테스트 편의를 위한 구분입니다.
    
-   ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_env.png)
+![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_env.png)
 
-   ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_socket_web.png)
+![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_socket_web.png)
 
-   ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_socket_aos.png)
+![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_socket_aos.png)
 
 
 # 주요 특징 (메시징 관점에서)
 
-   1. (웹/모바일) 소켓 Connect/Reconnect
+1. (웹/모바일) 소켓 Connect/Reconnect
 
-      웹이든 모바일이든 소켓연결 및 재연결시 사용자가 불편함을 느끼지 않도록 자연스럽게 (자동) 처리하는 것이<br/>
-      핵심입니다. 특히, 메신저는 모든 직원이 항상 (웹 관점으로 보면 사내ERP에 들어와 있는 상태에서는 항상)<br/>
-      소켓이 연결되어 있어야 한다는 것입니다. 서로 연결되어 있지 않은 메신저는 의미가 없기 때문입니다.<br/>
+   웹이든 모바일이든 소켓연결 및 재연결시 사용자가 불편함을 느끼지 않도록 자연스럽게 (자동) 처리하는 것이<br/>
+   핵심입니다. 특히, 메신저는 모든 직원이 항상 (웹 관점으로 보면 사내ERP에 들어와 있는 상태에서는 항상)<br/>
+   소켓이 연결되어 있어야 한다는 것입니다. 서로 연결되어 있지 않은 메신저는 의미가 없기 때문입니다.<br/>
 
-      (1) 웹에서의 소켓 연결
+   (1) 웹에서의 소켓 연결
      
-         ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_erp_portal.png)
+       ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_erp_portal.png)
 
          - PC 웹브라우저에서는 모바일보다는 일반적으로 상대적으로 네트워크가 안정이 되어 있습니다.<br/>
            사내ERP에 최초 접속시 웹메신저를 별도의 브라우저탭으로(Standalone) 자동실행시키는 경우는 크게<br/>
@@ -81,6 +81,7 @@ Here are some ideas to get you started:
            b. 브라우저탭에서 백그라운드로 자동실행<br/>
            백그라운드 자동실행을 위해서 HTML5 Web Worker와 IndexedDB API를 이용하여 경합을 구현했습니다.<br/>
 
+```
           $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js") //cache setting to false
@@ -98,8 +99,9 @@ Here are some ideas to get you started:
                             //if (!result) return 오류나도 아래가 실행되도록 함
                         }                        
                     }
+```
 
-      (2) 모바일에서의 소켓 연결
+   (2) 모바일에서의 소켓 연결
 
           모바일에서는 일반적으로 자주 네트워크가 끊어질 수도 있고 사용자에 의해 앱이 강제종료될 수도 있을 것입니다.<br/>
           따라서, 재연결이 아주 중요한데 아래와 같은 경우를 대비해야 할 것입니다. (안드로이드 기준)<br/>
@@ -117,9 +119,9 @@ Here are some ideas to get you started:
          - 네트워크가 끊어진 경우는 ChatService의 데몬이 돌면서 상태를 체크해 다시 연결될 때 그동안 도착한 톡이<br/>
            있으면 바로 알려 줍니다.<br/>
       
-   1. (웹/모바일) 앱과 웹뷰간의 메시지 플로우 : 핵심은 웹모듈 재사용. 유지보수 효율성 극대화
+2. (웹/모바일) 앱과 웹뷰간의 메시지 플로우 : 핵심은 웹모듈 재사용. 유지보수 효율성 극대화
 
-      (1) 
+   (1) 
 
 
 # 구축형(On-Premise) 서버 적용 안내
