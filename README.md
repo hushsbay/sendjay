@@ -53,7 +53,7 @@ Here are some ideas to get you started:
 
 # 주요 특징 (메시징 관점에서)
 
-1. (웹/모바일) 소켓 Connect/Reconnect
+   ### (웹/모바일) 소켓 Connect/Reconnect
 
    웹이든 모바일이든 소켓연결 및 재연결시 사용자가 불편함을 느끼지 않도록 자연스럽게 (자동) 처리하는 것이<br/>
    핵심입니다. 특히, 메신저는 모든 직원이 항상 (웹 관점으로 보면 사내ERP에 들어와 있는 상태에서는 항상)<br/>
@@ -122,9 +122,11 @@ Here are some ideas to get you started:
       - 네트워크가 끊어진 경우는 ChatService의 데몬이 돌면서 상태를 체크해 다시 연결될 때 그동안 도착한 톡이<br/>
         있으면 바로 알려 줍니다.<br/>
       
-2. (웹/모바일) 앱과 웹뷰간의 메시지 플로우 : 핵심은 웹모듈 재사용. 유지보수 효율성 극대화
+   ### (웹/모바일) 앱과 웹뷰간의 메시지 플로우 : 핵심은 웹모듈 재사용. 유지보수 효율성 극대화
 
-   (1) 
+   (1) dsgklfadsg;lasdgfdskf
+
+   (2) dlf;kdaslkfjdlskfjdsfkjl
 
 
 # 구축형(On-Premise) 서버 적용 안내
