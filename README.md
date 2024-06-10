@@ -99,6 +99,8 @@ $.when($.ready).done(async function() {
                   //if (!result) return 오류나도 아래가 실행되도록 함
             }                        
          }
+      }
+})
 ```
 
    (2) 모바일에서의 소켓 연결
