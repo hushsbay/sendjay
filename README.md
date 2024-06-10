@@ -15,6 +15,7 @@ Here are some ideas to get you started:
 안드로이드용 소스는 <https://github.com/hushsbay/sendjay_aos> 참조하시면 되며<br/>
 여기 소스는 was와 web client가 들어 있는 sendjay_was라고 생각하고 보면 됩니다. (나중에 이름 변경 예정)
 
+
 # Sendjay 소개
 
 1. Sendjay는 개인이 만들고 명명한 메시징 앱/웹 (통합) 프로그램입니다. (created by hushsbay@gmail.com)
@@ -37,6 +38,7 @@ Here are some ideas to get you started:
 
 6. Sendjay는 소스를 내려 받아 구축형(On-Premise)으로 사내 ERP등의 사용자관리와 연동해 운영할 수 있습니다.<br/>   
    - 하단 MySql Table 명세 참조
+     
 
 # 환경 구성
 
@@ -47,6 +49,7 @@ Here are some ideas to get you started:
 ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_socket_web.png)
 
 ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_socket_aos.png)
+
 
 # 주요 특징 (메시징 관점에서)
 
@@ -120,6 +123,7 @@ Here are some ideas to get you started:
    2. (웹/모바일) 앱과 웹뷰간의 메시지 플로우 : 핵심은 웹모듈 재사용. 유지보수 효율성 극대화
 
       (1) 
+
 
 # 구축형(On-Premise) 서버 적용 안내
 
