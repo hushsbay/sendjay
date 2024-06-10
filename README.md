@@ -81,7 +81,6 @@ Here are some ideas to get you started:
            b. 브라우저탭에서 백그라운드로 자동실행<br/>
            백그라운드 자동실행을 위해서 HTML5 Web Worker와 IndexedDB API를 이용하여 경합을 구현했습니다.<br/>
 
-```
           $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js") //cache setting to false
@@ -99,7 +98,6 @@ Here are some ideas to get you started:
                             //if (!result) return 오류나도 아래가 실행되도록 함
                         }                        
                     }
-```
 
    (2) 모바일에서의 소켓 연결
 
