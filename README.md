@@ -44,11 +44,11 @@ Here are some ideas to get you started:
 
    포트를 PC와 모바일로 나눈 것은 단순히 테스트 편의를 위한 구분입니다.
    
-![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_env.png)
+   ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_env.png)
 
-![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_socket_web.png)
+   ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_socket_web.png)
 
-![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_socket_aos.png)
+   ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_socket_aos.png)
 
 
 # 주요 특징 (메시징 관점에서)
@@ -76,7 +76,7 @@ Here are some ideas to get you started:
          - 사내ERP탭은 회사의 정책에 따라 하나만 제공될 수도 있으나 일반적으로 여러 개의 탭이 열릴 것인데<br/>
            이 경우 백그라운드 자동실행은 각 탭간의 (로컬에서의) 경합을 통해 한개의 탭에서만 동작하도록 했습니다.<br/>
            (아래 startMsngr() in index.html 참조)<br/>
-      
+
           $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js") //cache setting to false
@@ -95,7 +95,7 @@ Here are some ideas to get you started:
                         }                        
                     }
 
-         - startMsngr()에서는 아래 2가지를 처리하는데<br/>
+         startMsngr()에서는 아래 2가지를 처리하는데<br/>
            a. 사용자가 클릭해 웹메신저가 Standalone으로 실행<br/>
            b. 브라우저탭에서 백그라운드로 자동실행<br/>
            백그라운드 자동실행을 위해서 HTML5 Web Worker와 IndexedDB API를 이용하여 경합을 구현했습니다.<br/>
