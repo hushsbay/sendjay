@@ -77,7 +77,7 @@ Here are some ideas to get you started:
            이 경우 백그라운드 자동실행은 각 탭간의 (로컬에서의) 경합을 통해 한개의 탭에서만 동작하도록 했습니다.<br/>
            (아래 startMsngr() in index.html 참조)<br/>
       
-```
+         ```
           $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js") //cache setting to false
@@ -95,7 +95,7 @@ Here are some ideas to get you started:
                             //if (!result) return 오류나도 아래가 실행되도록 함
                         }                        
                     }
-```
+         ```
       
          - startMsngr()에서는 아래 2가지를 처리하는데<br/>
            a. 사용자가 클릭해 웹메신저가 Standalone으로 실행<br/>
