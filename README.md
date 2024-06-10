@@ -137,7 +137,7 @@ Here are some ideas to get you started:
    - Z_FILELOG_TBL : 파일 전송 관련 정보
    - Z_ACTLOG_TBL  : 액션로그(연결 등) 정보
 
-```
+
 drop table if exists jay.Z_ORG_TBL;
 CREATE TABLE jay.Z_ORG_TBL (
 ORG_CD VARCHAR(20) NOT NULL COMMENT '조직코드',
@@ -285,7 +285,7 @@ UDT CHAR(26) NOT NULL DEFAULT '' COMMENT '수정시각 등',
 ISUDT CHAR(26) NOT NULL DEFAULT '' COMMENT '서버시각 기준' ) ;
 CREATE UNIQUE INDEX Z_ACTLOG_IDX0 ON jay.Z_ACTLOG_TBL (ISUDT, USER_ID, WORK) ;
 
-```
+
 
 
 
