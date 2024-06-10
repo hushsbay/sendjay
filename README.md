@@ -44,6 +44,9 @@ Here are some ideas to get you started:
    
 ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_env.png)
 
+![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_socket_web.png)
+
+![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_socket_aos.png)
 
 # 주요 특징 (메시징 관점에서)
 
