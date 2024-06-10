@@ -75,7 +75,11 @@ Here are some ideas to get you started:
 
          - 사내ERP탭은 회사의 정책에 따라 하나만 제공될 수도 있으나 일반적으로 여러 개의 탭이 열릴 것인데<br/>
            이 경우 백그라운드 자동실행은 각 탭간의 (로컬에서의) 경합을 통해 한개의 탭에서만 동작하도록 했습니다.<br/>
-           (아래 startMsngr() in index.html 참조)<br/>
+
+         - 아래 startMsngr()에서는 아래 2가지를 처리하는데<br/>
+           a. 사용자가 클릭해 웹메신저가 Standalone으로 실행<br/>
+           b. 브라우저탭에서 백그라운드로 자동실행<br/>
+           백그라운드 자동실행을 위해서 HTML5 Web Worker와 IndexedDB API를 이용하여 경합을 구현했습니다.<br/>
 
           $.when($.ready).done(async function() {
                 try {
@@ -95,11 +99,6 @@ Here are some ideas to get you started:
                         }                        
                     }
 
-         startMsngr()에서는 아래 2가지를 처리하는데<br/>
-           a. 사용자가 클릭해 웹메신저가 Standalone으로 실행<br/>
-           b. 브라우저탭에서 백그라운드로 자동실행<br/>
-           백그라운드 자동실행을 위해서 HTML5 Web Worker와 IndexedDB API를 이용하여 경합을 구현했습니다.<br/>
-
       (2) 모바일에서의 소켓 연결
 
           모바일에서는 일반적으로 자주 네트워크가 끊어질 수도 있고 사용자에 의해 앱이 강제종료될 수도 있을 것입니다.<br/>
@@ -118,7 +117,7 @@ Here are some ideas to get you started:
          - 네트워크가 끊어진 경우는 ChatService의 데몬이 돌면서 상태를 체크해 다시 연결될 때 그동안 도착한 톡이<br/>
            있으면 바로 알려 줍니다.<br/>
       
-   2. (웹/모바일) 앱과 웹뷰간의 메시지 플로우 : 핵심은 웹모듈 재사용. 유지보수 효율성 극대화
+   1. (웹/모바일) 앱과 웹뷰간의 메시지 플로우 : 핵심은 웹모듈 재사용. 유지보수 효율성 극대화
 
       (1) 
 
