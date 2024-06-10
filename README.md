@@ -81,28 +81,33 @@ Here are some ideas to get you started:
         b. 브라우저탭에서 백그라운드로 자동실행<br/>
         백그라운드 자동실행을 위해서 HTML5 Web Worker와 IndexedDB API를 이용하여 경합을 구현했습니다.<br/>
 
-```
-$.when($.ready).done(async function() {
-      try {
-         await $.getScript("/common/common.js") //cache setting to false
-         await $.getScript("/app/msngr/main_common.js")
-         const _token = hush.http.getCookie("token")  
-         if (_token) { //jwt는 세션쿠키이므로 있다면 사용자가 인증한 것이 되므로 jwt를 검증해야 함
-            const rs = await hush.http.ajax("/auth/login") //token과 userid는 쿠키로 전송됨
-            if (rs.code != hush.cons.CODE_OK) {
-                  hush.msg.showMsg(rs.msg, rs.code)
-                  showLogout(false) //return 하지 말기
-            } else {
-                  hush.auth.setUser(_token)
-                  showLogout(true)
-                  const result = await startMsngr("auto", hush.sock.getWinId()) //mobile app(webview)에서는 바로 return
-                  //if (!result) return 오류나도 아래가 실행되도록 함
-            }                        
-         }
-      }
-})
+         ```
+         $.when($.ready).done(async function() {
+               try {
+                  await $.getScript("/common/common.js") //cache setting to false
+                  await $.getScript("/app/msngr/main_common.js")
+                  const _token = hush.http.getCookie("token")  
+                  if (_token) { //jwt는 세션쿠키이므로 있다면 사용자가 인증한 것이 되므로 jwt를 검증해야 함
+                     const rs = await hush.http.ajax("/auth/login") //token과 userid는 쿠키로 전송됨
+                     if (rs.code != hush.cons.CODE_OK) {
+                           hush.msg.showMsg(rs.msg, rs.code)
+                           showLogout(false) //return 하지 말기
+                     } else {
+                           hush.auth.setUser(_token)
+                           showLogout(true)
+                           const result = await startMsngr("auto", hush.sock.getWinId()) //mobile app(webview)에서는 바로 return
+                           //if (!result) return 오류나도 아래가 실행되도록 함
+                     }                        
+                  }
+               }
+         })
 
-```
+         ```
+         
+   (2) 모바일에서의 소켓 연결
+
+      모바일에서는 일반적으로 자주 네트워크가 끊어질 수도 있고 사용자에 의해 앱이 강제종료될 수도 있을 것입니다.<br/>
+      따라서, 재연결이 아주 중요한데 아래와 같은 경우를 대비해야 할 것입니다. (안드로이드 기준)<br/>
 
 
       
