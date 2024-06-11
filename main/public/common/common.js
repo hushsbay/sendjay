@@ -680,16 +680,22 @@
                 socket.off(hush.cons.sock_ev_alert).on(hush.cons.sock_ev_alert, async (obj) => { 
                     debugger
                     if (!obj.roomid) {
-                        await hush.msg.alert("sock_alert<br>" + obj.msg) 
+                        await hush.msg.alert("[sock_alert]<br>" + obj.msg) 
                     } else {
-                        await hush.sock.rooms[obj.roomid].hush.msg.alert("sock_alert<br>" + obj.msg)
+                        const _win = hush.sock.rooms[obj.roomid]
+                        if (_win && !_win.closed) {
+                            await _win.hush.msg.alert("[sock_alert]<br>" + obj.msg)
+                        }
                     }
                 })
                 socket.off(hush.cons.sock_ev_toast).on(hush.cons.sock_ev_toast, (obj) => {
                     if (!obj.roomid) {
-                        hush.msg.toast("sock_toast<br>" + obj.msg) 
+                        hush.msg.toast("[sock_toast]<br>" + obj.msg) 
                     } else {
-                        hush.sock.rooms[obj.roomid].hush.msg.toast("socksock_toast<br>" + obj.msg)
+                        const _win = hush.sock.rooms[obj.roomid]
+                        if (_win && !_win.closed) {
+                            hush.msg.toast("[sock_toast]<br>" + obj.msg)
+                        }
                     }
                 })
                 socket.off(hush.cons.sock_ev_common).on(hush.cons.sock_ev_common, (rs) => { callback(rs) })
