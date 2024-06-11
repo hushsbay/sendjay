@@ -912,7 +912,6 @@ var funcSockEv = { //needs to be public
         if (g_memWin && !g_memWin.closed) g_memWin.funcSockEv[hush.cons.sock_ev_show_on].call(null, userkey) 
     },
     [hush.cons.sock_ev_send_msg] : async (data) => {
-        debugger
         try {
             if (data.type == "leave") {
                 if (!runFromStandalone) return
