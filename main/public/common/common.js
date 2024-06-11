@@ -678,6 +678,7 @@
             },
             on : (socket, callback) => {            
                 socket.off(hush.cons.sock_ev_alert).on(hush.cons.sock_ev_alert, async (obj) => { 
+                    debugger
                     if (!obj.roomid) {
                         await hush.msg.alert("sock_alert<br>" + obj.msg) 
                     } else {
