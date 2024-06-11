@@ -638,7 +638,7 @@
                 socket.off(hush.cons.sock_ev_connect).on(hush.cons.sock_ev_connect, () => {
                     console.log("socket connected " + hush.util.getCurDateTimeStr(true, true))
                     hush.sock.on(socket, (rs) => {
-                        if (rs.ev != "chk_roomfocus") debugger
+                        if (rs.ev != "chk_roomfocus" && rs.ev != "chk_alive" ) debugger
                         console.log("hush.sock.on => " + JSON.stringify(rs)) //if (rs.data.type == "talk") debugger
                         if (rs.returnTo == "parent" || rs.returnTo == "all") {
                             funcSockEv[rs.ev].call(null, rs.data)
