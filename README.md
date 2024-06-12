@@ -145,14 +145,13 @@ Here are some ideas to get you started:
       </tr>
    </table>
 
-
    1. 앱과 웹뷰간의 소켓 메시지 플로우
 
    전체적인 흐름은 위 "환경 구성"내 그림 "socket flow - Android"를 참조하시기 바랍니다.
 
    2. 메시지 로컬DB 저장
 
-   카카오톡과는 달리 Sendjay는 로컬DB에 메시지 데이터를 쌓아두지 않습니다.</br/>
+   카카오톡과는 달리 Sendjay는 로컬DB에 메시지 데이터를 쌓아두지 않습니다.<br/>
    작성중인 메시지 정도만 HTML5 IndexedDB에 잠시 저장할 뿐입니다.<br/>
    따라서, 아래와 같은 경우에 대해 사용자 불편이 발생할 수 있습니다<br/>
 
