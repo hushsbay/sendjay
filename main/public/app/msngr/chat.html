@@ -488,9 +488,7 @@
                         const _pattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi //two more bytes parameter not working
                         const _http = _pattern.exec(_body) //const _pattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9가-힣+&@#\/%?=~_|!:,.;]*[-A-Z0-9가-힣+&@#\/%=~_|])/gi
                         if (_http != null) { //##00 opengraph : get first item
-                            alert(_body)
                             _body = _body.replace(_pattern, "<a href='javascript:openLink(\"$1\")' style='color:#005192'>$1</a>")				
-                            alert(_body)
                             _sublink = "<div style='clear:both'></div>"
                             _sublink = "<div id=openGraph" + obj.msgid + " og=" + _http[0] + " style='display:none;cursor:pointer;width:150px;height:150px;border:1px solid lightgray;" + _submargin + "'>"
                             _sublink += "   <div style='width:100%;text-align:center'><img id=ogImg" + obj.msgid + " style='max-width:150px;max-height:150px' /></div>"
