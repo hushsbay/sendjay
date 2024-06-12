@@ -89,9 +89,8 @@ module.exports = async function(socket, param) {
 					await wsmysql.query(conn, "UPDATE A_ROOMMST_TBL SET MEMCNT = ?, ROOMNM = ?, UDT = ? WHERE ROOMID = ? ", [len, JSON.stringify(roomnmObj), param.data.cdt, _roomid])
 					await wsmysql.query(conn, "DELETE FROM A_ROOMMEM_TBL WHERE ROOMID = ? ", [_roomid]) //should be deleted since it might be multi records			
 					const qryMem = "SELECT GROUP_CONCAT(USERID separator '" + ws.cons.easydeli + "') USERIDS FROM A_ROOMDTL_TBL WHERE ROOMID = ? AND STATE <> 'L' ORDER BY USERID "
-					const dataMem = await wsmysql.query(conn, qryMem, [_roomid])
-					console.log(_roomid, dataMem[0].USERIDS)
-					if (_chkSameMembers) await wsmysql.query(conn, "INSERT INTO A_ROOMMEM_TBL (ROOMID, MEMBERS, CDT) VALUES (?, ?, ?) ", [_roomid, dataMem[0].USERIDS, param.data.cdt])
+					const dataMem = await wsmysql.query(conn, qryMem, [_roomid]) //dataMem[0].USERIDS이 null이면 나 혼자만의 방에서 내가 퇴장하고 아무도 없다는 의미가 되므로 체크해야 함
+					if (_chkSameMembers && dataMem[0].USERIDS) await wsmysql.query(conn, "INSERT INTO A_ROOMMEM_TBL (ROOMID, MEMBERS, CDT) VALUES (?, ?, ?) ", [_roomid, dataMem[0].USERIDS, param.data.cdt])
 					param.data.roomnm = JSON.stringify(roomnmObj)
 					param.data.receiverid = arrUseridSortedByUsernm
 					param.data.receivernm = arrUsernmSortedByUsernm
