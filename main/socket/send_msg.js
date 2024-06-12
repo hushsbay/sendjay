@@ -16,10 +16,14 @@ module.exports = async function(socket, param) {
 		await wsmysql.txBegin(conn)	
 		let useridToProc = obj.senderid
 		if (obj.type == 'check') { //전송여부 단순 확인
-			data = await wsmysql.query(conn, "SELECT COUNT(*) CNT, CDT FROM A_MSGMST_TBL WHERE MSGID = ? ", [obj.prevmsgid])
+			data = await wsmysql.query(conn, "SELECT CDT, COUNT(*) CNT FROM A_MSGMST_TBL WHERE MSGID = ? GROUP BY CDT ", [obj.prevmsgid])
 			param.data.msgid = obj.prevmsgid
-			param.data.body = data[0].CNT
-			param.data.cdt = data[0].CDT
+			if (data.length == 0) {				
+				param.data.body = 0 //전송실패표시
+			} else {
+				param.data.body = data[0].CNT
+				param.data.cdt = data[0].CDT
+			}
 			await wsmysql.txCommit(conn)
 			socket.emit(ws.cons.sock_ev_common, param)
 		} else if (obj.type == 'notice') { //이미지, 파일 전송후 notice
