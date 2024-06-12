@@ -129,8 +129,9 @@ Here are some ideas to get you started:
    UI 관련은 대부분 웹뷰를 통해 기존에 개발된 웹모듈을 재사용하고자 했습니다.<br/>
 
    아래는 안드로이드에서 캡쳐한 이미지인데 PC 브라우저에서도 동일한 화면을 만날 수 있습니다.<br/>
-
-   |![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_chat_1.jpg)|![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_chat_2.jpg)|
+   
+   |<img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_chat_1.jpg" width="138" height="300"/>|<img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_chat_2.jpg" width="138" height="300"/>|
+   
 
    2. 앱과 웹뷰간의 메시지 플로우
 
