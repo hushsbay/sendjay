@@ -130,12 +130,10 @@ Here are some ideas to get you started:
 
    아래는 안드로이드에서 캡쳐한 이미지인데 PC 브라우저에서도 동일한 화면을 만날 수 있습니다.<br/>
    
-   |<img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_chat_1.jpg" width="138" height="300"/>|<img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_chat_2.jpg" width="138" height="300"/>|
-
    <table>
       <tr>
-         <td><img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_chat_1.jpg" width="138" height="300"/></td>
-         <td><img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_chat_2.jpg" width="138" height="300"/></td>
+         <td><img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_chat_1.jpg" width="276" height="600"/></td>
+         <td><img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_chat_2.jpg" width="276" height="300"/></td>
       </tr>
    </table>
 
