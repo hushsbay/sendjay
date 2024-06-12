@@ -133,7 +133,15 @@ Here are some ideas to get you started:
    <table>
       <tr>
          <td><img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_chat_1.jpg" style="width:276px;height:600px"/></td>
-         <td><img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_chat_2.jpg" width="276" height="600"/></td>
+         <td><img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_chat_2.jpg" style="width:276px;height:600px"/></td>
+      </tr>
+      <tr>
+         <td><img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_talklist.jpg" style="width:276px;height:600px"/></td>
+         <td><img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_option.jpg" style="width:276px;height:600px"/></td>
+      </tr>
+      <tr>
+         <td><img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_team.jpg" style="width:276px;height:600px"/></td>
+         <td><img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_treeview.jpg" style="width:276px;height:600px"/></td>
       </tr>
    </table>
 
