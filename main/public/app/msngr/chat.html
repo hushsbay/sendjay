@@ -368,7 +368,7 @@
                 try {
                     const len = $(".needCheckUnread").length
                     if (len == 0) return
-                    $("#in_search").val("111") //테스트 (가끔 ..가 남아 있는 때가 있음)
+                    //$("#in_search").val("111") //테스트 (가끔 ..가 남아 있는 때가 있음)
                     if (len > hush.cons.unread_max_check) {
                         $("#btn_qry_etc").hide()
                         $("#txt_unread_notice").show()
@@ -390,7 +390,7 @@
                         }
                     }
                     if (arr.length == 0) return
-                    $("#in_search").val("222") //테스트 (가끔 ..가 남아 있는 때가 있음)
+                    //$("#in_search").val("222") //테스트 (가끔 ..가 남아 있는 때가 있음)
                     if (!hush.http.chkOnline("none")) return
                     const rq = { type : "query", msgidArr : arr }                
                     if (hush.webview.ios) {
