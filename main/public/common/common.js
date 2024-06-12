@@ -638,8 +638,10 @@
                 socket.off(hush.cons.sock_ev_connect).on(hush.cons.sock_ev_connect, () => {
                     console.log("socket connected " + hush.util.getCurDateTimeStr(true, true))
                     hush.sock.on(socket, (rs) => {
-                        if (rs.ev != "chk_roomfocus" && rs.ev != "chk_alive" ) debugger
-                        console.log("hush.sock.on => " + JSON.stringify(rs)) //if (rs.data.type == "talk") debugger
+                        if (rs.ev != "chk_roomfocus" && rs.ev != "chk_alive" ) {
+                            //debugger //if (rs.data.type == "talk") debugger
+                            //console.log("hush.sock.on => " + JSON.stringify(rs))
+                        } //아래는 callback 호출되어야 실행되므로 alert와 toast에는 실행되지 않음
                         if (rs.returnTo == "parent" || rs.returnTo == "all") {
                             funcSockEv[rs.ev].call(null, rs.data)
                             if (rs.returnTo == "all") { //call from app.js or disconnect.js on server
@@ -678,23 +680,26 @@
                 return hush.util.getRnd().toString() + "_" + hush.util.getCurDateTimeStr()
             },
             on : (socket, callback) => {            
-                socket.off(hush.cons.sock_ev_alert).on(hush.cons.sock_ev_alert, async (obj) => { 
-                    debugger
+                socket.off(hush.cons.sock_ev_alert).on(hush.cons.sock_ev_alert, async (obj) => { //callback 없음
                     if (!obj.roomid) {
                         await hush.msg.alert("[sock_alert]<br>" + obj.msg) 
                     } else {
                         const _win = hush.sock.rooms[obj.roomid]
                         if (_win && !_win.closed) {
                             await _win.hush.msg.alert("[sock_alert]<br>" + obj.msg)
+                        } else {
+                            await hush.msg.alert("[sock_alert]<br>" + obj.msg)
                         }
                     }
                 })
-                socket.off(hush.cons.sock_ev_toast).on(hush.cons.sock_ev_toast, (obj) => {
+                socket.off(hush.cons.sock_ev_toast).on(hush.cons.sock_ev_toast, (obj) => { //callback 없음
                     if (!obj.roomid) {
                         hush.msg.toast("[sock_toast]<br>" + obj.msg) 
                     } else {
                         const _win = hush.sock.rooms[obj.roomid]
                         if (_win && !_win.closed) {
+                            _win.hush.msg.toast("[sock_toast]<br>" + obj.msg)
+                        } else {
                             hush.msg.toast("[sock_toast]<br>" + obj.msg)
                         }
                     }
