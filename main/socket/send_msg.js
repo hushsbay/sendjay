@@ -203,7 +203,7 @@ module.exports = async function(socket, param) {
 				socket.emit(ws.cons.sock_ev_common, param)
 				ws.sock.warn(null, socket, _logTitle, ex, _roomid)
 			} else {
-				console.log(_roomid, "###########")
+				console.log(_roomid, "###########", ws.cons.sock_ev_alert)
 				ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex, _roomid)
 			}			
 		} catch (ex1) {}
