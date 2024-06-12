@@ -122,11 +122,21 @@ Here are some ideas to get you started:
    - 네트워크가 끊어진 경우는 ChatService의 데몬이 돌면서 상태를 체크해 다시 연결될 때 그동안 도착한 톡이<br/>
      있으면 바로 알려 줍니다.<br/>
       
-   ### (웹/모바일) 앱과 웹뷰간의 메시지 플로우 : 핵심은 웹모듈 재사용. 유지보수 효율성 극대화
+   ### (웹/모바일) 유지보수 효율의 극대화를 위해 가급적 웹으로 구현
 
-   1. dsgklfadsg;lasdgfdskf
+   Sendjay는 일반 기업에서 추구하는 유지보수 효율성을 목적으로 두고<br/>      
+   모바일에서 앱으로 반드시 구현해야 할 소켓통신, 알림, 앱버전업데이트 등만 앱으로 개발하고<br/>
+   UI 관련은 대부분 웹뷰를 통해 기존에 개발된 웹모듈을 재사용하고자 했습니다.<br/>
 
-   2. dlf;kdaslkfjdlskfjdsfkjl
+   아래는 안드로이드에서 캡쳐한 이미지인데 PC 브라우저에서도 동일한 화면을 만날 수 있습니다.<br/>
+
+   ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_erp_portal.png)
+
+   2. 앱과 웹뷰간의 메시지 플로우
+
+   dsgklfadsg;lasdgfdskf
+
+   dlf;kdaslkfjdlskfjdsfkjl
 
 
 # 구축형(On-Premise) 서버 적용 안내
