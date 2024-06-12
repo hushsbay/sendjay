@@ -130,7 +130,7 @@ Here are some ideas to get you started:
 
    아래는 안드로이드에서 캡쳐한 이미지인데 PC 브라우저에서도 동일한 화면을 만날 수 있습니다.<br/>
 
-   ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_erp_portal.png)
+   |![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_chat_1.png)|![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_chat_2.png)|
 
    2. 앱과 웹뷰간의 메시지 플로우
 
