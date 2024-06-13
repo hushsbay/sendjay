@@ -9,11 +9,12 @@ module.exports = async function(socket, param) {
 		obj = param.data
 		_roomid = obj.roomid
 		obj.senderid = socket.userid
+		console.log(JSON.stringify(obj)+"#####")
 		//if (obj.senderid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- obj.senderid')
 		conn = await wsmysql.getConnFromPool(global.pool) //console.log(obj.senderid, _roomid)
 		const ret = await ws.util.chkAccessUserWithTarget(conn, obj.senderid, _roomid, 'room')
 		if (ret != '') throw new Error(ret)
-		await wsmysql.txBegin(conn)	
+		await wsmysql.txBegin(conn)
 		let useridToProc = obj.senderid
 		if (obj.type == 'check') { //전송여부 단순 확인
 			data = await wsmysql.query(conn, "SELECT CDT, COUNT(*) CNT FROM A_MSGMST_TBL WHERE MSGID = ? GROUP BY CDT ", [obj.prevmsgid])
