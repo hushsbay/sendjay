@@ -943,6 +943,7 @@
             }
 
             const procFailure = (rq, dtDetails) => { //Request already sent. Retry(resending) might not be needed in most cases since error already occurred.
+                debugger
                 if ($("#unread_" + rq.msgid).text() == hush.cons.no_response) return 
                 $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                 $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("$$")
@@ -1693,6 +1694,7 @@
                     toggleDispMem(data.value)
                 },
                 [hush.cons.sock_ev_send_msg] : (data) => {
+                    debugger
                     if (data.roomid != g_roomid) {
                         hush.msg.alert("Different RoomID : " + data.roomid + "/" + g_roomid) //개발자오류
                         return
