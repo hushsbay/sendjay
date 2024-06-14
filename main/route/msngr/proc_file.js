@@ -76,7 +76,7 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 				data = await wsmysql.query(conn, sql, [ws.cons.file_expired, req.body.senderid])
 				if (data[0].CNT >= ws.cons.max_filecount) throw new Error('최대 ' + ws.cons.max_filecount + '개 파일까지 한번에 전송 가능합니다.')
 			//}
-		console.log(req.body.msgid, req.body.roomid, "=============")
+			console.log(req.body.msgid, req.body.roomid, "=============")
 			sql = "INSERT INTO A_FILELOG_TBL (MSGID, ROOMID, SENDERID, BODY, CDT) VALUES (?, ?, ?, ?, sysdate(6)) "
 			await wsmysql.query(conn, sql, [req.body.msgid, req.body.roomid, req.body.senderid, req.filename])
 			cb(null, req.filename)
