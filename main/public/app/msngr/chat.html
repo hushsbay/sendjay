@@ -1334,7 +1334,7 @@
                                         if (_percent >= 98) $("#abort_" + rq.msgid).html("<span class=mq_tiny style='color:red'>완료중</span>")
                                     }
                                     if (!sockConnected || hush.http.chkOnline("none")) {
-                                        return xhr
+                                        procFailure(rq, "오류11")
                                     }
                                 }
                                 return xhr
