@@ -952,7 +952,7 @@
                 objUnread.show()
                 objUnread.off("click").on("click", async function() { 
                     hush.util.animBgColor($(this))
-                    const ret = await hush.msg.confirm(dtDetails + "<br>확인을 누르면 이 메시지를 화면에서 제거합니다.")
+                    const ret = await hush.msg.confirm(dtDetails + "<br>확인을 누르면 이 메시지가 제거됩니다.")
                     if (!ret) return 
                     $("#msg_" + rq.msgid).remove()
                 })

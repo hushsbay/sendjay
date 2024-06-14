@@ -91,7 +91,7 @@
             handling : ".. ", //handling..
             no_response : "전송확인",
             retry_sending : "retry sending",
-            sending_failure : "오류보기",
+            sending_failure : "문제발생",
             left : " left this room",
             param_webview_and : "webview=and",
             param_webview_ios : "webview=ios",
