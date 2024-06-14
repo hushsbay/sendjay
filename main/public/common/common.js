@@ -384,7 +384,7 @@
                     conn.onerror = function() {	
                         if (callback) callback({ code : "idb_conn_err", msg : "IndexedDB connect error: " + conn.errorCode })
                     }
-                    conn.onupgradeneeded = function(e) { //field(roomid, msgid, body, reply, sent, cdt)
+                    conn.onupgradeneeded = function(e) { //field : roomid, msgid, type, body, reply, sent, cdt
                         hush.idb.db = e.target.result
                         let os
                         if (hush.idb.db.objectStoreNames.contains(hush.cons.idb_tbl)) {

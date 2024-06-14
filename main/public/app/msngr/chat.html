@@ -917,7 +917,7 @@
                                                 obj.buffer = null
                                                 obj.bufferStr = null
                                                 obj.reply = rec.reply
-                                                obj.type = "talk"
+                                                obj.type = rec.type
                                                 obj.state = ""
                                                 obj.filestate = ""
                                                 obj.cnt = -1 //-1 means from local IndexedDB
@@ -1059,7 +1059,8 @@
                         //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 : deleteLocalMsg(data.msgid)
                         //결국, 정상적이지 않은 경우만 로컬에 있을 것임
                         const add_req = os.add({ 
-                            roomid : g_roomid, msgid : rq.msgid, body : rq.body, reply : rq.reply, cdt : hush.util.getCurDateTimeStr(true) 
+                            roomid : g_roomid, msgid : rq.msgid, type : rq.type, body : rq.body, reply : rq.reply, 
+                            cdt : hush.util.getCurDateTimeStr(true) 
                         })
                         add_req.onsuccess = function() { /*do nothing*/ }
                         add_req.onerror = function(e) { console.log("add_req error: " + e.srcElement.error) }
@@ -1988,7 +1989,7 @@
                         } else {
                             hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
                         }
-                        }, 5000)
+                        }, 2000)
                     } catch (ex) {
                         hush.util.showEx(ex)
                     }
