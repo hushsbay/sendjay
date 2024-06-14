@@ -1333,7 +1333,7 @@
                                     } else {
                                         if (_percent >= 98) $("#abort_" + rq.msgid).html("<span class=mq_tiny style='color:red'>완료중</span>")
                                     }
-                                    if (!sockConnected || hush.http.chkOnline("none")) {
+                                    if (!sockConnected || !hush.http.chkOnline("none")) {
                                         procFailure(rq, "오류11")
                                     }
                                 }
