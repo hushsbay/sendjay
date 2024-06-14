@@ -1007,11 +1007,10 @@
                     objUnread.show()
                     objUnread.off("click").on("click", async function() {
                         hush.util.animBgColor($(this))
-                        //const ret = await hush.msg.confirm("전송여부를 확인하시겠습니까?")
-                        //if (!ret) return 
+                        const ret = await hush.msg.confirm("전송여부를 확인하시겠습니까?")
+                        if (!ret) return 
                         if (!hush.http.chkOnline()) return
-                        $("#handling_" + rq.msgid).show()
-                        
+                        $("#handling_" + rq.msgid).show()                        
                         objUnread.hide() 
                         const rqCheck = initMsg()
                         rqCheck.type = "check"
@@ -1050,7 +1049,7 @@
                 g_in_chat.val("")
                 $("#fr_byte").html("")
                 if (_focused) g_in_chat.focus()       
-                if (rq.type != "file") prepareForNoResponse(rq)
+                //if (rq.type != "file") prepareForNoResponse(rq)
                 if (rq.type == "talk") {
                     const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readwrite")
                     const os = tx.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
@@ -1067,6 +1066,35 @@
                         tx.oncomplete = function() { /*do nothing*/ }  
                     }
                     os_req.onerror = function(e) { console.log("os_req error: " + e.srcElement.error) }   
+
+
+                    setTimeout(() => { //타이머 지나고 찾았을 때 아직 남아 있으면 전송실패인 것임
+                        const tx1 = hush.idb.db.transaction(hush.cons.idb_tbl, "readonly")
+                        const os = tx1.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
+                        os.get(rq.msgid).onsuccess = function(e) {
+                            const rec = e.target.result
+                            if (rec) {
+                                const obj = {}
+                                obj.msgid = rec.msgid
+                                obj.cdt = rec.cdt
+                                obj.senderid = g_userid
+                                obj.sendernm = g_usernm
+                                obj.body = rec.body
+                                obj.buffer = null
+                                obj.bufferStr = null
+                                obj.reply = rec.reply
+                                obj.type = "talk"
+                                obj.state = ""
+                                obj.filestate = ""
+                                obj.cnt = -1 //-1 means from local IndexedDB
+                                //addRow(obj, rq.type) //normal
+                                retrySending(obj)
+                            }
+                        }
+                        tx1.oncomplete = function() {
+                            //do nothing
+                        }
+                    }, hush.cons.send_timeout_sec * 1000)
                 }
             }
 
