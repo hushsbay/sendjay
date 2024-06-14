@@ -944,7 +944,7 @@
 
             const procFailure = (rq, dtDetails) => { //Request already sent. Retry(resending) might not be needed in most cases since error already occurred.
                 debugger
-                if ($("#unread_" + rq.msgid).text() == hush.cons.no_response) return 
+                //if ($("#unread_" + rq.msgid).text() == hush.cons.no_response) return 
                 $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                 $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("$$")
                 const objUnread = $("#unread_" + rq.msgid)
@@ -1008,10 +1008,11 @@
                     objUnread.show()
                     objUnread.off("click").on("click", async function() {
                         hush.util.animBgColor($(this))
-                        const ret = await hush.msg.confirm("전송여부를 확인하시겠습니까?")
-                        if (!ret) return 
+                        //const ret = await hush.msg.confirm("전송여부를 확인하시겠습니까?")
+                        //if (!ret) return 
                         if (!hush.http.chkOnline()) return
                         $("#handling_" + rq.msgid).show()
+                        
                         objUnread.hide() 
                         const rqCheck = initMsg()
                         rqCheck.type = "check"
