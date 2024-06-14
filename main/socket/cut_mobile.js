@@ -1,6 +1,8 @@
 const config = require('../config')
 const ws = require(config.app.ws)
 
+//미사용하는 것으로 .. 다시 체크해보기
+
 module.exports = function(socket, param) {
 	const _logTitle = param.ev
 	try { //ws.sock.warn(null, socket, _logTitle, JSON.stringify(param))	

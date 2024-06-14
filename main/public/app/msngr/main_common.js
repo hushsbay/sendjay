@@ -282,7 +282,7 @@ const sendChkAlive = (userkeyArr) => {
     if (hush.webview.ios) {
     } else if (hush.webview.and) {
         setTimeout(function() {
-            AndroidCom.send(hush.cons.sock_ev_chk_alive, JSON.stringify(dataObj), null, null, false) //procMsg=false
+            AndroidCom.send(hush.cons.sock_ev_chk_alive, JSON.stringify(dataObj), null, null, false)
         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
     } else {
         if (g_win_type == "invite") { //from chat.html
@@ -841,7 +841,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             if (hush.webview.ios) {
             } else if (hush.webview.and) {
                 setTimeout(function() {
-                    AndroidCom.send(hush.cons.sock_ev_set_env, JSON.stringify(rq1), "all", null, true) //procMsg=true
+                    AndroidCom.send(hush.cons.sock_ev_set_env, JSON.stringify(rq1), "all", null, true)
                 }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
             } else {
                 hush.sock.send(hush.socket, hush.cons.sock_ev_set_env, rq1, "all")

@@ -167,7 +167,7 @@
                                 const rq = { kind : "noti", value : _toggle, roomid : _roomid }
                                 if (hush.webview.ios) {
                                 } else if (hush.webview.and) {                                     
-                                    AndroidCom.send(hush.cons.sock_ev_set_env, JSON.stringify(rq), "parent", null, false) //procMsg=false
+                                    AndroidCom.send(hush.cons.sock_ev_set_env, JSON.stringify(rq), "parent", null, true)
                                 } else {
                                     hush.sock.send(hush.socket, hush.cons.sock_ev_set_env, rq, "parent")
                                 }
@@ -186,7 +186,7 @@
                                 const rq = { type : "updateall", senderkey : g_userkey, roomid : _roomid, first_queried : "Y" }
                                 if (hush.webview.ios) {
                                 } else if (hush.webview.and) { 
-                                    AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), _roomid, "parent", false) //procMsg=false
+                                    AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), _roomid, "parent", false)
                                 } else {
                                     hush.sock.send(hush.socket, hush.cons.sock_ev_read_msg, rq, _roomid, "parent")
                                 }
@@ -212,7 +212,7 @@
                                 rq.body = g_usernm + "<br>" + hush.cons.left
                                 if (hush.webview.ios) { 
                                 } else if (hush.webview.and) {
-                                    AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), _roomid, "parent", true) //procMsg=false 
+                                    AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), _roomid, "parent", true)
                                 } else {
                                     hush.sock.send(hush.socket, hush.cons.sock_ev_send_msg, rq, _roomid, "parent")
                                 }

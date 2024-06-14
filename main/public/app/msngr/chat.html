@@ -141,7 +141,7 @@
                 if (hush.webview.ios) { 
                 } else if (hush.webview.and) {
                     setTimeout(function() {
-                        AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, "parent", false) //procMsg=false
+                        AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, "parent", false)
                     }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                 } else {
                     hush.sock.send(g_socket, hush.cons.sock_ev_read_msg, rq, g_roomid, "parent")
@@ -225,7 +225,7 @@
                                 if (hush.webview.ios) {
                                 } else if (hush.webview.and) {
                                     setTimeout(function() {
-                                        AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
+                                        AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true)
                                     }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                                 } else {
                                     hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
@@ -237,15 +237,6 @@
                         hush.http.getUserPic(_userid, "img_userid")
                     })
                     if (!data.userkeys) return
-                    // const dataObj = { userkeys : data.userkeys }
-                    // if (hush.webview.ios) {
-                    // } else if (hush.webview.and) {
-                    //     setTimeout(function() {
-                    //         AndroidCom.send(hush.cons.sock_ev_chk_alive, JSON.stringify(dataObj), g_roomid, null, false) //procMsg=false
-                    //     }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
-                    // } else {
-                    //     hush.sock.send(g_socket, hush.cons.sock_ev_chk_alive, dataObj, g_roomid)
-                    // }
                     chkAlive(data.userkeys)
                 } catch (ex) {
                     hush.util.showEx(ex)
@@ -257,7 +248,7 @@
                 if (hush.webview.ios) {
                 } else if (hush.webview.and) {
                     setTimeout(function() {
-                        AndroidCom.send(hush.cons.sock_ev_chk_alive, JSON.stringify(dataObj), g_roomid, null, false) //procMsg=false
+                        AndroidCom.send(hush.cons.sock_ev_chk_alive, JSON.stringify(dataObj), g_roomid, null, false)
                     }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                 } else {
                     hush.sock.send(g_socket, hush.cons.sock_ev_chk_alive, dataObj, g_roomid)
@@ -266,13 +257,15 @@
             
             const callPeriodic = () => { //원래 타이머로 chkTyping()만 실행했는데 최초 페이지 열릴 때 모바일에서
                 //(네트워크 문제인지 아닌지 모르는 문제로) ON/OFF 표시가 안되는 문제가 드물게 나타나 일단 그 보완재로서 타이머에 chkAlive()도 같이 추가해 돌리게 됨
-                const userkeyArr = []
-                $(".state").each(function(idx, item) {
-                    userkeyArr.push(this.id.substring(2))
-                }).promise().done(function() {
-                    chkAlive(userkeyArr)
-                })
-                chkTyping()
+                if (sockConnected && hush.http.chkOnline("none")) {
+                    const userkeyArr = []
+                    $(".state").each(function(idx, item) {
+                        userkeyArr.push(this.id.substring(2))
+                    }).promise().done(function() {
+                        chkAlive(userkeyArr)
+                    })
+                    chkTyping()
+                }
                 setTimeout(() => callPeriodic(), 3000)
             }
 
@@ -396,7 +389,7 @@
                     if (hush.webview.ios) {
                     } else if (hush.webview.and) {
                         setTimeout(function() {
-                            AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, null, false) //procMsg=false
+                            AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, null, false)
                         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                     } else {
                         hush.sock.send(g_socket, hush.cons.sock_ev_read_msg, rq, g_roomid)
@@ -584,7 +577,7 @@
                         if (hush.webview.ios) { 
                         } else if (hush.webview.and) {
                             setTimeout(function() {
-                                AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
+                                AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, null, true)
                             }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                         } else {
                             hush.sock.send(g_socket, hush.cons.sock_ev_read_msg, rq, g_roomid)
@@ -654,7 +647,7 @@
                     if (hush.webview.ios) {
                     } else if (hush.webview.and) {
                         setTimeout(function() {
-                            AndroidCom.send(hush.cons.sock_ev_delete_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
+                            AndroidCom.send(hush.cons.sock_ev_delete_msg, JSON.stringify(rq), g_roomid, "parent", true)
                         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                     } else {
                         hush.sock.send(g_socket, hush.cons.sock_ev_delete_msg, rq, g_roomid, "parent")
@@ -726,7 +719,7 @@
                             if (hush.webview.ios) {
                             } else if (hush.webview.and) {
                                 setTimeout(function() {
-                                    AndroidCom.send(hush.cons.sock_ev_revoke_msgcell, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
+                                    AndroidCom.send(hush.cons.sock_ev_revoke_msgcell, JSON.stringify(rq), g_roomid, "parent", true)
                                 }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작    
                             } else {
                                 hush.sock.send(g_socket, hush.cons.sock_ev_revoke_msgcell, rq, g_roomid, "parent")
@@ -880,7 +873,7 @@
                             if (hush.webview.ios) { 
                             } else if (hush.webview.and) {
                                 setTimeout(function() {
-                                    AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
+                                    AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, true)
                                 }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                             }
                         }
@@ -1025,7 +1018,7 @@
                         if (hush.webview.ios) {
                         } else if (hush.webview.and) {
                             setTimeout(function() {
-                                AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rqCheck), g_roomid, null, true) //procMsg=true
+                                AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rqCheck), g_roomid, null, true)
                             }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                         } else {
                             hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqCheck, g_roomid)
@@ -1046,7 +1039,7 @@
                     if (hush.webview.ios) {
                     } else if (hush.webview.and) {
                         setTimeout(function() {
-                            AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", false) //procMsg=false
+                            AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true)
                         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                     } else {
                         hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
@@ -1125,7 +1118,7 @@
                                 if (hush.webview.ios) { 
                                 } else if (hush.webview.and) {
                                     setTimeout(function() {
-                                        AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rqNotice), g_roomid, "parent", false) //procMsg=false
+                                        AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rqNotice), g_roomid, "parent", true)
                                     }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                                 } else {
                                     hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqNotice, g_roomid, "parent")
@@ -1353,7 +1346,7 @@
                                     if (hush.webview.ios) { 
                                     } else if (hush.webview.and) {
                                         setTimeout(function() {
-                                            AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rqNotice), g_roomid, "parent", false) //procMsg=false
+                                            AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rqNotice), g_roomid, "parent", true)
                                         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                                     } else {
                                         hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqNotice, g_roomid, "parent")
@@ -1474,7 +1467,7 @@
                         if (hush.webview.ios) { 
                         } else if (hush.webview.and) {
                             setTimeout(function() {
-                                AndroidCom.send(hush.cons.sock_ev_rename_room, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
+                                AndroidCom.send(hush.cons.sock_ev_rename_room, JSON.stringify(rq), g_roomid, "parent", true)
                             }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작    
                         } else {
                             hush.sock.send(g_socket, hush.cons.sock_ev_rename_room, rq, g_roomid, "parent") //it should be transferred to parent
@@ -1496,7 +1489,7 @@
                     if (hush.webview.ios) { //alert(JSON.stringify(rq))
                     } else if (hush.webview.and) { //await hush.webview.callAppFunc(AndroidCom.send) //callAppFunc()에 설명 달아 놓았음
                         setTimeout(function() {
-                            AndroidCom.send(hush.cons.sock_ev_invite_user, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
+                            AndroidCom.send(hush.cons.sock_ev_invite_user, JSON.stringify(rq), g_roomid, null, true)
                         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작                     
                     } else {
                         hush.sock.send(g_socket, hush.cons.sock_ev_invite_user, rq, g_roomid)
@@ -1573,27 +1566,24 @@
             }
 
             const chkTyping = () => {
-                if (sockConnected && hush.http.chkOnline("none")) { //instead of socket.volatile.emit()
-                    const curTyping = g_in_chat.val().trim()
-                    const disp = $("#typing_" + g_userid).css("display")
-                    let rq
-                    if (disp == "none") {
-                        if (curTyping) rq = { typing : true, userid : g_userid }
+                const curTyping = g_in_chat.val().trim()
+                const disp = $("#typing_" + g_userid).css("display")
+                let rq
+                if (disp == "none") {
+                    if (curTyping) rq = { typing : true, userid : g_userid }
+                } else {
+                    if (!curTyping) rq = { typing : false, userid : g_userid }
+                }
+                if (rq) {
+                    if (hush.webview.ios) {
+                    } else if (hush.webview.and) {
+                        setTimeout(function() {
+                            AndroidCom.send(hush.cons.sock_ev_chk_typing, JSON.stringify(rq), g_roomid, null, false)
+                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                     } else {
-                        if (!curTyping) rq = { typing : false, userid : g_userid }
-                    }
-                    if (rq) {
-                        if (hush.webview.ios) {
-                        } else if (hush.webview.and) {
-                            setTimeout(function() {
-                                AndroidCom.send(hush.cons.sock_ev_chk_typing, JSON.stringify(rq), g_roomid, null, false) //procMsg=false
-                            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
-                        } else {
-                            hush.sock.send(g_socket, hush.cons.sock_ev_chk_typing, rq, g_roomid)
-                        }
+                        hush.sock.send(g_socket, hush.cons.sock_ev_chk_typing, rq, g_roomid)
                     }
                 }
-                //setTimeout(() => chkTyping(), 3000)
             }
 
             const calcBytes = () => {
@@ -1619,7 +1609,7 @@
                     if (hush.webview.ios) {
                     } else if (hush.webview.and) {
                         setTimeout(function() {
-                            AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
+                            AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, true)
                         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작 
                     }
                 } else {
@@ -1648,7 +1638,7 @@
                     if (hush.webview.ios) {
                     } else if (hush.webview.and) {
                         setTimeout(function() {
-                            AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, false) //procMsg=false
+                            AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, false)
                         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                     } else {
                         hush.sock.send(g_socket, hush.cons.sock_ev_open_room, rq, g_roomid)
@@ -1677,7 +1667,7 @@
                     if (hush.webview.ios) {
                     } else if (hush.webview.and) {
                         setTimeout(function() {
-                            AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
+                            AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, true)
                         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                     } else {
                         hush.sock.send(g_socket, hush.cons.sock_ev_open_room, rq, g_roomid)
@@ -1754,7 +1744,7 @@
                             if (hush.webview.ios) { 
                             } else if (hush.webview.and) {
                                 setTimeout(function() {
-                                    AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, null, false) //procMsg=false
+                                    AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, null, false)
                                 }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                             } else {
                                 hush.sock.send(g_socket, hush.cons.sock_ev_read_msg, rq, g_roomid)
@@ -1837,7 +1827,7 @@
                             if (hush.webview.ios) { 
                             } else if (hush.webview.and) { 
                                 setTimeout(function() {
-                                    AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, "parent", false) //procMsg=false
+                                    AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, "parent", false)
                                 }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작   
                             } else {
                                 hush.sock.send(g_socket, hush.cons.sock_ev_read_msg, rq, g_roomid, "parent")
@@ -1953,7 +1943,7 @@
                         if (hush.webview.ios) {
                         } else if (hush.webview.and) {
                             setTimeout(function() {
-                                AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
+                                AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true)
                             }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                         } else {
                             hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
@@ -1967,7 +1957,7 @@
                     if (hush.webview.ios) {
                     } else if (hush.webview.and) {
                         setTimeout(function() {
-                            AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
+                            AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, true)
                         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작    
                     } else {
                         hush.sock.send(g_socket, hush.cons.sock_ev_open_room, rq, g_roomid)
@@ -2041,7 +2031,7 @@
                         if (hush.webview.ios) { 
                         } else if (hush.webview.and) { 
                             setTimeout(function() {
-                                AndroidCom.send(hush.cons.sock_ev_create_room, JSON.stringify(rs), g_roomid, null, true) //procMsg=true
+                                AndroidCom.send(hush.cons.sock_ev_create_room, JSON.stringify(rs), g_roomid, null, true)
                             }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                         }
                     } else if (g_type == "newFromPopup") {
@@ -2096,7 +2086,7 @@
                 if (hush.webview.ios) {
                 } else if (hush.webview.and) { //it's text
                     setTimeout(function() {
-                        AndroidCom.send(hush.cons.sock_ev_qry_msgcell, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
+                        AndroidCom.send(hush.cons.sock_ev_qry_msgcell, JSON.stringify(rq), g_roomid, null, true)
                     }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                 }
             }
@@ -2190,7 +2180,7 @@
                         if (hush.webview.ios) {
                         } else if (hush.webview.and) {
                             setTimeout(function() {
-                                AndroidCom.send(hush.cons.sock_ev_set_env, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
+                                AndroidCom.send(hush.cons.sock_ev_set_env, JSON.stringify(rq), g_roomid, null, true)
                             }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                         }
                     })
@@ -2247,7 +2237,7 @@
                                         if (hush.webview.ios) { 
                                         } else if (hush.webview.and) { //it's text
                                             setTimeout(function() {
-                                                AndroidCom.send(hush.cons.sock_ev_qry_msgcell, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
+                                                AndroidCom.send(hush.cons.sock_ev_qry_msgcell, JSON.stringify(rq), g_roomid, null, true)
                                             }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                                         } else {
                                             hush.sock.send(g_socket, hush.cons.sock_ev_qry_msgcell, rq, g_roomid)
@@ -2303,7 +2293,7 @@
                         if (hush.webview.ios) {
                         } else if (hush.webview.and) {
                             setTimeout(function() {
-                                AndroidCom.send(hush.cons.sock_ev_delete_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
+                                AndroidCom.send(hush.cons.sock_ev_delete_msg, JSON.stringify(rq), g_roomid, "parent", true)
                             }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                         } else {
                             hush.sock.send(g_socket, hush.cons.sock_ev_delete_msg, rq, g_roomid, "parent")
@@ -2342,7 +2332,7 @@
                         if (hush.webview.ios) {
                         } else if (hush.webview.and) {
                             setTimeout(function() {
-                                AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true) //procMsg=true
+                                AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true)
                             }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                         } else {
                             hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
@@ -2388,7 +2378,7 @@
                                 if (hush.webview.ios) { 
                                 } else if (hush.webview.and) { //it's text
                                     setTimeout(function() {
-                                        AndroidCom.send(hush.cons.sock_ev_qry_msgcell, JSON.stringify(rq), g_roomid, null, true) //procMsg=true
+                                        AndroidCom.send(hush.cons.sock_ev_qry_msgcell, JSON.stringify(rq), g_roomid, null, true)
                                     }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                                 } else {
                                     hush.sock.send(g_socket, hush.cons.sock_ev_qry_msgcell, rq, g_roomid)

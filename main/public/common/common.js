@@ -628,6 +628,8 @@
             roomMap : { }, //{ nm: 'xxx', noti: true/false }
             rooms : { }, //window 객체가 저장됨. sock.connect => https://socket.io/docs/v3/client-initialization        
             connect : (io, query) => new Promise((resolve, reject) => { //PC Web only on index.html
+                //의도치 않게 연결이 끊어진 경우에 reconnection 시도를 true로 하고 다른 조치가 없으면 해당 웹페이지가 닫히고 나면 결국엔 다른 페이지에서 연결해야 하므로
+                //웹에서는 차라리 reconnection을 false로 두고 진행하기로 함
                 const socket = io(hush.cons.socket_url, { forceNew: false, reconnection: false, query: query }) //forceNew=false //See 'disconnect_prev_sock' in pmessage.js (on server)
         		socket.off("connect_error").on("connect_error", async (e) => { await hush.msg.alert("connect_error\n" + e.toString()) })
                 socket.off(hush.cons.sock_ev_disconnect).on(hush.cons.sock_ev_disconnect, async () => { 
@@ -739,7 +741,17 @@
                 //returnToAnother : returnTo 말고도 하나 더 전송 가능 (주로 특정 방에 보내면서 parent에게 추가로 보낼 때 사용)
                 const _returnTo = returnTo ? returnTo : "parent" //parent(부모)가 기본값
                 socket.emit(hush.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
-            },            
+            }, 
+            //https://socket.io/docs/v4/client-offline-behavior/#buffered-events
+            //원래는 아래의 설명처럼 buffer를 기본설정되어 있는 대로 사용하려 했으나 2) 웹은 소켓이 죽으면 메신저가 닫히도록 했기 때문에 volatile을 사용하지 않음
+            //2) Android에서는 socket.io 라이브러리에서 volatile을 지원하는 것을 아직 찾지 못해서 volatile을 사용하지 않기로 하나
+            //대신, 각 코딩에서 송신하기 전에 socket이 살아 있는지 체크해서 죽은 상태면 1) 보내지 않고 그냥 넘어 가든지 2) 사용자가 선택해 처리하도록 하기로 함
+            sendVolatile : (socket, ev, data, returnTo, returnToAnother) => { //바로 위 send()와 파라미터 동일하나 휘발성임 (현재 미사용 - 위 1)2) 설명 참조)
+                //chk_alive, chk_roomfocus, chk_typing 등과 같이 짧게 주기적으로 발생하는 송신의 경우는 소켓이 끊어질 경우에 버퍼링되지 않게 volatile로 처리하는 것이 합리적일 것이고
+                //나머지 송신의 경우도 서버 입장에서는 재시작(재연결)시 엄청난 부하가 올 수 있으므로 클라이언트에서 연결이 끊어졌을 경우나 네트워크가 불안정하거나 서버다운시 송신할 수 없도록 막기로 함
+                const _returnTo = returnTo ? returnTo : "parent" //parent(부모)가 기본값
+                socket.volatile.emit(hush.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
+            },
         },        
         util : {
             chkSeoulTz : () => {
