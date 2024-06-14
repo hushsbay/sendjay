@@ -943,7 +943,6 @@
             }
 
             const procFailure = (rq, dtDetails) => { //Request already sent. Retry(resending) might not be needed in most cases since error already occurred.
-                debugger
                 //if ($("#unread_" + rq.msgid).text() == hush.cons.no_response) return 
                 $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                 $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("$$")
@@ -953,7 +952,7 @@
                 objUnread.show()
                 objUnread.off("click").on("click", async function() { 
                     hush.util.animBgColor($(this))
-                    const ret = await hush.msg.confirm(dtDetails)
+                    const ret = await hush.msg.confirm(dtDetails + "<br>확인을 누르면 이 메시지를 화면에서 제거합니다.")
                     if (!ret) return 
                     $("#msg_" + rq.msgid).remove()
                 })
@@ -1733,7 +1732,7 @@
                     _dt = hush.util.formatMsgDt(_dt, g_year)
                     if (data.type == "check") { //from socket.emit (not room broadcast) //전송여부 단순 확인
                         if (data.errcd == hush.cons.CODE_ERR) {
-                            procFailure(data, "check failure : " + data.errmsg)
+                            procFailure(data, data.errmsg)
                             return
                         }
                         if (data.body == 0) {
