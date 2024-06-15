@@ -878,12 +878,70 @@
                             }
                         }
                         if (!hush.webview.on) g_in_chat.focus()
+                        // if (rq.type == "normal" && g_page == 0) {
+                        //     const _arr = []
+                        //     let _brr
+                        //     const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readonly") //readonly
+                        //     const os = tx.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
+                        //     const index = os.index("roomid") //let req = os.openCursor() //req = os.count(); req.onsuccess = function(evt) { console.log("====" + evt.target.result) }
+                        //     let req = index.openCursor(IDBKeyRange.only(g_roomid)) //1)
+                        //     req.onsuccess = async function(evt) { //2)
+                        //         const cursor = evt.target.result //3)
+                        //         if (cursor) { //cursor.key = cursor.value.roomid in this case //console.log("cursor:", cursor) 
+                        //             //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 
+                        //             //(정상적이지 않은 경우만 로컬에 있을 것임) 따라서, 아래 담기는 건 전송 실패건만임 
+                        //             //indexedDB는 일반적인 형식의 데이터 읽어오기와는 다름. 복수의 데이터를 읽어오는 것은 아래 순서대로 읽어옴
+                        //             //1) -> 2) -> 3)까지 한개의 데이터를 읽음. 그 다음 데이터는 다시 1) -> 2) -> 3)을 거치고 더 이상 없으면 아래의 4)를 지나 5)로 넘어가서 종료하게 됨
+                        //             _arr.push(cursor.value.msgid)
+                        //             cursor.continue()                               
+                        //         } else { //4) console.log("No more entries")
+                        //             if (_arr.length == 0) return 
+                        //             const rs = await hush.http.ajax("/msngr/get_msginfo", { msgids : _arr, kind : "check" })
+                        //             if (!hush.util.chkAjaxCode(rs)) return
+                        //             const _len = rs.list.length //서버에 없는 것(sending failure 실패난 것)만 내려옴
+                        //             if (_len == 0) return
+                        //             _brr = rs.list
+                        //             const tx1 = hush.idb.db.transaction(hush.cons.idb_tbl, "readonly")
+                        //             const os = tx1.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
+                        //             for (let i = 0; i < _len; i++) {
+                        //                 const _msgid = _brr[i] //If _msgid is undefined, 'The transaction has finished' error occurs for 'os.get(_msgid).onsuccess' below.
+                        //                 os.get(_msgid).onsuccess = function(e) {
+                        //                     const rec = e.target.result
+                        //                     if (rec) {
+                        //                         const obj = {}
+                        //                         obj.msgid = rec.msgid
+                        //                         obj.cdt = rec.cdt
+                        //                         obj.senderid = g_userid
+                        //                         obj.sendernm = g_usernm
+                        //                         obj.body = rec.body
+                        //                         obj.buffer = null
+                        //                         obj.bufferStr = null
+                        //                         obj.reply = rec.reply
+                        //                         obj.type = rec.type
+                        //                         obj.state = ""
+                        //                         obj.filestate = ""
+                        //                         obj.cnt = -1 //-1 means from local IndexedDB
+                        //                         addRow(obj, rq.type) //normal
+                        //                         retrySending(obj)
+                        //                     }
+                        //                 }
+                        //             }
+                        //             tx1.oncomplete = function() { //5)
+                        //                 scrollToTarget()
+                        //                 if (_arr.length > 0) {
+                        //                     const _crr = _arr.filter(x => !_brr.includes(x)) //_arr - _brr(서버에서 실패난 것 제외) = _crr (발송 성공은 제거해야 함)
+                        //                     for (msgid of _crr) deleteLocalMsg(msgid)
+                        //                 }
+                        //             }
+                        //         }
+                        //     }            
+                        // }
                         if (rq.type == "normal" && g_page == 0) {
                             const _arr = []
                             let _brr
-                            const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readonly") //readonly
-                            const os = tx.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
-                            const index = os.index("roomid") //let req = os.openCursor() //req = os.count(); req.onsuccess = function(evt) { console.log("====" + evt.target.result) }
+                            const iObj = hush.idb.setTxOs("readonly")
+                            if (iObj == null) return
+                            const index = iObj.os.index("roomid") //let req = os.openCursor() //req = os.count(); req.onsuccess = function(evt) { console.log("====" + evt.target.result) }
                             let req = index.openCursor(IDBKeyRange.only(g_roomid)) //1)
                             req.onsuccess = async function(evt) { //2)
                                 const cursor = evt.target.result //3)
@@ -901,32 +959,18 @@
                                     const _len = rs.list.length //서버에 없는 것(sending failure 실패난 것)만 내려옴
                                     if (_len == 0) return
                                     _brr = rs.list
-                                    const tx1 = hush.idb.db.transaction(hush.cons.idb_tbl, "readonly")
-                                    const os = tx1.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
+                                    const iObj1 = hush.idb.setTxOs("readonly")
+                                    if (iObj1 == null) return
                                     for (let i = 0; i < _len; i++) {
                                         const _msgid = _brr[i] //If _msgid is undefined, 'The transaction has finished' error occurs for 'os.get(_msgid).onsuccess' below.
-                                        os.get(_msgid).onsuccess = function(e) {
-                                            const rec = e.target.result
-                                            if (rec) {
-                                                const obj = {}
-                                                obj.msgid = rec.msgid
-                                                obj.cdt = rec.cdt
-                                                obj.senderid = g_userid
-                                                obj.sendernm = g_usernm
-                                                obj.body = rec.body
-                                                obj.buffer = null
-                                                obj.bufferStr = null
-                                                obj.reply = rec.reply
-                                                obj.type = rec.type
-                                                obj.state = ""
-                                                obj.filestate = ""
-                                                obj.cnt = -1 //-1 means from local IndexedDB
-                                                addRow(obj, rq.type) //normal
-                                                retrySending(obj)
-                                            }
-                                        }
+                                        hush.idb.getRec(iObj1.os, _msgid, function(rec) {
+                                            if (!rec) return
+                                            const obj = initMsgForRetrySending(rec.msgid, rec.type, rec.body, rec.type, rec.cdt)
+                                            addRow(obj, rq.type) //normal
+                                            retrySending(obj)
+                                        })
                                     }
-                                    tx1.oncomplete = function() { //5)
+                                    iObj1.tx.oncomplete = function() { //5)
                                         scrollToTarget()
                                         if (_arr.length > 0) {
                                             const _crr = _arr.filter(x => !_brr.includes(x)) //_arr - _brr(서버에서 실패난 것 제외) = _crr (발송 성공은 제거해야 함)
@@ -959,11 +1003,17 @@
             }
 
             const deleteLocalMsg = (msgid) => {
-                const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readwrite")
-                const os = tx.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
-                os.get(msgid).onsuccess = function(e) {
-                    if (e.target.result) os.delete(msgid)
-                }
+                // const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readwrite")
+                // const os = tx.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
+                // os.get(msgid).onsuccess = function(e) {
+                //     if (e.target.result) os.delete(msgid)
+                // }
+                const iObj = hush.idb.setTxOs("readwrite") //밖으로 빼는 게 좋은데 일단 그대로 둠
+                if (iObj == null) return
+                hush.idb.getRec(iObj.os, msgid, function(rec) {
+                    if (!rec) return
+                    iObj.os.delete(msgid)
+                })
             }
 
             const retrySending = (rq) => {
@@ -975,7 +1025,7 @@
                 objUnread.show()
                 objUnread.off("click").on("click", function() {
                     hush.util.animBgColor($(this))
-                    hush.msg.dialogMultiButton("Do you want to retry sending ?", {
+                    hush.msg.dialogMultiButton("retry sending ?", {
                         "Retry": function() { 
                             if (!hush.http.chkOnline()) return
                             $("#msg_" + rq.msgid).remove()
@@ -1028,6 +1078,30 @@
                 }, hush.cons.send_timeout_sec * 1000)
             }
 
+            const prepareForSendingFailure = (rq) => {
+                const iObj = hush.idb.setTxOs("readwrite")
+                if (iObj == null) return
+                const os_req = iObj.os.get(rq.msgid)
+                os_req.onsuccess = function(e) {
+                    if (os_req.result) return //const rec = os_req.result
+                    //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 : deleteLocalMsg(data.msgid)
+                    //결국, 정상적이지 않은 경우만 로컬에 있을 것임
+                    iObj.os.add({ 
+                        roomid : g_roomid, msgid : rq.msgid, type : rq.type, body : rq.body, reply : rq.reply, 
+                        cdt : hush.util.getCurDateTimeStr(true) 
+                    })
+                }
+                setTimeout(() => { //타이머 지나고 찾았을 때 아직 남아 있으면 전송실패인 것임
+                    const iObj1 = hush.idb.setTxOs("readonly")
+                    if (iObj1 == null) return
+                    hush.idb.getRec(iObj1.os, rq.msgid, function(rec) {
+                        if (!rec) return
+                        const obj = initMsgForRetrySending(rec.msgid, rec.type, rec.body, rec.type, rec.cdt)
+                        retrySending(obj)
+                    })
+                }, hush.cons.send_timeout_sec * 1000)
+            }
+
             const procSendAndAppend = (rq, blobUrl) => {
                 const _focused = hush.webview.screenHeightOnLoad == $(window).height() ? false : true //g_in_chat.is(":focus") ? true : false
                 addRow(rq)
@@ -1050,52 +1124,53 @@
                 $("#fr_byte").html("")
                 if (_focused) g_in_chat.focus()       
                 //if (rq.type != "file") prepareForNoResponse(rq)
-                if (rq.type != "file") { //if (rq.type == "talk") {
-                    const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readwrite")
-                    const os = tx.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
-                    const os_req = os.get(rq.msgid)
-                    os_req.onsuccess = function(e) {
-                        if (os_req.result) return //const rec = os_req.result
-                        //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 : deleteLocalMsg(data.msgid)
-                        //결국, 정상적이지 않은 경우만 로컬에 있을 것임
-                        const add_req = os.add({ 
-                            roomid : g_roomid, msgid : rq.msgid, type : rq.type, body : rq.body, reply : rq.reply, 
-                            cdt : hush.util.getCurDateTimeStr(true) 
-                        })
-                        add_req.onsuccess = function() { /*do nothing*/ }
-                        add_req.onerror = function(e) { console.log("add_req error: " + e.srcElement.error) }
-                        tx.oncomplete = function() { /*do nothing*/ }  
-                    }
-                    os_req.onerror = function(e) { console.log("os_req error: " + e.srcElement.error) }   
-
-
-                    setTimeout(() => { //타이머 지나고 찾았을 때 아직 남아 있으면 전송실패인 것임
-                        const tx1 = hush.idb.db.transaction(hush.cons.idb_tbl, "readonly")
-                        const os = tx1.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
-                        os.get(rq.msgid).onsuccess = function(e) {
-                            const rec = e.target.result
-                            if (rec) {
-                                const obj = {}
-                                obj.msgid = rec.msgid
-                                obj.cdt = rec.cdt
-                                obj.senderid = g_userid
-                                obj.sendernm = g_usernm
-                                obj.body = rec.body
-                                obj.buffer = null
-                                obj.bufferStr = null
-                                obj.reply = rec.reply
-                                obj.type = rq.type
-                                obj.state = ""
-                                obj.filestate = ""
-                                obj.cnt = -1 //-1 means from local IndexedDB
-                                //addRow(obj, rq.type) //normal
-                                retrySending(obj)
-                            }
-                        }
-                        tx1.oncomplete = function() {
-                            //do nothing
-                        }
-                    }, hush.cons.send_timeout_sec * 1000)
+                // if (rq.type != "file") { //if (rq.type == "talk") {
+                //     const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readwrite")
+                //     const os = tx.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
+                //     const os_req = os.get(rq.msgid)
+                //     os_req.onsuccess = function(e) {
+                //         if (os_req.result) return //const rec = os_req.result
+                //         //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 : deleteLocalMsg(data.msgid)
+                //         //결국, 정상적이지 않은 경우만 로컬에 있을 것임
+                //         const add_req = os.add({ 
+                //             roomid : g_roomid, msgid : rq.msgid, type : rq.type, body : rq.body, reply : rq.reply, 
+                //             cdt : hush.util.getCurDateTimeStr(true) 
+                //         })
+                //         add_req.onsuccess = function() { /*do nothing*/ }
+                //         add_req.onerror = function(e) { console.log("add_req error: " + e.srcElement.error) }
+                //         tx.oncomplete = function() { /*do nothing*/ }  
+                //     }
+                //     os_req.onerror = function(e) { console.log("os_req error: " + e.srcElement.error) }
+                //     setTimeout(() => { //타이머 지나고 찾았을 때 아직 남아 있으면 전송실패인 것임
+                //         const tx1 = hush.idb.db.transaction(hush.cons.idb_tbl, "readonly")
+                //         const os = tx1.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
+                //         os.get(rq.msgid).onsuccess = function(e) {
+                //             const rec = e.target.result
+                //             if (rec) {
+                //                 const obj = {}
+                //                 obj.msgid = rec.msgid
+                //                 obj.cdt = rec.cdt
+                //                 obj.senderid = g_userid
+                //                 obj.sendernm = g_usernm
+                //                 obj.body = rec.body
+                //                 obj.buffer = null
+                //                 obj.bufferStr = null
+                //                 obj.reply = rec.reply
+                //                 obj.type = rq.type
+                //                 obj.state = ""
+                //                 obj.filestate = ""
+                //                 obj.cnt = -1 //-1 means from local IndexedDB
+                //                 //addRow(obj, rq.type) //normal
+                //                 retrySending(obj)
+                //             }
+                //         }
+                //         tx1.oncomplete = function() {
+                //             //do nothing
+                //         }
+                //     }, hush.cons.send_timeout_sec * 1000)
+                // }
+                if (rq.type != "file") {
+                    prepareForSendingFailure(rq)
                 }
             }
 
@@ -1116,6 +1191,23 @@
                     prevmsgid : "", roomid : g_roomid, roomnm : "", 
                     bufferStr : null, state : "", unread : mem.length, line : "" //여기 4개는 web과는 다르게 모바일에서 필요
                 } 
+            }
+
+            const initMsgForRetrySending = (msgid, type, body, reply, cdt) => {
+                const obj = {}
+                obj.msgid = msgid
+                obj.type = type
+                obj.body = body
+                obj.reply = reply
+                obj.cdt = cdt
+                obj.senderid = g_userid
+                obj.sendernm = g_usernm                
+                obj.buffer = null
+                obj.bufferStr = null
+                obj.state = ""
+                obj.filestate = ""
+                obj.cnt = -1 //-1 means from local IndexedDB
+                return obj
             }
 
             const getMsgToReply = () => {
@@ -1973,7 +2065,6 @@
                             hush.msg.toast("초대된 멤버가 없거나 이미 초대된 멤버입니다.")
                             return
                         }
-                        setTimeout(function() {
                         const rq = initMsg()
                         rq.type = "invite"
                         rq.body = data.invitedUsernms.join(hush.cons.memdeli) + hush.cons.deli + data.invitedUserids.join(hush.cons.memdeli) + hush.cons.deli + data.sendernm
@@ -1989,7 +2080,6 @@
                         } else {
                             hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
                         }
-                        }, 2000)
                     } catch (ex) {
                         hush.util.showEx(ex)
                     }

@@ -402,6 +402,32 @@
                         if (callback) callback({ code : hush.cons.result_ok, msg : "IndexedDB connected" })
                     }
                 }
+            },
+            setTxOs : (type) => { //type="readonly","readwrite"
+                let obj = { tx : null, os : null }
+                try {
+                    const tx = hush.idb.db.transaction(hush.cons.idb_tbl, type)
+                    const os = tx.objectStore(hush.cons.idb_tbl)
+                    obj = { tx : tx, os : os }
+                } catch (ex) {
+                    if (obj.tx == null || obj.os == null) obj = null
+                } finally {
+                    return obj
+                }
+            },
+            getRec : (os, msgid, callback) => {
+                const req = os.get(msgid)
+                req.onsuccess = function(e) {
+                    const rec = e.target.result
+                    if (rec) {
+                        callback(rec)
+                    } else {
+                        callback(null)
+                    }
+                }
+                req.onerror = function(e) {
+                    callback(null)
+                }
             }
         },
         msg : { //1. msg(비동기콜백) 2. alert(=window.alert) 3. confirm(=window.confirm) 4. toast(복수메시지 순서대로 표시 지원)
