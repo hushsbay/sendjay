@@ -941,6 +941,7 @@
                             let _brr
                             const iObj = hush.idb.setTxOs("readonly")
                             if (iObj == null) return
+                            //로컬에서 어떤 것들이 저장되어서 여기서 읽어 와야 하는지는 ##8 참조하기
                             const index = iObj.os.index("roomid") //let req = os.openCursor() //req = os.count(); req.onsuccess = function(evt) { console.log("====" + evt.target.result) }
                             let req = index.openCursor(IDBKeyRange.only(g_roomid)) //1)
                             req.onsuccess = async function(evt) { //2)
@@ -965,7 +966,7 @@
                                         const _msgid = _brr[i] //If _msgid is undefined, 'The transaction has finished' error occurs for 'os.get(_msgid).onsuccess' below.
                                         hush.idb.getRec(iObj1.os, _msgid, function(rec) {
                                             if (!rec) return
-                                            const obj = initMsgForRetrySending(rec.msgid, rec.type, rec.body, rec.type, rec.cdt)
+                                            const obj = initMsgForRetrySending(rec.msgid, rec.type, rec.body, rec.reply, rec.cdt)
                                             addRow(obj, rq.type) //normal
                                             retrySending(obj)
                                         })
@@ -1078,30 +1079,6 @@
                 }, hush.cons.send_timeout_sec * 1000)
             }
 
-            const prepareForSendingFailure = (rq) => {
-                const iObj = hush.idb.setTxOs("readwrite")
-                if (iObj == null) return
-                const os_req = iObj.os.get(rq.msgid)
-                os_req.onsuccess = function(e) {
-                    if (os_req.result) return //const rec = os_req.result
-                    //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 : deleteLocalMsg(data.msgid)
-                    //결국, 정상적이지 않은 경우만 로컬에 있을 것임
-                    iObj.os.add({ 
-                        roomid : g_roomid, msgid : rq.msgid, type : rq.type, body : rq.body, reply : rq.reply, 
-                        cdt : hush.util.getCurDateTimeStr(true) 
-                    })
-                }
-                setTimeout(() => { //타이머 지나고 찾았을 때 아직 남아 있으면 전송실패인 것임
-                    const iObj1 = hush.idb.setTxOs("readonly")
-                    if (iObj1 == null) return
-                    hush.idb.getRec(iObj1.os, rq.msgid, function(rec) {
-                        if (!rec) return
-                        const obj = initMsgForRetrySending(rec.msgid, rec.type, rec.body, rec.type, rec.cdt)
-                        retrySending(obj)
-                    })
-                }, hush.cons.send_timeout_sec * 1000)
-            }
-
             const procSendAndAppend = (rq, blobUrl) => {
                 const _focused = hush.webview.screenHeightOnLoad == $(window).height() ? false : true //g_in_chat.is(":focus") ? true : false
                 addRow(rq)
@@ -1169,8 +1146,28 @@
                 //         }
                 //     }, hush.cons.send_timeout_sec * 1000)
                 // }
-                if (rq.type != "file") {
-                    prepareForSendingFailure(rq)
+                if (rq.type == "talk" || rq.type == "flink") { //##8
+                    const iObj = hush.idb.setTxOs("readwrite")
+                    if (iObj == null) return
+                    const os_req = iObj.os.get(rq.msgid)
+                    os_req.onsuccess = function(e) {
+                        if (os_req.result) return //const rec = os_req.result
+                        //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 : deleteLocalMsg(data.msgid)
+                        //결국, 정상적이지 않은 경우만 로컬에 있을 것임
+                        iObj.os.add({ 
+                            roomid : g_roomid, msgid : rq.msgid, type : rq.type, body : rq.body, reply : rq.reply, 
+                            cdt : hush.util.getCurDateTimeStr(true) 
+                        })
+                    }
+                    setTimeout(() => { //타이머 지나고 찾았을 때 아직 남아 있으면 전송실패인 것임
+                        const iObj1 = hush.idb.setTxOs("readonly")
+                        if (iObj1 == null) return
+                        hush.idb.getRec(iObj1.os, rq.msgid, function(rec) {
+                            if (!rec) return
+                            const obj = initMsgForRetrySending(rec.msgid, rec.type, rec.body, rec.reply, rec.cdt)
+                            retrySending(obj)
+                        })
+                    }, hush.cons.send_timeout_sec * 1000)
                 }
             }
 
@@ -1193,7 +1190,7 @@
                 } 
             }
 
-            const initMsgForRetrySending = (msgid, type, body, reply, cdt) => {
+            const initMsgForRetrySending = (msgid, type, body, reply, cdt) => { //send_msg시 talk와 flink type에만 정상 동작하도록 설정됨
                 const obj = {}
                 obj.msgid = msgid
                 obj.type = type
