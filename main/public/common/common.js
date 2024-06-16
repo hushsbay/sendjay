@@ -319,11 +319,14 @@
                     contentType : false,
                     cache : false,
                     type : "POST",
+                    timeout : hush.cons.restful_timeout,
                     success : function(rs) { //if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
+                        alert("2222")
                         if (callback) callback(rs)
                     },
                     error : function(xhr, status, error) {
                         const msg = (typeof error == "string") ? error : error.toString()
+                        alert("1111"+msg)
                         if (failCallback == false) {
                             //skip (like getting image)
                         } else if (failCallback) {

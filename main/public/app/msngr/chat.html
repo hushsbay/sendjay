@@ -1146,7 +1146,7 @@
                 //         }
                 //     }, hush.cons.send_timeout_sec * 1000)
                 // }
-                if (rq.type == "talk" || rq.type == "flink") { //##8
+                if (rq.type == "talk") { //##8
                     const iObj = hush.idb.setTxOs("readwrite")
                     if (iObj == null) return
                     const os_req = iObj.os.get(rq.msgid)
