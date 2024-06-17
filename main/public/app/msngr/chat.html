@@ -1488,7 +1488,7 @@
                                     //   서버 죽은 경우나 네트워크 불안정해 타임아웃 걸려 100% 진행되면서도 삭제/재전송을 보여주므로 사용자혼란을 줄여줌
                                     //3) 그런데 아직 파일 재전송 코딩이 어려워 1) 2) 경우는 삭제만 가능하며 웹뷰이므로 채팅방을 나가는 순간 제거됨
                                     if (!sockConnected || !hush.http.chkOnline("none")) {
-                                        procFailure(rq, "오류(file)")
+                                        prepareForNoResponse(rq)
                                     }
                                 }
                                 return xhr
@@ -1516,7 +1516,11 @@
                             error : function(xhr, status, error) { 
                                 $("#abort_" + rq.msgid).hide()
                                 const msg = (typeof error == "string") ? error : error.toString()
-                                procFailure(rq, msg)
+                                if (msg.includes("timeout")) { //proc_image()의 설명 참조
+                                    prepareForNoResponse(rq) 
+                                } else { 
+                                    procFailure(rq, msg)
+                                }
                             }
                         })
                         $("#abort_" + rq.msgid).off("click").on("click", async function() {
