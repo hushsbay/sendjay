@@ -1154,7 +1154,7 @@
                         if (os_req.result) return //const rec = os_req.result
                         //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 : deleteLocalMsg(data.msgid)
                         //결국, 정상적이지 않은 경우만 로컬에 있을 것임
-                        iObj.os.add({ 
+                        iObj.os.add({ //톡은 사용자 타이핑이 많은 경우 전송실패후 휘발성으로 날아가버리면 사용자 입장에서는 매우 불편함
                             roomid : g_roomid, msgid : rq.msgid, type : rq.type, body : rq.body, reply : rq.reply, 
                             cdt : hush.util.getCurDateTimeStr(true) 
                         })
@@ -1167,6 +1167,13 @@
                             const obj = initMsgForRetrySending(rec.msgid, rec.type, rec.body, rec.reply, rec.cdt)
                             retrySending(obj)
                         })
+                    }, hush.cons.send_timeout_sec * 1000)
+                } else if (rq.type == "flink") {
+                    setTimeout(() => { //타이머 지나고 찾았을 때 아직 남아 있으면 전송실패인 것임
+                        const objHandling = $("#handling_" + rq.msgid)
+                        if (objHandling.css("display") != "none") { //flink를 talk과 같은 방식으로 retry sending하지 않고 바로 procFailure시킴 
+                            procFailure(rq, "오류") //initMsgForRetrySending()에 flink 관련 설정하기도 힘들고 flink는 사용자가 타이핑하는 것이 아닌 
+                        } //파일 선택해 복사하는 액션이므로 네트워크 재연결시에 크게 불편하지 않으므로 새로 새로 선택하라고 가이드 하는 것임 
                     }, hush.cons.send_timeout_sec * 1000)
                 }
             }
@@ -1190,7 +1197,7 @@
                 } 
             }
 
-            const initMsgForRetrySending = (msgid, type, body, reply, cdt) => { //send_msg시 talk와 flink type에만 정상 동작하도록 설정됨
+            const initMsgForRetrySending = (msgid, type, body, reply, cdt) => { //send_msg시 talk type에만 정상 동작하도록 설정됨
                 const obj = {}
                 obj.msgid = msgid
                 obj.type = type
@@ -1215,7 +1222,7 @@
 
             const sendMsg = (type, blobUrlOrBody, blobOrFilestate) => {
                 try {
-//                    if (!hush.http.chkOnline()) return
+                    if (!hush.http.chkOnline()) return
                     const rq = initMsg()
                     if (type == "image") { //ajax used. arraybuffer sent with blank on socket.io-redis npm. download (through socket) is ok                    
                         rq.type = type
@@ -1251,7 +1258,8 @@
                             //1) 서버를 죽이면 여기 오류로 덜어지는데 이때 msg는 timeout이 나옴 (timeout 설정했을 때이며 미설정시는 GATEWAY~TIMEOUT으로 나왔음)
                             //   어쨋든 이 경우는 소켓버퍼링처럼 ajax도 버퍼링?이 되어 웹뷰를 닫고 새로 열어도 바이너리 데이터를 가지고 있는 것 같음
                             //   왜냐면, 다시 들어오면 실제로 전송이 성공한 결과를 보여주기 때문임 (왜 그런지 어디서 옵션을 가지는지는 아직 미파악)
-                            //2) 네트워크가 끊어져도 여기 오류로 떨어지는데 이때는 msg가 없고 ajax 버퍼링?이 없이 전송이 실패로 끝남
+                            //2) 네트워크가 끊어지면 timeout없이 여기 오류로 즉시 떨어지는데 이때는 msg가 없고 ajax 버퍼링?이 없이 전송이 실패로 끝남
+                            //   그러나, 사실 바로 앞단에서 네트워크 연결여부를 체크하므로 2) 경우가 발생할 일은 매우 낮음
                             //따라서, 1) 경우와 나머지 경우(챗방을 닫고 열면 해당 데이터는 사라짐)가 사용자에게 주는 가이드가 달라야 함
                             if (msg.includes("timeout")) { //응답없으니 재연결시엔 (이미 버퍼링된 데이터가 업로드되었을테니) 클릭해서
                                 prepareForNoResponse(rq) //서버에 데이터가 있으면 그걸로 대체하고 없으면 procFailure()로 안내하기
@@ -1468,7 +1476,7 @@
                                     //   서버 죽은 경우나 네트워크 불안정해 타임아웃 걸려 100% 진행되면서도 삭제/재전송을 보여주므로 사용자혼란을 줄여줌
                                     //3) 그런데 아직 파일 재전송 코딩이 어려워 1) 2) 경우는 삭제만 가능하며 웹뷰이므로 채팅방을 나가는 순간 제거됨
                                     if (!sockConnected || !hush.http.chkOnline("none")) {
-                                        procFailure(rq, "오류11")
+                                        procFailure(rq, "오류")
                                     }
                                 }
                                 return xhr
