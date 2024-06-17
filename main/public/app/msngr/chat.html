@@ -1511,7 +1511,6 @@
                                 $("#abort_" + rq.msgid).hide()
                                 if (!$("#sel_" + rq.msgid).hasClass("chkboxSel")) $("#sel_" + rq.msgid).addClass("chkboxSel")
                                 if (rs.code == hush.cons.CODE_OK) {
-                                    alert("1111111")
                                     const rqNotice = initMsg()
                                     rqNotice.type = "notice"
                                     rqNotice.body = rq.type
