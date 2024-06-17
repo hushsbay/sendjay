@@ -1215,7 +1215,7 @@
 
             const sendMsg = (type, blobUrlOrBody, blobOrFilestate) => {
                 try {
-                    if (!hush.http.chkOnline()) return
+//                    if (!hush.http.chkOnline()) return
                     const rq = initMsg()
                     if (type == "image") { //ajax used. arraybuffer sent with blank on socket.io-redis npm. download (through socket) is ok                    
                         rq.type = type
@@ -1245,9 +1245,11 @@
                                     hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqNotice, g_roomid, "parent")
                                 }
                             } else {
+                                alert("111"+rs.msg)
                                 procFailure(rq, rs.msg)
                             }
                         }, (msg) => {
+                            alert("222"+rs.msg)
                             procFailure(rq, msg)
                         })
                     } else if (type == "flink") {
