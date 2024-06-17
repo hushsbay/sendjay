@@ -218,7 +218,7 @@
                                 const ret = await hush.msg.confirm("강제퇴장처리를 계속 진행할까요?")
                                 if (!ret) return
                                 hush.msg.dialogClose()
-                                //if (!hush.http.chkOnline()) return
+                                if (!hush.http.chkOnline()) return
                                 const rq = initMsg()
                                 rq.type = "leave"
                                 rq.reply = _userid
@@ -2501,7 +2501,7 @@
                         if (hush.webview.on) showRoomMenu(false)
                         const ret = await hush.msg.confirm("퇴장시 모든 메시지가 삭제됩니다. 계속할까요?")
                         if (!ret) return
-                        if (!hush.http.chkOnline()) return
+                        //if (!hush.http.chkOnline()) return
                         const rq = initMsg(g_roomid)
                         rq.type = "leave"
                         rq.body = g_usernm + "<br>" + hush.cons.left //when 3 people above
