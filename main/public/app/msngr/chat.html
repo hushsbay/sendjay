@@ -2108,6 +2108,7 @@
                             hush.msg.toast("초대된 멤버가 없거나 이미 초대된 멤버입니다.")
                             return
                         }
+                        setTimeout(function() {
                         const rq = initMsg()
                         rq.type = "invite"
                         rq.body = data.invitedUsernms.join(hush.cons.memdeli) + hush.cons.deli + data.invitedUserids.join(hush.cons.memdeli) + hush.cons.deli + data.sendernm
@@ -2123,6 +2124,7 @@
                         } else {
                             hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
                         }
+                        }, 5000)
                     } catch (ex) {
                         hush.util.showEx(ex)
                     }
