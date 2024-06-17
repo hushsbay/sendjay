@@ -1230,7 +1230,9 @@
                         fd.append("type", rq.type)
                         fd.append("reply", getMsgToReply())
                         fd.append("file", blobOrFilestate)
+                        alert("000")
                         hush.http.ajaxFormData("/msngr/proc_image", fd, (rs) => {
+                            alert("000AA"+rs.code)
                             if (rs.code == hush.cons.CODE_OK) {
                                 const rqNotice = initMsg()
                                 rqNotice.type = "notice"
