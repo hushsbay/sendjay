@@ -218,6 +218,7 @@
                                 const ret = await hush.msg.confirm("강제퇴장처리를 계속 진행할까요?")
                                 if (!ret) return
                                 hush.msg.dialogClose()
+                                if (!hush.http.chkOnline()) return
                                 const rq = initMsg()
                                 rq.type = "leave"
                                 rq.reply = _userid
@@ -2108,8 +2109,6 @@
                             hush.msg.toast("초대된 멤버가 없거나 이미 초대된 멤버입니다.")
                             return
                         }
-                        alert("0000000000000")
-                        setTimeout(function() {
                         const rq = initMsg()
                         rq.type = "invite"
                         rq.body = data.invitedUsernms.join(hush.cons.memdeli) + hush.cons.deli + data.invitedUserids.join(hush.cons.memdeli) + hush.cons.deli + data.sendernm
@@ -2125,7 +2124,6 @@
                         } else {
                             hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
                         }
-                        }, 5000)
                     } catch (ex) {
                         hush.util.showEx(ex)
                     }
