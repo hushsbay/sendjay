@@ -218,7 +218,7 @@
                                 const ret = await hush.msg.confirm("강제퇴장처리를 계속 진행할까요?")
                                 if (!ret) return
                                 hush.msg.dialogClose()
-                                if (!hush.http.chkOnline()) return
+                                //if (!hush.http.chkOnline()) return
                                 const rq = initMsg()
                                 rq.type = "leave"
                                 rq.reply = _userid
