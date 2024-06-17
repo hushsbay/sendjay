@@ -1483,10 +1483,11 @@
                                         if (_percent >= 98) $("#abort_" + rq.msgid).html("<span class=mq_tiny style='color:red'>완료중</span>")
                                     }
                                     //파일업로드시 1) 네트워크 끊어지면 바로 삭제/재전송 아이콘이 보이는데 
-                                    //2) 서버가 죽으면 (아래 if 없을 경우 100%까지 가고 (GATEWAY_TIMEOUT이 리턴되면서) 삭제/재전송 아이콘이 보이게 됨
+                                    //2) 서버가 죽으면 (아래 if 없을 경우 100%까지 가고 (timeout이 리턴되면서) prepareForNoResponse() 보이게 됨
                                     //   이 경우, 파일이 아주 크면 사용자는 100%까지 잘되나보다라고 착각할 수도 있어서 아래 if와 같이 체크하면
-                                    //   서버 죽은 경우나 네트워크 불안정해 타임아웃 걸려 100% 진행되면서도 삭제/재전송을 보여주므로 사용자혼란을 줄여줌
+                                    //   서버 죽은 경우나 네트워크 불안정해 타임아웃 걸려 100% 진행되면서도 오류를 보여주므로 사용자혼란을 줄여줌
                                     //3) 그런데 아직 파일 재전송 코딩이 어려워 1) 2) 경우는 삭제만 가능하며 웹뷰이므로 채팅방을 나가는 순간 제거됨
+                                    //4) 파일이 작은 것은 ajax buffering?인지 잘 모르겠는데 서버가 살아날 경우 자동으로 보냄 (아직 옵션 등 미파악)
                                     if (!sockConnected || !hush.http.chkOnline("none")) {
                                         prepareForNoResponse(rq)
                                     }
@@ -2418,7 +2419,7 @@
                         sendMsg() 
                     })
                     $("#btn_file, #btn_file_m").on("click", function() {
-                        //if (!hush.http.chkOnline()) return
+                        if (!hush.http.chkOnline()) return
                         hush.util.animBgColor($(this))
                         $("#file_upload").val("") //btn_file_m : see webview setting
                         $("#file_upload").trigger("click")
