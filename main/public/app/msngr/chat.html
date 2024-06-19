@@ -1022,7 +1022,7 @@
                 $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("##")
                 $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                 const objUnread = $("#unread_" + rq.msgid)
-                objUnread.html("<img id=retry_talk src='/img/retry_small.png' style='width:16px;height:16px'><img id=delete_talk src='/img/delete_small.png' style='width:16px;height:16px'>")
+                objUnread.html("<img id=retry_talk src='/img/retry_small.png' style='width:15px;height:15px'><img id=delete_talk src='/img/delete_small.png' style='width:16px;height:16px'>")
                 objUnread.removeClass("unread").addClass("failure")
                 objUnread.show()
                 $("#retry_talk,#delete_talk").off("click").on("click", function() {
