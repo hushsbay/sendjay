@@ -38,35 +38,35 @@
             let g_msgUnread = [], g_focus_for_webview, g_show_list_people = "X", sockConnected = false
             const FIRST_QUERIED = "9999"
             let g_retry_small, g_delete_small
-            //const htmlRetryDelete = "<img src='/img/retry_small.png' style='width:14px;height:14px;margin-top:0px;margin-right:2px'><img src='/img/delete_small.png' style='width:16px;height:16px;margin-top:5px'>"
+            //const htmlRetryDelete = "<img src='" + g_retry_small + "' style='width:14px;height:14px;margin-top:0px;margin-right:2px'><img src='" + g_delete_small + "' style='width:16px;height:16px;margin-top:5px'>"
 
-            const getBase64FromImageRetry = () => {
-                let xhr = new XMLHttpRequest()
-                xhr.onload = () => {
-                    let reader = new FileReader()
-                    reader.onloadend = function () {
-                        g_retry_small = reader.result
-                    }
-                    reader.readAsDataURL(xhr.response)
-                }
-                xhr.open('GET', "/img/retry_small.png")
-                xhr.responseType = 'blob'
-                xhr.send()
-            }
+            // const getBase64FromImageRetry = () => {
+            //     let xhr = new XMLHttpRequest()
+            //     xhr.onload = () => {
+            //         let reader = new FileReader()
+            //         reader.onloadend = function () {
+            //             g_retry_small = reader.result
+            //         }
+            //         reader.readAsDataURL(xhr.response)
+            //     }
+            //     xhr.open('GET', "/img/retry_small.png")
+            //     xhr.responseType = 'blob'
+            //     xhr.send()
+            // }
 
-            const getBase64FromImageDelete = () => {
-                let xhr = new XMLHttpRequest()
-                xhr.onload = () => {
-                    let reader = new FileReader()
-                    reader.onloadend = function () {
-                        g_delete_small = reader.result
-                    }
-                    reader.readAsDataURL(xhr.response)
-                }
-                xhr.open('GET', "/img/delete_small.png")
-                xhr.responseType = 'blob'
-                xhr.send()
-            }
+            // const getBase64FromImageDelete = () => {
+            //     let xhr = new XMLHttpRequest()
+            //     xhr.onload = () => {
+            //         let reader = new FileReader()
+            //         reader.onloadend = function () {
+            //             g_delete_small = reader.result
+            //         }
+            //         reader.readAsDataURL(xhr.response)
+            //     }
+            //     xhr.open('GET', "/img/delete_small.png")
+            //     xhr.responseType = 'blob'
+            //     xhr.send()
+            // }
 
             const resetEnvForScroll = () => {
                 g_cdt = FIRST_QUERIED //FIRST_QUERIED(default). YYYYMMDD~ : when scrolled all the way down to the bottom, previous page shown and g_cdt gets YYYYMMDD~ value
@@ -1052,10 +1052,11 @@
                 $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("##")
                 $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                 const objUnread = $("#unread_" + rq.msgid)
-                objUnread.html("<img id=xxx src=''>") //objUnread.html(htmlRetryDelete)
+                const htmlRetryDelete = "<img src='" + g_retry_small + "' style='width:14px;height:14px;margin-top:0px;margin-right:2px'><img src='" + g_delete_small + "' style='width:16px;height:16px;margin-top:5px'>"
+                objUnread.html(htmlRetryDelete)
                 //const url = hush.blob.getDataUrl(g_retry_small, "image/png")
-                $("#xxx").attr("src", g_retry_small)
-                $("#xxx").attr("mimetype", "image/png")
+                //$("#xxx").attr("src", g_retry_small)
+                //$("#xxx").attr("mimetype", "image/png")
                 objUnread.removeClass("unread").addClass("failure")
                 objUnread.show()
                 objUnread.off("click").on("click", function() {
@@ -1087,7 +1088,8 @@
                     $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("^^")
                     $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                     const objUnread = $("#unread_" + rq.msgid)
-                    objUnread.html($("#retrydelete").html()) //objUnread.html(htmlRetryDelete)
+                    const htmlRetryDelete = "<img src='" + g_retry_small + "' style='width:14px;height:14px;margin-top:0px;margin-right:2px'><img src='" + g_delete_small + "' style='width:16px;height:16px;margin-top:5px'>"
+                    objUnread.html(htmlRetryDelete)
                     objUnread.removeClass("unread").addClass("failure")
                     objUnread.show()
                     objUnread.off("click").on("click", async function() {
@@ -2346,8 +2348,8 @@
                         setTimeout(function() {
                             AndroidRoom.procAfterOpenRoom()
                         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
-                        getBase64FromImageRetry()
-                        getBase64FromImageDelete()
+                        getBase64FromImage("/img/retry_small.png", function(dataUrl) { g_retry_small = dataUrl }) //오프라인에서 이미지 핸들링하기 위해 미리 내림
+                        getBase64FromImage("/img/delete_small.png", function(dataUrl) { g_retry_small = dataUrl }) //상동
                     } else {                        
                         g_focus_for_webview = false
                         $("#fr_main").height("calc(100% - 190px)")

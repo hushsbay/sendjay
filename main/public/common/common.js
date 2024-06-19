@@ -218,6 +218,19 @@
 				return dataUrl
             },
             ////////////////////////////////////////////////////////////////////////////////////////
+            getBase64FromImage : (imgUrl, callback) => { //리턴 : "data:" + mimetype + ";base64," + base64
+                let xhr = new XMLHttpRequest()
+                xhr.onload = () => {
+                    let reader = new FileReader()
+                    reader.onloadend = function () {
+                        callback(reader.result)
+                    }
+                    reader.readAsDataURL(xhr.response)
+                }
+                xhr.open('GET', imgUrl)
+                xhr.responseType = 'blob'
+                xhr.send()
+            },
             parseDataUrl : (objUrl) => { //eg) data:image/png;base64,~
                 let _ret = { mimetype : "", body : "" }
                 var _header = objUrl.split(";base64,")
