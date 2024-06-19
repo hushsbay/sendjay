@@ -46,7 +46,6 @@
                     let reader = new FileReader()
                     reader.onloadend = function () {
                         g_retry_small = reader.result
-                        alert(g_retry_small)
                     }
                     reader.readAsDataURL(xhr.response)
                 }
@@ -1053,10 +1052,10 @@
                 $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("##")
                 $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                 const objUnread = $("#unread_" + rq.msgid)
-                objUnread.html("<img id=xxx>") //objUnread.html(htmlRetryDelete)
+                objUnread.html("<img id=xxx src=''>") //objUnread.html(htmlRetryDelete)
                 const url = hush.blob.getDataUrl(g_retry_small, "image/png")
                 $("#xxx").attr("src", url)
-                alert("2222")
+                $("#xxx").attr("mimetype", "image/png")
                 objUnread.removeClass("unread").addClass("failure")
                 objUnread.show()
                 objUnread.off("click").on("click", function() {
