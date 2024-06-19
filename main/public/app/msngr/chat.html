@@ -1022,12 +1022,12 @@
                 $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("##")
                 $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                 const objUnread = $("#unread_" + rq.msgid)
-                objUnread.html(hush.cons.retry_sending)
+                objUnread.html("<img id=retry_talk src='/img/retry_small.png' style='width:16px;height:16px'><img id=delete_talk src='/img/delete_small.png' style='width:16px;height:16px'>")
                 objUnread.removeClass("unread").addClass("failure")
                 objUnread.show()
-                objUnread.off("click").on("click", function() {
+                $("#retry_talk,#delete_talk").off("click").on("click", function() {
                     hush.util.animBgColor($(this))
-                    hush.msg.dialogMultiButton("retry sending ?", {
+                    hush.msg.dialogMultiButton("retry or delete ?", {
                         "Retry": function() { 
                             if (!hush.http.chkOnline()) return
                             $("#msg_" + rq.msgid).remove()
@@ -1044,7 +1044,7 @@
                         }, "Close": function() { 
                             hush.msg.dialogClose() 
                         } 
-                    }, hush.cons.retry_sending)
+                    }, "retry sending")
                 })
             }
 
@@ -1287,16 +1287,20 @@
                         rq.filestate = blobOrFilestate
                         procSendAndAppend(rq)
                     } else {
-                        rq.type = "talk"
-                        let _body = g_in_chat.val() //while (_body.endsWith(_body, "\n")) { const _len = _body.length; _body = _body.substring(0, _len - 1) } //infinite loop when _len is 0
-                        if (_body.trim() == "") return
-                        if (hush.util.strLen(_body) > hush.cons.max_msg_len) {
-                            hush.msg.toast("최대 : " + hush.cons.max_msg_len + " 바이트<br>현재 : " + hush.util.strLen(_body) + " 바이트")
-                            return
-                        }
-                        rq.body = _body
-                        rq.reply = getMsgToReply()
-                        procSendAndAppend(rq)
+                        // rq.type = "talk"
+                        // let _body = g_in_chat.val() //while (_body.endsWith(_body, "\n")) { const _len = _body.length; _body = _body.substring(0, _len - 1) } //infinite loop when _len is 0
+                        // if (_body.trim() == "") return
+                        // if (hush.util.strLen(_body) > hush.cons.max_msg_len) {
+                        //     hush.msg.toast("최대 : " + hush.cons.max_msg_len + " 바이트<br>현재 : " + hush.util.strLen(_body) + " 바이트")
+                        //     return
+                        // }
+                        // rq.body = _body
+                        // rq.reply = getMsgToReply()
+                        // procSendAndAppend(rq)
+
+                        const rq = initMsg()
+                        const obj = initMsgForRetrySending(rq.msgid, "talk", "121212", "", "20240606123101")
+                        retrySending(obj)
                     }
                 } catch (ex) {
                     hush.util.showEx(ex)
