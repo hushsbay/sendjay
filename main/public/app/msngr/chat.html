@@ -38,6 +38,9 @@
             let g_msgUnread = [], g_focus_for_webview, g_show_list_people = "X", sockConnected = false
             const FIRST_QUERIED = "9999"
 
+            const htmlRetryDelete = "<img src='/img/retry_small.png' style='width:14px;height:14px;margin-top:2px;margin-right:2px'><img src='/img/delete_small.png' style='width:16px;height:16px;margin-top:5px'>"
+            const htmlHandling = "<img src='/img/handling_small.png' style='width:16px;height:16px;margin-top:4px'>"
+
             const resetEnvForScroll = () => {
                 g_cdt = FIRST_QUERIED //FIRST_QUERIED(default). YYYYMMDD~ : when scrolled all the way down to the bottom, previous page shown and g_cdt gets YYYYMMDD~ value
             }
@@ -989,11 +992,11 @@
             }
 
             const procFailure = (rq, dtDetails) => { //Request already sent. Retry(resending) might not be needed in most cases since error already occurred.
-                //if ($("#unread_" + rq.msgid).text() == hush.cons.no_response) return 
+                //if ($("#unread_" + rq.msgid).html() == htmlRetryDelete) return 
                 $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                 $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("$$")
                 const objUnread = $("#unread_" + rq.msgid)
-                objUnread.html(hush.cons.sending_failure)
+                objUnread.html("<span style='width:12px;height:12px'>문제발생</span>")
                 objUnread.removeClass("unread").addClass("failure")
                 objUnread.show()
                 objUnread.off("click").on("click", async function() { 
@@ -1022,13 +1025,13 @@
                 $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("##")
                 $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                 const objUnread = $("#unread_" + rq.msgid)
-                objUnread.html("<img id=retry_talk src='/img/retry_small.png' style='width:14px;height:14px;margin-top:2px;margin-right:2px'><img id=delete_talk src='/img/delete_small.png' style='width:16px;height:16px;margin-top:3px'>")
+                objUnread.html(htmlRetryDelete)
                 objUnread.removeClass("unread").addClass("failure")
                 objUnread.show()
-                $("#retry_talk,#delete_talk").off("click").on("click", function() {
+                objUnread.off("click").on("click", function() {
                     hush.util.animBgColor($(this))
-                    hush.msg.dialogMultiButton("retry or delete ?", {
-                        "Retry": function() { 
+                    hush.msg.dialogMultiButton("아래 선택", {
+                        "재전송": function() { 
                             if (!hush.http.chkOnline()) return
                             $("#msg_" + rq.msgid).remove()
                             const rq1 = initMsg()
@@ -1037,14 +1040,14 @@
                             procSendAndAppend(rq1)
                             deleteLocalMsg(rq.msgid)
                             hush.msg.dialogClose()
-                        }, "Delete": function() { 
+                        }, "삭제": function() { 
                             $("#msg_" + rq.msgid).remove()
                             deleteLocalMsg(rq.msgid)
                             hush.msg.dialogClose()
-                        }, "Close": function() { 
+                        }, "닫기": function() { 
                             hush.msg.dialogClose() 
                         } 
-                    }, "retry sending")
+                    }, "재전송/삭제")
                 })
             }
 
@@ -1054,28 +1057,54 @@
                     $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("^^")
                     $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                     const objUnread = $("#unread_" + rq.msgid)
-                    objUnread.html(hush.cons.no_response)
+                    objUnread.html(htmlRetryDelete)
                     objUnread.removeClass("unread").addClass("failure")
                     objUnread.show()
                     objUnread.off("click").on("click", async function() {
                         hush.util.animBgColor($(this))
-                        const ret = await hush.msg.confirm("전송여부를 확인하시겠습니까?")
-                        if (!ret) return 
-                        if (!hush.http.chkOnline()) return
-                        $("#handling_" + rq.msgid).show()                        
-                        objUnread.hide() 
-                        const rqCheck = initMsg()
-                        rqCheck.type = "check"
-                        rqCheck.prevmsgid = rq.msgid
-                        if (hush.webview.ios) {
-                        } else if (hush.webview.and) {
-                            setTimeout(function() {
-                                AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rqCheck), g_roomid, null, true)
-                            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
-                        } else {
-                            hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqCheck, g_roomid)
-                        }
-                        prepareForNoResponse(rq)
+                        // const ret = await hush.msg.confirm("전송여부를 확인하시겠습니까?")
+                        // if (!ret) return 
+                        // if (!hush.http.chkOnline()) return
+                        // $("#handling_" + rq.msgid).show()                        
+                        // objUnread.hide() 
+                        // const rqCheck = initMsg()
+                        // rqCheck.type = "check"
+                        // rqCheck.prevmsgid = rq.msgid
+                        // if (hush.webview.ios) {
+                        // } else if (hush.webview.and) {
+                        //     setTimeout(function() {
+                        //         AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rqCheck), g_roomid, null, true)
+                        //     }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                        // } else {
+                        //     hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqCheck, g_roomid)
+                        // }
+                        // prepareForNoResponse(rq)
+                        hush.msg.dialogMultiButton("아래 선택", {
+                            "전송확인": function() { 
+                                if (!hush.http.chkOnline()) return
+                                $("#handling_" + rq.msgid).show()                        
+                                objUnread.hide() 
+                                const rqCheck = initMsg()
+                                rqCheck.type = "check"
+                                rqCheck.prevmsgid = rq.msgid
+                                if (hush.webview.ios) {
+                                } else if (hush.webview.and) {
+                                    setTimeout(function() {
+                                        AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rqCheck), g_roomid, null, true)
+                                    }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                                } else {
+                                    hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqCheck, g_roomid)
+                                }
+                                prepareForNoResponse(rq)
+                                hush.msg.dialogClose()
+                            }, "삭제": function() { 
+                                $("#msg_" + rq.msgid).remove()
+                                deleteLocalMsg(rq.msgid)
+                                hush.msg.dialogClose()
+                            }, "닫기": function() { 
+                                hush.msg.dialogClose() 
+                            } 
+                        }, "전송확인/삭제")
                     })
                 }, hush.cons.send_timeout_sec * 1000)
             }
@@ -1185,7 +1214,7 @@
                     setTimeout(() => { //타이머 지나고 찾았을 때 아직 남아 있으면 전송실패인 것임
                         const objHandling = $("#handling_" + rq.msgid)
                         if (objHandling.css("display") != "none") {
-                            procFailure(rq, "오류(flink")
+                            procFailure(rq, "오류(flink)")
                         }
                     }, hush.cons.send_timeout_sec * 1000)
                 }
@@ -2026,9 +2055,6 @@
                         hush.msg.alert(arrUnreads.join(hush.cons.memdeli), null, "people unread")
                     } else if (data.type == "update") {
                         procUnreadCount(data.msgid, data.unread_cnt)
-                        setTimeout(function() {
-                            retrySending(data)
-                        }, 3000)
                     } else { //query
                         for (let i = 0; i < data.msgidArr.length; i++) {
                             procUnreadCount(data.msgidArr[i], data.unreadArr[i])
