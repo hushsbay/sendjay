@@ -1297,7 +1297,6 @@
                         rq.body = _body
                         rq.reply = getMsgToReply()
                         procSendAndAppend(rq)
-                        retrySending(rq)
                     }
                 } catch (ex) {
                     hush.util.showEx(ex)
@@ -2027,6 +2026,9 @@
                         hush.msg.alert(arrUnreads.join(hush.cons.memdeli), null, "people unread")
                     } else if (data.type == "update") {
                         procUnreadCount(data.msgid, data.unread_cnt)
+                        setTimeout(function() {
+                            retrySending(data)
+                        }, 3000)
                     } else { //query
                         for (let i = 0; i < data.msgidArr.length; i++) {
                             procUnreadCount(data.msgidArr[i], data.unreadArr[i])
