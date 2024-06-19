@@ -1297,10 +1297,7 @@
                         // rq.body = _body
                         // rq.reply = getMsgToReply()
                         // procSendAndAppend(rq)
-
-                        const rq = initMsg()
-                        const obj = initMsgForRetrySending(rq.msgid, "talk", "121212", "", "20240606123101")
-                        retrySending(obj)
+                        retrySending(rq)
                     }
                 } catch (ex) {
                     hush.util.showEx(ex)
