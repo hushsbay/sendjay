@@ -38,7 +38,7 @@
             let g_msgUnread = [], g_focus_for_webview, g_show_list_people = "X", sockConnected = false
             const FIRST_QUERIED = "9999"
 
-            const htmlRetryDelete = "<img src='/img/retry_small.png' style='width:14px;height:14px;margin-top:0px;margin-right:2px'><img src='/img/delete_small.png' style='width:16px;height:16px;margin-top:5px'>"
+            //const htmlRetryDelete = "<img src='/img/retry_small.png' style='width:14px;height:14px;margin-top:0px;margin-right:2px'><img src='/img/delete_small.png' style='width:16px;height:16px;margin-top:5px'>"
 
             const resetEnvForScroll = () => {
                 g_cdt = FIRST_QUERIED //FIRST_QUERIED(default). YYYYMMDD~ : when scrolled all the way down to the bottom, previous page shown and g_cdt gets YYYYMMDD~ value
@@ -1025,7 +1025,7 @@
                 $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("##")
                 $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                 const objUnread = $("#unread_" + rq.msgid)
-                objUnread.html(htmlRetryDelete)
+                objUnread.html($("#retrydelete").html()) //objUnread.html(htmlRetryDelete)
                 objUnread.removeClass("unread").addClass("failure")
                 objUnread.show()
                 objUnread.off("click").on("click", function() {
@@ -1058,7 +1058,7 @@
                     $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("^^")
                     $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                     const objUnread = $("#unread_" + rq.msgid)
-                    objUnread.html(htmlRetryDelete)
+                    objUnread.html($("#retrydelete").html()) //objUnread.html(htmlRetryDelete)
                     objUnread.removeClass("unread").addClass("failure")
                     objUnread.show()
                     objUnread.off("click").on("click", async function() {
@@ -2694,6 +2694,10 @@
                 </div>
             </div>
             <input id=file_upload type=file multiple style="display:none">
+            <span id="retrydelete">
+                <img src='/img/retry_small.png' style='display:none;width:14px;height:14px;margin-top:0px;margin-right:2px'>
+                <img src='/img/delete_small.png' style='display:none;width:16px;height:16px;margin-top:5px'>
+            </span>
         </div>    
     </body>
 </html>
