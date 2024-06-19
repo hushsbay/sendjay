@@ -1052,7 +1052,7 @@
                 $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("##")
                 $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                 const objUnread = $("#unread_" + rq.msgid)
-                const htmlRetryDelete = "<img src='" + g_retry_small + "' style='width:14px;height:14px;margin-top:0px;margin-right:2px'><img src='" + g_delete_small + "' style='width:16px;height:16px;margin-top:5px'>"
+                const htmlRetryDelete = "<img src='" + g_retry_small + "' style='width:14px;height:14px;margin-top:-1px;margin-right:2px'><img src='" + g_delete_small + "' style='width:16px;height:16px;margin-top:5px'>"
                 objUnread.html(htmlRetryDelete)
                 //const url = hush.blob.getDataUrl(g_retry_small, "image/png")
                 //$("#xxx").attr("src", g_retry_small)
@@ -1061,7 +1061,7 @@
                 objUnread.show()
                 objUnread.off("click").on("click", function() {
                     hush.util.animBgColor($(this))
-                    hush.msg.dialogMultiButton("아래 선택", {
+                    hush.msg.dialogMultiButton("아래 버튼을 선택하시기 바랍니다.", {
                         "재전송": function() { 
                             if (!hush.http.chkOnline()) return
                             deleteLocalMsg(rq.msgid)
@@ -1088,7 +1088,7 @@
                     $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("^^")
                     $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                     const objUnread = $("#unread_" + rq.msgid)
-                    const htmlRetryDelete = "<img src='" + g_retry_small + "' style='width:14px;height:14px;margin-top:0px;margin-right:2px'><img src='" + g_delete_small + "' style='width:16px;height:16px;margin-top:5px'>"
+                    const htmlRetryDelete = "<img src='" + g_retry_small + "' style='width:14px;height:14px;margin-top:-1px;margin-right:2px'><img src='" + g_delete_small + "' style='width:16px;height:16px;margin-top:5px'>"
                     objUnread.html(htmlRetryDelete)
                     objUnread.removeClass("unread").addClass("failure")
                     objUnread.show()
@@ -1111,7 +1111,7 @@
                         //     hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqCheck, g_roomid)
                         // }
                         // prepareForNoResponse(rq)
-                        hush.msg.dialogMultiButton("아래 선택", {
+                        hush.msg.dialogMultiButton("아래 버튼을 선택하시기 바랍니다.", {
                             "전송확인": function() { 
                                 if (!hush.http.chkOnline()) return
                                 $("#handling_" + rq.msgid).show()                        
