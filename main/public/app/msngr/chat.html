@@ -2349,7 +2349,7 @@
                             AndroidRoom.procAfterOpenRoom()
                         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                         hush.blob.getBase64FromImage("/img/retry_small.png", function(dataUrl) { g_retry_small = dataUrl }) //오프라인에서 이미지 핸들링하기 위해 미리 내림
-                        hush.blob.getBase64FromImage("/img/delete_small.png", function(dataUrl) { g_retry_small = dataUrl }) //상동
+                        hush.blob.getBase64FromImage("/img/delete_small.png", function(dataUrl) { g_delete_small = dataUrl }) //상동
                     } else {                        
                         g_focus_for_webview = false
                         $("#fr_main").height("calc(100% - 190px)")
