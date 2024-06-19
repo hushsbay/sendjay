@@ -1033,16 +1033,16 @@
                     hush.msg.dialogMultiButton("아래 선택", {
                         "재전송": function() { 
                             if (!hush.http.chkOnline()) return
+                            deleteLocalMsg(rq.msgid)
                             $("#msg_" + rq.msgid).remove()
                             const rq1 = initMsg()
                             rq1.type = "talk"
                             rq1.body = rq.body
-                            procSendAndAppend(rq1)
-                            deleteLocalMsg(rq.msgid)
+                            procSendAndAppend(rq1)                            
                             hush.msg.dialogClose()
                         }, "삭제": function() { 
-                            $("#msg_" + rq.msgid).remove()
                             deleteLocalMsg(rq.msgid)
+                            $("#msg_" + rq.msgid).remove()                            
                             hush.msg.dialogClose()
                         }, "닫기": function() { 
                             hush.msg.dialogClose() 
@@ -1099,8 +1099,8 @@
                                 prepareForNoResponse(rq)
                                 hush.msg.dialogClose()
                             }, "삭제": function() { 
-                                $("#msg_" + rq.msgid).remove()
                                 deleteLocalMsg(rq.msgid)
+                                $("#msg_" + rq.msgid).remove()                                
                                 hush.msg.dialogClose()
                             }, "닫기": function() { 
                                 hush.msg.dialogClose() 
