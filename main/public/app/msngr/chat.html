@@ -1023,12 +1023,14 @@
                 $("#msg_" + rq.msgid).removeClass("needCheckUnread")
                 $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("$$")
                 const objUnread = $("#unread_" + rq.msgid)
-                objUnread.html("<span style='width:8px;height:8px'>문제발생</span>")
+                const htmlRetryDelete = "<img src='" + g_delete_small + "' style='width:16px;height:16px;margin-top:5px'>"
+                objUnread.html(htmlRetryDelete)
                 objUnread.removeClass("unread").addClass("failure")
                 objUnread.show()
                 objUnread.off("click").on("click", async function() { 
                     hush.util.animBgColor($(this))
-                    const ret = await hush.msg.confirm(dtDetails + "<br>확인을 누르면 이 메시지가 제거됩니다.")
+                    const _details = dtDetails ? dtDetails + "<br>" : ""
+                    const ret = await hush.msg.confirm(_details + "확인을 누르면 메시지가 제거됩니다.")
                     if (!ret) return 
                     $("#msg_" + rq.msgid).remove()
                 })
