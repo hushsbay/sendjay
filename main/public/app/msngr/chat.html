@@ -1248,7 +1248,7 @@
                     setTimeout(() => { //타이머 지나고 찾았을 때 아직 남아 있으면 전송실패인 것임
                         const objHandling = $("#handling_" + rq.msgid)
                         if (objHandling.css("display") != "none") {
-                            procFailure(rq, "오류(flink)")
+                            procFailure(rq, "전송 실패.")
                         }
                     }, hush.cons.send_timeout_sec * 1000)
                 }
@@ -1973,7 +1973,7 @@
                             return
                         }
                         if (data.body == 0) {
-                            procFailure(data, "전송 실패")
+                            procFailure(data, "전송 실패.")
                             return
                         } else {
                             $("#msg_" + data.msgid).addClass("needCheckUnread")
