@@ -207,36 +207,36 @@ Here are some ideas to get you started:
          <td>talk</td>
          <td>block</td>
          <td>일반적인 텍스트로 보냄</td>
-         <td>111</td>
-         <td>111</td>
+         <td>Yes</td>
+         <td>retrySending()</td>
       </tr>
       <tr>
          <td>invite</td>
          <td>buffered</td>
-         <td>invite_user.js를 통해 초청대상을 room join시킨후<br>방멤버에게 알림</td>
-         <td>111</td>
-         <td>111</td>
+         <td>invite_user.js를 통해 초청대상을<br>room join시킨 후<br>방멤버에게 알림</td>
+         <td>No</td>
+         <td>-</td>
       </tr>
       <tr>
          <td>leave</td>
          <td>buffered</td>
          <td>퇴장시 room leave후<br>방멤버에게 알림</td>
-         <td>111</td>
-         <td>111</td>
+         <td>No</td>
+         <td>-</td>
       </tr>
       <tr>
          <td>notice</td>
          <td>buffered</td>
-         <td>proc_image.js(이미지전송)/proc_file(파일전송) 처리후<br>방멤버에게 전송내용을 알려줌</td>
-         <td>111</td>
-         <td>111</td>
+         <td>proc_image.js(이미지전송),<br>proc_file(파일전송)후<br>방멤버에게 알림</td>
+         <td>No</td>
+         <td>-</td>
       </tr>
       <tr>
          <td>check</td>
          <td>block</td>
-         <td>prepareForNoResponse()에서 전송여부확인을 위해 사용</td>
-         <td>111</td>
-         <td>111</td>
+         <td>prepareForNoResponse()에서<br>전송여부확인을 위해 사용</td>
+         <td>No</td>
+         <td>prepareForNoResponse()</td>
       </tr>
    </table>
 
