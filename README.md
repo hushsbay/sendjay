@@ -20,7 +20,7 @@ Here are some ideas to get you started:
 
 1. Sendjay는 개인이 만들고 명명한 메시징 앱/웹 (통합) 프로그램입니다. (created by hushsbay@gmail.com)
 
-2. Sendjay는 현재 모 기업내 ERP 사이트에서 위 당사자에 의해 개발되어 현재 실사용중인 웹 전용 메신저를<br/>
+2. Sendjay는 현재 모 기업내 ERP 사이트에서 필자에 의해 개발되어 현재 실사용중인 웹 전용 메신저를<br/>
    좀 더 확장시켜 멀티소켓서버 환경으로 구성하고 안드로이드 앱에서도 사용 가능하도록 개발되었습니다.
 
 3. Sendjay는 이미 개발된 웹 모듈을 거의 그대로 재사용해 앱내 WebView에서 실행되므로<br/>
@@ -31,12 +31,13 @@ Here are some ideas to get you started:
    항상 연결되어 있어 메시지를 받을 수 있도록 하였습니다.
 
 5. Sendjay는 소스만 제공하는 것뿐만 아니라 누구나 자유롭게 실제로 사용해 볼 수 있도록 사이트를 제공합니다.<br/>
-   다만, 개인이 만든 사이트이므로 대용량 파일 업로드에 제한이 있으며 서버 성능 문제를 겪을 수도 있음을<br/>
+   다만, 개인이 만든 사이트이므로 대용량 파일 업로드에 용량 제한이 있으며 서버 성능 문제를 겪을 수도 있음을<br/>
    양해해 주시기 바랍니다. 아래 사이트로 들어가 간단히 아이디를 만들어 테스트 가능합니다.
 
    <https://hushsbay.com>
 
 6. Sendjay는 소스를 내려 받아 구축형(On-Premise)으로 사내 ERP등의 사용자관리와 연동해 운영할 수 있습니다.<br/>   
+   - 하단 구축형(On-Premise) 서버 적용 안내 참조
    - 하단 MySql Table 명세 참조
      
 
@@ -186,14 +187,14 @@ Here are some ideas to get you started:
    않았던 것인데, 이제 와서 모바일을 개발하다 보니 제가 잘못된 판단이었다는 걸 깨닫게 되었습니다.<br/>
    (예를 들어, 페이지를 닫지 말고 유지하고 재연결시킬 걸..등)
    
-   어쨋든, Sendjay에서 socket과 ajax에 대해 buffered/block(volatile 대신) 관련해 아래와 같이 정리하고<br/>
+   어쨋든, 안드로이드에서 socket과 ajax에 대해 buffered/block(volatile 대신) 관련해 아래와 같이 정리하고<br/>
    공유하고자 합니다. (이 부분은 소스를 함께 봐야 이해되는 부분입니다. chat.html, ChatService.kt)<br/>
    
    1. socket
       - Sendjay socket event에는 chk_alive.js, create_room.js, invite_user.js, open_room.js,send_msg.js<br/>
         등이 있습니다.<br/>
-      - 모든 event는 block을 기본으로 함 (안드로이드에서 volatile 메소드를 못찾아 대신 미연결시차단(blcok))<br/>
-      - send_msg만 block과 buffering으로 나누었는데 내용은 아래 표와 같습니다.<br/>
+      - 안드로이드에서 volatile 메소드를 못찾아 대신 block방식으로 처리하는데 모든 event는 buffered가 아닌<br/>
+        block을 기본으로 하는데 send_msg만 block과 buffered로 구분했으며 내용은 아래 표와 같습니다.<br/>
         
    <table>
       <tr>
@@ -227,7 +228,7 @@ Here are some ideas to get you started:
       <tr>
          <td>notice</td>
          <td>buffered</td>
-         <td>proc_image.js(이미지전송),<br>proc_file(파일전송)후<br>방멤버에게 알림</td>
+         <td>proc_image.js(이미지전송),<br>proc_file.js(파일전송)후<br>방멤버에게 알림</td>
          <td>No</td>
          <td>없음</td>
       </tr>
@@ -251,11 +252,13 @@ Here are some ideas to get you started:
      모바일에서는 조금만 타이핑 양이 많아도 아주 불편하고 힘든 상황이 되므로<br/>
      전송시 Offline(네트워크 연결 끊어짐, 불안정, 서버 다운 등)이 되서 타이핑이 모두 사라진다면<br/>
      아주 곤란하므로 전송과 동시에 로컬DB(HTML5 IndexedDB)에 저장하도록 처리하였습니다.<br/> 
+     (아래 소스(chat.html) 참조)<br/>
 
-     Offline이 되면 buffered가 아닌 block 방식으로 emit이 안되게 막고 <br/>
+     Offline이 되면 buffered가 아닌 block 방식으로 emit이 안되게 막고<br/>
      retrySending()을 통해 전송실패라고 보여주고 나중에 Online(소켓연결)상태가 되면<br/>
-     재전송 또는 삭제를 선택할 수 있도록 하였습니다. (카카오톡과 유사. 아래 소스(chat.html) 참조)<br/> 
-     참고로, 타이핑한 톡을 전송하지 않고 방을 닫은 경우도 localStorage를 이용해 저장시키고<br/>
+     재전송 또는 삭제를 선택할 수 있도록 하였습니다.<br/> 
+
+     참고로, 타이핑한 톡을 전송하지 않고 방을 닫은 경우는 localStorage를 이용해 저장시키고<br/>
      다시 방을 열때 localStorage 데이터를 보여줘서 사용자 불편을 최소화합니다.<br/>
      ``` 
      const procSendAndAppend = (rq, blobUrl) => {
@@ -305,24 +308,25 @@ Here are some ideas to get you started:
      (전송 성공이 아닌 실패의 경우 처리)<br/>
   
    + type=flink는 이미 전송된 파일을 다른 방으로 전달하고자 할 때 해당 파일을 다시 내려서<br/>
-     전송하는 것은 시간이 많이 걸리고 불편한데 링크로 보내면 수월합니다.<br/>
+     전송하는 것은 시간이 많이 걸리고 불편한데 링크로 보낼 때 사용합니다.<br/>
      이 경우는 사용자 타이핑이 없으므로 로컬DB저장도 않고 buffered시키지도 않고자 했습니다.<br/>
    
    2. ajax (파일/이미지 전송)<br/>
       - Sendjay에서는 ajax로 가능한 것은 굳이 socket으로 처리하지 않으려 했습니다.<br/>
       - 파일/이미지 전송은 ajax with multipart/form-data로 먼저 DB에 저장후 socket으로<br/>
         send_msg(type=notice)로 알려 주는 방식을 사용했습니다.<br/>
-      - 따라서, type=notice는 전송실패시 사용자가 재전송할 지 삭제할 지 선택하는 것이 아닌<br/>
+      - 따라서, 위 표의 type=notice는 전송실패시 사용자가 재전송할 지 삭제할 지 선택하는 것이 아닌<br/>
         무조건 재전송되어야 하므로 위 표에서 buffered로 잡았습니다.<br/>
       - 그런데, 아직 파악하지 못한 것이 있는데 안드로이드 웹뷰에서 $.ajax로 파일/이미지 전송시<br/>
         네트워크 재연결시엔 buffered되지 않는데 서버(Node.js) 재시작시에는 어디선가 buffered되어<br/>
         DB로 잘 저장됩니다. (이게 Node.js가 죽어도 그 앞단인 AWS CLB에서 받아 저장하고 있는 건지<br/>
         아니면 안드로이드 웹뷰가 가지고 있는지 등을 모르겠습니다. $.ajax가 buffered 관련 free, remove<br/>
-        또는 설정옵션도 못찾았습니다)<br/>
-      - 그래서 일단, ajax로 파일/이미지 전송실패후에는 사용자로 하여금 서버에 이미 전송되었는지 먼저<br/>
-        체크하도록 했습니다. (위 표 type=check 참조)<br/>
+        또는 설정옵션도 못찾았습니다.) 고수님들의 가이드 부탁 드립니다. 꾸벅! <br/>
+      - 그래서 일단, ajax로 파일/이미지 전송실패후에는 사용자로 하여금 재전송할 지 묻지 않고<br/>
+        서버에 이미 전송되었는지 먼저 체크하도록 했습니다. (위 표 type=check 참조)<br/>
    
-   3. procSocketEmit() in ChatService.kt : 위 의도대로 send_msg의 socket emit시 코딩은 아래 참조<br/>
+   3. procSocketEmit() in ChatService.kt<br/>
+      따라서, 위 내용대로 send_msg의 socket emit시에 아래와 같이 코딩되었습니다.<br/>
 
    ```
    private fun procSocketEmit() {
