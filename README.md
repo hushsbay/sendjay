@@ -155,32 +155,31 @@ Here are some ideas to get you started:
    socket.io docs에 보면 "연결이 끊어진(offline) 상태에서 emit된 이벤트는 기본적으로<br/> 
    재연결때까지 buffered된다"라고 되어 있습니다.<br/>
    
-   https://socket.io/docs/v4/client-offline-behavior/#buffered-events<br/>
+   <https://socket.io/docs/v4/client-offline-behavior/#buffered-events>
    
-   By default, any event emitted while the Socket is not connected will be buffered until reconnection.
-   While useful in most cases (when the reconnection delay is short), 
-   it could result in a huge spike of events when the connection is restored.
+   By default, any event emitted while the Socket is not connected will be buffered until reconnection.<br/>
+   While useful in most cases (when the reconnection delay is short),<br/> 
+   it could result in a huge spike of events when the connection is restored.<br/>
    There are several solutions to prevent this behavior, depending on your use case:<br/>
 
-      • use the connected attribute of the Socket instance<br/>
-      if (socket.connected) {<br/>
-           socket.emit( /* ... */ );<br/>
-      } else {<br/>
-           // ...<br/>
-      }<br/>
+      • use the connected attribute of the Socket instance
+      if (socket.connected) {
+           socket.emit( /* ... */ );
+      } else {
+           // ...
+      }
 
       • use volatile events<br/>
-      socket.volatile.emit( /* ... */ );<br/>
+      socket.volatile.emit( /* ... */ );
    
-   위 글에 의하면, Sendjay에서의 socket event들에 대해 각각 buffered시킬 것인지<br/>
-   volatile시킬 것인지를 판단해서 설정해야 합니다.<br/>
-   예를 들어, Sendjay socket event중에는 chk_typing.js(키보딩 여부 주기적 확인)이 있는데,<br/>
-   서버다운후 오랜 시간이 지나서 재시작되었다고 가정할 때 이 event를 buffered되도록 해놓았다면<br/>
+   위 글에 의하면, Sendjay에서의 socket event들에 대해 각각 buffered시킬 것인지 volatile시킬 것인지를<br/>
+   판단해서 설정해야 합니다. 예를 들어, Sendjay socket event중에 chk_typing.js(키보딩 여부 주기적 확인)이<br/>
+   있는데, 서버다운후 오랜 시간이 지나서 재시작되었다고 가정할 때 이 event를 buffered되도록 해 놓았다면<br/>
    재시작시 서버에 상당한 부하를 주게 될 것이며 이 event 성격을 봐도 굳이 buffered 시킬 필요없이<br/>
    volatile로 처리해도 크리티컬하지 않다고 판단됩니다.<br/> 
    
    다만, 안드로이드에서 socket.io 사용시 volatile 메소드를 제가 아직 찾지 못해 volatile을 대신해서<br/> 
-   위 글에 언급된 if (socket.connect) ~처럼 미연결시 차단 (이하 'blcok')하는 걸로 코드를 짰습니다.<br/>
+   위 글에 언급된 if (socket.connect) ~처럼 미연결시차단 (이하 'blcok')하는 걸로 코드를 짰습니다.<br/>
    
    웹에서는 PC 웹브라우저 환경을 염두에 두고 개발되어서 안정적인 소켓 연결이 전제였으며 소켓연결이 끊어지면<br/>
    해당 페이지들을 모두 닫아버리고 새로 연결하도록 처리했기 때문에 buffered/volatile에 대해 신경쓰지<br/>
@@ -191,9 +190,9 @@ Here are some ideas to get you started:
    공유하고자 합니다. (이 부분은 소스를 함께 봐야 이해되는 부분입니다. chat.html, ChatService.kt)<br/>
    
    1. socket
-      - Sendjay socket event에는 chk_alive.js, create_room.js, invite_user.js, open_room.js,<br/>
-        send_msg.js 등이 있습니다.<br/>
-      - 모든 event는 block을 기본으로 함 (안드로이드에서 volatile 메소드를 못찾아서 대신 미연결시 차단(blcok))<br/>
+      - Sendjay socket event에는 chk_alive.js, create_room.js, invite_user.js, open_room.js,send_msg.js<br/>
+        등이 있습니다.<br/>
+      - 모든 event는 block을 기본으로 함 (안드로이드에서 volatile 메소드를 못찾아 대신 미연결시차단(blcok))<br/>
       - send_msg만 block과 buffering으로 나누었는데 내용은 아래와 같습니다.<br/>
         
    <table>
@@ -217,17 +216,17 @@ Here are some ideas to get you started:
    
    2. ajax (파일/이미지 전송)<br/>
       - Sendjay에서는 ajax로 가능한 것은 굳이 socket으로 처리하지 않으려 했습니다.<br/>
-      - 파일/이미지 전송은 ajax with multipart/form-data로 먼저 DB에 저장후<br/>
-        socket으로 send_msg(type=notice)로 알려 주는 방식을 사용했습니다.<br/>
-         . 따라서, type=notice는 전송실패시 사용자가 재전송할 지 삭제할 지 선택하는 것이 아닌<br/>
-           무조건 재전송되어야 하므로 위 표에서 buffered로 잡았습니다.
-         . 그런데, 아직 파악하지 못한 것이 있는데 안드로이드 웹뷰에서 $.ajax로 파일/이미지 전송시<br/>
-           네트워크 재연결시엔 buffered되지 않는데 서버(Node.js) 재시작시에는 어디선가 buffered되어<br/>
-           DB로 잘 저장됩니다. (이게 Node.js가 죽어도 그 앞단인 AWS CLB에서 받아 저장하고 있는 건지<br/>
-           아니면 안드로이드 웹뷰가 가지고 있는지 등을 모르겠습니다. $.ajax가 buffered 관련 free, remove<br/>
-           또는 설정옵션도 못찾았습니다)<br/>
-      - 따라서, ajax로 파일/이미지 전송실패후에는 서버에 이미 전송되었는지 먼저 체크해야 합니다.<br/>
-        (위 표 type=notice 참조)
+      - 파일/이미지 전송은 ajax with multipart/form-data로 먼저 DB에 저장후 socket으로<br/>
+        send_msg(type=notice)로 알려 주는 방식을 사용했습니다.<br/>
+      - 따라서, type=notice는 전송실패시 사용자가 재전송할 지 삭제할 지 선택하는 것이 아닌<br/>
+        무조건 재전송되어야 하므로 위 표에서 buffered로 잡았습니다.<br/>
+      - 그런데, 아직 파악하지 못한 것이 있는데 안드로이드 웹뷰에서 $.ajax로 파일/이미지 전송시<br/>
+        네트워크 재연결시엔 buffered되지 않는데 서버(Node.js) 재시작시에는 어디선가 buffered되어<br/>
+        DB로 잘 저장됩니다. (이게 Node.js가 죽어도 그 앞단인 AWS CLB에서 받아 저장하고 있는 건지<br/>
+        아니면 안드로이드 웹뷰가 가지고 있는지 등을 모르겠습니다. $.ajax가 buffered 관련 free, remove<br/>
+        또는 설정옵션도 못찾았습니다)<br/>
+      - 그래서 일단, ajax로 파일/이미지 전송실패후에는 사용자로 하여금 서버에 이미 전송되었는지 먼저<br/>
+        체크하도록 했습니다. (위 표 type=notice 참조)<br/>
    
    
    
