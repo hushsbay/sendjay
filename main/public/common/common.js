@@ -641,7 +641,7 @@
                 }
                 const msgArrived = "새 메시지 도착"
                 const _bodyoff = hush.http.getCookie("bodyoff")
-                const _senderoff = hush.http.getCookie("senderoff")
+                const _senderoff = hush.http.getCookie("senderoff") //popupoff는 모바일만 지원하는 옵션이므로 여기에 없음
                 if (_bodyoff == "Y" && _senderoff == "Y") { //see setting tab
                     _body = msgArrived
                 } else if (_bodyoff == "Y") {

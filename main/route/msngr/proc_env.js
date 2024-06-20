@@ -35,11 +35,12 @@ router.post('/', async function(req, res) {
 		const _to = req.body.to
 		const _bodyoff = req.body.bodyoff
 		const _senderoff = req.body.senderoff
+		const _popupoff = req.body.popupoff
 		sql = "UPDATE Z_USER_TBL "
 		sql += "  SET NICK_NM = ?, JOB = ?, AB_CD = ?, AB_NM = ?, STANDALONE = ?, NOTI_OFF = ?, " 
-		sql += "      SOUND_OFF = ?, VIB_OFF = ?, BODY_OFF = ?, SENDER_OFF = ?, TM_FR = ?, TM_TO = ?, MODR = ?, MODDT = sysdate(6) "
+		sql += "      SOUND_OFF = ?, VIB_OFF = ?, BODY_OFF = ?, SENDER_OFF = ?, POPUP_OFF, TM_FR = ?, TM_TO = ?, MODR = ?, MODDT = sysdate(6) "
 		sql += "WHERE USER_ID = ? "
-		await wsmysql.query(conn, sql, [_nicknm, _job, _abcd, _abnm, _standalone, _notioff, _soundoff, _viboff, _bodyoff, _senderoff, _fr, _to, userid, userid])
+		await wsmysql.query(conn, sql, [_nicknm, _job, _abcd, _abnm, _standalone, _notioff, _soundoff, _viboff, _bodyoff, _senderoff, _popupoff, _fr, _to, userid, userid])
 		ws.http.resJson(res, rs, userid) //세번째 인자(userid) 있으면 token 갱신
 	} catch (ex) {
 		ws.http.resException(req, res, ex)

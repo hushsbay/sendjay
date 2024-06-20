@@ -324,7 +324,7 @@
                             hush.util.showEx(ex)
                         }
                     })
-                    $("#in_nicknm,#in_job,#in_abcd,#in_abnm,#chk_standalone,#chk_notioff,#chk_soundoff,#chk_viboff,#in_fr,#in_to,#chk_bodyoff,#chk_senderoff").on("change", function() { 
+                    $("#in_nicknm,#in_job,#in_abcd,#in_abnm,#chk_standalone,#chk_notioff,#chk_soundoff,#chk_viboff,#in_fr,#in_to,#chk_bodyoff,#chk_senderoff,,#chk_popupoff").on("change", function() { 
                         g_setting_changed = true 
                     })   
                     $("#spn_clear").on("click", function() {  
@@ -546,7 +546,11 @@
                     <div class='coSettingLabel coText'>알림설정</div>
                     <label for=chk_notioff class=coSettingWrap>
                         <input type=checkbox id=chk_notioff name=chk_notioff class=coSettingChkbox />
-                        <span class='coSettingSpan coText'>모두 끄기</span>
+                        <span class='coSettingSpan coText'>끄기</span>
+                    </label>
+                    <label for=chk_popupoff class=coSettingWrap style="margin-left:10px">
+                        <input type=checkbox id=chk_popupoff name=chk_popupoff class=coSettingChkbox />
+                        <span class='coSettingSpan coText'>모바일팝업숨김</span>
                     </label>
                 </div>
                 <div class=coSettingRow>
