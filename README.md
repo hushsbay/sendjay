@@ -193,24 +193,53 @@ Here are some ideas to get you started:
       - Sendjay socket event에는 chk_alive.js, create_room.js, invite_user.js, open_room.js,send_msg.js<br/>
         등이 있습니다.<br/>
       - 모든 event는 block을 기본으로 함 (안드로이드에서 volatile 메소드를 못찾아 대신 미연결시차단(blcok))<br/>
-      - send_msg만 block과 buffering으로 나누었는데 내용은 아래와 같습니다.<br/>
-        
+      - send_msg만 block과 buffering으로 나누었는데 내용은 아래 표와 같습니다.<br/>
+        leave, invite, check, notice, flink, 
    <table>
       <tr>
-         <td>000</td>
+         <td>타입</td>
+         <td>전송실패시(Offline등)</td>
+         <td>내용</td>
+         <td>로컬DB저장</td>
+         <td>처리함수</td>
+      </tr>
+      <tr>
+         <td>talk</td>
+         <td>111</td>
+         <td>111</td>
+         <td>111</td>
          <td>111</td>
       </tr>
       <tr>
-         <td>000</td>
+         <td>invite</td>
+         <td>111</td>
+         <td>111</td>
+         <td>111</td>
          <td>111</td>
       </tr>
       <tr>
-         <td>000</td>
+         <td>leave</td>
+         <td>111</td>
+         <td>111</td>
+         <td>111</td>
+         <td>111</td>
+      </tr>
+      <tr>
+         <td>notice</td>
+         <td>111</td>
+         <td>111</td>
+         <td>111</td>
+         <td>111</td>
+      </tr>
+      <tr>
+         <td>check</td>
+         <td>111</td>
+         <td>111</td>
+         <td>111</td>
          <td>111</td>
       </tr>
    </table>
 
-      - invite 등 buffered 설명
       - ChatService.kt 코딩 설명
       - 로컬 저장 설명 (코딩)
    
