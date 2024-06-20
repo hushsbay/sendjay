@@ -194,47 +194,47 @@ Here are some ideas to get you started:
         등이 있습니다.<br/>
       - 모든 event는 block을 기본으로 함 (안드로이드에서 volatile 메소드를 못찾아 대신 미연결시차단(blcok))<br/>
       - send_msg만 block과 buffering으로 나누었는데 내용은 아래 표와 같습니다.<br/>
-        leave, invite, check, notice, flink, 
+        
    <table>
       <tr>
          <td>타입</td>
          <td>전송실패시(Offline등)</td>
          <td>내용</td>
          <td>로컬DB저장</td>
-         <td>처리함수</td>
+         <td>처리함수(chat.html)</td>
       </tr>
       <tr>
          <td>talk</td>
-         <td>111</td>
-         <td>111</td>
+         <td>block</td>
+         <td>일반적인 텍스트로 보냄</td>
          <td>111</td>
          <td>111</td>
       </tr>
       <tr>
          <td>invite</td>
-         <td>111</td>
-         <td>111</td>
+         <td>buffered</td>
+         <td>invite_user.js를 통해 초청대상을 room join시킨후<br>방멤버에게 알림</td>
          <td>111</td>
          <td>111</td>
       </tr>
       <tr>
          <td>leave</td>
-         <td>111</td>
-         <td>111</td>
+         <td>buffered</td>
+         <td>퇴장시 room leave후<br>방멤버에게 알림</td>
          <td>111</td>
          <td>111</td>
       </tr>
       <tr>
          <td>notice</td>
-         <td>111</td>
-         <td>111</td>
+         <td>buffered</td>
+         <td>proc_image.js(이미지전송)/proc_file(파일전송) 처리후<br>방멤버에게 전송내용을 알려줌</td>
          <td>111</td>
          <td>111</td>
       </tr>
       <tr>
          <td>check</td>
-         <td>111</td>
-         <td>111</td>
+         <td>block</td>
+         <td>prepareForNoResponse()에서 전송여부확인을 위해 사용</td>
          <td>111</td>
          <td>111</td>
       </tr>
