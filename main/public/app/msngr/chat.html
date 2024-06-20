@@ -1063,7 +1063,7 @@
                 objUnread.show()
                 objUnread.off("click").on("click", function() {
                     hush.util.animBgColor($(this))
-                    hush.msg.dialogMultiButton("아래 버튼을 선택하시기 바랍니다.", {
+                    hush.msg.dialogMultiButton("전송 실패.", {
                         "재전송": function() { 
                             if (!hush.http.chkOnline()) return
                             deleteLocalMsg(rq.msgid)
@@ -1113,7 +1113,7 @@
                         //     hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqCheck, g_roomid)
                         // }
                         // prepareForNoResponse(rq)
-                        hush.msg.dialogMultiButton("아래 버튼을 선택하시기 바랍니다.", {
+                        hush.msg.dialogMultiButton("전송 실패.", {
                             "전송확인": function() { 
                                 if (!hush.http.chkOnline()) return
                                 $("#handling_" + rq.msgid).show()                        
@@ -1210,6 +1210,7 @@
                 //         }
                 //     }, hush.cons.send_timeout_sec * 1000)
                 // }
+
                 //아래는 네트워크가 끊어지거나 불안정하거나 서버가 다운되는 등의 경우 각 type마다 실패된 전송을 어찌 처리하는지에 대한 코딩임
                 //image, file는 chat.html에서 구분값으로 넘기나 결국은 서버에 넘길 때는 notice로 type이 넘어가므로 서버에서는 미사용 (실데이터는 ajax로 처리)
                 //그래서 결국 type은 leave, invite, check, notice, flink, talk인데
@@ -1337,7 +1338,7 @@
                             //2) 네트워크가 끊어지면 timeout없이 여기 오류로 즉시 떨어지는데 이때는 msg가 없고 ajax 버퍼링?이 없이 전송이 실패로 끝남
                             //   그러나, 사실 바로 앞단에서 네트워크 연결여부를 체크하므로 2) 경우가 발생할 일은 매우 낮음
                             //따라서, 1) 경우와 나머지 경우(챗방을 닫고 열면 해당 데이터는 사라짐)가 사용자에게 주는 가이드가 달라야 함
-                            if (msg.includes("timeout")) { //응답없으니 재연결시엔 (이미 버퍼링된 데이터가 업로드되었을테니) 클릭해서
+                            if (msg.toLowerCase().includes("timeout")) { //응답없으니 재연결시엔 (이미 버퍼링된 데이터가 업로드되었을테니) 클릭해서
                                 prepareForNoResponse(rq) //서버에 데이터가 있으면 그걸로 대체하고 없으면 procFailure()로 안내하기
                             } else { //실패해서 서버에 데이터도 없으므로 UI상으로 해당 셀만 제거하는 방법말고는 없음
                                 procFailure(rq, msg)
