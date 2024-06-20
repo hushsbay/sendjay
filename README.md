@@ -247,11 +247,11 @@ Here are some ideas to get you started:
       </tr>
    </table>
 
-      + ㅇ나ㅣ헝나ㅣㅓㄹ
-      + ㄴ어ㅏ혼ㅇ러ㅗ
+   + ㅇ나ㅣ헝나ㅣㅓㄹ
+   + ㄴ어ㅏ혼ㅇ러ㅗ
 
-      - ChatService.kt 코딩 설명
-      - 로컬 저장 설명 (코딩)
+   - ChatService.kt 코딩 설명
+   - 로컬 저장 설명 (코딩)
    
    2. ajax (파일/이미지 전송)<br/>
       - Sendjay에서는 ajax로 가능한 것은 굳이 socket으로 처리하지 않으려 했습니다.<br/>
