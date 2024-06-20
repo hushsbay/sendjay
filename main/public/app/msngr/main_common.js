@@ -823,7 +823,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             const _popupoff = $("#chk_popupoff").is(":checked") ? "Y" : ""
             const rq = { nicknm : encodeURIComponent(_nicknm), job : encodeURIComponent(_job), //type : "common", 
                         abcd : encodeURIComponent(_abcd), abnm : encodeURIComponent(_abnm), standalone : _standalone, notioff : _notioff,
-                        soundoff : _soundoff, viboff : _viboff, bodyoff : _bodyoff, popupoff : _popupoff, fr : _fr, to : _to }
+                        soundoff : _soundoff, viboff : _viboff, bodyoff : _bodyoff, senderoff : _senderoff, popupoff : _popupoff, fr : _fr, to : _to }
             const rs = await hush.http.ajax("/msngr/proc_env", rq)
             if (rs.code != hush.cons.CODE_OK) throw new Error(rs.msg)
             $("#header_title").html(g_usernm + ((_nicknm != "") ? " [" + _nicknm + "]" : ""))
