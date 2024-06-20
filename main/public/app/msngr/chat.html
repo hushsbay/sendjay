@@ -1163,54 +1163,7 @@
                 scrollToTarget()
                 g_in_chat.val("")
                 $("#fr_byte").html("")
-                if (_focused) g_in_chat.focus()       
-                //if (rq.type != "file") prepareForNoResponse(rq)
-                // if (rq.type != "file") { //if (rq.type == "talk") {
-                //     const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readwrite")
-                //     const os = tx.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
-                //     const os_req = os.get(rq.msgid)
-                //     os_req.onsuccess = function(e) {
-                //         if (os_req.result) return //const rec = os_req.result
-                //         //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 : deleteLocalMsg(data.msgid)
-                //         //결국, 정상적이지 않은 경우만 로컬에 있을 것임
-                //         const add_req = os.add({ 
-                //             roomid : g_roomid, msgid : rq.msgid, type : rq.type, body : rq.body, reply : rq.reply, 
-                //             cdt : hush.util.getCurDateTimeStr(true) 
-                //         })
-                //         add_req.onsuccess = function() { /*do nothing*/ }
-                //         add_req.onerror = function(e) { console.log("add_req error: " + e.srcElement.error) }
-                //         tx.oncomplete = function() { /*do nothing*/ }  
-                //     }
-                //     os_req.onerror = function(e) { console.log("os_req error: " + e.srcElement.error) }
-                //     setTimeout(() => { //타이머 지나고 찾았을 때 아직 남아 있으면 전송실패인 것임
-                //         const tx1 = hush.idb.db.transaction(hush.cons.idb_tbl, "readonly")
-                //         const os = tx1.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
-                //         os.get(rq.msgid).onsuccess = function(e) {
-                //             const rec = e.target.result
-                //             if (rec) {
-                //                 const obj = {}
-                //                 obj.msgid = rec.msgid
-                //                 obj.cdt = rec.cdt
-                //                 obj.senderid = g_userid
-                //                 obj.sendernm = g_usernm
-                //                 obj.body = rec.body
-                //                 obj.buffer = null
-                //                 obj.bufferStr = null
-                //                 obj.reply = rec.reply
-                //                 obj.type = rq.type
-                //                 obj.state = ""
-                //                 obj.filestate = ""
-                //                 obj.cnt = -1 //-1 means from local IndexedDB
-                //                 //addRow(obj, rq.type) //normal
-                //                 retrySending(obj)
-                //             }
-                //         }
-                //         tx1.oncomplete = function() {
-                //             //do nothing
-                //         }
-                //     }, hush.cons.send_timeout_sec * 1000)
-                // }
-
+                if (_focused) g_in_chat.focus()
                 //아래는 네트워크가 끊어지거나 불안정하거나 서버가 다운되는 등의 경우 각 type마다 실패된 전송을 어찌 처리하는지에 대한 코딩임
                 //image, file는 chat.html에서 구분값으로 넘기나 결국은 서버에 넘길 때는 notice로 type이 넘어가므로 서버에서는 미사용 (실데이터는 ajax로 처리)
                 //그래서 결국 type은 leave, invite, check, notice, flink, talk인데

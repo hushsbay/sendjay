@@ -250,11 +250,49 @@ Here are some ideas to get you started:
    + send_msg.js에 전송되는 일반적인 (텍스트)타입인 talk은 사용자가 키보드 타이핑이 필요한 경우인데<br/>
      모바일에서는 조금만 타이핑 양이 많아도 아주 불편하고 힘든 상황이 되므로<br/>
      전송시 Offline(네트워크 연결 끊어짐, 불안정, 서버 다운 등)이 되서 타이핑이 모두 사라진다면<br/>
-     아주 곤란하므로 전송과 동시에 로컬 DB에 저장하도록 처리하였습니다.<br/> 
+     아주 곤란하므로 전송과 동시에 로컬DB(HTML5 IndexedDB)에 저장하도록 처리하였습니다.<br/> 
      Offline이 되면 전송실패라고 보여주고 나중에 Online(소켓연결)상태가 되면 재전송 또는 삭제를<br/>
      선택할 수 있도록 하였습니다. (카카오톡과 유사)<br/> 
-
-   + dldsfk
+     참고로, 타이핑한 톡을 전송하지 않고 방을 닫으면 localStorage를 이용해 저장시키고<br/>
+     다시 방을 열면 localStorage 데이터를 보여줍니다.<br/>
+     ``` 
+     const procSendAndAppend = (rq, blobUrl) => {
+         .
+         .
+         .
+         if (rq.type == "talk") { //##8
+            const iObj = hush.idb.setTxOs("readwrite")
+            if (iObj == null) return
+            const os_req = iObj.os.get(rq.msgid)
+            os_req.onsuccess = function(e) {
+               if (os_req.result) return //const rec = os_req.result
+               //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 : deleteLocalMsg(data.msgid)
+               //결국, 정상적이지 않은 경우만 로컬에 있을 것임
+               iObj.os.add({
+                     roomid : g_roomid, msgid : rq.msgid, type : rq.type, body : rq.body, reply : rq.reply, 
+                     cdt : hush.util.getCurDateTimeStr(true) 
+               })
+            }
+            setTimeout(() => { //타이머 지나고 찾았을 때 아직 남아 있으면 전송실패인 것임
+               const iObj1 = hush.idb.setTxOs("readonly")
+               if (iObj1 == null) return
+               hush.idb.getRec(iObj1.os, rq.msgid, function(rec) {
+                     if (!rec) return
+                     const obj = initMsgForRetrySending(rec.msgid, rec.type, rec.body, rec.reply, rec.cdt)
+                     retrySending(obj)
+               })
+            }, hush.cons.send_timeout_sec * 1000)
+         } else if (rq.type == "flink") {
+            setTimeout(() => { //타이머 지나고 찾았을 때 아직 남아 있으면 전송실패인 것임
+               const objHandling = $("#handling_" + rq.msgid)
+               if (objHandling.css("display") != "none") {
+                     procFailure(rq, "전송 실패.")
+               }
+            }, hush.cons.send_timeout_sec * 1000)
+         }
+      }
+      ```
+   + 
 
    + ㄴ어ㅏ혼ㅇ러ㅗ
 
