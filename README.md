@@ -297,7 +297,7 @@ Here are some ideas to get you started:
    + type이 invite, leave인 경우는 초정 및 퇴장(강제퇴장 포함) 관련 처리(DB, socket)후<br/>
      send_msg로 알림을 전송하는데 이 알림은 전송시 Offline->Online이 된 경우 사용자가 재전송할 것인지<br/>
      삭제할 것인지 판단할 게 아니라 무조건 전송해야 하는 성격이므로 buffered되게 emit합니다.<br/>
-
+     
    + type=notice는 아래 2. ajax (파일/이미지 전송)를 참조하시기 바랍니다.<br/>
      (전송 성공 경우 처리)<br/>
 
