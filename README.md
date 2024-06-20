@@ -371,9 +371,19 @@ Here are some ideas to get you started:
    }
    ```
 
+   ### (웹/모바일) Notification
+
+   1. Web Notification -> 원노트 정리 참조해야 함
+      - dslkdskjfdfl
+      - skljsdksajdasd  
+
 
 # 구축형(On-Premise) 서버 적용 안내
 
+   1. DB 인터페이스만 작용해 운영 2) 소스내 db를 운영db로 변경해 적용
+   2. JWT 인증인데 적용은 1) 2)에 따라 다름 (로그인 처리..)
+   3. in-house 앱 (ios도 나중 앱스토어 배제..)
+   
 
 # Table 명세 (MySql)
 
