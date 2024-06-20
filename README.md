@@ -241,7 +241,7 @@ Here are some ideas to get you started:
       <tr>
          <td>check</td>
          <td>block</td>
-         <td>prepareForNoResponse()에서<br>전송여부확인을 위해 사용</td>
+         <td>전송여부확인을 위해 사용<br>아래 2. ajax 항목 참조</td>
          <td>No</td>
          <td>prepareForNoResponse()</td>
       </tr>
@@ -251,10 +251,12 @@ Here are some ideas to get you started:
      모바일에서는 조금만 타이핑 양이 많아도 아주 불편하고 힘든 상황이 되므로<br/>
      전송시 Offline(네트워크 연결 끊어짐, 불안정, 서버 다운 등)이 되서 타이핑이 모두 사라진다면<br/>
      아주 곤란하므로 전송과 동시에 로컬DB(HTML5 IndexedDB)에 저장하도록 처리하였습니다.<br/> 
-     Offline이 되면 전송실패라고 보여주고 나중에 Online(소켓연결)상태가 되면 재전송 또는 삭제를<br/>
-     선택할 수 있도록 하였습니다. (카카오톡과 유사)<br/> 
-     참고로, 타이핑한 톡을 전송하지 않고 방을 닫으면 localStorage를 이용해 저장시키고<br/>
-     다시 방을 열면 localStorage 데이터를 보여줍니다.<br/>
+
+     Offline이 되면 buffered가 아닌 block 방식으로 emit이 안되게 막고 <br/>
+     retrySending()을 통해 전송실패라고 보여주고 나중에 Online(소켓연결)상태가 되면<br/>
+     재전송 또는 삭제를 선택할 수 있도록 하였습니다. (카카오톡과 유사. 아래 소스(chat.html) 참조)<br/> 
+     참고로, 타이핑한 톡을 전송하지 않고 방을 닫은 경우도 localStorage를 이용해 저장시키고<br/>
+     다시 방을 열때 localStorage 데이터를 보여줘서 사용자 불편을 최소화합니다.<br/>
      ``` 
      const procSendAndAppend = (rq, blobUrl) => {
          .
@@ -292,13 +294,18 @@ Here are some ideas to get you started:
          }
       }
       ```
-   + 
+   + type이 invite, leave인 경우는 초정 및 퇴장(강제퇴장 포함) 관련 처리(DB, socket)후<br/>
+     send_msg로 알림을 전송하는데 이 알림은 전송시 Offline->Online이 된 경우 사용자가 재전송할 것인지<br/>
+     삭제할 것인지 판단할 게 아니라 무조건 전송해야 하는 성격이므로 buffered되게 emit합니다.<br/>
 
-   + ㄴ어ㅏ혼ㅇ러ㅗ
-
-   - ChatService.kt 코딩 설명
-   - 로컬 저장 설명 (코딩)
+   + type=notice 관련 설명은 아래 2. ajax (파일/이미지 전송)를 참조하시기 바랍니다.<br/>
    
+   + type=flink는 이미 전송된 파일을 다른 방으로 전달하고자 할 때 해당 파일을 다시 내려서<br/>
+     전송하는 것은 시간이 많이 걸리고 불편한데 링크로 보내면 수월합니다.<br/>
+     이 경우는 사용자 타이핑이 없으므로 로컬DB저장도 않고 buffered시키지도 않고자 했습니다.<br/>
+
+   + type=check은 
+
    2. ajax (파일/이미지 전송)<br/>
       - Sendjay에서는 ajax로 가능한 것은 굳이 socket으로 처리하지 않으려 했습니다.<br/>
       - 파일/이미지 전송은 ajax with multipart/form-data로 먼저 DB에 저장후 socket으로<br/>
@@ -314,24 +321,15 @@ Here are some ideas to get you started:
         체크하도록 했습니다. (위 표 type=notice 참조)<br/>
    
    
+   - ChatService.kt 코딩 설명
    
    
-   
 
 
 
 
 
 
-
-   2. 메시지 로컬DB 저장
-
-   카카오톡과는 달리 Sendjay는 로컬DB에 메시지 데이터를 쌓아두지 않습니다.<br/>
-   작성중인 메시지 정도만 HTML5 IndexedDB에 잠시 저장할 뿐입니다.<br/>
-   따라서, 아래와 같은 경우에 대해 사용자 불편이 발생할 수 있습니다<br/>
-
-   - 전송오류, 무응답, 재전송
-   - 파일업로드시 네트워크 끊김 문제
 
 
 # 구축형(On-Premise) 서버 적용 안내
