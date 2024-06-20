@@ -232,19 +232,19 @@ Here are some ideas to get you started:
          <td>없음</td>
       </tr>
       <tr>
+         <td>check</td>
+         <td>block</td>
+         <td>전송여부 확인용</td>
+         <td>No</td>
+         <td>prepareForNoResponse()</td>
+      </tr>
+      <tr>
          <td>flink</td>
          <td>block</td>
          <td>이미 전송한 파일의 링크를<br>복사해 전송</td>
          <td>No</td>
          <td>procFailure()</td>
-      </tr>
-      <tr>
-         <td>check</td>
-         <td>block</td>
-         <td>전송여부확인을 위해 사용<br>아래 2. ajax 항목 참조</td>
-         <td>No</td>
-         <td>prepareForNoResponse()</td>
-      </tr>
+      </tr>      
    </table>
 
    + send_msg.js에 전송되는 일반적인 (텍스트)타입인 talk은 사용자가 키보드 타이핑이 필요한 경우인데<br/>
@@ -298,14 +298,16 @@ Here are some ideas to get you started:
      send_msg로 알림을 전송하는데 이 알림은 전송시 Offline->Online이 된 경우 사용자가 재전송할 것인지<br/>
      삭제할 것인지 판단할 게 아니라 무조건 전송해야 하는 성격이므로 buffered되게 emit합니다.<br/>
 
-   + type=notice 관련 설명은 아래 2. ajax (파일/이미지 전송)를 참조하시기 바랍니다.<br/>
-   
+   + type=notice는 아래 2. ajax (파일/이미지 전송)를 참조하시기 바랍니다.<br/>
+     (전송 성공 경우 처리)<br/>
+
+   + type=check은 아래 2. ajax (파일/이미지 전송)를 참조하시기 바랍니다.<br/>
+     (전송 성공이 아닌 실패의 경우 처리)<br/>
+  
    + type=flink는 이미 전송된 파일을 다른 방으로 전달하고자 할 때 해당 파일을 다시 내려서<br/>
      전송하는 것은 시간이 많이 걸리고 불편한데 링크로 보내면 수월합니다.<br/>
      이 경우는 사용자 타이핑이 없으므로 로컬DB저장도 않고 buffered시키지도 않고자 했습니다.<br/>
-
-   + type=check은 
-
+   
    2. ajax (파일/이미지 전송)<br/>
       - Sendjay에서는 ajax로 가능한 것은 굳이 socket으로 처리하지 않으려 했습니다.<br/>
       - 파일/이미지 전송은 ajax with multipart/form-data로 먼저 DB에 저장후 socket으로<br/>
@@ -318,18 +320,56 @@ Here are some ideas to get you started:
         아니면 안드로이드 웹뷰가 가지고 있는지 등을 모르겠습니다. $.ajax가 buffered 관련 free, remove<br/>
         또는 설정옵션도 못찾았습니다)<br/>
       - 그래서 일단, ajax로 파일/이미지 전송실패후에는 사용자로 하여금 서버에 이미 전송되었는지 먼저<br/>
-        체크하도록 했습니다. (위 표 type=notice 참조)<br/>
+        체크하도록 했습니다. (위 표 type=check 참조)<br/>
    
-   
-   - ChatService.kt 코딩 설명
-   
-   
+   3. procSocketEmit() in ChatService.kt : 위 의도대로 send_msg의 socket emit시 코딩은 아래 참조<br/>
 
-
-
-
-
-
+   ```
+   private fun procSocketEmit() {
+      val logTitle = object{}.javaClass.enclosingMethod?.name!!
+      disposable?.dispose()
+      disposable = RxToUp.subscribe<RxEvent>().subscribe {
+         try {
+               val json = JSONObject()
+               val evt = it.ev
+               val dataStr = it.data.toString()
+               json.put("ev", evt)
+               json.putOpt("data", it.data)
+               json.put("returnTo", it.returnTo ?: "parent")
+               json.put("returnToAnother", it.returnToAnother)
+               if (evt != "chk_alive" && evt != "chk_typing") Util.log("$logTitle", it.toString())
+               val procMsg = it.procMsg //모바일 전용 (웹에는 없음). 아래 buffering하고도 일부는 관련있는 파라미터임 (토스트 뿌리면 true 안뿌리게 하려면 false가 넘어와야 함)
+               //아래는 소켓 끊어질 때 버퍼링 관련임. common.js의 hush.sock.sendVolatile() 설명 참조
+               //socket.io의 기본 설정은 소켓이 끊어지더라도 버퍼에 두고 있다가 재연결시 내보내는 것인데 
+               //Android socket.io 라이브러리에서 volatile을 지원하는 것을 아직 찾지 못해, 사용하지 않으려 함
+               //따라서, 기본적으로는 버퍼에 저장하지 않게 하기 위해 아예 소켓이 연결되어 있지 않으면 전송을 멈추기로 함 (아래 몇개 예외 있음)
+               Util.connectSockWithCallback(applicationContext, connManager!!) { //SocketIO.connect()
+                  if (it.get("code").asString != Const.RESULT_OK) {
+                     if (evt == Const.SOCK_EV_SEND_MSG) {
+                           val gson = Gson().fromJson(dataStr, JsonObject::class.java)
+                           val type = gson.get("type").asString
+                           if (type == "leave" || type == "invite" || type == "notice") {
+                              //버퍼링. 소켓이 끊어지더라도 일단 소켓객체에 전달해 emit => chat.html의 procSendAndAppend() 설명 참조
+                           } else { //talk, flink
+                              if (procMsg == true) Toast.makeText(applicationContext, Const.TITLE + ": " + it.get("msg").asString, Toast.LENGTH_LONG).show()
+                              return@connectSockWithCallback
+                           }
+                     } else {
+                           if (procMsg == true) Toast.makeText(applicationContext, Const.TITLE + ": " + it.get("msg").asString, Toast.LENGTH_LONG).show()
+                           return@connectSockWithCallback
+                     }
+                  }
+                  SocketIO.sock!!.emit(Const.SOCK_EV_COMMON, json)
+               }
+         } catch (e: Exception) {
+               logger.error("$logTitle: ${e.toString()}")
+               Util.log(logTitle, e.toString())
+               e.printStackTrace()
+               Util.showRxMsgInApp(Const.SOCK_EV_TOAST, "$logTitle: ${e.toString()}")
+         }
+      }
+   }
+   ```
 
 
 # 구축형(On-Premise) 서버 적용 안내
