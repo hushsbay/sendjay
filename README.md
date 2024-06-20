@@ -215,21 +215,28 @@ Here are some ideas to get you started:
          <td>buffered</td>
          <td>invite_user.js를 통해 초청대상을<br>room join시킨 후<br>방멤버에게 알림</td>
          <td>No</td>
-         <td>-</td>
+         <td>없음</td>
       </tr>
       <tr>
          <td>leave</td>
          <td>buffered</td>
          <td>퇴장시 room leave후<br>방멤버에게 알림</td>
          <td>No</td>
-         <td>-</td>
+         <td>없음</td>
       </tr>
       <tr>
          <td>notice</td>
          <td>buffered</td>
          <td>proc_image.js(이미지전송),<br>proc_file(파일전송)후<br>방멤버에게 알림</td>
          <td>No</td>
-         <td>-</td>
+         <td>없음</td>
+      </tr>
+      <tr>
+         <td>flink</td>
+         <td>block</td>
+         <td>이미 전송한 파일의 링크를<br>복사해 전송</td>
+         <td>No</td>
+         <td>procFailure()</td>
       </tr>
       <tr>
          <td>check</td>
@@ -239,6 +246,9 @@ Here are some ideas to get you started:
          <td>prepareForNoResponse()</td>
       </tr>
    </table>
+
+      + ㅇ나ㅣ헝나ㅣㅓㄹ
+      + ㄴ어ㅏ혼ㅇ러ㅗ
 
       - ChatService.kt 코딩 설명
       - 로컬 저장 설명 (코딩)
