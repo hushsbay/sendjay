@@ -13,7 +13,7 @@ Here are some ideas to get you started:
 
 현재 85%정도 개발된 상태입니다.<br/>
 안드로이드용 소스는 <https://github.com/hushsbay/sendjay_aos> 참조하시면 되며 (설명은 여기에)<br/>
-여기 소스는 was와 web client가 들어 있는 sendjay_was라고 생각하고 보면 됩니다.
+여기 소스는 was와 web client가 들어 있는 sendjay_was라고 생각하고 보면 됩니다.<br/>
 (나중에 sendjay_was로 이름 변경 예정)
 
 
