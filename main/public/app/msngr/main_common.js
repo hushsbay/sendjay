@@ -877,11 +877,8 @@ const getRoomInfo = (roomid) => {
 }
 
 const chkRoomFocus = () => { //웹에서만 호출. 앱에서의 채팅방이 현재 포커싱되어 있는지 파악해 웹에서 노티를 표시할지 여부를 결정하기 위함
-    if (hush.http.chkOnline("none")) {
-        hush.sock.send(hush.socket, hush.cons.sock_ev_chk_roomfocus, { })
-        console.log("chkRoomFocus")
-    }
-    setTimeout(() => chkRoomFocus(), 3000)
+    if (hush.http.chkOnline("none")) hush.sock.send(hush.socket, hush.cons.sock_ev_chk_roomfocus, { })
+    setTimeout(() => chkRoomFocus(), 3000) //해당 간격 단위가 있으므로 약간의 오차가 있을 수 있음
 }
 
 function OnSearch(input) {
@@ -1031,11 +1028,11 @@ var funcSockEv = { //needs to be public
         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
     },
     [hush.cons.sock_ev_chk_roomfocus] : (data) => {
-        console.log("data.focusedRoomid"+"==="+data.focusedRoomid)
+        //console.log("data.focusedRoomid"+"==="+data.focusedRoomid)
         //focusedRoomid는 웹에서 앱으로 (단방향으로만) 요청하는 소켓정보임
-        //focusedRoomid가 빈칸이 아니면 현재 앱에서 해당 roomid로 챗방이 맨위에 열려 있고 스크린도 On 상태이어서
-        //톡을 보내면 웹과 앱이 모두 접속된 상태에서 앱에서는 계속 메시지가 읽음처리가 되므로 웹에서는 노티가 필요없게 됨. 
-        //그 반대의 경우는 앱에서 노티체크를 1초정도 delay시켜서 하기 때문에 웹에서 챗방에 포커스가 가 있으면 이미 읽음처리되므로 노티가 필요없게 됨
+        //1) focusedRoomid가 빈칸이 아니면 현재 앱에서 해당 roomid로 챗방이 맨위에 열려 있고 스크린도 On 상태이어서
+        //   톡을 보내면 웹과 앱이 모두 접속된 상태에서 앱에서는 계속 메시지가 읽음처리가 되므로 웹에서는 노티가 필요없게 됨 (사용자입장에서는 이 경우 노티가 뜨면 불편한 것임). 
+        //2) 그 반대의 경우는 앱에서 노티 체크를 1초정도 delay시켜서 하기 때문에 웹에서 챗방에 포커스가 가 있으면 이미 읽음처리되므로 노티가 필요없게 됨
         g_focusedRoomid = data.focusedRoomid
     },
 }
