@@ -71,6 +71,7 @@
                             return
                         }
                         $("#div_log").show()
+                        $("#btn_noti_popup").show()
                     } else {
                         $("#btn_collapseall").show()
                         $("#btn_expandall").show()
@@ -324,6 +325,10 @@
                             hush.util.showEx(ex)
                         }
                     })
+                    $("#btn_noti_popup").on("click", function() {
+                        hush.util.animBgColor($(this))
+                        AndroidMain.setNotiPopup()
+                    })
                     $("#in_nicknm,#in_job,#in_abcd,#in_abnm,#chk_standalone,#chk_notioff,#chk_soundoff,#chk_viboff,#in_fr,#in_to,#chk_bodyoff,#chk_senderoff,#chk_popupoff").on("change", function() { 
                         g_setting_changed = true 
                     })   
@@ -548,10 +553,11 @@
                         <input type=checkbox id=chk_notioff name=chk_notioff class=coSettingChkbox />
                         <span class='coSettingSpan coText'>끄기</span>
                     </label>
-                    <label for=chk_popupoff class=coSettingWrap style="margin-left:10px">
+                    <!-- <label for=chk_popupoff class=coSettingWrap style="margin-left:10px">
                         <input type=checkbox id=chk_popupoff name=chk_popupoff class=coSettingChkbox />
                         <span class='coSettingSpan coText'>모바일팝업숨김</span>
-                    </label>
+                    </label> //NotiCenter.kt의 $$7 참조 (현재 미사용) 대신 아래 버튼으로 처리-->
+                    <div id=btn_noti_popup class='picBtn coText' style="display:none;margin-left:5px">팝업옵션</div>
                 </div>
                 <div class=coSettingRow>
                     <div class='coSettingLabel coText'>알림표시</div>

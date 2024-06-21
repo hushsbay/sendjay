@@ -776,7 +776,7 @@ const procSettingOnLoad = (rs) => { //rs from hush.auth.verifyUser(true)
     hush.http.setCookie("viboff", rs.VIB_OFF)
     hush.http.setCookie("bodyoff", rs.BODY_OFF)
     hush.http.setCookie("senderoff", rs.SENDER_OFF)
-    hush.http.setCookie("popupoff", rs.POPUP_OFF)
+    hush.http.setCookie("popupoff", rs.POPUP_OFF) //NotiCenter.kt의 $$7 참조 (현재 미사용이나 그대로 두고 향후 대비)
     g_setting.fr = (rs.TM_FR) ? rs.TM_FR : ""
     g_setting.to = (rs.TM_TO) ? rs.TM_TO : ""
 }
