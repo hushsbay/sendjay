@@ -119,7 +119,34 @@ Here are some ideas to get you started:
    node app
    ```
 
-   Sendjay는 템플릿 개념의 프로젝트이므로 굳이 PM2 등의 모듈을 사용하지 않고 node app으로 구동했습니다.<br/>
+   Sendjay는 템플릿 개념의 프로젝트이므로 PM2 등의 모듈을 사용하지 않고 node app으로 단순 구동했습니다.<br/>
+
+   ### nodeConfig.js (c:/nodeops)
+   
+   ```
+   module.exports = {
+    	"mysql" : {
+        	"host" : "localhost",
+        	"poolsize" : 50,
+        	"port" : 3306,
+        	"user" : "xxx",
+        	"pwd" : "xxx"
+      },
+      "redis" : {
+         "host" : "127.0.0.1",
+         "port" : 6379,
+         "pwd" : "xxx"
+      },
+      "jwt" : {
+         "algo" : "xxx",
+         "key" : "xxx", //32bytes
+         "expiry" : "365 days" //"4h" //for web and mobile //"59s", "365 days"
+      },
+      "crypto" : {
+         "key" : "xxx" //32bytes
+      }
+   }
+   ```
 
 
 # 구현된 기능
