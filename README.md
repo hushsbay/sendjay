@@ -90,7 +90,6 @@ Here are some ideas to get you started:
    set SOCK_PORT=3050
    set REDIS_DB=0
    set MAIN_SERVER=Y
-   set FFMPEG_PATH=c:/ffmpeg/bin/ffmpeg.exe
    set LOG_PATH=c:/nodeops/log/hushsbay
    set UPLOAD_PATH=c:/nodeops/upload/hushsbay
    set FFMPEG_PATH=c:/ffmpeg/bin/ffmpeg.exe
@@ -112,7 +111,6 @@ Here are some ideas to get you started:
    set SOCK_PORT=3051
    set REDIS_DB=0
    set MAIN_SERVER=N
-   set FFMPEG_PATH=c:/ffmpeg/bin/ffmpeg.exe
    set LOG_PATH=c:/nodeops/log/hushsbay
    set UPLOAD_PATH=c:/nodeops/upload/hushsbay
    set FFMPEG_PATH=c:/ffmpeg/bin/ffmpeg.exe
