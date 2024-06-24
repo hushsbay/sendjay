@@ -11,7 +11,7 @@ Here are some ideas to get you started:
 - ⚡ Fun fact: ...
 -->
 
-현재 85%정도 개발된 상태입니다.<br/>
+현재 90%정도 개발된 상태입니다.<br/>
 안드로이드용 소스는 <https://github.com/hushsbay/sendjay_aos> 참조하시면 되며 (설명은 여기에)<br/>
 여기 소스는 was와 web client가 들어 있는 sendjay_was라고 생각하고 보면 됩니다.<br/>
 (나중에 sendjay_was로 이름 변경 예정)
@@ -47,6 +47,82 @@ Here are some ideas to get you started:
 포트를 PC와 모바일로 나눈 것은 단순히 테스트 편의를 위한 구분입니다.
    
 ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_env.png)
+
+   ### package.json
+
+   적용된 npm list는 아래와 같습니다.<br/>
+   ```
+   {
+      "dependencies": {
+         "@socket.io/redis-adapter": "^8.2.1",
+         "cookie-parser": "^1.4.6",
+         "cors": "^2.8.5",
+         "crypto": "^1.0.1",
+         "express": "^4.18.2",
+         "fluent-ffmpeg": "^2.1.2",
+         "fs-extra": "^11.2.0",
+         "ioredis": "^5.3.2",
+         "jsonwebtoken": "^9.0.2",
+         "mime": "^3.0.0",
+         "multer": "^1.4.0",
+         "mysql2": "^3.9.0",
+         "open-graph-scraper": "^4.7.1",
+         "request-ip": "^3.3.0",
+         "socket.io": "^4.7.3",
+         "winston": "^3.11.0",
+         "winston-daily-rotate-file": "^4.7.1"
+      }
+   }
+   ```
+
+   ### start.bat
+
+   PC 브라우저에서 호출되는 Node.js서버는 아래와 같이 구동됩니다.
+   ```
+   set NODE_CONFIG=c:/nodeops/nodeconfig.js
+   set MODULE_COMMON=c:/nodeops/hushsbay/common/wscommon.js
+   set MODULE_LOGGER=c:/nodeops/hushsbay/common/wslogger.js
+   set MODULE_MYSQL=c:/nodeops/hushsbay/common/wsmysql.js
+   set MYSQL_SCHEMA=jay
+   set HTTP_METHOD=http
+   set HTTP_PORT=80
+   set SOCK_NAMESPACE=jay
+   set SOCK_PORT=3050
+   set REDIS_DB=0
+   set MAIN_SERVER=Y
+   set FFMPEG_PATH=c:/ffmpeg/bin/ffmpeg.exe
+   set LOG_PATH=c:/nodeops/log/hushsbay
+   set UPLOAD_PATH=c:/nodeops/upload/hushsbay
+   set FFMPEG_PATH=c:/ffmpeg/bin/ffmpeg.exe
+   node app
+   ```
+
+   ### start1.bat
+
+   모바일앱에서 호출되는 Node.js서버는 아래와 같이 구동됩니다.
+   ```
+   set NODE_CONFIG=c:/nodeops/nodeconfig.js
+   set MODULE_COMMON=c:/nodeops/hushsbay/common/wscommon.js
+   set MODULE_LOGGER=c:/nodeops/hushsbay/common/wslogger.js
+   set MODULE_MYSQL=c:/nodeops/hushsbay/common/wsmysql.js
+   set MYSQL_SCHEMA=jay
+   set HTTP_METHOD=http
+   set HTTP_PORT=81
+   set SOCK_NAMESPACE=jay
+   set SOCK_PORT=3051
+   set REDIS_DB=0
+   set MAIN_SERVER=N
+   set FFMPEG_PATH=c:/ffmpeg/bin/ffmpeg.exe
+   set LOG_PATH=c:/nodeops/log/hushsbay
+   set UPLOAD_PATH=c:/nodeops/upload/hushsbay
+   set FFMPEG_PATH=c:/ffmpeg/bin/ffmpeg.exe
+   node app
+   ```
+
+   Sendjay는 템플릿 개념의 프로젝트이므로 굳이 PM2 등의 모듈을 사용하지 않고 node app으로 구동했습니다.<br/>
+
+
+# 구현된 기능
 
 
 # 주요 특징 (메시징 관점에서)
@@ -403,6 +479,10 @@ Here are some ideas to get you started:
    
    + 앱에서는 사용자에 의한 앱의 강제종료 및 사용자의 의도와 관련없이 네트워크 재연결이 자주 발생할 수도<br/>
      있는데 이 경우, 그 시간동안 새로운 톡 도착을 (안읽은 톡이라고 표시하면서) 알려주도록 했습니다.<br/>
+
+
+# 참고 사항 (메시징 제외)
+
 
 
 # 구축형(On-Premise) 서버 적용 안내

@@ -1,6 +1,6 @@
 module.exports = {
 	http : {
-		method : process.env.HTTP_METHOD, //로드밸랜서 안쪽이면 http로 가능
+		method : process.env.HTTP_METHOD, //예) AWS 로드밸랜서 안쪽이면 http로 통신
 		port : process.env.HTTP_PORT
 	},
 	mysql : {
@@ -11,15 +11,14 @@ module.exports = {
 		namespace : process.env.SOCK_NAMESPACE		
     },
 	redis : {
-		db : process.env.REDIS_DB,
-		//flush : process.env.REDIS_FLUSH_SERVER 
+		db : process.env.REDIS_DB
 	},
 	app : {
 		nodeConfig : process.env.NODE_CONFIG,
 		ws : process.env.MODULE_COMMON,
 		wsmysql : process.env.MODULE_MYSQL,
-		corsRestful : ['https://hushsbay.com'], //Array type. It's ok even if same origin not here
-		corsSocket : 'https://hushsbay.com', //Non-array type. Same origin should be here
+		corsRestful : ['https://hushsbay.com'], //Array type. Same origin이 없어도 됨
+		corsSocket : 'https://hushsbay.com', //Non-array type. Same origin이 들어 있어야 함
 		wslogger : process.env.MODULE_LOGGER,
 		logPath : process.env.LOG_PATH,
 		mainserver : process.env.MAIN_SERVER,
