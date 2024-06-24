@@ -125,7 +125,7 @@ Here are some ideas to get you started:
    
    ```
    module.exports = {
-    	"mysql" : {
+      "mysql" : {   
         	"host" : "localhost",
         	"poolsize" : 50,
         	"port" : 3306,
