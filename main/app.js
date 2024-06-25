@@ -48,8 +48,8 @@ io.listen(config.sock.port)
 global.jay = io.of('/' + config.sock.namespace)
 
 global.jay.on('connection', async (socket) => {
-	const sockets = await io.of('/' + config.sock.namespace).fetchSocket()
-	console.log('socket count :', sockets.size)
+	const sockets = await io.of('/' + config.sock.namespace).fetchSockets()
+	console.log('socket count :', sockets.length)
 	//const sockets1 = await redisAdapter.fetchSockets() //둘 다 오류 발생
 	const _logTitle = 'connect'	
 	try {
