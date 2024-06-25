@@ -53,7 +53,7 @@ global.jay.on('connection', async (socket) => { //https://socket.io/docs/v4/serv
 	console.log('socket count :', sockets.length)
 	for (let item of sockets) {
 		const xx = await global.jay.in(item.id).fetchSockets()
-		console.log(item.id, "=========", xx.id)
+		console.log(item.id, "=========", xx[0].id)
 	}
 
 	const _logTitle = 'connect'	
