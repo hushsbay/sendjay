@@ -11,8 +11,7 @@ const { Worker } = require('worker_threads')
 const DIR_PUBSUB = './pubsub/', DIR_SOCKET = './socket/'
 const PING_TIMEOUT = 5000, PING_INTERVAL = 25000 //default
 
-//global이므로 global.을 빼고 사용해도 되나 명시적으로 붙여서 사용하기로 함
-global.logger = wslogger
+global.logger = wslogger //global이므로 global.을 빼고 사용해도 되나 모두 명시적으로 붙여서 사용하기로 함
 global.pool = wsmysql.createPool(config.mysql.schema, true)
 
 console.log('version:', process.version)
@@ -47,15 +46,21 @@ io.adapter(redisAdapter(global.pub, sub))
 io.listen(config.sock.port)
 global.jay = io.of('/' + config.sock.namespace)
 
-global.jay.on('connection', async (socket) => { //https://socket.io/docs/v4/server-api/
-	const sockets = await global.jay.fetchSockets()
-	//const sockets = await global.jay.in("room1").fetchSockets() // return all Socket instances in the "room1" room of the main namespace
-	console.log('socket count :', sockets.length)
-	for (let item of sockets) {
-		const xx = await global.jay.in(item.id).fetchSockets()
-		console.log(item.id, "=========", xx[0].id)
-	}
+//const sockets = await global.jay.adapter.sockets(new Set()) //https://socket.io/docs/v4/adapter/
+//const sockets = await global.jay.sockets //위 아래 둘 다 각 서버의 소켓 카운트만 가능 (따라서, 아래 코딩으로 사용하기)
 
+/* https://socket.io/docs/v4/server-api/
+const sockets = await global.jay.fetchSockets() //모든 소켓서버에 있는 정보 가져오기
+console.log('socket count :', sockets.length)
+for (let item of sockets) {
+	const sock = await global.jay.in(item.id).fetchSockets() //소켓 한 개
+	console.log(item.id, "=========", sock[0].id)
+}
+const sockets = await global.jay.in("room1").fetchSockets() // return all Socket instances in the "room1" room of the main namespace
+await global.jay.in(_socketid).socketsJoin(_roomid)
+await global.jay.in(_socketid).socketsLeave(_roomid) */
+
+global.jay.on('connection', async (socket) => {
 	const _logTitle = 'connect'	
 	try {
 		const queryParam = socket.handshake.query
@@ -88,7 +93,7 @@ global.jay.on('connection', async (socket) => { //https://socket.io/docs/v4/serv
 		await ws.redis.multiSetForUserkeySocket(socket)
 		const pattern = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli //예) $$SW__userid;
 		const stream = store.scanStream({ match : pattern + '*', count : ws.cons.scan_stream_cnt })
-		stream.on('data', (resultKeys) => { //아래는 비동기처리됨. //call pmessage()
+		stream.on('data', (resultKeys) => { //비동기 //call pmessage()
 			for (let item of resultKeys) {
 				const _sockid = item.split(ws.cons.easydeli)[1]
 				if (_sockid != socket.id) { //PC웹과 모바일 구분 (모바일이라면 모바일 userkey로만 찾아 현재 소켓이 아니면 이전 소켓이므로 모두 kill)
@@ -97,11 +102,11 @@ global.jay.on('connection', async (socket) => { //https://socket.io/docs/v4/serv
 				}
 			}
 		})
-		ws.sock.broadcast(socket, ws.cons.sock_ev_show_on, socket.userkey, 'all') //서버로 들어오는 것이 없고 클라이언트로 나가는 것만 있을 것임
+		//ws.sock.broadcast(socket, ws.cons.sock_ev_show_on, socket.userkey, 'all') //서버로 들어오는 것이 없고 클라이언트로 나가는 것만 있을 것임
+		await ws.sock.broadcast(ws.cons.sock_ev_show_on, socket.userkey, 'all') //서버로 들어오는 것이 없고 클라이언트로 나가는 것만 있을 것임
 		socket.on(ws.cons.sock_ev_disconnect, (reason) => require(DIR_SOCKET + ws.cons.sock_ev_disconnect)(socket, reason))
 		socket.on(ws.cons.sock_ev_common, (param) => require(DIR_SOCKET + param.ev)(socket, param))
 		socket.on('error', (err) => global.logger.error('socket error\n' + err.toString()))
-		console.log('socketid', socket.id)
 	} catch (ex) {
 		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex)
 		socket.disconnect() //setTimeout(() => socket.disconnect(), 1000)
@@ -136,58 +141,9 @@ rt = [
 ] 
 for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/msngr/' + rt[i])) 
 
-// proc()
-// async function proc() {
-//     const sockets = await global.jay.adapter.sockets(new Set()) //https://socket.io/docs/v4/adapter/
-// 	//const sockets1 = await global.jay.sockets //위 아래 둘 다 각 서버의 소켓 카운트만 가능
-//     //console.log('socket count :', sockets.size) //, sockets1.size)
-// 	const stream = global.store.scanStream({ match : ws.cons.key_str_socket + '*', count: ws.cons.scan_stream_cnt })
-// 	stream.on('data', (resultKeys) => {
-// 		for (let key of resultKeys) {
-// 			const obj = ws.redis.getUserkeySocketIdFromKey(key)
-// 			if (sockets.has(obj.socketid)) {
-// 				const socket = global.jay.sockets.get(obj.socketid)
-// 				console.log('socket :', socket.id, socket.userkey, socket.userip, socket.winid)
-// 			}
-// 		}
-// 	})
-// 	setTimeout(() => { proc() }, 5000) //Test
-// }
-
-//////////////////////////////////////////////////////////////////////////////////////////////Worker
-// if (config.app.mainserver == 'Y') {
-// 	const worker01 = new Worker('./thread/worker01.js') //worker.postMessage('hello')
-// 	worker01.on('message', async (data) => { 
-// 		try {
-// 			if (data.ev == 'del_redis_socket') { //console.log(data.item+"==="+data.userkey)
-// 				const sockInfo = com.getUserkeySocketid(data.item) //$$SD__3;/sendjay#sjkfhsaf8934kmhjsfd8 
-// 				com.pub('disconnect_prev_sock', { prevkey : data.item, socketid : sockInfo.socketid, userkey : data.userkey }) //call pmessage()
-// 			}
-// 		} catch (ex) {
-// 			global.logger.error(data.ev + ': error\n' + ex.stack)
-// 		}
-// 	})
-// }
-// const worker02 = new Worker('./thread/worker02.js')
-// worker02.on('message', async (data) => {
-// 	try {
-// 		if (data.ev = 'chk_sockets_rooms') {
-// 			const sockets = await global.jay.adapter.sockets(new Set())
-// 			const rooms = await global.jay.adapter.allRooms()
-// 			const osMem = ws.util.osMem()
-// 			const totalMem = parseInt(osMem.totalMem)
-// 			const freeMem = parseInt(osMem.freeMem)
-// 			console.log('socket count :', sockets.size, '/ room count :', rooms.size, '/ freeMem :', freeMem, '/ totalMem :', totalMem)
-// 		}
-// 	} catch (ex) {
-// 		global.logger.error(data.ev + ': error\n' + ex.stack)
-// 	}
-// })
-console.log(config.app.mainserver, "!!!")
 if (config.app.mainserver == 'Y') {
 	const worker = new Worker('./thread/worker.js')
-	//현재 리턴되는 메시지 없음
+	//현재는 리턴되는 메시지 없음
 }
-//////////////////////////////////////////////////////////////////////////////////////////////
 
 ws.util.watchProcessError()

@@ -45,7 +45,7 @@ module.exports = (function() {
 			key_str_winid : PREFIX + 'W', //redis strings (userkey+deli+winid prefix added) - get winid for auto launch
 			key_str_socket : PREFIX + 'S', //redis strings (userkey+deli+socketid prefix added) - get socketid
 			//key_set_us : PREFIX + 'US', //redis set - prefix+'S'+userkey+deli+socketid //지우지는 말 것 (주석으로 막은 코딩 있음)
-			scan_stream_cnt : 100, //means scanning count at a time, not whole count to scan. https://www.gitmemory.com/issue/luin/ioredis/908/511472853. Without count param, Something unexpectable might be happend ?!.
+			scan_stream_cnt : 100, //means scanning count at a time, not whole count to scan. https://www.gitmemory.com/issue/luin/ioredis/908/511472853. Without count param, Something unexpectable might be happend ?!
 			sock_ev_alert : 'alert',
 			sock_ev_toast : 'toast',
 			sock_ev_disconnect : "disconnect",
@@ -144,14 +144,12 @@ module.exports = (function() {
 						if (!token) {
 							rs.code = ws.cons.CODE_TOKEN_NEEDED
 							rs.msg = '인증(토큰)이 없습니다.'
-							console.log(tokenInfo.ip, rs.msg) //안정화때까지 임시로 찍어보기 (나중에 막기)
 							resolve(rs)
 							return
 						}
 						if (!userid) {
 							rs.code = ws.cons.CODE_USERINFO_MISMATCH
 							rs.msg = '토큰과 비교할 사용자정보가 없습니다.'
-							console.log(tokenInfo.ip, rs.msg) //안정화때까지 임시로 찍어보기 (나중에 막기)
 							resolve(rs)
 							return
 						}
@@ -166,22 +164,19 @@ module.exports = (function() {
 									rs.code = ws.cons.CODE_ERR
 									rs.msg = err.message + ' : ' + userid
 								}
-								console.log(tokenInfo.ip, rs.msg) //안정화때까지 임시로 찍어보기 (나중에 막기)
 								resolve(rs)
 								return
-							} //아래부터는 위변조도 체크하는 것이 됨
+							} //아래부터는 위변조도 체크
 							const decodedStr = JSON.stringify(decoded)
 							if (decodedStr != _payloadStr) {
 								rs.code = ws.cons.CODE_TOKEN_MISMATCH
 								rs.msg = 'Token mismatch : ' + decoded.userid + '/' + userid
-								console.log(tokenInfo.ip, rs.msg) //안정화때까지 임시로 찍어보기 (나중에 막기)
 								resolve(rs)
 								return
 							}
 							if (decoded.userid != userid) {
 								rs.code = ws.cons.CODE_USERINFO_MISMATCH
 								rs.msg = '사용자정보에 문제가 있습니다 : ' + decoded.userid + '/' + userid
-								console.log(tokenInfo.ip, rs.msg) //안정화때까지 임시로 찍어보기 (나중에 막기)
 								resolve(rs)
 								return
 							}
@@ -330,7 +325,7 @@ module.exports = (function() {
 					//.sadd(ws.cons.key_set_userkey_socket, usKey)는 아직 쓰임새가 없으므로 막음
 					const usKey = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli + socket.id //예) $$S + W__userid + ; + XYZ~
 					if (usKey.includes('undefined')) throw Error('multiSetForUserkeySocket : usKey not defined')
-					const arr = await global.store.multi().set(usKey, socket.id).exec() //한개 항목이면 멀티로 안해도 되나, 추가 고려해 유지함
+					const arr = await global.store.multi().set(usKey, socket.id).exec() //한개 항목이면 멀티로 안해도 되나, 추가 고려해 그대로 유지함
 					if (!arr || arr.length < 1) throw Error('multiSetForUserkeySocket : global.store.multi() error')
 					if (arr[0][1] != 'OK') throw Error('multiSetForUserkeySocket : global.store.multi() error : ' + arr[0][1])
 				} catch(ex) {
@@ -385,12 +380,14 @@ module.exports = (function() {
 		},
 
 		sock : {
-			broadcast : (socket, ev, data, returnTo, returnToAnother) => {
+			broadcast : async (ev, data, returnTo, returnToAnother) => { //broadcast : async (socket, ev, data, returnTo, returnToAnother) => {
 				const _returnTo = returnTo ? returnTo : 'parent' //'all' used in most cases
-				//global.jay.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //to all inside namaspace. socket oneself included
-				//global.jay.emit => TypeError: opts.except is not iterable (from socket.io 3.0)
-				socket.broadcast.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //자기자신 제외
-				socket.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
+				/*global.jay.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //to all inside namaspace. socket oneself included
+				global.jay.emit => TypeError: opts.except is not iterable (from socket.io 3.0)*/
+				//socket.broadcast.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //자기자신 제외
+				//socket.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
+				const sockets = await global.jay.fetchSockets()
+				sockets.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
 			},
 			getLogMsg : (_socket, ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기 (ws에서만 존재해야 함)
 				let _msg = '', _stack = ''
