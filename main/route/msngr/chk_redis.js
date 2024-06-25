@@ -1,4 +1,5 @@
 const config = require('../../config')
+const nodeConfig = require(config.app.nodeConfig)
 const ws = require(nodeConfig.app.ws)
 const express = require('express')
 const router = express.Router()

@@ -1,4 +1,5 @@
 const config = require('../config')
+const nodeConfig = require(config.app.nodeConfig)
 const ws = require(nodeConfig.app.ws)
 const wsmysql = require(nodeConfig.app.wsmysql)
 //새 채팅방을 개설하기 전에 기존에 같은 멤버들의 방이 있으면 그 방을 열기. 퇴장한 후라도 이미 이전 데이터는 삭제되었으므로 문제없음
