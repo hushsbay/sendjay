@@ -31,14 +31,13 @@ module.exports = (function() {
 			CODE_TOKEN_EXPIRED : '-84',
 			CODE_USERCOOKIE_MISMATCH : '-85',
 			mysql_close_error : 'mysql_close_error',
-			toast_prefix : '##$$', //클라이언트와 동일
+			toast_prefix : '##$$', //클라이언트와 동일해야 함
 			deli : '##',
 			subdeli : '$$',
 			indeli : "','", //Use this for sql where in clause.
 			easydeli : ';', //Use this for absolutely safe place.
 			memdeli : ' / ',
 			keydeli : KEYDELI, 
-			/////////////////////////////////////////////아래는 메신저 관련
 			title : 'sendjay',
 			w_key : 'W' + KEYDELI, //Web userkey
 			m_key : 'M' + KEYDELI, //Mobile userkey
@@ -46,7 +45,7 @@ module.exports = (function() {
 			pattern : PREFIX + '*', //redis pub/sub				
 			key_str_winid : PREFIX + 'W', //redis strings (userkey+deli+winid prefix added) - get winid for auto launch
 			key_str_socket : PREFIX + 'S', //redis strings (userkey+deli+socketid prefix added) - get socketid
-			//key_set_us : PREFIX + 'US', //redis set - prefix+'S'+userkey+deli+socketid
+			//key_set_us : PREFIX + 'US', //redis set - prefix+'S'+userkey+deli+socketid //지우지는 말 것 (주석으로 막은 코딩 있음)
 			scan_stream_cnt : 100, //means scanning count at a time, not whole count to scan. https://www.gitmemory.com/issue/luin/ioredis/908/511472853. Without count param, Something unexpectable might be happend ?!.
 			sock_ev_alert : 'alert',
 			sock_ev_toast : 'toast',
@@ -67,12 +66,11 @@ module.exports = (function() {
 			sock_ev_rename_room : 'rename_room',
 			sock_ev_set_env : 'set_env',
 			sock_ev_chk_typing : 'chk_typing',
-			//sock_ev_cut_mobile : 'cut_mobile',	
 			sock_ev_chk_roomfocus : 'chk_roomfocus',
 			max_diff_sec_worker : 5 * 2, //SEC in worker.js * 2		
 			max_days_to_fetch : -365, //For sql where : 조회 및 worker.js에서 함께 사용 (오래된 데이터 물리적인 삭제 아닌 논리적 삭제만 적용함. 더 상세처리는 각자 알아서 정책 만들어 적용하기)
-			max_check_same_members : 50, //Consider up to 50 and no more. max 1500 bytes for members field in z_roommem_tbl. userid(20) + alpha = 21 * 50 = 1050 bytes.
-			max_people_to_display : 3, //Consider up to 10 and no more. max 800 bytes for roomnm field in z_roommst_tbl. usernm(50) + userid(20) + alpha = 80 * 10 = 800 bytes.
+			max_check_same_members : 50, //Consider up to 50 and no more. max 1500 bytes for members field in z_roommem_tbl. userid(20) + alpha = 21 * 50 = 1050 bytes
+			max_people_to_display : 3, //Consider up to 10 and no more. max 800 bytes for roomnm field in z_roommst_tbl. usernm(50) + userid(20) + alpha = 80 * 10 = 800 bytes
 			max_hours_to_filesave : 1, //max_days_to_filesave : 1, //File's expiry
 			max_hours_to_endure_upload : -4, //worker.js 파일업로드 사작후 4시간이 지나도 완료되지 않으면 가비지로 간주하고 제거
 			max_nicknm_len : 100, //same as client's
@@ -81,10 +79,10 @@ module.exports = (function() {
 			max_filecount : 50, //per user
 			max_size_to_sublink : 5242880, //5MB. same as client's
 			cell_revoked : 'message cancelled',
-			file_expired : 'expired', //Used in daemon and client too.
+			file_expired : 'expired', //Used in daemon and client too
 			sublink_ext_image : 'png,gif,jpg,jpeg,ico',
-			sublink_ext_video : 'mp4', //File format which supports html5 streaming.
-			sublink_result_img : '.png', //ffmpeg converts screenshot to png.
+			sublink_ext_video : 'mp4', //File format which supports html5 streaming
+			sublink_result_img : '.png', //ffmpeg converts screenshot to png
 		},
 
 		http : {

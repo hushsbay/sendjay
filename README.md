@@ -50,7 +50,7 @@ Here are some ideas to get you started:
 
    ### package.json
 
-   적용된 npm list는 아래와 같습니다.<br/>
+   적용된 npm list는 아래와 같습니다.
    ```
    {
       "dependencies": {
@@ -75,7 +75,7 @@ Here are some ideas to get you started:
    }
    ```
 
-   ### start.bat
+   ### start.bat (c:/nodeops/hushsbay/main)
 
    PC 브라우저에서 호출되는 Node.js서버는 아래와 같이 구동됩니다.
    ```
@@ -92,7 +92,7 @@ Here are some ideas to get you started:
    node app
    ```
 
-   ### start1.bat
+   ### start1.bat (c:/nodeops/hushsbay/main)
 
    모바일앱에서 호출되는 Node.js서버는 아래와 같이 구동됩니다.
    ```
