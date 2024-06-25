@@ -116,7 +116,7 @@ Here are some ideas to get you started:
    set FFMPEG_PATH=c:/ffmpeg/bin/ffmpeg.exe
    node app
    ```
-
+   
    Sendjay는 템플릿 개념의 프로젝트이므로 PM2 등의 모듈을 사용하지 않고 node app으로 단순 구동했습니다.<br/>
 
    ### nodeConfig.js (c:/nodeops)
