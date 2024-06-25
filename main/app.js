@@ -47,10 +47,15 @@ io.adapter(redisAdapter(global.pub, sub))
 io.listen(config.sock.port)
 global.jay = io.of('/' + config.sock.namespace)
 
-global.jay.on('connection', async (socket) => {
-	const sockets = await io.of('/' + config.sock.namespace).fetchSockets()
+global.jay.on('connection', async (socket) => { //https://socket.io/docs/v4/server-api/
+	const sockets = await global.jay.fetchSockets() //sockets.emit(~)
+	//const sockets = await io.in("room1").fetchSockets() // return all Socket instances in the "room1" room of the main namespace
 	console.log('socket count :', sockets.length)
-	//const sockets1 = await redisAdapter.fetchSockets() //둘 다 오류 발생
+	for (let item in sockets) {
+		let xx = global.jay.in(item.id).id
+		console.log(item.id, "=========", xx)
+	}
+
 	const _logTitle = 'connect'	
 	try {
 		const queryParam = socket.handshake.query
