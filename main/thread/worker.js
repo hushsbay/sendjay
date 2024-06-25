@@ -5,9 +5,9 @@ const wsmysql = require(nodeConfig.app.wsmysql)
 const wslogger = require(nodeConfig.app.wslogger)(config.app.logPath, 'hushsbay')
 const fs = require('fs')
 
-global.nodeConfig = nodeConfig
+//global.nodeConfig = nodeConfig
 global.logger = wslogger
-global.pool = wsmysql.createPool(config.mysql.schema, true)
+global.pool = wsmysql.createPool(config.mysql.schema)
 
 const TITLE = 'worker'
 console.log('starting thread: ' + TITLE)

@@ -10,7 +10,7 @@ module.exports = function(logPath, title) {
       return `${timestamp} [${level}] ${message}` //return `${timestamp} [${label}] ${level}: ${message}`; // 날짜 [시스템이름] 로그레벨 메세지
    })
 
-   //가장 큰 단점은 console.log(a, b, c ..)처럼 여러 항목으로 표시가 안되고 a 한개의 항목으로만 표시된다는 것임
+   //console.log(a, b, c ..)처럼 ,를 이용해 여러 항목으로 표시가 안되고 a 한개의 항목으로만 표시됨
    //Log Level => error: 0, warn: 1, info: 2, http: 3, verbose: 4, debug: 5, silly: 6
    const logger = winston.createLogger({
       format: combine( //로그 출력 형식 정의
@@ -18,8 +18,8 @@ module.exports = function(logPath, title) {
          label({ label: title }), 
          logFormat, //? format: combine() 에서 정의한 timestamp와 label 형식값이 logFormat에 들어가서 정의되게 된다. level이나 message는 콘솔에서 자동 정의
       ),
-      transports: [ //실제 로그를 어떻게 기록을 한 것인가 정의
-         new winstonDaily({ //info 레벨 로그를 저장할 파일 설정 (info: 2 보다 높은 error: 0 와 warn: 1 로그들도 자동 포함해서 저장)
+      transports: [ //실제 로그를 어떻게 기록을 할 것인가 정의
+         new winstonDaily({ //info 레벨 로그를 저장할 파일 설정 (이 경우, info: 2 보다 높은 error: 0 와 warn: 1 로그들도 자동 포함해서 저장)
             level: 'info', // info 레벨에선
             datePattern: 'YYYY-MM-DD', // 파일 날짜 형식
             dirname: logDir, // 파일 경로

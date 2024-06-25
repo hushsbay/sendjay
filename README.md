@@ -147,7 +147,7 @@ Here are some ideas to get you started:
    ```
 
 
-# 구현된 기능
+# 구현 기능 (메시징 관점에서)
 
 
 # 주요 특징 (메시징 관점에서)

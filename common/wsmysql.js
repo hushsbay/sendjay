@@ -100,7 +100,7 @@ module.exports = (function() {
 			try { 
 				if (conn) conn.release() 
 			} catch (ex) { 
-				ws.util.loge(ws.cons.mysql_close_error, title) 
+				ws.util.loge('mysql_close_error', title) 
 			}
 		}
 

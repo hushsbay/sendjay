@@ -30,7 +30,6 @@ module.exports = (function() {
 			CODE_USERINFO_MISMATCH : '-83',
 			CODE_TOKEN_EXPIRED : '-84',
 			CODE_USERCOOKIE_MISMATCH : '-85',
-			mysql_close_error : 'mysql_close_error',
 			toast_prefix : '##$$', //클라이언트와 동일해야 함
 			deli : '##',
 			subdeli : '$$',
@@ -132,15 +131,17 @@ module.exports = (function() {
 
 		jwt : {
 			make : (userInfo, _key) => { //userInfo = { userid }
-				const key = _key || global.nodeConfig.jwt.key
-				return jwt.sign(userInfo, key, { algorithm : global.nodeConfig.jwt.algo, expiresIn : global.nodeConfig.jwt.expiry })
+				//const key = _key || global.nodeConfig.jwt.key
+				//return jwt.sign(userInfo, key, { algorithm : global.nodeConfig.jwt.algo, expiresIn : global.nodeConfig.jwt.expiry })
+				const key = _key || nodeConfig.jwt.key
+				return jwt.sign(userInfo, key, { algorithm : nodeConfig.jwt.algo, expiresIn : nodeConfig.jwt.expiry })
 			},
 			verify : (tokenInfo, _key) => { //tokenInfo = { token, userid } //여기서는 orgcd, toporgcd 체크하지 않음
 				return new Promise((resolve, reject) => {
 					try {
 						const token = tokenInfo.token
 						const userid = tokenInfo.userid
-						const key = _key || global.nodeConfig.jwt.key			
+						const key = _key || nodeConfig.jwt.key			//const key = _key || global.nodeConfig.jwt.key			
 						let rs = ws.http.resInit()
 						if (!token) {
 							rs.code = ws.cons.CODE_TOKEN_NEEDED

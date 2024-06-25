@@ -3,15 +3,15 @@ const nodeConfig = require(config.app.nodeConfig)
 const ws = require(nodeConfig.app.ws)
 const wsmysql = require(nodeConfig.app.wsmysql)
 const wslogger = require(nodeConfig.app.wslogger)(config.app.logPath, 'hushsbay')
-const Redis = require('ioredis') //not redis npm => redisAdapter로 할 수 없는 것들을 각 서버별로 store.publish를 통해 모두 처리하는 개념임
 const { Server } = require('socket.io')
+const Redis = require('ioredis') //not redis npm => redisAdapter로 할 수 없는 것들을 각 서버별로 store.publish를 통해 모두 처리하는 개념임
 const redisAdapter = require('@socket.io/redis-adapter') //특히, sockets set에서 각 socket을 바로 뽑기 힘들어 ioredis의 global.store.scanStream으로 처리
 const { Worker } = require('worker_threads')
 
 const DIR_PUBSUB = './pubsub/', DIR_SOCKET = './socket/'
 const PING_TIMEOUT = 5000, PING_INTERVAL = 25000 //default
 
-global.nodeConfig = nodeConfig
+//global.nodeConfig = nodeConfig
 global.logger = wslogger
 global.pool = wsmysql.createPool(config.mysql.schema, true)
 
