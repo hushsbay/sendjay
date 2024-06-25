@@ -1,4 +1,5 @@
 const config = require('./config')
+const nodeConfig = require(config.app.nodeConfig)
 const fs = require('fs')
 const http = require('http')
 const https = require('https')
