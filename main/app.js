@@ -51,7 +51,7 @@ global.jay.on('connection', async (socket) => { //https://socket.io/docs/v4/serv
 	const sockets = await global.jay.fetchSockets() //sockets.emit(~)
 	//const sockets = await io.in("room1").fetchSockets() // return all Socket instances in the "room1" room of the main namespace
 	console.log('socket count :', sockets.length)
-	for (let item in sockets) {
+	for (let item of sockets) {
 		let xx = global.jay.in(item.id).id
 		console.log(item.id, "=========", xx)
 	}
