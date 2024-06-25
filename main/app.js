@@ -48,11 +48,11 @@ io.listen(config.sock.port)
 global.jay = io.of('/' + config.sock.namespace)
 
 global.jay.on('connection', async (socket) => { //https://socket.io/docs/v4/server-api/
-	const sockets = await global.jay.fetchSockets() //sockets.emit(~)
+	const sockets = await global.jay.fetchSockets()
 	//const sockets = await io.in("room1").fetchSockets() // return all Socket instances in the "room1" room of the main namespace
 	console.log('socket count :', sockets.length)
 	for (let item of sockets) {
-		let xx = global.jay.in(item.id)
+		const xx = await io.in(item.id).fetchSockets()
 		console.log(item.id, "=========", xx.id)
 	}
 
