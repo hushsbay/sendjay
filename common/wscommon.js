@@ -134,6 +134,7 @@ module.exports = (function() {
 				//const key = _key || global.nodeConfig.jwt.key
 				//return jwt.sign(userInfo, key, { algorithm : global.nodeConfig.jwt.algo, expiresIn : global.nodeConfig.jwt.expiry })
 				const key = _key || nodeConfig.jwt.key
+				console.log(key, "@@@@@@@@@@")
 				return jwt.sign(userInfo, key, { algorithm : nodeConfig.jwt.algo, expiresIn : nodeConfig.jwt.expiry })
 			},
 			verify : (tokenInfo, _key) => { //tokenInfo = { token, userid } //여기서는 orgcd, toporgcd 체크하지 않음
@@ -141,7 +142,8 @@ module.exports = (function() {
 					try {
 						const token = tokenInfo.token
 						const userid = tokenInfo.userid
-						const key = _key || nodeConfig.jwt.key			//const key = _key || global.nodeConfig.jwt.key			
+						const key = _key || nodeConfig.jwt.key			//const key = _key || global.nodeConfig.jwt.key		
+						console.log(key, "@@@@@@@@@@###########")	
 						let rs = ws.http.resInit()
 						if (!token) {
 							rs.code = ws.cons.CODE_TOKEN_NEEDED
