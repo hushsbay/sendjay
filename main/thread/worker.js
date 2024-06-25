@@ -5,7 +5,6 @@ const wsmysql = require(nodeConfig.app.wsmysql)
 const wslogger = require(nodeConfig.app.wslogger)(config.app.logPath, 'hushsbay')
 const fs = require('fs')
 
-//global이므로 global.을 빼고 사용해도 되나 명시적으로 붙여서 사용하기로 함
 global.logger = wslogger
 global.pool = wsmysql.createPool(config.mysql.schema)
 
@@ -18,14 +17,14 @@ async function proc() {
     try {
         conn = await wsmysql.getConnFromPool(global.pool)
         await wsmysql.txBegin(conn)
-        //1) 특정 기간 (예: 1년) 지나면 논리적인 삭제 처리 - 향후 물리적인 삭제 또는 백업(이동) 등은 정책적으로 결정해 처리하는 것으로 진행하기로 함.
-        //   UDT에는 원래 삭제여부를 표시 (한번에 처리하니 UDT에 모두 D로 들어가서 부득이하게 나눔). 하루에 한번만 처리해도 되는 루틴이라 부하시 별도 분리 처리하는 것이 좋을 것임
+        //1) 특정 기간 (예: 1년) 지나면 논리적인 삭제 처리 - 향후 물리적인 삭제 또는 백업(이동) 등은 정책적으로 결정해 처리하는 것으로 진행하면 됨
+        //UDT에는 원래 삭제여부를 표시 (한번에 처리하니 UDT에 모두 D로 들어가서 부득이하게 아래처럼 나눔). 하루에 한번만 처리해도 되는 루틴이라 부하시 별도 분리 처리하는 것이 좋을 것임
         const sqlWhere = "WHERE STATE IN ('', 'R') AND CDT < DATE_ADD(sysdate(), INTERVAL " + ws.cons.max_days_to_fetch + " DAY) "
-        sql = "UPDATE A_MSGDTL_TBL SET UDT = STATE " + sqlWhere
+        sql = "UPDATE A_MSGDTL_TBL SET UDT = STATE " + sqlWhere //일종의 필드 백업
         await wsmysql.query(conn, sql, null)
         sql = "UPDATE A_MSGDTL_TBL SET STATE = 'D' " + sqlWhere
         await wsmysql.query(conn, sql, null)
-        sql = "UPDATE A_MSGMST_TBL SET UDT = STATE " + sqlWhere
+        sql = "UPDATE A_MSGMST_TBL SET UDT = STATE " + sqlWhere //일종의 필드 백업
         await wsmysql.query(conn, sql, null)
         sql = "UPDATE A_MSGMST_TBL SET STATE = 'D' " + sqlWhere
         await wsmysql.query(conn, sql, null)
@@ -37,7 +36,7 @@ async function proc() {
         sql += " FROM A_MSGMST_TBL "
         sql += "WHERE TYP in ('file', 'flink') "
         sql += "  AND FILESTATE <> ? "
-        sql += "  AND (FILESTATE < sysdate() OR STATE = 'D' OR STATE2 = 'C') " //만료되었거나 메시지가 삭제 또는 전송취소된 것도 파일은 물리적 삭제 => 모두 만료로 표시        
+        sql += "  AND (FILESTATE < sysdate() OR STATE = 'D' OR STATE2 = 'C') " //만료되었거나 메시지가 삭제/전송취소된 것의 파일을 물리적 삭제 => 모두 만료로 표시        
         data = await wsmysql.query(conn, sql, [ws.cons.file_expired])
         _len = data.length
         for (let i = 0; i < _len; i++) {
@@ -65,8 +64,7 @@ async function proc() {
             await wsmysql.query(conn, "UPDATE A_FILELOG_TBL SET UDT = sysdate() WHERE MSGID = ? AND ROOMID = ? ", [_msgid, _roomid]) 
             if (data2[0].CNT >= 1) {
                 //no garbage
-            } else { //garbage : 제거해야 함
-                //console.log(_filename+"$$$$$$$$$$")
+            } else { //garbage이므로 제거해야 함
                 deleteFileAndRemoveEmptyFolderFromChild(_path, _filename, 'garbage')
             }
         }

@@ -142,7 +142,7 @@ for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/
 
 if (config.app.mainserver == 'Y') {
 	const worker = new Worker('./thread/worker.js')
-	//현재는 리턴되는 메시지 없음
+	//현재는 리턴되는 메시지 없음 : 만료된 파일, 가비지 등 주기적 삭제 처리
 }
 
 ws.util.watchProcessError()
