@@ -4,14 +4,14 @@ const ws = require(nodeConfig.app.ws)
 const wsmysql = require(nodeConfig.app.wsmysql)
 const wslogger = require(nodeConfig.app.wslogger)(config.app.logPath, 'hushsbay')
 const { Server } = require('socket.io')
-const Redis = require('ioredis') //not redis npm => redisAdapter로 할 수 없는 것들을 각 서버별로 store.publish를 통해 모두 처리하는 개념임
-const redisAdapter = require('@socket.io/redis-adapter') //특히, sockets set에서 각 socket을 바로 뽑기 힘들어 ioredis의 global.store.scanStream으로 처리
+const Redis = require('ioredis') //not redis npm => redisAdapter로 할 수 없는 것들을 각 서버별로 store.publish를 통해 모두 처리
+const redisAdapter = require('@socket.io/redis-adapter') //현재, sockets set에서 각 socket을 바로 get하는 것을 찾지 못해 ioredis의 global.store.scanStream으로 get하고 있음
 const { Worker } = require('worker_threads')
 
 const DIR_PUBSUB = './pubsub/', DIR_SOCKET = './socket/'
 const PING_TIMEOUT = 5000, PING_INTERVAL = 25000 //default
 
-//global.nodeConfig = nodeConfig
+//global이므로 global.을 빼고 사용해도 되나 명시적으로 붙여서 사용하기로 함
 global.logger = wslogger
 global.pool = wsmysql.createPool(config.mysql.schema, true)
 
@@ -34,18 +34,22 @@ global.pub.on('error', err => console.error('ioredis pub error :', err.stack))
 sub.psubscribe(ws.cons.pattern, (err, count) => { console.log('ioredis psubscribe pattern : ' + ws.cons.pattern) })
 sub.on('pmessage', (pattern, channel, message) => { require(DIR_PUBSUB + 'pmessage')(pattern, channel, message) })
 sub.on('error', err => { console.error('ioredis sub error:', err.stack) })
-//현재 Redis가 멀티서버에서의 소켓연결정보 관리에만 사용중이므로 NodeJS 재시작시 해당 redis데이터베이스내 데이터를 모두 지우는 것이 가비지정리 등에도 좋을 것임
 if (config.app.mainserver == 'Y') global.store.flushdb(function(err, result) { console.log('redis db flushed :', result) })
+//현재 Redis가 멀티서버에서의 소켓연결정보 관리에만 사용중이므로 NodeJS 재시작시 해당 redis데이터베이스내 데이터를 모두 지우는 것이 가비지 정리 등에도 좋을 것임 (다른 곳에 사용되면 문제없는지 테스트 필요)
 
 //3. Socket Server (with Redis Adapter)
 const appSocket = ws.util.initExpressApp()
 const socketServer = ws.util.createWas(appSocket, config.http.method) //not https (because of aws elastic load balancer)
-const io = new Server(socketServer, { allowEIO3: false, autoConnect: true, pingTimeout: PING_TIMEOUT, pingInterval: PING_INTERVAL, cors: { origin: config.app.corsSocket, methods: ["GET", "POST"] }})
+const io = new Server(socketServer, { //여기 Server는 socket.io
+	allowEIO3: false, autoConnect: true, pingTimeout: PING_TIMEOUT, pingInterval: PING_INTERVAL, cors: { origin: config.app.corsSocket, methods: ["GET", "POST"] }
+})
 io.adapter(redisAdapter(global.pub, sub))
 io.listen(config.sock.port)
 global.jay = io.of('/' + config.sock.namespace)
+
 global.jay.on('connection', async (socket) => {
-	//const sockets = await io.of('/' + config.sock.namespace).adapter.fetchSockets()
+	const sockets = await io.of('/' + config.sock.namespace).fetchSockets()
+	console.log('socket count :', sockets.size)
 	//const sockets1 = await redisAdapter.fetchSockets() //둘 다 오류 발생
 	const _logTitle = 'connect'	
 	try {

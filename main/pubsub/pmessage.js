@@ -1,7 +1,8 @@
 const config = require('../config')
 const nodeConfig = require(config.app.nodeConfig)
 const ws = require(nodeConfig.app.ws)
-//ioredis with sub.psubscribe() : 특정 socket서버로 전달된 메시지로 그 서버내에서 처리
+//global.pub.publish(ws.cons.prefix + pubKey, JSON.stringify(obj)) from ws.redis.pub(pubKey~)
+//ioredis with sub.psubscribe() : 위 메소드를 통해 각 socket서버로 전달된 메시지를 그 서버내에서 처리
 
 module.exports = async (pattern, channel, message) => {
 	

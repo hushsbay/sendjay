@@ -5,7 +5,7 @@ const wsmysql = require(nodeConfig.app.wsmysql)
 const wslogger = require(nodeConfig.app.wslogger)(config.app.logPath, 'hushsbay')
 const fs = require('fs')
 
-//global.nodeConfig = nodeConfig
+//global이므로 global.을 빼고 사용해도 되나 명시적으로 붙여서 사용하기로 함
 global.logger = wslogger
 global.pool = wsmysql.createPool(config.mysql.schema)
 

@@ -131,10 +131,7 @@ module.exports = (function() {
 
 		jwt : {
 			make : (userInfo, _key) => { //userInfo = { userid }
-				//const key = _key || global.nodeConfig.jwt.key
-				//return jwt.sign(userInfo, key, { algorithm : global.nodeConfig.jwt.algo, expiresIn : global.nodeConfig.jwt.expiry })
 				const key = _key || nodeConfig.jwt.key
-				console.log(key, "@@@@@@@@@@")
 				return jwt.sign(userInfo, key, { algorithm : nodeConfig.jwt.algo, expiresIn : nodeConfig.jwt.expiry })
 			},
 			verify : (tokenInfo, _key) => { //tokenInfo = { token, userid } //여기서는 orgcd, toporgcd 체크하지 않음
@@ -142,8 +139,7 @@ module.exports = (function() {
 					try {
 						const token = tokenInfo.token
 						const userid = tokenInfo.userid
-						const key = _key || nodeConfig.jwt.key			//const key = _key || global.nodeConfig.jwt.key		
-						console.log(key, "@@@@@@@@@@###########")	
+						const key = _key || nodeConfig.jwt.key
 						let rs = ws.http.resInit()
 						if (!token) {
 							rs.code = ws.cons.CODE_TOKEN_NEEDED
@@ -534,15 +530,15 @@ module.exports = (function() {
 				if (public) _app.use(express.static(public))
 				return _app
 			},
-			createWas : (_app, _kind) => {
+			createWas : (_app, _kind) => { //프로젝트 hushsbay는 aws 기반(https는 로드밸런서인 CLB 이용)이므로 내부에서는 https가 아닌 http로 설정
 				let server
-				if (_kind == 'https') { //프로젝트 hushsbay는 aws 기반(https는 로드밸런서CLB 이용)이므로 여기서는 https가 아닌 http로 설정
+				if (_kind == 'https') {
 					const sslOption = { key: fs.readFileSync(nodeConfig.ssl.key, 'utf-8'), cert: fs.readFileSync(nodeConfig.ssl.cert, 'utf-8') }
 					server = https.Server(sslOption, _app)
 				} else {
 					server = http.Server(_app)
 				}
-				server.keepAliveTimeout = 120000
+				server.keepAliveTimeout = 120000 //AWS ALB보다 Node.js에서 더 길게 잡아야 ??!!
 				return server
 			},
 			isvoid : (obj) => { //"0", 0, 등의 경우는 유효할 경우도 고려해야 하므로 아래 2가지 경우만 체크하는 함수임
