@@ -11,7 +11,7 @@ const { Worker } = require('worker_threads')
 const DIR_PUBSUB = './pubsub/', DIR_SOCKET = './socket/'
 const PING_TIMEOUT = 5000, PING_INTERVAL = 25000 //default
 
-global.nodeConfig = nodeConfig
+//global.nodeConfig = nodeConfig
 global.logger = wslogger
 global.pool = wsmysql.createPool(config.mysql.schema, true)
 
