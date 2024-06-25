@@ -48,7 +48,7 @@ module.exports = (function() {
 			scan_stream_cnt : 100, //means scanning count at a time, not whole count to scan. https://www.gitmemory.com/issue/luin/ioredis/908/511472853. Without count param, Something unexpectable might be happend ?!
 			sock_ev_alert : 'alert',
 			sock_ev_toast : 'toast',
-			sock_ev_disconnect : "disconnect",
+			sock_ev_disconnect : "disconnect", //disconnect로 써야 함 (socket.io event)
 			sock_ev_common : 'common', //Belows are handled in this sock_ev_common event.
 			sock_ev_chk_alive : 'chk_alive',
 			sock_ev_show_off : 'show_off',
