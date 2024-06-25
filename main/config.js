@@ -15,14 +15,10 @@ module.exports = {
 	},
 	app : {
 		nodeConfig : process.env.NODE_CONFIG,
-		//ws : process.env.MODULE_COMMON,
-		//wsmysql : process.env.MODULE_MYSQL,
 		corsRestful : ['https://hushsbay.com'], //Array type. Same origin이 없어도 됨
 		corsSocket : 'https://hushsbay.com', //Non-array type. Same origin이 들어 있어야 함
-		//wslogger : process.env.MODULE_LOGGER,
 		logPath : process.env.LOG_PATH,
 		mainserver : process.env.MAIN_SERVER,
-		uploadPath : process.env.UPLOAD_PATH,
-		//ffmpegPath : process.env.FFMPEG_PATH,
+		uploadPath : process.env.UPLOAD_PATH
 	}
 }

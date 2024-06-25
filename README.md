@@ -80,9 +80,6 @@ Here are some ideas to get you started:
    PC 브라우저에서 호출되는 Node.js서버는 아래와 같이 구동됩니다.
    ```
    set NODE_CONFIG=c:/nodeops/nodeconfig.js
-   set MODULE_COMMON=c:/nodeops/hushsbay/common/wscommon.js
-   set MODULE_LOGGER=c:/nodeops/hushsbay/common/wslogger.js
-   set MODULE_MYSQL=c:/nodeops/hushsbay/common/wsmysql.js
    set MYSQL_SCHEMA=jay
    set HTTP_METHOD=http
    set HTTP_PORT=80
@@ -92,7 +89,6 @@ Here are some ideas to get you started:
    set MAIN_SERVER=Y
    set LOG_PATH=c:/nodeops/log/hushsbay
    set UPLOAD_PATH=c:/nodeops/upload/hushsbay
-   set FFMPEG_PATH=c:/ffmpeg/bin/ffmpeg.exe
    node app
    ```
 
@@ -101,9 +97,6 @@ Here are some ideas to get you started:
    모바일앱에서 호출되는 Node.js서버는 아래와 같이 구동됩니다.
    ```
    set NODE_CONFIG=c:/nodeops/nodeconfig.js
-   set MODULE_COMMON=c:/nodeops/hushsbay/common/wscommon.js
-   set MODULE_LOGGER=c:/nodeops/hushsbay/common/wslogger.js
-   set MODULE_MYSQL=c:/nodeops/hushsbay/common/wsmysql.js
    set MYSQL_SCHEMA=jay
    set HTTP_METHOD=http
    set HTTP_PORT=81
@@ -113,7 +106,6 @@ Here are some ideas to get you started:
    set MAIN_SERVER=N
    set LOG_PATH=c:/nodeops/log/hushsbay
    set UPLOAD_PATH=c:/nodeops/upload/hushsbay
-   set FFMPEG_PATH=c:/ffmpeg/bin/ffmpeg.exe
    node app
    ```
    
@@ -142,6 +134,14 @@ Here are some ideas to get you started:
       },
       "crypto" : {
          "key" : "xxx" //32bytes
+      },
+      "app" : {
+         "ws" : "c:/nodeops/hushsbay/common/wscommon.js",
+         "wsmysql" : "c:/nodeops/hushsbay/common/wsmysql.js",
+         "wslogger" : "c:/nodeops/hushsbay/common/wslogger.js"
+      },
+      "path" : {
+         "ffmpeg" : "c:/ffmpeg/bin/ffmpeg.exe"
       }
    }
    ```
