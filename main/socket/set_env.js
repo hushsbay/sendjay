@@ -24,8 +24,6 @@ module.exports = async function(socket, param) {
 				socket.emit(ws.cons.sock_ev_common, param)	 
 			}					
 		} else if (_kind == 'userinfo') {
-			console.log("=============userinfo")
-			//ws.sock.broadcast(socket, ws.cons.sock_ev_set_env, param.data, 'all')
 			ws.sock.broadcast(ws.cons.sock_ev_set_env, param.data, 'all')
 		} //ws.sock.warn(null, socket, _logTitle, com.cons.rs + JSON.stringify(param))
 	} catch (ex) {
