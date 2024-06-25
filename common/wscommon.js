@@ -7,7 +7,7 @@ const express = require('express')
 const requestIp = require('request-ip')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
-const wsmysql = require(config.app.wsmysql)
+const wsmysql = require(nodeConfig.app.wsmysql)
 const jwt = require('jsonwebtoken')
 
 module.exports = (function() {

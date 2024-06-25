@@ -1,5 +1,5 @@
 const config = require('../config')
-const ws = require(config.app.ws)
+const ws = require(nodeConfig.app.ws)
 
 //미사용하는 것으로 .. 다시 체크해보기
 

@@ -1,5 +1,5 @@
 const config = require('../config')
-const ws = require(config.app.ws)
+const ws = require(nodeConfig.app.ws)
 //ioredis with sub.psubscribe() : 특정 socket서버로 전달된 메시지로 그 서버내에서 처리
 
 module.exports = async (pattern, channel, message) => {

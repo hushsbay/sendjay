@@ -1,5 +1,5 @@
 const config = require('../../config')
-const ws = require(config.app.ws)
+const ws = require(nodeConfig.app.ws)
 const express = require('express')
 const ogs = require('open-graph-scraper') //@4.7.1 적용. 최신 버전은 오류 발생 (fix 필요) https://balmostory.tistory.com/50
 const router = express.Router()

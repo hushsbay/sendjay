@@ -1,7 +1,7 @@
 const config = require('../config')
 const nodeConfig = require(config.app.nodeConfig)
-const ws = require(config.app.ws)
-const wsmysql = require(config.app.wsmysql)
+const ws = require(nodeConfig.app.ws)
+const wsmysql = require(nodeConfig.app.wsmysql)
 const wslogger = require(nodeConfig.app.wslogger)(config.app.logPath, 'hushsbay')
 const fs = require('fs')
 

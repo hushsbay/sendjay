@@ -1,7 +1,7 @@
 const config = require('./config')
 const nodeConfig = require(config.app.nodeConfig)
-const ws = require(config.app.ws)
-const wsmysql = require(config.app.wsmysql)
+const ws = require(nodeConfig.app.ws)
+const wsmysql = require(nodeConfig.app.wsmysql)
 const wslogger = require(nodeConfig.app.wslogger)(config.app.logPath, 'hushsbay')
 const Redis = require('ioredis') //not redis npm => redisAdapter로 할 수 없는 것들을 각 서버별로 store.publish를 통해 모두 처리하는 개념임
 const { Server } = require('socket.io')

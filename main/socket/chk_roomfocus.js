@@ -1,5 +1,5 @@
 const config = require('../config')
-const ws = require(config.app.ws)
+const ws = require(nodeConfig.app.ws)
 
 module.exports = function(socket, param) {
 	const _logTitle = param.ev

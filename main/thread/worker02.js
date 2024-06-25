@@ -1,6 +1,6 @@
 const config = require('../config')
 const nodeConfig = require(config.app.nodeConfig)
-const ws = require(config.app.ws)
+const ws = require(nodeConfig.app.ws)
 const { parentPort } = require('worker_threads')
 
 //미사용 - 오래된 코딩 (just 참고용)

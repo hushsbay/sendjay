@@ -1,6 +1,6 @@
 const config = require('./config')
 const nodeConfig = require(config.app.nodeConfig)
-const ws = require(config.app.ws)
+const ws = require(nodeConfig.app.ws)
 const mysql = require('mysql2')
 
 module.exports = (function() {

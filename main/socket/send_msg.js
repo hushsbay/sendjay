@@ -1,6 +1,6 @@
 const config = require('../config')
-const ws = require(config.app.ws)
-const wsmysql = require(config.app.wsmysql)
+const ws = require(nodeConfig.app.ws)
+const wsmysql = require(nodeConfig.app.wsmysql)
 
 //type = leave, invite, check, notice, flink, talk
 //image, file는 chat.html에서 구분값으로 넘기나 결국은 서버에 넘길 때는 notice로 type이 넘어가므로 서버에서는 미사용 (실데이터는 ajax로 처리) 

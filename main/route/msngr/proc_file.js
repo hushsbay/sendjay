@@ -1,6 +1,6 @@
 const config = require('../../config')
-const ws = require(config.app.ws)
-const wsmysql = require(config.app.wsmysql)
+const ws = require(nodeConfig.app.ws)
+const wsmysql = require(nodeConfig.app.wsmysql)
 const fs = require('fs-extra') //not fs
 const url = require('url')
 const mime = require('mime') //@4.x는 require()시 오류 발생 (@3.0.0 사용함)
@@ -14,7 +14,7 @@ const procScreenShot = (req, filename, filepath, filedir) => {
 		try {			
 			const new_filename = filename + ws.cons.sublink_result_img
 			const ffMpeg = new ffmpeg({ source: filepath, nolog: true })
-			ffMpeg.setFfmpegPath(config.app.ffmpegPath)
+			ffMpeg.setFfmpegPath(nodeConfig.path.ffmpeg)
 			ffMpeg.takeScreenshots({ timemarks : ['00:00:05.000'], size : '320x320', filename : new_filename }, filedir)
 			.on('error', function(err) {
 				console.log('ffmpeg error : ' + err + ' ==> ' + filepath) //나중에 제거

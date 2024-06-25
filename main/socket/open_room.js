@@ -1,6 +1,6 @@
 const config = require('../config')
-const ws = require(config.app.ws)
-const wsmysql = require(config.app.wsmysql)
+const ws = require(nodeConfig.app.ws)
+const wsmysql = require(nodeConfig.app.wsmysql)
 //remoteJoining room for valid socket
 
 module.exports = async function(socket, param) { 
