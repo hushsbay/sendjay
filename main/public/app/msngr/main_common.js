@@ -270,6 +270,7 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             procSelect(_userid)
         })  
         $(".chkbox_people").css("visibility", "visible")
+        alert("333")
         sendChkAlive(userkeyArr)
         return true
     } catch (ex) {
@@ -281,6 +282,7 @@ const sendChkAlive = (userkeyArr) => {
     const dataObj = { userkeys : userkeyArr }
     if (hush.webview.ios) {
     } else if (hush.webview.and) {
+        alert(JSON.stringify(dataObj))
         setTimeout(function() {
             AndroidCom.send(hush.cons.sock_ev_chk_alive, JSON.stringify(dataObj), null, null, false)
         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
@@ -1013,6 +1015,7 @@ var funcSockEv = { //needs to be public
     [hush.cons.sock_ev_connect] : (data) => { //mobile only
         //Be careful that Socket.EVENT_CONNECT occurred many times at a moment. => from ChatService.kt (socket.io 초기버전 이야기?!)
         toggleDisconnIcon(false)
+        alert(g_mode+"000")
         if (g_mode == BTN_MODE_PEOPLE) {
             alert("111")
             const userkeyArr = []
