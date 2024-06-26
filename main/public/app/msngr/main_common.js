@@ -270,7 +270,6 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             procSelect(_userid)
         })  
         $(".chkbox_people").css("visibility", "visible")
-        alert("333")
         sendChkAlive(userkeyArr)
         return true
     } catch (ex) {
@@ -1015,15 +1014,12 @@ var funcSockEv = { //needs to be public
     [hush.cons.sock_ev_connect] : (data) => { //mobile only
         //Be careful that Socket.EVENT_CONNECT occurred many times at a moment. => from ChatService.kt (socket.io 초기버전 이야기?!)
         toggleDisconnIcon(false)
-        alert(g_mode+"000")
         if (g_mode == BTN_MODE_PEOPLE) {
-            alert("111")
             const userkeyArr = []
             $(".state").each(function(idx, item) {
                 userkeyArr.push(this.id.substring(2))
             }).promise().done(function() {                
                 sendChkAlive(userkeyArr)
-                alert(userkeyArr.toString())
             })
         } else if (g_mode == BTN_MODE_CHAT) {
             getPortalList({ type: "reconnect" }) //procMenuTop(hush.http.getCookie("mode"))
