@@ -282,7 +282,6 @@ const sendChkAlive = (userkeyArr) => {
     const dataObj = { userkeys : userkeyArr }
     if (hush.webview.ios) {
     } else if (hush.webview.and) {
-        alert(JSON.stringify(dataObj))
         setTimeout(function() {
             AndroidCom.send(hush.cons.sock_ev_chk_alive, JSON.stringify(dataObj), null, null, false)
         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
