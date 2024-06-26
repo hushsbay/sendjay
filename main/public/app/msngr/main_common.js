@@ -270,7 +270,8 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             procSelect(_userid)
         })  
         $(".chkbox_people").css("visibility", "visible")
-        sendChkAlive(userkeyArr)
+        sendChkAlive(userkeyArr) //모바일의 setupWebViewMain() 관련 : 웹뷰 열리자마자 chk_alive 이벤트는 ChatService.kt에서 소켓연결이 되고 나서 가능하므로 소켓연결을 chk해야 함
+        setTimeout(function() { sendChkAlive(userkeyArr) }, 2500) //(chk_alive말고는 크리티컬한 소켓이벤트가 없어서) 그냥 편법으로 2.5초후에 한번 더 체크하는 정도로 함
         return true
     } catch (ex) {
         hush.util.showEx(ex)
@@ -902,7 +903,6 @@ var procUnreadTitle = (roomid) => { //call from chat.html
 
 var funcSockEv = { //needs to be public
     [hush.cons.sock_ev_chk_alive] : (data) => { //[...]
-        alert("555")
         for (let item of data) hush.util.displayOnOff(item, true)
         if (g_memWin && !g_memWin.closed) g_memWin.funcSockEv[hush.cons.sock_ev_chk_alive].call(null, data)
     },
