@@ -1014,11 +1014,13 @@ var funcSockEv = { //needs to be public
         //Be careful that Socket.EVENT_CONNECT occurred many times at a moment. => from ChatService.kt (socket.io 초기버전 이야기?!)
         toggleDisconnIcon(false)
         if (g_mode == BTN_MODE_PEOPLE) {
+            alert("111")
             const userkeyArr = []
             $(".state").each(function(idx, item) {
                 userkeyArr.push(this.id.substring(2))
-            }).promise().done(function() {
+            }).promise().done(function() {                
                 sendChkAlive(userkeyArr)
+                alert(userkeyArr.toString())
             })
         } else if (g_mode == BTN_MODE_CHAT) {
             getPortalList({ type: "reconnect" }) //procMenuTop(hush.http.getCookie("mode"))
