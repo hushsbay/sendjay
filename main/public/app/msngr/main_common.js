@@ -1013,20 +1013,24 @@ var funcSockEv = { //needs to be public
     },
     [hush.cons.sock_ev_connect] : (data) => { //mobile only
         //Be careful that Socket.EVENT_CONNECT occurred many times at a moment. => from ChatService.kt (socket.io 초기버전 이야기?!)
-        toggleDisconnIcon(false)
-        if (g_mode == BTN_MODE_PEOPLE) {
-            const userkeyArr = []
-            $(".state").each(function(idx, item) {
-                userkeyArr.push(this.id.substring(2))
-            }).promise().done(function() {                
-                sendChkAlive(userkeyArr)
-            })
-        } else if (g_mode == BTN_MODE_CHAT) {
-            getPortalList({ type: "reconnect" }) //procMenuTop(hush.http.getCookie("mode"))
+        try {
+            toggleDisconnIcon(false)
+            if (g_mode == BTN_MODE_PEOPLE) {
+                const userkeyArr = []
+                $(".state").each(function(idx, item) {
+                    userkeyArr.push(this.id.substring(2))
+                }).promise().done(function() {                
+                    sendChkAlive(userkeyArr)
+                })
+            } else if (g_mode == BTN_MODE_CHAT) {
+                getPortalList({ type: "reconnect" }) //procMenuTop(hush.http.getCookie("mode"))
+            }
+            setTimeout(function() {
+                AndroidCom.reconnectDone()
+            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+        } catch (ex) {
+            hush.util.showEx(ex)
         }
-        setTimeout(function() {
-            AndroidCom.reconnectDone()
-        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
     },
     [hush.cons.sock_ev_chk_roomfocus] : (data) => {
         //console.log("data.focusedRoomid"+"==="+data.focusedRoomid)

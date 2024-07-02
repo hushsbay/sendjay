@@ -2176,6 +2176,7 @@
                     toggleDisconnIcon(false) //Util.kt의 connectSockWithCallback() 설명 참조
                 },
                 [hush.cons.sock_ev_connect] : (data) => { //mobile only
+                    //Be careful that Socket.EVENT_CONNECT occurred many times at a moment. => from ChatService.kt (socket.io 초기버전 이야기?!)
                     try {
                         sockConnected = true
                         toggleDisconnIcon(false)
