@@ -10,16 +10,14 @@ module.exports = async (pattern, channel, message) => {
 	const _logTitle = _chan
 	let obj //const obj = JSON.parse(message) //{"prevkey":"$$SD__q;/sendjay#fNVceK6CERrueMCpAAAC","socketid":"/sendjay#7psRJ_F6lf6_FB6nAAAA",~}
 
-	try {
-		//console.log("pmessage string :", message) //obj = JSON.parse(message) 여기 넣으면 다른 메시지도 전달되므로 파싱이 안되는 오류 발생       
+	try { //console.log("pmessage string :", message) //obj = JSON.parse(message) 여기 넣으면 다른 메시지도 전달되므로 파싱이 안되는 오류 발생       
 		if (_chan == 'disconnect_prev_sock') { //adapter.remoteDisconnect 사용하지 않음 : 아래 코딩처럼 처리할 내용이 있어서 그대로 사용하기로 함
 			obj = JSON.parse(message)
 			const prevsocketid = obj.prevkey.split(ws.cons.easydeli)[1]
 			const prevSocket = global.jay.sockets.get(prevsocketid)
 			if (prevSocket) { //Previous socket for current userkey exists in this server. 해당서버에 이전 소켓이 있으므로 연결 끊기.
-				//console.log("prevSocket found", prevsocketid)
 				if (prevSocket.userkey.startsWith(ws.cons.m_key)) { //Mobile App
-					if (prevSocket.userip != obj.userip) { //obj.userip might be undefined when it comes from worker01.js
+					if (prevSocket.userip != obj.userip) { 
 						/*const param = { ev : ws.cons.sock_ev_cut_mobile, data : { userid : prevSocket.userid }, returnTo : "parent" }
 						prevSocket.emit(ws.cons.sock_ev_common, param) //emit to client directly*/
 						//가끔, 'connect - connect - disconnect(ping timeout)' 문제가 발생하며 아직 원인파악이 안됨 (async).
@@ -39,13 +37,7 @@ module.exports = async (pattern, channel, message) => {
 			obj = JSON.parse(message)
 			const othersocketid = obj.otherkey.split(ws.cons.easydeli)[1]
 			const otherSocket = global.jay.sockets.get(othersocketid)
-			//console.log("othersocketid", othersocketid)
-			if (otherSocket) {
-				//console.log("yesyesyes")
-				otherSocket.emit(ws.cons.sock_ev_common, obj.param)
-			} else {
-				//console.log("nononono")
-			}
+			if (otherSocket) otherSocket.emit(ws.cons.sock_ev_common, obj.param)
 		}
 	} catch (ex) {
 		global.logger.error(ex.stack) //아래 오류날 수 있으므로 미리 찍어두기
