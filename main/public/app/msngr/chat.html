@@ -38,35 +38,6 @@
             let g_msgUnread = [], g_focus_for_webview, g_show_list_people = "X", sockConnected = false
             const FIRST_QUERIED = "9999"
             let g_retry_small, g_delete_small
-            //const htmlRetryDelete = "<img src='" + g_retry_small + "' style='width:14px;height:14px;margin-top:0px;margin-right:2px'><img src='" + g_delete_small + "' style='width:16px;height:16px;margin-top:5px'>"
-
-            // const getBase64FromImageRetry = () => {
-            //     let xhr = new XMLHttpRequest()
-            //     xhr.onload = () => {
-            //         let reader = new FileReader()
-            //         reader.onloadend = function () {
-            //             g_retry_small = reader.result
-            //         }
-            //         reader.readAsDataURL(xhr.response)
-            //     }
-            //     xhr.open('GET', "/img/retry_small.png")
-            //     xhr.responseType = 'blob'
-            //     xhr.send()
-            // }
-
-            // const getBase64FromImageDelete = () => {
-            //     let xhr = new XMLHttpRequest()
-            //     xhr.onload = () => {
-            //         let reader = new FileReader()
-            //         reader.onloadend = function () {
-            //             g_delete_small = reader.result
-            //         }
-            //         reader.readAsDataURL(xhr.response)
-            //     }
-            //     xhr.open('GET', "/img/delete_small.png")
-            //     xhr.responseType = 'blob'
-            //     xhr.send()
-            // }
 
             const resetEnvForScroll = () => {
                 g_cdt = FIRST_QUERIED //FIRST_QUERIED(default). YYYYMMDD~ : when scrolled all the way down to the bottom, previous page shown and g_cdt gets YYYYMMDD~ value
@@ -392,7 +363,7 @@
                 try {
                     const len = $(".needCheckUnread").length
                     if (len == 0) return
-                    //$("#in_search").val("111") //테스트 (가끔 ..가 남아 있는 때가 있음)
+                    $("#in_search").val("111") //테스트 (가끔 ..가 남아 있는 때가 있음)
                     if (len > hush.cons.unread_max_check) {
                         $("#btn_qry_etc").hide()
                         $("#txt_unread_notice").show()
@@ -414,7 +385,7 @@
                         }
                     }
                     if (arr.length == 0) return
-                    //$("#in_search").val("222") //테스트 (가끔 ..가 남아 있는 때가 있음)
+                    $("#in_search").val("222") //테스트 (가끔 ..가 남아 있는 때가 있음)
                     if (!hush.http.chkOnline("none")) return
                     const rq = { type : "query", msgidArr : arr }                
                     if (hush.webview.ios) {
@@ -492,7 +463,6 @@
                             _body += "<span class=mq_tiny id=expiry_" + obj.msgid + " style='color:darkgreen;cursor:default'>" + _expiry + "</span>"
                             _body += "<span class=mq_tiny id=abort_" + obj.msgid + " style='display:none;color:darkgray;cursor:pointer;margin-left:4px'>Abort</span>"
                             _body += "<progress id=pb_" + obj.msgid + " value=0 max=100 style='display:none;width:100%;height:6px;cursor:default;margin-bottom:3px'></progress>"
-                            //_boderpx = "1px"
                             if (obj.filestate != hush.cons.file_expired) {
                                 const _submax = (obj.senderid == g_userid) ? "" : ";max-width:150px;max-height:150px"
                                 _sublink = "<div style='position:relative;cursor:pointer" + _submax + "'>"
@@ -504,11 +474,9 @@
                     } else {
                         if (obj.body == hush.cons.cell_revoked) {
                             _body = obj.body
-                        } else { 
-                            //_body = hush.util.removeTag(obj.body) //.text()로 변경 검토해야 함
+                        } else { //_body = hush.util.removeTag(obj.body) //.text()로 변경 검토해야 함
                             _body = obj.body
                         }
-                        //_boderpx = "1px"
                         const _pattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi //two more bytes parameter not working
                         const _http = _pattern.exec(_body) //const _pattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9가-힣+&@#\/%?=~_|!:,.;]*[-A-Z0-9가-힣+&@#\/%=~_|])/gi
                         if (_http != null) { //##00 opengraph : get first item
@@ -594,14 +562,7 @@
                             }
                         })
                     }
-                    if (obj.type == "talk") {
-                        if (_sublink) {
-                            procOpengraph(obj.msgid, kind)
-                        } else if (obj.body.length == 2) { //to make display one emoji big
-                            //const korean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/; //needs nice solution : temporary way to avoid conflict korean and emoji like 'ㅋㅋ'
-                            //if (!korean.test(obj.body) && hush.util.chkEmoji(obj.body)) $("#body_" + obj.msgid).css("font-size", "48px")
-                        }
-                    }
+                    if (obj.type == "talk" && _sublink) procOpengraph(obj.msgid, kind)
                     $("#unread_" + obj.msgid).off("click").on("click", function() {
                         hush.util.animBgColor($(this))
                         const rq = { type : "getmembers", msgid : obj.msgid }
@@ -885,8 +846,7 @@
                             scrollToTarget(0)
                         } else if (rq.dt == FIRST_QUERIED || $("#getmore").length == 0) {
                             scrollToTarget()
-                            updateAllUnreads("Y")
-                            //procQueryUnread() //바로 위 updateAll~콜백에서 처리됨
+                            updateAllUnreads("Y") //procQueryUnread() //바로 위 updateAll~콜백에서 처리됨
                         } else if (rq.type == "after") {
                             scrollToTarget()
                         } else {
@@ -909,64 +869,6 @@
                             }
                         }
                         if (!hush.webview.on) g_in_chat.focus()
-                        // if (rq.type == "normal" && g_page == 0) {
-                        //     const _arr = []
-                        //     let _brr
-                        //     const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readonly") //readonly
-                        //     const os = tx.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
-                        //     const index = os.index("roomid") //let req = os.openCursor() //req = os.count(); req.onsuccess = function(evt) { console.log("====" + evt.target.result) }
-                        //     let req = index.openCursor(IDBKeyRange.only(g_roomid)) //1)
-                        //     req.onsuccess = async function(evt) { //2)
-                        //         const cursor = evt.target.result //3)
-                        //         if (cursor) { //cursor.key = cursor.value.roomid in this case //console.log("cursor:", cursor) 
-                        //             //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 
-                        //             //(정상적이지 않은 경우만 로컬에 있을 것임) 따라서, 아래 담기는 건 전송 실패건만임 
-                        //             //indexedDB는 일반적인 형식의 데이터 읽어오기와는 다름. 복수의 데이터를 읽어오는 것은 아래 순서대로 읽어옴
-                        //             //1) -> 2) -> 3)까지 한개의 데이터를 읽음. 그 다음 데이터는 다시 1) -> 2) -> 3)을 거치고 더 이상 없으면 아래의 4)를 지나 5)로 넘어가서 종료하게 됨
-                        //             _arr.push(cursor.value.msgid)
-                        //             cursor.continue()                               
-                        //         } else { //4) console.log("No more entries")
-                        //             if (_arr.length == 0) return 
-                        //             const rs = await hush.http.ajax("/msngr/get_msginfo", { msgids : _arr, kind : "check" })
-                        //             if (!hush.util.chkAjaxCode(rs)) return
-                        //             const _len = rs.list.length //서버에 없는 것(sending failure 실패난 것)만 내려옴
-                        //             if (_len == 0) return
-                        //             _brr = rs.list
-                        //             const tx1 = hush.idb.db.transaction(hush.cons.idb_tbl, "readonly")
-                        //             const os = tx1.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
-                        //             for (let i = 0; i < _len; i++) {
-                        //                 const _msgid = _brr[i] //If _msgid is undefined, 'The transaction has finished' error occurs for 'os.get(_msgid).onsuccess' below.
-                        //                 os.get(_msgid).onsuccess = function(e) {
-                        //                     const rec = e.target.result
-                        //                     if (rec) {
-                        //                         const obj = {}
-                        //                         obj.msgid = rec.msgid
-                        //                         obj.cdt = rec.cdt
-                        //                         obj.senderid = g_userid
-                        //                         obj.sendernm = g_usernm
-                        //                         obj.body = rec.body
-                        //                         obj.buffer = null
-                        //                         obj.bufferStr = null
-                        //                         obj.reply = rec.reply
-                        //                         obj.type = rec.type
-                        //                         obj.state = ""
-                        //                         obj.filestate = ""
-                        //                         obj.cnt = -1 //-1 means from local IndexedDB
-                        //                         addRow(obj, rq.type) //normal
-                        //                         retrySending(obj)
-                        //                     }
-                        //                 }
-                        //             }
-                        //             tx1.oncomplete = function() { //5)
-                        //                 scrollToTarget()
-                        //                 if (_arr.length > 0) {
-                        //                     const _crr = _arr.filter(x => !_brr.includes(x)) //_arr - _brr(서버에서 실패난 것 제외) = _crr (발송 성공은 제거해야 함)
-                        //                     for (msgid of _crr) deleteLocalMsg(msgid)
-                        //                 }
-                        //             }
-                        //         }
-                        //     }            
-                        // }
                         if (rq.type == "normal" && g_page == 0) {
                             const _arr = []
                             let _brr
@@ -1037,11 +939,6 @@
             }
 
             const deleteLocalMsg = (msgid) => {
-                // const tx = hush.idb.db.transaction(hush.cons.idb_tbl, "readwrite")
-                // const os = tx.objectStore(hush.cons.idb_tbl) //if (!os) os = ~ error occurs
-                // os.get(msgid).onsuccess = function(e) {
-                //     if (e.target.result) os.delete(msgid)
-                // }
                 const iObj = hush.idb.setTxOs("readwrite") //밖으로 빼는 게 좋은데 일단 그대로 둠
                 if (iObj == null) return
                 hush.idb.getRec(iObj.os, msgid, function(rec) {
@@ -1056,9 +953,6 @@
                 const objUnread = $("#unread_" + rq.msgid)
                 const htmlRetryDelete = "<img src='" + g_retry_small + "' style='width:16px;height:16px;margin-top:5px;margin-right:2px'><img src='" + g_delete_small + "' style='width:16px;height:16px;margin-top:5px'>"
                 objUnread.html(htmlRetryDelete)
-                //const url = hush.blob.getDataUrl(g_retry_small, "image/png")
-                //$("#xxx").attr("src", g_retry_small)
-                //$("#xxx").attr("mimetype", "image/png")
                 objUnread.removeClass("unread").addClass("failure")
                 objUnread.show()
                 objUnread.off("click").on("click", function() {
@@ -1096,23 +990,6 @@
                     objUnread.show()
                     objUnread.off("click").on("click", async function() {
                         hush.util.animBgColor($(this))
-                        // const ret = await hush.msg.confirm("전송여부를 확인하시겠습니까?")
-                        // if (!ret) return 
-                        // if (!hush.http.chkOnline()) return
-                        // $("#handling_" + rq.msgid).show()                        
-                        // objUnread.hide() 
-                        // const rqCheck = initMsg()
-                        // rqCheck.type = "check"
-                        // rqCheck.prevmsgid = rq.msgid
-                        // if (hush.webview.ios) {
-                        // } else if (hush.webview.and) {
-                        //     setTimeout(function() {
-                        //         AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rqCheck), g_roomid, null, true)
-                        //     }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
-                        // } else {
-                        //     hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqCheck, g_roomid)
-                        // }
-                        // prepareForNoResponse(rq)
                         hush.msg.dialogMultiButton("전송 실패.", {
                             "전송확인": function() { 
                                 if (!hush.http.chkOnline()) return
@@ -1489,17 +1366,6 @@
                                 const xhr = $.ajaxSettings.xhr()
                                 let _started = false
                                 xhr.upload.onprogress = function(e) {
-                                    /*const percent = e.loaded * 100 / e.total
-                                    $("#pb_" + rq.msgid).val(percent)
-                                    const _percent = parseInt(percent)
-                                    $("#expiry_" + rq.msgid).html(_percent.toString() + "%")
-                                    if (!_started) {
-                                        _started = true
-                                        $("#abort_" + rq.msgid).show()
-                                        $("#sel_" + rq.msgid).removeClass("chkboxSel")
-                                    } else {
-                                        if (_percent >= 98) $("#abort_" + rq.msgid).html("<span class=mq_tiny style='color:red'>완료중</span>")
-                                    }*/
                                     //파일업로드시 1) 네트워크 끊어지면 바로 삭제/재전송 아이콘이 보이는데 
                                     //2) 서버가 죽으면 (아래 if 없을 경우 100%까지 가고 (timeout이 리턴되면서) prepareForNoResponse() 보이게 됨
                                     //   이 경우, 파일이 아주 크면 사용자는 100%까지 잘되나보다라고 착각할 수도 있어서 아래 if와 같이 체크하면
@@ -1719,11 +1585,6 @@
                     return true
                 }
             }
-
-            // const setTitleToFrTip = (doItNow) => {
-            //     const frTip = $("#fr_tip")
-            //     if (doItNow || frTip.html() == "" || frTip.html().includes("방명 :")) frTip.html("<span class=coText>방명 : " + g_title + "</span>")
-            // }
 
             const setTitleToFrTip = () => {
                 const frTip = $("#fr_tip")
@@ -2033,7 +1894,6 @@
                         //data.first_queried means that procQueryUnread() will be occurred in scroll event too, so it should be skipped here.
                         //Since "updateall" is broadcast, procQueryUnread() needed unless it's same userkey.
                         //if (data.senderkey != g_userkey || !data.first_queried) procQueryUnread()
-                        //$("#in_search").val("000") //테스트 (가끔 ..가 남아 있는 때가 있음)
                         procQueryUnread() //updateall후엔 본인도 다시 읽어야 최신의 정보를 갖고 올 것임 (아무것도 안하면 본인 것 최초시엔 ..이 보일 것임)
                     } else if (data.type == "getmembers") { //socket.emit
                         const len = data.unread_list.length
@@ -2167,9 +2027,6 @@
                 },
                 [hush.cons.sock_ev_disconnect] : (data) => { //mobile only
                     sockConnected = false
-                    // $("#img_disconn").show() //hush.msg.toast("disconnected", false, true)
-                    // $("#btn_people_m").hide()
-                    // $("#btn_menu_m").hide()
                     toggleDisconnIcon(true)
                 },
                 [hush.cons.sock_ev_mark_as_connect] : (data) => { //mobile only

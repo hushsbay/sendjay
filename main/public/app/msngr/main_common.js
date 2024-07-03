@@ -1,4 +1,4 @@
-//index.html 및 main.html에서 사용됨
+//index.html(사내ERP포털) 및 main.html에서 사용됨
 
 var g_memWin, g_userkey, g_userid, g_usernm, g_orgcd, g_useridArr, g_unread = {}
 
@@ -894,7 +894,7 @@ function OnSearch(input) {
 }
 
 var procUnreadTitle = (roomid) => { //call from chat.html
-    //document.title에 안읽은톡 표시는 메신저가 시작하기 전까지 안읽은 톡 갯수만 다루고 시작 이후의 톡은 대상으로 하지 않음.
+    //document.title에 안읽은톡 표시는 메신저가 시작하기 전까지 안읽은 톡 갯수만 다루고 시작 이후의 톡은 대상으로 하지 않음
     if (!$.isEmptyObject(g_unread)) {
         delete g_unread[roomid]
         if ($.isEmptyObject(g_unread)) handleDocTitle(false)
@@ -998,14 +998,7 @@ var funcSockEv = { //needs to be public
             })
         }          
     },
-    // [hush.cons.sock_ev_cut_mobile] : async (data) => {
-    //     await hush.msg.alert("Logout done. (including mobile device)")
-    // },
     [hush.cons.sock_ev_disconnect] : (data) => { //mobile only
-        console.log("disconnected from server : " + JSON.stringify(data))
-        // $("#img_disconn").show() //hush.msg.toast("disconnected", false, true)
-        // $("#btn_refresh").hide()
-        // $("#btn_logout").hide()
         toggleDisconnIcon(true)
     },
     [hush.cons.sock_ev_mark_as_connect] : (data) => {//mobile only
@@ -1033,7 +1026,6 @@ var funcSockEv = { //needs to be public
         }
     },
     [hush.cons.sock_ev_chk_roomfocus] : (data) => {
-        //console.log("data.focusedRoomid"+"==="+data.focusedRoomid)
         //focusedRoomid는 웹에서 앱으로 (단방향으로만) 요청하는 소켓정보임
         //1) focusedRoomid가 빈칸이 아니면 현재 앱에서 해당 roomid로 챗방이 맨위에 열려 있고 스크린도 On 상태이어서
         //   톡을 보내면 웹과 앱이 모두 접속된 상태에서 앱에서는 계속 메시지가 읽음처리가 되므로 웹에서는 노티가 필요없게 됨 (사용자입장에서는 이 경우 노티가 뜨면 불편한 것임). 
@@ -1068,7 +1060,7 @@ const startMsngr = async (launch, winid) => {
     const rs = await hush.auth.verifyUser()
     if (!rs) return false
     SetUserVar()
-    ///////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////worker
     const worker = new Worker("/app/msngr/worker.js?" + Math.random())
     worker.onerror = function(err) {
         worker.terminate()
