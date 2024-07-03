@@ -13,8 +13,6 @@ module.exports = async function(socket, param) {
 		obj = param.data
 		_roomid = obj.roomid
 		obj.senderid = socket.userid
-		console.log(JSON.stringify(obj)+"#####")
-		//if (obj.senderid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- obj.senderid')
 		conn = await wsmysql.getConnFromPool(global.pool) //console.log(obj.senderid, _roomid)
 		const ret = await ws.util.chkAccessUserWithTarget(conn, obj.senderid, _roomid, 'room')
 		if (ret != '') throw new Error(ret)
@@ -67,8 +65,6 @@ module.exports = async function(socket, param) {
 			if (obj.type == 'leave') {				
 				if (obj.reply && obj.reply != obj.senderid) { //강제퇴장
 					useridToProc = obj.reply
-					//const dataA = await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM " + com.tbl.user + " WHERE USER_ID = ? ", [useridToProc])
-					//if (dataA[0].CNT > 0) throw new Error('Only unregistered user can be processed : ' + useridToProc) 
                     await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM Z_USER_TBL WHERE USER_ID = ? ", [useridToProc])
 				}
 				if (_cnt == 2) { //챗방에 2명인 경우는 한명이 나가도 퇴장 표시 안함
@@ -116,12 +112,7 @@ module.exports = async function(socket, param) {
 					await wsmysql.query(conn, _sql, null)
 				}
 				let bodyForInsert
-				//if (obj.type == 'talk' && ws.util.chkEmoji(obj.body)) {
-				//	bodyForInsert = emoji.unemojify(obj.body)
-				//	if (ws.util.strLen(bodyForInsert) > ws.cons.max_msg_len) throw new Error('Max size of talk is ' + ws.cons.max_msg_len + '. Now is ' + ws.util.strLen(bodyForInsert) + '.') 
-				//} else {
-					bodyForInsert = obj.body
-				//}
+				bodyForInsert = obj.body
 				let iqry = "INSERT INTO A_MSGMST_TBL (MSGID, ROOMID, SENDERID, SENDERNM, BODY, REPLY, TYP, CDT, FILESTATE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) "
 				await wsmysql.query(conn, iqry, [obj.msgid, _roomid, useridToProc, obj.sendernm, bodyForInsert, obj.reply, obj.type, param.data.cdt, obj.filestate])
 				const _state = (obj.type == 'leave') ? 'R' : '' //Inserting R to 'STATE' field in advance for 'leave' message gives good sql performance in qry_unread.js
@@ -152,56 +143,6 @@ module.exports = async function(socket, param) {
 				}, 1000)
 			}
 		}
-		/*if (obj.type != 'check' && obj.type != 'leave') { //push(fcm/apns) sending to userkeys who are not connected
-			const userkeyArrInSocket = await ws.redis.getUserkeysInSocket(userkeyCrr)
-			const userkeyArrNotInSocket = userkeyCrr.filter(item => !userkeyArrInSocket.includes(item))
-			const _len = userkeyArrNotInSocket.length
-			for (let i = 0; i < _len; i++) {				
-				if (userkeyArrNotInSocket[i].startsWith(ws.cons.m_key)) { //이 로직은 다시 한번 점검해야 할 것임 (오래전 기억..)
-					const userid = userkeyArrNotInSocket[i].replace(ws.cons.m_key, '')
-					const sqry = "SELECT OS_INUSE, PUSH_IOS, PUSH_AND FROM Z_USER_TBL WHERE USER_ID = ? "
-					const sdata = await wsmysql.query(conn, sqry, [userid]) //Notice that txCommit has already done above.
-					if (sdata.length == 0) continue //console.log(userkeyArrNotInSocket[i]+"===="+sdata[0].PUSH_AND)
-					if (sdata[0].OS_INUSE == 'ios' && sdata[0].PUSH_IOS != ws.cons.invalid_push_token) {
-						//later
-					} else if (sdata[0].OS_INUSE == 'and' && sdata[0].PUSH_AND != ws.cons.invalid_push_token) {
-						// let msg = {
-						// 	data: { //Every key name should be equal to socket's data (param.data) since Android app use these things for notification.
-						// 		msgid : param.data.msgid, 
-						// 		senderkey : param.data.senderkey, 
-						// 		senderid : param.data.senderid, 
-						// 		body : 'fcm) ' + param.data.body, //fcm) is temporary test for distinguish it from socket message.  
-						// 		type : param.data.type, 
-						// 		userkeyArr : param.data.userkeyArr.toString(), 
-						// 		roomid : param.data.roomid,
-						// 		cdt : param.data.cdt
-						// 	},
-						// 	android: {
-						// 		priority: "high"
-						// 	},
-						// 	token: sdata[0].PUSH_AND
-						// } //https://noonestaysthesame.tistory.com/m/17
-                        // const dsql = "UPDATE A_MSGDTL_TBL SET PUSH_ERR = ? WHERE MSGID = ? AND ROOMID = ? "
-						// global.fcm.messaging().send(msg, false) //dryRun=false callback not found on google's sdk document
-						// .then(async (rs) => { //rs=projects/sendjay-d712c/messages/0:1619162645061012%3a7eb762f9fd7ecd
-						// 	await wsmysql.query(conn, dsql, ['fcm_ok', param.data.msgid, param.data.roomid])
-						// }).catch(async (err) => { //Error Code : https://firebase.google.com/docs/cloud-messaging/send-message?hl=ko	
-						// 	//const dsql = "UPDATE A_MSGDTL_TBL SET PUSH_ERR = ? WHERE MSGID = ? AND ROOMID = ? " //100byte
-						// 	let code = (err.errorInfo) ? err.errorInfo.code : err.code
-						// 	let msg = (err.errorInfo) ? err.errorInfo.message : 'Unknown Error'
-						// 	let _msg = 'fcm_err/' + code  + '/' + msg
-						// 	_msg = _msg.length > 100 ? _msg.substr(0, 100) : _msg //max 100byte
-						// 	console.log(userid, _msg)
-						// 	await wsmysql.query(conn, dsql, [_msg, param.data.msgid, param.data.roomid]) //Even if error occurs, talk will be sent.
-						// 	if (_msg.includes('The registration token is not a valid')) {
-						// 		const usql = "UPDATE Z_USER_TBL SET PUSH_AND = ? WHERE USER_ID = ? "
-						// 		await wsmysql.query(conn, usql, [ws.cons.invalid_push_token, userid])
-						// 	}
-						// })						
-					}
-				}
-			}
-		}*/
 	} catch (ex) { //ws.sock.warn(null, socket, _logTitle, JSON.stringify(param), _roomid)
 		if (conn) await wsmysql.txRollback(conn)
 		try {

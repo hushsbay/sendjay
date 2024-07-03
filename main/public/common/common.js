@@ -63,7 +63,6 @@
 			sock_ev_rename_room : 'rename_room',
 			sock_ev_set_env : 'set_env',
 			sock_ev_chk_typing : 'chk_typing',
-			//sock_ev_cut_mobile : 'cut_mobile',
             sock_ev_chk_roomfocus : 'chk_roomfocus',
             tz_seoul : "Asia/Seoul", //for korean
             fetch_cnt_list : 100, //At least, this should be the count which exceeds minimum rows with y-scroll .
@@ -89,10 +88,7 @@
             sublink_ext_image : "png,gif,jpg,jpeg,ico",
             sublink_ext_video : "mp4", //file format which supports html5 streaming
             handling : ".. ", //handling..
-            //no_response : "전송확인",
-            //retry_sending : "retry sending",
-            //sending_failure : "문제발생",
-            left : " left this room",
+            left : " 퇴장했습니다.",
             param_webview_and : "webview=and",
             param_webview_ios : "webview=ios",
         },
@@ -111,9 +107,8 @@
                 hush.http.setCookie("toporgcd", rs.TOP_ORG_CD || rs.toporgcd)
                 hush.http.setCookie("toporgnm", rs.TOP_ORG_NM || rs.toporgnm)
             }, //위 아래 함수는 verifyUser() in common.js와 앱의 UserInfo 클래스내 항목과 같아야 함
-            deleteCookieForUser : () => {
-                hush.http.deleteCookie('token')
-                //hush.http.deleteCookie('userid')
+            deleteCookieForUser : () => { //hush.http.deleteCookie('userid')
+                hush.http.deleteCookie('token')                
                 hush.http.deleteCookie('usernm')
                 hush.http.deleteCookie('orgcd')
                 hush.http.deleteCookie('orgnm')
@@ -845,19 +840,6 @@
                 }
             },
             chkAjaxCode : (rs, notShowMsgIfNoData) => {
-                // if (notShowMsgIfNoData) {
-                //     if (rs.code != hush.cons.CODE_OK) {
-                //         alert(rs.code +"====" + hush.cons.CODE_NO_DATA)
-                //         if (rs.code != hush.cons.CODE_NO_DATA) hush.msg.showMsg(rs.msg, rs.code)
-                //         return false
-                //     }
-                // } else {
-                //     if (rs.code != hush.cons.CODE_OK) {
-                //         alert(rs.code +"==00==" + hush.cons.CODE_OK)
-                //         hush.msg.showMsg(rs.msg, rs.code)
-                //         return false
-                //     }
-                // }
                 if (rs.code != hush.cons.CODE_OK) {
                     if (notShowMsgIfNoData && rs.code == hush.cons.CODE_NO_DATA) {
                         //데이터 없을 경우에 메시지없이 넘어가야 할 때가 있음
@@ -878,9 +860,6 @@
                 arr.sort(function() { return 0.5 - Math.random() })
                 return arr.join("")
             },
-            // createId : (uniqueStr) => { //uniqueStr 제거하기 : 과하게 길어서 불편하기만 함. 결국, g_token10도 모두 제거하기
-            //     return hush.util.getCurDateTimeStr(false, true) + hush.util.getRnd().toString().padStart(6, "0") + (uniqueStr ? hush.util.shuffleChar(uniqueStr) : "")
-            // },
             createId : () => {
                 return hush.util.getCurDateTimeStr(false, true) + hush.util.getRnd().toString().padStart(6, "0")
             },
@@ -1132,10 +1111,10 @@
                     hush.webview.ios = false
                     hush.webview.and = false
                 }
-            },
-            //////////////////////////////////////////chat.html의 procInvite()에서 AndroidCom.send가 안먹히길래 callAppFunc()로 처리하려 했더니 AndroidCom, AndroidCom.send는 잘 가져오고 있었음
+            },            
+            //chat.html의 procInvite()에서 AndroidCom.send가 안먹히길래 callAppFunc()로 처리하려 했더니 AndroidCom, AndroidCom.send는 잘 가져오고 있었음
             //결국, 아래 2개는 잘못 짚은 거였고 일단 setTimeout()으로 처리해서 넘어감
-            chkAppFunc : (WebInterface, elapsed) => {
+            /*chkAppFunc : (WebInterface, elapsed) => {
                 try {
                     let _elapsed = elapsed ? elapsed : 0
                     if (_elapsed >= 1000) return false
@@ -1162,9 +1141,7 @@
                 } catch (ex) {
                     reject(ex)
                 }                
-            }), /////////////////////////////////////////////////////////////////////////////
-
-
+            })*//////////////////////////////////////////////////////////////////////////////
         }      
     }
 })(jQuery)

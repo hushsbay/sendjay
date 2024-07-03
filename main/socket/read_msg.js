@@ -9,9 +9,6 @@ module.exports = async function(socket, param) {
 	try { //ws.sock.warn(null, socket, _logTitle, JSON.stringify(param), _roomid)
 		const obj = param.data	
 		const userid = socket.userid
-		//if (obj.type == 'updateall' || obj.type == 'update') {
-			//if (obj.receiverid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- obj.receiverid')	
-		//}
 		param.data.userid = userid //1) see ChatService.kt 2) sendToMyOtherSocket for mobile noti cancelling 3) updateall 4) update..
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const ret = await ws.util.chkAccessUserWithTarget(conn, userid, _roomid, 'room')
@@ -21,8 +18,7 @@ module.exports = async function(socket, param) {
 		if (obj.type == 'updateall') { //모두 읽은 것으로 하기
 			sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
 			data = await wsmysql.query(conn, sql, [_roomid, userid, dateFr])
-			const cntUnread = data[0].CNT 
-			//console.log(_roomid, userid, dateFr, cntUnread, "######")
+			const cntUnread = data[0].CNT //console.log(_roomid, userid, dateFr, cntUnread, "######")
 			if (cntUnread > 0) {
 				data = "UPDATE A_MSGDTL_TBL SET STATE = 'R' WHERE ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
 				await wsmysql.query(conn, data, [_roomid, userid, dateFr]) //update all
@@ -42,8 +38,7 @@ module.exports = async function(socket, param) {
 			socket.emit(ws.cons.sock_ev_common, param)
 		} else if (obj.type == 'update') { //해당 msgid만 읽은 것으로 하기
 			sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND ROOMID = ? AND CDT >= ? "
-			data = await wsmysql.query(conn, sql, [obj.msgid, _roomid, dateFr])
-			//console.log(obj.msgid, _roomid, dateFr, data[0].CNT, "========")
+			data = await wsmysql.query(conn, sql, [obj.msgid, _roomid, dateFr]) //console.log(obj.msgid, _roomid, dateFr, data[0].CNT, "========")
 			if (data[0].CNT == 0) { //might be no record at first right after sending talk				
 				param.data.unread_cnt = -1
 			} else {
@@ -59,8 +54,7 @@ module.exports = async function(socket, param) {
 			let unreadArr = []
 			for (let msgid of obj.msgidArr) {
 				sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND ROOMID = ? AND CDT >= ? "
-				data = await wsmysql.query(conn, sql, [msgid, _roomid, dateFr])
-				//console.log(msgid, _roomid, dateFr, data[0].CNT, "--------")
+				data = await wsmysql.query(conn, sql, [msgid, _roomid, dateFr]) //console.log(msgid, _roomid, dateFr, data[0].CNT, "--------")
 				if (data[0].CNT == 0) { //might be no record at first right after sending talk					
 					unreadArr.push(-1)
 				} else {

@@ -8,7 +8,6 @@ module.exports = async function(socket, param) {
 	let conn
 	try { //ws.sock.warn(null, socket, _logTitle, ws.cons.rq + JSON.stringify(param), _roomid)	
 		const userid = socket.userid //param.data.receiverid
-		//if (_receiverid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- _receiverid')
 		conn = await wsmysql.getConnFromPool(global.pool)
 		await wsmysql.txBegin(conn)	
 		if (param.data.type == 'all') {

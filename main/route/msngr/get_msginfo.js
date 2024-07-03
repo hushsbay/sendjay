@@ -39,8 +39,6 @@ router.post('/', async function(req, res) {
 				return
 			}
 			if (data[0].TYPE == 'image') {
-				//rs.buffer = data[0].BUFFER //rs.bufferStr = (data[0].BUFFER) ? Buffer.from(data[0].BUFFER, 'binary').toString('base64') : null
-				//resolve(rs)
 				const ret = await ws.util.chkAccessUserWithTarget(conn, userid, msgid, '')
 				if (ret != '') throw new Error(ret)
 				rs.list = data

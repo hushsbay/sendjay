@@ -10,7 +10,6 @@ module.exports = async function(socket, param) {
 		const _type = param.data.type //all or one(self)
 		const _roomname = param.data.roomname
 		const userid = socket.userid //param.data.userid
-		//if (_userid != socket.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- _userid')
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const ret = await ws.util.chkAccessUserWithTarget(conn, userid, _roomid, 'room')
 		if (ret != '') throw new Error(ret)

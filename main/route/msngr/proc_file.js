@@ -45,7 +45,6 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 	destination : async function(req, file, cb) {
 		let _dir_room, _dir
 		try {
-			console.log("destination=============")			
 			_dir_room = config.app.uploadPath + '/' + req.body.roomid
 			_dir = _dir_room + '/' + req.body.senderid
 			if (_dir.includes('undefined')) {
@@ -64,20 +63,15 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 	filename : async function(req, file, cb) { //file={"fieldname":"file","originalname":"제목 없음.png","encoding":"7bit","mimetype":"image/png"} : no file size here
 		let conn, sql, data, len
 		try {
-			console.log("filename=============")			
 			const fileStrObj = ws.util.getFileNameAndExtension(file.originalname) //file size => req.body.body
 			req.filename = fileStrObj.name + ws.cons.subdeli + ws.util.getCurDateTimeStr() + ws.util.getRnd() + fileStrObj.extDot
 			conn = await wsmysql.getConnFromPool(global.pool)
 			const ret = await ws.util.chkAccessUserWithTarget(conn, req.body.senderid, req.body.roomid, 'room')
 			if (ret != '') throw new Error(ret)
-			//const role = await ws.getRole(req.cookies.userid, conn)
-			//if (!ws.chkRole(role, ws.cons.group_admin)) {
-				if (req.body.body > ws.cons.max_filesize) throw new Error('파일크기 초과 (최대:' + ws.cons.max_filesize + ', 현재:' + req.body.body + ')')
-				sql = "SELECT COUNT(*) CNT FROM A_MSGMST_TBL WHERE TYP = 'file' AND FILESTATE >= sysdate() AND FILESTATE <> ? AND SENDERID = ? "
-				data = await wsmysql.query(conn, sql, [ws.cons.file_expired, req.body.senderid])
-				if (data[0].CNT >= ws.cons.max_filecount) throw new Error('최대 ' + ws.cons.max_filecount + '개 파일까지 한번에 전송 가능합니다.')
-			//}
-			console.log(req.body.msgid, req.body.roomid, "=============")
+			if (req.body.body > ws.cons.max_filesize) throw new Error('파일크기 초과 (최대:' + ws.cons.max_filesize + ', 현재:' + req.body.body + ')')
+			sql = "SELECT COUNT(*) CNT FROM A_MSGMST_TBL WHERE TYP = 'file' AND FILESTATE >= sysdate() AND FILESTATE <> ? AND SENDERID = ? "
+			data = await wsmysql.query(conn, sql, [ws.cons.file_expired, req.body.senderid])
+			if (data[0].CNT >= ws.cons.max_filecount) throw new Error('최대 ' + ws.cons.max_filecount + '개 파일까지 한번에 전송 가능합니다.')
 			sql = "INSERT INTO A_FILELOG_TBL (MSGID, ROOMID, SENDERID, BODY, CDT) VALUES (?, ?, ?, ?, sysdate(6)) "
 			await wsmysql.query(conn, sql, [req.body.msgid, req.body.roomid, req.body.senderid, req.filename])
 			cb(null, req.filename)
@@ -133,10 +127,8 @@ const procMulter = (req) => {
 
 router.post('/', (req, res) => { //router.post('/', upload.single('file'), async (req, res) => {
 	req.title = 'proc_file.post'
-	console.log("upload.post=============")	
 	upload.single('file')(req, res, async (err) => { //업로드 처리 순서 : upload(multer(destination) -> multer(filename)) -> procMulter()
 		try {
-			console.log("upload.single=============")	
 			if (err) throw new Error(err.toString())
 			const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
 			if (!objToken.userid) return //각각의 함수에 쿠키를 읽어서 처리해도 되는데 그냥 편의상 아래서 req.body.userid 사용하므로 userid와 비교하는 것임

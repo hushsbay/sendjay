@@ -248,14 +248,11 @@ module.exports = (function() {
 			getMyOtherSocket : async (socket) => {
 				let myOtherUserkey				
 				if (socket.userkey.startsWith(ws.cons.m_key)) {
-					//myOtherUserkey = ws.cons.w_key + socket.userkey.replace(ws.cons.m_key, '')
 					myOtherUserkey = socket.userkey.replace(ws.cons.m_key, ws.cons.w_key)
 				} else {
-					//myOtherUserkey = ws.cons.m_key + socket.userkey.replace(ws.cons.w_key, '')
 					myOtherUserkey = socket.userkey.replace(ws.cons.w_key, ws.cons.m_key)
 				}				
-				const arr = await ws.redis.getUserkeySocket(myOtherUserkey)
-				//console.log("socket.userkey", socket.userkey, myOtherUserkey, arr[0])
+				const arr = await ws.redis.getUserkeySocket(myOtherUserkey) //console.log("socket.userkey", socket.userkey, myOtherUserkey, arr[0])
 				return arr[0] //if not, undefined returned
 			},
 			getUserkeySocket : (userkey) => {
@@ -283,17 +280,7 @@ module.exports = (function() {
 				}
 				return usArr
 			},
-			// getUserkeysInSocket : async (userkeys) => { //chk_alive()의 sockets를 막은 이유와 동일함
-			// 	let ukArr = []
-			// 	const resultArr = await ws.redis.getUserkeySocketsFromMulti(userkeys)
-			// 	const sockets = await global.jay.adapter.sockets(new Set())
-			// 	for (let key of resultArr) {
-			// 		const _obj = ws.redis.getUserkeySocketIdFromKey(key)
-			// 		if (sockets.has(_obj.socketid)) ukArr.push(_obj.userkey)
-			// 	}
-			// 	return ukArr
-			// },
-			getUserkeysInSocket : async (userkeys) => {
+			getUserkeysInSocket : async (userkeys) => { //app.js에 주석으로 설명되어 있는 fetchSockets()을 이용해 더 정확한 소켓정보를 가져올 수 있겠으나 일단 아래의 코딩으로 유지해보려 함
 				let ukArr = []
 				const resultArr = await ws.redis.getUserkeySocketsFromMulti(userkeys)
 				for (let key of resultArr) {
@@ -364,14 +351,12 @@ module.exports = (function() {
 					if (afterScan) {
 						const stream = global.store.scanStream({ match : usKey, count : ws.cons.scan_stream_cnt })
 						stream.on('data', async (resultKeys) => { //Search for userkey's another socketid which might be alive on (other) server(s), and kill them.
-							for (let item of resultKeys) {
-								//await global.store.multi().del(item).srem(com.cons.key_set_userkey_socket, item).exec()
+							for (let item of resultKeys) { //await global.store.multi().del(item).srem(com.cons.key_set_userkey_socket, item).exec()
 								await global.store.multi().del(item).exec()
 							}
 						})
 					} else { //scanning not needed since already scanned
-						//await global.store.multi().del(usKey).srem(com.cons.key_set_userkey_socket, usKey).exec()
-						await global.store.multi().del(usKey).exec()
+						await global.store.multi().del(usKey).exec() //await global.store.multi().del(usKey).srem(com.cons.key_set_userkey_socket, usKey).exec()
 					}
 				} catch(ex) {
 					throw new Error(ex)
@@ -384,8 +369,8 @@ module.exports = (function() {
 				const _returnTo = returnTo ? returnTo : 'parent' //'all' used in most cases
 				/*global.jay.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //to all inside namaspace. socket oneself included
 				global.jay.emit => TypeError: opts.except is not iterable (from socket.io 3.0)*/
-				//socket.broadcast.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //자기자신 제외
-				//socket.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })
+				/*socket.broadcast.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //자기자신 제외
+				socket.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother })*/
 				global.jay.emit(ws.cons.sock_ev_common, { ev : ev, data : data, returnTo : _returnTo, returnToAnother : returnToAnother }) //to all inside namaspace. socket oneself included
 			},
 			getLogMsg : (_socket, ex, title) => { //단독으로 사용하지 말고 ws 함수에 녹여쓰기 (ws에서만 존재해야 함)
@@ -414,8 +399,7 @@ module.exports = (function() {
 				try {
 					for (let key of userkeySocketArr) { //Garbage of socketid might be in userkeySocketArr.
 						_obj = ws.redis.getUserkeySocketIdFromKey(key)
-						try {
-							//await global.jay.adapter.remoteJoin(_obj.socketid, _roomid)
+						try { //await global.jay.adapter.remoteJoin(_obj.socketid, _roomid)
 							await global.jay.in(_obj.socketid).socketsJoin(_roomid) //https://socket.io/docs/v4/server-api/#serversocketsjoinrooms
 						} catch (ex) { //reject(new Error('cannot connect to specific server when remoteJoinging with ' + _obj.userkey))
 							if (ex.message.includes('timeout')) { //timeout reached while waiting for remoteJoin response (specific server down)
@@ -444,12 +428,10 @@ module.exports = (function() {
 						const arr = key.split(ws.cons.easydeli)
 						_userkey = arr[0].replace(ws.cons.key_str_socket, '')
 						_socketid = arr[1]
-						try {
-							//await global.jay.adapter.remoteLeave(_socketid, _roomid)
+						try { //await global.jay.adapter.remoteLeave(_socketid, _roomid)
 							await global.jay.in(_socketid).socketsLeave(_roomid)
 						} catch (ex) { //reject(new Error('cannot connect to specific server when remoteLeaving with ' + _obj.userkey))
 							if (ex.message.includes('timeout')) { //timeout reached while waiting for remoteLeave response (specific server down)
-								//Same as joinRoomWithUserkeySocketArr(), one thing different is that re join will not be happened because it was already left.
 								//joinRoomWithUserkeySocketArr() 경우와 같지만 한가지 다른 점은 이미 leave하였기 때문에 opening room시 다시 join되지 않을 것임
 							} else {
 								throw new Error(ex.message)
@@ -468,12 +450,10 @@ module.exports = (function() {
 			}),
 			sendToMyOtherSocket : async (socket, param) => { //call pmessage()
 				param.data.userid = socket.userid //see ChatService.kt
-				//console.log("param.data.userid", param.data.userid)
 				const otherUserkeySocket = await ws.redis.getMyOtherSocket(socket)
-				//console.log("otherUserkeySocket", otherUserkeySocket)
 				if (otherUserkeySocket) ws.redis.pub('sendto_myother_socket', { socketid : socket.id, otherkey : otherUserkeySocket, param : param }) //call pmessage()
 			},
-			sendToRoom : (socket, roomid, param) => {
+			sendToRoom : (socket, roomid, param) => { //const sockets = await global.jay.in("room1").fetchSockets()
 				//global.jay.to(roomid).emit(com.cons.sock_ev_common, param) //to all inside room. socket oneself included
 				//global.jay.to(roomid).emit => TypeError: opts.except is not iterable (from socket.io 3.0)
 				socket.to(roomid).emit(ws.cons.sock_ev_common, param) //본인 소켓 제외
@@ -521,8 +501,7 @@ module.exports = (function() {
 				_app.use(requestIp.mw()) //req.clientIp => X-Forwarded-For header info in AWS checked (req.headers['x-forwarded-for'] || req.connection.remoteAddress)
 				_app.use(bodyParser.json()) //app.use(express.json())
 				_app.use(bodyParser.urlencoded({ extended: true })) //req.body : { array : { key1 : { key2 : '123' } } } //when false => req.body : { 'array[key1][key2]' :'123' }
-				_app.use(cookieParser())
-				//_app.use(express.limit('10G'))
+				_app.use(cookieParser()) //_app.use(express.limit('10G'))
 				if (public) _app.use(express.static(public))
 				return _app
 			},
