@@ -2459,7 +2459,7 @@
                     // })
                     window.onpagehide = (event) => {
                         if (event.persisted) { //브라우저가 캐시하려고 시도하는 중 (bfcache = back/forward cache = 네트워크 타지 않음)
-                            alert("새페이지를 열기 때문에 여기서는 bfcache 이슈 없어야 함")
+                            alert("웹에서는 새페이지, 앱에서는 nocache로 열기 때문에 여기서는 bfcache 이슈 없어야 함")
                         } else {
                             if (g_in_chat.val().trim() != "") {
                                 localStorage[g_roomid] = g_in_chat.val().trim()
