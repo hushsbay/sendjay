@@ -2457,19 +2457,20 @@
                     //     if (opener && g_roomid) delete opener.hush.sock.rooms[g_roomid]
                     //     if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.close()
                     // })
-                    $(window).on("pagehide", function(e) {
-                        if (e.persisted) {
-                            console.log("111")
-                        } else {
-                            console.log("1112222")
-                        }
-                    })
+                    
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }
             }).fail(function(ex) {
                 hush.util.showEx(ex, hush.cons.failOnLoad)
             })
+            window.onpagehide = (event) => {
+                if (event.persisted) {
+                    alert("1111")
+                } else {
+                    alert("111122222")
+                }
+            }
         </script>
     </head>
     <body>
