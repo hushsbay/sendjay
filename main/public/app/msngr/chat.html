@@ -2457,9 +2457,8 @@
                     //     if (opener && g_roomid) delete opener.hush.sock.rooms[g_roomid]
                     //     if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.close()
                     // })
-                    $(window).on("beforeunload", function() {
+                    $(window).on("visibilitychange", function() {
                         alert("111")
-                        return "aaa"
                     })
                 } catch (ex) {
                     hush.util.showEx(ex)
