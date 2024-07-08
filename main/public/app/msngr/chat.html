@@ -2458,7 +2458,7 @@
                     //     if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.close()
                     // })
                     $(window).on("visibilitychange", function() {
-                        alert("111")
+                        alert("111"+document.visibilityState)
                     })
                 } catch (ex) {
                     hush.util.showEx(ex)
