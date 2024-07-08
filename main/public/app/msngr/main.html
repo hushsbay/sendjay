@@ -454,10 +454,18 @@
                         hush.util.animBgColor($(this))
                         AndroidMain.deleteLog()
                     })
-                    $(window).bind("unload", function() { //$(window).unload(function() { deprecated as of 1.8
-                        procUnload()
-                        if (g_memWin && !g_memWin.closed) g_memWin.close()
-                    })
+                    // $(window).bind("unload", function() { //$(window).unload(function() { deprecated as of 1.8
+                    //     procUnload()
+                    //     if (g_memWin && !g_memWin.closed) g_memWin.close()
+                    // })
+                    window.onpagehide = (event) => {
+                        if (event.persisted) { //브라우저가 캐시하려고 시도하는 중 (bfcache = back/forward cache = 네트워크 타지 않음)
+                            alert("새페이지를 열기 때문에 여기서는 bfcache 이슈 없어야 함")
+                        } else {
+                            procUnload()
+                            if (g_memWin && !g_memWin.closed) g_memWin.close()
+                        }
+                    }
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }

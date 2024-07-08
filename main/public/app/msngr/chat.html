@@ -2458,10 +2458,16 @@
                     //     if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.close()
                     // })
                     window.onpagehide = (event) => {
-                        if (event.persisted) {
-                            opener.console.log("1111")
+                        if (event.persisted) { //브라우저가 캐시하려고 시도하는 중 (bfcache = back/forward cache = 네트워크 타지 않음)
+                            alert("새페이지를 열기 때문에 여기서는 bfcache 이슈 없어야 함")
                         } else {
-                            opener.console.log("11112222")
+                            if (g_in_chat.val().trim() != "") {
+                                localStorage[g_roomid] = g_in_chat.val().trim()
+                            } else {
+                                if (localStorage[g_roomid]) delete localStorage[g_roomid]
+                            }
+                            if (opener && g_roomid) delete opener.hush.sock.rooms[g_roomid]
+                            if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.close()
                         }
                     }
                 } catch (ex) {
