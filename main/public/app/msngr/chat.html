@@ -2448,9 +2448,9 @@
                     $(window).focus(function() { ///This focus event is not triggered when window newly opened.
                         if ($("#txt_msg_added").css("display") == "none") updateAllUnreads()                    
                     })
-                    $(window).on('beforeunload', function() {
-			            return '변경 사항을 저장하지 않을 수 있습니다. 정말로 이 페이지를 떠나시겠습니까?';
-		            });
+                    window.addEventListener("beforeunload", function (e) {
+                        alert("1111")
+                    })
                     $(window).bind("unload", function() { //$(window).unload(function() { deprecated as of 1.8
                         if (g_in_chat.val().trim() != "") {
                             localStorage[g_roomid] = g_in_chat.val().trim()
