@@ -2448,15 +2448,18 @@
                     $(window).focus(function() { ///This focus event is not triggered when window newly opened.
                         if ($("#txt_msg_added").css("display") == "none") updateAllUnreads()                    
                     })
-                    $(window).bind("unload", function() { //$(window).unload(function() { deprecated as of 1.8
-                        return "ddd"
-                        // if (g_in_chat.val().trim() != "") {
-                        //     localStorage[g_roomid] = g_in_chat.val().trim()
-                        // } else {
-                        //     if (localStorage[g_roomid]) delete localStorage[g_roomid]
-                        // }
-                        // if (opener && g_roomid) delete opener.hush.sock.rooms[g_roomid]
-                        // if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.close()
+                    // $(window).bind("unload", function() { //$(window).unload(function() { deprecated as of 1.8
+                    //     if (g_in_chat.val().trim() != "") {
+                    //         localStorage[g_roomid] = g_in_chat.val().trim()
+                    //     } else {
+                    //         if (localStorage[g_roomid]) delete localStorage[g_roomid]
+                    //     }
+                    //     if (opener && g_roomid) delete opener.hush.sock.rooms[g_roomid]
+                    //     if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.close()
+                    // })
+                    $(window).on("beforeunload", function() {
+                        alert("111")
+                        return "aaa"
                     })
                 } catch (ex) {
                     hush.util.showEx(ex)
