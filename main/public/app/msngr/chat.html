@@ -2457,8 +2457,12 @@
                     //     if (opener && g_roomid) delete opener.hush.sock.rooms[g_roomid]
                     //     if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.close()
                     // })
-                    $(window).on("visibilitychange", function() {
-                        console.log("111"+document.visibilityState)
+                    $(window).on("pagehide", function(e) {
+                        if (e.persisted) {
+                            console.log("111")
+                        } else {
+                            console.log("1112222")
+                        }
                     })
                 } catch (ex) {
                     hush.util.showEx(ex)
