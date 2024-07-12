@@ -71,7 +71,7 @@
                             return
                         }
                         $("#div_log").show()
-                        $("#btn_noti_mobile").show()
+                        $("#div_noti_mobile").show()
                     } else {
                         $("#btn_collapseall").show()
                         $("#btn_expandall").show()
@@ -588,9 +588,9 @@
                         <span class='coSettingSpan coText'>진동끄기</span>
                     </label>
                 </div>-->
-                <div class=coSettingRow>
+                <div class=coSettingRow id=div_noti_mobile style="display:none">
                     <div class='coSettingLabel coText'>알림옵션<br>(Mobile)</div>
-                    <div id=btn_noti_mobile class='picBtn coText' style="display:none;margin-left:5px">소리/진동/팝업</div>
+                    <div id=btn_noti_mobile class='picBtn coText'>소리/진동/팝업</div>
                 </div>
                 <div class=coSettingRow>
                     <div class='coSettingLabel coText'>알림시간<br>(Mobile)</div>
