@@ -773,8 +773,8 @@ const procSettingOnLoad = (rs) => { //rs from hush.auth.verifyUser(true)
     g_setting.abnm = (rs.AB_NM) ? rs.AB_NM : ""
     hush.http.setCookie("standalone", rs.STANDALONE)
     hush.http.setCookie("notioff", rs.NOTI_OFF)
-    hush.http.setCookie("soundoff", rs.SOUND_OFF)
-    hush.http.setCookie("viboff", rs.VIB_OFF)
+    //hush.http.setCookie("soundoff", rs.SOUND_OFF) //NotiCenter.kt ##55 참조
+    //hush.http.setCookie("viboff", rs.VIB_OFF) //NotiCenter.kt ##55 참조
     hush.http.setCookie("bodyoff", rs.BODY_OFF)
     hush.http.setCookie("senderoff", rs.SENDER_OFF)
     hush.http.setCookie("popupoff", rs.POPUP_OFF) //NotiCenter.kt의 $$7 참조 (현재 미사용이나 그대로 두고 향후 대비)
@@ -793,11 +793,11 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             $("#in_abnm").val(g_setting.abnm)
             $("#chk_standalone").prop("checked", (rs.STANDALONE == "Y" ? true : false))
             $("#chk_notioff").prop("checked", (rs.NOTI_OFF == "Y" ? true : false))  
-            $("#chk_soundoff").prop("checked", (rs.SOUND_OFF == "Y" ? true : false))  
-            $("#chk_viboff").prop("checked", (rs.VIB_OFF == "Y" ? true : false))  
-            $("#chk_bodyoff").prop("checked", (rs.BODY_OFF == "Y" ? true : false))
+            $("#chk_bodyoff").prop("checked", (rs.BODY_OFF == "Y" ? true : false))            
             $("#chk_senderoff").prop("checked", (rs.SENDER_OFF == "Y" ? true : false))   
-            $("#chk_popupoff").prop("checked", (rs.POPUP_OFF == "Y" ? true : false))      
+            //$("#chk_soundoff").prop("checked", (rs.SOUND_OFF == "Y" ? true : false)) //NotiCenter.kt ##55 참조  
+            //$("#chk_viboff").prop("checked", (rs.VIB_OFF == "Y" ? true : false)) //NotiCenter.kt ##55 참조 
+            //$("#chk_popupoff").prop("checked", (rs.POPUP_OFF == "Y" ? true : false)) //NotiCenter.kt ##55 참조
             $("#in_fr").val(g_setting.fr)
             $("#in_to").val(g_setting.to)     
             if (needPicture) hush.http.getUserPic(g_userid, "img_pict")
@@ -812,8 +812,8 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             if (!await hush.util.chkFieldVal(_abnm, "부재내용/기간", 0, 50)) return false    
             const _standalone = $("#chk_standalone").is(":checked") ? "Y" : ""
             const _notioff = $("#chk_notioff").is(":checked") ? "Y" : ""
-            const _soundoff = $("#chk_soundoff").is(":checked") ? "Y" : ""
-            const _viboff = $("#chk_viboff").is(":checked") ? "Y" : ""
+            //const _soundoff = $("#chk_soundoff").is(":checked") ? "Y" : "" //NotiCenter.kt ##55 참조
+            //const _viboff = $("#chk_viboff").is(":checked") ? "Y" : "" //NotiCenter.kt ##55 참조
             const _fr = $("#in_fr").val().trim()
             const _to = $("#in_to").val().trim()
             if (!chkTime(_fr)) return false
@@ -821,10 +821,10 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             if ((_fr == "" && _to != "") || (_fr != "" && _to == "")) throw new Error("알림시간이 빈칸입니다.")
             const _bodyoff = $("#chk_bodyoff").is(":checked") ? "Y" : ""                       
             const _senderoff = $("#chk_senderoff").is(":checked") ? "Y" : ""
-            const _popupoff = $("#chk_popupoff").is(":checked") ? "Y" : ""
+            //const _popupoff = $("#chk_popupoff").is(":checked") ? "Y" : "" //NotiCenter.kt ##55 참조
             const rq = { nicknm : encodeURIComponent(_nicknm), job : encodeURIComponent(_job), //type : "common", 
                         abcd : encodeURIComponent(_abcd), abnm : encodeURIComponent(_abnm), standalone : _standalone, notioff : _notioff,
-                        soundoff : _soundoff, viboff : _viboff, bodyoff : _bodyoff, senderoff : _senderoff, popupoff : _popupoff, fr : _fr, to : _to }
+                        bodyoff : _bodyoff, senderoff : _senderoff, fr : _fr, to : _to }
             const rs = await hush.http.ajax("/msngr/proc_env", rq)
             if (rs.code != hush.cons.CODE_OK) throw new Error(rs.msg)
             $("#header_title").html(g_usernm + ((_nicknm != "") ? " [" + _nicknm + "]" : ""))
@@ -834,15 +834,15 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             g_setting.abnm = _abnm            
             hush.http.setCookie("standalone", _standalone)
             hush.http.setCookie("notioff", _notioff)
-            hush.http.setCookie("soundoff", _soundoff)
-            hush.http.setCookie("viboff", _viboff)
+            //hush.http.setCookie("soundoff", _soundoff) //NotiCenter.kt ##55 참조
+            //hush.http.setCookie("viboff", _viboff) //NotiCenter.kt ##55 참조
             hush.http.setCookie("bodyoff", _bodyoff)
             hush.http.setCookie("senderoff", _senderoff)
-            hush.http.setCookie("popupoff", _popupoff)
+            //hush.http.setCookie("popupoff", _popupoff) //NotiCenter.kt ##55 참조
             g_setting.fr = _fr
             g_setting.to = _to
             const rq1 = { kind : "userinfo", userkey : g_userkey, nicknm : _nicknm, job : _job, abcd : _abcd, abnm : _abnm, notioff : _notioff,  
-            soundoff : _soundoff, viboff : _viboff, bodyoff : _bodyoff, senderoff : _senderoff, popupoff : _popupoff, fr : _fr, to : _to }
+            bodyoff : _bodyoff, senderoff : _senderoff, fr : _fr, to : _to }
             if (hush.webview.ios) {
             } else if (hush.webview.and) {
                 setTimeout(function() {
@@ -858,11 +858,11 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             $("#in_abnm").val(g_setting.abnm)  
             $("#chk_standalone").prop("checked", (hush.http.getCookie("standalone") == "Y" ? true : false))
             $("#chk_notioff").prop("checked", (hush.http.getCookie("notioff") == "Y" ? true : false))
-            $("#chk_soundoff").prop("checked", (hush.http.getCookie("soundoff") == "Y" ? true : false))
-            $("#chk_viboff").prop("checked", (hush.http.getCookie("viboff") == "Y" ? true : false))
+            //$("#chk_soundoff").prop("checked", (hush.http.getCookie("soundoff") == "Y" ? true : false)) //NotiCenter.kt ##55 참조
+            //$("#chk_viboff").prop("checked", (hush.http.getCookie("viboff") == "Y" ? true : false)) //NotiCenter.kt ##55 참조
             $("#chk_bodyoff").prop("checked", (hush.http.getCookie("bodyoff") == "Y" ? true : false))
             $("#chk_senderoff").prop("checked", (hush.http.getCookie("senderoff") == "Y" ? true : false))
-            $("#chk_popupoff").prop("checked", (hush.http.getCookie("popupoff") == "Y" ? true : false))
+            //$("#chk_popupoff").prop("checked", (hush.http.getCookie("popupoff") == "Y" ? true : false)) //NotiCenter.kt ##55 참조
             $("#in_fr").val(g_setting.fr)  
             $("#in_to").val(g_setting.to)
         }

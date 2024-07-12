@@ -71,7 +71,7 @@
                             return
                         }
                         $("#div_log").show()
-                        $("#btn_noti_popup").show()
+                        $("#btn_noti_mobile").show()
                     } else {
                         $("#btn_collapseall").show()
                         $("#btn_expandall").show()
@@ -325,11 +325,11 @@
                             hush.util.showEx(ex)
                         }
                     })
-                    $("#btn_noti_popup").on("click", function() {
+                    $("#btn_noti_mobile").on("click", function() {
                         hush.util.animBgColor($(this))
-                        AndroidMain.setNotiPopup()
+                        AndroidMain.setNotiMobile()
                     })
-                    $("#in_nicknm,#in_job,#in_abcd,#in_abnm,#chk_standalone,#chk_notioff,#chk_soundoff,#chk_viboff,#in_fr,#in_to,#chk_bodyoff,#chk_senderoff,#chk_popupoff").on("change", function() { 
+                    $("#in_nicknm,#in_job,#in_abcd,#in_abnm,#chk_standalone,#chk_notioff,#in_fr,#in_to,#chk_bodyoff,#chk_senderoff").on("change", function() { 
                         g_setting_changed = true 
                     })   
                     $("#spn_clear").on("click", function() {  
@@ -564,8 +564,7 @@
                     <!-- <label for=chk_popupoff class=coSettingWrap style="margin-left:10px">
                         <input type=checkbox id=chk_popupoff name=chk_popupoff class=coSettingChkbox />
                         <span class='coSettingSpan coText'>모바일팝업숨김</span>
-                    </label> //NotiCenter.kt의 $$7 참조 (현재 미사용) 대신 아래 버튼으로 처리-->
-                    <div id=btn_noti_popup class='picBtn coText' style="display:none;margin-left:5px">팝업옵션</div>
+                    </label> //NotiCenter.kt의 ##55 참조 (현재 미사용) 대신 아래 btn_noti_mobile 버튼으로 처리-->
                 </div>
                 <div class=coSettingRow>
                     <div class='coSettingLabel coText'>알림표시</div>
@@ -578,7 +577,7 @@
                         <span class='coSettingSpan coText'>발신숨김</span>
                     </label>
                 </div>
-                <div class=coSettingRow>
+                <!--<div class=coSettingRow> NotiCenter.kt의 ##55 참조 (현재 미사용) 대신 아래 btn_noti_mobile 버튼으로 처리
                     <div class='coSettingLabel coText'>알림음/진동<br>(Mobile)</div>
                     <label for=chk_soundoff class=coSettingWrap>
                         <input type=checkbox id=chk_soundoff name=chk_soundoff class=coSettingChkbox />
@@ -588,6 +587,10 @@
                         <input type=checkbox id=chk_viboff name=chk_viboff class=coSettingChkbox />
                         <span class='coSettingSpan coText'>진동끄기</span>
                     </label>
+                </div>-->
+                <div class=coSettingRow>
+                    <div class='coSettingLabel coText'>알림옵션<br>(Mobile)</div>
+                    <div id=btn_noti_mobile class='picBtn coText' style="display:none;margin-left:5px">소리/진동/팝업</div>
                 </div>
                 <div class=coSettingRow>
                     <div class='coSettingLabel coText'>알림시간<br>(Mobile)</div>
