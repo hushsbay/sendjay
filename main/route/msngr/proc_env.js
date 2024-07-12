@@ -28,7 +28,7 @@ router.post('/', async function(req, res) {
 		const _job = decodeURIComponent(req.body.job) || ''
 		const _abcd = decodeURIComponent(req.body.abcd) || ''
 		const _abnm = decodeURIComponent(req.body.abnm) || ''
-		const _standalone = req.body.standalone
+		//const _standalone = req.body.standalone
 		const _notioff = req.body.notioff
 		const _fr = req.body.fr
 		const _to = req.body.to
@@ -38,10 +38,10 @@ router.post('/', async function(req, res) {
 		//const _viboff = req.body.viboff //NotiCenter.kt ##55 참조
 		//const _popupoff = req.body.popupoff //NotiCenter.kt ##55 참조
 		sql = "UPDATE Z_USER_TBL "
-		sql += "  SET NICK_NM = ?, JOB = ?, AB_CD = ?, AB_NM = ?, STANDALONE = ?, NOTI_OFF = ?, " 
+		sql += "  SET NICK_NM = ?, JOB = ?, AB_CD = ?, AB_NM = ?, NOTI_OFF = ?, " 
 		sql += "      BODY_OFF = ?, SENDER_OFF = ?, TM_FR = ?, TM_TO = ?, MODR = ?, MODDT = sysdate(6) "
 		sql += "WHERE USER_ID = ? "
-		await wsmysql.query(conn, sql, [_nicknm, _job, _abcd, _abnm, _standalone, _notioff, _bodyoff, _senderoff, _fr, _to, userid, userid])
+		await wsmysql.query(conn, sql, [_nicknm, _job, _abcd, _abnm, _notioff, _bodyoff, _senderoff, _fr, _to, userid, userid])
 		ws.http.resJson(res, rs, userid) //세번째 인자(userid) 있으면 token 갱신
 	} catch (ex) {
 		ws.http.resException(req, res, ex)

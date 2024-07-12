@@ -165,9 +165,9 @@ Here are some ideas to get you started:
    ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_erp_portal.png)
 
    - PC 웹브라우저에서는 모바일보다는 일반적으로 상대적으로 네트워크가 안정이 되어 있습니다.<br/>
-     사내ERP에 최초 접속시 웹메신저를 별도의 브라우저탭으로(Standalone) 자동실행시키는 경우는 크게<br/>
-     어려움이 없으나 문제는 재연결입니다. 사용자가 해당 메신저 탭을 닫거나 다른 사이트로 대체해버리면<br/>
-     다른 사내ERP 탭에서 다시 자동실행을 시켜야 하는데 이 때 사용자 입장에서는 새로운 브라우저탭이<br/>
+     사내ERP에 최초 접속시 웹메신저를 실행시키는 경우는 크게 어려움이 없으나 문제는 재연결입니다.<br/>
+     사용자가 해당 메신저 탭을 닫거나 다른 사이트로 대체해 버리면 다른 사내ERP 탭에서<br/>
+     다시 자동실행을 시켜야 하는데 이 때 사용자 입장에서는 새로운 브라우저탭이<br/>
      자동으로 열리는 것이 불편하고 시각적으로도 아주 거슬리게 됩니다.<br/>
 
    - 그래서, 브라우저탭에서 백그라운드로 자동실행하는 옵션을 제공하여 사용자가 선택할 수 있도록 합니다.<br/>
@@ -559,7 +559,6 @@ JOB VARCHAR(50) NOT NULL DEFAULT '' COMMENT '직무, 업무내용',
 TEL_NO VARCHAR(20) NOT NULL DEFAULT '' COMMENT '전화번호',
 AB_CD VARCHAR(7) NOT NULL DEFAULT '' COMMENT '부재코드(예:dayoff, biztrip)',
 AB_NM VARCHAR(50) NOT NULL DEFAULT '' COMMENT '부재내용(예:20210101~20210103)',
-STANDALONE CHAR(1) NOT NULL DEFAULT '' COMMENT '별도탭에서실행(Y). 웹전용',
 NOTI_OFF CHAR(1) NOT NULL DEFAULT '' COMMENT '알림끄기(Y)',
 BODY_OFF CHAR(1) NOT NULL DEFAULT '' COMMENT '알림내용숨기기(Y)',
 SENDER_OFF CHAR(1) NOT NULL DEFAULT '' COMMENT '발신자숨기기(Y)',

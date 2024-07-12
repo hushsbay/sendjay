@@ -771,7 +771,7 @@ const procSettingOnLoad = (rs) => { //rs from hush.auth.verifyUser(true)
     g_setting.job = (rs.JOB) ? rs.JOB : ""
     g_setting.abcd = (rs.AB_CD) ? rs.AB_CD : ""
     g_setting.abnm = (rs.AB_NM) ? rs.AB_NM : ""
-    hush.http.setCookie("standalone", rs.STANDALONE)
+    //hush.http.setCookie("standalone", rs.STANDALONE)
     hush.http.setCookie("notioff", rs.NOTI_OFF)
     //hush.http.setCookie("soundoff", rs.SOUND_OFF) //NotiCenter.kt ##55 참조
     //hush.http.setCookie("viboff", rs.VIB_OFF) //NotiCenter.kt ##55 참조
@@ -791,7 +791,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             $("#in_job").val(g_setting.job)
             $("#in_abcd").val(g_setting.abcd)
             $("#in_abnm").val(g_setting.abnm)
-            $("#chk_standalone").prop("checked", (rs.STANDALONE == "Y" ? true : false))
+            //$("#chk_standalone").prop("checked", (rs.STANDALONE == "Y" ? true : false))
             $("#chk_notioff").prop("checked", (rs.NOTI_OFF == "Y" ? true : false))  
             $("#chk_bodyoff").prop("checked", (rs.BODY_OFF == "Y" ? true : false))            
             $("#chk_senderoff").prop("checked", (rs.SENDER_OFF == "Y" ? true : false))   
@@ -810,7 +810,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             if (!await hush.util.chkFieldVal(_job, "직무", 0, 50)) return false
             if (!await hush.util.chkFieldVal(_abcd, "부재코드", 0, 7)) return false
             if (!await hush.util.chkFieldVal(_abnm, "부재내용/기간", 0, 50)) return false    
-            const _standalone = $("#chk_standalone").is(":checked") ? "Y" : ""
+            //const _standalone = $("#chk_standalone").is(":checked") ? "Y" : ""
             const _notioff = $("#chk_notioff").is(":checked") ? "Y" : ""
             //const _soundoff = $("#chk_soundoff").is(":checked") ? "Y" : "" //NotiCenter.kt ##55 참조
             //const _viboff = $("#chk_viboff").is(":checked") ? "Y" : "" //NotiCenter.kt ##55 참조
@@ -823,7 +823,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             const _senderoff = $("#chk_senderoff").is(":checked") ? "Y" : ""
             //const _popupoff = $("#chk_popupoff").is(":checked") ? "Y" : "" //NotiCenter.kt ##55 참조
             const rq = { nicknm : encodeURIComponent(_nicknm), job : encodeURIComponent(_job), //type : "common", 
-                        abcd : encodeURIComponent(_abcd), abnm : encodeURIComponent(_abnm), standalone : _standalone, notioff : _notioff,
+                        abcd : encodeURIComponent(_abcd), abnm : encodeURIComponent(_abnm), notioff : _notioff,
                         bodyoff : _bodyoff, senderoff : _senderoff, fr : _fr, to : _to }
             const rs = await hush.http.ajax("/msngr/proc_env", rq)
             if (rs.code != hush.cons.CODE_OK) throw new Error(rs.msg)
@@ -832,7 +832,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             g_setting.job = _job
             g_setting.abcd = _abcd
             g_setting.abnm = _abnm            
-            hush.http.setCookie("standalone", _standalone)
+            //hush.http.setCookie("standalone", _standalone)
             hush.http.setCookie("notioff", _notioff)
             //hush.http.setCookie("soundoff", _soundoff) //NotiCenter.kt ##55 참조
             //hush.http.setCookie("viboff", _viboff) //NotiCenter.kt ##55 참조
@@ -856,7 +856,7 @@ const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) 
             $("#in_job").val(g_setting.job)
             $("#in_abcd").val(g_setting.abcd)
             $("#in_abnm").val(g_setting.abnm)  
-            $("#chk_standalone").prop("checked", (hush.http.getCookie("standalone") == "Y" ? true : false))
+            //$("#chk_standalone").prop("checked", (hush.http.getCookie("standalone") == "Y" ? true : false))
             $("#chk_notioff").prop("checked", (hush.http.getCookie("notioff") == "Y" ? true : false))
             //$("#chk_soundoff").prop("checked", (hush.http.getCookie("soundoff") == "Y" ? true : false)) //NotiCenter.kt ##55 참조
             //$("#chk_viboff").prop("checked", (hush.http.getCookie("viboff") == "Y" ? true : false)) //NotiCenter.kt ##55 참조

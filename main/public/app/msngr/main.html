@@ -329,7 +329,7 @@
                         hush.util.animBgColor($(this))
                         AndroidMain.setNotiMobile()
                     })
-                    $("#in_nicknm,#in_job,#in_abcd,#in_abnm,#chk_standalone,#chk_notioff,#in_fr,#in_to,#chk_bodyoff,#chk_senderoff").on("change", function() { 
+                    $("#in_nicknm,#in_job,#in_abcd,#in_abnm,#chk_notioff,#in_fr,#in_to,#chk_bodyoff,#chk_senderoff").on("change", function() { 
                         g_setting_changed = true 
                     })   
                     $("#spn_clear").on("click", function() {  
@@ -548,13 +548,13 @@
                     <div class='coSettingLabel coText'>부재내용</div>
                     <input id=in_abnm data-role=none spellcheck=false placeholder='50 bytes. eg) 08/15~08/23' class='inputSetting coText' />
                 </div>
-                <div class=coSettingRow>
+                <!-- <div class=coSettingRow>
                     <div class='coSettingLabel coText'>자동시작<br>(Web)</div>
                     <label for=chk_standalone class=coSettingWrap>
                         <input type=checkbox id=chk_standalone name=chk_standalone class=coSettingChkbox />
                         <span class='coSettingSpan coText'>별도 브라우저탭에서 실행</span>
                     </label>
-                </div>
+                </div> -->
                 <div class=coSettingRow>
                     <div class='coSettingLabel coText'>알림설정</div>
                     <label for=chk_notioff class=coSettingWrap>
