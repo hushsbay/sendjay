@@ -541,7 +541,7 @@
                 if (_sec == -1) { 
                     //endless toast (예: 서버호출) : 사용자가 hush.msg.toastEnd()를 이용해 종료해야 함
                 } else {
-                    const sec = (!_sec ? 2 : _sec) * 1000
+                    const sec = (!_sec ? 1 : _sec) * 1000
                     setTimeout(function() {
                         hush.msg.toastEnd()
                     }, sec)
