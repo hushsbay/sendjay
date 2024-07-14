@@ -681,7 +681,7 @@
                                 document.execCommand('copy')
                                 document.body.removeChild(t)
                                 showCellMenu(false)
-                                hush.msg.toast("복사 완료. Ctrl+V로 붙이고 전송하면 됩니다. (" + obj.type + ")") //image, file, flink will be ok too
+                                hush.msg.toast("복사 완료. Ctrl+V로 붙이고 전송하면 됩니다. (" + obj.type + ")", 2) //image, file, flink will be ok too
                             } else { //mobile
                                 AndroidRoom.copy(obj.msgid)
                                 hush.msg.toast("복사 완료") //image, file, flink will be ok too
@@ -1935,6 +1935,7 @@
                                     const blob = new Blob([uInt8Array], { type: "image/png" })
                                     const blobUrl = URL.createObjectURL(blob)
                                     $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
+                                    debugger
                                     showImgMenu(true)
                                     $("#btn_send_img_m").off("click").on("click", function(e) { 
                                         hush.util.animBgColor($(this))
