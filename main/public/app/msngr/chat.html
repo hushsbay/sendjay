@@ -1194,12 +1194,9 @@
                         rq.reply = getMsgToReply()
                         procSendAndAppend(rq)
                     }
-                    alert("111")
-                    alert("222"+$("#cancelreply").css("display"))
-                    if ($("#cancelreply").css("display") != "none") {
+                    if ($("#cancelreply").length > 0) {
                         setTimeout(function() { 
-                            //$("#cancelreply").click() 
-                            alert("333")
+                            $("#cancelreply").click() 
                         }, 500)
                     }
                 } catch (ex) {
