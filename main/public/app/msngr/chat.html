@@ -409,9 +409,11 @@
                     let _desc                
                     if (obj.type == "invite") {
                         const _arr = obj.body.split(hush.cons.deli)
-                        _desc = "<span class=mq_tiny>" + _arr[0] + "</span><br><span class=mq_tiny>invited by " + _arr[2] + "<br>at " + _dt + "</span>"
+                        //_desc = "<span class=mq_tiny>" + _arr[0] + "</span><br><span class=mq_tiny>invited by " + _arr[2] + "<br>at " + _dt + "</span>"
+                        _desc = "<span class=mq_tiny>" + _arr[0] + " invited by " + _arr[2] + " at " + _dt + "</span>"
                     } else {
-                        _desc = "<span class=mq_tiny>" + obj.body + "</span><br><span class=mq_tiny>at " + _dt + "</span>"
+                        //_desc = "<span class=mq_tiny>" + obj.body + "</span><br><span class=mq_tiny>at " + _dt + "</span>"
+                        _desc = "<span class=mq_tiny>" + obj.body + " at " + _dt + "</span>"
                     }
                     const _html = "<div id=msg_" + obj.msgid + " style='text-align:center;background:lightgray;border:1px solid lightgray;border-radius:8px;padding:3px 5px;margin:10px auto'>" + _desc + "</div>"
                     if (kind) {
@@ -1489,7 +1491,7 @@
             const drawLine = (_class, _str, _id) => {
                 if ($("." + _class).length > 0) $("." + _class).remove() //there'll be problems if not removed when auto scrolling
                 const _idHtml = (_id) ? "id=" + _id + " " : ""
-                return "<div class='" + _class + "' " + _idHtml + "style='clear:both;font-size:14px;color:maroon;padding:5px;margin:3px;text-align:center;border-top:1px solid peru'>" + _str + "</div>"
+                return "<div class='" + _class + "' " + _idHtml + "style='clear:both;font-size:12px;color:maroon;padding:5px;margin:3px;text-align:center;border-top:1px solid peru'>" + _str + "</div>"
             }
 
             const toggleResult = (show) => {
