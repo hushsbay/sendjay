@@ -1940,10 +1940,12 @@
                                     $("#btn_send_img_m").off("click").on("click", function(e) { 
                                         hush.util.animBgColor($(this))
                                         sendMsg("image", blobUrl, blob) 
+                                        $("#fr_sendcopy").hide()
                                     })
                                     $("#btn_cancel_img_m").off("click").on("click", function(e) { 
                                         hush.util.animBgColor($(this))
                                         showImgMenu(false) 
+                                        $("#fr_sendcopy").hide()
                                     })
                                 }
                             })
