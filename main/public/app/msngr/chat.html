@@ -1935,7 +1935,7 @@
                                     const blob = new Blob([uInt8Array], { type: "image/png" })
                                     const blobUrl = URL.createObjectURL(blob)
                                     $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
-                                    debugger
+                                    alert("1111")
                                     showImgMenu(true)
                                     $("#btn_send_img_m").off("click").on("click", function(e) { 
                                         hush.util.animBgColor($(this))
