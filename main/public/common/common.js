@@ -88,7 +88,7 @@
             sublink_ext_image : "png,gif,jpg,jpeg,ico",
             sublink_ext_video : "mp4", //file format which supports html5 streaming
             handling : ".. ", //handling..
-            left : " 퇴장했습니다.",
+            left : " 퇴장", //" 퇴장했습니다."
             param_webview_and : "webview=and",
             param_webview_ios : "webview=ios",
         },
@@ -949,7 +949,7 @@
                     _body = body
                 } else if (type == "invite") {
                     const _arr = body.split(hush.cons.deli)
-                    _body = _arr[0] + " invited by " + _arr[2]
+                    _body = "초대 : " + _arr[0] //+ " by " + _arr[2]
                 } else if (type == "image") {
                     _body = type
                 } else if (type == "file" || type == "flink") {

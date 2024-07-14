@@ -223,7 +223,7 @@
                                 const rq = initMsg()
                                 rq.type = "leave"
                                 rq.reply = _userid
-                                rq.body = _usernm + "<br>" + hush.cons.left //+ " by force"
+                                rq.body = _usernm + " " + hush.cons.left //+ " by force"
                                 if (hush.webview.ios) {
                                 } else if (hush.webview.and) {
                                     setTimeout(function() {
@@ -410,7 +410,7 @@
                     if (obj.type == "invite") {
                         const _arr = obj.body.split(hush.cons.deli)
                         //_desc = "<span class=mq_tiny>" + _arr[0] + "</span><br><span class=mq_tiny>invited by " + _arr[2] + "<br>at " + _dt + "</span>"
-                        _desc = "<span class=mq_tiny>" + _arr[0] + " invited by " + _arr[2] + " at " + _dt + "</span>"
+                        _desc = "<span class=mq_tiny>초대 : " + _arr[0] + " by " + _arr[2] + " at " + _dt + "</span>"
                     } else {
                         //_desc = "<span class=mq_tiny>" + obj.body + "</span><br><span class=mq_tiny>at " + _dt + "</span>"
                         _desc = "<span class=mq_tiny>" + obj.body + " at " + _dt + "</span>"
@@ -2383,7 +2383,7 @@
                         if (!hush.http.chkOnline()) return
                         const rq = initMsg(g_roomid)
                         rq.type = "leave"
-                        rq.body = g_usernm + "<br>" + hush.cons.left //when 3 people above
+                        rq.body = g_usernm + " " + hush.cons.left //when 3 people above
                         if (hush.webview.ios) {
                         } else if (hush.webview.and) {
                             setTimeout(function() {

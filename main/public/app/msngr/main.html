@@ -210,7 +210,7 @@
                                 const _roomid = item.id.substring(4)
                                 const rq = initMsg(_roomid)
                                 rq.type = "leave"
-                                rq.body = g_usernm + "<br>" + hush.cons.left
+                                rq.body = g_usernm + " " + hush.cons.left
                                 if (hush.webview.ios) { 
                                 } else if (hush.webview.and) {
                                     AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), _roomid, "parent", true)
