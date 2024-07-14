@@ -1196,9 +1196,13 @@
                     }
                     alert($("#cancelreply").length+"@@@")
                     if ($("#cancelreply").length > 0) {
-                        setTimeout(function() { 
+                        alert("33333")
+                        //setTimeout(function() { 
                             $("#cancelreply").click() 
-                        }, 500)
+                        //}, 500)
+                        alert("444")
+                    } else {
+                        alert("22222")
                     }
                 } catch (ex) {
                     hush.util.showEx(ex)
