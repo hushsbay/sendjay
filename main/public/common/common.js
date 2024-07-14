@@ -39,7 +39,7 @@
             subdeli : "$$",
             indeli : "','", //use this for sql where in clause
             easydeli : ";", //use this for absolutely safe place
-            memdeli : " / ",
+            memdeli : "/", //" / "
             deli_key : "__", //for setUser()
             idb_tbl : "msngr", //indexedDB
             sock_ev_connect : 'connect', //connect로 써야 함 (socket.io event) : 안드로이드에서는 Socket.EVENT_CONNECT
