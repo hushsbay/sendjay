@@ -90,11 +90,11 @@
                     }
                 } else {
                     if (show) {
-                        $("#send_copy, #cancel_copy").hide()
+                        $("#btn_paste, #btn_cancel_paste").hide()
                         $("#imgplate, #btn_send_img_m, #btn_cancel_img_m").show()
                     } else {
                         $("#imgplate, #btn_send_img_m, #btn_cancel_img_m").hide() 
-                        $("#send_copy, #cancel_copy").show()
+                        $("#btn_paste, #btn_cancel_paste").show()
                         $("#imgplate").empty()
                     }
                 }
@@ -2399,13 +2399,13 @@
                             hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
                         }
                     })
-                    $("#send_copy").on("click", function() {
+                    $("#btn_paste").on("click", function() {
                         if (!hush.http.chkOnline()) return
                         hush.util.animBgColor($(this))
                         AndroidRoom.paste()
-                        $("#fr_sendcopy").hide()
+                        //$("#fr_sendcopy").hide()
                     })
-                    $("#cancel_copy").on("click", function() {
+                    $("#btn_cancel_paste").on("click", function() {
                         hush.util.animBgColor($(this))
                         AndroidRoom.copy("")
                         $("#fr_tip").show()
@@ -2528,8 +2528,8 @@
             <div style="width:100%;height:20px;display:flex;align-items:center;justify-content:space-between;margin:3px 5px">
                 <div id=fr_tip class=coDotDot style="height:100%;width:calc(100% - 80px);display:flex;align-items:center"></div>
                 <div id=fr_sendcopy style="display:none;width:100%;align-items:center;justify-content:center">
-                    <span id=send_copy class=coText style='background:#005192;color:white;border-radius:5px;padding:2px'>붙이기</span><!--이미지복사후-->
-                    <span id=cancel_copy class=coText style='background:#005192;color:white;border-radius:5px;padding:2px;margin-left:3px'>취소</span><!--이미지복사후-->
+                    <span id=btn_paste class=coText style='background:#005192;color:white;border-radius:5px;padding:2px'>붙이기1</span><!--이미지복사후-->
+                    <span id=btn_cancel_paste class=coText style='background:#005192;color:white;border-radius:5px;padding:2px;margin-left:3px'>취소1</span><!--이미지복사후-->
                     <span id=btn_send_img_m class=coText style='display:none;background:#005192;color:white;border-radius:5px;padding:2px'>전송</span><!--이미지붙인후-->
                     <span id=btn_cancel_img_m class=coText style='display:none;background:#005192;color:white;border-radius:5px;padding:2px;margin-left:3px'>취소</span><!--이미지붙인후-->
                 </div>
