@@ -1194,6 +1194,7 @@
                         rq.reply = getMsgToReply()
                         procSendAndAppend(rq)
                     }
+                    if ($("#cancelreply").css("display") != "none") setTimeout(function() { $("#cancelreply").click() }, 500)
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }
@@ -1985,7 +1986,7 @@
                 [hush.cons.sock_ev_invite_user] : (data) => {
                     try {
                         if (data.invitedUserids.length == 0) {
-                            hush.msg.toast("초대된 멤버가 없거나 이미 초대된 멤버입니다.")
+                            hush.msg.toast("초대된 멤버가 없거나 이미 초대된 멤버입니다.", 3)
                             return
                         } //여기서는 네트워크 연결 체크. 소켓연결체크 하지 말기 : 그 앞단에서 하고 여기까지 왔다는 것은 반드시 아래 메시지가 상대방에게 전달되어야 하므로 volatile로 가면 안됨
                         const rq = initMsg()
