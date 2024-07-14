@@ -1080,7 +1080,7 @@
                 } else if (rq.type == "flink") {
                     setTimeout(() => { //타이머 지나고 찾았을 때 아직 남아 있으면 전송실패인 것임
                         const objHandling = $("#handling_" + rq.msgid)
-                        if (objHandling.length > 0 && objHandling.css("display") != "none") {
+                        if (objHandling.css("display") != "none") {
                             procFailure(rq, "전송 실패.")
                         }
                     }, hush.cons.send_timeout_sec * 1000)
@@ -1177,6 +1177,7 @@
                             }
                         })
                     } else if (type == "flink") {
+                        debugger
                         rq.type = type
                         rq.body = blobUrlOrBody
                         rq.reply = getMsgToReply()
