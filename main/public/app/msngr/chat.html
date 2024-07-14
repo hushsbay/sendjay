@@ -1194,6 +1194,7 @@
                         rq.reply = getMsgToReply()
                         procSendAndAppend(rq)
                     }
+                    alert($("#cancelreply").length+"@@@")
                     if ($("#cancelreply").length > 0) {
                         setTimeout(function() { 
                             $("#cancelreply").click() 
