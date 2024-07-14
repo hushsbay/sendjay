@@ -1194,6 +1194,7 @@
                         rq.reply = getMsgToReply()
                         procSendAndAppend(rq)
                     }
+                    debugger
                     if ($("#cancelreply").css("display") != "none") setTimeout(function() { $("#cancelreply").click() }, 500)
                 } catch (ex) {
                     hush.util.showEx(ex)
