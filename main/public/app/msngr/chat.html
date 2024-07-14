@@ -1177,6 +1177,7 @@
                             }
                         })
                     } else if (type == "flink") {
+                        alert("1111")
                         rq.type = type
                         rq.body = blobUrlOrBody
                         rq.reply = getMsgToReply()
@@ -1194,6 +1195,7 @@
                         rq.reply = getMsgToReply()
                         procSendAndAppend(rq)
                     }
+alert("222")
                     if ($("#cancelreply").css("display") != "none") {
                         setTimeout(function() { $("#cancelreply").click() }, 500)
                     }
