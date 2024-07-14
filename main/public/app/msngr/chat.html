@@ -1471,7 +1471,7 @@
                     if (hush.cons.sublink_ext_image.includes(_extension) || hush.cons.sublink_ext_video.includes(_extension)) {
                         const _type = hush.cons.sublink_ext_image.includes(_extension) ? "ext_image" : "ext_video"
                         hush.http.ajaxCall("/msngr/get_msginfo", { msgid : obj.msgid, body : _sublink_request }, function(rsPic) {
-                            // if (rsPic.buffer) {
+                            // if (rsPic && rsPic.buffer) {
                             //     const blobUrl = hush.blob.getBlobUrlForImage(rsPic.buffer.data)
                             //     imageSrcEvent(blobUrl, obj.msgid, kind, _type, _sublink_request) //$("#~").attr("src", "data:image/png;base64," + data)
                             // }
