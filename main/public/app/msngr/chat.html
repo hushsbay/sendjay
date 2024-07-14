@@ -683,7 +683,7 @@
                                 showCellMenu(false)
                                 hush.msg.toast("복사 완료. Ctrl+V로 붙이면 됩니다. (" + obj.type + ")", 2) //image, file, flink will be ok too
                             } else { //mobile
-                                AndroidRoom.copy(obj.msgid)
+                                localStorage.msgidCopied = obj.msgid //AndroidRoom.copy(obj.msgid) //$$66 in MainActivity.kt 참조
                                 hush.msg.toast("복사 완료") //image, file, flink will be ok too
                                 $("#fr_tip").hide()
                                 $("#fr_sendcopy").css("display", "flex")
@@ -2101,7 +2101,7 @@
                     } else if (g_type == "open") {
                         openRoomWithMobile(g_type)
                     }
-                    if (rs && rs.msgidCopied) {
+                    if (localStorage.msgidCopied) { //if (rs && rs.msgidCopied) { //$$66 in MainActivity.kt 참조
                         $("#fr_tip").hide()
                         $("#fr_sendcopy").css("display", "flex")
                     }
@@ -2139,17 +2139,17 @@
             const invite = (from, obj) => {                 
                 procInvite(obj.userids.split(hush.cons.deli), obj.usernms.split(hush.cons.deli))
             }
-                
-            const pasteFromWebView = (from, obj) => {
-                if (!hush.http.chkOnline()) return
-                const rq = { msgid : obj.msgidCopied }
-                if (hush.webview.ios) {
-                } else if (hush.webview.and) { //it's text
-                    setTimeout(function() {
-                        AndroidCom.send(hush.cons.sock_ev_qry_msgcell, JSON.stringify(rq), g_roomid, null, true)
-                    }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
-                }
-            }
+            
+            // const pasteFromWebView = (from, obj) => { //$$66 in MainActivity.kt 참조
+            //     if (!hush.http.chkOnline()) return
+            //     const rq = { msgid : obj.msgidCopied }
+            //     if (hush.webview.ios) {
+            //     } else if (hush.webview.and) { //it's text
+            //         setTimeout(function() {
+            //             AndroidCom.send(hush.cons.sock_ev_qry_msgcell, JSON.stringify(rq), g_roomid, null, true)
+            //         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+            //     }
+            // }
 
             $.when($.ready).done(async function() {
                 try {
@@ -2403,14 +2403,22 @@
                     $("#btn_paste").on("click", function() {
                         if (!hush.http.chkOnline()) return
                         hush.util.animBgColor($(this))
-                        AndroidRoom.paste()
-                        //$("#fr_sendcopy").hide()
+                        //AndroidRoom.paste() //$$66 in MainActivity.kt 참조
+                        const rq = { msgid : localStorage.msgidCopied }
+                        if (hush.webview.ios) {
+                        } else if (hush.webview.and) { //it's text
+                            setTimeout(function() {
+                                AndroidCom.send(hush.cons.sock_ev_qry_msgcell, JSON.stringify(rq), g_roomid, null, true)
+                            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                        }
+                        localStorage.msgidCopied = "" //AndroidRoom.copy("") //$$66 in MainActivity.kt 참조
+                        ////$("#fr_sendcopy").hide()
                     })
                     $("#btn_cancel_paste").on("click", function() {
                         hush.util.animBgColor($(this))
-                        AndroidRoom.copy("")
                         $("#fr_tip").show()
                         $("#fr_sendcopy").hide()
+                        localStorage.msgidCopied = "" //AndroidRoom.copy("") //$$66 in MainActivity.kt 참조                        
                     })
                     $("#main_pg").on("dragenter", function(e) {
                         e.stopPropagation()
