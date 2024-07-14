@@ -1194,6 +1194,8 @@
                         rq.reply = getMsgToReply()
                         procSendAndAppend(rq)
                     }
+                    alert("111")
+                    alert("222"+$("#cancelreply").css("display"))
                     if ($("#cancelreply").css("display") != "none") {
                         setTimeout(function() { 
                             //$("#cancelreply").click() 
