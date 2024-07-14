@@ -591,7 +591,7 @@
                         _html += "<span id=msgtoreply class=mq_tiny style='color:#005192;cursor:default;margin-left:4px'>re) " + _msg + "</span> "
                         $("#fr_tip").html(_html)
                         $("#cancelreply").off("click").on("click", function() {
-                            setTitleToFrTip(true)
+                            setTitleToFrTip()
                         })
                     })
                     $("#save_" + obj.msgid).off("click").on("click", function() {
@@ -1125,7 +1125,7 @@
 
             const getMsgToReply = () => {
                 const _msg = ($("#msgtoreply").length > 0) ? $("#msgtoreply").html().trim() : ""
-                if (_msg) setTitleToFrTip(true)
+                if (_msg) setTitleToFrTip()
                 return _msg
             }
 
@@ -1194,9 +1194,7 @@
                         rq.reply = getMsgToReply()
                         procSendAndAppend(rq)
                     }
-                    debugger
                     if ($("#cancelreply").css("display") != "none") {
-                        alert("111")
                         setTimeout(function() { $("#cancelreply").click() }, 500)
                     }
                 } catch (ex) {
@@ -1595,8 +1593,9 @@
 
             const setTitleToFrTip = () => {
                 const frTip = $("#fr_tip")
-                alert(frTip.html()+"@@@@")
-                if (frTip.html() == "" || frTip.html().includes("방명 :")) frTip.html("<span class=coText>방명 : " + g_title + "</span>")
+                if (frTip.html() == "" || frTip.html().includes("방명 :") || frTip.html().includes("cancelreply")) {
+                    frTip.html("<span class=coText>방명 : " + g_title + "</span>")
+                }
             }
 
             const showRoomMenu = (show) => { //for mobile only
@@ -1624,7 +1623,7 @@
                     $("#list_msg").css("margin-right", "0px") //$(".plate").css("margin-right", "0px")
                 }
                 if (!notRecall) g_show_list_people = value
-                setTitleToFrTip(true)
+                setTitleToFrTip()
             }
 
             const chkTyping = () => {
@@ -1818,7 +1817,7 @@
                             return
                         }
                         setMembers(data)
-                        setTitleToFrTip(true)
+                        setTitleToFrTip()
                         addRow(data)
                         if (!_isStickyNeeded) scrollToTarget()
                     } else if (data.type == "leave") {                    
@@ -1838,7 +1837,7 @@
                                 }
                             } else {
                                 setMembers(data)
-                                setTitleToFrTip(true)
+                                setTitleToFrTip()
                                 addRow(data)
                                 if (!_isStickyNeeded) scrollToTarget()
                             }
@@ -1854,7 +1853,7 @@
                                 }
                             } else {
                                 setMembers(data)
-                                setTitleToFrTip(true)
+                                setTitleToFrTip()
                                 addRow(data)
                                 if (!_isStickyNeeded) scrollToTarget()
                             }
