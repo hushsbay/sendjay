@@ -1966,6 +1966,7 @@
                         const ret = await hush.msg.confirm("파일을 전송할까요? " + hush.util.extractFileFromTalkBody(rs.BODY))
                         if (!ret) return
                         sendMsg("flink", rs.BODY, rs.FILESTATE)
+                        $("#fr_sendcopy").hide()
                     } else {
                         if (rs.BODY.trim() == "") {
                             hush.msg.alert("no text data to send")
