@@ -1195,7 +1195,10 @@
                         procSendAndAppend(rq)
                     }
                     debugger
-                    if ($("#cancelreply").css("display") != "none") setTimeout(function() { $("#cancelreply").click() }, 500)
+                    if ($("#cancelreply").css("display") != "none") {
+                        alert("111")
+                        setTimeout(function() { $("#cancelreply").click() }, 500)
+                    }
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }
@@ -1592,6 +1595,7 @@
 
             const setTitleToFrTip = () => {
                 const frTip = $("#fr_tip")
+                alert(frTip.html()+"@@@@")
                 if (frTip.html() == "" || frTip.html().includes("방명 :")) frTip.html("<span class=coText>방명 : " + g_title + "</span>")
             }
 
