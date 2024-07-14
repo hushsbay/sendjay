@@ -1078,6 +1078,7 @@
                         })
                     }, hush.cons.send_timeout_sec * 1000)
                 } else if (rq.type == "flink") {
+                    alert("@@@111")
                     setTimeout(() => { //타이머 지나고 찾았을 때 아직 남아 있으면 전송실패인 것임
                         const objHandling = $("#handling_" + rq.msgid)
                         if (objHandling.css("display") != "none") {
@@ -1194,16 +1195,7 @@
                         rq.reply = getMsgToReply()
                         procSendAndAppend(rq)
                     }
-                    // alert($("#cancelreply").length+"@@@")
-                    // if ($("#cancelreply").length > 0) {
-                    //     alert("33333")
-                    //     //setTimeout(function() { 
-                    //         //$("#cancelreply").click() 
-                    //     //}, 500)
-                    //     alert("444")
-                    // } else {
-                    //     alert("22222")
-                    // }
+                    if ($("#cancelreply").length > 0) $("#cancelreply").click()
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }
