@@ -32,7 +32,7 @@ async function proc() {
         sql = "UPDATE A_MSGMST_TBL A SET STATE = 'D' WHERE STATE = '' AND (SELECT COUNT(*) FROM A_MSGDTL_TBL WHERE MSGID = A.MSGID AND ROOMID = A.ROOMID AND STATE <> 'D') = 0 "
         await wsmysql.query(conn, sql, null)
         //3) 파일 삭제
-        sql = "SELECT MSGID, ROOMID, BODY "
+        sql = "SELECT MSGID, ROOMID, BODY, TYP "
         sql += " FROM A_MSGMST_TBL "
         sql += "WHERE TYP in ('file', 'flink') "
         sql += "  AND FILESTATE <> ? "
@@ -42,11 +42,12 @@ async function proc() {
         for (let i = 0; i < _len; i++) {
             const _msgid = data[i].MSGID
             const _roomid = data[i].ROOMID
+            const _type = data[i].TYP
             const _body = data[i].BODY //예) 20240210071920474000999934t0-cYE8g_E/oldclock/7인의 부활_wise banner$$20240527214223680240.jpg##37786
             const _filename = _body.split(ws.cons.deli)[0] //예) 20240210071920474000999934t0-cYE8g_E/oldclock/7인의 부활_wise banner$$20240527214223680240.jpg
             const _path = config.app.uploadPath + '/' + _filename
             await wsmysql.query(conn, "UPDATE A_MSGMST_TBL SET FILESTATE = ? WHERE MSGID = ? AND ROOMID = ? ", [ws.cons.file_expired, _msgid, _roomid]) 
-            deleteFileAndRemoveEmptyFolderFromChild(_path, _filename, 'expiry')
+            if (_type == 'file') deleteFileAndRemoveEmptyFolderFromChild(_path, _filename, 'expiry') //flink는 말그대로 file의 링크이므로 실제 파일은 없음
         } 
         //4) 가비지 파일 삭제 (파일업로드중 브라우저 닫기 등)
         //A_FILELOG_TBL에 insert하는 것은 proc_file.js인데 아래 로직에서 MSGMST에 있다는 것은 정상적으로 파일이 업로드되었다는 의미임
