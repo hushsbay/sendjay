@@ -329,11 +329,14 @@
                     })
                     $("#res_" + data.list[_len - 1].MSGID).click()
                     $("#getprev").off("click").on("click", function(e) { //검색결과는 한번에 조회해서 이전 페이지 추가 표시하는 기능 등이 없음
-                        //따라서, 여기 getPrev는 검색결과중 제일 오래된 톡보다 이전 내용을 보고자 할 때 누르면 그 내용을 보여 주는 기능임
+                        //따라서, 여기 getPrev는 검색결과중 제일 오래된(처음) 톡보다 이전 내용을 보고자 할 때 누르면 그 내용을 보여 주는 기능임
                         hush.util.animBgColor($(this))
                         g_cdt = $(this).data("cdt")
                         getMsgList()
-                        setTimeout(() => $("#getprev").hide(), 500)
+                        setTimeout(function() {
+                            scrollToTarget("#getprev")
+                            $("#getprev").hide()
+                        }, 500)
                     })
                 } catch (ex) {
                     hush.util.showEx(ex)
