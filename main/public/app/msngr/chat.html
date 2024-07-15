@@ -442,14 +442,14 @@
                     const _submargin = (obj.senderid == g_userid) ? "margin:4px 4px 1px 1px" : "margin:4px 1px 1px 4px"
                     const _replied = obj.reply || ""
                     const _dispReplied = obj.reply ? "" : "display:none;"
-                    if (obj.type == "image") {
+                    if (obj.type == "image" && obj.body != hush.cons.cell_revoked) {
                         if (obj.body == hush.cons.cell_revoked) {
                             _body = obj.body
                             obj.bufferStr = null //obj.buffer = null
                         } else {
                             _body = "<img id=img_" + obj.msgid + " style='display:none;max-width:150px;max-height:150px;cursor:pointer;margin-top:4px'>"
                         }
-                        _boderpx = "1px" //_boderpx = "0px"
+                        _boderpx = "0px"
                     } else if (obj.type == "file" || obj.type == "flink") {
                         if (obj.body == hush.cons.cell_revoked) {
                             _body = obj.body
