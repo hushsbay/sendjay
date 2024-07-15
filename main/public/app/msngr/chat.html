@@ -474,11 +474,11 @@
                             }
                         }
                     } else {
-                        if (obj.body == hush.cons.cell_revoked) {
+                        //if (obj.body == hush.cons.cell_revoked) {
+                        //    _body = obj.body
+                        //} else { //_body = hush.util.removeTag(obj.body) //.text()로 변경 검토해야 함
                             _body = obj.body
-                        } else { //_body = hush.util.removeTag(obj.body) //.text()로 변경 검토해야 함
-                            _body = obj.body
-                        }
+                        //}
                         const _pattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi //two more bytes parameter not working
                         const _http = _pattern.exec(_body) //const _pattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9가-힣+&@#\/%?=~_|!:,.;]*[-A-Z0-9가-힣+&@#\/%=~_|])/gi
                         if (_http != null) { //##00 opengraph : get first item
@@ -493,7 +493,7 @@
                     }
                     let _html
                     if (obj.senderid == g_userid) { //sent
-                        _backcolor = (obj.type == "image") ? "white" : "lightyellow"
+                        _backcolor = (obj.type == "image" && obj.body != hush.cons.cell_revoked) ? "white" : "lightyellow"
                         _html = "<div id=msg_" + obj.msgid + " class='talk" + needCheckUnread + "' style='display:flex;flex-direction:column;align-items:flex-end;cursor:pointer;margin:20px 0px 10px 0px'>"
                         _html += "  <div style='height:20px;display:flex;align-items:center;justify-content:flex-end;margin-right:4px;margin-bottom:4px'>"
                         _html += "      <img id=save_" + obj.msgid + " src='/img/download.png' class=coImg20 style='display:none;margin:0px 8px 0px 0px'>"
