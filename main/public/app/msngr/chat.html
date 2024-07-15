@@ -290,7 +290,7 @@
                             const _filepath = _fileStr[0].split("/")
                             const _filenameLong = _filepath[_filepath.length - 1]
                             const _brr = _filenameLong.split(hush.cons.subdeli) //original_filename_body + hush.cons.subdeli + 20191016081710239944.mp4
-                            const _crr = _brr[1].split(".")
+                            const _crr = (_brr.length == 1) ? _brr[0].split(".") : _brr[1].split(".")
                             body = (_crr.length > 1) ? _brr[0] + "." + _crr[1] : _brr[0] //original_filename_body.mp4                    
                         } else  {
                             body = row.BODY
