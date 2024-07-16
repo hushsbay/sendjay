@@ -941,7 +941,9 @@
                 const _arr = body.split("/")
                 const _brr = (_arr.length == 1) ? _arr[0].split(hush.cons.subdeli) : _arr[2].split(hush.cons.subdeli)
                 const _crr = (_brr.length == 1) ? _brr[0].split(hush.cons.deli) : _brr[1].split(hush.cons.deli)
-                return _brr[0] + hush.util.getFileNameAndExtension(_crr[0]).extDot
+                return (_brr.length == 1 ? _crr[0] : _brr[0]) + hush.util.getFileNameAndExtension(_crr[0]).extDot
+                //return _brr[0] + hush.util.getFileNameAndExtension(_crr[0]).extDot
+                //return _crr[0] + hush.util.getFileNameAndExtension(_crr[0]).extDot
             },
             displayTalkBodyCustom : (type, body) => { //See ChatService.kt too.
                 let _body
