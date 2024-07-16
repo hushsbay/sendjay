@@ -47,7 +47,7 @@
                 resetEnvForScroll()
                 setTimeout(function() {
                     g_list_msg.scroll(_.debounce(function() { //_.debounce => lodash.min.js
-                        alert("procScrollEvent")
+                        $("#in_search").val("procScrollEvent")
                         setTimeout(() => procQueryUnread(), 1) //스크롤이 맨 아래로 오면 txt_msg_added 있을 때 클릭한 효과와 동일해야 함
                         //const _lastTag = $($(".talk").last()[0]); if (_lastTag.position().top + _lastTag.height() + 1 <= g_list_msg.height()) {
                         if (g_list_msg.prop("scrollHeight") - parseInt(g_list_msg.height()) - g_list_msg.scrollTop() <= 100) {	
@@ -64,7 +64,7 @@
                             setTimeout(() => getMsgList(), 100)
                         }
                     }, 150))
-                }, 1000)
+                }, 2000)
             }
 
             const scrollToTarget = (_target) => {
