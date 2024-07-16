@@ -945,7 +945,7 @@
                 if (_brr.length == 1) {
                     return _crr[0]
                 } else {
-                    _brr[0] + hush.util.getFileNameAndExtension(_crr[0]).extDot
+                    return _brr[0] + hush.util.getFileNameAndExtension(_crr[0]).extDot
                 }
             },
             displayTalkBodyCustom : (type, body) => { //See ChatService.kt too.
