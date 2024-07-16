@@ -1524,7 +1524,7 @@
 
             const dialogRoomRename = (_type) => {
                 const _header = (_type == "all") ? "모두 적용" : "나만 적용"
-                hush.msg.dialogInputBox("새로운 방명을 입력하시기 바랍니다.<br>기존 방명을 지우려면 빈칸을 입력하면 됩니다.", g_title, { 
+                hush.msg.dialogInputBox("새로운 방명 입력.<br>기존 방명 지우기 : 빈칸 입력.", g_title, { 
                     "확인": async function() {                             
                         const _newName = hush.msg.dialogGetInput().trim()
                         if (!await hush.util.chkFieldVal(_newName, "방명", 0, 100)) return
@@ -1983,7 +1983,7 @@
                 },
                 [hush.cons.sock_ev_delete_msg] : (data) => {
                     if (data.type == "all") {
-                        hush.msg.toast("방의 모든 메시지가 삭제되었습니다.")
+                        hush.msg.toast("모든 메시지가 삭제되었습니다.")
                         g_list_msg.empty()                    
                     } else {
                         const _msgidArr = data.msgidArr
