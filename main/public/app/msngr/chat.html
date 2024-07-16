@@ -38,6 +38,7 @@
             let g_msgUnread = [], g_focus_for_webview, g_show_list_people = "X", sockConnected = false
             const FIRST_QUERIED = "9999"
             let g_retry_small, g_delete_small
+            let g_procQueryUnread = false
 
             const resetEnvForScroll = () => {
                 g_cdt = FIRST_QUERIED //FIRST_QUERIED(default). YYYYMMDD~ : when scrolled all the way down to the bottom, previous page shown and g_cdt gets YYYYMMDD~ value
@@ -394,7 +395,9 @@
                     //테스트해보니 이 procQueryUnread() 함수를 여러번 호출하고 있음 (아래 read_msg 여러번 호출하고 있음)
                     //원래는 read_msg(updateall)만 호출하면 되는데 특히, 앱 설치하자마자 방 열면 procScrollEvent가 2번, updateall이 2번 실행되고
                     //includes가 undefined때문에 안된다고 나와서 결국 오류로 멈춰서 ..가 남아 있게 된 것임
-                    //
+                    //                    
+                    if (g_procQueryUnread) return
+                    g_procQueryUnread = true
                     alert(arr.toString()+"@@@@")
                     const rq = { type : "query", msgidArr : arr }                
                     if (hush.webview.ios) {
@@ -1924,6 +1927,7 @@
                         for (let i = 0; i < data.msgidArr.length; i++) {
                             procUnreadCount(data.msgidArr[i], data.unreadArr[i])
                         }
+                        g_procQueryUnread = false
                     }
                 },
                 [hush.cons.sock_ev_qry_msgcell] : async (data) => { //when drag & drop
