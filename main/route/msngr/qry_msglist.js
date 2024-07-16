@@ -44,7 +44,6 @@ router.post('/', async function(req, res) {
 			sql += "  AND A.BODY LIKE '%" + keyword + "%' "
 			sql += "ORDER BY A.CDT LIMIT 0, ? "
 			arg = [roomid, userid, dateFr, cnt]
-			console.log(sql, roomid, userid, dateFr, cnt)
 		} else if (type == 'etc') {
 			sql += "  AND (A.TYP IN ('file', 'flink', 'image') OR (A.TYP = 'talk' AND (A.BODY LIKE '%http://%' OR A.BODY LIKE '%https://%'))) "
 			sql += "  AND A.BODY <> '" + ws.cons.cell_revoked + "' "
