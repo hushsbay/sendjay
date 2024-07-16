@@ -45,24 +45,26 @@
 
             const procScrollEvent = () => {
                 resetEnvForScroll()
-                g_list_msg.scroll(_.debounce(function() { //_.debounce => lodash.min.js
-                    alert("procScrollEvent")
-                    setTimeout(() => procQueryUnread(), 1) //스크롤이 맨 아래로 오면 txt_msg_added 있을 때 클릭한 효과와 동일해야 함
-                    //const _lastTag = $($(".talk").last()[0]); if (_lastTag.position().top + _lastTag.height() + 1 <= g_list_msg.height()) {
-                    if (g_list_msg.prop("scrollHeight") - parseInt(g_list_msg.height()) - g_list_msg.scrollTop() <= 100) {	
-                        const _tag = $("#txt_msg_added")
-                        if (_tag.css("display") != "none") _tag.click()
-                    } else {                    
-                        if (g_stopAutoScrollDown == null) g_stopAutoScrollDown = true
-                    }        
-                    const getMore = $("#getmore")
-                    if (!getMore || getMore.length == 0) return
-                    if (getMore.position().top + getMore.height() > 0) { //g_list_msg position should be relative for checking position().top
-                        if (getMore.attr("getting") == "Y") return
-                        getMore.attr("getting", "Y")
-                        setTimeout(() => getMsgList(), 100)
-                    }
-                }, 150))
+                setTimeout(function() {
+                    g_list_msg.scroll(_.debounce(function() { //_.debounce => lodash.min.js
+                        alert("procScrollEvent")
+                        setTimeout(() => procQueryUnread(), 1) //스크롤이 맨 아래로 오면 txt_msg_added 있을 때 클릭한 효과와 동일해야 함
+                        //const _lastTag = $($(".talk").last()[0]); if (_lastTag.position().top + _lastTag.height() + 1 <= g_list_msg.height()) {
+                        if (g_list_msg.prop("scrollHeight") - parseInt(g_list_msg.height()) - g_list_msg.scrollTop() <= 100) {	
+                            const _tag = $("#txt_msg_added")
+                            if (_tag.css("display") != "none") _tag.click()
+                        } else {                    
+                            if (g_stopAutoScrollDown == null) g_stopAutoScrollDown = true
+                        }        
+                        const getMore = $("#getmore")
+                        if (!getMore || getMore.length == 0) return
+                        if (getMore.position().top + getMore.height() > 0) { //g_list_msg position should be relative for checking position().top
+                            if (getMore.attr("getting") == "Y") return
+                            getMore.attr("getting", "Y")
+                            setTimeout(() => getMsgList(), 100)
+                        }
+                    }, 150))
+                }, 1000)
             }
 
             const scrollToTarget = (_target) => {
@@ -390,6 +392,9 @@
                     if (arr.length == 0) return
                     if (!hush.http.chkOnline("none")) return //가끔(특히, 앱 설치하자마자 방 열면) ..가 남아 있는 때가 있는데 
                     //테스트해보니 이 procQueryUnread() 함수를 여러번 호출하고 있음 (아래 read_msg 여러번 호출하고 있음)
+                    //원래는 read_msg(updateall)만 호출하면 되는데 특히, 앱 설치하자마자 방 열면 procScrollEvent가 2번, updateall이 2번 실행되고
+                    //includes가 undefined때문에 안된다고 나와서 결국 오류로 멈춰서 ..가 남아 있게 된 것임
+                    //
                     alert(arr.toString()+"@@@@")
                     const rq = { type : "query", msgidArr : arr }                
                     if (hush.webview.ios) {
