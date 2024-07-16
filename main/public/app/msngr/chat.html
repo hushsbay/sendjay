@@ -387,8 +387,8 @@
                         }
                     }
                     if (arr.length == 0) return
-                    $("#in_search").val("###") //테스트 (가끔 ..가 남아 있는 때가 있음)
-                    if (!hush.http.chkOnline("none")) return
+                    if (!hush.http.chkOnline("none")) return //가끔(특히, 앱 설치하자마자 방 열면) ..가 남아 있는 때가 있는데 테스트해보면 아래 read_msg는 호출하고 있음
+                    alert(arr.toString()+"@@@@")
                     const rq = { type : "query", msgidArr : arr }                
                     if (hush.webview.ios) {
                     } else if (hush.webview.and) {

@@ -54,8 +54,7 @@ module.exports = async function(socket, param) {
 			let unreadArr = []
 			for (let msgid of obj.msgidArr) {
 				sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND ROOMID = ? AND CDT >= ? "
-				data = await wsmysql.query(conn, sql, [msgid, _roomid, dateFr]) 
-				console.log(msgid, _roomid, dateFr, data[0].CNT, "--------")
+				data = await wsmysql.query(conn, sql, [msgid, _roomid, dateFr]) //console.log(msgid, _roomid, dateFr, data[0].CNT, "--------")
 				if (data[0].CNT == 0) { //might be no record at first right after sending talk					
 					unreadArr.push(-1)
 				} else {
