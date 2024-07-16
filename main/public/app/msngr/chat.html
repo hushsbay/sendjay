@@ -1523,7 +1523,7 @@
             }
 
             const dialogRoomRename = (_type) => {
-                const _header = (_type == "all") ? "모두 적용" : "나만 적용"
+                const _header = (_type == "all") ? "모두 적용" : "본인 적용"
                 hush.msg.dialogInputBox("새로운 방명 입력.<br>기존 방명 지우기 : 빈칸 입력.", g_title, { 
                     "확인": async function() {                             
                         const _newName = hush.msg.dialogGetInput().trim()
@@ -2367,12 +2367,12 @@
                     $("#btn_rename, #btn_rename_m").on("click", function() {
                         hush.util.animBgColor($(this))
                         if (g_masterid == g_userid) {
-                            hush.msg.dialogMultiButton("이 방의 관리자입니다.<br>방명 변경시 적용범위를 선택하시기 바랍니다.", { 
+                            hush.msg.dialogMultiButton("이 방의 관리자입니다.<br>방명 변경 범위를 선택하시기 바랍니다.", { 
                                 "모두 적용": function() { 
                                     if (!hush.http.chkOnline()) return
                                     hush.msg.dialogClose()
                                     dialogRoomRename("all")
-                                }, "나만 적용": function() { 
+                                }, "본인 적용": function() { 
                                     if (!hush.http.chkOnline()) return
                                     hush.msg.dialogClose()
                                     dialogRoomRename("one")
@@ -2380,7 +2380,7 @@
                                     hush.msg.dialogClose()
                                     if (hush.webview.on) showRoomMenu(false)
                                 } 
-                            }, "Rename", 320)
+                            }, "방명 변경", 320)
                         } else {
                             dialogRoomRename("one")
                         }
