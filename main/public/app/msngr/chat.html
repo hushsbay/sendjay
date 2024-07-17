@@ -1575,11 +1575,15 @@
 
             const procUnreadCount = (msgid, unread_cnt) => {
                 console.log("procUnreadCount " + msgid)
+                const objHandling = $("#handling_" + msgid)
+                console.log("procUnreadCount => " + objHandling.length)
+                objHandling.html("@@@@@@@")
                 if (unread_cnt == -1) {
                     $("#handling_" + msgid).html("**")
                     return //no record 
                 }
-                const objHandling = $("#handling_" + msgid)
+                console.log("$$$$$$$$$$$$$$$$$$")
+                //const objHandling = $("#handling_" + msgid)
                 //if (objHandling.css("display") != "none") objHandling.hide() 
                 objHandling.html("@@")
                 const objUnread = $("#unread_" + msgid)
