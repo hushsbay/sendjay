@@ -47,7 +47,8 @@
             const procScrollEvent = () => {
                 resetEnvForScroll()
                 g_list_msg.scroll(_.debounce(function() { //_.debounce => lodash.min.js
-                    $("#in_search").val("procScrollEvent")
+                    //$("#in_search").val("procScrollEvent")
+                    console.log("procScrollEvent")
                     setTimeout(() => procQueryUnread(), 1) //스크롤이 맨 아래로 오면 txt_msg_added 있을 때 클릭한 효과와 동일해야 함
                     //const _lastTag = $($(".talk").last()[0]); if (_lastTag.position().top + _lastTag.height() + 1 <= g_list_msg.height()) {
                     if (g_list_msg.prop("scrollHeight") - parseInt(g_list_msg.height()) - g_list_msg.scrollTop() <= 100) {	
@@ -396,6 +397,7 @@
                     //해결책으로, 아래와 같이 g_procQueryUnread으로 처리해 여러번 호출되는 것을 최대한 막음               
                     if (g_procQueryUnread) return
                     g_procQueryUnread = true
+                    console.log("procQueryUnread")
                     const rq = { type : "query", msgidArr : arr }                
                     if (hush.webview.ios) {
                     } else if (hush.webview.and) {
@@ -771,7 +773,6 @@
                     } else {
                         if (_len == 0) {
                             if (rq.type == "after") {
-                                alert("getMsgList")
                                 procQueryUnread()
                                 return
                             } 
@@ -1910,6 +1911,7 @@
                         //data.first_queried means that procQueryUnread() will be occurred in scroll event too, so it should be skipped here.
                         //Since "updateall" is broadcast, procQueryUnread() needed unless it's same userkey.
                         //if (data.senderkey != g_userkey || !data.first_queried) procQueryUnread()
+                        console.log("updateall")
                         procQueryUnread() //updateall후엔 본인도 다시 읽어야 최신의 정보를 갖고 올 것임 (아무것도 안하면 본인 것 최초시엔 ..이 보일 것임)
                     } else if (data.type == "getmembers") { //socket.emit
                         const len = data.unread_list.length
