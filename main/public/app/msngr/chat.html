@@ -1687,6 +1687,7 @@
             }
 
             const openRoomWithMobile = () => {
+                console.log(g_type+"***"+"openRoomWithMobile")
                 if (g_type == "open") {
                     const rq = { from : g_origin }
                     if (hush.webview.ios) {
@@ -2126,6 +2127,7 @@
                     } else if (g_type == "me") {    
                         //see btn_me in chat.html
                     } else if (g_type == "open") {
+                        console.log(g_type+"***"+"startFromWebView")
                         openRoomWithMobile(g_type)
                     }
                     if (localStorage.msgidCopied) { //if (rs && rs.msgidCopied) { //$$66 in MainActivity.kt 참조
