@@ -397,7 +397,7 @@
                     //해결책으로, 아래와 같이 g_procQueryUnread으로 처리해 여러번 호출되는 것을 최대한 막음               
                     if (g_procQueryUnread) return
                     g_procQueryUnread = true
-                    console.log("procQueryUnread")
+                    console.log("procQueryUnread..")
                     const rq = { type : "query", msgidArr : arr }                
                     if (hush.webview.ios) {
                     } else if (hush.webview.and) {
@@ -1574,12 +1574,14 @@
             }
 
             const procUnreadCount = (msgid, unread_cnt) => {
+                console.log("procUnreadCount " + msgid)
                 if (unread_cnt == -1) {
                     $("#handling_" + msgid).html("**")
                     return //no record 
                 }
                 const objHandling = $("#handling_" + msgid)
-                if (objHandling.css("display") != "none") objHandling.hide() //$("#handling_" + msgid).html("@@")
+                //if (objHandling.css("display") != "none") 
+                objHandling.hide() //$("#handling_" + msgid).html("@@")
                 const objUnread = $("#unread_" + msgid)
                 if (objUnread.css("display") == "none") objUnread.show()
                 const unreadStr = objUnread.text()
@@ -1603,8 +1605,11 @@
 
             const setTitleToFrTip = () => {
                 const frTip = $("#fr_tip")
-                if (frTip.html() == "" || frTip.html().includes("방명 :") || frTip.html().includes("cancelreply")) {
-                    frTip.html("<span class=coText>방명 : " + g_title + "</span>")
+                if (frTip.length > 0) {
+                    const _html = frTip.html()
+                    if (_html == "" || _html.includes("방명 :") || _html.includes("cancelreply")) {
+                        frTip.html("<span class=coText>방명 : " + g_title + "</span>")
+                    }
                 }
             }
 
@@ -1923,6 +1928,7 @@
                         procUnreadCount(data.msgid, data.unread_cnt)
                     } else { //query
                         for (let i = 0; i < data.msgidArr.length; i++) {
+                            console.log("procUnreadCount " + i)
                             procUnreadCount(data.msgidArr[i], data.unreadArr[i])
                         }
                         g_procQueryUnread = false
