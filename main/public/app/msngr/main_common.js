@@ -1068,7 +1068,7 @@ const startMsngr = async (launch, winid) => {
     }
     worker.onmessage = async function(e) {
         try {            
-            if (e.data.code == "idb_upgraded" || e.data.code == "idb_connected") {
+            if (e.data.code == "idb_connected") { //if (e.data.code == "idb_upgraded" || e.data.code == "idb_connected") { //worker.js의 ##31 참조
                 worker.postMessage({ code : launch, msg : winid })
             } else if (e.data.code == "winner") { 
                 const _token = hush.http.getCookie("token")

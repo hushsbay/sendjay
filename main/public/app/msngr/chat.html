@@ -38,7 +38,7 @@
             let g_msgUnread = [], g_focus_for_webview, g_show_list_people = "X", sockConnected = false
             const FIRST_QUERIED = "9999"
             let g_retry_small, g_delete_small
-            let g_procQueryUnread = false
+            //let g_procQueryUnread = false
 
             const resetEnvForScroll = () => {
                 g_cdt = FIRST_QUERIED //FIRST_QUERIED(default). YYYYMMDD~ : when scrolled all the way down to the bottom, previous page shown and g_cdt gets YYYYMMDD~ value
@@ -397,8 +397,9 @@
                     //원래는 read_msg(updateall)만 호출하면 되는데 특히, 앱 설치하자마자 방 열면 procScrollEvent가 2번, updateall이 2번 실행되고
                     //includes가 undefined때문에 안된다고 나와서 결국 오류로 멈춰서 ..가 남아 있게 된 것임
                     //해결책으로, 아래와 같이 g_procQueryUnread으로 처리해 여러번 호출되는 것을 최대한 막음. 그래도 안되서 살펴 보니 getMsgList()가 두번 호출됨
-                    if (g_procQueryUnread) return
-                    g_procQueryUnread = true
+                    //결국, 문제는 hush.idb.connect()이었음. common.js의 idb ##32 참조
+                    //if (g_procQueryUnread) return
+                    //g_procQueryUnread = true
                     console.log("procQueryUnread..")
                     const rq = { type : "query", msgidArr : arr }                
                     if (hush.webview.ios) {
@@ -1764,13 +1765,13 @@
                         setMembers(data) //console.log(JSON.stringify(data)+"===")
                         toggleDispMem(data.dispmem)
                         if (data.from == "rename_room" || data.from == "after") return
-                        console.log("hush.idb.connect")
                         hush.idb.connect((rs) => {
                             console.log(rs.code+"==="+rs.msg)
                             if (rs.code != hush.cons.result_ok) {
                                 hush.msg.alert(rs.msg)
                                 return
                             }
+                            if (rs.kind != "onsuccess") return //common.js의 idb ##32 참조
                             console.log("getMsgList1111")
                             getMsgList()
                         })
@@ -1942,7 +1943,7 @@
                             console.log("procUnreadCount " + i)
                             procUnreadCount(data.msgidArr[i], data.unreadArr[i])
                         }
-                        g_procQueryUnread = false
+                        //g_procQueryUnread = false
                     }
                 },
                 [hush.cons.sock_ev_qry_msgcell] : async (data) => { //when drag & drop

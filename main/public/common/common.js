@@ -388,10 +388,13 @@
         idb : { //for mobile only
             db : null, 
             connect : (callback) => {
+                //##32 아래에서 onupgradeneeded는 indexedDB.open시 항상 수행되는지는 않을 것인데 최초 또는 개발자가 업그레이드한 경우만 수행될 것이나, 하여튼,
+                //웹뷰에서 최초 실행시에는 반드시 onupgradeneeded가 발생하고 그 뒤에 onsuccess도 같이 발생함
+                //따라서, 이 두개의 이벤트를 구분하지 않고 코딩하면 callback안에서 중요한 의미의 실행이 두번 처리되는 것을 의미하므로 반드시 구분해야 함
                 if (!hush.idb.db) {
                     let conn = indexedDB.open("jay_mobile", 1) //Increment will trigger conn.onupgradeneeded (add version number if upgrade needed)
                     conn.onerror = function() {	
-                        if (callback) callback({ code : "idb_conn_err", msg : "IndexedDB connect error: " + conn.errorCode })
+                        if (callback) callback({ kind : "onerror", code : "idb_conn_err", msg : "IndexedDB connect error: " + conn.errorCode })
                     }
                     conn.onupgradeneeded = function(e) { //field : roomid, msgid, type, body, reply, sent, cdt
                         hush.idb.db = e.target.result
@@ -403,12 +406,12 @@
                         }
                         if (!os.indexNames.contains("roomid")) os.createIndex("roomid", "roomid", { unique : false }) //index 'roomid_cdt' failed to handle cursor
                         os.transaction.oncomplete = function(e) { 
-                            if (callback) callback({ code : hush.cons.result_ok, msg : "IndexedDB upgraded" })
+                            if (callback) callback({ kind : "onupgradeneeded", code : hush.cons.result_ok, msg : "IndexedDB upgraded" })
                         }
                     }
                     conn.onsuccess = function(e) {
                         hush.idb.db = conn.result
-                        if (callback) callback({ code : hush.cons.result_ok, msg : "IndexedDB connected" })
+                        if (callback) callback({ kind : "onsuccess", code : hush.cons.result_ok, msg : "IndexedDB connected" })
                     }
                 }
             },

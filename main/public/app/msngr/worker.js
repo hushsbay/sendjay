@@ -10,6 +10,9 @@ const SEC = 3 //10
 const DATABASE = "jay", TBL = "winner", ONE_KEY = "just_one" //only 1 table & 1 record handled
 let db //field(id, winid, udt), protocol(winid, code, msg);
 
+//##31 아래에서 onupgradeneeded는 indexedDB.open시 항상 수행되는지는 않을 것인데 최초 또는 개발자가 업그레이드한 경우만 수행될 것이나, 하여튼,
+//최초 실행시에는 반드시 onupgradeneeded가 발생하고 그 뒤에 onsuccess도 같이 발생함
+//따라서, 이 두개의 이벤트를 구분하지 않고 코딩하면 callback안에서 중요한 의미의 실행이 두번 처리되는 것을 의미하므로 반드시 구분해야 함
 let conn = indexedDB.open(DATABASE, 1) //Increment will trigger conn.onupgradeneeded (add version number if upgrade needed)
 conn.onerror = function() {	
     console.log("indexedDB connect error: " + conn.errorCode) 
