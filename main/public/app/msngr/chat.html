@@ -2127,7 +2127,6 @@
                     } else if (g_type == "me") {    
                         //see btn_me in chat.html
                     } else if (g_type == "open") {
-                        console.log(g_type+"***"+"startFromWebView")
                         openRoomWithMobile(g_type)
                     }
                     if (localStorage.msgidCopied) { //if (rs && rs.msgidCopied) { //$$66 in MainActivity.kt 참조
@@ -2232,6 +2231,7 @@
                             hush.sock.send(g_socket, hush.cons.sock_ev_create_room, rq, g_roomid)
                         } else if (g_type == "open") { //노티에서 오픈되는 것도 포함
                             if (opener.procUnreadTitle) opener.procUnreadTitle(g_roomid)
+                            console.log(g_type+"***"+"ready")
                             const rq = { from : param.from }
                             hush.sock.send(g_socket, hush.cons.sock_ev_open_room, rq, g_roomid)
                         }
