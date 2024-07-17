@@ -398,6 +398,7 @@
                     if (g_procQueryUnread) return
                     g_procQueryUnread = true
                     console.log("procQueryUnread..")
+                    debugger
                     const rq = { type : "query", msgidArr : arr }                
                     if (hush.webview.ios) {
                     } else if (hush.webview.and) {
