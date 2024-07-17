@@ -1580,8 +1580,8 @@
                     return //no record 
                 }
                 const objHandling = $("#handling_" + msgid)
-                //if (objHandling.css("display") != "none") 
-                objHandling.hide() //$("#handling_" + msgid).html("@@")
+                //if (objHandling.css("display") != "none") objHandling.hide() 
+                objHandling.html("@@")
                 const objUnread = $("#unread_" + msgid)
                 if (objUnread.css("display") == "none") objUnread.show()
                 const unreadStr = objUnread.text()
