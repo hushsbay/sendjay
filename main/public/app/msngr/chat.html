@@ -577,6 +577,7 @@
                         })
                     }
                     if (obj.type == "talk" && _sublink) procOpengraph(obj.msgid, kind)
+                    console.log("addrow === " + obj.msgid)
                     $("#unread_" + obj.msgid).off("click").on("click", function() {
                         hush.util.animBgColor($(this))
                         const rq = { type : "getmembers", msgid : obj.msgid }
