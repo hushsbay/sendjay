@@ -39,7 +39,7 @@ module.exports = async function(socket, param) {
 		} else if (obj.type == 'update') { //해당 msgid만 읽은 것으로 하기
 			sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND ROOMID = ? AND CDT >= ? "
 			data = await wsmysql.query(conn, sql, [obj.msgid, _roomid, dateFr]) //console.log(obj.msgid, _roomid, dateFr, data[0].CNT, "========")
-			if (data[0].CNT == 0) { //might be no record at first right after sending talk				
+			if (data[0].CNT == 0) {
 				param.data.unread_cnt = -1
 			} else {
 				data = "UPDATE A_MSGDTL_TBL SET STATE = 'R' WHERE MSGID = ? AND ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
@@ -55,7 +55,7 @@ module.exports = async function(socket, param) {
 			for (let msgid of obj.msgidArr) {
 				sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND ROOMID = ? AND CDT >= ? "
 				data = await wsmysql.query(conn, sql, [msgid, _roomid, dateFr]) //console.log(msgid, _roomid, dateFr, data[0].CNT, "--------")
-				if (data[0].CNT == 0) { //might be no record at first right after sending talk					
+				if (data[0].CNT == 0) {
 					unreadArr.push(-1)
 				} else {
 					sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND ROOMID = ? AND STATE = '' AND CDT >= ? "

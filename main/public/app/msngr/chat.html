@@ -1568,10 +1568,7 @@
             }
 
             const procUnreadCount = (msgid, unread_cnt) => {
-                if (unread_cnt == -1) {
-                    $("#handling_" + msgid).html("**")
-                    return //no record 
-                }
+                if (unread_cnt == -1) return //no record 
                 const objHandling = $("#handling_" + msgid)
                 if (objHandling.css("display") != "none") objHandling.hide() 
                 const objUnread = $("#unread_" + msgid)
