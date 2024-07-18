@@ -719,7 +719,7 @@ const getUnreadForAll = async () => {
     //따라서, 앱에서 최초 연결시 결과와 그 외의 결과는 달라야 함. 
     try { //예를 들어, 안드로이드 ChatService.kt에서 먼저 qry_unread로 LASTCHKDT 필드 업데이트하면 PC브라우저에서는 안읽은 톡 정보 없는 것으로 나타날 것임 
         if (!hush.http.chkOnline("none")) return
-        const rs = await hush.http.ajax("/msngr/qry_unread", {})
+        const rs = await hush.http.ajax("/msngr/qry_unread", {}, true)
         if (!hush.util.chkAjaxCode(rs, true)) return
         const _len = rs.list.length
         if (_len == 0) {
