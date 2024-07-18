@@ -22,7 +22,7 @@ router.post('/', async function(req, res) {
 		console.log(userid+"====@@")
 		//if (!userid) return
 		if (!userid) {
-			ws.http.resWarn(res, rs.msg, false, rs.code, req.title)
+			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
 			return
 		}
 
