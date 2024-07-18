@@ -7,6 +7,7 @@ const { Server } = require('socket.io')
 const Redis = require('ioredis') //not redis npm => redisAdapter로 할 수 없는 것들을 각 서버별로 store.publish를 통해 모두 처리
 const redisAdapter = require('@socket.io/redis-adapter')
 const { Worker } = require('worker_threads')
+const cors = require('cors')
 
 const DIR_PUBSUB = './pubsub/', DIR_SOCKET = './socket/'
 const PING_TIMEOUT = 5000, PING_INTERVAL = 25000 //default
@@ -112,18 +113,17 @@ global.jay.on('connection', async (socket) => {
 })
 console.log('socketServer listening on ' + config.sock.port)
 
-// const cors = require('cors')
-// const corsOptions = { //for Rest => 현재는 사용하지 않으나 향후 사용위해 그대로 두기
-// 	origin : function (origin, callback) {
-// 		if (!origin || config.app.corsRestful.indexOf(origin) > -1) { //!origin = in case of same origin
-// 			callback(null, true)
-// 		} else {
-// 			const _msg = 'Not allowed by CORS : ' + origin
-// 			global.logger.info(_msg)
-// 			callback(new Error(_msg))
-// 		}
-// 	}
-// }
+const corsOptions = { //for Rest
+	origin : function (origin, callback) {
+		if (!origin || config.app.corsRestful.indexOf(origin) > -1) { //!origin = in case of same origin
+			callback(null, true)
+		} else {
+			const _msg = 'Not allowed by CORS : ' + origin
+			global.logger.info(_msg)
+			callback(new Error(_msg))
+		}
+	}
+}
 
 app.use('/auth/login', require('./route/auth/login'))
 
