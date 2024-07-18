@@ -193,9 +193,8 @@ module.exports = (function() {
 			chkToken : async (req, res, conn) => { //const _title = 'chkToken'
 				let { token, userid, orgcd, toporgcd } = req.cookies
 				if (!token || !userid) {
-					//userid = req.body.userid
+					userid = req.body.userid
 					token = req.body.token //organ의 token은 외부 인터페이스를 통해 post로 호출될 수 있음					
-					console.log(userid, token, "@@@@")
 				}
 				const tokenInfo = { userid : userid, token : token, orgcd : orgcd, toporgcd : toporgcd } //login.html을 제외하고 웹 또는 앱에서 항상 넘어오는 쿠키
 				if (req && req.clientIp) tokenInfo.ip = req.clientIp
