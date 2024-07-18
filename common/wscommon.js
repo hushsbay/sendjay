@@ -194,8 +194,9 @@ module.exports = (function() {
 				const _title = 'chkToken'
 				let { token, userid, orgcd, toporgcd } = req.cookies
 				if (!token) {
-					token = req.body.token //organ의 token은 외부 인터페이스를 통해 post로 호출될 수 있음
-					console.log(token, "@@@@")
+					userid = req.body.userid
+					token = req.body.token //organ의 token은 외부 인터페이스를 통해 post로 호출될 수 있음					
+					console.log(userid, token, "@@@@")
 				}
 				const tokenInfo = { userid : userid, token : token, orgcd : orgcd, toporgcd : toporgcd } //login.html을 제외하고 웹 또는 앱에서 항상 넘어오는 쿠키
 				if (req && req.clientIp) tokenInfo.ip = req.clientIp
@@ -205,6 +206,7 @@ module.exports = (function() {
 					ws.util.loge(req, jwtRet.msg)
 					rs.code = jwtRet.code
 					rs.msg = jwtRet.msg
+					console.log(rs.code, rs.msg)
 					if (res) ws.http.resWarn(res, rs.msg, false, rs.code, _title)
 					return rs
 				}
