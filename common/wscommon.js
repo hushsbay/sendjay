@@ -207,11 +207,11 @@ module.exports = (function() {
 					rs.code = jwtRet.code
 					rs.msg = jwtRet.msg
 					console.log(rs.code, rs.msg)
-					//if (res) {
-					//	ws.http.resWarn(res, rs.msg, false, rs.code, _title)
-					//	return null
-					//}
-					//console.log(rs.code, rs.msg)
+					if (res) {
+						ws.http.resWarn(res, rs.msg, false, rs.code, _title)
+						return
+					}
+					console.log(rs.code, rs.msg)
 					return rs
 				}
 				if (conn) { //userid뿐만 아니라 부서정보 등 위변조도 체크 필요 (문제 발생시 로깅. 겸직 코딩은 제외되어 있음)
