@@ -20,11 +20,11 @@ router.post('/', async function(req, res) {
 		
 		const userid = objToken.userid
 		console.log(userid+"====@@")
-		if (!userid) return
-		//if (!userid) {
-		//	ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
-		//	return
-		//}
+		//if (!userid) return
+		if (!userid) {
+			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
+			return
+		}
 
 
 		// sql = "SELECT COUNT(*) CNT FROM Z_USER_TBL WHERE USER_ID = ? "
