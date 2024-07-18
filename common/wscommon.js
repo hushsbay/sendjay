@@ -207,7 +207,10 @@ module.exports = (function() {
 					rs.code = jwtRet.code
 					rs.msg = jwtRet.msg
 					console.log(rs.code, rs.msg)
-					if (res) ws.http.resWarn(res, rs.msg, false, rs.code, _title)
+					if (res) {
+						ws.http.resWarn(res, rs.msg, false, rs.code, _title)
+						return null
+					}
 					console.log(rs.code, rs.msg)
 					return rs
 				}
