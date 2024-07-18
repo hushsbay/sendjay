@@ -194,7 +194,7 @@ module.exports = (function() {
 				const _title = 'chkToken'
 				let { token, userid, orgcd, toporgcd } = req.cookies
 				if (!token) {
-					userid = req.body.userid
+					//userid = req.body.userid
 					token = req.body.token //organ의 token은 외부 인터페이스를 통해 post로 호출될 수 있음					
 					console.log(userid, token, "@@@@")
 				}
