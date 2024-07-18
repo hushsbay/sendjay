@@ -28,15 +28,11 @@ router.post('/', async function(req, res) {
 		const _job = decodeURIComponent(req.body.job) || ''
 		const _abcd = decodeURIComponent(req.body.abcd) || ''
 		const _abnm = decodeURIComponent(req.body.abnm) || ''
-		//const _standalone = req.body.standalone
 		const _notioff = req.body.notioff
 		const _fr = req.body.fr
 		const _to = req.body.to
 		const _bodyoff = req.body.bodyoff
 		const _senderoff = req.body.senderoff
-		//const _soundoff = req.body.soundoff //NotiCenter.kt ##55 참조
-		//const _viboff = req.body.viboff //NotiCenter.kt ##55 참조
-		//const _popupoff = req.body.popupoff //NotiCenter.kt ##55 참조
 		sql = "UPDATE Z_USER_TBL "
 		sql += "  SET NICK_NM = ?, JOB = ?, AB_CD = ?, AB_NM = ?, NOTI_OFF = ?, " 
 		sql += "      BODY_OFF = ?, SENDER_OFF = ?, TM_FR = ?, TM_TO = ?, MODR = ?, MODDT = sysdate(6) "

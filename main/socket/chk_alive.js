@@ -17,7 +17,7 @@ module.exports = async function(socket, param) {
 		// for (let key of userkeySocketArr) { //redis에 있는 특정 userkey들의 소켓 정보를 읽어 와서
 		// 	const _obj = ws.redis.getUserkeySocketIdFromKey(key) //userkey와 socketid를 분리
 		// 	if (sockets.has(_obj.socketid)) userkeyArr.push(_obj.userkey) //해당 socketid가 연결되어 있는 소켓목록에 있으면 userkey 담아서 리턴하면 됨
-		// } => app.js에 주석으로 설명되어 있는 fetchSockets()을 이용해 더 정확한 소켓정보를 가져올 수 있겠으나 일단 아래의 코딩으로 유지해보려 함
+		// } => app.js에 설명되어 있는 fetchSockets()을 이용해 더 정확한 소켓정보를 가져올 수 있겠으나 일단 아래 코딩으로 유지
 		for (let key of userkeySocketArr) { //redis에 있는 특정 userkey들의 소켓 정보를 읽어 와서
 			const _obj = ws.redis.getUserkeySocketIdFromKey(key) //userkey와 socketid를 분리
 			userkeyArr.push(_obj.userkey) //userkey 담아서 리턴하면 됨

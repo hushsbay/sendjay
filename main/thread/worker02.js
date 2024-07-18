@@ -3,7 +3,7 @@ const nodeConfig = require(config.app.nodeConfig)
 const ws = require(nodeConfig.app.ws)
 const { parentPort } = require('worker_threads')
 
-//미사용 - 오래된 코딩 (just 참고용)
+////////////////////////////////////////////////미사용 - 오래된 코딩 (just 참고용)
 
 ws.util.addGlobal({ logPath: config.app.logPath, dirName: __dirname }, nodeConfig)
 

@@ -258,7 +258,7 @@
             }
             
             const callPeriodic = () => { //원래 타이머로 chkTyping()만 실행했는데 최초 페이지 열릴 때 모바일에서
-                //(네트워크 문제인지 아닌지 모르는 문제로) ON/OFF 표시가 안되는 문제가 드물게 나타나 일단 그 보완재로서 타이머에 chkAlive()도 같이 추가해 돌리게 됨
+                //(네트워크 문제인지 아닌지 모르는 문제로) ON/OFF 표시가 안되는 문제가 드물게 나타나 일단 그 보완재로서 타이머에 chkAlive()도 같이 추가해 돌리게 됨 (idb.connect 문제였을 것임 - 해결)
                 if (sockConnected && hush.http.chkOnline("none")) {
                     const userkeyArr = []
                     $(".state").each(function(idx, item) {
@@ -479,11 +479,7 @@
                             }
                         }
                     } else {
-                        //if (obj.body == hush.cons.cell_revoked) {
-                        //    _body = obj.body
-                        //} else { //_body = hush.util.removeTag(obj.body) //.text()로 변경 검토해야 함
-                            _body = obj.body
-                        //}
+                        _body = obj.body
                         const _pattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi //two more bytes parameter not working
                         const _http = _pattern.exec(_body) //const _pattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9가-힣+&@#\/%?=~_|!:,.;]*[-A-Z0-9가-힣+&@#\/%=~_|])/gi
                         if (_http != null) { //##00 opengraph : get first item
@@ -1903,9 +1899,6 @@
                 },
                 [hush.cons.sock_ev_read_msg] : (data) => {
                     if (data.type == "updateall") {
-                        //data.first_queried means that procQueryUnread() will be occurred in scroll event too, so it should be skipped here.
-                        //Since "updateall" is broadcast, procQueryUnread() needed unless it's same userkey.
-                        //if (data.senderkey != g_userkey || !data.first_queried) procQueryUnread()
                         procQueryUnread() //updateall후엔 본인도 다시 읽어야 최신의 정보를 갖고 올 것임 (아무것도 안하면 본인 것 최초시엔 ..이 보일 것임)
                     } else if (data.type == "getmembers") { //socket.emit
                         const len = data.unread_list.length
@@ -2145,17 +2138,6 @@
             const invite = (from, obj) => {                 
                 procInvite(obj.userids.split(hush.cons.deli), obj.usernms.split(hush.cons.deli))
             }
-            
-            // const pasteFromWebView = (from, obj) => { //$$66 in MainActivity.kt 참조
-            //     if (!hush.http.chkOnline()) return
-            //     const rq = { msgid : obj.msgidCopied }
-            //     if (hush.webview.ios) {
-            //     } else if (hush.webview.and) { //it's text
-            //         setTimeout(function() {
-            //             AndroidCom.send(hush.cons.sock_ev_qry_msgcell, JSON.stringify(rq), g_roomid, null, true)
-            //         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
-            //     }
-            // }
 
             $.when($.ready).done(async function() {
                 try {
@@ -2409,7 +2391,6 @@
                     $("#btn_paste").on("click", function() {
                         if (!hush.http.chkOnline()) return
                         hush.util.animBgColor($(this))
-                        //AndroidRoom.paste() //$$66 in MainActivity.kt 참조
                         const rq = { msgid : localStorage.msgidCopied }
                         if (hush.webview.ios) {
                         } else if (hush.webview.and) { //it's text
@@ -2417,14 +2398,13 @@
                                 AndroidCom.send(hush.cons.sock_ev_qry_msgcell, JSON.stringify(rq), g_roomid, null, true)
                             }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                         }
-                        localStorage.msgidCopied = "" //AndroidRoom.copy("") //$$66 in MainActivity.kt 참조
-                        ////$("#fr_sendcopy").hide()
+                        localStorage.msgidCopied = "" 
                     })
                     $("#btn_cancel_paste").on("click", function() {
                         hush.util.animBgColor($(this))
                         $("#fr_tip").show()
                         $("#fr_sendcopy").hide()
-                        localStorage.msgidCopied = "" //AndroidRoom.copy("") //$$66 in MainActivity.kt 참조                        
+                        localStorage.msgidCopied = "" 
                     })
                     $("#main_pg").on("dragenter", function(e) {
                         e.stopPropagation()
@@ -2471,15 +2451,6 @@
                     $(window).focus(function() { ///This focus event is not triggered when window newly opened.
                         if ($("#txt_msg_added").css("display") == "none") updateAllUnreads()                    
                     })
-                    // $(window).bind("unload", function() { //$(window).unload(function() { deprecated as of 1.8
-                    //     if (g_in_chat.val().trim() != "") {
-                    //         localStorage[g_roomid] = g_in_chat.val().trim()
-                    //     } else {
-                    //         if (localStorage[g_roomid]) delete localStorage[g_roomid]
-                    //     }
-                    //     if (opener && g_roomid) delete opener.hush.sock.rooms[g_roomid]
-                    //     if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.close()
-                    // })
                     window.onpagehide = (event) => {
                         if (event.persisted) { //브라우저가 캐시하려고 시도하는 중 (bfcache = back/forward cache = 네트워크 타지 않음)
                             alert("웹에서는 새페이지, 앱에서는 nocache로 열기 때문에 여기서는 bfcache 이슈 없어야 함")
@@ -2577,10 +2548,6 @@
                 </div>
             </div>
             <input id=file_upload type=file multiple style="display:none">
-            <!-- <span id=retrydelete>
-                <img src='/img/retry_small.png' style='display:none;width:14px;height:14px;margin-top:0px;margin-right:2px'>
-                <img src='/img/delete_small.png' style='display:none;width:16px;height:16px;margin-top:5px'>
-            </span> -->
         </div>    
     </body>
 </html>

@@ -454,10 +454,6 @@
                         hush.util.animBgColor($(this))
                         AndroidMain.deleteLog()
                     })
-                    // $(window).bind("unload", function() { //$(window).unload(function() { deprecated as of 1.8
-                    //     procUnload()
-                    //     if (g_memWin && !g_memWin.closed) g_memWin.close()
-                    // })
                     window.onpagehide = (event) => {
                         if (event.persisted) { //브라우저가 캐시하려고 시도하는 중 (bfcache = back/forward cache = 네트워크 타지 않음)
                             alert("웹에서는 새페이지, 앱에서는 nocache로 열기 때문에 여기서는 bfcache 이슈 없어야 함")
@@ -548,23 +544,12 @@
                     <div class='coSettingLabel coText'>부재내용</div>
                     <input id=in_abnm data-role=none spellcheck=false placeholder='50 bytes. eg) 08/15~08/23' class='inputSetting coText' />
                 </div>
-                <!-- <div class=coSettingRow>
-                    <div class='coSettingLabel coText'>자동시작<br>(Web)</div>
-                    <label for=chk_standalone class=coSettingWrap>
-                        <input type=checkbox id=chk_standalone name=chk_standalone class=coSettingChkbox />
-                        <span class='coSettingSpan coText'>별도 브라우저탭에서 실행</span>
-                    </label>
-                </div> -->
                 <div class=coSettingRow>
                     <div class='coSettingLabel coText'>알림설정</div>
                     <label for=chk_notioff class=coSettingWrap>
                         <input type=checkbox id=chk_notioff name=chk_notioff class=coSettingChkbox />
                         <span class='coSettingSpan coText'>끄기</span>
                     </label>
-                    <!-- <label for=chk_popupoff class=coSettingWrap style="margin-left:10px">
-                        <input type=checkbox id=chk_popupoff name=chk_popupoff class=coSettingChkbox />
-                        <span class='coSettingSpan coText'>모바일팝업숨김</span>
-                    </label> //NotiCenter.kt의 ##55 참조 (현재 미사용) 대신 아래 btn_noti_mobile 버튼으로 처리-->
                 </div>
                 <div class=coSettingRow>
                     <div class='coSettingLabel coText'>알림표시</div>
@@ -577,17 +562,6 @@
                         <span class='coSettingSpan coText'>발신숨김</span>
                     </label>
                 </div>
-                <!--<div class=coSettingRow> NotiCenter.kt의 ##55 참조 (현재 미사용) 대신 아래 btn_noti_mobile 버튼으로 처리
-                    <div class='coSettingLabel coText'>알림음/진동<br>(Mobile)</div>
-                    <label for=chk_soundoff class=coSettingWrap>
-                        <input type=checkbox id=chk_soundoff name=chk_soundoff class=coSettingChkbox />
-                        <span class='coSettingSpan coText'>소리끄기</span>
-                    </label>
-                    <label for=chk_viboff class=coSettingWrap style="margin-left:10px">
-                        <input type=checkbox id=chk_viboff name=chk_viboff class=coSettingChkbox />
-                        <span class='coSettingSpan coText'>진동끄기</span>
-                    </label>
-                </div>-->
                 <div class=coSettingRow id=div_noti_mobile style="display:none">
                     <div class='coSettingLabel coText'>알림옵션<br>(Mobile)</div>
                     <div id=btn_noti_mobile class='picBtn coText'>소리/진동/팝업</div>

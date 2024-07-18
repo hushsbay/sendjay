@@ -21,7 +21,7 @@ module.exports = async function(socket, param) {
 				await wsmysql.query(conn, "UPDATE A_ROOMMST_TBL SET UDT = sysdate(6), NICKNM = ? WHERE ROOMID = ? ", [_roomname, _roomid]) 
 				ws.sock.sendToRoom(socket, _roomid, param)
 			} else {
-				throw new Error('방 맴버전체에게 적용되는 방명 변경은 방장만 가능합니다.')
+				throw new Error('방맴버 전체에게 적용되는 방명 변경은 방장만 가능합니다.')
 			}			
 		} else {
 			await wsmysql.query(conn, sql, [_roomname, _roomid, userid])

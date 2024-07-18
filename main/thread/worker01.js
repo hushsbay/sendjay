@@ -6,7 +6,7 @@ const com = require('../common')
 const Redis = require('ioredis')
 const { parentPort } = require('worker_threads')
 
-//미사용 - 오래된 코딩 (just 참고용)
+////////////////////////////////////////////////미사용 - 오래된 코딩 (just 참고용)
 
 ws.util.addGlobal({ logPath: config.app.logPath, dirName: __dirname }, nodeConfig)
 global.pool = wsmysql.createPool(config.mysql.scheme)

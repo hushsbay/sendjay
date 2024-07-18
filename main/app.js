@@ -5,7 +5,7 @@ const wsmysql = require(nodeConfig.app.wsmysql)
 const wslogger = require(nodeConfig.app.wslogger)(config.app.logPath, 'hushsbay')
 const { Server } = require('socket.io')
 const Redis = require('ioredis') //not redis npm => redisAdapter로 할 수 없는 것들을 각 서버별로 store.publish를 통해 모두 처리
-const redisAdapter = require('@socket.io/redis-adapter') //현재, sockets set에서 각 socket을 바로 get하는 것을 찾지 못해 ioredis의 global.store.scanStream으로 get하고 있음
+const redisAdapter = require('@socket.io/redis-adapter')
 const { Worker } = require('worker_threads')
 
 const DIR_PUBSUB = './pubsub/', DIR_SOCKET = './socket/'
@@ -34,7 +34,7 @@ sub.psubscribe(ws.cons.pattern, (err, count) => { console.log('ioredis psubscrib
 sub.on('pmessage', (pattern, channel, message) => { require(DIR_PUBSUB + 'pmessage')(pattern, channel, message) })
 sub.on('error', err => { console.error('ioredis sub error:', err.stack) })
 if (config.app.mainserver == 'Y') global.store.flushdb(function(err, result) { console.log('redis db flushed :', result) })
-//현재 Redis가 멀티서버에서의 소켓연결정보 관리에만 사용중이므로 NodeJS 재시작시 해당 redis데이터베이스내 데이터를 모두 지우는 것이 가비지 정리 등에도 좋을 것임 (다른 곳에 사용되면 문제없는지 테스트 필요)
+//현재 Redis가 멀티서버에서의 소켓연결정보 관리에만 사용중이므로 NodeJS 재시작시 해당 redis데이터베이스내 데이터를 모두 지우는 것이 가비지 정리 등 좋을 것 (다른 곳에 사용시 문제없는지 테스트 필요)
 
 //3. Socket Server (with Redis Adapter)
 const appSocket = ws.util.initExpressApp()
@@ -48,7 +48,6 @@ global.jay = io.of('/' + config.sock.namespace)
 
 //const sockets = await global.jay.adapter.sockets(new Set()) //https://socket.io/docs/v4/adapter/
 //const sockets = await global.jay.sockets //위 아래 둘 다 각 서버의 소켓 카운트만 가능 (따라서, 아래 코딩으로 사용하기)
-
 /* https://socket.io/docs/v4/server-api/
 const sockets = await global.jay.fetchSockets() //모든 소켓서버에 있는 정보 가져오기
 console.log('socket count :', sockets.length)

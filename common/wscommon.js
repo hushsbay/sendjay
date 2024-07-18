@@ -280,7 +280,7 @@ module.exports = (function() {
 				}
 				return usArr
 			},
-			getUserkeysInSocket : async (userkeys) => { //app.js에 주석으로 설명되어 있는 fetchSockets()을 이용해 더 정확한 소켓정보를 가져올 수 있겠으나 일단 아래의 코딩으로 유지해보려 함
+			getUserkeysInSocket : async (userkeys) => { //app.js에 설명되어 있는 fetchSockets()을 이용해 더 정확한 소켓정보를 가져올 수 있겠으나 일단 아래 코딩으로 유지
 				let ukArr = []
 				const resultArr = await ws.redis.getUserkeySocketsFromMulti(userkeys)
 				for (let key of resultArr) {
