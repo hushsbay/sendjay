@@ -24,7 +24,7 @@ router.post('/', async function(req, res) {
 			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA)
 			return
 		}
-		let _nicknm = decodeURIComponent(req.body.nicknm) || ''
+		const _nicknm = decodeURIComponent(req.body.nicknm) || ''
 		const _job = decodeURIComponent(req.body.job) || ''
 		const _abcd = decodeURIComponent(req.body.abcd) || ''
 		const _abnm = decodeURIComponent(req.body.abnm) || ''
