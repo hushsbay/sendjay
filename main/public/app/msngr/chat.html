@@ -158,7 +158,7 @@
                     const list = $("#people_sub")
                     list.empty()                
                     const rq = { type : "userids", keyword : data.receiverid.join(hush.cons.indeli) }
-                    const rs = await hush.http.ajax("/msngr/qry_userlist", rq)
+                    const rs = await hush.http.ajax("/msngr/qry_userlist", rq, true)
                     if (!hush.util.chkAjaxCode(rs, true)) return
                     const _len = rs.list.length
                     for (let i = 0; i < _len; i++) {
@@ -895,7 +895,7 @@
                                     cursor.continue()                               
                                 } else { //4) console.log("No more entries")
                                     if (_arr.length == 0) return 
-                                    const rs = await hush.http.ajax("/msngr/get_msginfo", { msgids : _arr, kind : "check" })
+                                    const rs = await hush.http.ajax("/msngr/get_msginfo", { msgids : _arr, kind : "check" }, true)
                                     if (!hush.util.chkAjaxCode(rs)) return
                                     const _len = rs.list.length //서버에 없는 것(sending failure 실패난 것)만 내려옴
                                     if (_len == 0) return
@@ -1277,7 +1277,7 @@
                     if (!hush.http.chkOnline()) return
                     const _url = $("#openGraph" + msgid).attr("og")
                     if (!_url) return
-                    const rs = await hush.http.ajax("/msngr/get_opengraph", { msgid : msgid, url : _url }) 
+                    const rs = await hush.http.ajax("/msngr/get_opengraph", { msgid : msgid, url : _url }, true) 
                     const ret = rs.result
                     if (!ret.ogTitle) {
                         $("#ogTitle" + ret.msgid).hide()
