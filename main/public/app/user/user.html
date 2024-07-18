@@ -137,7 +137,6 @@
 							const _toporgnm = $("#txt_toporgnm").text()
 							const _orgcd = $("#txt_orgcd").text()
 							const _orgnm = $("#txt_orgnm").text()
-							debugger
 							if (g_mode == "C" || _chkPwd) { //신규모드 또는 수정모드중 비번 변경시
 								if (!await hush.util.chkFieldVal(_pwd_1, "새비번", 4, 20, true)) return	
 								if (_pwd_1 != _pwd_2) {
@@ -151,7 +150,11 @@
 							if (!await hush.util.chkFieldVal(_id, "아이디", 4, MAX_LEN_ID, true)) return
 							if (!await hush.util.chkFieldVal(_nm, "이름", 2, MAX_LEN_NM, true)) return
 							if (!await hush.util.chkFieldVal(_alias, "별칭(Alias)", 0, MAX_LEN_ALIAS)) return
-							if (!await hush.util.chkFieldVal(_orgcd, "회사/부서", 1)) return
+							if (_id == "admin" || _id == "organ") {
+								//admin, organ(조직연동전용아이디)은 부서선택 없음. 이 2개 아이디는 각 회사의 관리자가 미리 등록해놓기
+							} else {
+								if (!await hush.util.chkFieldVal(_orgcd, "회사/부서", 1)) return
+							}
 							const fd = new FormData()
 							fd.append("type", g_mode)
 							fd.append("id", _id)

@@ -130,9 +130,10 @@ module.exports = (function() {
 		},
 
 		jwt : {
-			make : (userInfo, _key) => { //userInfo = { userid }
+			make : (userInfo, _key, _due) => { //userInfo = { userid }
 				const key = _key || nodeConfig.jwt.key
-				return jwt.sign(userInfo, key, { algorithm : nodeConfig.jwt.algo, expiresIn : nodeConfig.jwt.expiry })
+				const due = _due || nodeConfig.jwt.expiry //"4h", "59s", "365 days" ..
+				return jwt.sign(userInfo, key, { algorithm : nodeConfig.jwt.algo, expiresIn : due })
 			},
 			verify : (tokenInfo, _key) => { //tokenInfo = { token, userid } //여기서는 orgcd, toporgcd 체크하지 않음
 				return new Promise((resolve, reject) => {
