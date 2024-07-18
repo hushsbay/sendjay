@@ -13,6 +13,7 @@ router.use(function(req, res, next) {
 router.post('/', async function(req, res) {
 	let conn, sql, data, len
 	try {
+		console.log("111111111111111111111")
 		const rs = ws.http.resInit()	
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
