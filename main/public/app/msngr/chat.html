@@ -38,7 +38,6 @@
             let g_msgUnread = [], g_focus_for_webview, g_show_list_people = "X", sockConnected = false
             const FIRST_QUERIED = "9999"
             let g_retry_small, g_delete_small
-            //let g_procQueryUnread = false
 
             const resetEnvForScroll = () => {
                 g_cdt = FIRST_QUERIED //FIRST_QUERIED(default). YYYYMMDD~ : when scrolled all the way down to the bottom, previous page shown and g_cdt gets YYYYMMDD~ value
@@ -47,8 +46,6 @@
             const procScrollEvent = () => {
                 resetEnvForScroll()
                 g_list_msg.scroll(_.debounce(function() { //_.debounce => lodash.min.js
-                    //$("#in_search").val("procScrollEvent")
-                    console.log("procScrollEvent")
                     setTimeout(() => procQueryUnread(), 1) //스크롤이 맨 아래로 오면 txt_msg_added 있을 때 클릭한 효과와 동일해야 함
                     //const _lastTag = $($(".talk").last()[0]); if (_lastTag.position().top + _lastTag.height() + 1 <= g_list_msg.height()) {
                     if (g_list_msg.prop("scrollHeight") - parseInt(g_list_msg.height()) - g_list_msg.scrollTop() <= 100) {	
@@ -62,7 +59,6 @@
                     if (getMore.position().top + getMore.height() > 0) { //g_list_msg position should be relative for checking position().top
                         if (getMore.attr("getting") == "Y") return
                         getMore.attr("getting", "Y")
-                        console.log("getMsgList111133333")
                         setTimeout(() => getMsgList(), 100)
                     }
                 }, 150))
@@ -336,7 +332,6 @@
                         //따라서, 여기 getPrev는 검색결과중 제일 오래된(처음) 톡보다 이전 내용을 보고자 할 때 누르면 그 내용을 보여 주는 기능임
                         hush.util.animBgColor($(this))
                         g_cdt = $(this).data("cdt")
-                        console.log("getMsgList111144444")
                         getMsgList()
                         setTimeout(function() {
                             scrollToTarget("#getprev")
@@ -395,12 +390,8 @@
                     if (!hush.http.chkOnline("none")) return //가끔(특히, 앱 설치하자마자 방 열면) ..가 남아 있는 때가 있는데 
                     //테스트해보니 이 procQueryUnread() 함수를 여러번 호출하고 있음 (아래 read_msg 여러번 호출하고 있음)
                     //원래는 read_msg(updateall)만 호출하면 되는데 특히, 앱 설치하자마자 방 열면 procScrollEvent가 2번, updateall이 2번 실행되고
-                    //includes가 undefined때문에 안된다고 나와서 결국 오류로 멈춰서 ..가 남아 있게 된 것임
-                    //해결책으로, 아래와 같이 g_procQueryUnread으로 처리해 여러번 호출되는 것을 최대한 막음. 그래도 안되서 살펴 보니 getMsgList()가 두번 호출됨
+                    //includes가 undefined때문에 안된다고 나와서 결국 오류로 멈춰서 ..가 남아 있게 된 것임. 살펴 보니 getMsgList()가 두번 호출됨
                     //결국, 문제는 hush.idb.connect()이었음. common.js의 idb ##32 참조
-                    //if (g_procQueryUnread) return
-                    //g_procQueryUnread = true
-                    console.log("procQueryUnread..")
                     const rq = { type : "query", msgidArr : arr }                
                     if (hush.webview.ios) {
                     } else if (hush.webview.and) {
@@ -579,7 +570,6 @@
                         })
                     }
                     if (obj.type == "talk" && _sublink) procOpengraph(obj.msgid, kind)
-                    console.log("addrow === " + obj.msgid)
                     $("#unread_" + obj.msgid).off("click").on("click", function() {
                         hush.util.animBgColor($(this))
                         const rq = { type : "getmembers", msgid : obj.msgid }
@@ -1578,18 +1568,12 @@
             }
 
             const procUnreadCount = (msgid, unread_cnt) => {
-                console.log("procUnreadCount " + msgid)
-                const objHandling = $("#handling_" + msgid)
-                console.log("procUnreadCount => " + objHandling.length)
-                objHandling.html("@@@@@@@")
                 if (unread_cnt == -1) {
                     $("#handling_" + msgid).html("**")
                     return //no record 
                 }
-                console.log("$$$$$$$$$$$$$$$$$$")
-                //const objHandling = $("#handling_" + msgid)
-                //if (objHandling.css("display") != "none") objHandling.hide() 
-                objHandling.html("@@")
+                const objHandling = $("#handling_" + msgid)
+                if (objHandling.css("display") != "none") objHandling.hide() 
                 const objUnread = $("#unread_" + msgid)
                 if (objUnread.css("display") == "none") objUnread.show()
                 const unreadStr = objUnread.text()
@@ -1688,7 +1672,6 @@
             }
 
             const openRoomWithMobile = () => {
-                console.log(g_type+"***"+"openRoomWithMobile")
                 if (g_type == "open") {
                     const rq = { from : g_origin }
                     if (hush.webview.ios) {
@@ -1759,23 +1742,21 @@
                     }
                 },
                 [hush.cons.sock_ev_open_room] : (data) => { //from=after,create,dupchk,portal,noti,rename_room,hush.cons.sock_ev_show_on
-                    setTimeout(function() { //for debugging
+                    //setTimeout(function() { //for debugging
                         sockConnected = true //for mobile only
                         if (data.from == hush.cons.sock_ev_show_on) return
                         setMembers(data) //console.log(JSON.stringify(data)+"===")
                         toggleDispMem(data.dispmem)
                         if (data.from == "rename_room" || data.from == "after") return
                         hush.idb.connect((rs) => {
-                            console.log(rs.code+"==="+rs.msg)
                             if (rs.code != hush.cons.result_ok) {
                                 hush.msg.alert(rs.msg)
                                 return
                             }
                             if (rs.kind != "onsuccess") return //common.js의 idb ##32 참조
-                            console.log("getMsgList1111")
                             getMsgList()
                         })
-                    }, 20000)
+                    //}, 20000)
                 },
                 [hush.cons.sock_ev_set_env] : async (data) => {
                     toggleDispMem(data.value)
@@ -1928,7 +1909,6 @@
                         //data.first_queried means that procQueryUnread() will be occurred in scroll event too, so it should be skipped here.
                         //Since "updateall" is broadcast, procQueryUnread() needed unless it's same userkey.
                         //if (data.senderkey != g_userkey || !data.first_queried) procQueryUnread()
-                        console.log("updateall")
                         procQueryUnread() //updateall후엔 본인도 다시 읽어야 최신의 정보를 갖고 올 것임 (아무것도 안하면 본인 것 최초시엔 ..이 보일 것임)
                     } else if (data.type == "getmembers") { //socket.emit
                         const len = data.unread_list.length
@@ -1940,10 +1920,8 @@
                         procUnreadCount(data.msgid, data.unread_cnt)
                     } else { //query
                         for (let i = 0; i < data.msgidArr.length; i++) {
-                            console.log("procUnreadCount " + i)
                             procUnreadCount(data.msgidArr[i], data.unreadArr[i])
                         }
-                        //g_procQueryUnread = false
                     }
                 },
                 [hush.cons.sock_ev_qry_msgcell] : async (data) => { //when drag & drop
@@ -2234,7 +2212,6 @@
                             hush.sock.send(g_socket, hush.cons.sock_ev_create_room, rq, g_roomid)
                         } else if (g_type == "open") { //노티에서 오픈되는 것도 포함
                             if (opener.procUnreadTitle) opener.procUnreadTitle(g_roomid)
-                            console.log(g_type+"***"+"ready")
                             const rq = { from : param.from }
                             hush.sock.send(g_socket, hush.cons.sock_ev_open_room, rq, g_roomid)
                         }
@@ -2265,7 +2242,6 @@
                     $("#btn_qry_etc").on("click", function() { 
                         hush.util.animBgColor($(this))
                         toggleResult(true)
-                        console.log("getMsgList2222")
                         getMsgList("etc")
                     })
                     $("#btn_people_m").on("click", function() { 
