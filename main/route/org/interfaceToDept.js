@@ -18,6 +18,7 @@ router.post('/', async function(req, res) {
 		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
 		console.log(JSON.stringify(objToken)+"====")
 		const userid = objToken.userid
+		console.log(userid+"====@@")
 		if (!userid) return
 		// sql = "SELECT COUNT(*) CNT FROM Z_USER_TBL WHERE USER_ID = ? "
 		// data = await wsmysql.query(conn, sql, [userid])
