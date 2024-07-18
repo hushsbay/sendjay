@@ -21,7 +21,10 @@ router.post('/', async function(req, res) {
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
 		const userid = objToken.userid
-		if (!userid) return
+		if (!userid) {
+			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
+			return
+		}
 		if (kind == 'check') {
 			const _arr = []
 			for (let _msgid of msgids) {
@@ -98,7 +101,10 @@ router.get('/', async function(req, res) { //chat.html의 hush.http.fileDownload
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
 		const userid = objToken.userid
-		if (!userid) return
+		if (!userid) {
+			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
+			return
+		}
 		sql = "SELECT TYP TYPE, BUFFER, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END BODY FROM A_MSGMST_TBL WHERE MSGID = ? "
 		data = await wsmysql.query(conn, sql, [msgid])
 		if (data.length == 0) {

@@ -41,7 +41,10 @@ router.post('/', upload.any(), async (req, res) => {
 	req.title = 'proc_image.post'
 	try {
 		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
-		if (!objToken.userid) return //각각의 함수에 쿠키를 읽어서 처리해도 되는데 그냥 편의상 아래서 req.body.userid 사용하므로 userid와 비교하는 것임
+		if (!objToken.userid) { //각각의 함수에 쿠키를 읽어서 처리해도 되는데 그냥 편의상 아래서 req.body.userid 사용하므로 userid와 비교하는 것임
+			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
+			return
+		}
 		if (req.body.senderid != objToken.userid) throw new Error(ws.cons.MSG_MISMATCH_WITH_USERID + '- req.body.senderid')
 		const rs = await proc(req)
 		ws.http.resJson(res, rs, objToken.userid) //세번째 인자(userid) 있으면 token 갱신

@@ -20,7 +20,10 @@ router.post('/', async function(req, res) {
 		if (nodeToGet == 'U') { //사용자(U)일 경우만 인증체크함
 			const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
 			userid = objToken.userid
-			if (!userid) return
+			if (!userid) {
+				ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
+				return
+			}
 		}
 		sql =  "SELECT A.SEQ, A.LVL, A.ORG_CD, A.ORG_NM, B.ORG_CD TOP_ORG_CD, B.ORG_NM TOP_ORG_NM, '' USER_ID, '' USER_NM, '' NICK_NM, '' JOB, '' TEL_NO, '' AB_CD, '' AB_NM, "
 		sql += "       (SELECT COUNT(*) FROM JAY.Z_USER_TBL WHERE ORG_CD = A.ORG_CD) MEM_CNT "

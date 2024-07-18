@@ -21,7 +21,10 @@ router.post('/', async function(req, res) {
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
 		const userid = objToken.userid
-		if (!userid) return
+		if (!userid) {
+			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
+			return
+		}
 		const subqry = "(SELECT CDT FROM A_MSGDTL_TBL WHERE ROOMID = A.ROOMID AND RECEIVERID = '" + userid + "' AND STATE IN ('', 'R') ORDER BY CDT DESC LIMIT 1) "
 		sql = "SELECT ROOMID, ROOMNM, MASTERID, MASTERNM, MEMCNT, MAINNM, NOTI, STATE, NICKNM, LASTMSG, LASTDT "
 		sql += "	 FROM ("

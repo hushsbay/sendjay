@@ -190,10 +190,9 @@ module.exports = (function() {
 			},
 			//app.use(), router.use()에서 ws.jwt.verify()로 사용해도 되지만, 래핑된 chkToken()로 체크 : 코딩 약간 수월
 			//클라이언트에 code, msg 전달해야 하는데 app.use(), router.use()보다는 손이 더 갈 수도 있지만 더 유연하게 사용 가능
-			chkToken : async (req, res, conn) => {
-				const _title = 'chkToken'
+			chkToken : async (req, res, conn) => { //const _title = 'chkToken'
 				let { token, userid, orgcd, toporgcd } = req.cookies
-				if (!token) {
+				if (!token || !userid) {
 					//userid = req.body.userid
 					token = req.body.token //organ의 token은 외부 인터페이스를 통해 post로 호출될 수 있음					
 					console.log(userid, token, "@@@@")
@@ -205,13 +204,7 @@ module.exports = (function() {
 				if (jwtRet.code != ws.cons.CODE_OK) { //실수로 await 빼고 chkToken() 호출할 때 대비해 if절 구성
 					ws.util.loge(req, jwtRet.msg)
 					rs.code = jwtRet.code
-					rs.msg = jwtRet.msg
-					console.log(rs.code, rs.msg)
-					// if (res) {
-					// 	ws.http.resWarn(res, rs.msg, false, rs.code, _title)
-					// 	return
-					// }
-					// console.log(rs.code, rs.msg)
+					rs.msg = jwtRet.msg //if (res) ws.http.resWarn(res, rs.msg, false, rs.code, _title)
 					return rs
 				}
 				if (conn) { //userid뿐만 아니라 부서정보 등 위변조도 체크 필요 (문제 발생시 로깅. 겸직 코딩은 제외되어 있음)
@@ -221,16 +214,14 @@ module.exports = (function() {
 						const msg = ws.cons.MSG_NO_DATA + '/' + tokenInfo.userid
 						ws.util.loge(req, msg)
 						rs.code = ws.cons.CODE_NO_DATA
-						rs.msg = msg
-						if (res) ws.http.resWarn(res, rs.msg, false, rs.code, _title)
+						rs.msg = msg //if (res) ws.http.resWarn(res, rs.msg, false, rs.code, _title)
 						return rs
 					}
 					if (data[0].ORG_CD != tokenInfo.orgcd || data[0].TOP_ORG_CD != tokenInfo.toporgcd) {
 						const msg = '사용자쿠키값에 문제가 있습니다 : ' + tokenInfo.userid + '/' + tokenInfo.orgcd + '/' + tokenInfo.toporgcd
 						ws.util.loge(req, msg)
 						rs.code = ws.cons.CODE_USERCOOKIE_MISMATCH
-						rs.msg = msg
-						if (res) ws.http.resWarn(res, rs.msg, false, rs.code, _title)
+						rs.msg = msg //if (res) ws.http.resWarn(res, rs.msg, false, rs.code, _title)
 						return rs
 					}
 				}

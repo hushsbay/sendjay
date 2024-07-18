@@ -14,7 +14,10 @@ router.post('/', async function(req, res) {
 		const rs = ws.http.resInit()
 		const { type, userkey, winid } = req.body
 		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
-		if (!objToken.userid) return
+		if (!objToken.userid) {
+			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
+			return
+		}
 		const pattern = ws.cons.key_str_winid + userkey + ws.cons.easydeli //$$ + W + W__USERID;
 		const uwKey = pattern + winid //$$WW__USERID;winid
 		const _dt = ws.util.getCurDateTimeStr(true) //console.log(type, "##############", userkey, winid, pattern, uwKey)

@@ -21,7 +21,10 @@ router.post('/', async function(req, res) {
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
 		const userid = objToken.userid
-		if (!userid) return
+		if (!userid) {
+			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
+			return
+		}
 		const ret = await ws.util.chkAccessUserWithTarget(conn, userid, roomid, 'room')
 		if (ret != '') throw new Error(ret)
 		if (type == 'after') {

@@ -19,7 +19,10 @@ router.post('/', async function(req, res) {
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
 		const userid = objToken.userid
-		if (!userid) return
+		if (!userid) {
+			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
+			return
+		}
 		sql = "SELECT USER_ID, USER_NM, NICK_NM, ORG_CD, JOB, TEL_NO, AB_CD, AB_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM "
 		sql += " FROM Z_USER_TBL "
 		if (type == 'list') { //qry += "WHERE TOP_ORG_NM NOT LIKE 'COMPANY%' "
