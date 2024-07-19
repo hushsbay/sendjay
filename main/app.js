@@ -113,6 +113,8 @@ global.jay.on('connection', async (socket) => {
 })
 console.log('socketServer listening on ' + config.sock.port)
 
+//cors는 엄밀히 말하면 웹브라우저 이슈인 것으로 보임. 예를 들어, 도메인이 없는 앱에서는 사이트URL(origin)이 없기 때문에 통제안됨
+//실제로, 웹브라우저에서 요청시 그 도메인을 아래 config.app.corsRestful에 넣어 주면 통과되나 앱에서 요청시는 없어도 통과됨
 const corsOptions = { //for Rest
 	origin : function (origin, callback) {
 		if (!origin || config.app.corsRestful.indexOf(origin) > -1) { //!origin = in case of same origin
@@ -132,7 +134,8 @@ for (let i = 0; i < rt.length; i++) app.use('/user/' + rt[i], require('./route/u
 
 rt = ['orgtree', 'empsearch', 'deptsearch']
 for (let i = 0; i < rt.length; i++) app.use('/org/' + rt[i], require('./route/org/' + rt[i])) 
-app.use('/org/interfaceToDept', cors(corsOptions), require('./route/org/interfaceToDept'))
+//app.use('/org/interfaceToDept', cors(corsOptions), require('./route/org/interfaceToDept'))
+app.use('/org/interfaceToDept', require('./route/org/interfaceToDept'))
 
 rt = [
 	'append_log', 'chk_redis', 'qry_unread', 'qry_userlist', 'qry_orgtree', 'qry_portal', 'qry_msglist', 'get_roominfo', 'proc_file', 'proc_image',
