@@ -113,7 +113,7 @@
                     $("#btn_copy").on("click", async function() {
                         const _text = hush.http.getCookie("token")
                         navigator.clipboard.writeText(_text).then(async function() {
-                            await hush.msg.alert("지금 복사된 토큰을 ajax 소스에 붙여 넣기 바랍니다.")
+                            await hush.msg.alert("복사 완료.<br>복사된 토큰을 소스에 붙여 넣기 바랍니다.")
                         }).catch(async function() {
                             await hush.msg.alert("오류: " + err)
                         })
