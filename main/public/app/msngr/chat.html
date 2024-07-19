@@ -675,14 +675,21 @@
                             }
                             const _id = this.id
                             if (_id == "btn_copy_cell") {
-                                const t = document.createElement("input")
-                                document.body.appendChild(t)
-                                t.value = _id + hush.cons.deli + obj.type + hush.cons.deli + g_roomid + hush.cons.deli + obj.msgid
-                                t.select()
-                                document.execCommand('copy')
-                                document.body.removeChild(t)
+                                // const t = document.createElement("input")
+                                // document.body.appendChild(t)
+                                // t.value = _id + hush.cons.deli + obj.type + hush.cons.deli + g_roomid + hush.cons.deli + obj.msgid
+                                // t.select()
+                                // document.execCommand('copy')
+                                // document.body.removeChild(t)
+                                //showCellMenu(false)
+                                //hush.msg.toast("복사 완료. Ctrl+V로 붙이면 됩니다. (" + obj.type + ")", 2) //image, file, flink will be ok too
                                 showCellMenu(false)
-                                hush.msg.toast("복사 완료. Ctrl+V로 붙이면 됩니다. (" + obj.type + ")", 2) //image, file, flink will be ok too
+                                const _text = _id + hush.cons.deli + obj.type + hush.cons.deli + g_roomid + hush.cons.deli + obj.msgid
+                                navigator.clipboard.writeText(_text).then(function() {
+                                    hush.msg.toast("복사 완료. Ctrl+V로 붙이면 됩니다. (" + obj.type + ")", 2) //image, file, flink will be ok too
+                                }).catch(async function() {
+                                    await hush.msg.alert("오류: " + err)
+                                })
                             } else { //mobile
                                 localStorage.msgidCopied = obj.msgid //AndroidRoom.copy(obj.msgid) //$$66 in MainActivity.kt 참조
                                 hush.msg.toast("복사 완료") //image, file, flink will be ok too
