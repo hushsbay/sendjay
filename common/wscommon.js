@@ -128,6 +128,7 @@ module.exports = (function() {
 				}
 			},
 			ipChk : (_ipArr, _ip) => {
+				if (!_ipArr || !Array.isArray(_ipArr)) return false
 				if (_ipArr[0] == 'all') {
 					return true
 				} else {
