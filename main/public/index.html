@@ -5,7 +5,7 @@
         <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
         <meta http-equiv="Expires" content="-1">
         <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-        <title>사내ERP포털</title>
+        <title>ERP포털</title>
         <link id=favicon href="/img/hushsbay.png" rel="shortcut icon" type="image/x-icon"/>
         <link rel="stylesheet" href="/plugin/jquery-ui-smoothness-1.12.1.min.css">
         <link rel="stylesheet" href="/common/common.css">
@@ -74,10 +74,12 @@
             function showLogout(show) {
                 if (show) {
                     $("#btn_logout").css("display", "flex")
-                    $("#btn_login").hide()                         
+                    $("#btn_login").hide()
+                    $("#btn_copy").hide()
                 } else {
                     $("#btn_login").css("display", "flex")
-                    $("#btn_logout").hide()                            
+                    $("#btn_logout").hide()
+                    $("#btn_copy").css("display", "flex")
                 }
             }
 
@@ -170,7 +172,7 @@
                     <div class="topLeftText">사내ERP포털</div>
                 </div>
                 <div class="topRight">
-                    <div class="topRightItem coActive" id="btn_copy">토큰복사</div>
+                    <div class="topRightItem coActive" id="btn_copy" style="display:none">토큰복사</div>
                     <div class="topRightItem coActive" id="btn_guide">안내</div>
                     <div class="topRightItem coActive" id="btn_user">간편등록</div>
                     <div class="topRightItem coActive" id="btn_login">로그인</div>
