@@ -115,6 +115,8 @@ console.log('socketServer listening on ' + config.sock.port)
 
 //cors는 엄밀히 말하면 웹브라우저 이슈인 것으로 보임. 예를 들어, 도메인이 없는 앱에서는 사이트URL(origin)이 없기 때문에 통제안됨
 //실제로, 웹브라우저에서 요청시 그 도메인을 아래 config.app.corsRestful에 넣어 주면 통과되나 앱에서 요청시는 없어도 통과됨
+//cors(corsOptions)을 빼면 웹에서는 CORS로 인해 Block되지만 앱에서는 잘 통과됨 (예를 들어, 노드같은 서버에서 호출해도 앱과 동일할 것임)
+//결론적으로, cors는 설정하는 것으로 함 (웹이든 서버든 필요시 통과하도록 처리. 다만 서버는 최소한 IP 정도는 체크해서 허용하도록 해야 할 것임)
 const corsOptions = { //for Rest
 	origin : function (origin, callback) {
 		if (!origin || config.app.corsRestful.indexOf(origin) > -1) { //!origin = in case of same origin
@@ -134,8 +136,7 @@ for (let i = 0; i < rt.length; i++) app.use('/user/' + rt[i], require('./route/u
 
 rt = ['orgtree', 'empsearch', 'deptsearch']
 for (let i = 0; i < rt.length; i++) app.use('/org/' + rt[i], require('./route/org/' + rt[i])) 
-//app.use('/org/interfaceToDept', cors(corsOptions), require('./route/org/interfaceToDept'))
-app.use('/org/interfaceToDept', require('./route/org/interfaceToDept'))
+app.use('/org/interfaceToDept', cors(corsOptions), require('./route/org/interfaceToDept'))
 
 rt = [
 	'append_log', 'chk_redis', 'qry_unread', 'qry_userlist', 'qry_orgtree', 'qry_portal', 'qry_msglist', 'get_roominfo', 'proc_file', 'proc_image',
