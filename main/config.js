@@ -17,6 +17,7 @@ module.exports = {
 		nodeConfig : process.env.NODE_CONFIG,
 		corsRestful : ['https://hushsbay.com', 'https://wisedev.sbs.co.kr', 'https://wise.sbs.co.kr'], //Array type. Same origin이 없어도 됨
 		corsSocket : 'https://hushsbay.com', //Non-array type. Same origin이 들어 있어야 함
+		ipAccess : ['aaa'], //interfaceToDept.js, interfaceToUser.js에만 사용
 		logPath : process.env.LOG_PATH,
 		mainserver : process.env.MAIN_SERVER,
 		uploadPath : process.env.UPLOAD_PATH

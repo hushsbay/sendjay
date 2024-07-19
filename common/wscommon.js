@@ -126,6 +126,16 @@ module.exports = (function() {
 				} else {
 					return 'web'
 				}
+			},
+			ipChk : (_ipArr, _ip) => {
+				if (_ipArr[0] == 'all') {
+					return true
+				} else {
+					for (const item of _ipArr) { //console.log(item+"@@@")
+						if (item == _ip || '::ffff:' + item == _ip) return true
+					}
+					return false
+				}
 			}
 		},
 
