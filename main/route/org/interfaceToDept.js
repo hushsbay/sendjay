@@ -22,7 +22,6 @@ router.post('/', async function(req, res) {
 			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
 			return
 		}
-		console.log(userid, req.clientIp)
 		if (!ws.http.ipChk(config.app.ipAccess, req.clientIp)) throw new Error('client ip not allowed')
 		// sql = "SELECT COUNT(*) CNT FROM Z_USER_TBL WHERE USER_ID = ? "
 		// data = await wsmysql.query(conn, sql, [userid])
