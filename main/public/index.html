@@ -110,10 +110,13 @@
                             //if (!result) return 오류나도 아래가 실행되도록 함
                         }                        
                     }
-                    $("#btn_test").on("click", async function() {
-                        const rq = { userid : "organ", token : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiJhZG1pbiIsImlhdCI6MTcyMTI4NzE1MCwiZXhwIjoxNzUyODIzMTUwfQ.P3U8KqaRiU717sWWoH--pYDnt6D49YnOu7fMFxjFKp8" }
-                        const rs = await hush.http.ajax("/org/interfaceToDept", rq)
-                        debugger
+                    $("#btn_copy").on("click", async function() {
+                        const _text = hush.http.getCookie("token")
+                        navigator.clipboard.writeText(_text).then(async function() {
+                            await hush.msg.alert("지금 복사된 토큰을 ajax 소스에 붙여 넣기 바랍니다.")
+                        }).catch(async function() {
+                            await hush.msg.alert("오류: " + err)
+                        })
                     })
                     $("#btn_user").on("click", function() {
                         hush.util.openWinPop("/app/user/userlist.html", 550)
@@ -167,7 +170,7 @@
                     <div class="topLeftText">사내ERP포털</div>
                 </div>
                 <div class="topRight">
-                    <div class="topRightItem coActive" id="btn_test">테스트</div>
+                    <div class="topRightItem coActive" id="btn_copy">토큰복사</div>
                     <div class="topRightItem coActive" id="btn_guide">안내</div>
                     <div class="topRightItem coActive" id="btn_user">간편등록</div>
                     <div class="topRightItem coActive" id="btn_login">로그인</div>
