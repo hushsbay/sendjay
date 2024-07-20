@@ -46,6 +46,7 @@
 					for (let i = 0; i < _len; i++) {
 						const row = rs.list[i]
 						const user_id = row.USER_ID  
+						const kind = (row.ID_KIND == "D") ? "부서공용" : ""   
 						const user_nm = row.USER_NM
 						const org_cd = row.ORG_CD
 						const org_nm = row.ORG_NM
@@ -57,7 +58,8 @@
 						_html += "  	</div>"
 						_html += "		<div class=coRowMain >"
 						_html += "			<span class=coRowText style='width:100px' title='" + user_nm + "'>" + user_nm + "</span>"
-						_html += "			<span class=coRowText style='width:140px' title='" + user_id + "'>" + user_id + "</span>"
+						_html += "			<span class=coRowText style='width:100px' title='" + user_id + "'>" + user_id + "</span>"
+						_html += "			<span class=coRowText style='width:100px' title='" + kind + "'>" + kind + "</span>"
 						_html += "			<span class=coRowText style='width:140px;color:dimgray' title='" + org_nm + "'>" + org_nm + "</span>"
 						_html += "			<span class=coRowText style='width:140px;color:dimgray' title='" + top_org_nm + "'>" + top_org_nm + "</span>"
 						_html += "  	</div>"
