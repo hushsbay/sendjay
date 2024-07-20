@@ -59,7 +59,7 @@
 						_html += "		<div class=coRowMain >"
 						_html += "			<span class=coRowText style='width:90px' title='" + user_nm + "'>" + user_nm + "</span>"
 						_html += "			<span class=coRowText style='width:90px' title='" + user_id + "'>" + user_id + "</span>"
-						_html += "			<span class=coRowText style='width:60px' title='" + kind + "'>" + kind + "</span>"
+						_html += "			<span class=coRowText style='width:60px;color:darkgreen' title='" + kind + "'>" + kind + "</span>"
 						_html += "			<span class=coRowText style='width:120px;color:dimgray' title='" + org_nm + "'>" + org_nm + "</span>"
 						_html += "			<span class=coRowText style='width:120px;color:dimgray' title='" + top_org_nm + "'>" + top_org_nm + "</span>"
 						_html += "  	</div>"
@@ -119,8 +119,8 @@
     <body> 
         <div class="container">
             <div class="top">
-				<input type=radio id=rdoName name=sortKind value=N style="cursor:pointer" checked="checked"/><label for=rdoName style="cursor:pointer">이름순</label>
-				<input type=radio id=rdoOrg name=sortKind value=O style="cursor:pointer"/><label for=rdoOrg style="cursor:pointer">조직순</label>
+				<input type=radio id=rdoName name=sortKind value=N style="cursor:pointer"/><label for=rdoName style="cursor:pointer">이름순</label>
+				<input type=radio id=rdoOrg name=sortKind value=O style="cursor:pointer" checked="checked"/><label for=rdoOrg style="cursor:pointer">조직순</label>
                 <input id="in_search" type=search spellcheck=false autocomplete=off style="width:80px;margin-left:5px"/>                
 				<div id="btn_search" class="coMenuBtn coActive"><img src="/img/white_search.png" class="coImg16"/><span class="coSpanWithImg">조회</span></div>
 			</div>

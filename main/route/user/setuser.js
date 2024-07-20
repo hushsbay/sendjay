@@ -20,8 +20,19 @@ router.post('/', upload.any(), async function(req, res) {
 		let _kind = (id == 'admin') ? 'A' : (id == 'organ' ? 'O' : kind)
 		const buf = mimetype ? Buffer.from(new Uint8Array(req.files[0].buffer)) : null //MySql PICTURE 필드가 longblob 타입으로 되어 있고 브라우저에서 blob으로 넘겨받아 저장하는 것임
 		conn = await wsmysql.getConnFromPool(global.pool) //의도적으로 인증체크하지 않음
+		let userid = null //로그인하지 않은 상태로도 사용 가능
+		if (req.cookies.token && req.cookies.userid) {
+			const objToken = await ws.jwt.chkToken(req, res)
+			userid = objToken.userid
+		}
 		sql =  "SELECT COUNT(*) CNT, PWD FROM Z_USER_TBL WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [id])
+		if (userid != 'admin') {
+			if (_kind != 'U') {
+				ws.http.resWarn(res, 'ID구분이 사용자인 경우만 처리 가능합니다.')
+				return
+			}
+		}
 		if (type == 'C') {
 			if (data[0].CNT > 0) {
 				ws.http.resWarn(res, ws.cons.MSG_ALREADY_EXISTS)
@@ -37,10 +48,12 @@ router.post('/', upload.any(), async function(req, res) {
 				ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA)
 				return
 			}
-			const _dec = ws.util.decrypt(data[0].PWD, nodeConfig.crypto.key)
-			if (pwd != _dec) {
-				ws.http.resWarn(res, '입력한 (기존) 비번이 서버에 저장된 비번과 다릅니다.')
-				return
+			if (userid != 'admin') {
+				const _dec = ws.util.decrypt(data[0].PWD, nodeConfig.crypto.key)
+				if (pwd != _dec) {
+					ws.http.resWarn(res, '입력한 (기존) 비번이 서버에 저장된 비번과 다릅니다.')
+					return
+				}
 			}
 			if (type == 'D') {
 				sql = "DELETE FROM Z_USER_TBL WHERE USER_ID = ? "
