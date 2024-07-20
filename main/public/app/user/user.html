@@ -151,7 +151,9 @@
 								}
 							}
 							if (g_mode == "U") {
-								if (!await hush.util.chkFieldVal(_pwd, "비번", 4, MAX_LEN_PWD, true)) return	
+								if (hush.http.getCookie("userid") != "admin") {
+									if (!await hush.util.chkFieldVal(_pwd, "비번", 4, MAX_LEN_PWD, true)) return	
+								}
 							}
 							if (!await hush.util.chkFieldVal(_id, "아이디", 4, MAX_LEN_ID, true)) return
 							if (!await hush.util.chkFieldVal(_nm, "이름", 2, MAX_LEN_NM)) return

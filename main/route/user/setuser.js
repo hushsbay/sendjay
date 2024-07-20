@@ -29,7 +29,7 @@ router.post('/', upload.any(), async function(req, res) {
 		data = await wsmysql.query(conn, sql, [id])
 		if (userid != 'admin') {
 			if (_kind != 'U') {
-				ws.http.resWarn(res, 'ID구분이 사용자인 경우만 처리 가능합니다.<br>admin/organ도 처리 불가능.')
+				ws.http.resWarn(res, '일반 사용자ID만 처리 가능합니다.')
 				return
 			}
 		}
