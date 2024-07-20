@@ -7,6 +7,11 @@ const multer  = require('multer') //ajax enctype을 "multipart/form-data"으로 
 const router = express.Router()
 const upload = multer({ storage: multer.memoryStorage() })
 
+//1) 로그인하지 않은 상태로도 처리 가능
+//   - 아이디 생성 : admin/organ 아이디도 생성 가능. 수정/삭제시 기존 입력된 비번을 넣어야만 처리 가능
+//2) 로그인한 상태로 처리 가능
+//   - admin 아이디로 로그인한 상태에서 비번없이도 다른 아이디 수정, 삭제 가능. 부서공용ID도 처리 가능
+
 router.use(function(req, res, next) {
 	req.title = 'setuser'
 	next() //next('error')는 아래 ws.util.watchRouterError()로 연결
