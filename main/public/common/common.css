@@ -75,7 +75,7 @@ button { margin-left: 5px }
 
 .coRowText { /* width는 별도 지정 필요 */
     height: 20px; margin-left: 3px;
-    display: flex; align-items: center; flex: none; 
+    display: flex; align-items: center; flex: none; border:1px solid green;
     overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
 }
 
