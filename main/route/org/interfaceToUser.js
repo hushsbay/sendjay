@@ -35,10 +35,11 @@ router.post('/', async function(req, res) {
 		}
 		len = user.length
 		for (let i = 0; i < len; i++) {			
-			sql = "INSERT INTO Z_INTUSER_TBL (DTKEY, USER_ID, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, TEL_NO, AB_CD, AB_NM, IS_SYNC) "
+			sql = "INSERT INTO Z_INTUSER_TBL (DTKEY, USER_ID, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM) "
 			sql += " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
 			await wsmysql.query(conn, sql, [
-				dtkey, user[i].USER_ID, user[i].USER_NM, user[i].ORG_CD, user[i].ORG_NM, user[i].TOP_ORG_CD, user[i].TOP_ORG_NM, user[i].TEL_NO, user[i].AB_CD, user[i].AB_NM, 'Y'
+				dtkey, user[i].USER_ID, user[i].USER_NM, user[i].ORG_CD, user[i].ORG_NM, user[i].TOP_ORG_CD, user[i].TOP_ORG_NM, 
+				user[i].JOB, user[i].TEL_NO, user[i].AB_CD, user[i].AB_NM
 			])
 		}
 		rs.dtkey = dtkey

@@ -35,9 +35,9 @@ router.post('/', async function(req, res) {
 		}
 		len = dept.length
 		for (let i = 0; i < len; i++) {			
-			sql = "INSERT INTO Z_INTORG_TBL (DTKEY, ORG_CD, ORG_NM, SEQ, LVL, INUSE, IS_SYNC) "
-			sql += " VALUES (?, ?, ?, ?, ?, ?, ?) "
-			await wsmysql.query(conn, sql, [dtkey, dept[i].ORG_CD, dept[i].ORG_NM, dept[i].SEQ, dept[i].LVL, dept[i].INUSE, 'Y'])
+			sql = "INSERT INTO Z_INTORG_TBL (DTKEY, ORG_CD, ORG_NM, SEQ, LVL, INUSE) "
+			sql += " VALUES (?, ?, ?, ?, ?, ?) "
+			await wsmysql.query(conn, sql, [dtkey, dept[i].ORG_CD, dept[i].ORG_NM, dept[i].SEQ, dept[i].LVL, dept[i].INUSE])
 		}
 		rs.dtkey = dtkey
 		await wsmysql.txCommit(conn)
