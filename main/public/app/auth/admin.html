@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    	<meta http-equiv="Expires" content="-1">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+        <title>관리자</title>
+        <link id=favicon href="/img/hushsbay.png" rel="shortcut icon" type="image/x-icon"/>
+		<link rel="stylesheet" href="/plugin/jquery-ui-smoothness-1.12.1.min.css">
+        <link rel="stylesheet" href="/common/common.css">
+        <script src="/plugin/jquery-3.4.1.min.js"></script>
+		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
+		<script src="/plugin/jquery.cookie.js"></script>
+        <script>
+			const getUserData = async (_keyword, _teamcode) => {
+				try {
+					g_list.empty()
+					const _comp = $("#chk_mycomp").prop("checked") ? hush.user.toporgcd : g_comp
+					const rs = await hush.http.ajax("/org/empsearch", { keyword : _keyword, teamcode : _teamcode, comp : _comp })
+					if (!hush.util.chkAjaxCode(rs)) return
+					g_rs = rs
+					const _len = rs.list.length
+					for (let i = 0; i < _len; i++) {
+						const row = rs.list[i]
+						const user_id = row.USER_ID
+						const user_nm = row.USER_NM
+						const org_cd = row.ORG_CD
+						const org_nm = row.ORG_NM
+						const top_org_cd = row.TOP_ORG_CD
+						const top_org_nm = row.TOP_ORG_NM
+						const nodeStr = user_nm + "/" + org_nm + "/" + top_org_nm
+						let _html = "<div id=row_" + i.toString() + " class=coRow >"
+						_html += "   	<input type=checkbox id=sel_" + i + " code=" + user_id + " class=sel />"
+						if (g_getImage == "Y") {
+							_html += "	<img id=img_" + user_id + " src='/img/noperson.png' class=imgPerson downloaded='' />"
+						} else {
+							_html += "	<img src='/img/ico_user.png' class=coImg16 style='margin-left:5px' />"
+						}
+						_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
+						_html += "  </div>"
+						g_list.append(_html)
+					}
+					if (_len == 0) return
+					$(".sel").off("change").on("change", function(e) {
+						const _self = $(this)
+						const _id = this.id //sel_2
+						const _idx = parseInt(_id.substring(4)) //2
+						procSelect("U", _idx)
+					}) //g_nodeToGet == "U"일 경우만 btn_team() 실행됨
+					if (_teamcode) { //내팀
+						$("#chk_selectall").prop("disabled", false)
+					} else { //검색
+						$("#chk_selectall").prop("disabled", true)
+					}
+					procPhoto()
+				} catch (ex) {
+					hush.util.showEx(ex)
+				}  	                
+            }
+
+			const getDeptData = async (_keyword) => {
+				try {
+					g_list.empty()
+					const _comp = (hush.user && $("#chk_mycomp").prop("checked")) ? hush.user.toporgcd : g_comp //편의상 U말고는 hush.user가 null일 수 있음
+					const rs = await hush.http.ajax("/org/deptsearch", { keyword : _keyword, comp : _comp })
+					if (!hush.util.chkAjaxCode(rs)) return
+					g_rs = rs
+					const _len = rs.list.length
+					for (let i = 0; i < _len; i++) {
+						const row = rs.list[i]
+						const org_cd = row.ORG_CD
+						const org_nm = row.ORG_NM
+						const top_org_cd = row.TOP_ORG_CD
+						const top_org_nm = row.TOP_ORG_NM
+						const nodeStr = org_nm + "/" + top_org_nm
+						let _html = "<div id=row_" + i.toString() + " class=coRow >"
+						_html += "   	<input type=checkbox id=sel_" + i + " code=" + org_cd + " class=sel />"
+						_html += "		<img src='/img/ico_dept.png' class=coImg16 style='margin-left:5px' />"
+						_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
+						_html += "  </div>"
+						g_list.append(_html)
+					}
+					if (_len == 0) return
+					$(".sel").off("change").on("change", function(e) {
+						const _self = $(this)
+						const _id = this.id //sel_2
+						const _idx = parseInt(_id.substring(4)) //2
+						procSelect("D", _idx)
+					})
+					$("#chk_selectall").prop("disabled", true)
+				} catch (ex) {
+					hush.util.showEx(ex)
+				}  	                
+            }
+
+            $.when($.ready).done(async function() {
+                try {
+                    await $.getScript("/common/common.js")
+					if (!await hush.auth.verifyUser()) return //페이지 로드시 체크하는 루틴임 (ajax 호출시 체크와는 별개)
+					alert("111")
+                } catch (ex) {
+                    hush.util.showEx(ex)
+                }                
+            }).fail(function(ex) {
+                hush.util.showEx(ex, hush.cons.failOnLoad)
+            })
+        </script>
+    </head>
+    <body> 
+        <div id=main_pg class=coMainPage>
+            <div style="flex:1;display:none;flex-direction:column;background-color:white;border:1px solid darkgray;overflow:auto;margin:10px 5px 0px 5px">
+                <div class=coSettingRow>
+                    <div class='coSettingLabel coText'>별칭/상태</div>
+                    <input id=in_nicknm data-role=none spellcheck=false placeholder='100 bytes' class='inputSetting coText' />
+                </div>
+                <div class=coSettingRow>
+                    <div class='coSettingLabel coText'>직무</div>
+                    <input id=in_job data-role=none spellcheck=false placeholder='50 bytes' class='inputSetting coText' />
+                </div>
+                <div class=coSettingRow>
+                    <div class='coSettingLabel coText'>부재코드</div>
+                    <input id=in_abcd data-role=none spellcheck=false placeholder='8 bytes. eg) biztrip, dayoff' class='inputSetting coText' />
+                </div>
+                <div class=coSettingRow>
+                    <div class='coSettingLabel coText'>부재내용</div>
+                    <input id=in_abnm data-role=none spellcheck=false placeholder='50 bytes. eg) 08/15~08/23' class='inputSetting coText' />
+                </div>
+                <div class=coSettingRow>
+                    <div class='coSettingLabel coText'>알림설정</div>
+                    <label for=chk_notioff class=coSettingWrap>
+                        <input type=checkbox id=chk_notioff name=chk_notioff class=coSettingChkbox />
+                        <span class='coSettingSpan coText'>끄기</span>
+                    </label>
+                </div>
+                <div class=coSettingRow>
+                    <div class='coSettingLabel coText'>알림표시</div>
+                    <label for=chk_bodyoff class=coSettingWrap>
+                        <input type=checkbox id=chk_bodyoff name=chk_bodyoff class=coSettingChkbox />
+                        <span class='coSettingSpan coText'>내용숨김</span>
+                    </label>
+                    <label for=chk_senderoff class=coSettingWrap style="margin-left:10px">
+                        <input type=checkbox id=chk_senderoff name=chk_senderoff class=coSettingChkbox />
+                        <span class='coSettingSpan coText'>발신숨김</span>
+                    </label>
+                </div>
+                <div class=coSettingRow id=div_noti_mobile style="display:none">
+                    <div class='coSettingLabel coText'>알림옵션<br>(Mobile)</div>
+                    <div id=btn_noti_mobile class='picBtn coText'>소리/진동/팝업</div>
+                </div>
+                <div class=coSettingRow>
+                    <div class='coSettingLabel coText'>알림시간<br>(Mobile)</div>
+                    <input id=in_fr data-role=none spellcheck=false placeholder='0900' class=coText style="width:60px;text-align:center;border:1px solid darkgray;margin-right:3px" /> ~
+                    <input id=in_to data-role=none spellcheck=false placeholder='1800' class=coText style="width:60px;text-align:center;border:1px solid darkgray;margin-left:3px" />
+                    <span id=spn_clear class='coSettingSpan coText' style="color:#0082AD;cursor:pointer">Clear</span>
+                </div> 
+                <div class=coSettingRow id="div_log" style="display:none">  
+                    <div class='coSettingLabel coText'>모바일로그<br>(관리자용)</div><!--아래 0은 당일 로그-->
+                    <input id=in_showlog type=number data-role=none spellcheck=false value="0" style="width:40px;text-align:center;border:1px solid darkgray;margin:0px 5px" />
+                    <div id=btn_showlog class='picBtn coText' style="margin-left:5px">ShowLog</div>
+                    <div id=btn_deletelog class='picBtn coText' style="margin-left:5px">DelLog</div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
