@@ -30,11 +30,11 @@ router.post('/', async function(req, res) {
 		console.log(dtkey, "@@@@@")
 		sql = "SELECT COUNT(*) CNT FROM Z_INTORG_TBL WHERE DTKEY = ? "
 		data = await wsmysql.query(conn, sql, [dtkey])
-		len = data.length
-		if (len > 0) {
+		if (data.length > 0) {
 			sql = "DELETE FROM Z_INTORG_TBL WHERE DTKEY = ? "
 			await wsmysql.query(conn, sql, [dtkey])
 		}
+		len = dept.length
 		for (let i = 0; i < len; i++) {			
 			sql = "INSERT INTO Z_INTORG_TBL (DTKEY, ORG_CD, ORG_NM, SEQ, LVL, INUSE, IS_SYNC) "
 			sql += " VALUES (?, ?, ?, ?, ?, ?, ?) "
