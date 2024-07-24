@@ -137,6 +137,7 @@ for (let i = 0; i < rt.length; i++) app.use('/user/' + rt[i], require('./route/u
 rt = ['orgtree', 'empsearch', 'deptsearch']
 for (let i = 0; i < rt.length; i++) app.use('/org/' + rt[i], require('./route/org/' + rt[i])) 
 app.use('/org/interfaceToDept', cors(corsOptions), require('./route/org/interfaceToDept')) //외부 인터페이스
+app.use('/org/interfaceToUser', cors(corsOptions), require('./route/org/interfaceToUser')) //외부 인터페이스
 
 rt = [
 	'append_log', 'chk_redis', 'qry_unread', 'qry_userlist', 'qry_orgtree', 'qry_portal', 'qry_msglist', 'get_roominfo', 'proc_file', 'proc_image',
