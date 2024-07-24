@@ -27,6 +27,7 @@ router.post('/', async function(req, res) {
 		if (dept.length == 0) throw new Error('배열의 길이가 0입니다.')
 		await wsmysql.txBegin(conn)
 		let dtkey = dept[0].DTKEY ? dept[0].DTKEY : ws.util.getCurDateTimeStr()
+		console.log(dtkey, "@@@@@")
 		sql = "SELECT COUNT(*) CNT FROM Z_INTORG_TBL WHERE DTKEY = ? "
 		data = await wsmysql.query(conn, sql, [dtkey])
 		len = data.length
@@ -37,7 +38,7 @@ router.post('/', async function(req, res) {
 		for (let i = 0; i < len; i++) {			
 			sql = "INSERT INTO Z_INTORG_TBL (DTKEY, ORG_CD, ORG_NM, SEQ, LVL, INUSE, IS_SYNC) "
 			sql += " VALUES (?, ?, ?, ?, ?, ?, ?) "
-			await wsmysql.query(conn, sql, [dtkey, data[i].ORG_CD, data[i].ORG_NM, data[i].SEQ, data[i].LVL, data[i].INUSE, 'Y'])
+			await wsmysql.query(conn, sql, [dtkey, dept[i].ORG_CD, dept[i].ORG_NM, dept[i].SEQ, dept[i].LVL, dept[i].INUSE, 'Y'])
 		}
 		rs.dtkey = dtkey
 		await wsmysql.txCommit(conn)
