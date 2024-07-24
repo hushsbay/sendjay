@@ -512,7 +512,7 @@ Here are some ideas to get you started:
 
 
 
-# 구축형(On-Premise) 서버 적용 안내
+# 구축형(On-Premise) 서버 적용 안내 - 정리중
 
    1. DB 인터페이스만 작용해 운영 2) 소스내 db를 운영db로 변경해 적용
    2. JWT 인증인데 적용은 1) 2)에 따라 다름 (로그인 처리..)
@@ -525,15 +525,15 @@ Here are some ideas to get you started:
    - Z_INTUSER_TBL : 사용자 정보 (인터페이스용)
    - Z_ORG_TBL : 조직(회사, 본부, 팀 등) 정보
    - Z_USER_TBL : 사용자 정보
-   - Z_ROOMMST_TBL : 채팅방 마스터 정보
-   - Z_ROOMDTL_TBL : 채팅방 디테일 정보
-   - Z_ROOMMEM_TBL : 채팅방 멤버 정보
-   - Z_MSGMST_TBL : 메시지(톡) 마스터 정보
-   - Z_MSGDTL_TBL : 메시지(톡) 디테일 정보
-   - Z_FILELOG_TBL : 파일 전송 관련 정보
-   - Z_ACTLOG_TBL : 액션로그(연결 등) 정보
+   - A_ROOMMST_TBL : 채팅방 마스터 정보
+   - A_ROOMDTL_TBL : 채팅방 디테일 정보
+   - A_ROOMMEM_TBL : 채팅방 멤버 정보
+   - A_MSGMST_TBL : 메시지(톡) 마스터 정보
+   - A_MSGDTL_TBL : 메시지(톡) 디테일 정보
+   - A_FILELOG_TBL : 파일 전송 관련 정보
+   - A_ACTLOG_TBL : 액션로그(연결 등) 정보
 
-
+```
 drop table if exists jay.Z_INTORG_TBL;
 CREATE TABLE jay.Z_INTORG_TBL (
 DTKEY CHAR(14) NOT NULL DEFAULT '' COMMENT '일시(생성키)',
