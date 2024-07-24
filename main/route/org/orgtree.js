@@ -30,7 +30,6 @@ router.post('/', async function(req, res) {
 		sql += "  FROM JAY.Z_ORG_TBL A "
 		sql += "  LEFT OUTER JOIN JAY.Z_ORG_TBL B ON B.SEQ = CONCAT(LEFT(A.SEQ, 1), '00') "
 		sql += " WHERE B.ORG_CD IS NOT NULL " //바로 아래 조건이 where는 고려하지 말고 and만 편하게 사용하기 위한 dummy where절임
-		sql += "   AND A.INUSE = 'Y' "
 		if (nodeToGet == 'C') sql += " AND A.LVL = 0 "
 		if (comp != 'all') sql += " AND B.ORG_CD IN ('" + comp + "') "
 		if (nodeToGet == 'U') { 
