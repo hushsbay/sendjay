@@ -111,6 +111,11 @@
 						if (rs.list.length == 0) return
 						const row = rs.list[0]
 						$("#in_id").val(row.USER_ID)
+						if (row.ID_KIND == "D") {
+							$("#rdoDept").prop("checked", true)
+						} else {
+							$("#rdoUser").prop("checked", true)
+						}
 						$("#in_nm").val(row.USER_NM)
 						$("#in_alias").val(row.NICK_NM)
 						$("#txt_toporgcd").html(row.TOP_ORG_CD)
@@ -127,6 +132,7 @@
 					$("#btn_save").click(async function() {
 						try {
 							const _chkPwd = $("#chk_pwd").prop("checked")
+							const _kind = $("#rdoDept").prop("checked") ? $("#rdoDept").val() : $("#rdoUser").val()
 							const _id = $("#in_id").val().trim()
 							const _nm = $("#in_nm").val().trim()
 							const _alias = $("#in_alias").val().trim()
@@ -145,10 +151,16 @@
 								}
 							}
 							if (g_mode == "U") {
-								if (!await hush.util.chkFieldVal(_pwd, "비번", 4, MAX_LEN_PWD, true)) return	
+								if (hush.http.getCookie("userid") != "admin") {
+									if (!await hush.util.chkFieldVal(_pwd, "비번", 4, MAX_LEN_PWD, true)) return	
+								}
 							}
 							if (!await hush.util.chkFieldVal(_id, "아이디", 4, MAX_LEN_ID, true)) return
 							if (!await hush.util.chkFieldVal(_nm, "이름", 2, MAX_LEN_NM)) return
+							if (_nm.includes(hush.cons.memdeli)) {
+								await hush.msg.alert("이름에 " + hush.cons.memdeli + "가 들어가면 안됩니다.")
+								return
+							}
 							if (!await hush.util.chkFieldVal(_alias, "별칭(Alias)", 0, MAX_LEN_ALIAS)) return
 							if (_id == "admin" || _id == "organ") {
 								//admin, organ(조직연동전용아이디)은 부서선택 없음. 이 2개 아이디는 각 회사의 관리자가 미리 등록해놓기
@@ -158,6 +170,7 @@
 							const fd = new FormData()
 							fd.append("type", g_mode)
 							fd.append("id", _id)
+							fd.append("kind", _kind)
 							fd.append("nm", _nm)
 							fd.append("alias", _alias)
 							fd.append("pwd", _pwd)
@@ -272,7 +285,12 @@
 					이 사이트에서의 아이디 등 모든 정보는 사이트를 알아보기 위한 테스트용으로만 사용됩니다.
 					따라서, 개인정보와 관련없는 1회성 정보로 저장해 테스트해 보시길 바랍니다.
 				</div>
-                <div id="gridMain">		
+                <div id="gridMain">	
+					<div id="lbl_kind" class="cellLabel">구분</div>
+					<div id="fld_kind" class="cellField">
+						<input type=radio id=rdoUser name=idKind value=U style="cursor:pointer" checked="checked"/><label for=rdoUser style="cursor:pointer">사용자</label>
+						<input type=radio id=rdoDept name=idKind value=D style="cursor:pointer"/><label for=rdoDept style="cursor:pointer">부서공용</label>
+					</div>	
 					<div id="lbl_id" class="cellLabel">아이디</div>
 					<div id="fld_id" class="cellField">
 						<input id="in_id" spellcheck=false autocomplete=off style="width: 140px"/>
