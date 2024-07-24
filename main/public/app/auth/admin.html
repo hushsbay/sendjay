@@ -9,6 +9,10 @@
         <link id=favicon href="/img/hushsbay.png" rel="shortcut icon" type="image/x-icon"/>
 		<link rel="stylesheet" href="/plugin/jquery-ui-smoothness-1.12.1.min.css">
         <link rel="stylesheet" href="/common/common.css">
+		<style> 
+            .picBtn { height:30px;display:flex;align-items:center;background:#0082AD;color:white;border-radius:5px;padding:0px 5px }
+            .inputSetting { flex-grow:1;border:1px solid darkgray }
+        </style>
         <script src="/plugin/jquery-3.4.1.min.js"></script>
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
 		<script src="/plugin/jquery.cookie.js"></script>
@@ -110,8 +114,9 @@
         <div id=main_pg class=coMainPage>
             <div style="flex:1;display:flex;flex-direction:column;background-color:white;border:1px solid darkgray;overflow:auto;margin:10px 5px 0px 5px">
                 <div class=coSettingRow>
-                    <div class='coSettingLabel coText'>별칭/상태</div>
-                    <input id=in_nicknm data-role=none spellcheck=false placeholder='100 bytes' class='inputSetting coText' />
+                    <div class='coSettingLabel coText'>토큰</div>
+                    <div id=btn_copy_token class='picBtn coText'>토큰복사</div>
+					<br>블라블라<br>하하하
                 </div>
                 <div class=coSettingRow>
                     <div class='coSettingLabel coText'>직무</div>
