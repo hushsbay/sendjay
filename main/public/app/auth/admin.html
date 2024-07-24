@@ -98,7 +98,6 @@
                 try {
                     await $.getScript("/common/common.js")
 					if (!await hush.auth.verifyUser()) return //페이지 로드시 체크하는 루틴임 (ajax 호출시 체크와는 별개)
-					alert("111")
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }                
@@ -109,7 +108,7 @@
     </head>
     <body> 
         <div id=main_pg class=coMainPage>
-            <div style="flex:1;display:none;flex-direction:column;background-color:white;border:1px solid darkgray;overflow:auto;margin:10px 5px 0px 5px">
+            <div style="flex:1;display:flex;flex-direction:column;background-color:white;border:1px solid darkgray;overflow:auto;margin:10px 5px 0px 5px">
                 <div class=coSettingRow>
                     <div class='coSettingLabel coText'>별칭/상태</div>
                     <input id=in_nicknm data-role=none spellcheck=false placeholder='100 bytes' class='inputSetting coText' />
