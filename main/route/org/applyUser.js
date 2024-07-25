@@ -16,6 +16,7 @@ router.post('/', async function(req, res) {
 		const rs = ws.http.resInit()	
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const dtkey = req.body.key
+		console.log(dtkey, "----")
 		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
 		const userid = objToken.userid
 		if (!userid) {
@@ -51,6 +52,7 @@ router.post('/', async function(req, res) {
 		data = await wsmysql.query(conn, sql, [dtkey])
 		len = data.length
 		for (let i = 0; i < len; i++) {
+			console.log(JSON.stringify(data))
 			const _userid = data[i].USER_ID
 			sql = "SELECT * FROM Z_USER_TBL WHERE USER_ID = ? "
 			const data1 = await wsmysql.query(conn, sql, [_userid])
