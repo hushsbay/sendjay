@@ -102,9 +102,14 @@
 
 			const getDeptKeys = async () => {
 				try {
-					const rs = await hush.http.ajax("/org/interfaceKeys", { kind : "dept" })
+					const rs = await hush.http.ajax("/org/interfaceKeys", { })
 					if (!hush.util.chkAjaxCode(rs)) return
-					console.log("1111122222")
+					if (rs.dept.length > 0) {
+						$.each(rs.dept, function(i, p) {
+							const _sel = (i == 0) ? "selected" : ""
+                			$('#dept_result').append("<option value='" + rs.dept[i] + "' " + _sel + " >" + rs.dept[i] + "</option>")
+						})
+					}
 					debugger
 					const _len = rs.list.length
 					for (let i = 0; i < _len; i++) {
@@ -139,7 +144,6 @@
                     await $.getScript("/common/common.js")
 					if (!await hush.auth.verifyUser()) return //페이지 로드시 체크하는 루틴임 (ajax 호출시 체크와는 별개)
 					getDeptKeys()
-					console.log("11111")
 					$("#btn_copy_token").on("click", async function() {
                         const _text = hush.http.getCookie("token")
                         navigator.clipboard.writeText(_text).then(async function() {
