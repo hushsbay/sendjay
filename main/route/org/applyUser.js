@@ -48,7 +48,7 @@ router.post('/', async function(req, res) {
 			}
 		}
 		//2. Z_INTORG에 있는데 Z_ORG_TBL에 없으면 신규(추가)분이므로 넣기
-		sql = "SELECT * FROM Z_INTUSER_TBL WHERE DTKEY = ? "
+		sql = "SELECT USER_ID FROM Z_INTUSER_TBL WHERE DTKEY = ? "
 		data = await wsmysql.query(conn, sql, [dtkey])
 		len = data.length
 		for (let i = 0; i < len; i++) {
