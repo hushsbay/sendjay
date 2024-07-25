@@ -49,18 +49,18 @@ router.post('/', async function(req, res) {
 		}
 		//2. Z_INTORG에 있는데 Z_ORG_TBL에 없으면 신규(추가)분이므로 넣기
 		sql = "SELECT USER_ID, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM FROM Z_INTUSER_TBL WHERE DTKEY = ? "
-		data = await wsmysql.query(conn, sql, [dtkey])
-		len = data.length
+		const data2 = await wsmysql.query(conn, sql, [dtkey])
+		len = data2.length
 		for (let i = 0; i < len; i++) {
-			console.log(JSON.stringify(data))
-			const _userid = data[i].USER_ID
+			console.log(JSON.stringify(data2))
+			const _userid = data2[i].USER_ID
 			sql = "SELECT * FROM Z_USER_TBL WHERE USER_ID = ? "
 			const data1 = await wsmysql.query(conn, sql, [_userid])
 			if (data1.length == 0) {
 				sql = "INSERT INTO Z_USER_TBL (PWD, USER_ID, ID_KIND, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM) "
 				sql += " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
 				data = await wsmysql.query(conn, sql, [ //PWD는 나중에 제거하기 (drop table후)
-					'', data[0].USER_ID, 'U', data[0].USER_NM, data[0].ORG_CD, data[0].ORG_NM, data[0].TOP_ORG_CD, data[0].TOP_ORG_NM, data[0].JOB, data[0].TEL_NO, data[0].AB_CD, data[0].AB_NM
+					'', data2[0].USER_ID, 'U', data2[0].USER_NM, data2[0].ORG_CD, data2[0].ORG_NM, data2[0].TOP_ORG_CD, data2[0].TOP_ORG_NM, data2[0].JOB, data2[0].TEL_NO, data2[0].AB_CD, data2[0].AB_NM
 				])	
 			} else {
 				//위 1.에서 처리됨. 동기화되는 아이디가 아닌데 수동으로 이미 만든 아이디가 있을 수 있음 (오류처리하지 않고 일단 넘어감)
