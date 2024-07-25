@@ -134,7 +134,7 @@ app.use('/auth/login', require('./route/auth/login'))
 let rt = ['userlist', 'getuser', 'setuser']
 for (let i = 0; i < rt.length; i++) app.use('/user/' + rt[i], require('./route/user/' + rt[i]))
 
-rt = ['orgtree', 'empsearch', 'deptsearch', 'interfaceKeys', 'applyDept', 'applyUser']  
+rt = ['orgtree', 'empsearch', 'deptsearch', 'interfaceKeys', 'applyDept']  
 for (let i = 0; i < rt.length; i++) app.use('/org/' + rt[i], require('./route/org/' + rt[i])) 
 app.use('/org/interfaceToDept', cors(corsOptions), require('./route/org/interfaceToDept')) //외부 인터페이스
 app.use('/org/interfaceToUser', cors(corsOptions), require('./route/org/interfaceToUser')) //외부 인터페이스
