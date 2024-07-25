@@ -55,10 +55,10 @@ router.post('/', async function(req, res) {
 			sql = "SELECT * FROM Z_USER_TBL WHERE USER_ID = ? "
 			const data1 = await wsmysql.query(conn, sql, [_userid])
 			if (data1.length == 0) {
-				sql = "INSERT INTO Z_USER_TBL (USER_ID, ID_KIND, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM) "
-				sql += " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
-				data = await wsmysql.query(conn, sql, [
-					data[0].USER_ID, 'U', data[0].USER_NM, data[0].ORG_CD, data[0].ORG_NM, data[0].TOP_ORG_CD, data[0].TOP_ORG_NM, data[0].JOB, data[0].TEL_NO, data[0].AB_CD, data[0].AB_NM
+				sql = "INSERT INTO Z_USER_TBL (PWD, USER_ID, ID_KIND, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM) "
+				sql += " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+				data = await wsmysql.query(conn, sql, [ //PWD는 나중에 제거하기 (drop table후)
+					'', data[0].USER_ID, 'U', data[0].USER_NM, data[0].ORG_CD, data[0].ORG_NM, data[0].TOP_ORG_CD, data[0].TOP_ORG_NM, data[0].JOB, data[0].TEL_NO, data[0].AB_CD, data[0].AB_NM
 				])	
 			} else {
 				//위 1.에서 처리됨. 동기화되는 아이디가 아닌데 수동으로 이미 만든 아이디가 있을 수 있음 (오류처리하지 않고 일단 넘어감)
