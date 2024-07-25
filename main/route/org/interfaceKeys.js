@@ -15,15 +15,15 @@ router.post('/', async function(req, res) {
 	try {
 		const rs = ws.http.resInit()	
 		conn = await wsmysql.getConnFromPool(global.pool)
-		//const kind = req.body.kind
-		//const tbl = (kind == 'dept') ? "Z_INTORG_TBL" : "Z_INTUSER_TBL"
 		sql = "SELECT DISTINCT DTKEY FROM Z_INTORG_TBL ORDER BY DTKEY DESC LIMIT 0, 10 "
 		data = await wsmysql.query(conn, sql, null)
 		len = data.length
-		for (let i = 0; i < len; i++) {			
-
-		}
-		ws.http.resJson(res, rs, userid) //세번째 인자(userid) 있으면 token 갱신
+		if (len > 0) rs['dept'] = rs.data
+		sql = "SELECT DISTINCT DTKEY FROM Z_INTUSER_TBL ORDER BY DTKEY DESC LIMIT 0, 10 "
+		data = await wsmysql.query(conn, sql, null)
+		len = data.length
+		if (len > 0) rs['user'] = rs.data
+		ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
 	} finally {
