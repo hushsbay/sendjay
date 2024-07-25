@@ -13,7 +13,7 @@
             .picBtn { height:30px;display:flex;align-items:center;background:#0082AD;color:white;padding:0px 5px }
             .label { width:90px;height:100%;display:flex;align-items:center;color:dimgray;border:1px solid lightgray;padding:5px;margin:1px }
 			.content { width:100%;display:flex;flex-direction:column;border:1px solid lightgray;padding:5px;margin:1px }
-			.contentB { display:flex;align-items:center }
+			.contentB { display:flex;align-items:center;margin-top:3px}
         </style>
         <script src="/plugin/jquery-3.4.1.min.js"></script>
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
@@ -136,11 +136,12 @@
 						<div>토큰복사후 필요한 소스위치에 붙여넣기하시기 바랍니다.</div>
 						<div class='contentB'>
 							<div id=btn_apply_dept class='picBtn coText'>조직연동</div>
-							<select name="dept_result">
+							<select name="dept_result" style="height:30px;margin-left:5px">
 								<option value="1111" >1111</option>
 								<option value="2222" selected>2222</option>
-							</select>
-						</div>						
+							</select>							
+						</div>		
+						<div>처리결과 : </div>				
 					</div>
                 </div>
 
