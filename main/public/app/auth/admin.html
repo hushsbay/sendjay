@@ -104,6 +104,14 @@
                 try {
                     await $.getScript("/common/common.js")
 					if (!await hush.auth.verifyUser()) return //페이지 로드시 체크하는 루틴임 (ajax 호출시 체크와는 별개)
+					$("#btn_copy_token").on("click", async function() {
+                        const _text = hush.http.getCookie("token")
+                        navigator.clipboard.writeText(_text).then(async function() {
+                            hush.msg.toast("복사 완료")
+                        }).catch(async function() {
+                            await hush.msg.alert("오류: " + err)
+                        })
+                    })
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }                
@@ -119,9 +127,23 @@
                     <div class='label coText'>토큰</div>
                     <div class='content'>
 						<div class='contentB'><div id=btn_copy_token class='picBtn coText'>토큰복사</div></div>
-						<div>블라블라<br>하하하</div>
+						<div>토큰복사후 필요한 소스위치에 붙여넣기하시기 바랍니다.</div>
 					</div>
                 </div>
+				<div class=coSettingRow>
+                    <div class='label coText'>조직</div>
+                    <div class='content'>
+						<div class='contentB'>
+							<div id=btn_apply_dept class='picBtn coText'>조직연동</div>
+							<select name="dept_result">
+								<option value="1111" >1111</option>
+								<option value="2222" selected>2222</option>
+							</select>
+						</div>
+						<div>토큰복사후 필요한 소스위치에 붙여넣기하시기 바랍니다.</div>
+					</div>
+                </div>
+
                 <div class=coSettingRow>
                     <div class='coSettingLabel coText'>직무</div>
                     <input id=in_job data-role=none spellcheck=false placeholder='50 bytes' class='inputSetting coText' />
