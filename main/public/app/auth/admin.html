@@ -19,87 +19,6 @@
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
 		<script src="/plugin/jquery.cookie.js"></script>
         <script>
-			const getUserData = async (_keyword, _teamcode) => {
-				try {
-					g_list.empty()
-					const _comp = $("#chk_mycomp").prop("checked") ? hush.user.toporgcd : g_comp
-					const rs = await hush.http.ajax("/org/empsearch", { keyword : _keyword, teamcode : _teamcode, comp : _comp })
-					if (!hush.util.chkAjaxCode(rs)) return
-					g_rs = rs
-					const _len = rs.list.length
-					for (let i = 0; i < _len; i++) {
-						const row = rs.list[i]
-						const user_id = row.USER_ID
-						const user_nm = row.USER_NM
-						const org_cd = row.ORG_CD
-						const org_nm = row.ORG_NM
-						const top_org_cd = row.TOP_ORG_CD
-						const top_org_nm = row.TOP_ORG_NM
-						const nodeStr = user_nm + "/" + org_nm + "/" + top_org_nm
-						let _html = "<div id=row_" + i.toString() + " class=coRow >"
-						_html += "   	<input type=checkbox id=sel_" + i + " code=" + user_id + " class=sel />"
-						if (g_getImage == "Y") {
-							_html += "	<img id=img_" + user_id + " src='/img/noperson.png' class=imgPerson downloaded='' />"
-						} else {
-							_html += "	<img src='/img/ico_user.png' class=coImg16 style='margin-left:5px' />"
-						}
-						_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
-						_html += "  </div>"
-						g_list.append(_html)
-					}
-					if (_len == 0) return
-					$(".sel").off("change").on("change", function(e) {
-						const _self = $(this)
-						const _id = this.id //sel_2
-						const _idx = parseInt(_id.substring(4)) //2
-						procSelect("U", _idx)
-					}) //g_nodeToGet == "U"일 경우만 btn_team() 실행됨
-					if (_teamcode) { //내팀
-						$("#chk_selectall").prop("disabled", false)
-					} else { //검색
-						$("#chk_selectall").prop("disabled", true)
-					}
-					procPhoto()
-				} catch (ex) {
-					hush.util.showEx(ex)
-				}  	                
-            }
-
-			const getDeptData = async (_keyword) => {
-				try {
-					g_list.empty()
-					const _comp = (hush.user && $("#chk_mycomp").prop("checked")) ? hush.user.toporgcd : g_comp //편의상 U말고는 hush.user가 null일 수 있음
-					const rs = await hush.http.ajax("/org/deptsearch", { keyword : _keyword, comp : _comp })
-					if (!hush.util.chkAjaxCode(rs)) return
-					g_rs = rs
-					const _len = rs.list.length
-					for (let i = 0; i < _len; i++) {
-						const row = rs.list[i]
-						const org_cd = row.ORG_CD
-						const org_nm = row.ORG_NM
-						const top_org_cd = row.TOP_ORG_CD
-						const top_org_nm = row.TOP_ORG_NM
-						const nodeStr = org_nm + "/" + top_org_nm
-						let _html = "<div id=row_" + i.toString() + " class=coRow >"
-						_html += "   	<input type=checkbox id=sel_" + i + " code=" + org_cd + " class=sel />"
-						_html += "		<img src='/img/ico_dept.png' class=coImg16 style='margin-left:5px' />"
-						_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
-						_html += "  </div>"
-						g_list.append(_html)
-					}
-					if (_len == 0) return
-					$(".sel").off("change").on("change", function(e) {
-						const _self = $(this)
-						const _id = this.id //sel_2
-						const _idx = parseInt(_id.substring(4)) //2
-						procSelect("D", _idx)
-					})
-					$("#chk_selectall").prop("disabled", true)
-				} catch (ex) {
-					hush.util.showEx(ex)
-				}  	                
-            }
-
 			const getDTKeys = async () => {
 				try {
 					const rs = await hush.http.ajax("/org/interfaceKeys", { })
@@ -121,6 +40,23 @@
 				}  	                
             }
 
+			const applyDept = async () => {
+				try {
+					const _val = $("#dept_result").val()
+					alert(_val)
+					if (!_val) {
+						await hush.msg.alert("테이블에서 가져올 값이 없습니다.")
+						return
+					}
+					return
+					const rs = await hush.http.ajax("/org/interfaceKeys", { })
+					if (!hush.util.chkAjaxCode(rs)) return
+					
+				} catch (ex) {
+					hush.util.showEx(ex)
+				}  	                
+            }
+
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
@@ -133,6 +69,12 @@
                         }).catch(async function() {
                             await hush.msg.alert("오류: " + err)
                         })
+                    })
+					$("#btn_apply_dept").on("click", async function() {
+						applyDept()
+                    })
+					$("#btn_apply_user").on("click", async function() {
+						applyUser()
                     })
                 } catch (ex) {
                     hush.util.showEx(ex)
