@@ -48,9 +48,23 @@
 						return
 					}					
 					const rs = await hush.http.ajax("/org/applyDept", { key : _val })
-					debugger
 					if (!hush.util.chkAjaxCode(rs)) return
-					
+					hush.msg.toast("연동 완료")
+				} catch (ex) {
+					hush.util.showEx(ex)
+				}  	                
+            }
+
+			const applyUser = async () => {
+				try {
+					const _val = $("#user_result").val()
+					if (!_val) {
+						await hush.msg.alert("테이블에서 가져온 값이 없습니다.")
+						return
+					}					
+					const rs = await hush.http.ajax("/org/applyUser", { key : _val })
+					if (!hush.util.chkAjaxCode(rs)) return
+					hush.msg.toast("연동 완료")
 				} catch (ex) {
 					hush.util.showEx(ex)
 				}  	                
