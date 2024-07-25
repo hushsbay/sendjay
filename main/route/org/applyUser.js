@@ -33,7 +33,7 @@ router.post('/', async function(req, res) {
 		len = data.length
 		for (let i = 0; i < len; i++) {
 			const _userid = data[i].USER_ID
-			sql = "SELECT * FROM Z_INTUSER_TBL WHERE DTKEY = ? AND USER_ID = ? "
+			sql = "SELECT USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM FROM Z_INTUSER_TBL WHERE DTKEY = ? AND USER_ID = ? "
 			const data1 = await wsmysql.query(conn, sql, [dtkey, _userid])
 			if (data1.length > 0) {
 				sql = "UPDATE Z_USER_TBL SET "
@@ -48,7 +48,7 @@ router.post('/', async function(req, res) {
 			}
 		}
 		//2. Z_INTORG에 있는데 Z_ORG_TBL에 없으면 신규(추가)분이므로 넣기
-		sql = "SELECT USER_ID FROM Z_INTUSER_TBL WHERE DTKEY = ? "
+		sql = "SELECT USER_ID, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM FROM Z_INTUSER_TBL WHERE DTKEY = ? "
 		data = await wsmysql.query(conn, sql, [dtkey])
 		len = data.length
 		for (let i = 0; i < len; i++) {
