@@ -37,7 +37,7 @@ router.post('/', async function(req, res) {
 			if (data1.length > 0) {
 				sql = "UPDATE Z_USER_TBL SET "
 				sql += " USER_NM = ?, ORG_CD = ?, ORG_NM = ?, TOP_ORG_CD = ?, TOP_ORG_NM = ?, JOB  = ?, TEL_NO = ?, AB_CD  = ?, AB_NM = ? "
-				sql += "WHERE USER_ID = ? "
+				sql += "WHERE USER_ID = ? AND IS_SYNC = 'Y' "
 				await wsmysql.query(conn, sql, [
 					data1[0].USER_NM, data1[0].ORG_CD, data1[0].ORG_NM, data1[0].TOP_ORG_CD, data1[0].TOP_ORG_NM, data1[0].JOB, data1[0].TEL_NO, data1[0].AB_CD, data1[0].AB_NM, _userid
 				])	
@@ -55,10 +55,11 @@ router.post('/', async function(req, res) {
 			sql = "SELECT * FROM Z_USER_TBL WHERE USER_ID = ? "
 			const data1 = await wsmysql.query(conn, sql, [_userid])
 			if (data1.length == 0) {
-				sql = "INSERT INTO Z_USER_TBL (PWD, USER_ID, ID_KIND, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM) "
-				sql += " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+				sql = "INSERT INTO Z_USER_TBL (PWD, USER_ID, ID_KIND, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM, IS_SYNC) "
+				sql += " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
 				await wsmysql.query(conn, sql, [ //PWD는 나중에 제거하기 (drop table후)
-					'', _userid, 'U', data[i].USER_NM, data[i].ORG_CD, data[i].ORG_NM, data[i].TOP_ORG_CD, data[i].TOP_ORG_NM, data[i].JOB, data[i].TEL_NO, data[i].AB_CD, data[i].AB_NM
+					'', _userid, 'U', data[i].USER_NM, data[i].ORG_CD, data[i].ORG_NM, data[i].TOP_ORG_CD, data[i].TOP_ORG_NM, 
+					data[i].JOB, data[i].TEL_NO, data[i].AB_CD, data[i].AB_NM, 'Y'
 				])	
 			} else {
 				//위 1.에서 처리됨. 동기화되는 아이디가 아닌데 수동으로 이미 만든 아이디가 있을 수 있음 (오류처리하지 않고 일단 넘어감)
