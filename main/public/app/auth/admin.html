@@ -10,9 +10,9 @@
 		<link rel="stylesheet" href="/plugin/jquery-ui-smoothness-1.12.1.min.css">
         <link rel="stylesheet" href="/common/common.css">
 		<style> 
-            .picBtn { height:30px;display:flex;align-items:center;background:#0082AD;color:white;border-radius:5px;padding:0px 5px }
-            .label { width:90px;height:100%;display:flex;align-items:center;color:dimgray;border:1px solid lightgray;padding:3px;margin:1px }
-			.content { width:100%;display:flex;flex-direction:column;border:1px solid lightgray;padding:3px;margin:1px }
+            .picBtn { height:30px;display:flex;align-items:center;background:#0082AD;color:white;padding:0px 5px }
+            .label { width:90px;height:100%;display:flex;align-items:center;color:dimgray;border:1px solid lightgray;padding:5px;margin:1px }
+			.content { width:100%;display:flex;flex-direction:column;border:1px solid lightgray;padding:5px;margin:1px }
 			.contentB { display:flex;align-items:center }
         </style>
         <script src="/plugin/jquery-3.4.1.min.js"></script>
@@ -126,21 +126,21 @@
                 <div class=coSettingRow>
                     <div class='label coText'>토큰</div>
                     <div class='content'>
-						<div class='contentB'><div id=btn_copy_token class='picBtn coText'>토큰복사</div></div>
 						<div>토큰복사후 필요한 소스위치에 붙여넣기하시기 바랍니다.</div>
+						<div class='contentB'><div id=btn_copy_token class='picBtn coText'>토큰복사</div></div>						
 					</div>
                 </div>
 				<div class=coSettingRow>
                     <div class='label coText'>조직</div>
                     <div class='content'>
+						<div>토큰복사후 필요한 소스위치에 붙여넣기하시기 바랍니다.</div>
 						<div class='contentB'>
 							<div id=btn_apply_dept class='picBtn coText'>조직연동</div>
 							<select name="dept_result">
 								<option value="1111" >1111</option>
 								<option value="2222" selected>2222</option>
 							</select>
-						</div>
-						<div>토큰복사후 필요한 소스위치에 붙여넣기하시기 바랍니다.</div>
+						</div>						
 					</div>
                 </div>
 
