@@ -107,7 +107,7 @@
 					if (rs.dept.length > 0) {
 						$.each(rs.dept, function(i, p) {
 							const _sel = (i == 0) ? "selected" : ""
-                			$('#dept_result').append("<option value='" + rs.dept[i] + "' " + _sel + " >" + rs.dept[i] + "</option>")
+                			$('#dept_result').append("<option value='" + rs.dept[i].DTKEY + "' " + _sel + " >" + rs.dept[i].DTKEY + "</option>")
 						})
 					}
 					debugger
@@ -176,10 +176,18 @@
 						<div>토큰복사후 필요한 소스위치에 붙여넣기하시기 바랍니다.</div>
 						<div class='contentB'>
 							<div id=btn_apply_dept class='picBtn coText'>조직연동</div>
-							<select name="dept_result" id="dept_result" style="height:30px;margin-left:5px">
-								<option value="1111" >1111</option>
-								<option value="2222" selected>2222</option>
-							</select>							
+							<select name="dept_result" id="dept_result" style="height:30px;margin-left:5px"></select>							
+						</div>		
+						<div>처리결과 : </div>				
+					</div>
+                </div>
+				<div class=coSettingRow>
+                    <div class='label coText'>사용자</div>
+                    <div class='content'>
+						<div>토큰복사후 필요한 소스위치에 붙여넣기하시기 바랍니다.</div>
+						<div class='contentB'>
+							<div id=btn_apply_user class='picBtn coText'>사용자연동</div>
+							<select name="user_result" id="user_result" style="height:30px;margin-left:5px"></select>							
 						</div>		
 						<div>처리결과 : </div>				
 					</div>

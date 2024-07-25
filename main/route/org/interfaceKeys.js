@@ -19,10 +19,10 @@ router.post('/', async function(req, res) {
 		conn = await wsmysql.getConnFromPool(global.pool)
 		sql = "SELECT DISTINCT DTKEY FROM Z_INTORG_TBL ORDER BY DTKEY DESC LIMIT 0, 10 "
 		data = await wsmysql.query(conn, sql, null)
-		if (data.length > 0) rs.dept = data
+		if (data.length > 0) rs.dept = data //[{ DTKEY : "xxxxxxxxxxxx" }, { DTKEY : "yyyyyyyyyy" }]
 		sql = "SELECT DISTINCT DTKEY FROM Z_INTUSER_TBL ORDER BY DTKEY DESC LIMIT 0, 10 "
 		data = await wsmysql.query(conn, sql, null)
-		if (data.length > 0) rs.user = data
+		if (data.length > 0) rs.user = data //[{ DTKEY : "xxxxxxxxxxxx" }, { DTKEY : "yyyyyyyyyy" }]
 		ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
