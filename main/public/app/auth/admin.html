@@ -100,11 +100,44 @@
 				}  	                
             }
 
+			const getDeptKeys = async () => {
+				try {
+					const rs = await hush.http.ajax("/org/interfaceKeys", { kind : "dept" })
+					if (!hush.util.chkAjaxCode(rs)) return
+					debugger
+					const _len = rs.list.length
+					for (let i = 0; i < _len; i++) {
+						const row = rs.list[i]
+						const org_cd = row.ORG_CD
+						const org_nm = row.ORG_NM
+						const top_org_cd = row.TOP_ORG_CD
+						const top_org_nm = row.TOP_ORG_NM
+						const nodeStr = org_nm + "/" + top_org_nm
+						let _html = "<div id=row_" + i.toString() + " class=coRow >"
+						_html += "   	<input type=checkbox id=sel_" + i + " code=" + org_cd + " class=sel />"
+						_html += "		<img src='/img/ico_dept.png' class=coImg16 style='margin-left:5px' />"
+						_html += "		<span class=coDotDot style='margin-left:5px' title='" + nodeStr + "'>" + nodeStr + "</span>"
+						_html += "  </div>"
+						g_list.append(_html)
+					}
+					if (_len == 0) return
+					$(".sel").off("change").on("change", function(e) {
+						const _self = $(this)
+						const _id = this.id //sel_2
+						const _idx = parseInt(_id.substring(4)) //2
+						procSelect("D", _idx)
+					})
+					$("#chk_selectall").prop("disabled", true)
+				} catch (ex) {
+					hush.util.showEx(ex)
+				}  	                
+            }
+
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
 					if (!await hush.auth.verifyUser()) return //페이지 로드시 체크하는 루틴임 (ajax 호출시 체크와는 별개)
-					
+
 					$("#btn_copy_token").on("click", async function() {
                         const _text = hush.http.getCookie("token")
                         navigator.clipboard.writeText(_text).then(async function() {
