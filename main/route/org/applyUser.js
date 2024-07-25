@@ -52,8 +52,9 @@ router.post('/', async function(req, res) {
 		const data2 = await wsmysql.query(conn, sql, [dtkey])
 		len = data2.length
 		for (let i = 0; i < len; i++) {
-			console.log(JSON.stringify(data2))
+			console.log(JSON.stringify(data2[i]))
 			const _userid = data2[i].USER_ID
+			console.log(_userid, "=====")
 			sql = "SELECT * FROM Z_USER_TBL WHERE USER_ID = ? "
 			const data1 = await wsmysql.query(conn, sql, [_userid])
 			if (data1.length == 0) {
