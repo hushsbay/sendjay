@@ -43,13 +43,12 @@
 			const applyDept = async () => {
 				try {
 					const _val = $("#dept_result").val()
-					alert(_val)
 					if (!_val) {
-						await hush.msg.alert("테이블에서 가져올 값이 없습니다.")
+						await hush.msg.alert("테이블에서 가져온 값이 없습니다.")
 						return
-					}
-					return
-					const rs = await hush.http.ajax("/org/interfaceKeys", { })
+					}					
+					const rs = await hush.http.ajax("/org/applyDept", { key : _val })
+					debugger
 					if (!hush.util.chkAjaxCode(rs)) return
 					
 				} catch (ex) {

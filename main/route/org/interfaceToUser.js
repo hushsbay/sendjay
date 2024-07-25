@@ -29,7 +29,7 @@ router.post('/', async function(req, res) {
 		let dtkey = user[0].DTKEY ? user[0].DTKEY : ws.util.getCurDateTimeStr()
 		sql = "SELECT COUNT(*) CNT FROM Z_INTUSER_TBL WHERE DTKEY = ? "
 		data = await wsmysql.query(conn, sql, [dtkey])
-		if (data.length > 0) {
+		if (data[0].CNT > 0) {
 			sql = "DELETE FROM Z_INTUSER_TBL WHERE DTKEY = ? "
 			await wsmysql.query(conn, sql, [dtkey])
 		}
