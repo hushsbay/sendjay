@@ -114,7 +114,10 @@
 				<div class=coSettingRow>
                     <div class='label coText'>조직</div>
                     <div class='content'>
-						<div>토큰복사후 필요한 소스위치에 붙여넣기하시기 바랍니다.</div>
+						<div>복사된 토큰값을 붙인 소스를 실행하면 Z_INTORG_TBL로 insert되며</div>
+						<div>그 테이블에서 DTKEY 필드값을 유니크하게 받아 온 것이 아래 콤보리스트의 값들입니다.</div>
+						<div>일반적이라면 최종적으로 실행한 DTKEY값을 여기서 선택하고 </div>
+						<div>'조직연동' 버튼을 누르면 그 데이터셋을 가지고 Z_ORG_TBL로 단순연동(Delete & Insert)합니다.</div>
 						<div class='contentB'>
 							<div id=btn_apply_dept class='picBtn coText'>조직연동</div>
 							<select name="dept_result" id="dept_result" style="height:30px;margin-left:5px"></select>							
