@@ -112,14 +112,6 @@
                             //if (!result) return 오류나도 아래가 실행되도록 함
                         }                        
                     }
-                    // $("#btn_copy").on("click", async function() {
-                    //     const _text = hush.http.getCookie("token")
-                    //     navigator.clipboard.writeText(_text).then(async function() {
-                    //         await hush.msg.alert("복사 완료.<br>복사된 토큰을 소스에 붙여 넣기 바랍니다.")
-                    //     }).catch(async function() {
-                    //         await hush.msg.alert("오류: " + err)
-                    //     })
-                    // })
                     $("#btn_admin").on("click", function() {
                         hush.util.openWinPop("/app/auth/admin.html", 500, 530)
                     })
