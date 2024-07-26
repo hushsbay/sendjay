@@ -67,8 +67,8 @@ router.post('/', async function(req, res) {
 			if (data3.length == 0) {
 				await wsmysql.query(conn, sql, ['(구)' + top_org_nm, _userid])	
 			} else {
-				if (top_org_nm != data3[0].TOP_ORG_NM) {
-					await wsmysql.query(conn, sql, [data3[0].TOP_ORG_NM, _userid])	
+				if (top_org_nm != data3[0].ORG_NM) {
+					await wsmysql.query(conn, sql, [data3[0].ORG_NM, _userid])	
 				}
 			}
 		}
