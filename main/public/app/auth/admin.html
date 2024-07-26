@@ -129,7 +129,13 @@
 				<div class=coSettingRow>
                     <div class='label coText'>사용자</div>
                     <div class='content'>
-						<div>토큰복사후 필요한 소스위치에 붙여넣기하시기 바랍니다.</div>
+						<div>복사된 토큰값을 붙인 소스를 실행하면 Z_INTUSER_TBL로</div>
+						<div>insert되며 그 테이블에서 DTKEY 필드값을 유니크하게</div>
+						<div>받아 온 것이 아래 콤보리스트의 값들입니다.</div>
+						<div>일반적이라면 최종적으로 받은 DTKEY값을 여기서 선택후</div>
+						<div>'사용자연동' 버튼을 누르면 그 데이터셋을 가지고</div>
+						<div>Z_USER_TBL로 연동되는데 '조직연동'과는 다르게</div>
+						<div>사용자정보를 하나씩 읽어 수정/삭제/추가를 수행합니다.</div>
 						<div class='contentB'>
 							<div id=btn_apply_user class='picBtn coText'>사용자연동</div>
 							<select name="user_result" id="user_result" style="height:30px;margin-left:5px"></select>							
