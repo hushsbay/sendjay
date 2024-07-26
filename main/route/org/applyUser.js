@@ -49,25 +49,31 @@ router.post('/', async function(req, res) {
 			//2) 조직개편후 없어진 부서와 회사를 아직도 가지고 있는 사용자정보에 (구)부서,(구)회사 표시하고 코드는 같은데 이름이 다르면 이름 업데이트 하기 (수동/동기화 모두 해당)
 			const org_cd = data[i].ORG_CD
 			const org_nm = data[i].ORG_NM
+			if (_userid == 'doob3755') console.log(org_cd, org_nm)
 			sql = "SELECT ORG_NM FROM Z_ORG_TBL WHERE ORG_CD = ? "
 			const data2 = await wsmysql.query(conn, sql, [org_cd])
 			sql = "UPDATE Z_USER_TBL SET ORG_NM = ? WHERE USER_ID = ? "
 			if (data2.length == 0) {
+				if (_userid == 'doob3755') console.log("===========")
 				await wsmysql.query(conn, sql, ['(구)' + org_nm, _userid])	
 			} else {
 				if (org_nm != data2[0].ORG_NM) {
+					if (_userid == 'doob3755') console.log(org_nm, data2[0].ORG_NM, "===========!!!!!!!!!!!!!")
 					await wsmysql.query(conn, sql, [data2[0].ORG_NM, _userid])	
 				}
 			}
 			const top_org_cd = data[i].TOP_ORG_CD
 			const top_org_nm = data[i].TOP_ORG_NM
+			if (_userid == 'doob3755') console.log(top_org_cd, top_org_nm)
 			sql = "SELECT ORG_NM FROM Z_ORG_TBL WHERE ORG_CD = ? "
 			const data3 = await wsmysql.query(conn, sql, [top_org_cd])
 			sql = "UPDATE Z_USER_TBL SET TOP_ORG_NM = ? WHERE USER_ID = ? "
 			if (data3.length == 0) {
+				if (_userid == 'doob3755') console.log("^^^^^^^^^^")
 				await wsmysql.query(conn, sql, ['(구)' + top_org_nm, _userid])	
 			} else {
 				if (top_org_nm != data3[0].ORG_NM) {
+					if (_userid == 'doob3755') console.log(top_org_nm, data3[0].ORG_NM, "===========*******")
 					await wsmysql.query(conn, sql, [data3[0].ORG_NM, _userid])	
 				}
 			}
