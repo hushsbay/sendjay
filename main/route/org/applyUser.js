@@ -27,15 +27,13 @@ router.post('/', async function(req, res) {
 		data = await wsmysql.query(conn, sql, [dtkey])
 		if (data[0].CNT == 0) throw new Error('해당 키가 테이블에 없습니다 : ' + dtkey)
 		//1. (동기화 아이디만을 대상으로 해서) Z_ORG_TBL 루프 돌면서 
-		//sql = "SELECT * FROM Z_USER_TBL WHERE IS_SYNC = 'Y' "
-		sql = "SELECT * FROM Z_USER_TBL "
+		sql = "SELECT * FROM Z_USER_TBL WHERE ID_KIND NOT IN ('U', 'D') " //User, Dept 구분만 해당 (admin, organ 등 제외)
 		data = await wsmysql.query(conn, sql, null)
 		len = data.length
 		for (let i = 0; i < len; i++) {
 			const _userid = data[i].USER_ID
 			//1) Z_INTORG_TBL에 있으면 가져와 업데이트하고 없으면 아이디 제거해야 함
 			if (data[i].IS_SYNC == 'Y') {
-				//sql = "SELECT USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM FROM Z_INTUSER_TBL WHERE DTKEY = ? AND USER_ID = ? "
 				sql = "SELECT * FROM Z_INTUSER_TBL WHERE DTKEY = ? AND USER_ID = ? "
 				const data1 = await wsmysql.query(conn, sql, [dtkey, _userid])
 				if (data1.length > 0) {
@@ -53,37 +51,30 @@ router.post('/', async function(req, res) {
 			//2) 조직개편후 없어진 부서와 회사를 아직도 가지고 있는 사용자정보에 (구)부서,(구)회사 표시하고 코드는 같은데 이름이 다르면 이름 업데이트 하기 (수동/동기화 모두 해당)
 			const org_cd = data[i].ORG_CD
 			const org_nm = data[i].ORG_NM
-			if (_userid == 'doob3755') console.log(org_cd, org_nm)
 			sql = "SELECT ORG_NM FROM Z_ORG_TBL WHERE ORG_CD = ? "
 			const data2 = await wsmysql.query(conn, sql, [org_cd])
 			sql = "UPDATE Z_USER_TBL SET ORG_NM = ? WHERE USER_ID = ? "
-			if (data2.length == 0) {
-				if (_userid == 'doob3755') console.log("===========")
+			if (data2.length == 0 && !org_nm.includes('(구)')) {
 				await wsmysql.query(conn, sql, ['(구)' + org_nm, _userid])	
 			} else {
 				if (org_nm != data2[0].ORG_NM) {
-					if (_userid == 'doob3755') console.log(org_nm, data2[0].ORG_NM, "===========!!!!!!!!!!!!!")
 					await wsmysql.query(conn, sql, [data2[0].ORG_NM, _userid])	
 				}
 			}
 			const top_org_cd = data[i].TOP_ORG_CD
 			const top_org_nm = data[i].TOP_ORG_NM
-			if (_userid == 'doob3755') console.log(top_org_cd, top_org_nm)
 			sql = "SELECT ORG_NM FROM Z_ORG_TBL WHERE ORG_CD = ? "
 			const data3 = await wsmysql.query(conn, sql, [top_org_cd])
 			sql = "UPDATE Z_USER_TBL SET TOP_ORG_NM = ? WHERE USER_ID = ? "
-			if (data3.length == 0) {
-				if (_userid == 'doob3755') console.log("^^^^^^^^^^")
+			if (data3.length == 0 && !top_org_nm.includes('(구)')) {
 				await wsmysql.query(conn, sql, ['(구)' + top_org_nm, _userid])	
 			} else {
 				if (top_org_nm != data3[0].ORG_NM) {
-					if (_userid == 'doob3755') console.log(top_org_nm, data3[0].ORG_NM, "===========*******")
 					await wsmysql.query(conn, sql, [data3[0].ORG_NM, _userid])	
 				}
 			}
 		}
 		//2. Z_INTORG에 있는데 Z_ORG_TBL에 없으면 신규(추가)분이므로 넣기
-		//sql = "SELECT USER_ID, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM FROM Z_INTUSER_TBL WHERE DTKEY = ? "
 		sql = "SELECT * FROM Z_INTUSER_TBL WHERE DTKEY = ? "
 		data = await wsmysql.query(conn, sql, [dtkey])
 		len = data.length
@@ -99,7 +90,7 @@ router.post('/', async function(req, res) {
 					data[i].JOB, data[i].TEL_NO, data[i].AB_CD, data[i].AB_NM, 'Y'
 				])	
 			} else {
-				//위 1.에서 처리됨. 동기화되는 아이디가 아닌데 수동으로 이미 만든 아이디가 있을 수 있음 (오류처리하지 않고 일단 넘어감)
+				//위에서 처리됨. 동기화되는 아이디가 아닌데 수동으로 이미 만든 아이디가 있을 수 있음 (오류처리하지 않고 일단 넘어감)
 			}
 		}
 		await wsmysql.txCommit(conn)
