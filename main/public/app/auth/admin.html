@@ -19,6 +19,94 @@
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
 		<script src="/plugin/jquery.cookie.js"></script>
         <script>
+			//아래 interfaceToDept()와 interfaceToUser()는 여기 소스에서 사용하는 것이 아니고 
+			//다른 도메인의 웹페이지에서 이 도메인의 Z_INTORG_TBL과 Z_INTUSER_TBL로 데이터를 연동시키는 소스임			
+			const interfaceToDept = () => {
+				const _userid = "organ" 
+				const _token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiJvcmdhbiIsImlhdCI6MTcyMTM0MTg1NSwiZXhwIjoxNzUyODc3ODU1fQ.LSgqgQC6xHzqk4xEDpYN2ysaAWBmIEaNT7w9ME-NX3c"
+				const dt = "" //dt = "20240901134528" //테스트. DTKEY가 없는 경우는 서버에서 생성. 있으면 서버에 있는 기존 데이터 삭제후 생성
+				const deptArr = [
+					{ DTKEY : dt, ORG_CD : "Company_A", ORG_NM : "삼성전자", SEQ : "A00", LVL : 0 },
+					{ DTKEY : dt, ORG_CD : "Division_A1", ORG_NM : "본부_A1", SEQ : "A10", LVL : 1 },
+					{ DTKEY : dt, ORG_CD : "Dept_A11", ORG_NM : "팀_A11", SEQ : "A11", LVL : 2 },
+					{ DTKEY : dt, ORG_CD : "Dept_A12", ORG_NM : "팀_A12", SEQ : "A12", LVL : 2 },
+					{ DTKEY : dt, ORG_CD : "Dept_A13", ORG_NM : "팀_A13", SEQ : "A13", LVL : 2 },
+					{ DTKEY : dt, ORG_CD : "Division_A2", ORG_NM : "본부_A2", SEQ : "A20", LVL : 1 },
+					{ DTKEY : dt, ORG_CD : "Dept_A21", ORG_NM : "팀_A21", SEQ : "A21", LVL : 2 },
+					{ DTKEY : dt, ORG_CD : "Dept_A22", ORG_NM : "팀_A22", SEQ : "A22", LVL : 2 },
+					{ DTKEY : dt, ORG_CD : "Dept_A23", ORG_NM : "팀_A23", SEQ : "A23", LVL : 2 },
+					{ DTKEY : dt, ORG_CD : "Company_B", ORG_NM : "삼성물산", SEQ : "B00", LVL : 0 },
+					{ DTKEY : dt, ORG_CD : "Division_B1", ORG_NM : "본부_B1", SEQ : "B10", LVL : 1 },
+					{ DTKEY : dt, ORG_CD : "Dept_B11", ORG_NM : "팀_B11", SEQ : "B11", LVL : 2 },
+					{ DTKEY : dt, ORG_CD : "Dept_B12", ORG_NM : "팀_B12", SEQ : "B12", LVL : 2 },
+					{ DTKEY : dt, ORG_CD : "Dept_B13", ORG_NM : "팀_B13", SEQ : "B13", LVL : 2 },
+					{ DTKEY : dt, ORG_CD : "Division_B2", ORG_NM : "본부_B2", SEQ : "B20", LVL : 1 },
+					{ DTKEY : dt, ORG_CD : "Dept_B21", ORG_NM : "팀_B21", SEQ : "B21", LVL : 2 },
+					{ DTKEY : dt, ORG_CD : "Dept_B22", ORG_NM : "팀_B22", SEQ : "B22", LVL : 2 },
+					{ DTKEY : dt, ORG_CD : "Dept_B23", ORG_NM : "팀_B23", SEQ : "B23", LVL : 2 },
+					{ DTKEY : dt, ORG_CD : "Company_C", ORG_NM : "삼성디스플레이", SEQ : "C00", LVL : 0 },
+					{ DTKEY : dt, ORG_CD : "Division_C1", ORG_NM : "본부_C1", SEQ : "C10", LVL : 1 },
+					{ DTKEY : dt, ORG_CD : "Dept_C11", ORG_NM : "팀_C11", SEQ : "C11", LVL : 2 },
+					{ DTKEY : dt, ORG_CD : "Dept_C12", ORG_NM : "팀_C12", SEQ : "C12", LVL : 2 },
+					{ DTKEY : dt, ORG_CD : "Dept_C13", ORG_NM : "팀_C13", SEQ : "C13", LVL : 2 },
+					{ DTKEY : dt, ORG_CD : "Division_C2", ORG_NM : "본부_C2", SEQ : "C20", LVL : 1 },
+					{ DTKEY : dt, ORG_CD : "Dept_C21", ORG_NM : "팀_C21", SEQ : "C21", LVL : 2 },
+					{ DTKEY : dt, ORG_CD : "Dept_C22", ORG_NM : "팀_C22", SEQ : "C22", LVL : 2 },
+					{ DTKEY : dt, ORG_CD : "Dept_C23", ORG_NM : "팀_C23", SEQ : "C23", LVL : 2 },
+				]				
+				const _urlDept = "https://hushsbay.com/org/interfaceToDept"
+				$.ajax({
+					dataType : "json" //response data type
+					,contentType : "application/x-www-form-urlencoded;charset=utf-8" //request mime type => application/json은 CORS 안먹힘
+					,url : _urlDept
+					,data : { userid : _userid, token : _token, dept : deptArr }
+					,type : "post"
+					,cache : false
+					,success : function(rs) {
+						if (rs.code != "0") {
+							alert(rs.msg + " (" + rs.code + ")")
+							return
+						}
+						alert("interfaceToDept DTKEY : " + rs.dtkey)
+					}
+					,error : function(xhr, status, error) {
+						alert("[Error] " + status + "/" + error)
+					}
+				})
+			}
+
+			const interfaceToUser = () => {
+				const _userid = "organ" 
+				const _token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiJvcmdhbiIsImlhdCI6MTcyMTM0MTg1NSwiZXhwIjoxNzUyODc3ODU1fQ.LSgqgQC6xHzqk4xEDpYN2ysaAWBmIEaNT7w9ME-NX3c"
+				const dt = "" //dt = "20240901134528" //테스트. DTKEY가 없는 경우는 서버에서 생성. 있으면 서버에 있는 기존 데이터 삭제후 생성
+				const userArr = [
+					{ DTKEY : dt, USER_ID : "A000001", USER_NM : "이의방", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", TOP_ORG_NM : "삼성디스플레이", JOB : "프로그래머", TEL_NO : "01012345678", AB_CD : "", AB_NM : "" },
+					{ DTKEY : dt, USER_ID : "A000002", USER_NM : "정중부", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", TOP_ORG_NM : "삼성디스플레이", JOB : "사내변호사", TEL_NO : "01054982564", AB_CD : "dayoff", AB_NM : "20240901-20240930" },
+					{ DTKEY : dt, USER_ID : "A000003", USER_NM : "경대승", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", TOP_ORG_NM : "삼성디스플레이", JOB : "예산담당", TEL_NO : "01043565279", AB_CD : "", AB_NM : "" },
+					{ DTKEY : dt, USER_ID : "A000004", USER_NM : "이의민", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", TOP_ORG_NM : "삼성디스플레이", JOB : "자금담당", TEL_NO : "01097826494", AB_CD : "biztrip", AB_NM : "20241025-20241028" },
+				]			
+				const _urlDept = "https://hushsbay.com/org/interfaceToUser"
+				$.ajax({
+					dataType : "json" //response data type
+					,contentType : "application/x-www-form-urlencoded;charset=utf-8" //request mime type => application/json은 CORS 안먹힘
+					,url : _urlUser
+					,data : { userid : _userid, token : _token, user : userArr }
+					,type : "post"
+					,cache : false
+					,success : function(rs) {
+						if (rs.code != "0") {
+							alert(rs.msg + " (" + rs.code + ")")
+							return
+						}
+						alert("interfaceToUser DTKEY : " + rs.dtkey)
+					}
+					,error : function(xhr, status, error) {
+						alert("[Error] " + status + "/" + error)
+					}
+				})
+			}
+			/////////////////////////////////////////////////////////////////////////////////////
+
 			const getDTKeys = async () => {
 				try {
 					const rs = await hush.http.ajax("/org/interfaceKeys", { })
