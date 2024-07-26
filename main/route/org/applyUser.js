@@ -46,12 +46,12 @@ router.post('/', async function(req, res) {
 				sql = "DELETE FROM Z_USER_TBL WHERE USER_ID = ? AND IS_SYNC = 'Y' "
 				await wsmysql.query(conn, sql, [_userid])
 			}
-			//2) 조직개편후 없어진 부서와 회사를 아직도 가지고 있는 사용자정보에 (구)부서,(구)회사 표시하고 코드는 같은데 이름이 다르면 이름 업데이트 하기
+			//2) 조직개편후 없어진 부서와 회사를 아직도 가지고 있는 사용자정보에 (구)부서,(구)회사 표시하고 코드는 같은데 이름이 다르면 이름 업데이트 하기 (수동/동기화 모두 해당)
 			const org_cd = data[i].ORG_CD
 			const org_nm = data[i].ORG_NM
 			sql = "SELECT ORG_NM FROM Z_ORG_TBL WHERE ORG_CD = ? "
 			const data2 = await wsmysql.query(conn, sql, [org_cd])
-			sql = "UPDATE Z_USER_TBL SET ORG_NM = ? WHERE USER_ID = ? AND IS_SYNC = 'Y' "
+			sql = "UPDATE Z_USER_TBL SET ORG_NM = ? WHERE USER_ID = ? "
 			if (data2.length == 0) {
 				await wsmysql.query(conn, sql, ['(구)' + org_nm, _userid])	
 			} else {
@@ -63,7 +63,7 @@ router.post('/', async function(req, res) {
 			const top_org_nm = data[i].TOP_ORG_NM
 			sql = "SELECT ORG_NM FROM Z_ORG_TBL WHERE ORG_CD = ? "
 			const data3 = await wsmysql.query(conn, sql, [top_org_cd])
-			sql = "UPDATE Z_USER_TBL SET TOP_ORG_NM = ? WHERE USER_ID = ? AND IS_SYNC = 'Y' "
+			sql = "UPDATE Z_USER_TBL SET TOP_ORG_NM = ? WHERE USER_ID = ? "
 			if (data3.length == 0) {
 				await wsmysql.query(conn, sql, ['(구)' + top_org_nm, _userid])	
 			} else {
