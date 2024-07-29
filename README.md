@@ -11,17 +11,14 @@ Here are some ideas to get you started:
 - ⚡ Fun fact: ...
 -->
 
-현재 95%정도 개발된 상태입니다.<br/>
-안드로이드용 소스는 <https://github.com/hushsbay/sendjay_aos> 참조하시면 되며 (설명은 여기에)<br/>
-여기 소스는 was와 web client가 들어 있는 sendjay_was라고 생각하고 보면 됩니다.<br/>
-(나중에 sendjay_was로 이름 변경 예정)
-
+현재 96%정도 개발된 상태입니다.<br/>
+안드로이드용 소스는 <https://github.com/hushsbay/sendjay_aos> 참조하시면 됩니다.<br/>
 
 # Sendjay 소개
 
-1. Sendjay는 개인이 만들고 명명한 메시징 앱/웹 (통합) 프로그램입니다. (created by hushsbay@gmail.com)
+1. Sendjay는 개인이 만들고 명명한 기업용 메시징 서버 및 앱/웹 클라이언트 프로그램입니다. (created by hushsbay@gmail.com)
 
-2. Sendjay는 현재 모 기업내 ERP 사이트에서 필자에 의해 개발되어 현재 실사용중인 웹 전용 메신저를<br/>
+2. Sendjay는 현재 모 기업내 ERP 사이트에서 필자에 의해 개발되어 현재 실제로 사용중인 웹 전용 메신저를<br/>
    좀 더 확장시켜 멀티소켓서버 환경으로 구성하고 안드로이드 앱에서도 사용 가능하도록 개발되었습니다.
 
 3. Sendjay는 이미 개발된 웹 모듈을 거의 그대로 재사용해 앱내 WebView에서 실행되므로<br/>
@@ -46,7 +43,7 @@ Here are some ideas to get you started:
 
 포트를 PC와 모바일로 나눈 것은 단순히 테스트 편의를 위한 구분입니다.
    
-![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_env.png)
+![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_env.png)
 
    ### package.json
 
@@ -75,7 +72,7 @@ Here are some ideas to get you started:
    }
    ```
 
-   ### start.bat (c:/nodeops/hushsbay/main)
+   ### start.bat (c:/nodeops/sendjay/main)
 
    PC 브라우저에서 호출되는 Node.js서버는 아래와 같이 구동됩니다.
    ```
@@ -87,12 +84,12 @@ Here are some ideas to get you started:
    set SOCK_PORT=3050
    set REDIS_DB=0
    set MAIN_SERVER=Y
-   set LOG_PATH=c:/nodeops/log/hushsbay
-   set UPLOAD_PATH=c:/nodeops/upload/hushsbay
+   set LOG_PATH=c:/nodeops/log/sendjay
+   set UPLOAD_PATH=c:/nodeops/upload/sendjay
    node app
    ```
 
-   ### start1.bat (c:/nodeops/hushsbay/main)
+   ### start1.bat (c:/nodeops/sendjay/main)
 
    모바일앱에서 호출되는 Node.js서버는 아래와 같이 구동됩니다.
    ```
@@ -104,8 +101,8 @@ Here are some ideas to get you started:
    set SOCK_PORT=3051
    set REDIS_DB=0
    set MAIN_SERVER=N
-   set LOG_PATH=c:/nodeops/log/hushsbay
-   set UPLOAD_PATH=c:/nodeops/upload/hushsbay
+   set LOG_PATH=c:/nodeops/log/sendjay
+   set UPLOAD_PATH=c:/nodeops/upload/sendjay
    node app
    ```
    
@@ -136,9 +133,9 @@ Here are some ideas to get you started:
          "key" : "xxx" //32bytes
       },
       "app" : {
-         "ws" : "c:/nodeops/hushsbay/common/wscommon.js",
-         "wsmysql" : "c:/nodeops/hushsbay/common/wsmysql.js",
-         "wslogger" : "c:/nodeops/hushsbay/common/wslogger.js"
+         "ws" : "c:/nodeops/sendjay/common/wscommon.js",
+         "wsmysql" : "c:/nodeops/sendjay/common/wsmysql.js",
+         "wslogger" : "c:/nodeops/sendjay/common/wslogger.js"
       },
       "path" : {
          "ffmpeg" : "c:/ffmpeg/bin/ffmpeg.exe"
@@ -162,7 +159,7 @@ Here are some ideas to get you started:
 
    1. 웹에서의 소켓 연결
      
-   ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_erp_portal.png)
+   ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_erp_portal.png)
 
    - PC 웹브라우저에서는 모바일보다는 일반적으로 상대적으로 네트워크가 안정이 되어 있습니다.<br/>
      사내ERP에 최초 접속시 웹메신저를 실행시키는 경우는 크게 어려움이 없으나 문제는 재연결입니다.<br/>
@@ -234,25 +231,25 @@ Here are some ideas to get you started:
    
    <table>
       <tr>
-         <td><img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_chat_1.jpg" style="width:276px;height:600px"/></td>
-         <td><img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_chat_2.jpg" style="width:276px;height:600px"/></td>
+         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_chat_1.jpg" style="width:276px;height:600px"/></td>
+         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_chat_2.jpg" style="width:276px;height:600px"/></td>
       </tr>
       <tr>
-         <td><img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_talklist.jpg" style="width:276px;height:600px"/></td>
-         <td><img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_option.jpg" style="width:276px;height:600px"/></td>
+         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_talklist.jpg" style="width:276px;height:600px"/></td>
+         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_option.jpg" style="width:276px;height:600px"/></td>
       </tr>
       <tr>
-         <td><img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_team.jpg" style="width:276px;height:600px"/></td>
-         <td><img src="https://github.com/hushsbay/hushsbay/blob/master/sendjay_treeview.jpg" style="width:276px;height:600px"/></td>
+         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_team.jpg" style="width:276px;height:600px"/></td>
+         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_treeview.jpg" style="width:276px;height:600px"/></td>
       </tr>
    </table>
 
 
    ### (웹/모바일) 소켓 메시지 플로우
 
-   ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_socket_web.png)
+   ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_socket_web.png)
 
-   ![image](https://github.com/hushsbay/hushsbay/blob/master/sendjay_socket_aos.png)
+   ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_socket_aos.png)
 
 
    ### (모바일) 소켓 버퍼링 / 로컬 DB
@@ -565,8 +562,7 @@ CREATE TABLE jay.Z_ORG_TBL (
 ORG_CD VARCHAR(20) NOT NULL COMMENT '조직코드',
 ORG_NM VARCHAR(50) NOT NULL COMMENT '조직명',
 SEQ VARCHAR(8) NOT NULL COMMENT '순서',
-LVL INTEGER NOT NULL COMMENT '레벨(Depth)',
-IS_SYNC CHAR(1) NOT NULL DEFAULT '' COMMENT '동기화(Y)/수동(나머지)' ) ;
+LVL INTEGER NOT NULL COMMENT '레벨(Depth)' ) ;
 CREATE UNIQUE INDEX Z_ORG_IDX0 ON jay.Z_ORG_TBL (ORG_CD) ;
 CREATE INDEX Z_ORG_IDX1 ON jay.Z_ORG_TBL (SEQ) ;
 
@@ -603,7 +599,6 @@ MODDT CHAR(26) NOT NULL DEFAULT '' COMMENT '수정시각' ) ;
 CREATE UNIQUE INDEX Z_USER_IDX0 ON jay.Z_USER_TBL (USER_ID) ;
 CREATE INDEX Z_USER_IDX1 ON jay.Z_USER_TBL (ORG_CD, USER_NM) ;
 CREATE INDEX Z_USER_IDX2 ON jay.Z_USER_TBL (USER_NM, USER_ID) ;
-
 
 
 drop table if exists jay.A_ROOMMST_TBL; 
