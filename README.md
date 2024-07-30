@@ -96,7 +96,8 @@ Here are some ideas to get you started:
       + 검색모드 취소
    
 
-# 환경 구성 (https://hushsbay.com)
+# 환경 구성 
+  - https://hushsbay.com
   
 ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_env.png)
 
@@ -589,7 +590,7 @@ Here are some ideas to get you started:
 
    * 사내ERP에서 (웹페이지라고 가정하고) 아래 소스를 각각 '연동사전작업'등의 이름으로 설정한 버튼에 넣습니다.
 
-   
+
 
 # Table 명세 (MySql)
 
