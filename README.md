@@ -592,6 +592,8 @@ Here are some ideas to get you started:
    * 참고로, admin 아이디도 같은 방식으로 아예 만들어 놓습니다.
 
    * 사내ERP에서 (웹페이지라고 가정하고) 아래 소스를 각각 '연동사전작업'등의 이름으로 설정한 버튼에 넣습니다.
+      + deptArr, userArr는 여기선 편의상 하드코딩해 두었지만 실제로 사내 ERP에서는 데이터를 읽어와 담으면 될 것입니다.
+      + _token은 값을 복사해서 붙인 것인데 인증토큰이며 방법은 아래와 같습니다.
 
 ```
       const interfaceToDept = () => {
@@ -683,9 +685,6 @@ Here are some ideas to get you started:
          })
       }
 ```
-
-      + deptArr, userArr는 여기선 편의상 하드코딩해 두었지만 실제로 사내 ERP에서는 데이터를 읽어와 담으면 될 것입니다.
-      + _token은 값을 복사해서 붙인 것인데 인증토큰이며 방법은 아래와 같습니다.
 
    * organ으로 로그인후 '간편등록' 옆에 보이는 '관리자'라는 메뉴를 클릭하면 아래가 열립니다.
 
