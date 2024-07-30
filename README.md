@@ -34,14 +34,12 @@ Here are some ideas to get you started:
    양해해 주시기 바랍니다.<br/>
 
 6. Sendjay는 소스를 내려 받아 구축형(On-Premise)으로 사내 ERP등의 조직/사용자와 연동해 운영할 수 있습니다.<br/>   
-     
 
 
 # 구현 기능 (메시징 관점에서)
 
    - 소켓아이디는 웹과 앱 각각 1개씩만 허용 (예: 웹에서 2개일 경우 먼저 접속된 소켓이 끊어짐)
    - 아아아아
-
 
 
 # 환경 구성
@@ -56,7 +54,7 @@ Here are some ideas to get you started:
       - 서버 & 웹 클라이언트 : https://github.com/hushsbay/sendjay
       - Android 클라이언트 : https://github.com/hushsbay/sendjay_aos
    
-   * Sendjay는 https://hushsbay.com 으로 들어가 (실제로 운영되고 있는 환경에서) Full Test 가능합니다.
+   * Sendjay는 https://hushsbay.com 에서 Full Test 가능합니다.
    
    ### 서버 환경
 
@@ -67,7 +65,8 @@ Here are some ideas to get you started:
    3) Node.js (ver 20.10.0)
 
    ```
-   적용된 npm list는 아래와 같습니다. (package.json)
+   - 적용된 npm list는 아래와 같습니다. (package.json)
+
    {
       "dependencies": {
          "@socket.io/redis-adapter": "^8.2.1",
@@ -90,7 +89,7 @@ Here are some ideas to get you started:
       }
    }
    
-   start.bat (PC 브라우저에서 호출되는 Node.js서버)
+   - start.bat (PC 브라우저에서 호출되는 Node.js서버)
 
    set NODE_CONFIG=c:/nodeops/nodeconfig.js
    set MYSQL_SCHEMA=jay
@@ -104,7 +103,7 @@ Here are some ideas to get you started:
    set UPLOAD_PATH=c:/nodeops/upload/sendjay
    node app
 
-   start1.bat (모바일앱에서 호출되는 Node.js서버)
+   - start1.bat (모바일앱에서 호출되는 Node.js서버)
    
    set NODE_CONFIG=c:/nodeops/nodeconfig.js
    set MYSQL_SCHEMA=jay
@@ -118,7 +117,7 @@ Here are some ideas to get you started:
    set UPLOAD_PATH=c:/nodeops/upload/sendjay
    node app
       
-   nodeConfig.js (Node.js 전체 환경 설정)
+   - nodeConfig.js (Node.js 전체 환경 설정)
    
    module.exports = {
       "mysql" : {   
@@ -153,7 +152,6 @@ Here are some ideas to get you started:
    ```
 
    Sendjay는 템플릿 개념의 프로젝트이므로 PM2 등의 모듈을 사용하지 않고 node app으로 단순 구동했습니다.<br/>
-
 
 
 # 주요 특징 (메시징 관점에서)
@@ -512,13 +510,11 @@ Here are some ideas to get you started:
      있는데 이 경우, 그 시간동안 새로운 톡 도착을 (안읽은 톡이라고 표시하면서) 알려주도록 했습니다.<br/>
 
 
-
 # 조직/사용자 정보 연동 (인터페이스)
 
    * Sendjay는 기업의 ERP, GroupWare 등 사이트(인트라넷)내에서 GitHub 소스를 그대로 내려받아</br>
      개발/운영 가능합니다. 그렇게 운영하기 위해서는 기업내 조직/사용자정보를 연동해야 하는데</br>
      아래에서 설명하고 있습니다.</br>
-
 
 
 
