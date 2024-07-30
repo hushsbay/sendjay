@@ -37,6 +37,13 @@ Here are some ideas to get you started:
      
 
 
+# 구현 기능 (메시징 관점에서)
+
+   - 소켓아이디는 웹과 앱 각각 1개씩만 허용 (예: 웹에서 2개일 경우 먼저 접속된 소켓이 끊어짐)
+   - 아아아아
+
+
+
 # 환경 구성
   
 ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_env.png)
@@ -51,10 +58,6 @@ Here are some ideas to get you started:
    
    * Sendjay는 https://hushsbay.com 으로 들어가 (실제로 운영되고 있는 환경에서) Full Test 가능합니다.
    
-   * Sendjay는 기업의 ERP, GroupWare 등 사이트(인트라넷)내에서 GitHub 소스를 그대로 내려받아</br>
-     개발/운영 가능합니다. 그렇게 운영하기 위해서는 기업내 조직/사용자정보를 연동해야 하는데</br>
-     다음 항목에서 별도로 설명하고 있습니다.</br>
-   
    ### 서버 환경
 
    1) MySql (ver 8.0.32) : 테이블 명세는 맨 아래 있습니다.
@@ -63,9 +66,8 @@ Here are some ideas to get you started:
 
    3) Node.js (ver 20.10.0)
 
-      ##### 적용된 npm list는 아래와 같습니다. (package.json)
-
    ```
+   적용된 npm list는 아래와 같습니다. (package.json)
    {
       "dependencies": {
          "@socket.io/redis-adapter": "^8.2.1",
@@ -87,13 +89,9 @@ Here are some ideas to get you started:
          "winston-daily-rotate-file": "^4.7.1"
       }
    }
-   ```
+   
+   start.bat (PC 브라우저에서 호출되는 Node.js서버)
 
-      ##### start.bat 
-
-      PC 브라우저에서 호출되는 Node.js서버는 아래와 같이 구동됩니다.
-
-   ```
    set NODE_CONFIG=c:/nodeops/nodeconfig.js
    set MYSQL_SCHEMA=jay
    set HTTP_METHOD=http
@@ -105,13 +103,9 @@ Here are some ideas to get you started:
    set LOG_PATH=c:/nodeops/log/sendjay
    set UPLOAD_PATH=c:/nodeops/upload/sendjay
    node app
-   ```
 
-      ##### start1.bat 
-
-      모바일앱에서 호출되는 Node.js서버는 아래와 같이 구동됩니다.
-
-   ```
+   start1.bat (모바일앱에서 호출되는 Node.js서버)
+   
    set NODE_CONFIG=c:/nodeops/nodeconfig.js
    set MYSQL_SCHEMA=jay
    set HTTP_METHOD=http
@@ -123,11 +117,9 @@ Here are some ideas to get you started:
    set LOG_PATH=c:/nodeops/log/sendjay
    set UPLOAD_PATH=c:/nodeops/upload/sendjay
    node app
-   ```
+      
+   nodeConfig.js (Node.js 전체 환경 설정)
    
-      ##### nodeConfig.js
-   
-   ```
    module.exports = {
       "mysql" : {   
         	"host" : "localhost",
@@ -162,11 +154,6 @@ Here are some ideas to get you started:
 
    Sendjay는 템플릿 개념의 프로젝트이므로 PM2 등의 모듈을 사용하지 않고 node app으로 단순 구동했습니다.<br/>
 
-
-# 구현 기능 (메시징 관점에서)
-
-   - 소켓아이디는 웹과 앱 각각 1개씩만 허용 (예: 웹에서 2개일 경우 먼저 접속된 소켓이 끊어짐)
-   - 아아아아
 
 
 # 주요 특징 (메시징 관점에서)
@@ -525,16 +512,15 @@ Here are some ideas to get you started:
      있는데 이 경우, 그 시간동안 새로운 톡 도착을 (안읽은 톡이라고 표시하면서) 알려주도록 했습니다.<br/>
 
 
-# 참고 사항 (메시징 제외)
+
+# 조직/사용자 정보 연동 (인터페이스)
+
+   * Sendjay는 기업의 ERP, GroupWare 등 사이트(인트라넷)내에서 GitHub 소스를 그대로 내려받아</br>
+     개발/운영 가능합니다. 그렇게 운영하기 위해서는 기업내 조직/사용자정보를 연동해야 하는데</br>
+     아래에서 설명하고 있습니다.</br>
 
 
 
-# 구축형(On-Premise) 서버 적용 안내 - 정리중
-
-   1. DB 인터페이스만 작용해 운영 2) 소스내 db를 운영db로 변경해 적용
-   2. JWT 인증인데 적용은 1) 2)에 따라 다름 (로그인 처리..)
-   3. in-house 앱 (ios도 나중 앱스토어 배제..)
-   
 
 # Table 명세 (MySql)
 
