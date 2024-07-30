@@ -280,7 +280,7 @@ Here are some ideas to get you started:
      있으면 바로 알려 줍니다.<br/>
       
    
-   ### (웹/모바일) 유지보수 효율의 극대화를 위해 가급적 웹으로 구현
+   ### (웹/모바일) 유지보수 효율의 극대화를 위해 최대한 웹으로 구현
 
    Sendjay는 일반적으로 추구하는 유지보수 효율성을 목적으로 두고<br/>
    모바일에서, 앱으로 반드시 구현해야 할 소켓통신/알림/앱버전업데이트 등은 앱으로 개발하고<br/>
@@ -340,18 +340,17 @@ Here are some ideas to get you started:
    volatile로 처리해도 크리티컬하지 않다고 판단됩니다.<br/> 
    
    다만, 안드로이드에서 socket.io 사용시 volatile 메소드를 제가 아직 찾지 못해 volatile을 대신해서<br/> 
-   위 글에 언급된 if (socket.connect) ~처럼 미연결시차단 (이하 'blcok')하는 걸로 코드를 짰습니다.<br/>
+   위 글에 언급된 if (socket.connect) ~처럼 미연결시차단 (이하 'block')하는 걸로 코드를 짰습니다.<br/>
    
    웹에서는 PC 웹브라우저 환경을 염두에 두고 개발되어서 안정적인 소켓 연결이 전제였으며 소켓연결이 끊어지면<br/>
    해당 페이지들을 모두 닫아버리고 새로 연결하도록 처리했기 때문에 buffered/volatile에 대해 신경쓰지<br/>
-   않았던 것인데, 이제 와서 모바일을 개발하다 보니 제가 잘못된 판단이었다는 걸 깨닫게 되었습니다.<br/>
-   (예를 들어, 페이지를 닫지 말고 유지하고 재연결시킬 걸..등)
+   않았던 것인데, 이제 와서 모바일을 개발해보니 페이지를 닫지 않고 유지하는 것도 괜찮겠다는 생각이 듭니다.<br/>
    
    어쨋든, 안드로이드에서 socket과 ajax에 대해 buffered/block(volatile 대신) 관련해 아래와 같이 정리하고<br/>
    공유하고자 합니다. (이 부분은 소스를 함께 봐야 이해되는 부분입니다. chat.html, ChatService.kt)<br/>
    
    1. socket
-      - Sendjay socket event에는 chk_alive.js, create_room.js, invite_user.js, open_room.js,send_msg.js<br/>
+      - Sendjay socket event엔 chk_alive.js, create_room.js, invite_user.js, open_room.js, send_msg.js<br/>
         등이 있습니다.<br/>
       - 안드로이드에서 volatile 메소드를 못찾아 대신 block방식으로 처리하는데 모든 event는 buffered가 아닌<br/>
         block을 기본으로 하는데 send_msg만 block과 buffered로 구분했으며 내용은 아래 표와 같습니다.<br/>
@@ -591,7 +590,7 @@ Here are some ideas to get you started:
    * 참고로, admin 아이디도 같은 방식으로 아예 만들어 놓습니다.
 
    * 사내ERP에서 (웹페이지라고 가정하고) 아래 소스를 각각 '연동사전작업'등의 이름으로 설정한 버튼에 넣습니다.
-      + deptArr, userArr는 여기선 편의상 하드코딩해 두었지만 실제로 사내 ERP에서는 데이터를 읽어와 담으면 될 것입니다.
+      + deptArr, userArr는 여기선 편의상 하드코딩이지만 실제로 사내 ERP에서는 데이터를 읽어와 담으면 될 것입니다.
       + _token은 값을 복사해서 붙인 것인데 인증토큰이며 방법은 아래와 같습니다.
 
 ```
@@ -691,15 +690,15 @@ Here are some ideas to get you started:
 
    ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_interface_3.png)   
       
-   * 사내 ERP 웹페이지에서 위 소스의 interfaceToDept()와 interfaceToUser()를 각각 실행하면
-      MySql 테이블 Z_INTORG_TBL과 Z_INTUSER_TBL에 인터페이스용 데이터가 저장됩니다.
+   * 사내 ERP 웹페이지에서 위 소스의 interfaceToDept()와 interfaceToUser()를 각각 실행하면<br/>
+     MySql 테이블 Z_INTORG_TBL과 Z_INTUSER_TBL에 인터페이스용 데이터가 저장됩니다.
 
-   * 그리고, 바로 위 그림의 '조직연동'과 '사용자연동'을 누르면 
-      MySql 테이블 Z_ORG_TBL과 Z_USER_TBL에 데이터가 최종 저장되어 실제 적용됩니다.
+   * 그리고, 바로 위 그림의 '조직연동'과 '사용자연동'을 누르면<br/> 
+     MySql 테이블 Z_ORG_TBL과 Z_USER_TBL에 데이터가 최종 저장되어 실제 적용됩니다.
 
-   * 위에서 설명된 내용은 이해를 돕기 위해 웹페이지에서 버튼을 누르는 방식으로 구현한 것인데
-     실제 환경에서는 거의 모두 자동화되어 돌아가야 하는 것들일 것입니다. 자동화시키는 것은
-     사내 ERP 환경이 각각 다르기 때문에 각사에서 알아서 구현해야 할 사안입니다.
+   * 위에서 설명된 내용은 이해를 돕기 위해 웹페이지에서 버튼을 누르는 방식으로 구현한 것인데<br/>
+     실제 환경에서는 거의 모두 자동화되어 돌아가야 하는 것들일 것입니다. 자동화시키는 것은<br/>
+     사내 ERP 환경이 각각 다르기 때문에 각사에서 알아서 구현해야 할 사안입니다.<br/>
 
 
 # Table 명세 (MySql)
