@@ -684,15 +684,15 @@ Here are some ideas to get you started:
       }
 ```
 
-      - deptArr, userArr는 여기선 편의상 하드코딩해 두었지만 실제로 사내 ERP에서는 데이터를 읽어와 담으면 될 것입니다.
-      - _token은 값을 복사해서 붙인 것인데 인증토큰이며 방법은 아래와 같습니다.
+      + deptArr, userArr는 여기선 편의상 하드코딩해 두었지만 실제로 사내 ERP에서는 데이터를 읽어와 담으면 될 것입니다.
+      + _token은 값을 복사해서 붙인 것인데 인증토큰이며 방법은 아래와 같습니다.
 
    * organ으로 로그인후 '간편등록' 옆에 보이는 '관리자'라는 메뉴를 클릭하면 아래가 열립니다.
 
+      + '토큰복사'를 누르면 클립보드에 값이 복사되고 위 소스의 _token에 붙여 넣습니다.
+
    ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_interface_3.png)   
-
-      - '토큰복사'를 누르면 클립보드에 값이 복사되고 위 소스의 _token에 붙여 넣습니다.
-
+      
    * 사내 ERP 웹페이지에서 위 소스의 interfaceToDept()와 interfaceToUser()를 각각 실행하면
       MySql 테이블 Z_INTORG_TBL과 Z_INTUSER_TBL에 인터페이스용 데이터가 저장됩니다.
 
