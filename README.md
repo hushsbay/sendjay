@@ -29,11 +29,11 @@ Here are some ideas to get you started:
    알림을 받을 수 있으며 해당 페이지를 닫으면 다른 페이지에 백그라운드로 자동 실행되도록 해서 로그인한 후엔<br/>
    항상 연결되어 있어 메시지를 받을 수 있도록 하였습니다.<br/>
 
-5. Sendjay는 소스만 제공하는 것뿐만 아니라 누구나 자유롭게 실제로 사용해 볼 수 있도록 사이트를 제공합니다.<br/>
+5. Sendjay는 소스를 내려 받아 구축형(On-Premise)으로 사내 ERP등의 조직/사용자와 연동해 운영할 수 있습니다.<br/>   
+
+6. Sendjay는 소스만 제공하는 것뿐만 아니라 누구나 자유롭게 실제로 사용해 볼 수 있도록 사이트를 제공합니다.<br/>
    다만, 개인이 만든 사이트이므로 대용량 파일 업로드에 용량 제한이 있으며 서버 성능 문제를 겪을 수도 있음을<br/>
    양해해 주시기 바랍니다.<br/>
-
-6. Sendjay는 소스를 내려 받아 구축형(On-Premise)으로 사내 ERP등의 조직/사용자와 연동해 운영할 수 있습니다.<br/>   
 
 
 # 구현 기능 (메시징 관점에서)
@@ -227,9 +227,8 @@ Here are some ideas to get you started:
      다시 자동실행을 시켜야 하는데 이 때 사용자 입장에서는 새로운 브라우저탭이<br/>
      자동으로 열리는 것이 불편하고 시각적으로도 아주 거슬리게 됩니다.<br/>
 
-   - 그래서, 브라우저탭에서 백그라운드로 자동실행하는 옵션을 제공하여 사용자가 선택할 수 있도록 합니다.<br/>
-     위 그림처럼 브라우저탭에 (with Talk)으로 표시된 것이 백그라운드로 자동실행된 것이며 새로운 톡이<br/>
-     도착하면 알림이 뜨게 됩니다.<br/>
+   - 그래서, 브라우저탭에서 백그라운드로 자동실행하도록 합니다. 위 그림처럼 브라우저탭에 (with Talk)으로<br/>
+     표시된 것이 백그라운드로 자동실행된 것이며 새로운 톡이 도착하면 알림이 뜨게 됩니다.<br/>
 
    - 사내ERP탭은 회사의 정책에 따라 하나만 제공될 수도 있으나 일반적으로 여러 개의 탭이 열릴 것인데<br/>
      이 경우 백그라운드 자동실행은 각 탭간의 (로컬에서의) 경합을 통해 한개의 탭에서만 동작하도록 했습니다.<br/>
@@ -296,7 +295,7 @@ Here are some ideas to get you started:
       </tr>
       <tr>
          <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_talklist.jpg" style="width:276px;height:600px"/></td>
-         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_option.jpg" style="width:276px;height:600px"/></td>
+         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_option_1.jpg" style="width:276px;height:600px"/></td>
       </tr>
       <tr>
          <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_team.jpg" style="width:276px;height:600px"/></td>
