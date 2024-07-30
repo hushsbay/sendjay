@@ -96,7 +96,7 @@ Here are some ideas to get you started:
       + 검색모드 취소
    
 
-# 환경 구성
+# 환경 구성 (https://hushsbay.com)
   
 ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_env.png)
 
