@@ -98,7 +98,7 @@ Here are some ideas to get you started:
 
 # 환경 구성 
   - https://hushsbay.com
-  
+
 ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_env.png)
 
    + 포트를 PC와 모바일로 나눈 것은 단순히 멀티소켓서버 테스트 편의를 위한 구분입니다.
@@ -570,26 +570,138 @@ Here are some ideas to get you started:
    Sendjay에서는 조직과 사용자 정보를 다음과 같이 2가지 방법중 하나를 택해 적용, 운영 가능합니다.<br/>
    
    1. GitHub 소스를 수정해 사내 ERP내에서 운영하기
-      - 소스내 Z_ORG_TBL(조직정보)과 Z_USER_TBL 대신 사내 ERP에서 운영되는 테이블로 교체하여 운영하면 될 것입니다.
-      - 이 경우는 관련 소스를 변경해야 하는 불편함이 있지만 원하는 데이터 연동을 편리하게 효과적으로 할 수 있을 것으로 생각됩니다.
+      - Z_ORG_TBL(조직)과 Z_USER_TBL(사용자) 대신 사내 ERP에서 운영되는 테이블로 교체,운영하면 될 것입니다.
+      - 소스 변경의 불편함이 있지만 원하는 데이터 연동을 편리하게 효과적으로 할 수 있을 것으로 생각됩니다.
    
    2. 패키지 형태와 유사하게 내려받은 GitHub 소스를 수정하지 않고 그대로 운영하기
       - 아래는 이 경우에 대하여 어떻게 연동시키는지 설명하고 있습니다.
       - 사내 서버 환경구성은 완료했다고 가정하고 연동에 대해서만 설명합니다.
-      - 조직/사용자 연동은 각 시스템마다 (인증 등) 특성이 있을텐데 여기서는, 웹페이지에서 수동으로 버튼을 눌러 
-        연동하는 방식으로 진행하며 각 시스템내 배치, 데몬 등의 적용은 사내 ERP의 환경에 맞게 알아서 구성하면 될 것입니다.
+      - 조직/사용자 연동은 각 시스템마다 (인증 등) 특성이 있을텐데 여기서는, 웹페이지에서 수동으로 버튼을 눌러<br/>
+        연동하는 방식으로 진행하며 각 시스템내 배치, 데몬 등의 적용은 사내ERP환경에 맞게 구성하면 될 것입니다.<br/>
      
    * 먼저 간편등록에서 organ이라는 아이디를 만듭니다. 
-      - 아래 화면은 수동으로 아이디를 만드는 페이지입니다. (사용자정보와 연동해 자동으로 동기화된 아이디는 아래에서 조회되지 않음)
+      - 아래 화면은 수동으로 아이디를 만드는 페이지입니다.<br/>
+        (사용자정보와 연동해 자동으로 동기화된 아이디는 아래에서 조회되지 않음)<br/>
       - organ은 조직/사용자 연동을 위한 전용 아이디입니다. 
       - 이름과 비번만 저장하고 회사/부서 등은 입력하지 않습니다.           
    
    ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_interface_1.png)
 
+   ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_interface_2.png)
+
    * 참고로, admin 아이디도 같은 방식으로 아예 만들어 놓습니다.
 
    * 사내ERP에서 (웹페이지라고 가정하고) 아래 소스를 각각 '연동사전작업'등의 이름으로 설정한 버튼에 넣습니다.
 
+```
+      const interfaceToDept = () => {
+         const _userid = "organ" 
+         const _token = "eyJhbGciOiJIUzI1NiIsInR5c~~.Tg1NSwiZXhwIjoxNzUyODc3ODU1fQ~~.LSgqgQC6xHzqkIEaNT7w9ME-NX3c~~"
+         const dt = "" //dt = "20240901134528" //테스트. DTKEY가 없는 경우는 서버에서 생성. 있으면 서버에 있는 기존 데이터 삭제후 생성
+         const deptArr = [
+            { DTKEY : dt, ORG_CD : "Company_A", ORG_NM : "삼성전자", SEQ : "A00", LVL : 0 },
+            { DTKEY : dt, ORG_CD : "Division_A1", ORG_NM : "본부_A1", SEQ : "A10", LVL : 1 },
+            { DTKEY : dt, ORG_CD : "Dept_A11", ORG_NM : "팀_A11", SEQ : "A11", LVL : 2 },
+            { DTKEY : dt, ORG_CD : "Dept_A12", ORG_NM : "팀_A12", SEQ : "A12", LVL : 2 },
+            { DTKEY : dt, ORG_CD : "Dept_A13", ORG_NM : "팀_A13", SEQ : "A13", LVL : 2 },
+            { DTKEY : dt, ORG_CD : "Division_A2", ORG_NM : "본부_A2", SEQ : "A20", LVL : 1 },
+            { DTKEY : dt, ORG_CD : "Dept_A21", ORG_NM : "팀_A21", SEQ : "A21", LVL : 2 },
+            { DTKEY : dt, ORG_CD : "Dept_A22", ORG_NM : "팀_A22", SEQ : "A22", LVL : 2 },
+            { DTKEY : dt, ORG_CD : "Dept_A23", ORG_NM : "팀_A23", SEQ : "A23", LVL : 2 },
+            { DTKEY : dt, ORG_CD : "Company_B", ORG_NM : "삼성물산", SEQ : "B00", LVL : 0 },
+            { DTKEY : dt, ORG_CD : "Division_B1", ORG_NM : "본부_B1", SEQ : "B10", LVL : 1 },
+            { DTKEY : dt, ORG_CD : "Dept_B11", ORG_NM : "팀_B11", SEQ : "B11", LVL : 2 },
+            { DTKEY : dt, ORG_CD : "Dept_B12", ORG_NM : "팀_B12", SEQ : "B12", LVL : 2 },
+            { DTKEY : dt, ORG_CD : "Dept_B13", ORG_NM : "팀_B13", SEQ : "B13", LVL : 2 },
+            { DTKEY : dt, ORG_CD : "Division_B2", ORG_NM : "본부_B2", SEQ : "B20", LVL : 1 },
+            { DTKEY : dt, ORG_CD : "Dept_B21", ORG_NM : "팀_B21", SEQ : "B21", LVL : 2 },
+            { DTKEY : dt, ORG_CD : "Dept_B22", ORG_NM : "팀_B22", SEQ : "B22", LVL : 2 },
+            { DTKEY : dt, ORG_CD : "Dept_B23", ORG_NM : "팀_B23", SEQ : "B23", LVL : 2 },
+            { DTKEY : dt, ORG_CD : "Company_C", ORG_NM : "삼성디스플레이", SEQ : "C00", LVL : 0 },
+            { DTKEY : dt, ORG_CD : "Division_C1", ORG_NM : "본부_C1", SEQ : "C10", LVL : 1 },
+            { DTKEY : dt, ORG_CD : "Dept_C11", ORG_NM : "팀_C11", SEQ : "C11", LVL : 2 },
+            { DTKEY : dt, ORG_CD : "Dept_C12", ORG_NM : "팀_C12", SEQ : "C12", LVL : 2 },
+            { DTKEY : dt, ORG_CD : "Dept_C13", ORG_NM : "팀_C13", SEQ : "C13", LVL : 2 },
+            { DTKEY : dt, ORG_CD : "Division_C2", ORG_NM : "본부_C2", SEQ : "C20", LVL : 1 },
+            { DTKEY : dt, ORG_CD : "Dept_C21", ORG_NM : "팀_C21", SEQ : "C21", LVL : 2 },
+            { DTKEY : dt, ORG_CD : "Dept_C22", ORG_NM : "팀_C22", SEQ : "C22", LVL : 2 },
+            { DTKEY : dt, ORG_CD : "Dept_C23", ORG_NM : "팀_C23", SEQ : "C23", LVL : 2 },
+         ]               
+         const _urlDept = "https://hushsbay.com/org/interfaceToDept"
+         $.ajax({
+            dataType : "json" //response data type
+            ,contentType : "application/x-www-form-urlencoded;charset=utf-8" //request mime type => application/json은 CORS 안먹힘
+            ,url : _urlDept
+            ,data : { userid : _userid, token : _token, dept : deptArr }
+            ,type : "post"
+            ,cache : false
+            ,success : function(rs) {
+               if (rs.code != "0") {
+                     alert(rs.msg + " (" + rs.code + ")")
+                     return
+               }
+               alert("interfaceToDept DTKEY : " + rs.dtkey)
+            }
+            ,error : function(xhr, status, error) {
+               alert("[Error] " + status + "/" + error)
+            }
+         })
+      }
+
+      const interfaceToUser = () => {
+         const _userid = "organ" 
+         const _token = "eyJhbGciOiJIUzI1NiIsInR5c~~.Tg1NSwiZXhwIjoxNzUyODc3ODU1fQ~~.LSgqgQC6xHzqkIEaNT7w9ME-NX3c~~"
+         const dt = "" //dt = "20240901134528" //테스트. DTKEY가 없는 경우는 서버에서 생성. 있으면 서버에 있는 기존 데이터 삭제후 생성
+         const userArr = [
+            { DTKEY : dt, USER_ID : "A000001", USER_NM : "이의방", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", 
+               TOP_ORG_NM : "삼성디스플레이", JOB : "프로그래머", TEL_NO : "01012345678", AB_CD : "", AB_NM : "" },
+            { DTKEY : dt, USER_ID : "A000002", USER_NM : "정중부", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", 
+               TOP_ORG_NM : "삼성디스플레이", JOB : "사내변호사", TEL_NO : "01054982564", AB_CD : "dayoff", AB_NM : "20240901-20240930" },
+            { DTKEY : dt, USER_ID : "A000003", USER_NM : "경대승", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", 
+               TOP_ORG_NM : "삼성디스플레이", JOB : "예산담당", TEL_NO : "01043565279", AB_CD : "", AB_NM : "" },
+            { DTKEY : dt, USER_ID : "A000004", USER_NM : "이의민", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", 
+               TOP_ORG_NM : "삼성디스플레이", JOB : "자금담당", TEL_NO : "01097826494", AB_CD : "biztrip", AB_NM : "20241025-20241028" },
+         ]           
+         const _urlDept = "https://hushsbay.com/org/interfaceToUser"
+         $.ajax({
+            dataType : "json" //response data type
+            ,contentType : "application/x-www-form-urlencoded;charset=utf-8" //request mime type => application/json은 CORS 안먹힘
+            ,url : _urlUser
+            ,data : { userid : _userid, token : _token, user : userArr }
+            ,type : "post"
+            ,cache : false
+            ,success : function(rs) {
+               if (rs.code != "0") {
+                     alert(rs.msg + " (" + rs.code + ")")
+                     return
+               }
+               alert("interfaceToUser DTKEY : " + rs.dtkey)
+            }
+            ,error : function(xhr, status, error) {
+               alert("[Error] " + status + "/" + error)
+            }
+         })
+      }
+```
+
+      - deptArr, userArr는 여기선 편의상 하드코딩해 두었지만 실제로 사내 ERP에서는 데이터를 읽어와 담으면 될 것입니다.
+      - _token은 값을 복사해서 붙인 것인데 인증토큰이며 방법은 아래와 같습니다.
+
+   * organ으로 로그인후 '간편등록' 옆에 보이는 '관리자'라는 메뉴를 클릭하면 아래가 열립니다.
+
+   ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_interface_3.png)   
+
+      - '토큰복사'를 누르면 클립보드에 값이 복사되고 위 소스의 _token에 붙여 넣습니다.
+
+   * 사내 ERP 웹페이지에서 위 소스의 interfaceToDept()와 interfaceToUser()를 각각 실행하면
+      MySql 테이블 Z_INTORG_TBL과 Z_INTUSER_TBL에 인터페이스용 데이터가 저장됩니다.
+
+   * 그리고, 바로 위 그림의 '조직연동'과 '사용자연동'을 누르면 
+      MySql 테이블 Z_ORG_TBL과 Z_USER_TBL에 데이터가 최종 저장되어 실제 적용됩니다.
+
+   * 위에서 설명된 내용은 이해를 돕기 위해 웹페이지에서 버튼을 누르는 방식으로 구현한 것인데
+     실제 환경에서는 거의 모두 자동화되어 돌아가야 하는 것들일 것입니다. 자동화시키는 것은
+     사내 ERP 환경이 각각 다르기 때문에 각사에서 알아서 구현해야 할 사안입니다.
 
 
 # Table 명세 (MySql)
