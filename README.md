@@ -36,10 +36,23 @@ Here are some ideas to get you started:
      
 
 # 환경 구성
-
-포트를 PC와 모바일로 나눈 것은 단순히 테스트 편의를 위한 구분입니다.
-   
+  
 ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_env.png)
+
+   + 포트를 PC와 모바일로 나눈 것은 단순히 테스트 편의를 위한 구분입니다.
+   + 웹은 HTML5, jQuery가 쓰였으며 Android 앱은 Kotlin입니다.
+   + iOS 앱은 아직 개발되지 않았습니다.
+
+   * Sendjay 소스는 아래와 같습니다.
+      - 서버 & 웹 클라이언트 : https://github.com/hushsbay/sendjay
+      - Android 클라이언트 : https://github.com/hushsbay/sendjay_aos
+   
+   * Sendjay는 https://hushsbay.com 으로 들어가 (실제로 운영되고 있는 환경에서) Full Test 가능합니다.
+   
+   * Sendjay는 기업의 ERP, GroupWare 등 사이트(인트라넷)내에서 GitHub 소스를 그대로 내려받아 개발/운영 가능합니다.
+     그렇게 운영하기 위해서는 기업내 조직/사용자정보를 사이트내 구축한 Sendjay와 연동해야 하는데
+     다음 챕터에서 별도로 설명하고 있습니다. 일단, 아래 내용대로 환경구성부터 진행하시기 바랍니다.
+   
 
    ### package.json
 
