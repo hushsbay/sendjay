@@ -1015,7 +1015,7 @@ var funcSockEv = { //needs to be public
     },
 }
 
-const startMsngr = async (launch, winid) => {
+const startMsngr = async (launch, winid) => { //웹 전용
     if (hush.webview.on) return true
     if (!window.Notification) { //window.Notification || window.mozNotification || window.webkitNotification
         await hush.msg.alert("This browser does not support window.Notification.")
@@ -1030,7 +1030,7 @@ const startMsngr = async (launch, winid) => {
         return false
     }
     if (location.protocol != "https:") { //http not allowed for notification with chrome
-        await hush.msg.alert("Https가 필요합니다. (HTML5 Notification 등)")
+        await hush.msg.alert("Https가 필요합니다. (HTML5 Notification 등에서)")
         return false
     }    
     const permission = await window.Notification.requestPermission() 
@@ -1056,17 +1056,17 @@ const startMsngr = async (launch, winid) => {
                 if (!_token) { //메신저가 임베디드되어 있지 않은 웹페이지(탭)에서 로그아웃시키면 임베디드된 페이지에서도 메신저가 종료되게 함 : disconnect보다 아예 포털페이지로 replace함
                     location.replace("/" + hush.cons.erp_portal) //hush.msg.alert("disconnect") 
                     return
-                }
-                let _type = (winid && runFromStandalone && prevType == "") ? "set_new" : "chk_embeded" //set_new는 standalone일 때만 처음 한번만 설정됨. 그 다음부터는 무조건 chk_embeded
+                } //set_new는 standalone일 때만 처음 한번만 설정됨. 그 다음부터는 무조건 chk_embeded (아니면 사용자가 불편할 것임)
+                let _type = (winid && runFromStandalone && prevType == "") ? "set_new" : "chk_embeded"
                 prevType = _type //동일 브라우저내에서 윈도우(탭)끼리 (offline)경합을 벌여 1등이 되면 http call을 통해 각 브라우저의 1등끼리 (online)경합으로 최종 winner를 결정
                 if (!hush.http.chkOnline("none")) return
                 const rsRedis = await hush.http.ajax("/msngr/chk_redis", { type : _type, userkey : g_userkey, winid : winid }, true)
                 if (rsRedis.code == hush.cons.CODE_OK) { //console.log(_type+"==="+e.data.winid+"==="+rs1.result+"==="+rs1.ip)
                     if (!rsRedis.result) return //watch out for stream.on('end') in chk_redis.js
                     if (rsRedis.result == "another") {
-                        console.log("Talk running on another tab or browser / " + e.data.msg)
+                        console.log("Sendjay running on another tab or browser / " + e.data.msg)
                     } else if (rsRedis.result == "same") { //기존 winner 계속. Winner continued
-                        console.log("Talk running on this tab / " + e.data.msg)
+                        console.log("Sendjay running on this tab / " + e.data.msg)
                     } else { //new. 새로운 위너. //console.log(_type+"@@@"+e.data.winid+"@@@"+rs1.result)      
                         hush.socket = await hush.sock.connect(io, { 
                             token : hush.user.token, userid : g_userid, userkey : g_userkey, winid : winid, userip : rsRedis.userip 

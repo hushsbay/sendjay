@@ -678,10 +678,10 @@
                 socket.off(hush.cons.sock_ev_connect).on(hush.cons.sock_ev_connect, () => {
                     console.log("socket connected " + hush.util.getCurDateTimeStr(true, true))
                     hush.sock.on(socket, (rs) => {
-                        if (rs.ev != "chk_roomfocus" && rs.ev != "chk_alive" ) {
+                        //if (rs.ev != "chk_roomfocus" && rs.ev != "chk_alive" ) {
                             //debugger //if (rs.data.type == "talk") debugger
                             //console.log("hush.sock.on => " + JSON.stringify(rs))
-                        } //아래는 callback 호출되어야 실행되므로 alert와 toast에는 실행되지 않음
+                        //} //아래는 callback 호출되어야 실행되므로 alert와 toast에는 실행되지 않음
                         if (rs.returnTo == "parent" || rs.returnTo == "all") {
                             funcSockEv[rs.ev].call(null, rs.data)
                             if (rs.returnTo == "all") { //call from app.js or disconnect.js on server
@@ -716,7 +716,7 @@
                 const _roomnmObj = (typeof roomnm == "string") ? JSON.parse(roomnm) : roomnm
                 return hush.sock.procRoomName(_roomnmObj, g_userid) //Or member's name are displayed with some delimeter.
             },
-            getWinId : () => { //xxxxxx20241231010159
+            getWinId : () => { //xxxxxx_20241231010159
                 return hush.util.getRnd().toString() + "_" + hush.util.getCurDateTimeStr()
             },
             on : (socket, callback) => {            

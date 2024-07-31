@@ -10,8 +10,8 @@ const SEC = 3 //10
 const DATABASE = "jay", TBL = "winner", ONE_KEY = "just_one" //only 1 table & 1 record handled
 let db //field(id, winid, udt), protocol(winid, code, msg);
 
-//##31 아래에서 onupgradeneeded는 indexedDB.open시 항상 수행되는지는 않을 것인데 최초 또는 개발자가 업그레이드한 경우만 수행될 것이나, 하여튼,
-//최초 실행시에는 반드시 onupgradeneeded가 발생하고 그 뒤에 onsuccess도 같이 발생함
+//##31 아래에서 onupgradeneeded는 indexedDB.open시 항상 수행되는지는 않을 것인데 최초 또는 개발자가 업그레이드한 경우만 수행될 것이나
+//하여튼, 최초 실행시에는 반드시 onupgradeneeded가 발생하고 그 뒤에 onsuccess도 같이 발생함
 //따라서, 이 두개의 이벤트를 구분하지 않고 코딩하면 callback안에서 중요한 의미의 실행이 두번 처리되는 것을 의미하므로 반드시 구분해야 함
 let conn = indexedDB.open(DATABASE, 1) //Increment will trigger conn.onupgradeneeded (add version number if upgrade needed)
 conn.onerror = function() {	
@@ -40,7 +40,7 @@ conn.onsuccess = function(e) {
 onmessage = function(e) { //console.log(e.data.msg+"@@@@"+e.data.code) 
     w_winid = e.data.msg
     if (e.data.code == "auto") {        
-        competeWinner() //자동으로 백그라운드로 임베디드되는 것이므로 어느 브라우저탭이 위너가 될 지 경하해서 하나가 위너가 됨 
+        competeWinner() //자동으로 백그라운드로 임베디드되는 것이므로 어느 브라우저탭이 위너가 될 지 경합해서 하나가 위너가 됨 
     } else if (e.data.code == "manual") {
         setWinner() //사용자가 클릭해서 실행할 때는 경합할 이유없이 본인이 위너가 되면 돔
     }
@@ -104,7 +104,7 @@ function competeWinner() {
         }
         tx.oncomplete = function() {
             if (isWinner) {
-                postMessage({ code : "winner", msg : "competeWinner: being as winner: " + w_cnt, winid : w_winid })
+                postMessage({ code : "winner", msg : "competeWinner: became winner: " + w_cnt, winid : w_winid })
             } else {
                 postMessage({ code : "0", msg : "competeWinner: competing to be winner: " + w_cnt, winid : w_winid })
             }
@@ -152,7 +152,7 @@ function setWinner() {
             postMessage({ code : "setWinner_err", msg : _msg })
         }
         tx.oncomplete = function() {
-            postMessage({ code : "winner", msg : "setWinner: checking as winner: " + w_cnt, winid : w_winid })
+            postMessage({ code : "winner", msg : "setWinner: checked as winner: " + w_cnt, winid : w_winid })
             w_cnt += 1
             setTimeout(function() { competeWinner() }, SEC * 1000) //not setWinner()
         }  
