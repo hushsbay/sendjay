@@ -7,10 +7,8 @@ const multer  = require('multer') //ajax enctype을 "multipart/form-data"으로 
 const router = express.Router()
 const upload = multer({ storage: multer.memoryStorage() })
 
-//1) 로그인하지 않은 상태로도 처리 가능
-//   - 아이디 생성 : admin/organ 아이디도 생성 가능. 수정/삭제시 기존 입력된 비번을 넣어야만 처리 가능
-//2) 로그인한 상태로 처리 가능
-//   - admin 아이디로 로그인한 상태에서 비번없이도 다른 아이디 수정, 삭제 가능. 부서공용ID도 처리 가능
+//1) 로그인하지 않은 상태로도 처리 가능 (아이디 생성 : admin/organ 아이디도 생성 가능. 수정/삭제시 기존 입력된 비번을 넣어야만 처리 가능)
+//2) 로그인한 상태로 처리 가능 (admin 아이디로 로그인한 상태에서 비번없이도 다른 아이디 수정, 삭제 가능. 부서공용ID도 처리 가능)
 
 router.use(function(req, res, next) {
 	req.title = 'setuser'
@@ -24,9 +22,9 @@ router.post('/', upload.any(), async function(req, res) {
 		const { type, id, kind, nm, alias, pwd, pwd_1, toporgcd, toporgnm, orgcd, orgnm, mimetype } = req.body
 		let _kind = (id == 'admin') ? 'A' : (id == 'organ' ? 'O' : kind)
 		const buf = mimetype ? Buffer.from(new Uint8Array(req.files[0].buffer)) : null //MySql PICTURE 필드가 longblob 타입으로 되어 있고 브라우저에서 blob으로 넘겨받아 저장하는 것임
-		conn = await wsmysql.getConnFromPool(global.pool) //의도적으로 인증체크하지 않음
-		let userid = null //로그인하지 않은 상태로도 사용 가능
-		if (req.cookies.token && req.cookies.userid) {
+		conn = await wsmysql.getConnFromPool(global.pool)
+		let userid = null //로그인하지 않은 상태로도 사용 가능하나
+		if (req.cookies.token && req.cookies.userid) { //admin으로 로그인한 경우 체크 필요
 			const objToken = await ws.jwt.chkToken(req, res)
 			userid = objToken.userid
 		}
