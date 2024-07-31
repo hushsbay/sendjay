@@ -46,7 +46,7 @@
 					for (let i = 0; i < _len; i++) {
 						const row = rs.list[i]
 						const user_id = row.USER_ID  
-						const kind = (row.ID_KIND == "D") ? "부서공용" : ""   
+						//const kind = (row.ID_KIND == "D") ? "부서공용" : ""   
 						const user_nm = row.USER_NM
 						const org_cd = row.ORG_CD
 						const org_nm = row.ORG_NM
@@ -54,7 +54,11 @@
 						const top_org_nm = row.TOP_ORG_NM
 						let _html = "<div id=row_" + i.toString() + " class=coRow userid='" + user_id + "'>"
 						_html += "		<div class=coRowLeft >"
-						_html += "			<img src='/img/ico_user.png' class=coImg16 />"
+						if (row.ID_KIND == "D") {
+							_html += "			<img src='/img/ico_dept.png' class=coImg16 />"
+						} else {
+							_html += "			<img src='/img/ico_user.png' class=coImg16 />"
+						}
 						_html += "  	</div>"
 						_html += "		<div class=coRowMain >"
 						_html += "			<div class=coDotDot style='width:150px'><span title='" + user_nm + "'>" + user_nm + "</span></div>"
