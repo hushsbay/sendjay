@@ -28,7 +28,7 @@ router.post('/', async function(req, res) {
 			} else {
 				userid = uid
 			}
-		} else { //앱은 pwd가 항상 넘어와 체크?!?!?! => 오래되서 기억이 안나 나중에 확인하기로 함
+		} else { //앱은 pwd가 항상 넘어와 아래에서 체크
 			userid = uid
 		}
 		conn = await wsmysql.getConnFromPool(global.pool)
