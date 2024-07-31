@@ -5,11 +5,11 @@
         <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
         <meta http-equiv="Expires" content="-1">
         <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-        <title>ERP포털</title>
+        <title>Hushsbay</title>
         <link id=favicon href="/img/hushsbay.png" rel="shortcut icon" type="image/x-icon"/>
         <link rel="stylesheet" href="/plugin/jquery-ui-smoothness-1.12.1.min.css">
         <link rel="stylesheet" href="/common/common.css">
-        <style> /* css grid로 처리시 모바일크롬에서 주소창과 하단여백 처리 방법을 찾지 못해 css flex로 처리함 */
+        <style> /* css grid로 처리시 모바일크롬에서 약간 어긋나는 하단여백 처리 방법을 찾지 못해 css flex로 처리함 */
             body {     
                 background: black;  
             }
@@ -83,7 +83,7 @@
                 }
             }
 
-            function procFromOrgTree(from, nodeToGet, arr) { //조직도 관련 테스트 함수
+            function procFromOrgTree(from, nodeToGet, arr) { //조직도 관련 테스트 함수 (orgtree.html에서 호출)
         		try {
 	        		if (!$.isArray(arr) || arr.length == 0) {
 	        			hush.msg.msg("조직도 팝업으로부터 선택한 값이 없습니다.")
@@ -115,6 +115,9 @@
                     $("#btn_admin").on("click", function() {
                         hush.util.openWinPop("/app/auth/admin.html", 500, 530)
                     })
+                    $("#btn_guide").on("click", function() {
+                        hush.util.openWinTab("https://github.com/hushsbay/sendjay")
+                    })
                     $("#btn_user").on("click", function() {
                         hush.util.openWinPop("/app/user/userlist.html", 550)
                     })
@@ -144,13 +147,6 @@
                         }
                         hush.util.openWinPop("/app/org/orgtree.html?" + $.param(obj))
                     })
-                    window.onpagehide = (event) => {
-                        if (event.persisted) { //브라우저가 캐시하려고 시도하는 중 (bfcache = back/forward cache = 네트워크 타지 않음)
-                            alert("웹에서는 새페이지, 앱에서는 nocache로 열기 때문에 여기서는 bfcache 이슈 없어야 함")
-                        } else {
-                            if (g_chan) g_chan.close()
-                        }
-                    }
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }
