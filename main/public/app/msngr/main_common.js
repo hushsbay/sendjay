@@ -1153,8 +1153,8 @@ const refreshToken = async () => {
     if (hush.http.chkOnline("none")) {
         try {
             const rs = await hush.http.ajax("/auth/refresh_token", {}, true)
-            console.log(JSON.stringify(rs)+"$$$$")
             if (rs.token) hush.http.setCookie("token", rs.token)
+            console.log(hush.http.getCookie("token")+"=====")
         } catch (ex) {
             console.log("refreshToken Error : " + ex.message) //no alert
         }
