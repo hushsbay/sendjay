@@ -1148,6 +1148,19 @@ function toggleDisconnIcon(show) { //hush.msg.toast("disconnected", false, true)
     }
 }
 
+const refreshToken = async () => {
+    if (hush.http.chkOnline("none")) {
+        try {
+            const rs = await hush.http.ajax("/auth/refresh_token", {}, true)
+            console.log(JSON.stringify(rs)+"$$$$")
+            if (rs.token) hush.http.setCookie("token", rs.token)
+        } catch (ex) {
+            console.log("refreshToken Error : " + ex.message) //no alert
+        }
+    }
+    setTimeout(() => refreshToken(), 6000) //60000 * 10) //10분
+}
+
 ////////////////////////////////////////////////////////////////////////mobile webview
 const startFromWebView = (from, obj, rs, startFromResume) => {
     try { //alert(navigator.userAgent) - 안드로이드 웹뷰인데도 Dalvik이라고 나오지는 않음
@@ -1164,7 +1177,8 @@ const startFromWebView = (from, obj, rs, startFromResume) => {
             setTimeout(function() {
                 AndroidMain.doneLoad()
             }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작            
-        }     
+        }
+        refreshToken()
     } catch (ex) {
         hush.util.showEx(ex)
     }

@@ -129,9 +129,10 @@ const corsOptions = { //for Rest
 	}
 }
 
-app.use('/auth/login', require('./route/auth/login'))
+let rt = ['login', 'refresh_token']
+for (let i = 0; i < rt.length; i++) app.use('/auth/' + rt[i], require('./route/auth/' + rt[i]))
 
-let rt = ['userlist', 'getuser', 'setuser']
+rt = ['userlist', 'getuser', 'setuser']
 for (let i = 0; i < rt.length; i++) app.use('/user/' + rt[i], require('./route/user/' + rt[i]))
 
 rt = ['orgtree', 'empsearch', 'deptsearch', 'interfaceKeys', 'applyDept', 'applyUser']  
