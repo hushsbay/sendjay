@@ -1154,12 +1154,11 @@ const refreshToken = async () => {
         try {
             const rs = await hush.http.ajax("/auth/refresh_token", {}, true)
             if (rs.token) hush.http.setCookie("token", rs.token)
-            console.log(hush.http.getCookie("token")+"=====")
         } catch (ex) {
             console.log("refreshToken Error : " + ex.message) //no alert
         }
     }
-    setTimeout(() => refreshToken(), 6000) //60000 * 10) //10분
+    setTimeout(() => refreshToken(), 600000) //10분 (토큰 갱신 주기 = 웹과 동일하게 잡음)
 }
 
 ////////////////////////////////////////////////////////////////////////mobile webview

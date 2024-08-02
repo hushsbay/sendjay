@@ -9,11 +9,13 @@ const router = express.Router()
 //2) 만기를 짧게 주는 대신 여기 refresh_token을 클라이언트(앱 or 웹)에서 주기적으로 호출해서 갱신된 토큰을 내려 받는 것이 낫다고 판단됨
 //앱에서는 쿠키로 올리고 내려받는 건 불편하므로 post rq/rs로 핸들링 가능하도록 되어 있음
 
-//refresh_token을 호출하는 곳은 아래임
+//refresh_token을 호출하는 곳은 아래임 (주기적 호출)
 //1) startFromWebView() in main_common.js 앱에서 시작시
 //2) startMsngr() in main_common.js 웹에서 시작시 (StandAlone과 Embedded 두 경우 모두)
+//3) inner class Daemon in ChatService.kt 안드로이드 서비스
 //refresh_token을 호출하지는 않지만 안드로이드 onResume()에서 갱신된 토큰을 넘겨주고 있음
 //안드로이드 웹뷰가 스택 아래에 들어있는 경우도 백그라운드에서 refresh_token이 호출되는데 디바이스 제어에 의해 호출이 안되는 경우가 혹시 생길까봐 추가한 것임
+//결론적으로, jwt 만기는 토큰 갱신 주기(앱/웹 동일하게 잡음)가 10분으로 되어 있으므로 적어도 1시간 정도 이상으로 설정하는 것이 좋아 보임
 
 router.use(function(req, res, next) {
 	req.title = 'refresh_token'
