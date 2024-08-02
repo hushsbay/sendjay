@@ -21,8 +21,6 @@ router.post('/', async function(req, res) {
 		ws.http.resJson(res, rs, userid) //세번째 인자(userid) 있으면 token 갱신
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
-	} finally {
-		wsmysql.closeConn(conn, req.title)
 	}
 })
 
