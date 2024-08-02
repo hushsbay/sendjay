@@ -1078,6 +1078,7 @@ const startMsngr = async (launch, winid) => { //웹 전용
                             procSettingOnLoad(rs) //rsRedis 아님
                         }
                         chkRoomFocus()
+                        refreshToken()
                     }
                 } else {
                     worker.terminate()

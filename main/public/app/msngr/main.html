@@ -99,7 +99,6 @@
                     } else { //빈값은 Main인 경우임
                         const result = await startMsngr("manual", hush.sock.getWinId()) //mobile app(webview)에서는 바로 return true
                         if (!result) return //오류발생하면 아래 실행해도 의미없음
-                        refreshToken()
                         $(".coNav").on("click", function() { procMenuTop(this.id) })
                         $("#btn_team, #btn_company").on("click", function() {
                             hush.util.animBgColor($(this))
