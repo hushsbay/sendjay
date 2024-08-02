@@ -1149,12 +1149,14 @@ function toggleDisconnIcon(show) { //hush.msg.toast("disconnected", false, true)
 }
 
 ////////////////////////////////////////////////////////////////////////mobile webview
-const startFromWebView = (from, obj, rs) => {
+const startFromWebView = (from, obj, rs, startFromResume) => {
     try { //alert(navigator.userAgent) - 안드로이드 웹뷰인데도 Dalvik이라고 나오지는 않음
         if (!hush.http.chkOnline()) return
         hush.auth.setCookieForUser(obj, true)        
         hush.auth.setUser(obj.token)        
         SetUserVar()
+        console.log(hush.util.getCurDateTimeStr()+"####"+JSON.stringify(rs))
+        if (startFromResume == "Y") return //예) 안드로이드 onResume(그것도 onCreate 다음이 아닌 평소대의 onResume)인 경우는 갱신된 토큰만 받고 멈추면 됨
         if (g_win_type) {
             procMenuTop(BTN_MODE_PEOPLE, BTN_PEOPLE_COMPANY)
         } else { //main 화면
