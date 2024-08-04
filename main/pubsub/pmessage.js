@@ -30,6 +30,7 @@ module.exports = async (pattern, channel, message) => {
 						//2) 추가로, if userip 비교 넣어서 문제발생 안되도록 함
 					} //ws.sock.warn(null, prevSocket, _logTitle, 'telling previous Mobile socket to finish ChatService =>', prevsocketid, obj.userkey)
 				} else { //PC Web
+					console.log(prevsocketid, "555555")
 					prevSocket.prev = true //prevSocket은 true로 해야 disconnect시 sock_ev_show_off emit하지 않음
 					prevSocket.disconnect() //redis 데이터 처리(multiDelForUserkeySocket())는 disconnect.js에서 담당
 				} //ws.sock.warn(null, prevSocket, _logTitle, 'telling previous Web socket to disconnect =>', prevsocketid, obj.userkey)
