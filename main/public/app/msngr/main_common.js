@@ -1167,8 +1167,7 @@ const startFromWebView = (from, obj, rs, startFromResume) => {
         if (!hush.http.chkOnline()) return
         hush.auth.setCookieForUser(obj, true)        
         hush.auth.setUser(obj.token)        
-        SetUserVar()
-        console.log(hush.util.getCurDateTimeStr()+"####"+JSON.stringify(rs))
+        SetUserVar() //console.log(hush.util.getCurDateTimeStr()+"####"+JSON.stringify(rs))
         if (startFromResume) return //예) 안드로이드 onResume(그것도 onCreate 다음이 아닌 평소대의 onResume)인 경우는 갱신된 토큰만 받고 멈추면 됨
         if (g_win_type) {
             procMenuTop(BTN_MODE_PEOPLE, BTN_PEOPLE_COMPANY)

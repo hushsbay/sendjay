@@ -230,7 +230,6 @@ module.exports = (function() {
 						rs.msg = msg //if (res) ws.http.resWarn(res, rs.msg, false, rs.code, _title)
 						return rs
 					}
-					console.log(data[0].ORG_CD, tokenInfo.orgcd, "@@@@")
 					if (data[0].ORG_CD != tokenInfo.orgcd || data[0].TOP_ORG_CD != tokenInfo.toporgcd) {
 						const msg = '사용자쿠키값에 문제가 있습니다 : ' + tokenInfo.userid + '/' + tokenInfo.orgcd + '/' + tokenInfo.toporgcd
 						ws.util.loge(req, msg)
