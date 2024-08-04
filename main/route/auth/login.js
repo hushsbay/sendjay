@@ -16,6 +16,7 @@ router.post('/', async function(req, res) {
 		const rs = ws.http.resInit()
 		const { uid, pwd, autologin } = req.body //autologin은 앱에서만 사용
 		const device = ws.http.deviceFrom(req) //console.log(uid, pwd, autologin, device)
+		conn = await wsmysql.getConnFromPool(global.pool)
 		console.log(device, uid, "####")
 		if (device == 'web') { //웹에서는 맨 처음 로그인시 uid,pwd가 넘어 오거나 이미 로그인 상태에서 쿠키(token,userid)가 넘어와 체크하면 됨
 			if (!uid) {
@@ -32,7 +33,7 @@ router.post('/', async function(req, res) {
 		} else { //앱은 pwd가 항상 넘어와 아래에서 체크
 			userid = uid
 		}
-		conn = await wsmysql.getConnFromPool(global.pool)
+		
 		sql =  "SELECT USER_ID, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, NICK_NM, JOB, AB_CD, AB_NM, NOTI_OFF, "
 		sql += "       BODY_OFF, SENDER_OFF, POPUP_OFF, TM_FR, TM_TO "
 		sql += "  FROM Z_USER_TBL "
