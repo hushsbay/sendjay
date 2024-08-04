@@ -53,8 +53,7 @@ global.jay = io.of('/' + config.sock.namespace)
 const sockets = await global.jay.fetchSockets() //모든 소켓서버에 있는 정보 가져오기
 console.log('socket count :', sockets.length)
 for (let item of sockets) {
-	const sock = await global.jay.in(item.id).fetchSockets() //소켓 한 개
-	console.log(item.id, "=========", sock[0].id)
+	const sock = await global.jay.in(item.id).fetchSockets() //소켓 한 개 //console.log(item.id, "=========", sock[0].id)	
 }
 const sockets = await global.jay.in("room1").fetchSockets() // return all Socket instances in the "room1" room of the main namespace
 await global.jay.in(_socketid).socketsJoin(_roomid)
@@ -92,15 +91,12 @@ global.jay.on('connection', async (socket) => {
 		}
 		await ws.redis.multiSetForUserkeySocket(socket)
 		const pattern = ws.cons.key_str_socket + socket.userkey + ws.cons.easydeli //예) $$SW__userid;
-		console.log(pattern, "#####")
 		const stream = store.scanStream({ match : pattern + '*', count : ws.cons.scan_stream_cnt })
 		stream.on('data', (resultKeys) => { //비동기 //call pmessage()
 			for (let item of resultKeys) {
 				const _sockid = item.split(ws.cons.easydeli)[1]
-				console.log(_sockid, "@@@@@", socket.id)
 				if (_sockid != socket.id) { //PC웹과 모바일 구분 (모바일이라면 모바일 userkey로만 찾아 현재 소켓이 아니면 이전 소켓이므로 모두 kill)
 					//기존 소켓 연결 끊기. adapter.remoteDisconnect 사용하지 않음 : 추가로 처리할 내용이 있어서 그대로 사용하기로 함
-					console.log(_sockid, "!!!!!", socket.id)
 					ws.redis.pub('disconnect_prev_sock', { prevkey : item, socketid : socket.id, userkey : socket.userkey, userip : socket.userip }) //call pmessage()
 				}
 			}

@@ -13,8 +13,12 @@ const router = express.Router()
 //1) startFromWebView() in main_common.js 앱에서 시작시
 //2) startMsngr() in main_common.js 웹에서 시작시 (StandAlone과 Embedded 두 경우 모두)
 //3) inner class Daemon in ChatService.kt 안드로이드 서비스
-//refresh_token을 호출하지는 않지만 안드로이드 onResume()에서 갱신된 토큰을 넘겨주고 있음
-//안드로이드 웹뷰가 스택 아래에 들어있는 경우도 백그라운드에서 refresh_token이 호출되는데 디바이스 제어에 의해 호출이 안되는 경우가 혹시 생길까봐 추가한 것임
+
+//refresh_token을 호출하지는 않지만 아래와 같이 웹뷰와 소켓으로 토큰을 넘겨줘야 함
+//1) 안드로이드 onResume()에서 갱신된 토큰을 웹뷰로 넘겨주고 있는데 웹뷰가 스택 아래에 들어있는 경우도 
+//   (웹뷰에서도 별도로 주기적으로 refresh_token이 호출되긴 하지만) 디바이스 제어에 의해 호출 안되는 경우가 생길까봐 추가함
+//2) socket.io가 재연결할 때도 query 파라미터내 token을 갱신하지 않으면 old token이 그대로 전송되므로 이 경우도 refresh해야 함 (SocketIO.kt 참조)
+
 //결론적으로, jwt 만기는 토큰 갱신 주기(앱/웹 동일하게 잡음)가 10분으로 되어 있으므로 적어도 1시간 정도 이상으로 설정하는 것이 좋아 보임
 
 router.use(function(req, res, next) {
