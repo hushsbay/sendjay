@@ -848,7 +848,13 @@
                     if (notShowMsgIfNoData && rs.code == hush.cons.CODE_NO_DATA) {
                         //데이터 없을 경우에 메시지없이 넘어가야 할 때가 있음
                     } else if (rs.code.startsWith(hush.cons.token_err_prefix)) {
-                        deleteCookieForUser() //사용자정보 관련 오류이므로 로그아웃으로 처리
+                        setTimeout(function() {
+                            if (hush.webview.and) {
+                                AndroidMain.logout()
+                            } else if (hush.webview.ios) {                            
+                            }
+                        }, 5000)   
+                        deleteCookieForUser() //사용자정보 관련 오류이므로 로그아웃으로 처리                     
                     } else {
                         hush.msg.showMsg(rs.msg, rs.code)
                     }

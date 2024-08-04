@@ -224,7 +224,7 @@ module.exports = (function() {
 					const sql = "SELECT ORG_CD, TOP_ORG_CD FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
 					const data = await wsmysql.query(conn, sql, [tokenInfo.userid])
 					if (data.length == 0) {
-						const msg = ws.cons.CODE_USERID_NOT_EXIST + '/' + tokenInfo.userid
+						const msg = ws.cons.CODE_USERID_NOT_EXIST + '/' + tokenInfo.userid + '/사용자아이디가 없습니다.' 
 						ws.util.loge(req, msg)
 						rs.code = ws.cons.CODE_USERID_NOT_EXIST
 						rs.msg = msg //if (res) ws.http.resWarn(res, rs.msg, false, rs.code, _title)
