@@ -854,7 +854,7 @@
                             } else if (hush.webview.ios) {                            
                             }
                         }, 5000)   
-                        deleteCookieForUser() //사용자정보 관련 오류이므로 로그아웃으로 처리                     
+                        hush.auth.deleteCookieForUser() //사용자정보 관련 오류이므로 로그아웃으로 처리                     
                     } else {
                         hush.msg.showMsg(rs.msg, rs.code)
                     }
