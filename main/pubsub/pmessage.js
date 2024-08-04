@@ -19,16 +19,16 @@ module.exports = async (pattern, channel, message) => {
 			if (prevSocket) { //Previous socket for current userkey exists in this server. 해당서버에 이전 소켓이 있으므로 연결 끊기.
 				console.log(prevsocketid, "22222222")
 				if (prevSocket.userkey.startsWith(ws.cons.m_key)) { //Mobile App
-					console.log(prevsocketid, "44444444444")
-					//if (prevSocket.userip != obj.userip) { 
-						/*const param = { ev : ws.cons.sock_ev_cut_mobile, data : { userid : prevSocket.userid }, returnTo : "parent" }
-						prevSocket.emit(ws.cons.sock_ev_common, param) //emit to client directly*/
+					console.log(prevsocketid, "44444444444", prevSocket.userip, obj.userip)
+					if (prevSocket.userip != obj.userip) { 
+						const param = { ev : ws.cons.sock_ev_stop_mobile, data : { userid : prevSocket.userid }, returnTo : "parent" }
+						prevSocket.emit(ws.cons.sock_ev_common, param) //emit to mobile client directly
 						//가끔, 'connect - connect - disconnect(ping timeout)' 문제가 발생하며 아직 원인파악이 안됨 (async).
 						//그런데 여기서 emit되어야 할 prevSocket.emit(cut_mobile)은 emit되지 않음. 
 						//1) socket connect option인 forceNew를 false로 변경한 후엔 발생하지 않고는 있으나
-						//   sendjay가 소켓 인스턴스 한개만 사용하므로 forceNew는 상관없다고 생각하였는데 이해는 안되는 상태임
+						//   sendjay가 소켓 인스턴스 한개만 사용하므로 forceNew는 상관없다고 생각하였는데 안됨
 						//2) 추가로, if userip 비교 넣어서 문제발생 안되도록 함
-					//} //ws.sock.warn(null, prevSocket, _logTitle, 'telling previous Mobile socket to finish ChatService =>', prevsocketid, obj.userkey)
+					} //ws.sock.warn(null, prevSocket, _logTitle, 'telling previous Mobile socket to finish ChatService =>', prevsocketid, obj.userkey)
 				} else { //PC Web
 					prevSocket.prev = true //prevSocket은 true로 해야 disconnect시 sock_ev_show_off emit하지 않음
 					prevSocket.disconnect() //redis 데이터 처리(multiDelForUserkeySocket())는 disconnect.js에서 담당
