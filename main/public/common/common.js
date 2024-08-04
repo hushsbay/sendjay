@@ -848,9 +848,8 @@
                     if (notShowMsgIfNoData && rs.code == hush.cons.CODE_NO_DATA) {
                         //데이터 없을 경우에 메시지없이 넘어가야 할 때가 있음
                     } else if (rs.code.startsWith(hush.cons.token_err_prefix)) {
-                        alert("111")
+                        alert(rs.code + "/" + rs.msg) //alert로 처리해도 됨
                         if (hush.webview.and) {
-                            alert("@22")
                             AndroidMain.logout()
                         } else if (hush.webview.ios) {                            
                         } else {
