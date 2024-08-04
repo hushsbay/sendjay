@@ -207,7 +207,7 @@ module.exports = (function() {
 				if (!token || !userid) {
 					userid = req.body.userid
 					token = req.body.token //organ의 token은 외부 인터페이스를 통해 post로 호출될 수 있음					
-				}
+				}				
 				const tokenInfo = { userid : userid, token : token, orgcd : orgcd, toporgcd : toporgcd } //login.html을 제외하고 웹 또는 앱에서 항상 넘어오는 쿠키
 				if (req && req.clientIp) tokenInfo.ip = req.clientIp
 				const rs = ws.http.resInit()
@@ -228,6 +228,7 @@ module.exports = (function() {
 						rs.msg = msg //if (res) ws.http.resWarn(res, rs.msg, false, rs.code, _title)
 						return rs
 					}
+					console.log(data[0].ORG_CD, tokenInfo.toporgcd, "@@@@")
 					if (data[0].ORG_CD != tokenInfo.orgcd || data[0].TOP_ORG_CD != tokenInfo.toporgcd) {
 						const msg = '사용자쿠키값에 문제가 있습니다 : ' + tokenInfo.userid + '/' + tokenInfo.orgcd + '/' + tokenInfo.toporgcd
 						ws.util.loge(req, msg)

@@ -14,12 +14,9 @@ module.exports = async (pattern, channel, message) => {
 		if (_chan == 'disconnect_prev_sock') { //adapter.remoteDisconnect 사용하지 않음 : 아래 코딩처럼 처리할 내용이 있어서 그대로 사용하기로 함
 			obj = JSON.parse(message)
 			const prevsocketid = obj.prevkey.split(ws.cons.easydeli)[1]
-			console.log(prevsocketid, "11111111")			
 			const prevSocket = global.jay.sockets.get(prevsocketid)
 			if (prevSocket) { //Previous socket for current userkey exists in this server. 해당서버에 이전 소켓이 있으므로 연결 끊기.
-				console.log(prevsocketid, "22222222")
 				if (prevSocket.userkey.startsWith(ws.cons.m_key)) { //Mobile App
-					console.log(prevsocketid, "44444444444", prevSocket.userip, obj.userip)
 					if (prevSocket.userip != obj.userip) { 
 						const param = { ev : ws.cons.sock_ev_stop_mobile, data : { userid : prevSocket.userid }, returnTo : "parent" }
 						prevSocket.emit(ws.cons.sock_ev_common, param) //emit to mobile client directly
@@ -30,12 +27,10 @@ module.exports = async (pattern, channel, message) => {
 						//2) 추가로, if userip 비교 넣어서 문제발생 안되도록 함
 					} //ws.sock.warn(null, prevSocket, _logTitle, 'telling previous Mobile socket to finish ChatService =>', prevsocketid, obj.userkey)
 				} else { //PC Web
-					console.log(prevsocketid, "555555")
 					prevSocket.prev = true //prevSocket은 true로 해야 disconnect시 sock_ev_show_off emit하지 않음
 					prevSocket.disconnect() //redis 데이터 처리(multiDelForUserkeySocket())는 disconnect.js에서 담당
 				} //ws.sock.warn(null, prevSocket, _logTitle, 'telling previous Web socket to disconnect =>', prevsocketid, obj.userkey)
 			} else { //ws.sock.warn(null, null, _logTitle, 'no socket in this server =>', prevsocketid, obj.userkey)
-				console.log(prevsocketid, "33333333")
 				await ws.redis.multiDelGarbageForUserkeySocket(obj.prevkey, true) //소켓정보 없으므로 가비지로 처리 (every socket server)
 			}
 		} else if (_chan == 'sendto_myother_socket') { //from read_msg.js, delete_msg.js
