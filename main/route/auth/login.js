@@ -16,6 +16,7 @@ router.post('/', async function(req, res) {
 		const rs = ws.http.resInit()
 		const { uid, pwd, autologin } = req.body //autologin은 앱에서만 사용
 		const device = ws.http.deviceFrom(req) //console.log(uid, pwd, autologin, device)
+		console.log(device, uid, "####")
 		if (device == 'web') { //웹에서는 맨 처음 로그인시 uid,pwd가 넘어 오거나 이미 로그인 상태에서 쿠키(token,userid)가 넘어와 체크하면 됨
 			if (!uid) {
 				const objToken = await ws.jwt.chkToken(req, res, conn) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
