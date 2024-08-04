@@ -304,7 +304,9 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
         const list = $("#list_people")
         list.empty()
         let rq = { keyword : encodeURIComponent(obj.keyword) }
+        alert("@@@111")
         const rs = await hush.http.ajax("/msngr/qry_orgtree", rq) //without members
+        alert("@@@222")
         if (!hush.util.chkAjaxCode(rs)) return
         const _len = rs.list.length
         const _objUpperLevel = {} //used for deciding child node's parent tag id
@@ -509,6 +511,7 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
             }
         })
     } catch (ex) {
+        alert("@@@333"+ex.message)
         hush.util.showEx(ex)
     }
 }
