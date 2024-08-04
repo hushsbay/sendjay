@@ -12,6 +12,7 @@
             NETWORK_UNAVAILABLE : '네트워크가 연결되어 있지 않습니다.',
             NETWORK_UNSTABLE : '네트워크가 원할하지 않거나 서버 작업중입니다.',
             toast_prefix : "##$$", 
+            token_err_prefix : "-8",
             ///////////////////////////////////위는 서버와 동일
             erp_portal : "index.html",
             failOnLoad : "failOnLoad",
@@ -137,7 +138,7 @@
                         if (verbose) {
                             await hush.msg.alert(rs.msg + "<br>로그인이 필요합니다.")
                         } else {
-                            if (rs.code.startsWith("-8")) {
+                            if (rs.code.startsWith(hush.cons.token_err_prefix)) { //-8
                                 await hush.msg.alert(rs.msg + "<br>로그인 페이지로 이동합니다.")
                                 const _target = encodeURIComponent(location.pathname + location.search)
                                 hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
@@ -846,6 +847,8 @@
                 if (rs.code != hush.cons.CODE_OK) {
                     if (notShowMsgIfNoData && rs.code == hush.cons.CODE_NO_DATA) {
                         //데이터 없을 경우에 메시지없이 넘어가야 할 때가 있음
+                    } else if (rs.code.startsWith(hush.cons.token_err_prefix)) {
+                        deleteCookieForUser() //사용자정보 관련 오류이므로 로그아웃으로 처리
                     } else {
                         hush.msg.showMsg(rs.msg, rs.code)
                     }

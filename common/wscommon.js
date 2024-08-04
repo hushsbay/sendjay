@@ -30,6 +30,8 @@ module.exports = (function() {
 			CODE_USERINFO_MISMATCH : '-83',
 			CODE_TOKEN_EXPIRED : '-84',
 			CODE_USERCOOKIE_MISMATCH : '-85',
+			CODE_USERID_NOT_EXIST : '-86',
+			token_err_prefix : '-8',
 			toast_prefix : '##$$', //클라이언트와 동일해야 함
 			deli : '##',
 			subdeli : '$$',
@@ -222,9 +224,9 @@ module.exports = (function() {
 					const sql = "SELECT ORG_CD, TOP_ORG_CD FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
 					const data = await wsmysql.query(conn, sql, [tokenInfo.userid])
 					if (data.length == 0) {
-						const msg = ws.cons.MSG_NO_DATA + '/' + tokenInfo.userid
+						const msg = ws.cons.CODE_USERID_NOT_EXIST + '/' + tokenInfo.userid
 						ws.util.loge(req, msg)
-						rs.code = ws.cons.CODE_NO_DATA
+						rs.code = ws.cons.CODE_USERID_NOT_EXIST
 						rs.msg = msg //if (res) ws.http.resWarn(res, rs.msg, false, rs.code, _title)
 						return rs
 					}
