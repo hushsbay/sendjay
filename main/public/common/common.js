@@ -65,6 +65,7 @@
 			sock_ev_set_env : 'set_env',
 			sock_ev_chk_typing : 'chk_typing',
             sock_ev_chk_roomfocus : 'chk_roomfocus',
+            sock_ev_stop_mobile : 'stop_mobile',
             tz_seoul : "Asia/Seoul", //for korean
             fetch_cnt_list : 100, //At least, this should be the count which exceeds minimum rows with y-scroll .
             fetch_cnt : 100, //At least, this should be the count which exceeds minimum rows with y-scroll.
