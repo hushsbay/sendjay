@@ -15,9 +15,9 @@ module.exports = async function(socket, param) {
 			sql = "UPDATE Z_USER_TBL SET AUTOKEY_APP = ? WHERE USER_ID = ? "
 			await wsmysql.query(conn, sql, [autokey, userid])
 			ws.sock.sendToMyOtherSocket(socket, param) //모바일기기 자동로그인 해제
-			socket.emit(com.cons.sock_ev_common, param) //단순 통지
+			socket.emit(ws.cons.sock_ev_common, param) //단순 통지
 		} else { //앱 (현재 소켓) -> 앱 (분실은 아니지만 중지하고자 하는 디바이스의 기존 연결된 소켓)
-			//socket.emit(com.cons.sock_ev_common, param) //pmessage.js에서 바로 모바일디바이스로 내려 보냄
+			//socket.emit(ws.cons.sock_ev_common, param) //pmessage.js에서 바로 모바일디바이스로 내려 보냄
 		}
 	} catch (ex) {
 		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex)
