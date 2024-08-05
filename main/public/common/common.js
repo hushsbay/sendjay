@@ -103,11 +103,13 @@
                 const persist = (_persist == true) ? true : false
                 hush.http.setCookie("token", rs.token)
                 hush.http.setCookie("userid", rs.USER_ID || rs.userid, persist) //persistent cookie - _persist는 아이디를 화면에 저장할 지에만 사용
-                hush.http.setCookie("usernm", rs.USER_NM || rs.usernm) //모바일에서 소문자 붙여서 넘어옴 (이하 동일)
+                hush.http.setCookie("usernm", rs.USER_NM || rs.usernm) //모바일에서 소문자(uInfo) 붙여서 넘어옴 (이하 동일)
                 hush.http.setCookie("orgcd", rs.ORG_CD || rs.orgcd)
                 hush.http.setCookie("orgnm", rs.ORG_NM || rs.orgnm)
                 hush.http.setCookie("toporgcd", rs.TOP_ORG_CD || rs.toporgcd)
                 hush.http.setCookie("toporgnm", rs.TOP_ORG_NM || rs.toporgnm)
+                hush.http.setCookie("autokey_web", rs.AUTOKEY_WEB || rs.autokey_web, true) //persist cookie
+                hush.http.setCookie("autokey_app", rs.AUTOKEY_APP || rs.autokey_app, true) //persist cookie
             }, //위 아래 함수는 verifyUser() in common.js와 앱의 UserInfo 클래스내 항목과 같아야 함
             deleteCookieForUser : () => { //hush.http.deleteCookie('userid')
                 hush.http.deleteCookie('token')                
@@ -134,8 +136,8 @@
                 let rs
                 const _token = hush.http.getCookie("token")  
                 if (_token) {
-                    const _autokey = hush.http.getCookie("autokey")
-                    rs = await hush.http.ajax("/auth/login", { autokey : _autokey })
+                    const autokey_web = hush.http.getCookie("autokey_web")
+                    rs = await hush.http.ajax("/auth/login", { autokey_web : autokey_web })
                     if (rs.code != hush.cons.CODE_OK) {
                         if (verbose) {
                             await hush.msg.alert(rs.msg + "<br>로그인이 필요합니다.")
