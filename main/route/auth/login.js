@@ -63,7 +63,7 @@ router.post('/', async function(req, res) {
 			}
 		} else {
 			const fld = (device == 'web') ? 'AUTOKEY_WEB' : 'AUTOKEY_APP'
-			sql = "UPDATE Z_USER_TBL SET " + fld + " = ? WHERE WHERE USER_ID = ? "
+			sql = "UPDATE Z_USER_TBL SET " + fld + " = ? WHERE USER_ID = ? "
 			await wsmysql.query(conn, sql, [autokey, userid])
 			data[0].AUTOKEY_WEB = autokey
 			data[0].AUTOKEY_APP = autokey
