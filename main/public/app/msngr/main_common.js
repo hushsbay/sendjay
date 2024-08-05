@@ -78,9 +78,9 @@ const procMenuTop = async (_mode, _mode_people) => {
             $("#fr_chat").hide()
             $("#fr_setting").css("display", "flex")
             $(".setting").show()
-            debugger
             const rs = await hush.auth.verifyUser()
-            if (rs.code == hush.cons.CODE_OK) procSetting("load", rs, true)
+            if (!rs) return
+            procSetting("load", rs, true)
         }
         $("#" + g_mode).addClass("coNavSelected")
         $("#fr_menu_bottom").css("display", "flex")
@@ -953,7 +953,8 @@ var funcSockEv = { //needs to be public
         } else if (data.kind == "userinfo") { //broadcast inside namespace
             if (data.userid == g_userid && data.userkey != g_userkey) {
                 const rs = await hush.auth.verifyUser()
-                if (rs.code == hush.cons.CODE_OK) procSetting("load", rs)
+                if (!rs) return
+                procSetting("load", rs)
             }
             const _nicknm = data.nicknm ? "[" + data.nicknm + "]" : ""
             $("#nick_" + data.userid).html(_nicknm)
