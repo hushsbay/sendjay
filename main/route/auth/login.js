@@ -55,7 +55,7 @@ router.post('/', async function(req, res) {
 				ws.http.resWarn(res, '비번이 다릅니다.')
 				return
 			}
-		}		
+		}
 		if (autologin == 'Y' || webAuthenticated) { //앱자동로그인 또는 웹인증OK시 
 			if (autokey != data[0].AUTOKEY_APP && autokey != data[0].AUTOKEY_WEB) {
 				ws.http.resWarn(res, '(자동로그인 해제) 수동로그인이 필요합니다.')
