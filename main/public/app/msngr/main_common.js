@@ -78,8 +78,11 @@ const procMenuTop = async (_mode, _mode_people) => {
             $("#fr_chat").hide()
             $("#fr_setting").css("display", "flex")
             $(".setting").show()
-            const rs = await hush.auth.verifyUser()
-            if (!rs) return
+            //const rs = await hush.auth.verifyUser()
+            //if (!rs) return
+            debugger
+            const rs = await hush.http.ajax("/msngr/get_userinfo")
+            if (!hush.util.chkAjaxCode(rs)) return
             procSetting("load", rs, true)
         }
         $("#" + g_mode).addClass("coNavSelected")
@@ -767,7 +770,7 @@ const chkTime = async (tm) => {
     return true
 }
 
-const procSettingOnLoad = (rs) => { //rs from hush.auth.verifyUser(true)
+const procSettingOnLoad = (rs) => {
     g_setting.nicknm = (rs.NICK_NM) ? rs.NICK_NM : ""
     g_setting.job = (rs.JOB) ? rs.JOB : ""
     g_setting.abcd = (rs.AB_CD) ? rs.AB_CD : ""
@@ -780,7 +783,7 @@ const procSettingOnLoad = (rs) => { //rs from hush.auth.verifyUser(true)
     g_setting.to = (rs.TM_TO) ? rs.TM_TO : ""
 }
 
-const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel) //rs from hush.auth.verifyUser(true)
+const procSetting = async (type, rs, needPicture) => { //type(load,save,cancel)
     try {
         if (type == "load") {
             procSettingOnLoad(rs)
@@ -952,8 +955,11 @@ var funcSockEv = { //needs to be public
             getRoomInfo(data.roomid)
         } else if (data.kind == "userinfo") { //broadcast inside namespace
             if (data.userid == g_userid && data.userkey != g_userkey) {
-                const rs = await hush.auth.verifyUser()
-                if (!rs) return
+                //const rs = await hush.auth.verifyUser()
+                //if (!rs) return
+                debugger
+                const rs = await hush.http.ajax("/msngr/get_userinfo")
+                if (!hush.util.chkAjaxCode(rs)) return
                 procSetting("load", rs)
             }
             const _nicknm = data.nicknm ? "[" + data.nicknm + "]" : ""
@@ -1121,7 +1127,7 @@ const SetUserVar = () => { //편의상 한번 더 g_로 set
     g_orgcd = hush.user.orgcd
 }
 
-const initStandAlone = (rs) => { //임베디드가 아닐 경우임. rs from hush.auth.verifyUser(true)
+const initStandAlone = (rs) => { //임베디드가 아닐 경우임
     procSetting("load", rs, true)
     procScrollEvent()
     if (!hush.http.chkOnline()) return

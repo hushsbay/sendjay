@@ -140,8 +140,8 @@ app.use('/org/interfaceToDept', cors(corsOptions), require('./route/org/interfac
 app.use('/org/interfaceToUser', cors(corsOptions), require('./route/org/interfaceToUser')) //외부 인터페이스
 
 rt = [
-	'append_log', 'chk_redis', 'qry_unread', 'qry_userlist', 'qry_orgtree', 'qry_portal', 'qry_msglist', 'get_roominfo', 'proc_file', 'proc_image',
-	'get_msginfo', 'get_opengraph', 'proc_env', 'proc_picture'
+	'append_log', 'chk_redis', 'get_userinfo', 'qry_unread', 'qry_userlist', 'qry_orgtree', 'qry_portal', 'qry_msglist', 'get_roominfo',
+	'proc_file', 'proc_image', 'get_msginfo', 'get_opengraph', 'proc_env', 'proc_picture'
 ] 
 for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/msngr/' + rt[i])) 
 
