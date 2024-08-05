@@ -11,10 +11,10 @@ router.use(function(req, res, next) {
 })
 
 router.post('/', async function(req, res) {
-	let conn, sql, data, len, userid, alreadyAuthenticated
+	let conn, sql, data, len, userid, webAuthenticated
 	try { 
 		const rs = ws.http.resInit()
-		const { uid, pwd, autologin } = req.body //autologin은 앱에서만 사용
+		const { uid, pwd, autologin, autokey } = req.body //autologin은 앱에서만 사용 (웹은 자동로그인이 아닌 token을 통한 인증체크임)
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const device = ws.http.deviceFrom(req) //console.log(uid, pwd, autologin, device)		
 		if (device == 'web') { //웹에서는 맨 처음 로그인시 uid,pwd가 넘어 오거나 이미 로그인 상태에서 쿠키(token,userid)가 넘어와 체크하면 됨
@@ -25,24 +25,23 @@ router.post('/', async function(req, res) {
 					ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
 					return
 				}
-				alreadyAuthenticated = true		
+				webAuthenticated = true		
 			} else {
 				userid = uid
 			}
 		} else { //앱은 pwd가 항상 넘어와 아래에서 체크
 			userid = uid
-		}
-		
+		}		
 		sql =  "SELECT USER_ID, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, NICK_NM, JOB, AB_CD, AB_NM, NOTI_OFF, "
-		sql += "       BODY_OFF, SENDER_OFF, POPUP_OFF, TM_FR, TM_TO "
+		sql += "       BODY_OFF, SENDER_OFF, POPUP_OFF, TM_FR, TM_TO, AUTOKEY_WEB, AUTOKEY_APP "
 		sql += "  FROM Z_USER_TBL "
 		sql += " WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [userid])
 		if (data.length == 0) {
 			ws.http.resWarn(res, '사용자아이디가 없습니다.')
 			return
-		}	
-		if (alreadyAuthenticated) {
+		}
+		if (webAuthenticated) {
 			//위 토큰 인증을 신뢰하고 진행함
 		} else {
 			let pwdToCompare
@@ -56,6 +55,18 @@ router.post('/', async function(req, res) {
 				return
 			}
 		}		
+		if (autologin == 'Y' || webAuthenticated) { //앱자동로그인 또는 웹인증OK시 
+			if (autokey != data[0].AUTOKEY_APP && autokey != data[0].AUTOKEY_WEB) {
+				ws.http.resWarn(res, '(자동로그인 해제) 수동로그인이 필요합니다.')
+				return
+			}
+		} else {
+			const fld = (device == 'web') ? 'AUTOKEY_WEB' : 'AUTOKEY_APP'
+			sql = "UPDATE Z_USER_TBL SET " + fld + " = ? WHERE WHERE USER_ID = ? "
+			await wsmysql.query(conn, sql, [autokey, userid])
+			data[0].AUTOKEY_WEB = autokey
+			data[0].AUTOKEY_APP = autokey
+		}
 		Object.assign(rs, data[0])
 		if (ws.http.deviceFrom(req) == 'web') delete rs['PWD'] //웹에서는 브라우저에서 비번저장하지 않음 (암호화된 비번도 내리지도 말기)
 		//여기는 모두 세션 쿠키로 내림. 아래 쿠키설정은 verifyUser() in common.js의 쿠키가져오기와 일치해야 함 
