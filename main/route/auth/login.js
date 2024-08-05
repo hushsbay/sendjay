@@ -27,7 +27,7 @@ router.post('/', async function(req, res) {
 					return
 				}
 				webAuthenticated = true		
-			} else {
+			} else { //웹 로그인 (원래부터 자동로그인은 없음)
 				userid = uid
 			}
 		} else { //앱은 pwd가 항상 넘어와 아래에서 체크
@@ -65,8 +65,8 @@ router.post('/', async function(req, res) {
 			const fld = (device == 'web') ? 'AUTOKEY_WEB' : 'AUTOKEY_APP'
 			sql = "UPDATE Z_USER_TBL SET " + fld + " = ? WHERE USER_ID = ? "
 			await wsmysql.query(conn, sql, [autokey, userid])
-			data[0].AUTOKEY_WEB = autokey
-			data[0].AUTOKEY_APP = autokey
+			data[0].AUTOKEY_WEB = autokey //순전히 앱에서 코딩이 불편해서 처리한 것임
+			data[0].AUTOKEY_APP = autokey //순전히 앱에서 코딩이 불편해서 처리한 것임
 		}
 		Object.assign(rs, data[0])
 		if (ws.http.deviceFrom(req) == 'web') delete rs['PWD'] //웹에서는 브라우저에서 비번저장하지 않음 (암호화된 비번도 내리지도 말기)

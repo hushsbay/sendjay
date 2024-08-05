@@ -133,7 +133,8 @@
                 let rs
                 const _token = hush.http.getCookie("token")  
                 if (_token) {
-                    rs = await hush.http.ajax("/auth/login")
+                    const _autokey = hush.http.getCookie("autokey")
+                    rs = await hush.http.ajax("/auth/login", { autokey : _autokey })
                     if (rs.code != hush.cons.CODE_OK) {
                         if (verbose) {
                             await hush.msg.alert(rs.msg + "<br>로그인이 필요합니다.")

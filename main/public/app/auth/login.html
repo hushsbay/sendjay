@@ -78,8 +78,10 @@
 							const _pwd = $("#in_pwd").val().trim()
 							if (!await hush.util.chkFieldVal(_userid, "아이디", 1)) return
 							if (!await hush.util.chkFieldVal(_pwd, "비번", 1)) return
-							const rs = await hush.http.ajax("/auth/login", { uid : _userid, pwd : _pwd }, true)
+							const _autokey = hush.util.getRnd()
+							const rs = await hush.http.ajax("/auth/login", { uid : _userid, pwd : _pwd, autokey : _autokey }, true)
 							if (!hush.util.chkAjaxCode(rs)) return
+							hush.http.setCookie("autokey", _autokey, true) //persist cookie
 							hush.auth.setCookieForUser(rs, $("#chk_save").prop("checked"))
 							if (opener && opener.showLogout) opener.showLogout(true) //포털(index.html) 
 							const _target = g_target ? decodeURIComponent(g_target) : "/index.html"
