@@ -325,6 +325,10 @@
                             hush.util.showEx(ex)
                         }
                     })
+                    $("#btn_autokey").on("click", function() {
+                        const rq = { autokey : hush.util.getRnd() }
+                        hush.sock.send(hush.socket, hush.cons.sock_ev_stop_mobile, rq, "parent")
+                    })
                     $("#btn_noti_mobile").on("click", function() {
                         hush.util.animBgColor($(this))
                         AndroidMain.setNotiMobile()
@@ -526,6 +530,7 @@
                         <div id=pict_upload class='picBtn coText' style="margin-left:10px">저장</div>
                         <div id=pict_delete class='picBtn coText' style="margin-left:10px">삭제</div>
                         <input id=file_upload type=file accept="image/*" style="display:none">
+                        <div id=btn_autokey class='picBtn coText' style="margin-left:10px">분실처리</div>
                     </div>
                 </div>
                 <div class=coSettingRow>

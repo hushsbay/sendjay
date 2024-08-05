@@ -1015,6 +1015,9 @@ var funcSockEv = { //needs to be public
         //2) 그 반대의 경우는 앱에서 노티 체크를 1초정도 delay시켜서 하기 때문에 웹에서 챗방에 포커스가 가 있으면 이미 읽음처리되므로 노티가 필요없게 됨
         g_focusedRoomid = data.focusedRoomid
     },
+    [hush.cons.sock_ev_stop_mobile] : (data) => {
+        hush.msg.toast("처리 완료")
+    },
 }
 
 const startMsngr = async (launch, winid) => { //웹 전용
