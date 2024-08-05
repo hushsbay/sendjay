@@ -12,8 +12,8 @@ module.exports = async function(socket, param) {
 		console.log(autokey_app, userid, "%%%%")
 		conn = await wsmysql.getConnFromPool(global.pool)
 		if (socket.userkey.startsWith(ws.cons.w_key)) { //웹 -> 서버 -> 앱 (분실된 디바이스의 기존 연결된 소켓) 
-			sql = "UPDATE Z_USER_TBL SET AUTOKEY_APP = ?, AUTOKEY_WEB = ?  WHERE USER_ID = ? "
-			await wsmysql.query(conn, sql, [autokey_app, autokey_app, userid]) //나중에 분실된 노트북인 경우도 수동로그인 유도
+			sql = "UPDATE Z_USER_TBL SET AUTOKEY_APP = ? WHERE USER_ID = ? "
+			await wsmysql.query(conn, sql, [autokey_app, userid]) //나중에 분실된 노트북인 경우도 수동로그인 유도
 			ws.sock.sendToMyOtherSocket(socket, param) //모바일기기 자동로그인 해제
 			socket.emit(ws.cons.sock_ev_common, param) //단순 통지
 		} else { //앱 (현재 소켓) -> 앱 (분실은 아니지만 중지하고자 하는 디바이스의 기존 연결된 소켓)

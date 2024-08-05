@@ -957,7 +957,6 @@ var funcSockEv = { //needs to be public
             if (data.userid == g_userid && data.userkey != g_userkey) {
                 //const rs = await hush.auth.verifyUser()
                 //if (!rs) return
-                debugger
                 const rs = await hush.http.ajax("/msngr/get_userinfo")
                 if (!hush.util.chkAjaxCode(rs)) return
                 procSetting("load", rs)
@@ -1049,7 +1048,6 @@ const startMsngr = async (launch, winid) => { //웹 전용
         await hush.msg.alert("Notification 권한이 필요합니다.")
         return false
     }
-    debugger
     const rs = await hush.auth.verifyUser()
     if (!rs) return false
     SetUserVar()
