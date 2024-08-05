@@ -78,7 +78,7 @@ const procMenuTop = async (_mode, _mode_people) => {
             $("#fr_chat").hide()
             $("#fr_setting").css("display", "flex")
             $(".setting").show()
-            debugger
+            debugger   
             const rs = await hush.auth.verifyUser()
             if (!rs) return
             procSetting("load", rs, true)
