@@ -108,7 +108,6 @@
                 hush.http.setCookie("orgnm", rs.ORG_NM || rs.orgnm)
                 hush.http.setCookie("toporgcd", rs.TOP_ORG_CD || rs.toporgcd)
                 hush.http.setCookie("toporgnm", rs.TOP_ORG_NM || rs.toporgnm)
-                alert(rs.AUTOKEY_APP+"==="+rs.autokey_app)
                 hush.http.setCookie("autokey_web", rs.AUTOKEY_WEB || rs.autokey_web, true) //persist cookie
                 hush.http.setCookie("autokey_app", rs.AUTOKEY_APP || rs.autokey_app, true) //persist cookie
             }, //위 아래 함수는 verifyUser() in common.js와 앱의 UserInfo 클래스내 항목과 같아야 함
