@@ -34,7 +34,7 @@ router.post('/', async function(req, res) {
 			userid = uid
 		}		
 		sql =  "SELECT USER_ID, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, NICK_NM, JOB, AB_CD, AB_NM, NOTI_OFF, "
-		sql += "       BODY_OFF, SENDER_OFF, POPUP_OFF, TM_FR, TM_TO, AUTOKEY_APP "
+		sql += "       BODY_OFF, SENDER_OFF, TM_FR, TM_TO, AUTOKEY_APP "
 		sql += "  FROM Z_USER_TBL "
 		sql += " WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [userid])
