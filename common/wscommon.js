@@ -120,16 +120,16 @@ module.exports = (function() {
 				}
 				res.json(rs)
 			},
-			deviceFrom : (req) => {
-				const userAgent = req.headers['user-agent'] //String
-				if (userAgent.includes('Dalvik') || userAgent.includes('Android')) {
-					return 'aos'
-				} else if (userAgent.includes('notyettested') && userAgent.includes('notyettested')) {
-					return 'ios'
-				} else {
-					return 'web'
-				}
-			},
+			// deviceFrom : (req) => { //사용금지
+			// 	const userAgent = req.headers['user-agent'] //String
+			// 	if (userAgent.includes('Dalvik') || userAgent.includes('Android')) {
+			// 		return 'aos'
+			// 	} else if (userAgent.includes('notyettested') && userAgent.includes('notyettested')) {
+			// 		return 'ios'
+			// 	} else {
+			// 		return 'web'
+			// 	}
+			// },
 			ipChk : (_ipArr, _ip) => {
 				if (!_ipArr || !Array.isArray(_ipArr)) return false
 				if (_ipArr[0] == 'all') {

@@ -132,13 +132,14 @@
                     nm : _nm, orgcd : _orgcd, orgnm : _orgnm, toporgcd : _toporgcd, toporgnm : _toporgnm 
                 }
             },
-            verifyUser : async (verbose) => { //index.html 제외한 나머지에서 사용됨
+            verifyUser : async (verbose) => { //index.html 제외한 나머지에서 사용됨 (웹 또는 앱(웹뷰)에도 사용됨)
                 let rs
                 const _token = hush.http.getCookie("token")  
                 if (_token) {
                     const autokey_web = hush.http.getCookie("autokey_web")
                     const autokey_app = hush.http.getCookie("autokey_app")
-                    rs = await hush.http.ajax("/auth/login", { autokey_web : autokey_web, autokey_app : autokey_app })
+                    const kind = (hush.webview.and || hush.webview.ios) ? "app" : "Web"
+                    rs = await hush.http.ajax("/auth/login", { autokey_web : autokey_web, autokey_app : autokey_app, kind : kind })
                     if (rs.code != hush.cons.CODE_OK) {
                         if (verbose) {
                             await hush.msg.alert(rs.msg + "<br>로그인이 필요합니다.")

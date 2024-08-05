@@ -14,13 +14,11 @@ router.post('/', async function(req, res) {
 	let conn, sql, data, len, userid, webAuthenticated
 	try { 
 		const rs = ws.http.resInit()
-		const { uid, pwd, autologin, autokey_web, autokey_app } = req.body //autologin은 앱에서만 사용 (웹은 자동로그인이 아닌 token을 통한 인증체크임)
+		const { uid, pwd, autologin, autokey_web, autokey_app, kind } = req.body //autologin은 앱에서만 사용 (웹은 자동로그인이 아닌 token을 통한 인증체크임)
 		conn = await wsmysql.getConnFromPool(global.pool)
-		const device = ws.http.deviceFrom(req) //console.log(uid, pwd, autologin, device)
-		console.log(uid, autologin, autokey_web, autokey_app, device)
-		const userAgent = req.headers['user-agent']
-		console.log(userAgent)
-		if (device == 'web') { //웹에서는 맨 처음 로그인시 uid,pwd가 넘어 오거나 이미 로그인 상태에서 쿠키(token,userid)가 넘어와 체크하면 됨
+		//const device = ws.http.deviceFrom(req) //console.log(uid, pwd, autologin, device)
+		console.log(uid, autologin, autokey_web, autokey_app, kind)
+		if (kind == 'web') { //웹에서는 맨 처음 로그인시 uid,pwd가 넘어 오거나 이미 로그인 상태에서 쿠키(token,userid)가 넘어와 체크하면 됨
 			if (!uid) {
 				const objToken = await ws.jwt.chkToken(req, res, conn) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
 				userid = objToken.userid
@@ -71,7 +69,7 @@ router.post('/', async function(req, res) {
 				}
 			}
 		} else {
-			if (device == 'web') {
+			if (kind == 'web') {
 				sql = "UPDATE Z_USER_TBL SET AUTOKEY_WEB = '" + autokey_web + "' WHERE USER_ID = ? "					
 			} else {
 				sql = "UPDATE Z_USER_TBL SET AUTOKEY_APP = '" + autokey_app + "' WHERE USER_ID = ? "		
@@ -81,7 +79,7 @@ router.post('/', async function(req, res) {
 			data[0].AUTOKEY_APP = autokey_app //순전히 앱에서 코딩이 불편해서 처리한 것임
 		}
 		Object.assign(rs, data[0])
-		if (ws.http.deviceFrom(req) == 'web') delete rs['PWD'] //웹에서는 브라우저에서 비번저장하지 않음 (암호화된 비번도 내리지도 말기)
+		if (kind == 'web') delete rs['PWD'] //웹에서는 브라우저에서 비번저장하지 않음 (암호화된 비번도 내리지도 말기)
 		//여기는 모두 세션 쿠키로 내림. 아래 쿠키설정은 verifyUser() in common.js의 쿠키가져오기와 일치해야 함 
 		//userid는 여기가 아닌 (아이디저장 옵션때문에 session/persist 여부를) login.html에서 판단 : 여기서도 설정하면 브라우저에서와 충돌 (더 먼저 수행될 수 있어 문제)
 		//ws.http.resCookie(res, "usernm", rs.USER_NM); ws.http.resCookie(res, "orgcd", rs.ORG_CD); ws.http.resCookie(res, "orgnm", rs.ORG_NM)
