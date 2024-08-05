@@ -122,7 +122,7 @@ module.exports = (function() {
 			},
 			deviceFrom : (req) => {
 				const userAgent = req.headers['user-agent'] //String
-				if (userAgent.includes('Dalvik')) { //&& userAgent.includes('Android')) {
+				if (userAgent.includes('Dalvik') || userAgent.includes('Android')) {
 					return 'aos'
 				} else if (userAgent.includes('notyettested') && userAgent.includes('notyettested')) {
 					return 'ios'
