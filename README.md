@@ -278,7 +278,31 @@ Here are some ideas to get you started:
      (Worker를 이용하면 최소주기가 15분이므로 Term이 길고 FCM을 적용하려면 효과 대비 노력이 많이 소요)<br/>
    - 네트워크가 끊어진 경우는 ChatService의 데몬이 돌면서 상태를 체크해 다시 연결될 때 그동안 도착한 톡이<br/>
      있으면 바로 알려 줍니다.<br/>
-      
+
+
+   ### 인증 토큰 관리
+
+   * Sendjay에서는 인증을 세션이 아닌 토큰(JWT)으로 관리하고 있습니다. 특히, 기업 사이트는 각각의 보안정책을<br/>
+     기반으로 운영되고 있을 것이므로 Sendjay에서 굳이 2차인증까지 구현하지는 않았습니다.<br/>
+   
+   * 일반적으로 Restful 사이트에서는 인증 토큰의 만기를 적당히 (예: 4시간) 설정할텐데<br/>
+      - 만기가 지나도록 아이들 상태(서버호출없음)이면 인증만료로 리턴하는데<br/>
+      - 메신저처럼 계속 토큰이 살아 있으려면<br/> 
+        1) 토큰만료일을 길게 주게 될 경우는 노출시 아무래도 보안상 위험한 부분이 있으므로<br/> 
+        2) 만기를 짧게 주는 대신 refresh_token.js을 클라이언트(앱 or 웹)에서 주기적으로 호출해서 
+           갱신된 토큰을 내려 받는 것이 낫다고 판단됩니다.<br/>
+   
+   * refresh_token.js를 호출하는 곳은 아래와 같은데 아래에서 토큰 만기전에 갱신하는 것입니다.<br/>
+     - startFromWebView() in main_common.js (웹뷰 시작시 주기적으로 호출하도록 설정함)<br/>
+     - startMsngr() in main_common.js (웹에서 시작시 주기적으로 호출하도록 설정함)<br/>
+     - inner class Daemon in ChatService.kt (안드로이드 서비스)<br/>
+   
+   * 특히, 앱에서 갱신된 토큰은 아래와 같이 웹뷰와 소켓으로 토큰을 넘겨줘야 합니다.<br/>
+     - 안드로이드 onResume()에서 갱신된 토큰을 웹뷰로 넘겨줍니다.<br/>
+     - socket.io가 재연결할 때도 query 파라미터내 token을 갱신해 서버에 전달합니다. (SocketIO.kt 참조)<br/>
+   
+   * Sendjay에서의 토큰갱신주기(앱/웹 동일설정)가 10분으로 되어 있고 JWT 만기는 1시간으로 설정되어 있습니다.<br/>
+   
    
    ### (웹/모바일) 유지보수 효율의 극대화를 위해 최대한 웹으로 구현
 
@@ -776,6 +800,7 @@ TM_FR VARCHAR(4) NOT NULL DEFAULT '' COMMENT '모바일알림시간(시작)',
 TM_TO VARCHAR(4) NOT NULL DEFAULT '' COMMENT '모바일알림시간(종료)',
 LASTCHKDT CHAR(26) NOT NULL DEFAULT '' COMMENT '최근체크시각',
 UID VARCHAR(30) NOT NULL DEFAULT '' COMMENT '유니크아이디(예:IP)',
+AUTOKEY_APP VARCHAR(6) NOT NULL DEFAULT '' COMMENT '자동로그인키',
 IS_SYNC CHAR(1) NOT NULL DEFAULT '' COMMENT '동기화(Y)/수동(나머지)',
 ISUR VARCHAR(20) NOT NULL DEFAULT '' COMMENT '작성자',
 ISUDT CHAR(26) NOT NULL DEFAULT '' COMMENT '작성시각',
