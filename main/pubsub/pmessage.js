@@ -25,12 +25,12 @@ module.exports = async (pattern, channel, message) => {
 						//1) socket connect option인 forceNew를 false로 변경한 후엔 발생하지 않고는 있으나
 						//   sendjay가 소켓 인스턴스 한개만 사용하므로 forceNew는 상관없다고 생각하였는데 안됨
 						//2) 추가로, if userip 비교 넣어서 문제발생 안되도록 함
-					} //ws.sock.warn(null, prevSocket, _logTitle, 'telling previous Mobile socket to finish ChatService =>', prevsocketid, obj.userkey)
+					}
 				} else { //PC Web
 					prevSocket.prev = true //prevSocket은 true로 해야 disconnect시 sock_ev_show_off emit하지 않음
 					prevSocket.disconnect() //redis 데이터 처리(multiDelForUserkeySocket())는 disconnect.js에서 담당
-				} //ws.sock.warn(null, prevSocket, _logTitle, 'telling previous Web socket to disconnect =>', prevsocketid, obj.userkey)
-			} else { //ws.sock.warn(null, null, _logTitle, 'no socket in this server =>', prevsocketid, obj.userkey)
+				}
+			} else {
 				await ws.redis.multiDelGarbageForUserkeySocket(obj.prevkey, true) //소켓정보 없으므로 가비지로 처리 (every socket server)
 			}
 		} else if (_chan == 'sendto_myother_socket') { //from read_msg.js, delete_msg.js

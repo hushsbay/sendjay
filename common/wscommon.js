@@ -204,11 +204,11 @@ module.exports = (function() {
 			},
 			//app.use(), router.use()에서 ws.jwt.verify()로 사용해도 되지만, 래핑된 chkToken()로 체크 : 코딩 약간 수월
 			//클라이언트에 code, msg 전달해야 하는데 app.use(), router.use()보다는 손이 더 갈 수도 있지만 더 유연하게 사용 가능
-			chkToken : async (req, res, conn) => { //const _title = 'chkToken'
+			chkToken : async (req, res, conn) => {
 				let { token, userid, orgcd, toporgcd } = req.cookies
-				if (!token || !userid) {
+				if (!token || !userid) { //organ의 token은 외부 인터페이스를 통해 post로 호출될 수 있음
 					userid = req.body.userid
-					token = req.body.token //organ의 token은 외부 인터페이스를 통해 post로 호출될 수 있음					
+					token = req.body.token
 				}				
 				const tokenInfo = { userid : userid, token : token, orgcd : orgcd, toporgcd : toporgcd } //login.html을 제외하고 웹 또는 앱에서 항상 넘어오는 쿠키
 				if (req && req.clientIp) tokenInfo.ip = req.clientIp

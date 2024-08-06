@@ -78,9 +78,6 @@ const procMenuTop = async (_mode, _mode_people) => {
             $("#fr_chat").hide()
             $("#fr_setting").css("display", "flex")
             $(".setting").show()
-            //const rs = await hush.auth.verifyUser()
-            //if (!rs) return
-            debugger
             const rs = await hush.http.ajax("/msngr/get_userinfo")
             if (!hush.util.chkAjaxCode(rs)) return
             procSetting("load", rs, true)
@@ -778,7 +775,6 @@ const procSettingOnLoad = (rs) => {
     hush.http.setCookie("notioff", rs.NOTI_OFF)
     hush.http.setCookie("bodyoff", rs.BODY_OFF)
     hush.http.setCookie("senderoff", rs.SENDER_OFF)
-    //hush.http.setCookie("popupoff", rs.POPUP_OFF) //NotiCenter.kt의 $$7 참조 (현재 미사용이나 그대로 두고 향후 대비)
     g_setting.fr = (rs.TM_FR) ? rs.TM_FR : ""
     g_setting.to = (rs.TM_TO) ? rs.TM_TO : ""
 }
@@ -955,8 +951,6 @@ var funcSockEv = { //needs to be public
             getRoomInfo(data.roomid)
         } else if (data.kind == "userinfo") { //broadcast inside namespace
             if (data.userid == g_userid && data.userkey != g_userkey) {
-                //const rs = await hush.auth.verifyUser()
-                //if (!rs) return
                 const rs = await hush.http.ajax("/msngr/get_userinfo")
                 if (!hush.util.chkAjaxCode(rs)) return
                 procSetting("load", rs)

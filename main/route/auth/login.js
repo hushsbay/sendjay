@@ -16,8 +16,6 @@ router.post('/', async function(req, res) {
 		const rs = ws.http.resInit()
 		const { uid, pwd, autologin, autokey_app, kind } = req.body //autologin은 앱에서만 사용 (웹은 자동로그인이 아닌 token을 통한 인증체크임)
 		conn = await wsmysql.getConnFromPool(global.pool)
-		//const device = ws.http.deviceFrom(req) //console.log(uid, pwd, autologin, device)
-		console.log(uid, autologin, autokey_app, kind)
 		if (kind == 'web') { //웹에서는 맨 처음 로그인시 uid,pwd가 넘어 오거나 이미 로그인 상태에서 쿠키(token,userid)가 넘어와 체크하면 됨
 			if (!uid) {
 				const objToken = await ws.jwt.chkToken(req, res, conn) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
@@ -62,21 +60,17 @@ router.post('/', async function(req, res) {
 					ws.http.resWarn(res, '(자동로그인 해제) 수동로그인이 필요합니다.')
 					return
 				}
-			// } else {
-			// 	if (autokey_web != data[0].AUTOKEY_WEB) {
-			// 		ws.http.resWarn(res, '(인증토큰 해제) 수동로그인이 필요합니다.')
-			// 		return
-			// 	}
+			} else {
+				//AUTOKEY_WEB은 관리안함
 			}
 		} else {
 			if (kind == 'web') {
-			//	sql = "UPDATE Z_USER_TBL SET AUTOKEY_WEB = '" + autokey_web + "' WHERE USER_ID = ? "					
+				//AUTOKEY_WEB은 관리안함
 			} else {
 				sql = "UPDATE Z_USER_TBL SET AUTOKEY_APP = '" + autokey_app + "' WHERE USER_ID = ? "		
 			}
 			await wsmysql.query(conn, sql, [userid])
-			//data[0].AUTOKEY_WEB = autokey_web //순전히 앱에서 코딩이 불편해서 처리한 것임
-			data[0].AUTOKEY_APP = autokey_app //순전히 앱에서 코딩이 불편해서 처리한 것임
+			data[0].AUTOKEY_APP = autokey_app //순전히 앱에서 코딩이 불편해서 처리한 것임 //AUTOKEY_WEB은 관리안함
 		}
 		Object.assign(rs, data[0])
 		if (kind == 'web') delete rs['PWD'] //웹에서는 브라우저에서 비번저장하지 않음 (암호화된 비번도 내리지도 말기)

@@ -325,7 +325,9 @@
                             hush.util.showEx(ex)
                         }
                     })
-                    $("#btn_autokey_app").on("click", function() {
+                    $("#btn_autokey_app").on("click", async function() {
+                        const ret = await hush.msg.confirm("모바일기기에 대해 자동로그인이 해제됩니다. 계속할까요?")
+                        if (!ret) return
                         const rq = { autokey_app : hush.util.getRnd() }
                         hush.sock.send(hush.socket, hush.cons.sock_ev_stop_mobile, rq, "parent")
                     })
