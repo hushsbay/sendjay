@@ -8,7 +8,7 @@ module.exports = async function(socket, param) {
 	let conn, sql, data, len
 	try { 
 		const autokey_app = param.data.autokey_app
-		const userid = socket.userid //param.data.userid
+		const userid = socket.userid
 		conn = await wsmysql.getConnFromPool(global.pool)
 		if (socket.userkey.startsWith(ws.cons.w_key)) { //웹 -> 서버 -> 앱 (분실된 디바이스의 기존 연결된 소켓) 
 			sql = "UPDATE Z_USER_TBL SET AUTOKEY_APP = ? WHERE USER_ID = ? "
