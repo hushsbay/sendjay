@@ -2075,7 +2075,7 @@
             }
 
             ////////////////////////////////////////////////////////////////////////mobile webview
-            const startFromWebView = (from, obj, rs) => {
+            const startFromWebView = (from, obj, rs, startFromResume) => {
                 try {
                     if (!hush.http.chkOnline()) return
                     hush.auth.setCookieForUser(obj, true)
@@ -2085,6 +2085,11 @@
                     g_usernm = hush.user.nm
                     g_orgcd = hush.user.orgcd
                     g_role = hush.user.role
+                    if (localStorage.msgidCopied) { //if (rs && rs.msgidCopied) { //$$66 in MainActivity.kt 참조
+                        $("#fr_tip").hide()
+                        $("#fr_sendcopy").css("display", "flex")
+                    }
+                    if (startFromResume) return //예) 안드로이드 onResume(그것도 onCreate 다음이 아닌 평소대의 onResume)인 경우는 갱신된 토큰만 받고 멈추면 됨
                     if (g_type == "newFromMain") {
                         if (hush.webview.ios) { 
                         } else if (hush.webview.and) { 
@@ -2099,18 +2104,18 @@
                     } else if (g_type == "open") {
                         openRoomWithMobile(g_type)
                     }
-                    if (localStorage.msgidCopied) { //if (rs && rs.msgidCopied) { //$$66 in MainActivity.kt 참조
-                        $("#fr_tip").hide()
-                        $("#fr_sendcopy").css("display", "flex")
-                    }
                     procScrollEvent()
                     callPeriodic() //chkTyping()
-                    setTimeout(function() {
-                        AndroidRoom.doneLoad()
-                    }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                    //setTimeout(function() {
+                    //    AndroidRoom.doneLoad()
+                    //}, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }
+            }
+
+            const resumeWebView = (from, obj, rs) => {
+                startFromWebView(from, obj, rs, true)
             }
 
             const getFromWebViewSocket = (from, json) => {
