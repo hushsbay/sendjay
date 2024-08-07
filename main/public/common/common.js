@@ -273,7 +273,7 @@
                     async : true,
                     type : (method) ? method : "post",
                     timeout : hush.cons.restful_timeout,
-                    success : function(rs) { //if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
+                    success : function(rs) {
                         if (callback) callback(rs)
                     },
                     error : function(xhr, status, error) {
@@ -310,7 +310,7 @@
                     async : true,
                     type : (method) ? method : "post",
                     timeout : hush.cons.restful_timeout,
-                    success : function(rs) { //if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
+                    success : function(rs) {
                         resolve(rs)
                     },
                     error : function(xhr, status, error) {
@@ -331,7 +331,7 @@
                     cache : false,
                     type : "POST",
                     timeout : hush.cons.restful_timeout,
-                    success : function(rs) { //if (rs.token) hush.http.refreshToken(rs.token) //모바일앱 등 고려해서 편의상 쿠키로 처리하지 않음
+                    success : function(rs) {
                         if (callback) callback(rs)
                     },
                     error : function(xhr, status, error) { //네트워크 끊어지고 타임아웃 걸리는 것도 여기로 들어옴

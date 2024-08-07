@@ -1162,7 +1162,7 @@ const refreshToken = async () => {
             console.log("refreshToken Error : " + ex.message) //no alert
         }
     }
-    setTimeout(() => refreshToken(), 600000) //10분 (토큰 갱신 주기 = 웹과 동일하게 잡음)
+    setTimeout(() => refreshToken(), 10000) //600000) //10분 (토큰 갱신 주기 = 웹과 동일하게 잡음)
 }
 
 ////////////////////////////////////////////////////////////////////////mobile webview
