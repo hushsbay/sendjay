@@ -1084,7 +1084,7 @@ const startMsngr = async (launch, winid) => { //웹 전용
                             procSettingOnLoad(rs) //rsRedis 아님
                         }
                         chkRoomFocus()
-                        refreshToken()
+                        hush.auth.refreshToken()
                     }
                 } else {
                     worker.terminate()
@@ -1155,19 +1155,6 @@ function toggleDisconnIcon(show) { //hush.msg.toast("disconnected", false, true)
     }
 }
 
-const refreshToken = async () => { //모바일에서는 디바이스가 대기모드 등으로 들어갈 때 http call이 멈추게 됨을 유의
-    if (hush.http.chkOnline("none")) {
-        try {
-            const rs = await hush.http.ajax("/auth/refresh_token", {}, true)
-            if (rs.token) hush.http.setCookie("token", rs.token)
-        } catch (ex) {
-            console.log("refreshToken Error : " + ex.message) //no alert
-            return //오류나면 멈추는 게 맞음
-        }
-    }
-    setTimeout(() => refreshToken(), 10000) //600000) //10분 (토큰 갱신 주기 = 웹과 동일하게 잡음)
-}
-
 ////////////////////////////////////////////////////////////////////////mobile webview
 const startFromWebView = (from, obj, rs, startFromResume) => {
     try { //alert(navigator.userAgent) - 안드로이드 웹뷰인데도 Dalvik이라고 나오지는 않음
@@ -1184,7 +1171,7 @@ const startFromWebView = (from, obj, rs, startFromResume) => {
                 AndroidMain.doneLoad()
             }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작            
         }
-        refreshToken()
+        hush.auth.refreshToken()
     } catch (ex) {
         hush.util.showEx(ex)
     }

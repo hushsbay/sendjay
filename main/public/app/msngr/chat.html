@@ -2105,7 +2105,8 @@
                         openRoomWithMobile(g_type)
                     }
                     procScrollEvent()
-                    callPeriodic() //chkTyping()
+                    callPeriodic()
+//                    hush.auth.refreshToken()
                     //setTimeout(function() {
                     //    AndroidRoom.doneLoad()
                     //}, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
@@ -2199,7 +2200,7 @@
                             hush.sock.send(g_socket, hush.cons.sock_ev_open_room, rq, g_roomid)
                         }
                         procScrollEvent()
-                        callPeriodic() //chkTyping()
+                        callPeriodic()
                     }
                     if (localStorage[g_roomid]) g_in_chat.val(localStorage[g_roomid])
                     hush.webview.ready = true
