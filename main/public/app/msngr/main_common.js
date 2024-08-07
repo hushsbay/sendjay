@@ -1189,6 +1189,7 @@ const startFromWebView = (from, obj, rs, startFromResume) => {
 
 const resumeWebView = (from, obj, rs) => {
     startFromWebView(from, obj, rs, true)
+    setTimeout(function() { hush.msg.toast("resumeWebView")})
 }
 
 const getFromWebViewSocket = (from, json) => { //MainActivity.kt의 procAfterOpenMain() 설명 참조
