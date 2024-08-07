@@ -29,12 +29,14 @@ router.use(function(req, res, next) {
 router.post('/', async function(req, res) {
 	try {
 		const rs = ws.http.resInit()
+		console.log(ws.util.getCurDateTimeStr(true), 'refresh_token')
 		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
 		const userid = objToken.userid
 		if (!userid) {
 			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
 			return
 		}
+		console.log(ws.util.getCurDateTimeStr(true), 'refresh_token', userid)
 		ws.http.resJson(res, rs, userid) //세번째 인자(userid) 있으면 token 갱신
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
