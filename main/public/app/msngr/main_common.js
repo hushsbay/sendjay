@@ -1181,7 +1181,7 @@ const startFromWebView = (from, obj, rs, startFromResume) => {
                 AndroidMain.doneLoad()
             }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작            
         }
-//        refreshToken()
+        refreshToken()
     } catch (ex) {
         hush.util.showEx(ex)
     }
