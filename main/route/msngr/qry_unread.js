@@ -16,7 +16,6 @@ router.post('/', async function(req, res) {
 		const rs = ws.http.resInit()
 		let dateFr = ws.util.setDateAdd(new Date(), ws.cons.max_days_to_fetch) //예) 1년전(-365)으로 설정
 		const { roomid, msgid, type } = req.body
-		console.log(roomid, msgid, type)
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
 		const userid = objToken.userid
