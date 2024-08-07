@@ -858,7 +858,9 @@ const getRoomInfo = (roomid) => {
     if ($("#div_" + roomid).length > 0) getPortalList({ type: "row", roomid : roomid, replace: true })
 }
 
-const chkRoomFocus = () => { //웹에서만 호출. 앱에서의 채팅방이 현재 포커싱되어 있는지 파악해 웹에서 노티를 표시할지 여부를 결정하기 위함
+const chkRoomFocus = () => { 
+    //웹에서만 호출. 앱에서의 채팅방이 현재 포커싱되어 있는지 파악해 웹에서 노티를 표시할지 여부를 결정하기 위함
+    //웹에서만 호출하므로 앱(웹뷰)에서 호출시 디바이스가 대기모드 등으로 들어갈 때 http call이 멈추는 일이 발생하지 않음
     if (hush.http.chkOnline("none")) hush.sock.send(hush.socket, hush.cons.sock_ev_chk_roomfocus, { })
     setTimeout(() => chkRoomFocus(), 3000) //해당 간격 단위가 있으므로 약간의 오차가 있을 수 있음
 }
@@ -1153,7 +1155,7 @@ function toggleDisconnIcon(show) { //hush.msg.toast("disconnected", false, true)
     }
 }
 
-const refreshToken = async () => {
+const refreshToken = async () => { //모바일에서는 디바이스가 대기모드 등으로 들어갈 때 http call이 멈추게 됨을 유의
     if (hush.http.chkOnline("none")) {
         try {
             const rs = await hush.http.ajax("/auth/refresh_token", {}, true)
