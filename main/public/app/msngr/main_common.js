@@ -1162,6 +1162,7 @@ const refreshToken = async () => { //모바일에서는 디바이스가 대기�
             if (rs.token) hush.http.setCookie("token", rs.token)
         } catch (ex) {
             console.log("refreshToken Error : " + ex.message) //no alert
+            return //오류나면 멈추는 게 맞음
         }
     }
     setTimeout(() => refreshToken(), 10000) //600000) //10분 (토큰 갱신 주기 = 웹과 동일하게 잡음)
@@ -1191,7 +1192,6 @@ const startFromWebView = (from, obj, rs, startFromResume) => {
 
 const resumeWebView = (from, obj, rs) => {
     startFromWebView(from, obj, rs, true)
-    setTimeout(function() { hush.msg.toast("resumeWebView")})
 }
 
 const getFromWebViewSocket = (from, json) => { //MainActivity.kt의 procAfterOpenMain() 설명 참조

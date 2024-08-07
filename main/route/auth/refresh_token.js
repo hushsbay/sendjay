@@ -20,6 +20,7 @@ const router = express.Router()
 //2) socket.io가 재연결할 때도 query 파라미터내 token을 갱신하지 않으면 old token이 그대로 전송되므로 이 경우도 refresh해야 함 (SocketIO.kt 참조)
 
 //결론적으로, jwt 만기는 토큰 갱신 주기(앱/웹 동일하게 잡음)가 10분으로 되어 있으므로 적어도 1시간 정도 이상으로 설정하는 것이 좋아 보임
+//정상적인 상황이면 주기적으로 갱신하므로 토큰 만기가 뜨면 안되는 것임
 
 router.use(function(req, res, next) {
 	req.title = 'refresh_token'
