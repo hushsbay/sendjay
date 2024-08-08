@@ -18,7 +18,10 @@ module.exports = async function(socket, param) {
 		sql += "  AND A.ROOMID = ? AND B.USERID = ? "
 		data = await wsmysql.query(conn, sql, [roomid, userid])
 		if (data.length == 0) throw new Error(ws.cons.MSG_NO_DATA)
-		param.data = data[0] 
+		//다른 소켓통신과 응답이 다르게 route/get_roominfo와 동일하게 넘어가야 함
+		const rs = ws.http.resInit()
+		rs.list = data
+		param.data = rs
 		socket.emit(ws.cons.sock_ev_common, param)
 	} catch (ex) {
 		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex)
