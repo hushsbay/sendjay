@@ -68,8 +68,8 @@ module.exports = (function() {
 			sock_ev_set_env : 'set_env',
 			sock_ev_chk_typing : 'chk_typing',
 			sock_ev_chk_roomfocus : 'chk_roomfocus',
-			sock_ev_stop_mobile : 'stop_mobile',
-			sock_ev_refresh_token : 'refresh_token', //socket으로는 모바일만 사용 (웹/웹뷰에서는 rest로 사용)
+			sock_ev_stop_mobile : 'stop_mobile',	
+			sock_ev_get_roominfo : 'get_roominfo', //socket으로는 모바일만 사용 (웹/웹뷰에서는 rest로 사용)		
 			max_diff_sec_worker : 5 * 2, //SEC in worker.js * 2		
 			max_days_to_fetch : -365, //For sql where : 조회 및 worker.js에서 함께 사용 (오래된 데이터 물리적인 삭제 아닌 논리적 삭제만 적용함. 더 상세처리는 각자 알아서 정책 만들어 적용하기)
 			max_check_same_members : 50, //Consider up to 50 and no more. max 1500 bytes for members field in z_roommem_tbl. userid(20) + alpha = 21 * 50 = 1050 bytes
