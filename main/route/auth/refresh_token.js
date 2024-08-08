@@ -32,7 +32,7 @@ router.post('/', async function(req, res) {
 		const rs = ws.http.resInit()
 		const objToken = await ws.jwt.chkToken(req, res) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
 		const userid = objToken.userid
-		console.log(ws.util.getCurDateTimeStr(true), 'refresh_token', userid)
+		console.log(ws.util.getCurDateTimeStr(true), 'refresh_token========')
 		if (!userid) {
 			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
 			return
