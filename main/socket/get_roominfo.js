@@ -21,6 +21,7 @@ module.exports = async function(socket, param) {
 		//다른 소켓통신과 응답이 다르게 route/get_roominfo와 동일하게 넘어가야 함
 		const rs = ws.http.resInit()
 		rs.list = data
+		rs.roomid = roomid
 		param.data = rs
 		socket.emit(ws.cons.sock_ev_common, param)
 	} catch (ex) {
