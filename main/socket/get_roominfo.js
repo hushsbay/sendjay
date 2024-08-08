@@ -3,6 +3,12 @@ const nodeConfig = require(config.app.nodeConfig)
 const ws = require(nodeConfig.app.ws)
 const wsmysql = require(nodeConfig.app.wsmysql)
 
+//get_roominfo.js는 rest통신을 위한 route/msngr 폴더에도 있는데 맨 처음 모바일 네이티브앱에서도 rest로 호출하다가
+//디바이스가 대기모드나 슬립모드에 들어가면 jwt 갱신을 주기적으로 하는 것이 block되므로 토큰이 만료되는 상황이 와서
+//모바일 네이티브앱에서는 /msngr/qry_unread는 (연결시 호출하는데 연결할 때 토큰이 새로 생성되므로) 문제가 없고
+//나머지는 rest로 호출하는 것을 억제하고자 함 (그래서, 기존 get_roominfo.js를 socket 통신으로도 만들어 아래와 같이 사용)
+//결론적으로, jwt 갱신을 위한 모바일 네이티브앱에서 호출은 없음. 자세한 내용은 route/auth/refresh_token.js에 설명되어 있음
+
 module.exports = async function(socket, param) {
 	const _logTitle = param.ev
 	let conn, sql, data, len
