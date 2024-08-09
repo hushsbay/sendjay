@@ -239,10 +239,10 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             _html += "          <div id=first_" + _userid + " style='flex-grow:1;display:flex;align-items:center;overflow:hidden;margin:3px 0px 0px 0px'>"
             _html += "              <span id=w_" + w_userkey + " class='state coStateOff'>W</span>"
             _html += "              <span id=m_" + m_userkey + " class='state coStateOff' style='margin-left:3px'>M</span>"
-            _html += "              <span id=nm_" + _userid + " class='coDotDot coText' style='min-width:60px;max-width:120px;color:#005192;font-weight:bold;margin-left:5px'>" + _nm + "</span>"
+            _html += "              <span id=nm_" + _userid + " title='" + _nm + "' class='coDotDot coText' style='min-width:60px;max-width:120px;color:#005192;font-weight:bold;margin-left:5px'>" + _nm + "</span>"
             _html += "              <span id=abcd_" + _userid + " class='coStateOut coText' style='" + disp_abcd + "margin-left:10px'>" + _abcd + "</span>"
             // _html += "              <span id=abnm_" + _userid + " class='coDotDot coText' style='" + disp_abnm + "margin-left:5px'>" + _abnm + "</span>"
-            _html += "              <span id=nick_" + _userid + " class='coDotDot coText' style='" + disp_nick + "margin-left:10px'>[" + _nicknm + "]</span>"
+            _html += "              <span id=nick_" + _userid + " class='coDotDot coText' style='" + disp_nick + "margin-left:10px'>" + _nicknm + "</span>"
             _html += "         </div>"
             _html += "          <div id=second_" + _userid + " style='" + disp_second + ";align-items:center;overflow:hidden;margin:-5px 0px 0px 0px'>"
             _html += "              <span id=team_" + _userid + " class='coDotDot coText' style='" + disp_org + "'>" + _org + "</span>"
@@ -262,7 +262,9 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             $("#mem_" + _userid).off("click").on("click", async function(e) {
                 if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 event가 먹히도록 함
                 hush.util.animBgColor($(this))
-                await hush.msg.alert("이름 : " + _nm + "<br><br>전화 : <a href=tel:'" + _tel + "'>" + _tel + "</a><br>부서 : " + _org + "<br>직무 : " + _job + "<br><br>" + _abcd + " " + _abnm, null, "Info")
+                let _str = "이름 : " + _nm + "<br>부서 : " + _org + "<br>직무 : " + _job + "<br>전화 : <a href='tel:" + _tel + "'>" + _tel + "</a>" + _abcd + " " + _abnm
+                _str += "<br>별칭(상태) : " + _nicknm + "<br><br>" + _abcd + " " + _abnm
+                await hush.msg.alert(_str, null, "Info")
             })
         }
         if (_len == 0) return false          
