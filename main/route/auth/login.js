@@ -15,7 +15,6 @@ router.post('/', async function(req, res) {
 	try { 
 		const rs = ws.http.resInit()
 		const { uid, pwd, autologin, autokey_app, kind } = req.body //autologin은 앱에서만 사용 (웹은 자동로그인이 아닌 token을 통한 인증체크임)
-		console.log(ws.util.getCurDateTimeStr(true), 'login@@@@@')
 		conn = await wsmysql.getConnFromPool(global.pool)
 		if (kind == 'web') { //웹에서는 맨 처음 로그인시 uid,pwd가 넘어 오거나 이미 로그인 상태에서 쿠키(token,userid)가 넘어와 체크하면 됨
 			if (!uid) {
