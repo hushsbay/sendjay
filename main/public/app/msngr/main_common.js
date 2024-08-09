@@ -617,7 +617,7 @@ const getPortalList = async (obj) => {
             const _noti_visible = (_noti == "X") ? "" : "display:none;"
             _html += "                  <img id=alarm_" + _roomid + " src='/img/notify_off_com.png' style='" + _noti_visible + "width:18px;height:18px;vertical-align:middle'/>"
             _html += "                  <span id=unread_" + _roomid + " style='display:none;border-radius:8px;background-color:orange;color:white;font-size:10px;padding:2px 6px;margin-left:10px'></span>"
-            _html += "                  <span style='color:darkgray;font-size:10px;margin-left:10px'>" + _memcnt + "</span>"
+            _html += "                  <span class=coText style='color:darkgray;margin-left:10px'>" + _memcnt + "</span>"
             _html += "              </div>"
             _html += "          </div>"
             _html += "          <div style='width:100%;height:50%;display:flex;align-items:flex-start;margin:2px 0px'>"

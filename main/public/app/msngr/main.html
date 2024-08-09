@@ -70,7 +70,7 @@
                             hush.msg.alert("Android/iOS만 지원됩니다.")
                             return
                         }
-                        $("#div_log").show()
+                        //$("#div_log").show()
                         $("#div_noti_mobile").show()
                     } else {
                         $("#btn_collapseall").show()
@@ -326,7 +326,7 @@
                         }
                     })
                     $("#btn_autokey_app").on("click", async function() {
-                        const ret = await hush.msg.confirm("모바일기기에 대해 자동로그인이 해제됩니다. 계속할까요?")
+                        const ret = await hush.msg.confirm("Sendjay앱 자동로그인이 해제됩니다. 계속할까요?")
                         if (!ret) return
                         const rq = { autokey_app : hush.util.getRnd() }
                         hush.sock.send(hush.socket, hush.cons.sock_ev_stop_mobile, rq, "parent")
@@ -450,16 +450,16 @@
                             g_setting_changed = false
                         }
                     })
-                    $("#btn_showlog").on("click", function() {
-                        hush.util.animBgColor($(this))
-                        let num = $("#in_showlog").val()
-                        num = parseInt(num) || 0
-                        AndroidMain.showLog(num)
-                    })
-                    $("#btn_deletelog").on("click", function() {
-                        hush.util.animBgColor($(this))
-                        AndroidMain.deleteLog()
-                    })
+                    // $("#btn_showlog").on("click", function() {
+                    //     hush.util.animBgColor($(this))
+                    //     let num = $("#in_showlog").val()
+                    //     num = parseInt(num) || 0
+                    //     AndroidMain.showLog(num)
+                    // })
+                    // $("#btn_deletelog").on("click", function() {
+                    //     hush.util.animBgColor($(this))
+                    //     AndroidMain.deleteLog()
+                    // })
                     window.onpagehide = (event) => {
                         if (event.persisted) { //브라우저가 캐시하려고 시도하는 중 (bfcache = back/forward cache = 네트워크 타지 않음)
                             alert("웹에서는 새페이지, 앱에서는 nocache로 열기 때문에 여기서는 bfcache 이슈 없어야 함")
@@ -532,7 +532,7 @@
                         <div id=pict_upload class='picBtn coText' style="margin-left:10px">저장</div>
                         <div id=pict_delete class='picBtn coText' style="margin-left:10px">삭제</div>
                         <input id=file_upload type=file accept="image/*" style="display:none">
-                        <div id=btn_autokey_app class='picBtn coText' style="display:none;margin-left:10px">분실처리</div>
+                        <div id=btn_autokey_app class='picBtn coText' style="display:none;margin-left:10px">모바일자동로그인해제</div>
                     </div>
                 </div>
                 <div class=coSettingRow>
@@ -555,18 +555,18 @@
                     <div class='coSettingLabel coText'>알림설정</div>
                     <label for=chk_notioff class=coSettingWrap>
                         <input type=checkbox id=chk_notioff name=chk_notioff class=coSettingChkbox />
-                        <span class='coSettingSpan coText'>끄기</span>
+                        <span class=coText style="margin-left:5px">끄기</span>
                     </label>
                 </div>
                 <div class=coSettingRow>
                     <div class='coSettingLabel coText'>알림표시</div>
                     <label for=chk_bodyoff class=coSettingWrap>
                         <input type=checkbox id=chk_bodyoff name=chk_bodyoff class=coSettingChkbox />
-                        <span class='coSettingSpan coText'>내용숨김</span>
+                        <span class=coText style="margin-left:5px">내용숨김</span>
                     </label>
                     <label for=chk_senderoff class=coSettingWrap style="margin-left:10px">
                         <input type=checkbox id=chk_senderoff name=chk_senderoff class=coSettingChkbox />
-                        <span class=coText style="margin:0 8px">발신숨김</span>
+                        <span class=coText style="margin-left:5px">발신숨김</span>
                     </label>
                 </div>
                 <div class=coSettingRow id=div_noti_mobile style="display:none">
@@ -580,12 +580,13 @@
                     <input id=in_to data-role=none spellcheck=false placeholder='1800' class=coText style="width:60px;text-align:center;border:1px solid darkgray;margin-left:3px" />
                     <span id=spn_clear class=coText style="color:#0082AD;cursor:pointer;margin-left:8px">Clear</span>
                 </div> 
+                <!-- 아래 필드값 0은 당일 로그 
                 <div class=coSettingRow id="div_log" style="display:none">  
-                    <div class='coSettingLabel coText'>모바일로그<br>(테스트용)</div><!--아래 0은 당일 로그-->
+                    <div class='coSettingLabel coText'>모바일로그<br>(테스트용)</div>
                     <input id=in_showlog type=number data-role=none spellcheck=false value="0" style="width:40px;text-align:center;border:1px solid darkgray;margin:0px 5px" />
                     <div id=btn_showlog class='picBtn coText' style="margin-left:5px">ShowLog</div>
                     <div id=btn_deletelog class='picBtn coText' style="margin-left:5px">DelLog</div>
-                </div>
+                </div> -->
             </div>
             <div class=coMenuBottom>
                 <div id=btn_new class="coMenuBtn people chat" style="display:none"><img src="/img/white_chat.png" class=coImgMenu /><span class=coText>새채팅</span></div>
