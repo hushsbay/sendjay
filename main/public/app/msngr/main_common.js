@@ -231,12 +231,12 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             } else {
                 disp_job = (_job) ? "" : "display:none;"
             }
-            const disp_second = (_job == "" && disp_org == "display:none;") ? "flex-grow:0;display:none" : "flex-grow:1;display:flex"
+            const disp_second = (_job == "" && disp_org == "display:none") ? "flex-grow:0;display:none" : "flex-grow:1;display:flex"
             let _html = "<div id=mem_" + _userid + " " + _attr + " style='height:50px;display:flex;align-items:center;cursor:default;border-bottom:1px solid lightgray;overflow:hidden;padding-left:" + paddingLeft + "px'>"
             _html += "      <input type=checkbox id=sel_" + _userid + " class=chkbox_people style='visibility:hidden;margin-left:" + marginLeft + "px' />"
             _html += "      <img id=img_" + _userid + " src='" + hush.cons.img_noperson + "' class=coImg32 style='border-radius:5px;margin-left:8px' />"
             _html += "      <div id=per_" + _userid + " style='flex:1;min-width:0;height:100%;display:flex;flex-direction:column;cursor:pointer;margin-left:10px'>" //flex:1;min-width:0 used instead of width:calc
-            _html += "          <div id=first_" + _userid + " style='flex-grow:1;display:flex;align-items:center;overflow:hidden;margin:3px 0px 0px 0px'>"
+            _html += "          <div id=first_" + _userid + " style='flex-grow:1;display:flex;align-items:center;overflow:hidden;margin:0px 0px 0px 0px'>"
             _html += "              <span id=w_" + w_userkey + " class='state coStateOff'>W</span>"
             _html += "              <span id=m_" + m_userkey + " class='state coStateOff' style='margin-left:3px'>M</span>"
             _html += "              <span id=nm_" + _userid + " title='" + _nm + "' class='coDotDot coText' style='min-width:60px;max-width:120px;color:#005192;font-weight:bold;margin-left:5px'>" + _nm + "</span>"
@@ -244,7 +244,7 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             // _html += "              <span id=abnm_" + _userid + " class='coDotDot coText' style='" + disp_abnm + "margin-left:5px'>" + _abnm + "</span>"
             _html += "              <span id=nick_" + _userid + " class='coDotDot coText' style='margin-left:10px'>" + _nicknm + "</span>"
             _html += "         </div>"
-            _html += "          <div id=second_" + _userid + " style='" + disp_second + ";align-items:center;overflow:hidden;margin:-5px 0px 0px 0px'>"
+            _html += "          <div id=second_" + _userid + " style='" + disp_second + ";align-items:center;overflow:hidden;margin:3px 0px 0px 0px'>"
             _html += "              <span id=team_" + _userid + " class='coDotDot coText' style='" + disp_org + "'>" + _org + "</span>"
             _html += "              <span id=job_" + _userid + " class='coDotDot coText' style='" + disp_job + "color:darkgray'>" + _job + "</span>"
             _html += "         </div>"
