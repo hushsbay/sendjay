@@ -227,7 +227,7 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             const disp_org = (type == "search") ? "" : "display:none" 
             let disp_job
             if (_job && type == "search") {
-                disp_job = "color:#005192;margin-left:10px;"
+                disp_job = "margin-left:10px;"
             } else {
                 disp_job = (_job) ? "" : "display:none;"
             }
