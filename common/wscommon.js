@@ -205,7 +205,7 @@ module.exports = (function() {
 			},
 			//app.use(), router.use()에서 ws.jwt.verify()로 사용해도 되지만, 래핑된 chkToken()로 체크 : 코딩 약간 수월
 			//클라이언트에 code, msg 전달해야 하는데 app.use(), router.use()보다는 손이 더 갈 수도 있지만 더 유연하게 사용 가능
-			chkToken : async (req, res, conn) => {
+			chkToken : async (req, res, conn, notLogging) => {
 				let { token, userid, orgcd, toporgcd } = req.cookies
 				if (!token || !userid) { //organ의 token은 외부 인터페이스를 통해 post로 호출될 수 있음
 					userid = req.body.userid
@@ -216,7 +216,7 @@ module.exports = (function() {
 				const rs = ws.http.resInit()
 				const jwtRet = await ws.jwt.verify(tokenInfo)
 				if (jwtRet.code != ws.cons.CODE_OK) { //실수로 await 빼고 chkToken() 호출할 때 대비해 if절 구성
-					ws.util.loge(req, jwtRet.msg)
+					if (!notLogging) ws.util.loge(req, jwtRet.msg) //refresh_token처럼 클라이언트에서 주기적으로 갱신하는 경우 시간차때문에 만기가 올 수 있으므로 로깅(console.log도 포함)없게 함
 					rs.code = jwtRet.code
 					rs.msg = jwtRet.msg //if (res) ws.http.resWarn(res, rs.msg, false, rs.code, _title)
 					return rs
