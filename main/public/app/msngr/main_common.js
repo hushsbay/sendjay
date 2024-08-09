@@ -231,7 +231,7 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             } else {
                 disp_job = (_job) ? "" : "display:none;"
             }
-            const disp_second = (disp_job == "display:none" && disp_org == "display:none") ? "flex-grow:0;display:none" : "flex-grow:1;display:flex"
+            const disp_second = (_job == "" && disp_org == "display:none") ? "flex-grow:0;display:none" : "flex-grow:1;display:flex"
             let _html = "<div id=mem_" + _userid + " " + _attr + " style='height:50px;display:flex;align-items:center;cursor:default;border-bottom:1px solid lightgray;overflow:hidden;padding-left:" + paddingLeft + "px'>"
             _html += "      <input type=checkbox id=sel_" + _userid + " class=chkbox_people style='visibility:hidden;margin-left:" + marginLeft + "px' />"
             _html += "      <img id=img_" + _userid + " src='" + hush.cons.img_noperson + "' class=coImg32 style='border-radius:5px;margin-left:8px' />"
