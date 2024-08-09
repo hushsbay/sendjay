@@ -566,7 +566,7 @@
                     </label>
                     <label for=chk_senderoff class=coSettingWrap style="margin-left:10px">
                         <input type=checkbox id=chk_senderoff name=chk_senderoff class=coSettingChkbox />
-                        <span class='coSettingSpan coText'>발신숨김</span>
+                        <span class='coSettingSpan'>발신숨김</span>
                     </label>
                 </div>
                 <div class=coSettingRow id=div_noti_mobile style="display:none">
@@ -575,12 +575,13 @@
                 </div>
                 <div class=coSettingRow>
                     <div class='coSettingLabel coText'>알림시간<br>(Mobile)</div>
-                    <input id=in_fr data-role=none spellcheck=false placeholder='0900' class=coText style="width:60px;text-align:center;border:1px solid darkgray;margin-right:3px" /> ~
+                    <input id=in_fr data-role=none spellcheck=false placeholder='0900' class=coText style="width:60px;text-align:center;border:1px solid darkgray;margin-right:3px" />
+                    <span class=coText> ~ </span>
                     <input id=in_to data-role=none spellcheck=false placeholder='1800' class=coText style="width:60px;text-align:center;border:1px solid darkgray;margin-left:3px" />
-                    <span id=spn_clear class='coSettingSpan coText' style="color:#0082AD;cursor:pointer">Clear</span>
+                    <span id=spn_clear class=coText style="color:#0082AD;cursor:pointer;margin-left:8px">Clear</span>
                 </div> 
                 <div class=coSettingRow id="div_log" style="display:none">  
-                    <div class='coSettingLabel coText'>모바일로그<br>(관리자용)</div><!--아래 0은 당일 로그-->
+                    <div class='coSettingLabel coText'>모바일로그<br>(테스트용)</div><!--아래 0은 당일 로그-->
                     <input id=in_showlog type=number data-role=none spellcheck=false value="0" style="width:40px;text-align:center;border:1px solid darkgray;margin:0px 5px" />
                     <div id=btn_showlog class='picBtn coText' style="margin-left:5px">ShowLog</div>
                     <div id=btn_deletelog class='picBtn coText' style="margin-left:5px">DelLog</div>
