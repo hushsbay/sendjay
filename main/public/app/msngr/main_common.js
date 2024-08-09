@@ -216,18 +216,18 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             const _nm = row.USER_NM
             const _tel = row.TEL_NO
             const _job = row.JOB
-            const _org = row.ORG_NM + " / " + row.TOP_ORG_NM
+            const _org = row.ORG_NM + "/" + row.TOP_ORG_NM
             const _abcd = row.AB_CD
             const _abnm = row.AB_NM
             const _nicknm = row.NICK_NM
-            let disp_nick = "display:;", disp_abcd = "display:none;"//, disp_abnm = "display:none;"
+            let disp_abcd = (_abcd) ? "" : "display:none;" //disp_nick = "display:;", //, disp_abnm = "display:none;"
             //if (_nicknm && !_abcd && !_abnm) disp_nick = ""
-            if (_abcd) disp_abcd = ""    
+            //if (_abcd) disp_abcd = ""    
             //if (_abnm && !hush.webview.on) disp_abnm = ""   
-            const disp_org = (type == "search" && !hush.webview.on) ? "" : "display:none" 
+            const disp_org = (type == "search") ? "" : "display:none" 
             let disp_job
             if (_job && type == "search") {
-                disp_job = (hush.webview.on) ? "color:#005192" : "color:#005192;margin-left:10px"
+                disp_job = "color:#005192;margin-left:10px;"
             } else {
                 disp_job = (_job) ? "" : "display:none;"
             }
@@ -242,7 +242,7 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             _html += "              <span id=nm_" + _userid + " title='" + _nm + "' class='coDotDot coText' style='min-width:60px;max-width:120px;color:#005192;font-weight:bold;margin-left:5px'>" + _nm + "</span>"
             _html += "              <span id=abcd_" + _userid + " class='coStateOut coText' style='" + disp_abcd + "margin-left:10px'>" + _abcd + "</span>"
             // _html += "              <span id=abnm_" + _userid + " class='coDotDot coText' style='" + disp_abnm + "margin-left:5px'>" + _abnm + "</span>"
-            _html += "              <span id=nick_" + _userid + " class='coDotDot coText' style='" + disp_nick + "margin-left:10px'>" + _nicknm + "</span>"
+            _html += "              <span id=nick_" + _userid + " class='coDotDot coText' style='margin-left:10px'>" + _nicknm + "</span>"
             _html += "         </div>"
             _html += "          <div id=second_" + _userid + " style='" + disp_second + ";align-items:center;overflow:hidden;margin:-5px 0px 0px 0px'>"
             _html += "              <span id=team_" + _userid + " class='coDotDot coText' style='" + disp_org + "'>" + _org + "</span>"
@@ -262,8 +262,8 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             $("#mem_" + _userid).off("click").on("click", async function(e) {
                 if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 event가 먹히도록 함
                 hush.util.animBgColor($(this))
-                let _str = "이름 : " + _nm + "<br>부서 : " + _org + "<br>직무 : " + _job + "<br>전화 : <a href='tel:" + _tel + "'>" + _tel + "</a>" + _abcd + " " + _abnm
-                _str += "<br>별칭(상태) : " + _nicknm + "<br><br>" + _abcd + " " + _abnm
+                let _str = "이름 : " + _nm + "<br>부서 : " + _org + "<br>직무 : " + _job + "<br>전화 : <a href='tel:" + _tel + "'>" + _tel + "</a>"
+                _str += "<br>" + _nicknm + "<br>" + _abcd + " " + _abnm
                 await hush.msg.alert(_str, null, "Info")
             })
         }
