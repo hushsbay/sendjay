@@ -220,8 +220,8 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             const _abcd = row.AB_CD
             const _abnm = row.AB_NM
             const _nicknm = row.NICK_NM
-            let disp_nick = "display:none;", disp_abcd = "display:none;"//, disp_abnm = "display:none;"
-            if (_nicknm && !_abcd && !_abnm) disp_nick = ""
+            let disp_nick = "display:;", disp_abcd = "display:none;"//, disp_abnm = "display:none;"
+            //if (_nicknm && !_abcd && !_abnm) disp_nick = ""
             if (_abcd) disp_abcd = ""    
             //if (_abnm && !hush.webview.on) disp_abnm = ""   
             const disp_org = (type == "search" && !hush.webview.on) ? "" : "display:none" 
