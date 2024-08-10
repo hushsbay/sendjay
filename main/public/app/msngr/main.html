@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="/plugin/jquery-ui-smoothness-1.12.1.min.css">
         <link rel="stylesheet" href="/common/common.css?001">
         <style> 
-            .mem { display:flex;flex-direction:column;background-color:#fdf5f6;border:1px solid lightgray;overflow:auto;padding-top:4px;margin:4px 4px 0px 4px }
+            .mem { display:flex;flex-direction:column;background-color:#fdf5f6;border:1px solid lightgray;overflow:auto;padding:4px 0px;margin:4px 4px 0px 4px }
             .memNm { height:20px;color:#005192;cursor:pointer;margin-left:3px }
             .memTeam { height:20px;cursor:pointer;margin-left:3px }
             .memSel { background:#b2e2f8 }
@@ -76,6 +76,7 @@
                         $("#btn_collapseall").show()
                         $("#btn_expandall").show()
                         $("#btn_autokey_app").show()
+                        $("#selected_people").css("width", "150px")
                     }
                     hush.webview.ready = true
                     //main.html은 아래 5군데에서 호출됨
