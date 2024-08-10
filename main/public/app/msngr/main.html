@@ -10,6 +10,12 @@
         <link rel="stylesheet" href="/plugin/jquery-ui-smoothness-1.12.1.min.css">
         <link rel="stylesheet" href="/common/common.css?001">
         <style> 
+            @media screen and (max-device-width: 500px) {
+                #selected_people { max-width:100px }
+            }
+            @media screen and (min-device-width: 501px) {
+                #selected_people { max-width:200px }
+            }
             .mem { display:flex;flex-direction:column;background-color:#fdf5f6;border:1px solid lightgray;overflow:auto;padding:4px 0px;margin:4px 4px 0px 4px }
             .memNm { height:20px;color:#005192;cursor:pointer;margin-left:3px }
             .memTeam { height:20px;cursor:pointer;margin-left:3px }
@@ -75,8 +81,7 @@
                     } else {
                         $("#btn_collapseall").show()
                         $("#btn_expandall").show()
-                        $("#btn_autokey_app").show()
-                        $("#selected_people").css("max-width", "200px")
+                        $("#btn_autokey_app").show()                        
                     }
                     hush.webview.ready = true
                     //main.html은 아래 5군데에서 호출됨
@@ -510,7 +515,7 @@
             </div>
             <div id=fr_people class=coFrList style="display:none">
                 <div id=list_people style="flex-grow:1;background-color:white;border:1px solid darkgray;overflow-y:auto"></div>
-                <div id=selected_people style="display:none;flex-direction:column;min-width:100px;max-width:100px;overflow:hidden;background-color:white;border:1px solid darkgray;border-left:0px;margin-left:auto">
+                <div id=selected_people style="display:none;flex-direction:column;min-width:100px;overflow:hidden;background-color:white;border:1px solid darkgray;border-left:0px;margin-left:auto">
                     <div style="height:24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid darkgray">
                         <div class=coText style="color:red;margin-left:3px">선택 : <span id=selected_people_cnt class=coText>0</span></div>
                         <img id=remove_selected_people src="/img/close.png" style="margin-right:3px" class=coImg16 />
