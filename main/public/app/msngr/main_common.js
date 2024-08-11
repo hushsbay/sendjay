@@ -312,7 +312,6 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
             const orgcd = row.ORG_CD
             const orgnm = row.ORG_NM
             const level = row.LVL
-            if (level == 2) debugger
             const memcnt = (obj.withMember) ? row.MEMCNT : -1 //-1 means no need to download members (when -1, every org node has -1)
             let disp = "", hasChild = "Y", expanded = "", parentid = "", chkDisp = ""
             if (i == _len - 1 || rs.list[i + 1].LVL <= level) hasChild = "N" //if hasChild is "N" then 'expanded' has no effect at all
@@ -402,6 +401,7 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
             const _memDownloaded = _tag.attr("memdownloaded") //Y or ~ => withMember option needed
             hush.util.animBgColor($(this)) //PC 브라우저에서는 문제없음. android webview에서는 행전체 effect와 .orgbody의 animcall이 같이 실행되는데 .orgbody가 높이가 더 커서 부자연스러움
             //원래 의도는 webview에서도 animCall만 먹었으면 좋겠는데 webview 자체의 efffect가 그것도 높낮이가 다른 두개의 effect가 보이는 것이 문제임 .orgbody의 height:100%로 해결함
+            debugger
             if (_hasChild == "Y") {
                 const _nextTag = $("#orgrow_" + (_idx + 1))
                 const levelNext = (_nextTag || _nextTag.length > 0) ? parseInt(_nextTag.attr("level")) : -1
