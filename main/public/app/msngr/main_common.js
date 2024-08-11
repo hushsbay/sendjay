@@ -348,7 +348,7 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
             _html += "          <div style='font-size:10px;color:darkgray;margin-left:10px'>" + dispCnt + "</div>"
             _html += "      </div>"
             _html += "      <div style='width:40px;display:flex;align-items:center;justify-content:flex-end;margin-right:8px'>"
-            const dispImg = (hasChild == "Y") ? "" : "style='display:none'"
+            const dispImg = (hasChild == "Y" || memcnt > 0) ? "" : "style='display:none'"
             _html += "          <img id=orgexpcol_" + i + " src='/img/" + expcolImg + ".png' class=coImg32 " + dispImg + " />"
             _html += "      </div>"
             _html += "  </div>"
@@ -435,7 +435,6 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
                     }  
                     if (j > 0) procExpCol(_expanded, _tag, _idx, obj)
                 }
-            debugger
                 if (_memcnt > -1) { //belows are should be processed if _memcnt is 0 (-1 is for withMember option false)
                     for (let i = _idx; i < _len; i++) { //The above is for org node display and below is for member toggle (display or not)
                         const _tag = $("#orgrow_" + i)
