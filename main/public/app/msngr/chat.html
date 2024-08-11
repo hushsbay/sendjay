@@ -182,7 +182,7 @@
                         _html += "   </div>"
                         list.append(_html)
                         if (_abcd) $("#abcd_" + _userid).show()
-                        $("#div" + _userid).off("click").on("click", function() {
+                        $("#div_" + _userid).off("click").on("click", function() {
                             hush.util.animBgColor($(this))
                             let _str = "이름 : " + _nm + "<br>부서 : " + _org + "<br>직무 : " + _job + "<br>전화 : <a href='tel:" + _tel + "'>" + _tel + "</a>"
                             _str += "<br>" + _nicknm + "<br>" + _abcd + " " + _abnm
