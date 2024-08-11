@@ -33,6 +33,23 @@ const procScrollEvent = () => {
     })
 }
 
+const getUsersWithinDisplayArea = () => {
+    const rect = hush.util.getRect("#list_people")
+    const xx = rect.left + 1 //border plus 1
+    const yy = rect.top + 1 //border plus 1
+    const ele = document.elementFromPoint(xx, yy)
+    //아래 수정 필요
+    //위 ele의 bottom 위치 + 1은 새로운 tag이므로 그렇게 해서 맨 아래까지가면 몇개 안되므로 성능의 지장이 없을 것임 (특히, 조직트리)
+    //bottom은 top+height가 아닌게 중간에 걸쳐 있을 수 있을 것임. 그런데 첫째 높이만큼 elementFromPoint하면 무조건 2번째것이 get..
+    for (let i = intId; i < 100; i++) { //100은 max로 설정한 대략의 값
+        const idTag = $("#row_" + i.toString())
+        if (idTag.length == 0 || idTag.position().top >= listHeight) break 
+        const row = g_rs.list[i]
+        if (!row.USER_ID) continue
+        hush.http.getUserPic(row.USER_ID, "img_" + row.USER_ID)
+    }
+}
+
 const procMenuTop = async (_mode, _mode_people) => {
     try {
         if (!hush.http.chkOnline()) return
