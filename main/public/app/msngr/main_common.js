@@ -336,7 +336,7 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
             }
             if (level > 0 && _objUpperLevel[level - 1]) parentid = _objUpperLevel[level - 1]
             const expcolImg = (expanded.includes("=Y")) ? "minus_1" : "plus_1"                    
-            const paddingLeft = level * g_nodeIndent //10 + level * g_nodeIndent
+            const paddingLeft = level * g_nodeIndent
             let _html = "<div id=orgrow_" + i + " class=orgrow orgcd=" + orgcd + " dispstate=" + disp + " haschild=" + hasChild + " level=" + level + expanded + " memcnt=" + memcnt
             _html += "      memdownloaded=N parent='" + parentid + "' z-index=0 "
             _html += "      style='height:50px;display:" + disp + ";align-items:center;cursor:pointer;border-bottom:1px solid lightgray;padding-left:" + paddingLeft + "px'>"
@@ -586,7 +586,9 @@ const getPortalList = async (obj) => {
                 hush.msg.toast(hush.cons.MSG_NO_DATA)
             } else {
                 $("#getmore").html(hush.cons.MSG_NO_MORE_DATA)
-                setTimeout(() => $("#getmore").remove(), 1000)    
+                setTimeout(() => {
+                    if ($("#getmore").length > 0) $("#getmore").remove()
+                }, 1000)    
             }
             portalListBeingQueried = false
             return
@@ -636,6 +638,9 @@ const getPortalList = async (obj) => {
                             _last.css("border-bottom", "1px solid steelblue")
                         }
                     }
+                    setTimeout(() => {
+                        if ($("#getmore").length > 0) $("#getmore").remove()
+                    }, 1000)    
                 }
             } else {
                 if (obj.replace) {
