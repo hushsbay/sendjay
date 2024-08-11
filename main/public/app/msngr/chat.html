@@ -840,6 +840,7 @@
                             const msgid = rs.list[rs.list.length - 1].MSGID
                             procHighlight($("#high_" + msgid))
                             scrollToTarget(0)
+                            procQueryUnread()
                         } else if (rq.dt == FIRST_QUERIED || $("#getmore").length == 0) {
                             scrollToTarget()
                             updateAllUnreads("Y") //procQueryUnread() //바로 위 updateAll~콜백에서 처리됨

@@ -633,7 +633,7 @@ const getPortalList = async (obj) => {
                     const _last = $("#div_" + _roomid)
                     if (_last && _last.length > 0) {
                         if (_last.position().top + _last.height() + 1 >= g_list.height()) { //g_list position should be relative for checking position().top. 1 is border.
-                            _html = "<div id=getmore style='height:50px;display:flex;align-items:center;justify-content:center;background:steelblue;color:white'>processing..</div>"
+                            _html = "<div id=getmore style='height:50px;display:flex;align-items:center;justify-content:center;background:steelblue;color:white'>데이터 가져오는 중..</div>"
                             g_list.append(_html)
                             _last.css("border-bottom", "1px solid steelblue")
                         }
