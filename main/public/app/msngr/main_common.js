@@ -312,6 +312,7 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
             const orgcd = row.ORG_CD
             const orgnm = row.ORG_NM
             const level = row.LVL
+            if (level == 2) debugger
             const memcnt = (obj.withMember) ? row.MEMCNT : -1 //-1 means no need to download members (when -1, every org node has -1)
             let disp = "", hasChild = "Y", expanded = "", parentid = "", chkDisp = ""
             if (i == _len - 1 || rs.list[i + 1].LVL <= level) hasChild = "N" //if hasChild is "N" then 'expanded' has no effect at all
