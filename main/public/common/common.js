@@ -1119,6 +1119,7 @@
             }, 
             getRect : (tagStr) => {
                 const tag = document.querySelector(tagStr)
+                if (!tag) return null 
                 const rect = tag.getBoundingClientRect()
                 return rect
             }
