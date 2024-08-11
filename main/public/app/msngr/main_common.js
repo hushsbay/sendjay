@@ -401,7 +401,6 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
             const _memDownloaded = _tag.attr("memdownloaded") //Y or ~ => withMember option needed
             hush.util.animBgColor($(this)) //PC 브라우저에서는 문제없음. android webview에서는 행전체 effect와 .orgbody의 animcall이 같이 실행되는데 .orgbody가 높이가 더 커서 부자연스러움
             //원래 의도는 webview에서도 animCall만 먹었으면 좋겠는데 webview 자체의 efffect가 그것도 높낮이가 다른 두개의 effect가 보이는 것이 문제임 .orgbody의 height:100%로 해결함
-            debugger
             if (_hasChild == "Y") {
                 const _nextTag = $("#orgrow_" + (_idx + 1))
                 const levelNext = (_nextTag || _nextTag.length > 0) ? parseInt(_nextTag.attr("level")) : -1
@@ -436,6 +435,7 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
                     }  
                     if (j > 0) procExpCol(_expanded, _tag, _idx, obj)
                 }
+            debugger
                 if (_memcnt > -1) { //belows are should be processed if _memcnt is 0 (-1 is for withMember option false)
                     for (let i = _idx; i < _len; i++) { //The above is for org node display and below is for member toggle (display or not)
                         const _tag = $("#orgrow_" + i)
