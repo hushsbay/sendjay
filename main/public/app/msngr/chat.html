@@ -160,9 +160,13 @@
                         const _userid = row.USER_ID
                         const w_userkey = hush.cons.w_key + _userid
                         const m_userkey = hush.cons.m_key + _userid            
-                        const _nm = row.USER_NM //row.JOB ? row.USER_NM + " / " + row.JOB : row.USER_NM
+                        const _nm = row.USER_NM
+                        const _tel = row.TEL_NO
+                        const _job = row.JOB
+                        const _org = row.ORG_NM + "/" + row.TOP_ORG_NM
                         const _abcd = row.AB_CD.toLowerCase()
                         const _abnm = row.AB_NM
+                        const _nicknm = row.NICK_NM
                         let _html = "<div id=div_" + _userid + " class=mem data-nm='" + encodeURIComponent(_nm) + "' data-usernm='" + encodeURIComponent(row.USER_NM) + "' "
                         _html += "                                         data-abcd='" + _abcd + "' data-abnm='" + encodeURIComponent(_abnm) + "' style='cursor:pointer'>"
                         _html += "      <div style='height:18px;display:flex;align-items:center;margin:3px 0 0 3px'>"
@@ -183,12 +187,15 @@
                     $(".mem").off("click").on("click", function() {
                         hush.util.animBgColor($(this))
                         const _userid = this.id.substring(4)
-                        const _abcd = $(this).data("abcd") ? " / " + $(this).data("abcd") : ""
-                        const _abnm = $(this).data("abnm") ? decodeURIComponent($(this).data("abnm")) : ""
-                        const _usernm = decodeURIComponent($(this).data("nm"))
+                        //const _usernm = decodeURIComponent($(this).data("nm"))
+                        //const _abcd = $(this).data("abcd") ? " / " + $(this).data("abcd") : ""
+                        //const _abnm = $(this).data("abnm") ? decodeURIComponent($(this).data("abnm")) : ""
+                        let _str = "이름 : " + _nm + "<br>부서 : " + _org + "<br>직무 : " + _job + "<br>전화 : <a href='tel:" + _tel + "'>" + _tel + "</a>"
+                        _str += "<br>" + _nicknm + "<br>" + _abcd + " " + _abnm
                         let _html = "<div style='display:flex;flex-direction:column;align-items:center'>"
                         _html += "  <img id=img_userid src='/img/noperson.png' style='width:64px;height:64px'>"
-                        _html += "  <span style='margin-top:15px'>" + _usernm + _abcd + "<br>" + _abnm + "</span>"
+                        //_html += "  <span style='margin-top:15px'>" + _usernm + _abcd + "<br>" + _abnm + "</span>"
+                        _html += _str
                         _html += "</div>"
                         hush.msg.dialogMultiButton(_html, { 
                             "채팅보기": function() { 
