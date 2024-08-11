@@ -229,9 +229,7 @@
                     }
                     $("#btn_refresh").on("click", function() { //mobile only
                         hush.util.animBgColor($(this))
-                        //AndroidMain.reload()
-                        const rect = hush.util.getRect("list_people")
-                        debugger
+                        AndroidMain.reload()
                     })
                     $("#btn_logout").on("click", async function() { //mobile only
                         hush.util.animBgColor($(this))
@@ -257,7 +255,9 @@
                     $("#in_search").keyup(function(e) { if (e.keyCode === 13) procSearch() })
                     $("#btn_search").on("click", function() {
                         hush.util.animBgColor($(this))
-                        procSearch() 
+                        //procSearch() 
+                        const rect = hush.util.getRect("list_people")
+                        debugger
                     })
                     $("#btn_close_search").on("click", function() {
                         hush.util.animBgColor($(this))
