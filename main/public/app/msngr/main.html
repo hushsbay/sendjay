@@ -229,7 +229,9 @@
                     }
                     $("#btn_refresh").on("click", function() { //mobile only
                         hush.util.animBgColor($(this))
-                        AndroidMain.reload()
+                        //AndroidMain.reload()
+                        const rect = hush.util.getRect("list_people")
+                        debugger
                     })
                     $("#btn_logout").on("click", async function() { //mobile only
                         hush.util.animBgColor($(this))

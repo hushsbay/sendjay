@@ -1116,6 +1116,11 @@
                 const posColon = agent.indexOf(";", pos)
                 const ver = agent.substr(pos + os.length, posColon - (pos + os.length))
                 return parseInt(ver.trim())
+            }, 
+            getRect : (tagStr) => {
+                const tag = document.querySelector(tagStr)
+                const rect = tag.getBoundingClientRect()
+                return rect
             }
         },
         webview : {
