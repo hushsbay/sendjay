@@ -274,9 +274,9 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
             hush.http.getUserPic(_userid, "img_" + _userid) //$("#per_" + _userid).off("click").on("click", async function(e) {
             $("#mem_" + _userid).off("click").on("click", async function(e) {
                 if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 event가 먹히도록 함
-                hush.util.animBgColor($(this)) //<a hre='tel:~'>은 웹뷰 설정 필요
+                hush.util.animBgColor($(this))
                 let _str = "이름 : " + _nm + "<br>부서 : " + _org + "<br>직무 : " + _job + "<br>전화 : <a href='tel:" + _tel + "'>" + _tel + "</a>"
-                _str += "<br>" + _nicknm + "<br>" + _abcd + " " + _abnm
+                _str += "<br>" + _nicknm + "<br>" + _abcd + " " + _abnm //chat.html에도 있음. <a hre='tel:~'>은 웹뷰 설정 필요
                 await hush.msg.alert(_str, null, "Info")
             })
         }

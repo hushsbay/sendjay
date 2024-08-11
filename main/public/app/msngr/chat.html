@@ -185,11 +185,11 @@
                         $("#div_" + _userid).off("click").on("click", function() {
                             hush.util.animBgColor($(this))
                             let _str = "이름 : " + _nm + "<br>부서 : " + _org + "<br>직무 : " + _job + "<br>전화 : <a href='tel:" + _tel + "'>" + _tel + "</a>"
-                            _str += "<br>" + _nicknm + "<br>" + _abcd + " " + _abnm
+                            _str += "<br>" + _nicknm + "<br>" + _abcd + " " + _abnm //main_common.js에도 있음. <a hre='tel:~'>은 웹뷰 설정 필요
                             let _html = "<div style='display:flex;flex-direction:column;align-items:center'>"
                             _html += "  <img id=img_userid src='/img/noperson.png' style='width:64px;height:64px'>"
                             _html += "  <div style='padding-left:10px'>"
-                            _html += _str
+                            _html += "<br>" + _str
                             _html += "  </div>"
                             _html += "</div>"
                             hush.msg.dialogMultiButton(_html, { 
