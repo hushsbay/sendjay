@@ -349,22 +349,17 @@
 				let yy = rect.top + 1 //border plus 1
 				let ele = document.elementFromPoint(xx, yy)
 				while (ele) {
+					if (yy > rect.height) break
 					const id = ele.id
-					const _outerHeight = $(ele).outerHeight(true)
+					const _outerHeight = $(ele).outerHeight(true)					
 					yy += _outerHeight
 					console.log(id+"========"+yy+"====="+_outerHeight+"===="+rect.height)
-					if (yy > rect.height) break
-					ele = document.elementFromPoint(xx, yy)
-					debugger
+					ele = document.elementFromPoint(xx, yy)					
+					if (!$(ele).hasClass("coRow")) break
+					const idx = parseInt(id.substring(4))
+					const row = g_rs.list[idx]
+					if (row && row.USER_ID) hush.http.getUserPic(row.USER_ID, "img_" + row.USER_ID)
 				}
-				debugger
-				// for (let i = intId; i < 100; i++) {
-				// 	const idTag = $("#row_" + i.toString())
-				// 	if (idTag.length == 0 || idTag.position().top >= listHeight) break 
-				// 	const row = g_rs.list[i]
-				// 	if (!row.USER_ID) continue
-				// 	hush.http.getUserPic(row.USER_ID, "img_" + row.USER_ID)
-				// }
 			}
 
             $.when($.ready).done(async function() {
