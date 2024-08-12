@@ -193,9 +193,6 @@ const procSelect = (_userid) => {
 }
 
 const procSearch = () => {
-    const arr = getUserkeysWithinDisplayArea()
-    debugger
-    return
     if (!hush.http.chkOnline()) return
     const keyword = $("#in_search").val().trim()
     if (keyword.length == 0) {
@@ -292,7 +289,6 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
         })  
         $(".chkbox_people").css("visibility", "visible")
         sendChkAlive(userkeyArr) //모바일의 setupWebViewMain() 관련 : 웹뷰 열리자마자 chk_alive 이벤트는 ChatService.kt에서 소켓연결이 되고 나서 가능하므로 소켓연결을 chk해야 함
-        setTimeout(function() { sendChkAlive(userkeyArr) }, 3000) //(chk_alive말고는 크리티컬한 소켓이벤트가 없어서) 그냥 편법으로 2.5초후에 한번 더 체크하는 정도로 함
         return true
     } catch (ex) {
         hush.util.showEx(ex)
@@ -315,6 +311,14 @@ const sendChkAlive = (userkeyArr) => {
             hush.sock.send(hush.socket, hush.cons.sock_ev_chk_alive, dataObj)
         }
     }
+}
+
+const callPeriodic = () => {
+    if (hush.http.chkOnline("none") && g_mode == BTN_MODE_PEOPLE) {
+        const userkeyArr = getUserkeysWithinDisplayArea()
+        sendChkAlive(userkeyArr)
+    }
+    setTimeout(() => callPeriodic(), 3000)
 }
 
 const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMember : false, expand : 1 }
@@ -1109,6 +1113,7 @@ const startMsngr = async (launch, winid) => { //웹 전용
                             procSettingOnLoad(rs) //rsRedis 아님
                         }
                         chkRoomFocus()
+                        callPeriodic()
                         hush.auth.refreshToken()
                     }
                 } else {
@@ -1196,6 +1201,7 @@ const startFromWebView = (from, obj, rs, startFromResume) => {
                 AndroidMain.doneLoad()
             }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작            
         }
+        callPeriodic()
         hush.auth.refreshToken()
     } catch (ex) {
         hush.util.showEx(ex)

@@ -6,6 +6,7 @@ module.exports = async function(socket, param) {
 	const _logTitle = param.ev
 	try {  //ws.sock.warn(null, socket, _logTitle, JSON.stringify(param))	
 		let userkeySocketArr = [], userkeyArr = []
+		console.log(param.data.userkeys.toString())
 		for (let userkey of param.data.userkeys) { //[userkey1,userkey2..]
 			const arr = await ws.redis.getUserkeySocket(userkey) //redis에 있는 userkey 관련 정보 읽어옴			
 			if (arr.length > 0) userkeySocketArr = userkeySocketArr.concat(arr) //예) $$SW__xxxx;~
