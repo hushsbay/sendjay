@@ -350,8 +350,10 @@
 				let ele = document.elementFromPoint(xx, yy)
 				while (ele) {
 					const id = ele.id
-					console.log(id+"========")
+					const _outerHeight = $(ele).outerHeight(true)
 					yy += 51
+					console.log(id+"========"+yy+"====="+_outerHeight+"===="+rect.height)
+					if (yy > rect.height) break
 					ele = document.elementFromPoint(xx, yy)
 					debugger
 				}
