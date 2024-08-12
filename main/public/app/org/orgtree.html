@@ -349,10 +349,10 @@
 				let yy = rect.top + 1 //border plus 1
 				let ele = document.elementFromPoint(xx, yy)
 				while (ele) {
-					if (yy > rect.height) break
 					const id = ele.id
 					const _outerHeight = $(ele).outerHeight(true)					
 					yy += _outerHeight
+					if (yy > rect.height + rect.top) break
 					console.log(id+"========"+yy+"====="+_outerHeight+"===="+rect.height)
 					ele = document.elementFromPoint(xx, yy)					
 					if (!$(ele).hasClass("coRow")) break
