@@ -370,7 +370,7 @@ const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMembe
             _html += "          <div style='font-size:10px;color:darkgray;margin-left:10px'>" + dispCnt + "</div>"
             _html += "      </div>"
             _html += "      <div style='width:40px;display:flex;align-items:center;justify-content:flex-end;margin-right:8px'>"
-            const dispImg = (hasChild == "Y" || memcnt > 0) ? "" : "style='display:none'"
+            const dispImg = (hasChild == "Y") ? "" : "style='display:none'" //서버에서 가져오는 것이므로 처음엔 최하위 부서노드엔 +/- 기호 없음
             _html += "          <img id=orgexpcol_" + i + " src='/img/" + expcolImg + ".png' class=coImg32 " + dispImg + " />"
             _html += "      </div>"
             _html += "  </div>"
