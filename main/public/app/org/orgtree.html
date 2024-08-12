@@ -328,18 +328,41 @@
             	}
         	}
 
+			// const procPhoto = () => { 
+			// 	if (g_getImage != "Y") return 
+			// 	const listHeight = g_list.height()
+			// 	const ele = document.elementFromPoint(7, 51) //5까지 .container, 6은 .listMain / 50까지는 .top
+			// 	const intId = parseInt(ele.id.substring(4))
+			// 	for (let i = intId; i < 100; i++) { //100은 max로 설정한 대략의 값
+			// 		const idTag = $("#row_" + i.toString())
+			// 		if (idTag.length == 0 || idTag.position().top >= listHeight) break 
+			// 		const row = g_rs.list[i]
+			// 		if (!row.USER_ID) continue
+			// 		hush.http.getUserPic(row.USER_ID, "img_" + row.USER_ID)
+			// 	}
+			// }
+
 			const procPhoto = () => { 
 				if (g_getImage != "Y") return 
-				const listHeight = g_list.height()
-				const ele = document.elementFromPoint(7, 51) //5까지 .container, 6은 .listMain / 50까지는 .top
-				const intId = parseInt(ele.id.substring(4))
-				for (let i = intId; i < 100; i++) { //100은 max로 설정한 대략의 값
-					const idTag = $("#row_" + i.toString())
-					if (idTag.length == 0 || idTag.position().top >= listHeight) break 
-					const row = g_rs.list[i]
-					if (!row.USER_ID) continue
-					hush.http.getUserPic(row.USER_ID, "img_" + row.USER_ID)
+				const rect = hush.util.getRect("#listMain")
+				const xx = rect.left + 1 //border plus 1
+				let yy = rect.top + 1 //border plus 1
+				let ele = document.elementFromPoint(xx, yy)
+				while (ele) {
+					const id = ele.id
+					console.log(id+"========")
+					yy += 51
+					ele = document.elementFromPoint(xx, yy)
+					debugger
 				}
+				debugger
+				// for (let i = intId; i < 100; i++) {
+				// 	const idTag = $("#row_" + i.toString())
+				// 	if (idTag.length == 0 || idTag.position().top >= listHeight) break 
+				// 	const row = g_rs.list[i]
+				// 	if (!row.USER_ID) continue
+				// 	hush.http.getUserPic(row.USER_ID, "img_" + row.USER_ID)
+				// }
 			}
 
             $.when($.ready).done(async function() {
