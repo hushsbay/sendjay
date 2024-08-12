@@ -316,9 +316,9 @@ const sendChkAlive = (userkeyArr) => {
 const callPeriodic = () => {
     if (hush.http.chkOnline("none") && g_mode == BTN_MODE_PEOPLE) {
         const userkeyArr = getUserkeysWithinDisplayArea()
-        sendChkAlive(userkeyArr)
+        if (userkeyArr.length > 0) sendChkAlive(userkeyArr)
     }
-    setTimeout(() => callPeriodic(), 3000)
+    setTimeout(() => callPeriodic(), 10000)
 }
 
 const getOrgTree = async (obj) => { //예) const obj = { keyword : "", withMember : false, expand : 1 }
