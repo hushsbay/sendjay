@@ -47,7 +47,7 @@ const getUserkeysWithinDisplayArea = () => {
         console.log(id+"========"+yy+"====="+_outerHeight+"===="+rect.height)
         ele = document.elementFromPoint(xx, yy)					
         if (!$(ele).hasClass("user")) break
-        const userid = parseInt(id.substring(4))
+        const userid = id.substring(4)
         userkeyArr.push(hush.cons.w_key + userid)
         userkeyArr.push(hush.cons.m_key + userid)
     }
