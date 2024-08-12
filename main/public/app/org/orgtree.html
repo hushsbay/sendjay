@@ -338,7 +338,8 @@
 					if (yy > rect.height + rect.top) break
 					const id = ele.id
 					const _outerHeight = $(ele).outerHeight(true)					
-					yy += _outerHeight //console.log(id+"========"+yy+"====="+_outerHeight+"===="+rect.height)
+					yy += _outerHeight 
+					console.log(id+"========"+yy+"====="+_outerHeight+"===="+rect.height)
 					ele = document.elementFromPoint(xx, yy)					
 					if ($(ele).hasClass("coRow")) {
 						const idx = parseInt(id.substring(4))
