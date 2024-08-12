@@ -33,21 +33,25 @@ const procScrollEvent = () => {
     })
 }
 
-const getUsersWithinDisplayArea = () => {
+const getUserkeysWithinDisplayArea = () => {
+    const userkeyArr = []
     const rect = hush.util.getRect("#list_people")
     const xx = rect.left + 1 //border plus 1
-    const yy = rect.top + 1 //border plus 1
-    const ele = document.elementFromPoint(xx, yy)
-    //아래 수정 필요
-    //위 ele의 bottom 위치 + 1은 새로운 tag이므로 그렇게 해서 맨 아래까지가면 몇개 안되므로 성능의 지장이 없을 것임 (특히, 조직트리)
-    //bottom은 top+height가 아닌게 중간에 걸쳐 있을 수 있을 것임. 그런데 첫째 높이만큼 elementFromPoint하면 무조건 2번째것이 get..
-    for (let i = intId; i < 100; i++) { //100은 max로 설정한 대략의 값
-        const idTag = $("#row_" + i.toString())
-        if (idTag.length == 0 || idTag.position().top >= listHeight) break 
-        const row = g_rs.list[i]
-        if (!row.USER_ID) continue
-        hush.http.getUserPic(row.USER_ID, "img_" + row.USER_ID)
+    let yy = rect.top + 1 //border plus 1
+    let ele = document.elementFromPoint(xx, yy)
+    while (ele) {
+        if (yy > rect.height + rect.top) break
+        const id = ele.id
+        const _outerHeight = $(ele).outerHeight(true)					
+        yy += _outerHeight 
+        console.log(id+"========"+yy+"====="+_outerHeight+"===="+rect.height)
+        ele = document.elementFromPoint(xx, yy)					
+        if (!$(ele).hasClass("user")) break
+        const userid = parseInt(id.substring(4))
+        userkeyArr.push(hush.cons.w_key + userid)
+        userkeyArr.push(hush.cons.m_key + userid)
     }
+    return userkeyArr
 }
 
 const procMenuTop = async (_mode, _mode_people) => {
@@ -191,6 +195,9 @@ const procSelect = (_userid) => {
 }
 
 const procSearch = () => {
+    const arr = getUserkeysWithinDisplayArea()
+    debugger
+    return
     if (!hush.http.chkOnline()) return
     const keyword = $("#in_search").val().trim()
     if (keyword.length == 0) {
@@ -246,7 +253,7 @@ const getMembers = async (type, keyword, tag) => { //group or search. (userids u
                 disp_job = (_job) ? "" : "display:none;"
             }
             const disp_second = (_job == "" && disp_org == "display:none") ? "flex-grow:0;display:none" : "flex-grow:1;display:flex"
-            let _html = "<div id=mem_" + _userid + " " + _attr + " style='height:50px;display:flex;align-items:center;cursor:default;border-bottom:1px solid lightgray;overflow:hidden;padding-left:" + paddingLeft + "px'>"
+            let _html = "<div id=mem_" + _userid + " class=user " + _attr + " style='height:50px;display:flex;align-items:center;cursor:default;border-bottom:1px solid lightgray;overflow:hidden;padding-left:" + paddingLeft + "px'>"
             _html += "      <input type=checkbox id=sel_" + _userid + " class=chkbox_people style='visibility:hidden;margin-left:" + marginLeft + "px' />"
             _html += "      <img id=img_" + _userid + " src='" + hush.cons.img_noperson + "' class=coImg32 style='border-radius:5px;margin-left:8px' />"
             _html += "      <div id=per_" + _userid + " style='flex:1;min-width:0;height:100%;display:flex;flex-direction:column;cursor:pointer;margin-left:10px'>" //flex:1;min-width:0 used instead of width:calc

@@ -255,12 +255,7 @@
                     $("#in_search").keyup(function(e) { if (e.keyCode === 13) procSearch() })
                     $("#btn_search").on("click", function() {
                         hush.util.animBgColor($(this))
-                        //procSearch() 
-                        const rect = hush.util.getRect("#list_people")
-                        const xx = rect.left + 1
-                        const yy = rect.top + 1
-                        const ele = document.elementFromPoint(xx, yy) //5까지 .container, 6은 .listMain / 50까지는 .top
-				        debugger
+                        procSearch()
                     })
                     $("#btn_close_search").on("click", function() {
                         hush.util.animBgColor($(this))
