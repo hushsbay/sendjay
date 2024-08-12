@@ -221,8 +221,8 @@ module.exports = (function() {
 					rs.msg = jwtRet.msg //if (res) ws.http.resWarn(res, rs.msg, false, rs.code, _title)
 					return rs
 				}
-				if (conn) { //userid뿐만 아니라 부서정보 등 위변조도 체크 필요 (문제 발생시 로깅. 겸직 코딩은 제외되어 있음)
-					const sql = "SELECT ORG_CD, TOP_ORG_CD FROM JAY.Z_USER_TBL WHERE USER_ID = ? "
+				if (conn && userid != 'admin' && userid != 'organ') { //userid뿐만 아니라 부서정보 등 위변조도 체크 필요 (문제 발생시 로깅. 겸직 코딩은 제외되어 있음)
+					const sql = "SELECT ORG_CD, TOP_ORG_CD FROM Z_USER_TBL WHERE USER_ID = ? "
 					const data = await wsmysql.query(conn, sql, [tokenInfo.userid])
 					if (data.length == 0) {
 						const msg = ws.cons.CODE_USERID_NOT_EXIST + '/' + tokenInfo.userid + '/사용자아이디가 없습니다.' 

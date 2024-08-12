@@ -18,8 +18,8 @@ router.post('/', async function(req, res) {
 		const comp = (!_comp || _comp.toLowerCase() == 'all') ? 'all' : ws.util.toStringForInClause(_comp)
 		conn = await wsmysql.getConnFromPool(global.pool) //의도적으로 인증체크하지 않음
 		sql =  "SELECT A.ORG_CD, A.ORG_NM, B.ORG_CD TOP_ORG_CD, B.ORG_NM TOP_ORG_NM "
-		sql += "  FROM JAY.Z_ORG_TBL A "
-		sql += "  LEFT OUTER JOIN JAY.Z_ORG_TBL B ON B.SEQ = CONCAT(LEFT(A.SEQ, 1), '00') "
+		sql += "  FROM Z_ORG_TBL A "
+		sql += "  LEFT OUTER JOIN Z_ORG_TBL B ON B.SEQ = CONCAT(LEFT(A.SEQ, 1), '00') "
 		sql += " WHERE A.ORG_CD IS NOT NULL " //바로 아래 조건이 where는 고려하지 말고 and만 편하게 사용하기 위한 dummy where절임
         if (comp != 'all') sql += " AND B.ORG_CD IN ('" + comp + "') "
         sql += " AND A.LVL > 0 " //회사 검색은 제외
