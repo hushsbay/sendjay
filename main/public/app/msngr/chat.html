@@ -517,7 +517,7 @@
                                             const uInt8Array = new Uint8Array(row.BUFFER.data)
                                             const blob = new Blob([uInt8Array], { type: "image/png" })
                                             const blobUrl = URL.createObjectURL(blob)
-                                            $("#replied_" + obj.msgid).html("<span class=coText>re) </span><img src=" + blobUrl + " style='width:30px;height:30px'>")
+                                            $("#replied_" + obj.msgid).html("<span class=coText>re) </span><img src=" + blobUrl + " style='width:24px;height:24px'>")
                                             // $("#btn_send_img_m").off("click").on("click", function(e) { 
                                             //     hush.util.animBgColor($(this))
                                             //     sendMsg("image", blobUrl, blob) 
@@ -530,9 +530,9 @@
                                             // })
                                         }
                                     } else if (row.TYPE == "file" || row.TYPE == "flink") {
-                                        $("#replied_" + obj.msgid).html("<span class=coText1>re) " + rs.BODY + "</span>")
+                                        $("#replied_" + obj.msgid).html("<span class=coText1>re) " + row.BODY + "</span>")
                                     } else {
-                                        $("#replied_" + obj.msgid).html("<span class=coText1>re) " + rs.BODY + "</span>")
+                                        $("#replied_" + obj.msgid).html("<span class=coText1>re) " + row.BODY + "</span>")
                                     }
                                 })
                             //}
