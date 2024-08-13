@@ -528,8 +528,8 @@ module.exports = (function() {
 					server = https.Server(sslOption, _app)
 				} else {
 					server = http.Server(_app)
-				}
-				server.keepAliveTimeout = 120000 //AWS ALB보다 Node.js에서 더 길게 잡아야 ??!!
+				} //https://velog.io/@dramatic/NestJS-%ED%98%B9%EC%9D%80-Express%EC%97%90%EC%84%9C-%EA%B0%84%ED%97%90%EC%A0%81%EC%9C%BC%EB%A1%9C-502-%EC%9D%91%EB%8B%B5%EC%9D%B4-%EC%98%A4%EB%8A%94-%EA%B2%BD%EC%9A%B0
+				server.keepAliveTimeout = 120000 //위 링크 참조. 502 방지. AWS ALB보다 Node.js에서 더 길게 잡아야
 				return server
 			},
 			isvoid : (obj) => { //"0", 0, 등의 경우는 유효할 경우도 고려해야 하므로 아래 2가지 경우만 체크하는 함수임
