@@ -47,7 +47,8 @@ router.post('/', async function(req, res) {
 				if (ret != '') throw new Error(ret)
 				rs.list = data
 				ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
-			} else if (data[0].TYPE == 'file' || data[0].TYPE == 'flink') { //almost same as get_sublink.js 
+			} else if (kind != 'reply' && data[0].TYPE == 'file' || data[0].TYPE == 'flink') { //almost same as get_sublink.js 
+				//reply일 경우 file은 일반텍스트만 받으므로 여기로 들어오지 않음
 				let fileToProc
 				const _fileStr = body.split(ws.cons.deli)
 				const objFileStr = ws.util.getFileNameAndExtension(_fileStr[0])
