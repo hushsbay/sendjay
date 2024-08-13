@@ -570,7 +570,7 @@
                         _backcolor = (obj.type == "image") ? "white" : "mintcream"
                         _html = "<div id=msg_" + obj.msgid + " class='talk" + needCheckUnread + "' style='display:flex;flex-direction:column;cursor:pointer;margin:20px 0px 10px 0px'>"
                         _html += "  <div style='height:20px;display:flex;align-items:center;margin-bottom:4px;margin-left:4px'>"
-                        _html += "      <span class=coText1 style='color:#063470;cursor:default;margin-right:6px'>" + obj.sendernm + "</span>"
+                        _html += "      <span class=coText1 style='color:darkgray;cursor:default;margin-right:6px'>" + "fgfgfg" + "</span>" //#063470 obj.sendernm
                         _html += "      <span class=coText1 style='color:darkgray;cursor:default;margin-right:4px'>" + _dt + "</span>"
                         _html += "      <span id=unread_" + obj.msgid + " class='unread" + unreadDisp + " coText1'>" + cnt + "</span>"
                         _html += "      <span id=handling_" + obj.msgid + " class='unread coText1' " + handlingDisp + ">" + hush.cons.handling + "</span>"   
@@ -2562,13 +2562,6 @@
                     <div id=btn_rename_m class="menuBtn chat"><img src="/img/white_tag.png" class=coImgMenu14 /><span class=coText>방명</span></div>
                     <div id=btn_exit_m class="menuBtn chat"><img src="/img/white_exit.png" class=coImgMenu14 /><span class=coText>퇴장</span></div>
                     <div id=btn_cancel_room_m class="menuBtn chat"><img src="/img/white_no.png" class=coImgMenu14 /><span class=coText>취소</span></div>
-                    <!-- <div id=btn_rename_m class="menuBtn chat coText">방명</div>
-                    <div id=btn_exit_m class="menuBtn chat coText">퇴장</div>
-                    <div id=btn_cancel_room_m class="menuBtn chat coText">취소</div> -->
-                    <!-- <div id=btn_copy_cell_m class="menuBtnCell cell single coText">복사</div>
-                    <div id=btn_revoke_cell_m class="menuBtnCell cell single coText">전송취소</div>
-                    <div id=btn_delete_cell_m class="menuBtnCell cell coText">삭제</div>
-                    <div id=btn_cancel_cell_m class="menuBtnCell cell coText">취소</div> -->
                     <div id=btn_copy_cell_m class="menuBtnCell cell"><img src="/img/white_copy.png" class=coImgMenu14 /><span class=coText>복사</span></div>
                     <div id=btn_revoke_cell_m class="menuBtnCell cell"><img src="/img/white_revoke.png" class=coImgMenu14 /><span class=coText>전송취소</span></div>
                     <div id=btn_delete_cell_m class="menuBtnCell cell"><img src="/img/white_trash.png" class=coImgMenu14 /><span class=coText>삭제</span></div>
