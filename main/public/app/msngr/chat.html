@@ -499,8 +499,7 @@
                     let _replied = obj.reply || ""
                     const _dispReplied = obj.reply ? "" : "display:none;"
                     //응답이 있을 경우만 해당
-                    if (_replied) { //로컬에 msgidForReply가 있는 경우는 로컬에서 가져오면 되나 
-                        debugger
+                    if (_replied && _replied.length == 26) { //로컬에 msgidForReply가 있는 경우는 로컬에서 가져오면 되나 
                         //이미지의 경우 어차피 비동기(hush.blob.get)로 가져와야 하는 것이라서 차라리 그냥 모든 경우를 서버에서 가져오려 함
                         const msgidForReply = _replied
                         $("#replied_" + obj.msgid).css("border-bottom", "1px solid dimgray")
