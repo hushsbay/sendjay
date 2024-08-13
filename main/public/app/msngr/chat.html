@@ -510,6 +510,7 @@
 
                             //} else {
                                 hush.http.ajaxCall("/msngr/get_msginfo", { msgid : msgidForReply, kind : "reply" }, function(rs) {
+                                    debugger
                                     const row = rs.list[0]
                                     if (row.type == "image") {
                                         if (row.BUFFER) {
@@ -529,9 +530,9 @@
                                             // })
                                         }
                                     } else if (row.type == "file" || row.type == "flink") {
-                                        $("#replied_" + obj.msgid).html("<span class=coText>re) " + obj.body + "</span>")
+                                        $("#replied_" + obj.msgid).html("<span class=coText1>re) " + rs.body + "</span>")
                                     } else {
-                                        $("#replied_" + obj.msgid).html("<span class=coText>re) " + obj.body + "</span>")
+                                        $("#replied_" + obj.msgid).html("<span class=coText1>re) " + rs.body + "</span>")
                                     }
                                 })
                             //}
