@@ -512,7 +512,16 @@
                                     const blobUrl = URL.createObjectURL(blob)
                                     $("#replied_" + obj.msgid).html("<span class=coText>re: " + row.SENDERNM + ") </span><img src=" + blobUrl + " style='width:24px;height:24px'>")
                                     $("#replied_" + obj.msgid).off("click").on("click", function(e) { 
-                                        
+                                        let urlStr = "/app/msngr/popup.html?type=" + row.TYPE + "&msgid=" + msgidForReply + "&body=" + row.BODY
+                                        if (!hush.webview.on) {
+                                            hush.util.openWinPop(urlStr)
+                                        } else {
+                                            if (hush.webview.ios) {
+                                            } else if (hush.webview.and) {
+                                                urlStr += "&" + hush.cons.param_webview_and
+                                                AndroidRoom.openPopup(urlStr, fileInfoForMobile)
+                                            }
+                                        }
                                     })
                                 }
                             } else if (row.TYPE == "file" || row.TYPE == "flink") {
