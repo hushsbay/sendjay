@@ -496,11 +496,10 @@
                     }
                     let _body, _backcolor, _boderpx = "1px", _sublink //_sublink can be 1) opengraph for url 2) image for .png/jpg/.. 3) image for mp4
                     const _submargin = (obj.senderid == g_userid) ? "margin:4px 4px 1px 1px" : "margin:4px 1px 1px 4px"
-                    const _replied = obj.reply || ""
+                    let _replied = obj.reply || ""
                     const _dispReplied = obj.reply ? "" : "display:none;"
                     //응답이 있을 경우만 해당
                     if (_replied) {
-                        debugger
                         const arr = _replied.split("/")
                         if (arr.length == 2) {
                             const msgidForReply = arr[0]
@@ -511,8 +510,7 @@
                                         const uInt8Array = new Uint8Array(rsPic.list[0].BUFFER.data) //new Uint8Array(rsPic.buffer.data)
                                         const blob = new Blob([uInt8Array], { type: "image/png" })
                                         const blobUrl = URL.createObjectURL(blob)
-                                        //$("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
-                                        debugger
+                                        _replied = "<img src=" + blobUrl + " style='width:20px;height:20px'>" 
                                         // $("#btn_send_img_m").off("click").on("click", function(e) { 
                                         //     hush.util.animBgColor($(this))
                                         //     sendMsg("image", blobUrl, blob) 
