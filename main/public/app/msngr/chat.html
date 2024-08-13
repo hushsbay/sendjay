@@ -638,6 +638,7 @@
                     $("#reply_" + obj.msgid).off("click").on("click", function() {
                         hush.util.animBgColor($(this))
                         if (obj.filestate == hush.cons.file_expired || $("#body_" + obj.msgid).text() == hush.cons.cell_revoked) return
+                        debugger
                         let _msg = obj.sendernm + " - " + hush.util.displayTalkBodyCustom(obj.type, obj.body)
                         let _html = "<span id=cancelreply class=coText1 style='background:#005192;color:white;border-radius:8px;cursor:pointer;padding:3px'>취소</span> "
                         _html += "<span id=msgtoreply class=coText1 style='color:#005192;cursor:default;margin-left:4px'>re) " + _msg + "</span> "
