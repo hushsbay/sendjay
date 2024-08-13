@@ -172,7 +172,7 @@
                         return //오류나면 멈추는 게 맞음
                     }
                 }
-                setTimeout(() => hush.auth.refreshToken(), 60) //600000) //10분 (토큰 갱신 주기 = 웹만 사용)
+                setTimeout(() => hush.auth.refreshToken(), 60000) //600000) //10분 (토큰 갱신 주기 = 웹만 사용)
             }
         },
         blob : { //브라우저에서 이미지 파일 선택후 노드서버에 올리고 다시 내려 표시하는 등 처리는 2가지 방법이 있음 => 1) blob 2) base64인코딩스트링
