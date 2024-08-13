@@ -510,6 +510,7 @@
                                         const uInt8Array = new Uint8Array(rsPic.list[0].BUFFER.data) //new Uint8Array(rsPic.buffer.data)
                                         const blob = new Blob([uInt8Array], { type: "image/png" })
                                         const blobUrl = URL.createObjectURL(blob)
+                                        debugger
                                         $("#replied_" + obj.msgid).html("<img src=" + blobUrl + " style='width:20px;height:20px'>")
                                         // $("#btn_send_img_m").off("click").on("click", function(e) { 
                                         //     hush.util.animBgColor($(this))
