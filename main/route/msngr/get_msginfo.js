@@ -35,7 +35,8 @@ router.post('/', async function(req, res) {
 			rs.list = _arr
 			ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
 		} else {
-			sql = "SELECT TYP TYPE, BUFFER, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END BODY FROM A_MSGMST_TBL WHERE MSGID = ? "
+			sql = "SELECT TYP TYPE, BUFFER, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END BODY "
+			sql += " FROM A_MSGMST_TBL WHERE MSGID = ? "
 			data = await wsmysql.query(conn, sql, [msgid])
 			if (data.length == 0) {
 				ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA) //true=toast

@@ -498,6 +498,37 @@
                     const _submargin = (obj.senderid == g_userid) ? "margin:4px 4px 1px 1px" : "margin:4px 1px 1px 4px"
                     const _replied = obj.reply || ""
                     const _dispReplied = obj.reply ? "" : "display:none;"
+                    //응답이 있을 경우만 해당
+                    if (_replied) {
+                        debugger
+                        const arr = _replied.split("/")
+                        if (arr.length == 2) {
+                            const msgidForReply = arr[0]
+                            const typeForReply = arr[1]
+                            if (typeForReply == "image") {
+                                hush.http.ajaxCall("/msngr/get_msginfo", { msgid : msgidForReply }, function(rsPic) {
+                                    if (rsPic.list[0].BUFFER) { //if (rsPic.buffer) {
+                                        const uInt8Array = new Uint8Array(rsPic.list[0].BUFFER.data) //new Uint8Array(rsPic.buffer.data)
+                                        const blob = new Blob([uInt8Array], { type: "image/png" })
+                                        const blobUrl = URL.createObjectURL(blob)
+                                        //$("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
+                                        debugger
+                                        // $("#btn_send_img_m").off("click").on("click", function(e) { 
+                                        //     hush.util.animBgColor($(this))
+                                        //     sendMsg("image", blobUrl, blob) 
+                                        //     $("#fr_sendcopy").hide()
+                                        // })
+                                        // $("#btn_cancel_img_m").off("click").on("click", function(e) { 
+                                        //     hush.util.animBgColor($(this))
+                                        //     showImgMenu(false) 
+                                        //     $("#fr_sendcopy").hide()
+                                        // })
+                                    }
+                                })
+                            }
+                        }                        
+                    }
+                    //응답이 있을 경우 처리 종료
                     if (obj.type == "image" && obj.body != hush.cons.cell_revoked) {
                         if (obj.body == hush.cons.cell_revoked) {
                             _body = obj.body
@@ -641,7 +672,7 @@
                         debugger
                         let _msg = obj.sendernm + " - " + hush.util.displayTalkBodyCustom(obj.type, obj.body)
                         let _html = "<span id=cancelreply class=coText1 style='background:#005192;color:white;border-radius:8px;cursor:pointer;padding:3px'>취소</span> "
-                        _html += "<span id=msgtoreply msgid='" + obj.msgid + "' class=coText1 style='color:#005192;cursor:default;margin-left:4px'>re) " + _msg + "</span> "
+                        _html += "<span id=msgtoreply msgid='" + obj.msgid + "' type='" + obj.type + "' class=coText1 style='color:#005192;cursor:default;margin-left:4px'>re) " + _msg + "</span> "
                         $("#fr_tip").html(_html)
                         $("#cancelreply").off("click").on("click", function() {
                             setTitleToFrTip()
@@ -1180,7 +1211,11 @@
                 //const _msg = ($("#msgtoreply").length > 0) ? $("#msgtoreply").html().trim() : ""
                 //if (_msg) setTitleToFrTip()
                 //return _msg
-                const msgid = ($("#msgtoreply").length > 0) ? $("#msgtoreply").attr("msgid") : ""
+                let msgid = ""
+                if ($("#msgtoreply").length > 0) {
+                    msgid = $("#msgtoreply").attr("msgid")
+                    msgid += "/" + $("#msgtoreply").attr("type")
+                }
                 if (msgid) setTitleToFrTip()
                 return msgid
             }
@@ -1790,7 +1825,7 @@
                     }
                 },
                 [hush.cons.sock_ev_open_room] : (data) => { //from=after,create,dupchk,portal,noti,rename_room,hush.cons.sock_ev_show_on
-                    //setTimeout(function() { //for debugging
+                    setTimeout(function() { //for debugging
                         sockConnected = true //for mobile only
                         if (data.from == hush.cons.sock_ev_show_on) return
                         setMembers(data) //console.log(JSON.stringify(data)+"===")
@@ -1804,7 +1839,7 @@
                             if (rs.kind != "onsuccess") return //common.js의 idb ##32 참조
                             getMsgList()
                         })
-                    //}, 20000)
+                    }, 3000)
                 },
                 [hush.cons.sock_ev_set_env] : async (data) => {
                     toggleDispMem(data.value)
