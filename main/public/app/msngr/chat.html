@@ -499,44 +499,35 @@
                     let _replied = obj.reply || ""
                     const _dispReplied = obj.reply ? "" : "display:none;"
                     //응답이 있을 경우만 해당
-                    if (_replied) {
-                        const arr = _replied.split("/")
-                        if (arr.length == 2) {
-                            $("#replied_" + obj.msgid).css("border-bottom", "1px solid dimgray")
-                            const msgidForReply = arr[0]
-                            const typeForReply = arr[1]
-                            //debugger
-                            //if ($("#msg_" + msgidForReply).length == 0) {
-
-                            //} else {
-                                hush.http.ajaxCall("/msngr/get_msginfo", { msgid : msgidForReply, kind : "reply" }, function(rs) {
-                                    debugger
-                                    const row = rs.list[0]
-                                    if (row.TYPE == "image") {
-                                        if (row.BUFFER) {
-                                            const uInt8Array = new Uint8Array(row.BUFFER.data)
-                                            const blob = new Blob([uInt8Array], { type: "image/png" })
-                                            const blobUrl = URL.createObjectURL(blob)
-                                            $("#replied_" + obj.msgid).html("<span class=coText>re) </span><img src=" + blobUrl + " style='width:24px;height:24px'>")
-                                            // $("#btn_send_img_m").off("click").on("click", function(e) { 
-                                            //     hush.util.animBgColor($(this))
-                                            //     sendMsg("image", blobUrl, blob) 
-                                            //     $("#fr_sendcopy").hide()
-                                            // })
-                                            // $("#btn_cancel_img_m").off("click").on("click", function(e) { 
-                                            //     hush.util.animBgColor($(this))
-                                            //     showImgMenu(false) 
-                                            //     $("#fr_sendcopy").hide()
-                                            // })
-                                        }
-                                    } else if (row.TYPE == "file" || row.TYPE == "flink") {
-                                        $("#replied_" + obj.msgid).html("<span class=coText1>re) " + row.BODY + "</span>")
-                                    } else {
-                                        $("#replied_" + obj.msgid).html("<span class=coText1>re) " + row.BODY + "</span>")
-                                    }
-                                })
-                            //}
-                        }                        
+                    if (_replied) { //로컬에 msgidForReply가 있는 경우는 로컬에서 가져오면 되나 
+                        //이미지의 경우 어차피 비동기(hush.blob.get)로 가져와야 하는 것이라서 차라리 그냥 모든 경우를 서버에서 가져오려 함
+                        const msgidForReply = _replied
+                        $("#replied_" + obj.msgid).css("border-bottom", "1px solid dimgray")
+                        hush.http.ajaxCall("/msngr/get_msginfo", { msgid : msgidForReply, kind : "reply" }, function(rs) {
+                            const row = rs.list[0]
+                            if (row.TYPE == "image") {
+                                if (row.BUFFER) {
+                                    const uInt8Array = new Uint8Array(row.BUFFER.data)
+                                    const blob = new Blob([uInt8Array], { type: "image/png" })
+                                    const blobUrl = URL.createObjectURL(blob)
+                                    $("#replied_" + obj.msgid).html("<span class=coText>re:Image) </span><img src=" + blobUrl + " style='width:24px;height:24px'>")
+                                    // $("#btn_send_img_m").off("click").on("click", function(e) { 
+                                    //     hush.util.animBgColor($(this))
+                                    //     sendMsg("image", blobUrl, blob) 
+                                    //     $("#fr_sendcopy").hide()
+                                    // })
+                                    // $("#btn_cancel_img_m").off("click").on("click", function(e) { 
+                                    //     hush.util.animBgColor($(this))
+                                    //     showImgMenu(false) 
+                                    //     $("#fr_sendcopy").hide()
+                                    // })
+                                }
+                            } else if (row.TYPE == "file" || row.TYPE == "flink") {
+                                $("#replied_" + obj.msgid).html("<span class=coText1>re:File) " + hush.util.extractFileFromTalkBody(row.BODY) + "</span>")
+                            } else {
+                                $("#replied_" + obj.msgid).html("<span class=coText1>re) " + row.BODY + "</span>")
+                            }
+                        })
                     } //응답이 있을 경우 처리 종료
                     if (obj.type == "image" && obj.body != hush.cons.cell_revoked) {
                         if (obj.body == hush.cons.cell_revoked) {
@@ -678,10 +669,9 @@
                     $("#reply_" + obj.msgid).off("click").on("click", function() {
                         hush.util.animBgColor($(this))
                         if (obj.filestate == hush.cons.file_expired || $("#body_" + obj.msgid).text() == hush.cons.cell_revoked) return
-                        debugger
                         let _msg = obj.sendernm + " - " + hush.util.displayTalkBodyCustom(obj.type, obj.body)
                         let _html = "<span id=cancelreply class=coText1 style='background:#005192;color:white;border-radius:8px;cursor:pointer;padding:3px'>취소</span> "
-                        _html += "<span id=msgtoreply msgid='" + obj.msgid + "' type='" + obj.type + "' class=coText1 style='color:#005192;cursor:default;margin-left:4px'>re) " + _msg + "</span> "
+                        _html += "<span id=msgtoreply msgid='" + obj.msgid + "' class=coText1 style='color:#005192;cursor:default;margin-left:4px'>re) " + _msg + "</span> "
                         $("#fr_tip").html(_html)
                         $("#cancelreply").off("click").on("click", function() {
                             setTitleToFrTip()
@@ -1220,11 +1210,7 @@
                 //const _msg = ($("#msgtoreply").length > 0) ? $("#msgtoreply").html().trim() : ""
                 //if (_msg) setTitleToFrTip()
                 //return _msg
-                let msgid = ""
-                if ($("#msgtoreply").length > 0) {
-                    msgid = $("#msgtoreply").attr("msgid")
-                    msgid += "/" + $("#msgtoreply").attr("type")
-                }
+                const msgid = ($("#msgtoreply").length > 0) ? $("#msgtoreply").attr("msgid") : ""
                 if (msgid) setTitleToFrTip()
                 return msgid
             }
