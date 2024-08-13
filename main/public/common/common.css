@@ -55,6 +55,7 @@ button { margin-left: 5px }
 }
 
 .coImgMenu { width:24px;height:24px;vertical-align:middle;cursor:pointer;margin-right:5px } /* 0086cd(more blue) */
+.coImgMenu14 { width:14px;height:14px;vertical-align:middle;cursor:pointer;margin-right:5px } /* 0086cd(more blue) */
 .coImgBtn { display:flex;align-items:center;justify-content:center;width:32px;height:32px;background-color:#0082AD;border-radius:4px;cursor:pointer;margin-left:10px }
 
 .coRow {
