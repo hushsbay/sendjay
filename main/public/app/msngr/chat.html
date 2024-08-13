@@ -512,7 +512,7 @@
                                     const blobUrl = URL.createObjectURL(blob)
                                     $("#replied_" + obj.msgid).html("<span class=coText>re: " + row.SENDERNM + ") </span><img src=" + blobUrl + " style='width:24px;height:24px'>")
                                     $("#replied_" + obj.msgid).off("click").on("click", function(e) { 
-                                        let urlStr = "/app/msngr/popup.html?type=" + row.TYPE + "&msgid=" + msgidForReply + "&body=" + row.BODY
+                                        let urlStr = "/app/msngr/popup.html?type=" + row.TYPE + "&msgid=" + msgidForReply // + "&body=" + row.BODY
                                         if (!hush.webview.on) {
                                             hush.util.openWinPop(urlStr)
                                         } else {
@@ -525,9 +525,12 @@
                                     })
                                 }
                             } else if (row.TYPE == "file" || row.TYPE == "flink") {
-                                $("#replied_" + obj.msgid).html("<span class=coText1>re: " + row.SENDERNM + ", File) " + hush.util.extractFileFromTalkBody(row.BODY) + "</span>")
+                                const _file = hush.util.extractFileFromTalkBody(row.BODY)
+                                $("#replied_" + obj.msgid).html("<span class=coText1>re: " + row.SENDERNM + ", File) " + _file + "</span>")
+                                $("#replied_" + obj.msgid).off("click").on("click", async function(e) { await hush.msg.alert(_file) })
                             } else {
                                 $("#replied_" + obj.msgid).html("<span class=coText1>re: " + row.SENDERNM + ") " + row.BODY + "</span>")
+                                $("#replied_" + obj.msgid).off("click").on("click", async function(e) { await hush.msg.alert(row.BODY) })
                             }
                         })
                     } //응답이 있을 경우 처리 종료
