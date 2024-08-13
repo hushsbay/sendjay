@@ -641,7 +641,7 @@
                         debugger
                         let _msg = obj.sendernm + " - " + hush.util.displayTalkBodyCustom(obj.type, obj.body)
                         let _html = "<span id=cancelreply class=coText1 style='background:#005192;color:white;border-radius:8px;cursor:pointer;padding:3px'>취소</span> "
-                        _html += "<span id=msgtoreply class=coText1 style='color:#005192;cursor:default;margin-left:4px'>re) " + _msg + "</span> "
+                        _html += "<span id=msgtoreply msgid='" + obj.msgid + "' class=coText1 style='color:#005192;cursor:default;margin-left:4px'>re) " + _msg + "</span> "
                         $("#fr_tip").html(_html)
                         $("#cancelreply").off("click").on("click", function() {
                             setTitleToFrTip()
@@ -1176,10 +1176,13 @@
                 return obj
             }
 
-            const getMsgToReply = () => {
-                const _msg = ($("#msgtoreply").length > 0) ? $("#msgtoreply").html().trim() : ""
-                if (_msg) setTitleToFrTip()
-                return _msg
+            const getMsgidToReply = () => {
+                //const _msg = ($("#msgtoreply").length > 0) ? $("#msgtoreply").html().trim() : ""
+                //if (_msg) setTitleToFrTip()
+                //return _msg
+                const msgid = ($("#msgtoreply").length > 0) ? $("#msgtoreply").attr("msgid") : ""
+                if (msgid) setTitleToFrTip()
+                return msgid
             }
 
             const sendMsg = (type, blobUrlOrBody, blobOrFilestate) => {
@@ -1197,7 +1200,7 @@
                         fd.append("receiverid", rq.receiverid.join(hush.cons.easydeli))
                         fd.append("receivernm", rq.receivernm.join(hush.cons.easydeli))
                         fd.append("type", rq.type)
-                        fd.append("reply", getMsgToReply())
+                        fd.append("reply", getMsgidToReply())
                         fd.append("file", blobOrFilestate)
                         hush.http.ajaxFormData("/msngr/proc_image", fd, (rs) => {
                             if (rs.code == hush.cons.CODE_OK) {
@@ -1232,7 +1235,7 @@
                     } else if (type == "flink") {
                         rq.type = type
                         rq.body = blobUrlOrBody
-                        rq.reply = getMsgToReply()
+                        rq.reply = getMsgidToReply()
                         rq.filestate = blobOrFilestate
                         procSendAndAppend(rq)
                     } else {
@@ -1244,7 +1247,7 @@
                             return
                         }
                         rq.body = _body
-                        rq.reply = getMsgToReply()
+                        rq.reply = getMsgidToReply()
                         procSendAndAppend(rq)
                     }
                     if ($("#cancelreply").length > 0) $("#cancelreply").click()
@@ -1407,7 +1410,7 @@
                         fd.append("receivernm", rq.receivernm.join(hush.cons.easydeli))
                         fd.append("body", files[i].size)
                         fd.append("type", rq.type)
-                        fd.append("reply", getMsgToReply())
+                        fd.append("reply", getMsgidToReply())
                         fd.append("file", files[i])
                         const ajaxObj = $.ajax({
                             url: "/msngr/proc_file",
