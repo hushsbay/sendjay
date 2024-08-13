@@ -467,11 +467,9 @@
                     let _desc                
                     if (obj.type == "invite") {
                         const _arr = obj.body.split(hush.cons.deli)
-                        //_desc = "<span class=coText1>" + _arr[0] + "</span><br><span class=coText1>invited by " + _arr[2] + "<br>at " + _dt + "</span>"
-                        _desc = "<span class=coText1>초대 : " + _arr[0] + " by " + _arr[2] + " at " + _dt + "</span>"
+                        _desc = "<span class=coText1>초대 : " + _arr[0] + " by " + _arr[2] + "<br>at " + _dt + "</span>"
                     } else {
-                        //_desc = "<span class=coText1>" + obj.body + "</span><br><span class=coText1>at " + _dt + "</span>"
-                        _desc = "<span class=coText1>" + obj.body + " at " + _dt + "</span>"
+                        _desc = "<span class=coText1>" + obj.body + "<br>at " + _dt + "</span>"
                     }
                     const _html = "<div id=msg_" + obj.msgid + " style='text-align:center;background:lightgray;border:1px solid lightgray;border-radius:8px;padding:3px 5px;margin:10px auto'>" + _desc + "</div>"
                     if (kind) {
@@ -2560,7 +2558,7 @@
                 </div>
                 <div id=list_menu_m style="display:none;width:98px;overflow:hidden;background-color:white;border:1px solid darkgray;margin-left:auto">
                     <div id=btn_invite_m class="menuBtn chat coText">초대</div>
-                    <div id=btn_delete_all_m class="menuBtn chat coText">모두삭제</div>
+                    <div id=btn_delete_all_m class="menuBtn chat coText"><img src="/img/white_trash.png" class=coImgMenu /><span class=coText>모두삭제</span></div>
                     <div id=btn_rename_m class="menuBtn chat coText">방명</div>
                     <div id=btn_exit_m class="menuBtn chat coText">퇴장</div>
                     <div id=btn_cancel_room_m class="menuBtn chat coText">취소</div>
