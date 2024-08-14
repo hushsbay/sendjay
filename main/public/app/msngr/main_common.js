@@ -23,6 +23,7 @@ const procScrollEvent = () => {
     resetEnvForScroll()
     g_list.scroll(function() { //endless scroll
         if (g_searchmode) return
+        debugger
         const getMore = $("#getmore")
         if (!getMore || getMore.length == 0) return
         if (getMore.position().top <= g_list.height()) { //g_list position should be relative for checking position().top
