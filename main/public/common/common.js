@@ -169,7 +169,7 @@
                         if (rs.token) hush.http.setCookie("token", rs.token)
                     } catch (ex) {
                         console.log("refreshToken Error : " + ex.message) //no alert
-                        return //오류나면 멈추는 게 맞음
+                        //return //오류나면 멈추는 게 맞음
                     }
                 }
                 setTimeout(() => hush.auth.refreshToken(), 60000) //600000) //10분 (토큰 갱신 주기 = 웹만 사용)
