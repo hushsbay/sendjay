@@ -613,9 +613,7 @@ const getPortalList = async (obj) => {
                 hush.msg.toast(hush.cons.MSG_NO_DATA)
             } else {
                 $("#getmore").html(hush.cons.MSG_NO_MORE_DATA)
-                setTimeout(() => {
-                    if ($("#getmore").length > 0) $("#getmore").remove()
-                }, 1000)    
+                setTimeout(() => $("#getmore").remove(), 2000)
             }
             portalListBeingQueried = false
             return
@@ -665,9 +663,9 @@ const getPortalList = async (obj) => {
                             _last.css("border-bottom", "1px solid steelblue")
                         }
                     }
-                    setTimeout(() => {
-                        if ($("#getmore").length > 0) $("#getmore").remove()
-                    }, 1000)    
+                    // setTimeout(() => {
+                    //     if ($("#getmore").length > 0) $("#getmore").remove()
+                    // }, 1000)    
                 }
             } else {
                 if (obj.replace) {
