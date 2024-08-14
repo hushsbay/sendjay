@@ -171,7 +171,7 @@
                         //return //오류나도 멈추지 말고 계속 수행 (일시적인 오류일 수도)
                     }
                 }
-                setTimeout(() => hush.auth.refreshToken(), 10000) //600000) //10분 (토큰 갱신 주기 = 웹만 사용)
+                setTimeout(() => hush.auth.refreshToken(), 600000) //10분 (토큰 갱신 주기 = 웹만 사용)
             },
             refreshTokenFrom : (token) => {
                 hush.http.setCookie("token", token)
