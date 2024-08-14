@@ -141,6 +141,7 @@
                             await hush.msg.alert(rs.msg + "<br>로그인이 필요합니다.")
                         } else {
                             if (!rs.code.startsWith(hush.cons.token_err_prefix)) { //-8
+                                //엣지에서는 jwt가 세션쿠키인데 브라우저를 종료후 재시작해도 값이 남아 있어 만료 alert가 나와 아래 if로 해결
                                 await hush.msg.alert(rs.msg + "<br>로그인 페이지로 이동합니다.")
                             }
                             const _target = encodeURIComponent(location.pathname + location.search)
