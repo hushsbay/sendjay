@@ -23,7 +23,6 @@ const procScrollEvent = () => {
     resetEnvForScroll()
     g_list.scroll(function() { //endless scroll
         if (g_searchmode) return
-        debugger
         const getMore = $("#getmore")
         if (!getMore || getMore.length == 0) return
         if (getMore.position().top <= g_list.height()) { //g_list position should be relative for checking position().top
@@ -894,14 +893,16 @@ const chkRoomFocus = () => {
 }
 
 function OnSearch(input) {
+    $("#in_search").blur()
     if (input.value == "") {
-        if (g_win_type == "invite" || g_win_type == "member" || g_win_type == "org") {
-            procMenuTop(BTN_MODE_PEOPLE, BTN_PEOPLE_COMPANY)
-        } else {
-            procMenuTop(hush.http.getCookie("mode"))
-        }
+        setTimeout(() => {
+            if (g_win_type == "invite" || g_win_type == "member" || g_win_type == "org") {
+                procMenuTop(BTN_MODE_PEOPLE, BTN_PEOPLE_COMPANY)
+            } else {
+                procMenuTop(hush.http.getCookie("mode"))
+            }
+        }, 500)
     }
-    setTimeout(() => $("#in_search").blur(), 500)
 }
 
 var procUnreadTitle = (roomid) => { //call from chat.html
