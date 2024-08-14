@@ -588,7 +588,7 @@ const getPortalList = async (obj) => {
             rq.cnt = 1
         } else { //normal (endless scrolling)
             rq.dt = g_cdt
-            rq.cnt = (g_cdt == FIRST_QUERIED) ? fetch_first_cnt : hush.cons.fetch_cnt_list
+            rq.cnt = (g_cdt == FIRST_QUERIED) ? hush.cons.fetch_first_cnt : hush.cons.fetch_cnt_list
         }
         const rs = await hush.http.ajax("/msngr/qry_portal", rq, noToast)
         if (rs.code != hush.cons.CODE_OK) {
