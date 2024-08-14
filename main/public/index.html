@@ -104,6 +104,7 @@
                         //const autokey_web = hush.http.getCookie("autokey_web")
                         //const rs = await hush.http.ajax("/auth/login", { autokey_web : autokey_web, kind : "web" }) //token과 userid는 쿠키로 전송됨
                         const rs = await hush.http.ajax("/auth/login", { kind : "web" }) //token과 userid는 쿠키로 전송됨
+                        debugger
                         if (rs.code != hush.cons.CODE_OK) {
                             //엣지에서는 jwt가 세션쿠키인데 브라우저를 종료후 재시작해도 값이 남아 있어 만료 alert가 나와 아래 if로 해결
                             if (rs.code.startsWith(hush.cons.token_err_prefix)) hush.msg.showMsg(rs.msg, rs.code)
