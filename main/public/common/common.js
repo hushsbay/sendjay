@@ -646,10 +646,12 @@
                         hush.sock.roomMap[roomid] = { nm: _from, noti: rs.list[0].NOTI }
                         if (hush.sock.roomMap[roomid].noti == "X") return
                     } else {
-                        let _people = obj.receivernm.join(",") + ","
-                        _people = _people.replace(hush.user.nm + ",", "")
-                        if (_people.endsWith(",")) _people = _people.substr(0, _people.length - 1)
-                        _from = _people
+                        // let _people = obj.receivernm.join(",") + ","
+                        // _people = _people.replace(hush.user.nm + ",", "")
+                        // if (_people.endsWith(",")) _people = _people.substr(0, _people.length - 1)
+                        const idx = obj.receivernm.indexOf(hush.user.nm)
+                        if (idx > -1) obj.receivernm.splice(idx, 1)
+                        _from = obj.receivernm.join(hush.cons.memdeli)
                     }
                 }
                 const msgArrived = "새 메시지 도착"

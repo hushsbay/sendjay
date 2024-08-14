@@ -35,9 +35,9 @@ module.exports = (function() {
 			toast_prefix : '##$$', //클라이언트와 동일해야 함
 			deli : '##',
 			subdeli : '$$',
-			indeli : "','", //Use this for sql where in clause.
-			easydeli : ';', //Use this for absolutely safe place.
-			memdeli : ' / ',
+			indeli : "','", //sql where in clause
+			easydeli : ';',
+			memdeli : '/', //
 			keydeli : KEYDELI, 
 			title : 'sendjay',
 			w_key : 'W' + KEYDELI, //Web userkey
