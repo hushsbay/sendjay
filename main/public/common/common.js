@@ -141,13 +141,11 @@
                         if (verbose) {
                             await hush.msg.alert(rs.msg + "<br>로그인이 필요합니다.")
                         } else {
-                            if (rs.code.startsWith(hush.cons.token_err_prefix)) { //-8
+                            if (!rs.code.startsWith(hush.cons.token_err_prefix)) { //-8
                                 await hush.msg.alert(rs.msg + "<br>로그인 페이지로 이동합니다.")
-                                const _target = encodeURIComponent(location.pathname + location.search)
-                                hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)
-                            } else {
-                                hush.msg.msg(rs.msg)
-                            }  
+                            }
+                            const _target = encodeURIComponent(location.pathname + location.search)
+                            hush.util.openWinTab("/app/auth/login.html?target=" + _target, true)  
                         }
                         return null                      
                     }
