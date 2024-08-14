@@ -30,12 +30,13 @@ router.post('/', async function(req, res) {
 		const rs = ws.http.resInit()
 		const objToken = await ws.jwt.chkToken(req, res, null, true) //true는 로깅(console.log 포함) 남기지 않게 함
 		const userid = objToken.userid
-		if (!userid) {
-			console.log("refreshToken", objToken.msg)
+		if (!userid) { //모바일 특성상 대기/슬립모드 등으로 http호출이 안되어 다시 호출하면서 토큰이 만기가 될 수 있는데
+			//앱을 열 때 (예: onResume()) 다시 자동로그인되어 토큰이 발행되므로 문제없게 됨
+			console.log(req.title, ws.util.getCurDateTimeStr(true), objToken.msg) //나중에 막기
 			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
 			return
 		}
-		console.log("refreshToken", userid)
+		console.log(req.title, ws.util.getCurDateTimeStr(true), userid) //나중에 막기
 		ws.http.resJson(res, rs, userid) //세번째 인자(userid) 있으면 token 갱신
 	} catch (ex) {
 		ws.http.resException(req, res, ex)

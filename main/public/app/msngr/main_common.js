@@ -1018,7 +1018,7 @@ var funcSockEv = { //needs to be public
         toggleDisconnIcon(false) //Util.kt의 connectSockWithCallback() 설명 참조
     },
     [hush.cons.sock_ev_connect] : (data) => { //mobile only
-        //Be careful that Socket.EVENT_CONNECT occurred many times at a moment. => from ChatService.kt (socket.io 초기버전 이야기?!)
+        //Be careful that Socket.EVENT_CONNECT occurred many times at a moment. ChatService.kt (socket.io 초기버전 이야기?!)
         try {
             toggleDisconnIcon(false)
             if (g_mode == BTN_MODE_PEOPLE) {
@@ -1114,7 +1114,7 @@ const startMsngr = async (launch, winid) => { //웹 전용
                         }
                         chkRoomFocus()
                         callPeriodic()
-                        hush.auth.refreshToken()
+                        hush.auth.refreshToken("main-web")
                     }
                 } else {
                     worker.terminate()
@@ -1202,7 +1202,7 @@ const startFromWebView = (from, obj, rs, startFromResume) => {
             }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작            
         }
         callPeriodic()
-        hush.auth.refreshToken()
+        hush.auth.refreshToken("main-app")
     } catch (ex) {
         hush.util.showEx(ex)
     }

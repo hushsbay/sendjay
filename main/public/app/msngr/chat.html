@@ -2197,7 +2197,7 @@
                     }
                     procScrollEvent()
                     callPeriodic()
-                    hush.auth.refreshToken()
+                    hush.auth.refreshToken("chat-app") //chat-web은 main.html에 연동되므로 별도로 호출할 필요없음
                     //setTimeout(function() {
                     //    AndroidRoom.doneLoad()
                     //}, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작

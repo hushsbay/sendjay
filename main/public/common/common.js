@@ -162,15 +162,14 @@
                 hush.auth.setUser(_token)
                 return rs
             },  
-            refreshToken : async () => { //모바일(웹뷰)에서는 디바이스가 대기모드 등으로 들어갈 때 http call이 멈추게 됨을 유의 (PC 웹에서는 OK)
+            refreshToken : async (from) => { //모바일(웹뷰)에서는 디바이스가 대기모드 등으로 들어갈 때 http call이 멈추게 됨을 유의 (PC 웹에서는 OK)
                 if (hush.http.chkOnline("none")) {
                     try {
-                        const rs = await hush.http.ajax("/auth/refresh_token", {}, true)
+                        const rs = await hush.http.ajax("/auth/refresh_token", { from : from }, true)
                         if (rs.token) hush.http.setCookie("token", rs.token)
-                        console.log("refreshToken", rs.token)
                     } catch (ex) {
                         console.log("refreshToken Error : " + ex.message) //no alert
-                        //return //오류나면 멈추는 게 맞음
+                        //return //오류나도 멈추지 말고 계속 수행 (일시적인 오류일 수도)
                     }
                 }
                 setTimeout(() => hush.auth.refreshToken(), 10000) //600000) //10분 (토큰 갱신 주기 = 웹만 사용)
