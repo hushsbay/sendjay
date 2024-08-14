@@ -31,9 +31,11 @@ router.post('/', async function(req, res) {
 		const objToken = await ws.jwt.chkToken(req, res, null, true) //true는 로깅(console.log 포함) 남기지 않게 함
 		const userid = objToken.userid
 		if (!userid) {
+			console.log("refreshToken", objToken.msg)
 			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
 			return
 		}
+		console.log("refreshToken", userid)
 		ws.http.resJson(res, rs, userid) //세번째 인자(userid) 있으면 token 갱신
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
