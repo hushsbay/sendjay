@@ -134,7 +134,6 @@
             verifyUser : async (verbose) => { //index.html 제외한 나머지에서 사용됨 (웹뷰에서도 실행되면 안되는 순수 웹 전용)
                 let rs
                 const _token = hush.http.getCookie("token")  
-                debugger
                 if (_token) {
                     rs = await hush.http.ajax("/auth/login", { kind : "web" })
                     if (rs.code != hush.cons.CODE_OK) {
