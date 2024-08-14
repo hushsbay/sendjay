@@ -67,9 +67,9 @@
             sock_ev_chk_roomfocus : 'chk_roomfocus',
             sock_ev_stop_mobile : 'stop_mobile',
             tz_seoul : "Asia/Seoul", //for korean
-            fetch_cnt_list : 2, //100, //챗방목록 가져오기시 최대 갯수 (Endless Scroll)
-            fetch_first_cnt : 20, //챗방내에서 가져오기시 맨 처음 최대 갯수 (Endless Scroll)
-            fetch_cnt : 100, //챗방내에서 가져오기시 처음이후 최대 갯수 (Endless Scroll)            
+            fetch_first_cnt : 30, //챗방목록 or 챗방내에서 가져오기시 맨 처음 최대 갯수 (Endless Scroll)
+            fetch_cnt_list : 100, //챗방목록 가져오기시 처음 이후 최대 갯수 (Endless Scroll)            
+            fetch_cnt : 100, //챗방내에서 가져오기시 처음 이후 최대 갯수 (Endless Scroll)            
             fetch_cnt_oneshot : 10000, //챗방내에서 검색시 한번에 가져오는 갯수
             sec_for_webview_func : 100,
             max_member_for_org : 16, //temporary. same as server's

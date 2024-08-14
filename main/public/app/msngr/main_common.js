@@ -15,7 +15,7 @@ const runFromStandalone = (location.pathname == hush.cons.app) ? true : false //
 
 const resetEnvForScroll = () => {
     g_searchmode = false
-    g_cdt = FIRST_QUERIED //FIRST_QUERIED(default). YYYYMMDD~ : when scrolled all the way down to the bottom, previous page shown and g_cdt gets YYYYMMDD~ value
+    g_cdt = FIRST_QUERIED //FIRST_QUERIED (default)
     if ($("#spn_unread").css("display") != "none") handleDocTitle(-1)
 }
 
@@ -588,7 +588,7 @@ const getPortalList = async (obj) => {
             rq.cnt = 1
         } else { //normal (endless scrolling)
             rq.dt = g_cdt
-            rq.cnt = hush.cons.fetch_cnt_list //if (g_cdt == FIRST_QUERIED) g_list.empty()
+            rq.cnt = (g_cdt == FIRST_QUERIED) ? fetch_first_cnt : hush.cons.fetch_cnt_list
         }
         const rs = await hush.http.ajax("/msngr/qry_portal", rq, noToast)
         if (rs.code != hush.cons.CODE_OK) {
