@@ -1018,7 +1018,7 @@ var funcSockEv = { //needs to be public
         toggleDisconnIcon(false) //Util.kt의 connectSockWithCallback() 설명 참조
     },
     [hush.cons.sock_ev_connect] : (data) => { //mobile only
-        //Be careful that Socket.EVENT_CONNECT occurred many times at a moment. ChatService.kt (socket.io 초기버전 이야기?!)
+        //Socket.EVENT_CONNECT occurred many times at a moment. ChatService.kt (socket.io 초기버전 이야기?!)
         try {
             toggleDisconnIcon(false)
             if (g_mode == BTN_MODE_PEOPLE) {
@@ -1028,7 +1028,9 @@ var funcSockEv = { //needs to be public
                 }).promise().done(function() {                
                     sendChkAlive(userkeyArr)
                 })
-            } else if (g_mode == BTN_MODE_CHAT) {
+            } else if (g_mode == BTN_MODE_CHAT) { //아래 호출은 refreshToken이 block된 슬립모드 등에서 재연결시 토큰만기 우려가 있음
+                hush.auth.refreshTokenFrom(data.token) //from mobile
+                hush.msg.toast(data.token + "-refreshTokenFrom")
                 getPortalList({ type: "reconnect" }) //procMenuTop(hush.http.getCookie("mode"))
             }
             setTimeout(function() {

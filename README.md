@@ -320,7 +320,8 @@ Here are some ideas to get you started:
    * 모바일 네이티브앱 + 웹뷰의 경우
       - 네이티브앱은 액티비티는 강제로 종료시키고 서비스만 살아 있는 경우도 고려해야 하므로
       - 주기적으로 토큰을 갱신하면 앱 대기모드나 슬립모드에서 주기적인 호출이 block되기 때문에
-      - 아예, 소켓 재연결시와 onResume()시에 자동로그인을 해서 토큰을 새로 생성받아서 웹뷰로 넘겨줍니다.<br/>
+      - 아예, 소켓 재연결후(sendToDownWhenConnDisconn())와 onResume()시에 자동로그인을 해서<br>
+        토큰을 새로 생성받아서 웹뷰로 넘겨줍니다.<br/>
         소켓 재연결시엔 query 파라미터내 token을 갱신해야 합니다. (SocketIO.kt 참조)<br/>
       - 웹뷰(앱)에서는 1. PC 웹의 경우처럼 주기적으로 토큰을 갱신해주면 됩니다.<br/>
         startFromWebView() in main_common.js 참조<br/>

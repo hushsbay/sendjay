@@ -173,6 +173,9 @@
                     }
                 }
                 setTimeout(() => hush.auth.refreshToken(), 10000) //600000) //10분 (토큰 갱신 주기 = 웹만 사용)
+            },
+            refreshTokenFrom : (token) => {
+                hush.http.setCookie("token", token)
             }
         },
         blob : { //브라우저에서 이미지 파일 선택후 노드서버에 올리고 다시 내려 표시하는 등 처리는 2가지 방법이 있음 => 1) blob 2) base64인코딩스트링
