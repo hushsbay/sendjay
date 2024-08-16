@@ -10,13 +10,13 @@
             MSG_NO_DATA : '데이터가 없습니다.',
             MSG_NO_MORE_DATA : '더 이상 데이터가 없습니다.',
             NETWORK_UNAVAILABLE : '네트워크가 연결되어 있지 않습니다.',
-            NETWORK_UNSTABLE : '네트워크가 원할하지 않거나 서버 작업중입니다.',
+            NETWORK_UNSTABLE : '네트워크가 원할하지 않거나 서버 작업중입니다.==',
             toast_prefix : "##$$", 
             token_err_prefix : "-8",
             ///////////////////////////////////위는 서버와 동일
             erp_portal : "index.html",
             failOnLoad : "failOnLoad",
-            restful_timeout : 8000, //실제로는 1~2초정도의 시간이 추가 소요되는 경험상 8초 정도로 설정해 10초 느낌이 나게 함
+            restful_timeout : 2000, //앱의 상수값과 동일하게 설정함
             pattern : /^[A-Za-z0-9!@#$=]*$/, //들어있는 항목 이외는 사용 금지
             color_fadein : "#b2e2f8",
             ext_image : "png,gif,jpg,jpeg,ico",
