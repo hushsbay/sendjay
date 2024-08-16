@@ -41,7 +41,8 @@ if (config.app.mainserver == 'Y') global.store.flushdb(function(err, result) { c
 const appSocket = ws.util.initExpressApp()
 const socketServer = ws.util.createWas(appSocket, config.http.method) //not https (because of aws elastic load balancer)
 const io = new Server(socketServer, { //여기 Server는 socket.io
-	allowEIO3: false, autoConnect: true, pingTimeout: PING_TIMEOUT, pingInterval: PING_INTERVAL, cors: { origin: config.app.corsSocket, methods: ["GET", "POST"] }
+	//autoConnect to false (모바일 connect후 로그인/로깅시 http호출 여러번 발생해서 false로 변경) : 웹은 끊어지면 다른 탭에서 연결, 모바일도 SocketIO.invoke 새로하므로 false로 해도 무방
+	allowEIO3: false, autoConnect: false, pingTimeout: PING_TIMEOUT, pingInterval: PING_INTERVAL, cors: { origin: config.app.corsSocket, methods: ["GET", "POST"] }
 })
 io.adapter(redisAdapter(global.pub, sub))
 io.listen(config.sock.port)
