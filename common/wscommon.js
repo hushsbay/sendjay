@@ -5,7 +5,7 @@ const http = require('http')
 const https = require('https')
 const crypto = require('crypto')
 const express = require('express')
-const timeout = require('connect-timeout')
+//const timeout = require('connect-timeout')
 const requestIp = require('request-ip')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
@@ -515,7 +515,7 @@ module.exports = (function() {
 		util : {
 			initExpressApp : (public) => {
 				const _app = express()
-				_app.use(timeout('2s'))
+				//_app.use(timeout('2s'))
 				_app.use(requestIp.mw()) //req.clientIp => X-Forwarded-For header info in AWS checked (req.headers['x-forwarded-for'] || req.connection.remoteAddress)
 				_app.use(bodyParser.json()) //app.use(express.json())
 				_app.use(bodyParser.urlencoded({ extended: true })) //req.body : { array : { key1 : { key2 : '123' } } } //when false => req.body : { 'array[key1][key2]' :'123' }
