@@ -5,6 +5,7 @@ const http = require('http')
 const https = require('https')
 const crypto = require('crypto')
 const express = require('express')
+const timeout = require('connect-timeout')
 const requestIp = require('request-ip')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
@@ -514,15 +515,12 @@ module.exports = (function() {
 		util : {
 			initExpressApp : (public) => {
 				const _app = express()
-				//_app.use(timeout('2s'))
+				_app.use(timeout('2s'))
 				_app.use(requestIp.mw()) //req.clientIp => X-Forwarded-For header info in AWS checked (req.headers['x-forwarded-for'] || req.connection.remoteAddress)
 				_app.use(bodyParser.json()) //app.use(express.json())
 				_app.use(bodyParser.urlencoded({ extended: true })) //req.body : { array : { key1 : { key2 : '123' } } } //when false => req.body : { 'array[key1][key2]' :'123' }
 				_app.use(cookieParser()) //_app.use(express.limit('10G'))
-				if (public) _app.use(express.static(public))	
-				//_app.use(function(req, res, next) { 
-				//	if (!req.timedout) next()
-				//})			
+				if (public) _app.use(express.static(public))					
 				return _app
 			},
 			createWas : (_app, _kind) => { //프로젝트 hushsbay는 aws 기반(https는 로드밸런서인 CLB 이용)이므로 내부에서는 https가 아닌 http로 설정
