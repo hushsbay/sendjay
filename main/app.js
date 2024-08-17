@@ -78,9 +78,10 @@ global.jay.on('connection', async (socket) => {
 			ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, 'userid/userkey/winid/userip 모두 필요합니다.')
 			socket.disconnect()
 			return
-		}
+		}		
 		if (queryParam.token) {
 			if (!socket.usertoken) {
+				console.log("1111111")
 				const tokenInfo = { userid : queryParam.userid, token : queryParam.token }
 				const jwtRet = await ws.jwt.verify(tokenInfo)
 				if (jwtRet.code != ws.cons.CODE_OK) {
@@ -89,6 +90,8 @@ global.jay.on('connection', async (socket) => {
 					return
 				}
 				socket.usertoken = queryParam.token
+			} else {
+				console.log("22222222222222")
 			}
 		} else {
 			ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, '소켓 연결시 인증 토큰이 필요합니다.') 
