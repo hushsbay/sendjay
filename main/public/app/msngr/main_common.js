@@ -918,6 +918,7 @@ var funcSockEv = { //needs to be public
         if (!data.token) return //app.js->ChatService.kt로부터 내려옴
         try {
             hush.auth.isTokenRefreshing = false
+            hush.msg.toast(hush.auth.isTokenRefreshing+"^^^")
             hush.auth.refreshTokenFrom(data.token)
             toggleDisconnIcon(false)
             if (g_mode == BTN_MODE_PEOPLE) {
