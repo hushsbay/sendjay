@@ -103,6 +103,7 @@ global.jay.on('connection', async (socket) => {
 				}
 				const newToken = ws.jwt.make({ userid : queryParam.userid })
 				socket.usertoken = newToken
+				console.log("1111111----" + newToken)
 			} else {
 				console.log("이 로그는 발생하면 안됨.")
 			}
@@ -123,6 +124,7 @@ global.jay.on('connection', async (socket) => {
 				}
 			}
 		})
+		socket.emit(ws.cons.sock_ev_common, { ev : ws.cons.sock_ev_chk_alive, data : { token : socket.usertoken} })
 		ws.sock.broadcast(ws.cons.sock_ev_show_on, socket.userkey, 'all') //서버로 들어오는 것이 없고 클라이언트로 나가는 것만 있을 것임
 		socket.on(ws.cons.sock_ev_disconnect, (reason) => require(DIR_SOCKET + ws.cons.sock_ev_disconnect)(socket, reason))
 		socket.on(ws.cons.sock_ev_common, (param) => require(DIR_SOCKET + param.ev)(socket, param))
