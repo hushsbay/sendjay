@@ -25,6 +25,10 @@ const app = ws.util.initExpressApp('public')
 // app.use(function(req, res, next) { 
 // 	if (!req.timedout) next()
 // })		
+app.use(function(req, res, next) { 
+	req.connection.setTimeout(2000)
+    res.connection.setTimeout(2000)
+})
 const wasServer = ws.util.createWas(app, config.http.method) //프로젝트 hushsbay는 aws 기반(https는 로드밸런서 CLB 이용)이므로 여기서는 https가 아닌 http로 설정
 wasServer.listen(config.http.port, () => { console.log('wasServer listening on ' + config.http.port) })
 
@@ -45,9 +49,9 @@ const appSocket = ws.util.initExpressApp()
 const socketServer = ws.util.createWas(appSocket, config.http.method) //not https (because of aws elastic load balancer)
 const io = new Server(socketServer, { //여기 Server는 socket.io
 	//autoConnect to false (모바일 connect후 로그인/로깅시 http호출 여러번 발생해서 false로 변경)
-	//웹은 끊어지면 다른 탭에서 연결, 모바일도 SocketIO.invoke 새로하므로 false로 해도 무방
+	//웹은 끊어지면 다른 탭에서 연결, 모바일도 SocketIO.invoke 새로 하므로 false로 해도 무방
 	//false로 해도 서버 재시작시 1초안에 여러건의 로깅이 발생함 (클라이언트는 옵션을 못찾음) => 해결은 다른 곳에서 함 (SocketIO.kt ###777 참조)
-	allowEIO3: false, autoConnect: true, pingTimeout: PING_TIMEOUT, pingInterval: PING_INTERVAL, cors: { origin: config.app.corsSocket, methods: ["GET", "POST"] }
+	allowEIO3: false, autoConnect: false, pingTimeout: PING_TIMEOUT, pingInterval: PING_INTERVAL, cors: { origin: config.app.corsSocket, methods: ["GET", "POST"] }
 })
 io.adapter(redisAdapter(global.pub, sub))
 io.listen(config.sock.port)
@@ -91,7 +95,7 @@ global.jay.on('connection', async (socket) => {
 				}
 				socket.usertoken = queryParam.token
 			} else {
-				console.log("22222222222222")
+				console.log("이 로그는 발생하면 안됨.")
 			}
 		} else {
 			ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, '소켓 연결시 인증 토큰이 필요합니다.') 
