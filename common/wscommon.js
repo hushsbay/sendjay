@@ -53,6 +53,7 @@ module.exports = (function() {
 			sock_ev_toast : 'toast',
 			sock_ev_disconnect : "disconnect", //disconnect로 써야 함 (socket.io event)
 			sock_ev_common : 'common', //Belows are handled in this sock_ev_common event.
+			sock_ev_refresh_token : 'refresh_token', //모바일앱에서 받아서 유용하게 사용 (웹에서는 별 필요없음)
 			sock_ev_chk_alive : 'chk_alive',
 			sock_ev_show_off : 'show_off',
 			sock_ev_show_on : 'show_on',
