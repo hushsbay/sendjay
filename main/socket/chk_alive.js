@@ -24,7 +24,7 @@ module.exports = async function(socket, param) {
 		}
 		console.log("param.data.token", JSON.stringify(param))	
 		if (param.data.token) {
-			console.log("param.data.token", param.data.token)
+			//app.js에서 바로 호출한 것임 (모바일만 적용) console.log("param.data.token", param.data.token)
 		} else {
 			param.data = userkeyArr
 		}
