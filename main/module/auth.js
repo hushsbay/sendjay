@@ -7,8 +7,8 @@ module.exports = {
 	login : (uid, pwd, autologin, autokey_app, kind) => {
 		return new Promise(async (resolve, reject) => { //module.exports 사용시 Promise로 구현해야 호출하는 곳에서 정상적으로 원하는 값을 리턴 받을 수 있음
 			let conn, sql, data, len, userid, webAuthenticated
-			try {
-				const rs = ws.http.resInit()
+            const rs = ws.http.resInit()
+			try {				
                 console.log('auth.login', uid, pwd, autologin, autokey_app, kind) //나중에 막기
                 conn = await wsmysql.getConnFromPool(global.pool)
                 if (kind == 'web') { //웹에서는 맨 처음 로그인시 uid,pwd가 넘어 오거나 이미 로그인 상태에서 쿠키(token,userid)가 넘어와 체크하면 됨
