@@ -22,7 +22,11 @@ module.exports = async function(socket, param) {
 			const _obj = ws.redis.getUserkeySocketIdFromKey(key) //userkey와 socketid를 분리
 			userkeyArr.push(_obj.userkey) //userkey 담아서 리턴하면 됨
 		}
-		param.data = userkeyArr
+		if (param.data.token) {
+			//
+		} else {
+			param.data = userkeyArr
+		}
 		socket.emit(ws.cons.sock_ev_common, param)
 	} catch (ex) {
 		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex)
