@@ -1776,6 +1776,7 @@
 
             var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
                 [hush.cons.sock_ev_chk_alive] : (data) => { //[...]
+                    if (data.token) return //app.js->ChatService.kt로부터 내려온 것으로 return하지 않으면 data is not Iterable 오류 발생
                     for (let item of data) hush.util.displayOnOff(item, true)
                     if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.funcSockEv[hush.cons.sock_ev_chk_alive].call(null, data)
                 },
