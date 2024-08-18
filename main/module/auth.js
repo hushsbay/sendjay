@@ -4,7 +4,7 @@ const ws = require(nodeConfig.app.ws)
 const wsmysql = require(nodeConfig.app.wsmysql)
 
 module.exports = {
-	login : (uid, pwd, autologin, autokey_app, kind) => {
+	login : (uid, pwd, autologin, autokey_app, kind, req, res) => { //req, res는 web에서만 사용
 		return new Promise(async (resolve, reject) => { //module.exports 사용시 Promise로 구현해야 호출하는 곳에서 정상적으로 원하는 값을 리턴 받을 수 있음
 			let conn, sql, data, len, userid, webAuthenticated
             const rs = ws.http.resInit()
