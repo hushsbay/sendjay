@@ -929,6 +929,7 @@ var funcSockEv = { //needs to be public
                     sendChkAlive(userkeyArr)
                 })
             } else if (g_mode == BTN_MODE_CHAT) { //아래 호출은 refreshToken이 block된 슬립모드 등에서 재연결시 토큰만기 우려가 있음
+                alert("1111")
                 getPortalList({ type: "reconnect" }) //procMenuTop(hush.http.getCookie("mode"))
             }
             setTimeout(function() {
