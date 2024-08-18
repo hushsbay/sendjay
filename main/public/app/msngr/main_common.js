@@ -918,7 +918,6 @@ var funcSockEv = { //needs to be public
         if (!data.token) return //app.js->ChatService.kt로부터 내려옴
         try {
             hush.auth.refreshTokenFrom(data.token)
-            hush.msg.toast(data.token+"======refreshTokenFrom")
             toggleDisconnIcon(false)
             if (g_mode == BTN_MODE_PEOPLE) {
                 const userkeyArr = []
@@ -1139,7 +1138,7 @@ const startMsngr = async (launch, winid) => { //웹 전용
                         }
                         chkRoomFocus()
                         callPeriodic()
-                        hush.auth.refreshToken("main-web")
+                        hush.auth.refreshToken("main_web")
                     }
                 } else {
                     worker.terminate()
@@ -1227,7 +1226,7 @@ const startFromWebView = (from, obj, rs, startFromResume) => {
             }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작            
         }
         callPeriodic()
-        hush.auth.refreshToken("main-app")
+        hush.auth.refreshToken("main_app")
     } catch (ex) {
         hush.util.showEx(ex)
     }

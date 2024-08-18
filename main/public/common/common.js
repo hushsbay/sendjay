@@ -165,7 +165,22 @@
                 if (hush.http.chkOnline("none")) {
                     try {
                         const rs = await hush.http.ajax("/auth/refresh_token", { from : from }, true)
-                        if (rs.token) hush.http.setCookie("token", rs.token)
+                        if (rs.token) {
+                            hush.http.setCookie("token", rs.token)
+                            if (hush.webview.ios) {
+                            } else if (hush.webview.and) {
+                                setTimeout(function() { //MainActivity.kt의 웹뷰가 main.html,chat.html 2개인데 공유를 하지 않으므로 
+                                    //액티비티로 넘겨 열릴 때마다 전달. 데몬에서 HttpFuel로 루핑돌며 호출시 서버재시작시 
+                                    //타임아웃이후에도 쌓이는 현상으로 부하 발생하므로 여기서 전달
+                                    //전달하지 않으면 웹뷰에서 chat.html 열릴 때 토큰이 만기되는 경우가 발생할 수 있음
+                                    if (from == "main_app") {
+                                        AndroidMain.refreshToken(rs.token) 
+                                    } else if (from == "chat_app") { 
+                                        AndroidRoom.refreshToken(rs.token) 
+                                    }
+                                }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                            }
+                        }                            
                     } catch (ex) {
                         console.log("refreshToken Error : " + ex.message) //no alert
                         //return //오류나도 멈추지 말고 계속 수행 (일시적인 오류일 수도)
