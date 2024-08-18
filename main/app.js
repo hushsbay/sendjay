@@ -25,10 +25,10 @@ const app = ws.util.initExpressApp('public')
 // app.use(function(req, res, next) { 
 // 	if (!req.timedout) next()
 // })		
-app.use(function(req, res, next) { 
-	req.connection.setTimeout(2000)
-    res.connection.setTimeout(2000)
-})
+// app.use(function(req, res, next) { 
+// 	req.connection.setTimeout(5000)
+//     res.connection.setTimeout(5000)
+// })
 const wasServer = ws.util.createWas(app, config.http.method) //프로젝트 hushsbay는 aws 기반(https는 로드밸런서 CLB 이용)이므로 여기서는 https가 아닌 http로 설정
 wasServer.listen(config.http.port, () => { console.log('wasServer listening on ' + config.http.port) })
 
