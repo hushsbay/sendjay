@@ -162,7 +162,6 @@
                 return rs
             },  
             refreshToken : async (from) => { //모바일(웹뷰)에서는 디바이스가 대기모드 등으로 들어갈 때 http call이 멈추게 됨을 유의 (PC 웹에서는 OK)
-                return
                 if (hush.http.chkOnline("none")) {
                     try {
                         const rs = await hush.http.ajax("/auth/refresh_token", { from : from }, true)
