@@ -22,7 +22,7 @@ module.exports = async function(socket, param) {
 			const _obj = ws.redis.getUserkeySocketIdFromKey(key) //userkey와 socketid를 분리
 			userkeyArr.push(_obj.userkey) //userkey 담아서 리턴하면 됨
 		}
-		console.log("param.data.token", JSON.stringify(param))	
+		console.log("param.data.token", JSON.stringify(param))	  
 		if (param.data.token) {
 			//app.js에서 바로 호출한 것임 (모바일만 적용) console.log("param.data.token", param.data.token)
 		} else {
