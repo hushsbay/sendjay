@@ -164,6 +164,7 @@
             isTokenRefreshing : false,
             refreshToken : async (from) => { //모바일(웹뷰)에서는 디바이스가 대기모드 등으로 들어갈 때 http call이 멈추게 됨을 유의 (PC 웹에서는 OK)
                 if (hush.http.chkOnline("none") && !hush.auth.isTokenRefreshing) {
+                    hush.msg.toast(hush.auth.isTokenRefreshing+"***")
                     try {
                         hush.auth.isTokenRefreshing = true
                         const rs = await hush.http.ajax("/auth/refresh_token", { from : from }, true)
@@ -185,6 +186,8 @@
                         console.log("refreshToken Error : " + ex.message) //no alert
                         //return //오류나도 멈추지 말고 계속 수행 (일시적인 오류일 수도)
                     }
+                } else {
+                    hush.msg.toast(hush.auth.isTokenRefreshing+"===")
                 }
                 setTimeout(() => hush.auth.refreshToken(from), 10000) //600000) //10분 (토큰 갱신 주기 = 웹만 사용)
             },
