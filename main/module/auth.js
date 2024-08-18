@@ -9,6 +9,7 @@ module.exports = {
 			let conn, sql, data, len, userid, webAuthenticated
 			try {
 				const rs = ws.http.resInit()
+                console.log('auth.login', uid, pwd, autologin, autokey_app, kind) //나중에 막기
                 conn = await wsmysql.getConnFromPool(global.pool)
                 if (kind == 'web') { //웹에서는 맨 처음 로그인시 uid,pwd가 넘어 오거나 이미 로그인 상태에서 쿠키(token,userid)가 넘어와 체크하면 됨
                     if (!uid) {
