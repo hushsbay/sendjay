@@ -915,6 +915,7 @@ var procUnreadTitle = (roomid) => { //call from chat.html
 
 var funcSockEv = { //needs to be public
     [hush.cons.sock_ev_chk_alive] : (data) => { //[...]
+        if (data.token) return //app.js->ChatService.kt로부터 내려온 것으로 return하지 않으면 data is not Iterable오류 발생
         for (let item of data) hush.util.displayOnOff(item, true)
         if (g_memWin && !g_memWin.closed) g_memWin.funcSockEv[hush.cons.sock_ev_chk_alive].call(null, data)
     },
