@@ -915,11 +915,9 @@ var procUnreadTitle = (roomid) => { //call from chat.html
 
 var funcSockEv = { //needs to be public
     [hush.cons.sock_ev_refresh_token] : (data) => { //모바일앱(웹뷰) 전용
-        alert("1111"+data.token)
         if (!data.token) return //app.js->ChatService.kt로부터 내려옴
         try {
             hush.auth.isTokenRefreshing = false
-            hush.msg.toast(hush.auth.isTokenRefreshing+"^^^")
             hush.auth.refreshTokenFrom(data.token)
             toggleDisconnIcon(false)
             if (g_mode == BTN_MODE_PEOPLE) {
@@ -930,7 +928,6 @@ var funcSockEv = { //needs to be public
                     sendChkAlive(userkeyArr)
                 })
             } else if (g_mode == BTN_MODE_CHAT) { //아래 호출은 refreshToken이 block된 슬립모드 등에서 재연결시 토큰만기 우려가 있음
-                
                 getPortalList({ type: "reconnect" }) //procMenuTop(hush.http.getCookie("mode"))
             }
             setTimeout(function() {
