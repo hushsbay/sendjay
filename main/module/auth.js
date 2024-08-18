@@ -75,6 +75,7 @@ module.exports = {
                     data[0].AUTOKEY_APP = autokey_app //순전히 앱에서 코딩이 불편해서 처리한 것임 //AUTOKEY_WEB은 관리안함
                 }
                 Object.assign(rs, data[0])
+                rs.userid = userid
                 resolve(rs)
 			} catch (ex) {
                 rs.code = ws.cons.CODE_ERR
