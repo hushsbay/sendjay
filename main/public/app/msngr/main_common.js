@@ -915,10 +915,9 @@ var procUnreadTitle = (roomid) => { //call from chat.html
 
 var funcSockEv = { //needs to be public
     [hush.cons.sock_ev_refresh_token] : (data) => {
-        console.log(JSON.stringify(data))
         if (!data.token) return //app.js->ChatService.kt로부터 내려옴 (chat.html은 굳이 처리할 필요없음 : cookie set)
         hush.auth.refreshTokenFrom(data.token)
-        hush.msg.toast(data.token)
+        hush.msg.toast(data.token+"======")
     },
     [hush.cons.sock_ev_chk_alive] : (data) => { //[...]
         for (let item of data) hush.util.displayOnOff(item, true)
