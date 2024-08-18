@@ -88,12 +88,21 @@ global.jay.on('connection', async (socket) => {
 				console.log("1111111")
 				const tokenInfo = { userid : queryParam.userid, token : queryParam.token }
 				const jwtRet = await ws.jwt.verify(tokenInfo)
-				if (jwtRet.code != ws.cons.CODE_OK) {
+				if (jwtRet.code == ws.cons.CODE_TOKEN_EXPIRED && queryParam.pwd) { //모바일 jwt 만기시에만 해당
+					const auth = require('./module/auth')
+					const rs = await auth.login(queryParam.userid, queryParam.pwd, 'Y', queryParam.autokey_app, 'app')
+					if (rs.code != ws.cons.CODE_OK) {
+						ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, rs.msg)
+						socket.disconnect()
+						return
+					}					
+				} else if (jwtRet.code != ws.cons.CODE_OK) {
 					ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, jwtRet.msg)
 					socket.disconnect()
 					return
 				}
-				socket.usertoken = queryParam.token
+				const newToken = ws.jwt.make({ userid : queryParam.userid })
+				socket.usertoken = newToken
 			} else {
 				console.log("이 로그는 발생하면 안됨.")
 			}
