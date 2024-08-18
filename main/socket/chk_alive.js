@@ -23,7 +23,7 @@ module.exports = async function(socket, param) {
 			userkeyArr.push(_obj.userkey) //userkey 담아서 리턴하면 됨
 		}
 		if (param.data.token) {
-			//
+			console.log("param.data.token", param.data.token)
 		} else {
 			param.data = userkeyArr
 		}
