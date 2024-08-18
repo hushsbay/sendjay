@@ -173,11 +173,8 @@
                                     //액티비티로 넘겨 열릴 때마다 전달. 데몬에서 HttpFuel로 루핑돌며 호출시 서버재시작시 
                                     //타임아웃이후에도 쌓이는 현상으로 부하 발생하므로 여기서 전달
                                     //전달하지 않으면 웹뷰에서 chat.html 열릴 때 토큰이 만기되는 경우가 발생할 수 있음
-                                    if (from == "main_app") {
-                                        AndroidMain.refreshToken(rs.token) 
-                                    } else if (from == "chat_app") { 
-                                        AndroidRoom.refreshToken(rs.token) 
-                                    }
+                                    if (from == "main_app") AndroidMain.refreshToken(rs.token) 
+                                    //from=="chat_app"일 경우(chat.html)는 main웹뷰가 항상 오픈되어 있으므로 액티비티로 늘 갱신됨
                                 }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
                             }
                         }                            
