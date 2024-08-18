@@ -15,7 +15,7 @@ router.post('/', async function(req, res) {
 	try { 
 		//const rs = ws.http.resInit()
 		const { uid, pwd, autologin, autokey_app, kind } = req.body //autologin은 앱에서만 사용 (웹은 자동로그인이 아닌 token을 통한 인증체크임)
-		console.log(req.title, ws.util.getCurDateTimeStr(true), autologin, uid) //나중에 막기
+		console.log(req.title, ws.util.getCurDateTimeStr(true), uid, pwd, autologin, autokey_app, kind) //나중에 막기
 		const auth = require('../../module/auth')
 		const rs = await auth.login(uid, pwd, autologin, autokey_app, kind)
 		if (rs.code != ws.cons.CODE_OK) {
