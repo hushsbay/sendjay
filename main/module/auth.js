@@ -78,6 +78,7 @@ module.exports = {
                 rs.userid = userid
                 resolve(rs)
 			} catch (ex) {
+                console.log("#######", ex.message)
                 rs.code = ws.cons.CODE_ERR
                 rs.msg = ex.message
 				reject(rs)
