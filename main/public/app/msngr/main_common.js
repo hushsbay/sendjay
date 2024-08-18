@@ -917,6 +917,7 @@ var funcSockEv = { //needs to be public
     [hush.cons.sock_ev_refresh_token] : (data) => { //모바일앱(웹뷰) 전용
         if (!data.token) return //app.js->ChatService.kt로부터 내려옴
         try {
+            hush.auth.isTokenRefreshing = false
             hush.auth.refreshTokenFrom(data.token)
             toggleDisconnIcon(false)
             if (g_mode == BTN_MODE_PEOPLE) {
