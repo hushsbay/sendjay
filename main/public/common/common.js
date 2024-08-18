@@ -165,8 +165,7 @@
             isTokenRefreshing : false,
             refreshToken : async (from) => { //모바일(웹뷰)에서는 디바이스가 대기모드 등으로 들어갈 때 http call이 멈추게 됨을 유의 (PC 웹에서는 OK)
                 if (hush.http.chkOnline("none") && !hush.auth.isTokenRefreshing) {
-                    //hush.msg.toast(hush.auth.isTokenRefreshing+"***")
-                    try {
+                    try { //isTokenRefreshing 체크하지 않으면 주기적 http 호출에서 서버재시작시 타임아웃이후에도 쌓이는 현상으로 부하 발생함
                         hush.auth.isTokenRefreshing = true
                         const rs = await hush.http.ajax("/auth/refresh_token", { from : from }, true)
                         hush.auth.isTokenRefreshing = false
@@ -175,8 +174,7 @@
                             if (hush.webview.ios) {
                             } else if (hush.webview.and) {
                                 setTimeout(function() { //MainActivity.kt의 웹뷰가 main.html,chat.html 2개인데 공유를 하지 않으므로 
-                                    //액티비티로 넘겨 열릴 때마다 전달. 데몬에서 HttpFuel로 루핑돌며 호출시 서버재시작시 
-                                    //타임아웃이후에도 쌓이는 현상으로 부하 발생하므로 여기서 전달
+                                    //액티비티로 넘겨 열릴 때마다 전달. 
                                     //전달하지 않으면 웹뷰에서 chat.html 열릴 때 토큰이 만기되는 경우가 발생할 수 있음
                                     if (from == "main_app") AndroidMain.refreshToken(rs.token) 
                                     //from=="chat_app"일 경우(chat.html)는 main웹뷰가 항상 오픈되어 있으므로 액티비티로 늘 갱신됨
@@ -187,10 +185,8 @@
                         console.log("refreshToken Error : " + ex.message) //no alert
                         //return //오류나도 멈추지 말고 계속 수행 (일시적인 오류일 수도)
                     }
-                } else {
-                    //hush.msg.toast(hush.auth.isTokenRefreshing+"===")
                 }
-                setTimeout(() => hush.auth.refreshToken(from), 10000) //600000) //10분 (토큰 갱신 주기 = 웹만 사용)
+                setTimeout(() => hush.auth.refreshToken(from), 1000 * 60 * 60) //1시간 (jwt 만기는 4시간 - 서버 nodeConfig.js)
             },
             refreshTokenFrom : (token) => {
                 hush.http.setCookie("token", token)
