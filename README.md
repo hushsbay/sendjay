@@ -939,6 +939,8 @@ ISUDT CHAR(26) NOT NULL DEFAULT '' COMMENT '서버시각 기준' ) ;
 CREATE UNIQUE INDEX Z_ACTLOG_IDX0 ON jay.Z_ACTLOG_TBL (ISUDT, USER_ID, WORK) ;
 
 
+-- 아래 2개의 테이블은 Sendjay ver2.0에서 구현될 내용 (ver1.0에서는 미사용)
+
 drop table if exists jay.A_CHANMST_TBL;
 CREATE TABLE jay.A_CHANMST_TBL (
 MSGID VARCHAR(40) NOT NULL COMMENT '메시지아이디',
