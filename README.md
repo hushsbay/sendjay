@@ -628,8 +628,8 @@ Here are some ideas to get you started:
         연동하는 방식으로 진행하며 각 시스템내 배치, 데몬 등의 적용은 사내ERP환경에 맞게 구성하면 될 것입니다.<br/>
      
    * 먼저 간편등록에서 organ이라는 아이디를 만듭니다. 
-      - 아래 화면은 수동으로 아이디를 만드는 페이지입니다.<br/>
-        (사용자정보와 연동해 자동으로 동기화된 아이디는 아래에서 조회되지 않음)<br/>
+      - 아래 화면은 수동으로 아이디를 만드는 페이지입니다. (사용자정보와 연동해 자동으로 동기화된 아이디는<br/>
+        아래 화면에서는 조회되지 않으며 수동으로 등록한 아이디만 조회됩니다)<br/>
       - organ은 조직/사용자 연동을 위한 전용 아이디입니다. 
       - 이름과 비번만 저장하고 회사/부서 등은 입력하지 않습니다.           
    
@@ -646,9 +646,9 @@ Here are some ideas to get you started:
 ```
       const interfaceToDept = () => {
          const _userid = "organ" 
-         const _token = "eyJhbGciOiJIUzI1NiIsInR5c~~.Tg1NSwiZXhwIjoxNzUyODc3ODU1fQ~~.LSgqgQC6xHzqkIEaNT7w9ME-NX3c~~"
+         const _token = "ey~XVCJ9.eyJ1c2VyhwIjoxNzUyODc3ODU1fQ.LSgqg"
          const dt = "" //dt = "20240901134528" //테스트. DTKEY가 없는 경우는 서버에서 생성. 있으면 서버에 있는 기존 데이터 삭제후 생성
-         const deptArr = [
+         const deptArr = [ //사내 ERP에서 가져온 조직 관련 데이터 샘플입니다.
             { DTKEY : dt, ORG_CD : "Company_A", ORG_NM : "삼성전자", SEQ : "A00", LVL : 0 },
             { DTKEY : dt, ORG_CD : "Division_A1", ORG_NM : "본부_A1", SEQ : "A10", LVL : 1 },
             { DTKEY : dt, ORG_CD : "Dept_A11", ORG_NM : "팀_A11", SEQ : "A11", LVL : 2 },
@@ -676,7 +676,7 @@ Here are some ideas to get you started:
             { DTKEY : dt, ORG_CD : "Dept_C21", ORG_NM : "팀_C21", SEQ : "C21", LVL : 2 },
             { DTKEY : dt, ORG_CD : "Dept_C22", ORG_NM : "팀_C22", SEQ : "C22", LVL : 2 },
             { DTKEY : dt, ORG_CD : "Dept_C23", ORG_NM : "팀_C23", SEQ : "C23", LVL : 2 },
-         ]               
+         ]				
          const _urlDept = "https://hushsbay.com/org/interfaceToDept"
          $.ajax({
             dataType : "json" //response data type
@@ -687,8 +687,8 @@ Here are some ideas to get you started:
             ,cache : false
             ,success : function(rs) {
                if (rs.code != "0") {
-                     alert(rs.msg + " (" + rs.code + ")")
-                     return
+                  alert(rs.msg + " (" + rs.code + ")")
+                  return
                }
                alert("interfaceToDept DTKEY : " + rs.dtkey)
             }
@@ -700,18 +700,14 @@ Here are some ideas to get you started:
 
       const interfaceToUser = () => {
          const _userid = "organ" 
-         const _token = "eyJhbGciOiJIUzI1NiIsInR5c~~.Tg1NSwiZXhwIjoxNzUyODc3ODU1fQ~~.LSgqgQC6xHzqkIEaNT7w9ME-NX3c~~"
+         const _token = "ey~XVCJ9.eyJ1c2VyhwIjoxNzUyODc3ODU1fQ.LSgqg"
          const dt = "" //dt = "20240901134528" //테스트. DTKEY가 없는 경우는 서버에서 생성. 있으면 서버에 있는 기존 데이터 삭제후 생성
-         const userArr = [
-            { DTKEY : dt, USER_ID : "A000001", USER_NM : "이의방", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", 
-               TOP_ORG_NM : "삼성디스플레이", JOB : "프로그래머", TEL_NO : "01012345678", AB_CD : "", AB_NM : "" },
-            { DTKEY : dt, USER_ID : "A000002", USER_NM : "정중부", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", 
-               TOP_ORG_NM : "삼성디스플레이", JOB : "사내변호사", TEL_NO : "01054982564", AB_CD : "dayoff", AB_NM : "20240901-20240930" },
-            { DTKEY : dt, USER_ID : "A000003", USER_NM : "경대승", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", 
-               TOP_ORG_NM : "삼성디스플레이", JOB : "예산담당", TEL_NO : "01043565279", AB_CD : "", AB_NM : "" },
-            { DTKEY : dt, USER_ID : "A000004", USER_NM : "이의민", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", 
-               TOP_ORG_NM : "삼성디스플레이", JOB : "자금담당", TEL_NO : "01097826494", AB_CD : "biztrip", AB_NM : "20241025-20241028" },
-         ]           
+         const userArr = [ //사내 ERP에서 가져온 사용자 관련 데이터 샘플입니다.
+            { DTKEY : dt, USER_ID : "A000001", USER_NM : "이의방", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", TOP_ORG_NM : "삼성디스플레이", JOB : "프로그래머", TEL_NO : "01012345678", AB_CD : "", AB_NM : "" },
+            { DTKEY : dt, USER_ID : "A000002", USER_NM : "정중부", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", TOP_ORG_NM : "삼성디스플레이", JOB : "사내변호사", TEL_NO : "01054982564", AB_CD : "dayoff", AB_NM : "20240901-20240930" },
+            { DTKEY : dt, USER_ID : "A000003", USER_NM : "경대승", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", TOP_ORG_NM : "삼성디스플레이", JOB : "예산담당", TEL_NO : "01043565279", AB_CD : "", AB_NM : "" },
+            { DTKEY : dt, USER_ID : "A000004", USER_NM : "이의민", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", TOP_ORG_NM : "삼성디스플레이", JOB : "자금담당", TEL_NO : "01097826494", AB_CD : "biztrip", AB_NM : "20241025-20241028" },
+         ]			
          const _urlDept = "https://hushsbay.com/org/interfaceToUser"
          $.ajax({
             dataType : "json" //response data type
@@ -722,8 +718,8 @@ Here are some ideas to get you started:
             ,cache : false
             ,success : function(rs) {
                if (rs.code != "0") {
-                     alert(rs.msg + " (" + rs.code + ")")
-                     return
+                  alert(rs.msg + " (" + rs.code + ")")
+                  return
                }
                alert("interfaceToUser DTKEY : " + rs.dtkey)
             }
@@ -737,6 +733,7 @@ Here are some ideas to get you started:
    * organ으로 로그인후 '간편등록' 옆에 보이는 '관리자'라는 메뉴를 클릭하면 아래가 열립니다.
 
       + '토큰복사'를 누르면 클립보드에 값이 복사되고 위 소스의 _token에 붙여 넣습니다.
+      + 복사된 토큰은 만기가 있습니다. (서버의 nodeConfig.js 내 jwt expiry 값 참조)
 
    ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_interface_3.png)   
       
