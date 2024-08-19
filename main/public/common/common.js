@@ -982,7 +982,7 @@
 				}
 				return obj
             },
-            extractFileFromTalkBody : (body) => { //from hush.A_MSGMS_TBL BODY Field value for file upload (xxroomid/xxuserid/realfilenamebody~~tempfilenamebody.extension##filesize)
+            extractFileFromTalkBody : (body) => { //from A_MSGMS_TBL BODY Field value for file upload (xxroomid/xxuserid/realfilenamebody~~tempfilenamebody.extension##filesize)
                 const _arr = body.split("/")
                 const _brr = (_arr.length == 1) ? _arr[0].split(hush.cons.subdeli) : _arr[2].split(hush.cons.subdeli)
                 const _crr = (_brr.length == 1) ? _brr[0].split(hush.cons.deli) : _brr[1].split(hush.cons.deli)
@@ -1126,16 +1126,16 @@
                 if (/android|iphone|ipad/i.test(navigator.userAgent)) return true
                 return false
             },
-            getMobileOSVersion : (os) => { //do not use. navigator.agent에서 14로 나오지 않고 10으로 나와서 사용못함
-                //os => "Android" : Mozilla/5.0 (Linux; Android 11; SM-G977N) AppleWebkit/537.36 (KHTML, ~
-                //os => iOS : not prepared yet
-                const agent = navigator.userAgent + ";"
-                const pos = agent.indexOf(os)
-                if (pos == -1) return pos
-                const posColon = agent.indexOf(";", pos)
-                const ver = agent.substr(pos + os.length, posColon - (pos + os.length))
-                return parseInt(ver.trim())
-            }, 
+            // getMobileOSVersion : (os) => { //do not use. navigator.agent에서 14로 나오지 않고 10으로 나와서 사용못함
+            //     //os => "Android" : Mozilla/5.0 (Linux; Android 11; SM-G977N) AppleWebkit/537.36 (KHTML, ~
+            //     //os => iOS : not prepared yet
+            //     const agent = navigator.userAgent + ";"
+            //     const pos = agent.indexOf(os)
+            //     if (pos == -1) return pos
+            //     const posColon = agent.indexOf(";", pos)
+            //     const ver = agent.substr(pos + os.length, posColon - (pos + os.length))
+            //     return parseInt(ver.trim())
+            // }, 
             getRect : (tagStr) => {
                 const tag = document.querySelector(tagStr)
                 if (!tag) return null 

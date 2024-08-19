@@ -1040,29 +1040,6 @@ var funcSockEv = { //needs to be public
     [hush.cons.sock_ev_mark_as_connect] : (data) => {//mobile only
         toggleDisconnIcon(false) //Util.kt의 connectSockWithCallback() 설명 참조
     },
-    // [hush.cons.sock_ev_connect] : (data) => { //mobile only
-    //     //Socket.EVENT_CONNECT occurred many times at a moment. ChatService.kt (socket.io 초기버전 이야기?!)
-    //     try {
-    //         toggleDisconnIcon(false)
-    //         if (g_mode == BTN_MODE_PEOPLE) {
-    //             const userkeyArr = []
-    //             $(".state").each(function(idx, item) {
-    //                 userkeyArr.push(this.id.substring(2))
-    //             }).promise().done(function() {                
-    //                 sendChkAlive(userkeyArr)
-    //             })
-    //         } else if (g_mode == BTN_MODE_CHAT) { //아래 호출은 refreshToken이 block된 슬립모드 등에서 재연결시 토큰만기 우려가 있음
-    //             hush.auth.refreshTokenFrom(data.token) //from mobile
-    //             hush.msg.toast("refreshTokenFrom")
-    //             getPortalList({ type: "reconnect" }) //procMenuTop(hush.http.getCookie("mode"))
-    //         }
-    //         setTimeout(function() {
-    //             AndroidCom.reconnectDone()
-    //         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
-    //     } catch (ex) {
-    //         hush.util.showEx(ex)
-    //     }
-    // },
     [hush.cons.sock_ev_chk_roomfocus] : (data) => {
         //focusedRoomid는 웹에서 앱으로 (단방향으로만) 요청하는 소켓정보임
         //1) focusedRoomid가 빈칸이 아니면 현재 앱에서 해당 roomid로 챗방이 맨위에 열려 있고 스크린도 On 상태이어서
@@ -1222,9 +1199,6 @@ const startFromWebView = (from, obj, rs, startFromResume) => {
             procMenuTop(BTN_MODE_PEOPLE, BTN_PEOPLE_COMPANY)
         } else { //main 화면
             initStandAlone(rs)
-            setTimeout(function() {
-                AndroidMain.doneLoad()
-            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작            
         }
         callPeriodic()
         hush.auth.refreshToken("main_app")

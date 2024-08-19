@@ -101,8 +101,6 @@
                     await $.getScript("/app/msngr/main_common.js")
                     const _token = hush.http.getCookie("token")  
                     if (_token) { //jwt는 세션쿠키이므로 있다면 사용자가 인증한 것이 되므로 jwt를 검증해야 함
-                        //const autokey_web = hush.http.getCookie("autokey_web")
-                        //const rs = await hush.http.ajax("/auth/login", { autokey_web : autokey_web, kind : "web" }) //token과 userid는 쿠키로 전송됨
                         const rs = await hush.http.ajax("/auth/login", { kind : "web" }) //token과 userid는 쿠키로 전송됨
                         if (rs.code != hush.cons.CODE_OK) {
                             if (!rs.code.startsWith(hush.cons.token_err_prefix)) { //-8
