@@ -278,7 +278,7 @@
                         const row = data.list[i]
                         const msgid = row.MSGID
                         const cdt = row.CDT
-                        const cdt1 = cdt.substr(2, 14)
+                        const cdt1 = cdt.substring(2, 2 + 14) //cdt.substr(2, 14)
                         const type = row.TYPE
                         let body
                         if (type == "image") {

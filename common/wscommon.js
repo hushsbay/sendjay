@@ -595,7 +595,7 @@ module.exports = (function() {
 				}
 				_ret = arr.map(item => "'" + item + "'").toString()
 				_ret = _ret.substring(1)
-				_ret = _ret.substr(0, _ret.length - 1)
+				_ret = _ret.substring(0, 0 + _ret.length - 1) //_ret.substr(0, _ret.length - 1)
 				return _ret
 			},
 			encrypt : (text, key) => { //key = 32bytes

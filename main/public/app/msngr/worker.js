@@ -51,7 +51,7 @@ function competeWinner() {
         let isWinner = false
         let udt = getCurDateTimeStr()
         w_winid = w_winid ? w_winid : udt //20200817153202xxx
-        udt = udt.substr(0, 14) //20200817153202
+        udt = udt.substring(0, 0 + 14) //udt.substr(0, 14) //20200817153202
         const tx = db.transaction(TBL, "readwrite")
         const os = tx.objectStore(TBL)
         const os_req = os.get(ONE_KEY) //record is only one
@@ -122,7 +122,7 @@ function competeWinner() {
 function setWinner() {
     try {
         let udt = getCurDateTimeStr()
-        udt = udt.substr(0, 14) //20200817153202
+        udt = udt.substring(0, 0 + 14) //udt.substr(0, 14) //20200817153202
         const tx = db.transaction(TBL, "readwrite")
         const os = tx.objectStore(TBL)
         const os_req = os.get(ONE_KEY) //record is only one
@@ -177,7 +177,9 @@ function getTimeStamp(str) { //str = 2012-08-02 14:12:04
 }
 
 function getDateTimeDiff(_prev, _now) {
-    const udt = _prev.substr(0, 4) + "-" + _prev.substr(4, 2) + "-" + _prev.substr(6, 2) + " " + _prev.substr(8, 2) + ":" + _prev.substr(10, 2) + ":" + _prev.substr(12, 2)
+    //const udt = _prev.substr(0, 4) + "-" + _prev.substr(4, 2) + "-" + _prev.substr(6, 2) + " " + _prev.substr(8, 2) + ":" + _prev.substr(10, 2) + ":" + _prev.substr(12, 2)
+    const udt = _prev.substring(0, 0 + 4) + "-" + _prev.substring(4, 4 + 2) + "-" + _prev.substring(6, 6 + 2) + " " + 
+                _prev.substring(8, 8 + 2) + ":" + _prev.substring(10, 10 + 2) + ":" + _prev.substring(12, 12 + 2)
     var dtPrev = getTimeStamp(udt)
     return parseInt((_now - dtPrev) / 1000) //return seconds
 }

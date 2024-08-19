@@ -663,9 +663,6 @@
                         hush.sock.roomMap[roomid] = { nm: _from, noti: rs.list[0].NOTI }
                         if (hush.sock.roomMap[roomid].noti == "X") return
                     } else {
-                        // let _people = obj.receivernm.join(",") + ","
-                        // _people = _people.replace(hush.user.nm + ",", "")
-                        // if (_people.endsWith(",")) _people = _people.substr(0, _people.length - 1)
                         const idx = obj.receivernm.indexOf(hush.user.nm)
                         if (idx > -1) obj.receivernm.splice(idx, 1)
                         _from = obj.receivernm.join(hush.cons.memdeli)
@@ -1075,24 +1072,24 @@
             },
             formatMsgDt : (_dt, _year, onlyDate) => { //yyyy-mm-dd hh:mm:ss => consider tzDateTime first
                 let dt 
-                if (_dt.substr(0, 4) == _year) {
-                    dt = _dt.substr(5, 11)
-                 } else {
+                if (_dt.substring(0, 0 + 4) == _year) { //if (_dt.substr(0, 4) == _year) {
+                    dt = _dt.substring(5, 5 + 11) //_dt.substr(5, 11)
+                } else {
                     if (onlyDate) {
-                        dt = _dt.substr(0, 10)
+                        dt = _dt.substring(0, 0 + 10) //dt = _dt.substr(0, 10)
                     } else {
-                        dt = _dt.substr(0, 16) //up to minutes
+                        dt = _dt.substring(0, 0 + 16) //_dt.substr(0, 16) //up to minutes
                     }
-                 }
-                 return dt
+                }
+                return dt
             },
             tzDateTime : (dt, dispSec) => { //see moment.js about timezone handling
-                let _dt = ((dt.length > 19) ? dt.substr(0, 19) : dt) + "Z" //dt = UTC (YYYY-MM-DD hh:MM:ss or YYYY-MM-DD hh:MM:ssZ or YYYY-MM-DDThh:MM:ssZ)
+                let _dt = ((dt.length > 19) ? dt.substring(0, 0 + 19) : dt) + "Z" //dt.substr(0, 19) : dt) + "Z" //dt = UTC (YYYY-MM-DD hh:MM:ss or YYYY-MM-DD hh:MM:ssZ or YYYY-MM-DDThh:MM:ssZ)
                 _dt = moment(_dt).tz(hush.tz).format() //returns 2020-07-19T11:07:00+09:00
                 if (dispSec) {
-                    return _dt.substr(0, 10) + " " + _dt.substr(11, 8)
+                    return _dt.substring(0, 0 + 10) + " " + _dt.substring(11, 11 + 8) //_dt.substr(0, 10) + " " + _dt.substr(11, 8)
                 } else {
-                    return _dt.substr(0, 10) + " " + _dt.substr(11, 5)
+                    return _dt.substring(0, 0 + 10) + " " + _dt.substring(11, 11 + 5) //_dt.substr(0, 10) + " " + _dt.substr(11, 5)
                 }
             },
             getExpiryWithTZ : (filestate, cur_year) => {
