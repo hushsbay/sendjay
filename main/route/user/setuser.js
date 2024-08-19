@@ -31,7 +31,9 @@ router.post('/', upload.any(), async function(req, res) {
 		}
 		sql =  "SELECT COUNT(*) CNT, PWD FROM Z_USER_TBL WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [id])
-		if (userid != 'admin' && id != 'admin') { //맨처음 로그인없이 누구나 admin 아이디 만들 수 있어야 함
+		if (!userid && id == 'admin') {
+ 			//맨처음 로그인없이 누구나 admin 아이디 만들 수 있어야 함
+		} else if (userid != 'admin') {
 		 	if (_kind != 'U') {
 		 		ws.http.resWarn(res, 'admin이 아니면 일반 사용자ID만 처리 가능합니다.')
 		 		return
