@@ -17,7 +17,7 @@ const router = express.Router()
 //     소켓 재연결시엔 query 파라미터내 token을 갱신해야 함 (SocketIO.kt 참조)
 //   - 웹뷰(앱)에서는 1. PC 웹의 경우처럼 주기적으로 토큰을 갱신해주면 됨 : startFromWebView() in main_common.js 참조
 
-//결론적으로, jwt 만기는 토큰 갱신 주기(앱은 없음)가 10분으로 되어 있으므로 적어도 1시간 정도 이상으로 설정하는 것이 좋아 보임
+//결론적으로, jwt 만기는 토큰 갱신 주기(앱은 없음)와 연동해 설정 필요 : 예) 10분 대 1시간, 1시간 대 4시간 등 
 //정상적인 상황이면 주기적으로 갱신하므로 토큰 만기가 뜨면 안되는 것임
 
 router.use(function(req, res, next) {
@@ -28,7 +28,7 @@ router.use(function(req, res, next) {
 router.post('/', async function(req, res) {
 	try {
 		const rs = ws.http.resInit()
-		const from = req.body.from
+		//const from = req.body.from
 		const objToken = await ws.jwt.chkToken(req, res, null, true) //true는 로깅(console.log 포함) 남기지 않게 함
 		const userid = objToken.userid
 		if (!userid) { //모바일 특성상 대기/슬립모드 등으로 http호출이 안되어 다시 호출하면서 토큰이 만기가 될 수 있는데
@@ -36,8 +36,7 @@ router.post('/', async function(req, res) {
 			console.log(req.title, ws.util.getCurDateTimeStr(true), objToken.msg) //나중에 막기
 			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
 			return
-		}
-		console.log(req.title, ws.util.getCurDateTimeStr(true), userid, from) //나중에 막기
+		} //console.log(req.title, ws.util.getCurDateTimeStr(true), userid, from) //나중에 막기
 		ws.http.resJson(res, rs, userid) //세번째 인자(userid) 있으면 token 갱신
 	} catch (ex) {
 		ws.http.resException(req, res, ex)

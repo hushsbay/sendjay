@@ -12,7 +12,7 @@ const cors = require('cors')
 const DIR_PUBSUB = './pubsub/', DIR_SOCKET = './socket/'
 const PING_TIMEOUT = 5000, PING_INTERVAL = 25000 //default
 
-global.logger = wslogger //global이므로 global.을 빼고 사용해도 되나 모두 명시적으로 붙여서 사용하기로 함
+global.logger = wslogger //global이므로 global.을 빼고 사용해도 되나 편의상 모두 명시적으로 붙여서 사용하기로 함
 global.pool = wsmysql.createPool(config.mysql.schema, true)
 
 console.log('version:', process.version)
@@ -22,13 +22,6 @@ console.log('jwtExpiry:', nodeConfig.jwt.expiry)
 
 //1. Was Server
 const app = ws.util.initExpressApp('public')
-// app.use(function(req, res, next) { 
-// 	if (!req.timedout) next()
-// })		
-// app.use(function(req, res, next) { 
-// 	req.connection.setTimeout(5000)
-//     res.connection.setTimeout(5000)
-// })
 const wasServer = ws.util.createWas(app, config.http.method) //프로젝트 hushsbay는 aws 기반(https는 로드밸런서 CLB 이용)이므로 여기서는 https가 아닌 http로 설정
 wasServer.listen(config.http.port, () => { console.log('wasServer listening on ' + config.http.port) })
 
@@ -42,15 +35,12 @@ sub.psubscribe(ws.cons.pattern, (err, count) => { console.log('ioredis psubscrib
 sub.on('pmessage', (pattern, channel, message) => { require(DIR_PUBSUB + 'pmessage')(pattern, channel, message) })
 sub.on('error', err => { console.error('ioredis sub error:', err.stack) })
 if (config.app.mainserver == 'Y') global.store.flushdb(function(err, result) { console.log('redis db flushed :', result) })
-//현재 Redis가 멀티서버에서의 소켓연결정보 관리에만 사용중이므로 NodeJS 재시작시 해당 redis데이터베이스내 데이터를 모두 지우는 것이 가비지 정리 등 좋을 것 (다른 곳에 사용시 문제없는지 테스트 필요)
+//현재 Redis가 멀티서버에서의 소켓연결정보 관리에만 사용중이므로 NodeJS 재시작시 해당 redis데이터베이스내 데이터를 모두 지우는 것이 가비지 정리 등 좋을 것 (다른 곳에 추가로 사용시 테스트 필요)
 
 //3. Socket Server (with Redis Adapter)
 const appSocket = ws.util.initExpressApp()
 const socketServer = ws.util.createWas(appSocket, config.http.method) //not https (because of aws elastic load balancer)
-const io = new Server(socketServer, { //여기 Server는 socket.io
-	//autoConnect to false (모바일 connect후 로그인/로깅시 http호출 여러번 발생해서 false로 변경)
-	//웹은 끊어지면 다른 탭에서 연결, 모바일도 SocketIO.invoke 새로 하므로 false로 해도 무방
-	//false로 해도 서버 재시작시 1초안에 여러건의 로깅이 발생함 (클라이언트는 옵션을 못찾음) => 해결은 다른 곳에서 함 (SocketIO.kt ###777 참조)
+const io = new Server(socketServer, { //여기 Server는 socket.io //autoConnect to false (웹은 끊어지면 다른 탭에서 연결, 모바일도 SocketIO.invoke 새로 하므로 false로 해도 무방)
 	allowEIO3: false, autoConnect: false, pingTimeout: PING_TIMEOUT, pingInterval: PING_INTERVAL, cors: { origin: config.app.corsSocket, methods: ["GET", "POST"] }
 })
 io.adapter(redisAdapter(global.pub, sub))
@@ -85,7 +75,6 @@ global.jay.on('connection', async (socket) => {
 		}		
 		if (queryParam.token) {
 			if (!socket.usertoken) {
-				console.log("1111111")
 				const tokenInfo = { userid : queryParam.userid, token : queryParam.token }
 				const jwtRet = await ws.jwt.verify(tokenInfo)
 				if (jwtRet.code == ws.cons.CODE_TOKEN_EXPIRED && queryParam.pwd) { //모바일 jwt 만기시에만 해당
@@ -122,10 +111,9 @@ global.jay.on('connection', async (socket) => {
 					ws.redis.pub('disconnect_prev_sock', { prevkey : item, socketid : socket.id, userkey : socket.userkey, userip : socket.userip }) //call pmessage()
 				}
 			}
-		})
-		console.log('socket.usertoken', socket.usertoken) //여기서의 ws.cons.sock_ev_refresh_token/sock_ev_show_on은 바로 클라이언트로 전송한 것임
+		}) //아래의 ws.cons.sock_ev_refresh_token, sock_ev_show_on은 서버로 들어오는 것이 없고 바로 클라이언트로 전송한 것임
 		socket.emit(ws.cons.sock_ev_common, { ev : ws.cons.sock_ev_refresh_token, data : { token : socket.usertoken }, returnTo : 'parent' }) //모바일에서의 토큰 갱신을 위한 목적
-		ws.sock.broadcast(ws.cons.sock_ev_show_on, socket.userkey, 'all') //서버로 들어오는 것이 없고 클라이언트로 나가는 것만 있을 것임
+		ws.sock.broadcast(ws.cons.sock_ev_show_on, socket.userkey, 'all')
 		socket.on(ws.cons.sock_ev_disconnect, (reason) => require(DIR_SOCKET + ws.cons.sock_ev_disconnect)(socket, reason))
 		socket.on(ws.cons.sock_ev_common, (param) => require(DIR_SOCKET + param.ev)(socket, param))
 		socket.on('error', (err) => global.logger.error('socket error\n' + err.toString()))
@@ -160,8 +148,8 @@ for (let i = 0; i < rt.length; i++) app.use('/user/' + rt[i], require('./route/u
 
 rt = ['orgtree', 'empsearch', 'deptsearch', 'interfaceKeys', 'applyDept', 'applyUser']  
 for (let i = 0; i < rt.length; i++) app.use('/org/' + rt[i], require('./route/org/' + rt[i])) 
-app.use('/org/interfaceToDept', cors(corsOptions), require('./route/org/interfaceToDept')) //외부 인터페이스
-app.use('/org/interfaceToUser', cors(corsOptions), require('./route/org/interfaceToUser')) //외부 인터페이스
+app.use('/org/interfaceToDept', cors(corsOptions), require('./route/org/interfaceToDept')) //외부 인터페이스 : CORS 적용
+app.use('/org/interfaceToUser', cors(corsOptions), require('./route/org/interfaceToUser')) //외부 인터페이스 : CORS 적용
 
 rt = [
 	'append_log', 'chk_redis', 'get_userinfo', 'qry_unread', 'qry_userlist', 'qry_orgtree', 'qry_portal', 'qry_msglist', 'get_roominfo',
