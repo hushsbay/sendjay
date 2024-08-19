@@ -915,6 +915,7 @@ var procUnreadTitle = (roomid) => { //call from chat.html
 
 var funcSockEv = { //needs to be public
     [hush.cons.sock_ev_refresh_token] : (data) => { //모바일앱(웹뷰) 전용
+        if (!hush.webview.on) return
         if (!data.token) return //app.js->ChatService.kt로부터 내려옴
         try {
             hush.auth.isTokenRefreshing = false
@@ -930,9 +931,12 @@ var funcSockEv = { //needs to be public
             } else if (g_mode == BTN_MODE_CHAT) { //아래 호출은 refreshToken이 block된 슬립모드 등에서 재연결시 토큰만기 우려가 있음
                 getPortalList({ type: "reconnect" }) //procMenuTop(hush.http.getCookie("mode"))
             }
-            setTimeout(function() {
-                AndroidCom.reconnectDone()
-            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+            if (hush.webview.ios) {
+            } else if (hush.webview.and) {
+                setTimeout(function() {
+                    AndroidCom.reconnectDone()
+                }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+            }            
         } catch (ex) {
             hush.util.showEx(ex)
         }
