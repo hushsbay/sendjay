@@ -740,8 +740,9 @@ Here are some ideas to get you started:
    * 사내 ERP 웹페이지에서 위 소스의 interfaceToDept()와 interfaceToUser()를 각각 실행하면<br/>
      MySql 테이블 Z_INTORG_TBL과 Z_INTUSER_TBL에 인터페이스용 데이터가 저장됩니다.
 
-   * 그리고, 바로 위 그림의 '조직연동'과 '사용자연동'을 누르면<br/> 
-     MySql 테이블 Z_ORG_TBL과 Z_USER_TBL에 데이터가 최종 저장되어 실제 적용됩니다.
+   * 그리고, 바로 위 그림(admin.html)의 '조직연동'과 '사용자연동'을 누르면<br/> 
+     MySql 테이블 Z_INTORG_TBL과 Z_INTUSER_TBL을 읽어서<br>
+     Z_ORG_TBL과 Z_USER_TBL에 데이터가 최종 저장되어 실제 적용됩니다.<br>
 
    * 위에서 설명된 내용은 이해를 돕기 위해 웹페이지에서 버튼을 누르는 방식으로 구현한 것인데<br/>
      실제 환경에서는 거의 모두 자동화되어 돌아가야 하는 것들일 것입니다. 자동화시키는 것은<br/>
