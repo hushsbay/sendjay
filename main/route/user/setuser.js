@@ -18,7 +18,7 @@ router.use(function(req, res, next) {
 router.post('/', upload.any(), async function(req, res) {
 	let conn, sql, data, len
 	try {
-		const rs = ws.http.resInit()
+		const rs = ws.http.resInit() //아래 id는 처리할 대상 사용자아이디. userid는 혹시 로그인했으면 로그인한 사용자아이디
 		const { type, id, kind, nm, alias, pwd, pwd_1, toporgcd, toporgnm, orgcd, orgnm, mimetype } = req.body
 		console.log(type, id, kind, nm, alias, pwd, pwd_1, toporgcd, toporgnm, orgcd, orgnm, mimetype)
 		let _kind = (id == 'admin') ? 'A' : (id == 'organ' ? 'O' : kind)
@@ -31,13 +31,13 @@ router.post('/', upload.any(), async function(req, res) {
 		}
 		sql =  "SELECT COUNT(*) CNT, PWD FROM Z_USER_TBL WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [id])
-		if (userid != 'admin') {
-			if (_kind != 'U') {
-				ws.http.resWarn(res, '일반 사용자ID만 처리 가능합니다.')
-				return
-			}
+		if (userid != 'admin' && id != 'admin') { //맨처음 로그인없이 누구나 admin 아이디 만들 수 있어야 함
+		 	if (_kind != 'U') {
+		 		ws.http.resWarn(res, 'admin이 아니면 일반 사용자ID만 처리 가능합니다.')
+		 		return
+		 	}
 		}
-		if (type == 'C') {
+		if (type == 'C') { //신규
 			if (data[0].CNT > 0) {
 				ws.http.resWarn(res, ws.cons.MSG_ALREADY_EXISTS)
 				return
@@ -59,7 +59,7 @@ router.post('/', upload.any(), async function(req, res) {
 					return
 				}
 			}
-			if (type == 'D') {
+			if (type == 'D') { //삭제
 				sql = "DELETE FROM Z_USER_TBL WHERE USER_ID = ? "
 				await wsmysql.query(conn, sql, [id])
 			} else { //U(Update)
