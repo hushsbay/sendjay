@@ -640,7 +640,7 @@ Here are some ideas to get you started:
 
    ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_interface_2.png)
 
-   * 사내ERP 웹페이지에 아래 소스를 각각 '연동사전작업' 등의 이름으로 설정한 버튼에 넣습니다.
+   * 사내ERP 웹페이지에 아래 소스를 각각 원하는 이름으로 설정한 버튼에 넣습니다.
 
       + 소스내 deptArr, userArr는 편의상 하드코딩이지만 실제 사내 ERP에서는 데이터를 읽어오면 될 것입니다.
    
@@ -731,10 +731,10 @@ Here are some ideas to get you started:
       }
 ```
 
-      + 소스내 _token은 인증토큰 값을 복사해서 붙인 것인데, organ으로 로그인후
-      + '간편등록' 옆에 보이는 '관리자'라는 메뉴를 클릭하면 팝업이 열립니다.
-      + '토큰복사'를 누르면 클립보드에 값이 복사되고 위 소스의 _token에 붙여 넣습니다.
-      + 복사된 토큰은 만기가 있습니다. (서버의 nodeConfig.js 내 jwt expiry 값 참조)
+   * 위 소스내 _token은 인증토큰 값을 복사해서 붙인 것인데, organ으로 로그인후</br>
+     '간편등록' 옆에 보이는 '관리자'라는 메뉴를 클릭하면 팝업이 열립니다.</br>
+     + '토큰복사'를 누르면 클립보드에 값이 복사되고 위 소스의 _token에 붙여 넣습니다.
+     + 복사된 토큰은 만기가 있습니다. (서버의 nodeConfig.js 내 jwt expiry 값 참조)
 
    ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_interface_3.png)   
       
