@@ -733,21 +733,22 @@ Here are some ideas to get you started:
 
    * 위 소스내 _token은 인증토큰 값을 복사해서 붙인 것인데, organ으로 로그인후</br>
      '간편등록' 옆에 보이는 '관리자'라는 메뉴를 클릭하면 팝업이 열립니다.</br>
+
      + '토큰복사'를 누르면 클립보드에 값이 복사되고 위 소스의 _token에 붙여 넣습니다.
      + 복사된 토큰은 만기가 있습니다. (서버의 nodeConfig.js 내 jwt expiry 값 참조)
 
    ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_interface_3.png)   
       
-   * 사내 ERP 웹페이지에서 위 소스의 interfaceToDept()와 interfaceToUser()를 각각 실행하면<br/>
-     MySql 테이블 Z_INTORG_TBL과 Z_INTUSER_TBL에 인터페이스용 데이터가 저장됩니다.
+   * 이제 사내 ERP 웹페이지에서 위 소스의 interfaceToDept()와 interfaceToUser()를 각각 실행하면<br/>
+     1차로 MySql 테이블 Z_INTORG_TBL과 Z_INTUSER_TBL에 인터페이스용 데이터가 저장됩니다.
 
    * 그리고, 바로 위 그림(admin.html)의 '조직연동'과 '사용자연동'을 누르면<br/> 
-     MySql 테이블 Z_INTORG_TBL과 Z_INTUSER_TBL을 읽어서<br>
+     2차로 MySql 테이블 Z_INTORG_TBL과 Z_INTUSER_TBL을 읽어서<br>
      Z_ORG_TBL과 Z_USER_TBL에 데이터가 최종 저장되어 실제 적용됩니다.<br>
 
-   * 위에서 설명된 내용은 이해를 돕기 위해 웹페이지에서 버튼을 누르는 방식으로 구현한 것인데<br/>
+   * 위에서 설명된 내용은, 이해를 돕기 위해 웹페이지에서 버튼을 누르는 방식으로 구현한 것인데<br/>
      실제 환경에서는 거의 모두 자동화되어 돌아가야 하는 것들일 것입니다. 자동화시키는 것은<br/>
-     사내 ERP 환경이 각각 다르기 때문에 각사에서 알아서 구현해야 할 사안입니다.<br/>
+     사내 ERP 환경이 각각 다르기 때문에 각사에서 알아서 구현해야 할 사안일 것입니다.<br/>
 
 
 # Table 명세 (MySql)
