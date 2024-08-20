@@ -103,7 +103,7 @@
                     if (_token) { //jwt는 세션쿠키이므로 있다면 사용자가 인증한 것이 되므로 jwt를 검증해야 함
                         const rs = await hush.http.ajax("/auth/login", { kind : "web" }) //token과 userid는 쿠키로 전송됨
                         if (rs.code != hush.cons.CODE_OK) {
-                            if (!rs.code.startsWith(hush.cons.token_err_prefix)) { //-8
+                            if (!rs.code.startsWith(hush.cons.auth_err_prefix)) { //-8
                                 //엣지에서는 jwt가 세션쿠키인데 브라우저를 종료후 재시작해도 값이 남아 있어 만료 alert가 나와 아래 if로 해결
                                 hush.msg.showMsg(rs.msg, rs.code)
                             }

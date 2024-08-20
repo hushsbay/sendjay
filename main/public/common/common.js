@@ -12,7 +12,7 @@
             NETWORK_UNAVAILABLE : '네트워크가 연결되어 있지 않습니다.',
             NETWORK_UNSTABLE : '네트워크가 원할하지 않거나 서버 작업중입니다.==',
             toast_prefix : "##$$", 
-            token_err_prefix : "-8",
+            auth_err_prefix : "-8",
             ///////////////////////////////////위는 서버와 동일
             erp_portal : "index.html",
             failOnLoad : "failOnLoad",
@@ -141,7 +141,7 @@
                         if (verbose) {
                             await hush.msg.alert(rs.msg + "<br>로그인이 필요합니다.")
                         } else {
-                            if (!rs.code.startsWith(hush.cons.token_err_prefix)) { //-8
+                            if (!rs.code.startsWith(hush.cons.auth_err_prefix)) { //-8
                                 //엣지에서는 jwt가 세션쿠키인데 브라우저를 종료후 재시작해도 값이 남아 있어 만료 alert가 나와 아래 if로 해결
                                 await hush.msg.alert(rs.msg + "<br>로그인 페이지로 이동합니다.")
                             }
@@ -877,7 +877,7 @@
                 if (rs.code != hush.cons.CODE_OK) {
                     if (notShowMsgIfNoData && rs.code == hush.cons.CODE_NO_DATA) {
                         //데이터 없을 경우에 메시지없이 넘어가야 할 때가 있음
-                    } else if (rs.code.startsWith(hush.cons.token_err_prefix)) {
+                    } else if (rs.code.startsWith(hush.cons.auth_err_prefix)) {
                         alert(rs.code + "/" + rs.msg) //alert로 처리해도 됨
                         if (hush.webview.and) {
                             AndroidMain.logout()

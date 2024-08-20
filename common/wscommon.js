@@ -33,7 +33,7 @@ module.exports = (function() {
 			CODE_USERID_NOT_EXIST : '-86',
 			CODE_PWD_MISMATCH : '-87',
 			CODE_AUTOLOGIN_CANCEL : '-88',
-			token_err_prefix : '-8',
+			auth_err_prefix : '-8',
 			CODE_CONNECT_ERR : '-91',
 			toast_prefix : '##$$', //클라이언트와 동일해야 함
 			deli : '##',
