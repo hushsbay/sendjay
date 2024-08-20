@@ -759,6 +759,7 @@ Here are some ideas to get you started:
    * 그리고, 바로 위 그림(admin.html)의 '조직연동'과 '사용자연동'을 누르면<br/> 
      2차로 MySql 테이블 Z_INTORG_TBL과 Z_INTUSER_TBL을 읽어서<br>
      Z_ORG_TBL과 Z_USER_TBL에 데이터가 최종 저장되어 실제 적용됩니다.<br>
+     - 새 아이디의 비번은 아이디와 동일하게 설정되어 있습니다.<br>
 
    * 위에서 설명된 내용은, 이해를 돕기 위해 웹페이지에서 버튼을 누르는 방식으로 구현한 것인데<br/>
      실제 환경에서는 거의 모두 자동화되어 돌아가야 하는 것들일 것입니다. 자동화시키는 것은<br/>
