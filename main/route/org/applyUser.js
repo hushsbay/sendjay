@@ -27,7 +27,7 @@ router.post('/', async function(req, res) {
 		data = await wsmysql.query(conn, sql, [dtkey])
 		if (data[0].CNT == 0) throw new Error('해당 키가 테이블에 없습니다 : ' + dtkey)
 		//1. (동기화 아이디만을 대상으로 해서) Z_ORG_TBL 루프 돌면서 
-		sql = "SELECT * FROM Z_USER_TBL WHERE ID_KIND NOT IN ('U', 'D') " //User, Dept 구분만 해당 (admin, organ 등 제외)
+		sql = "SELECT * FROM Z_USER_TBL WHERE ID_KIND NOT IN ('A', 'O') " //admin(A), organ(O) 제외
 		data = await wsmysql.query(conn, sql, null)
 		len = data.length
 		for (let i = 0; i < len; i++) {
@@ -83,8 +83,8 @@ router.post('/', async function(req, res) {
 			sql = "SELECT * FROM Z_USER_TBL WHERE USER_ID = ? "
 			const data1 = await wsmysql.query(conn, sql, [_userid])
 			if (data1.length == 0) {
-				sql = "INSERT INTO Z_USER_TBL (USER_ID, ID_KIND, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM, IS_SYNC) "
-				sql += " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+				sql = "INSERT INTO Z_USER_TBL (USER_ID, ID_KIND, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM, IS_SYNC, ISUDT) "
+				sql += " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
 				await wsmysql.query(conn, sql, [
 					_userid, 'U', data[i].USER_NM, data[i].ORG_CD, data[i].ORG_NM, data[i].TOP_ORG_CD, data[i].TOP_ORG_NM, 
 					data[i].JOB, data[i].TEL_NO, data[i].AB_CD, data[i].AB_NM, 'Y'

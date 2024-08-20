@@ -646,8 +646,8 @@ Here are some ideas to get you started:
    
 ```
       const _userid = "organ" 
-		const _token = "복사한 토큰값을 여기에 붙여 넣습니다"
-		const dt = "" //dt = "20240901134528" //테스트. DTKEY가 없는 경우는 서버에서 생성. 있으면 서버에 있는 기존 데이터 삭제후 생성
+      const _token = "복사한 토큰값을 여기에 붙여 넣습니다"
+      const dt = "" //dt = "20240901134528" //테스트. DTKEY가 없는 경우는 서버에서 생성. 있으면 서버에 있는 기존 데이터 삭제후 생성
 
       const interfaceToDept = () => {
          const deptArr = [ //사내 ERP에서 가져오는 조직 관련 데이터 샘플입니다.
