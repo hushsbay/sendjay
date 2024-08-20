@@ -508,7 +508,7 @@ module.exports = (function() {
 					if (_roomid) _obj.stack += '<br>' + _roomid
 					global.logger.info(_obj.stack) //logger는 console.log(a,b,c..)를 지원하지 않음. This line should precede _socket (in the next line)
 					if (_type && _socket) {
-						const arr = _obj.msg.split(ws.cons.DELI)
+						const arr = _obj.msg.split(ws.cons.deli)
 						let _code, _msg
 						if (arr.length > 1) {
 							_code = arr[0]
