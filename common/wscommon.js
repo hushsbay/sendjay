@@ -505,7 +505,7 @@ module.exports = (function() {
 					if (_roomid) _obj.stack += '<br>' + _roomid
 					global.logger.info(_obj.stack) //logger는 console.log(a,b,c..)를 지원하지 않음. This line should precede _socket (in the next line)
 					if (_type && _socket) {
-						console.log("@@@@@@", _socket.id, rs.msg)
+						console.log("@@@@@@", _socket.id, _obj.msg)
 						_socket.emit(_type, { code : '-1', msg : _obj.msg, roomid : _roomid })
 					}
 				} catch (ex) { 
