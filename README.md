@@ -11,7 +11,7 @@ Here are some ideas to get you started:
 - ⚡ Fun fact: ...
 -->
 
-현재 96%정도 개발된 상태입니다.<br/>
+현재 99% 개발완료된 상태이며 최종 테스트 계획중입니다.<br/>
 
 
 # Sendjay 소개
@@ -38,7 +38,7 @@ Here are some ideas to get you started:
 
 # 구현 기능 (메시징 관점에서)
 
-   아래와 같은 항목들이 개발/테스트되었습니다.
+   아래와 같은 항목들이 (크롬 브라우저 및 안드로이드 14에서만) 테스트되었습니다.
 
    * 멀티소켓 서버 : 소켓아이디는 웹과 앱 각각 1개씩만 허용 (예: 웹에서 2개일 경우 먼저 접속된 소켓이 끊어짐)
 
@@ -984,5 +984,21 @@ UDT CHAR(26) NOT NULL DEFAULT '' COMMENT '수정(읽음/삭제시각)' );
 CREATE UNIQUE INDEX A_CHANDTL_IDX0 ON jay.A_CHANDTL_TBL (MSGID, RECEIVERID) ;
 
 ```
+
+
+# 향후 주요 개발 예정 항목 (ver 2.0)
+
+   * iOS 디바이스 지원
+   * 백엔드에서 알림 전송 : SMS/LMS처럼 문자보내기 대신 소켓통신하는 단방향채널 구현
+   * 팀공용아이디, admin, organ 아이디로 백엔드 전송 및 채팅   
+   * 이모티콘 채팅 지원
+   
+
+# ver 1.0 아쉬운 점
+
+   * 안드로이드 포어그라운드 서비스 아이콘 제거 못함
+   * 안드로이드앱과 웹뷰간의 쿠키로 공유안하고 Content Provider 사용함
+   * 더 정제된 코딩 필요 (socket.io, Kotlin 등..)   
+   * Vue or React로 도전하지 못한 부분
 
 끝.
