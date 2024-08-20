@@ -22,6 +22,7 @@ router.post('/', async function(req, res) {
 			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
 			return
 		}
+		console.log(config.app.ipAccess, req.clientIp)
 		if (!ws.http.ipChk(config.app.ipAccess, req.clientIp)) throw new Error('client ip not allowed')
 		if (!Array.isArray(dept)) throw new Error('dept 파라미터는 배열이어야 합니다.') 
 		if (dept.length == 0) throw new Error('배열의 길이가 0입니다.')

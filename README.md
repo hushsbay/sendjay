@@ -647,9 +647,9 @@ Here are some ideas to get you started:
 ```
       const interfaceToDept = () => {
          const _userid = "organ" 
-         const _token = "ey~XVCJ9.eyJ1c2VyhwIjoxNzUyODc3ODU1fQ.LSgqg"
+         const _token = "복사한 토큰값을 여기에 붙여 넣습니다"
          const dt = "" //dt = "20240901134528" //테스트. DTKEY가 없는 경우는 서버에서 생성. 있으면 서버에 있는 기존 데이터 삭제후 생성
-         const deptArr = [ //사내 ERP에서 가져온 조직 관련 데이터 샘플입니다.
+         const deptArr = [ //사내 ERP에서 가져오는 조직 관련 데이터 샘플입니다.
             { DTKEY : dt, ORG_CD : "Company_A", ORG_NM : "삼성전자", SEQ : "A00", LVL : 0 },
             { DTKEY : dt, ORG_CD : "Division_A1", ORG_NM : "본부_A1", SEQ : "A10", LVL : 1 },
             { DTKEY : dt, ORG_CD : "Dept_A11", ORG_NM : "팀_A11", SEQ : "A11", LVL : 2 },
@@ -701,9 +701,9 @@ Here are some ideas to get you started:
 
       const interfaceToUser = () => {
          const _userid = "organ" 
-         const _token = "ey~XVCJ9.eyJ1c2VyhwIjoxNzUyODc3ODU1fQ.LSgqg"
+         const _token = "복사한 토큰값을 여기에 붙여 넣습니다"
          const dt = "" //dt = "20240901134528" //테스트. DTKEY가 없는 경우는 서버에서 생성. 있으면 서버에 있는 기존 데이터 삭제후 생성
-         const userArr = [ //사내 ERP에서 가져온 사용자 관련 데이터 샘플입니다.
+         const userArr = [ //사내 ERP에서 가져오는 사용자 관련 데이터 샘플입니다.
             { DTKEY : dt, USER_ID : "A000001", USER_NM : "이의방", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", TOP_ORG_NM : "삼성디스플레이", JOB : "프로그래머", TEL_NO : "01012345678", AB_CD : "", AB_NM : "" },
             { DTKEY : dt, USER_ID : "A000002", USER_NM : "정중부", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", TOP_ORG_NM : "삼성디스플레이", JOB : "사내변호사", TEL_NO : "01054982564", AB_CD : "dayoff", AB_NM : "20240901-20240930" },
             { DTKEY : dt, USER_ID : "A000003", USER_NM : "경대승", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", TOP_ORG_NM : "삼성디스플레이", JOB : "예산담당", TEL_NO : "01043565279", AB_CD : "", AB_NM : "" },
@@ -749,6 +749,9 @@ Here are some ideas to get you started:
    * 위에서 설명된 내용은, 이해를 돕기 위해 웹페이지에서 버튼을 누르는 방식으로 구현한 것인데<br/>
      실제 환경에서는 거의 모두 자동화되어 돌아가야 하는 것들일 것입니다. 자동화시키는 것은<br/>
      사내 ERP 환경이 각각 다르기 때문에 각사에서 알아서 구현해야 할 사안일 것입니다.<br/>
+
+   * 필요하면 간편등록에서 수동으로도 아이디를 만들 수 있습니다.<br/>
+     예) 팀공용 아이디, 가상 아이디 등..
 
 
 # Table 명세 (MySql)
