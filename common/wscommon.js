@@ -513,7 +513,7 @@ module.exports = (function() {
 						if (arr.length > 1) {
 							const brr = arr[0].split(']-') //[211.234.201.58][M__oldclock][connect]-87##ex.message
 							if (brr.length > 1) {
-								_code = brr[1]
+								_code = '-' + brr[1]
 							} else {
 								_code = arr[0]
 							}
