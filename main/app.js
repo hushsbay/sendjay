@@ -81,6 +81,7 @@ global.jay.on('connection', async (socket) => {
 					const auth = require('./module/auth')
 					const rs = await auth.login(queryParam.userid, queryParam.pwd, 'Y', queryParam.autokey_app, 'app')
 					if (rs.code != ws.cons.CODE_OK) {
+						console.log("======", socket.id, rs.msg)
 						ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, rs.msg)
 						socket.disconnect()
 						return
