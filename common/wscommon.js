@@ -33,8 +33,8 @@ module.exports = (function() {
 			CODE_USERID_NOT_EXIST : '-86',
 			CODE_PWD_MISMATCH : '-87',
 			CODE_AUTOLOGIN_CANCEL : '-88',
-			auth_err_prefix : '-8',
-			CODE_CONNECT_ERR : '-91',
+			CODE_AUTH_ERR_ON_CONNECT : '-89', //소켓연결시 인증 문제 발생
+			auth_err_prefix : '-8',			
 			toast_prefix : '##$$', //클라이언트와 동일해야 함
 			deli : '##',
 			subdeli : '$$',
