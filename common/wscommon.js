@@ -509,15 +509,18 @@ module.exports = (function() {
 					global.logger.info(_obj.stack) //logger는 console.log(a,b,c..)를 지원하지 않음. This line should precede _socket (in the next line)
 					if (_type && _socket) {
 						const arr = _obj.msg.split(ws.cons.deli)
-						let _code, _msg
+						let _code
 						if (arr.length > 1) {
-							_code = arr[0]
-							_msg = arr[1]
+							const brr = arr[0].split(']-') //[211.234.201.58][M__oldclock][connect]-87##ex.message
+							if (brr.length > 1) {
+								_code = brr[1]
+							} else {
+								_code = arr[0]
+							}
 						} else {
 							_code = '-1'
-							_msg = _obj.msg
 						}
-						_socket.emit(_type, { code : _code, msg : _msg, roomid : _roomid })
+						_socket.emit(_type, { code : _code, msg : _obj.msg, roomid : _roomid })
 					}
 				} catch (ex) { 
 					let _obj = ws.sock.getLogMsg(_socket, ex, _logTitle)
