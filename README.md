@@ -207,6 +207,7 @@ Here are some ideas to get you started:
    ```
 
    Sendjay는 템플릿 개념의 프로젝트이므로 PM2 등의 모듈을 사용하지 않고 node app으로 단순 구동했습니다.<br/>
+   위 jwt expiry는 변경되어 현재 1h 또는 4h로 설정되어 있습니다.<br/>
 
 
 # 주요 특징 (메시징 관점에서)
