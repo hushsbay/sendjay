@@ -69,8 +69,8 @@ global.jay.on('connection', async (socket) => {
 			socket.winid = queryParam.winid
 			socket.userip = queryParam.userip
 		} else {
-			ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, 'userid/userkey/winid/userip 모두 필요합니다.')
-			socket.disconnect()
+			ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ws.cons.CODE_CONNECT_ERR + ws.cons.DELI + 'userid/userkey/winid/userip 모두 필요합니다.')
+			setTimeout(() => socket.disconnect(), 1000)
 			return
 		}		
 		if (queryParam.token) {
@@ -81,14 +81,13 @@ global.jay.on('connection', async (socket) => {
 					const auth = require('./module/auth')
 					const rs = await auth.login(queryParam.userid, queryParam.pwd, 'Y', queryParam.autokey_app, 'app')
 					if (rs.code != ws.cons.CODE_OK) {
-						console.log("======", socket.id, rs.msg)
-						ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, rs.msg)
-						socket.disconnect()
+						ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, rs.code + ws.cons.DELI + rs.msg)
+						setTimeout(() => socket.disconnect(), 1000)
 						return
 					}					
 				} else if (jwtRet.code != ws.cons.CODE_OK) {
-					ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, jwtRet.msg)
-					socket.disconnect()
+					ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, jwtRet.code + ws.cons.DELI + jwtRet.msg)
+					setTimeout(() => socket.disconnect(), 1000)
 					return
 				}
 				const newToken = ws.jwt.make({ userid : queryParam.userid })
@@ -97,8 +96,8 @@ global.jay.on('connection', async (socket) => {
 				console.log("이 로그는 발생하면 안됨.")
 			}
 		} else {
-			ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, '소켓 연결시 인증 토큰이 필요합니다.') 
-			socket.disconnect()
+			ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ws.cons.CODE_CONNECT_ERR + ws.cons.DELI + '소켓 연결시 인증 토큰이 필요합니다.') 
+			setTimeout(() => socket.disconnect(), 1000)
 			return
 		}
 		await ws.redis.multiSetForUserkeySocket(socket)
@@ -119,8 +118,8 @@ global.jay.on('connection', async (socket) => {
 		socket.on(ws.cons.sock_ev_common, (param) => require(DIR_SOCKET + param.ev)(socket, param))
 		socket.on('error', (err) => global.logger.error('socket error\n' + err.toString()))
 	} catch (ex) {
-		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ex)
-		socket.disconnect() //setTimeout(() => socket.disconnect(), 1000)
+		ws.sock.warn(ws.cons.sock_ev_alert, socket, _logTitle, ws.cons.CODE_CONNECT_ERR + ws.cons.DELI + ex.message)
+		setTimeout(() => socket.disconnect(), 1000)
 	}
 })
 console.log('socketServer listening on ' + config.sock.port)

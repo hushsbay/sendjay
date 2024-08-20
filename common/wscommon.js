@@ -31,7 +31,10 @@ module.exports = (function() {
 			CODE_TOKEN_EXPIRED : '-84',
 			CODE_USERCOOKIE_MISMATCH : '-85',
 			CODE_USERID_NOT_EXIST : '-86',
+			CODE_PWD_MISMATCH : '-87',
+			CODE_AUTOLOGIN_CANCEL : '-88',
 			token_err_prefix : '-8',
+			CODE_CONNECT_ERR : '-91',
 			toast_prefix : '##$$', //클라이언트와 동일해야 함
 			deli : '##',
 			subdeli : '$$',
@@ -505,8 +508,16 @@ module.exports = (function() {
 					if (_roomid) _obj.stack += '<br>' + _roomid
 					global.logger.info(_obj.stack) //logger는 console.log(a,b,c..)를 지원하지 않음. This line should precede _socket (in the next line)
 					if (_type && _socket) {
-						console.log("@@@@@@", _socket.id, _obj.msg)
-						_socket.emit(_type, { code : '-1', msg : _obj.msg, roomid : _roomid })
+						const arr = _obj.msg.split(ws.cons.DELI)
+						let _code, _msg
+						if (arr.length > 1) {
+							_code = arr[0]
+							_msg = arr[1]
+						} else {
+							_code = '-1'
+							_msg = _obj.msg
+						}
+						_socket.emit(_type, { code : _code, msg : _msg, roomid : _roomid })
 					}
 				} catch (ex) { 
 					let _obj = ws.sock.getLogMsg(_socket, ex, _logTitle)

@@ -33,7 +33,7 @@ module.exports = {
                 sql += " WHERE USER_ID = ? "
                 data = await wsmysql.query(conn, sql, [userid])
                 if (data.length == 0) {
-                    rs.code = ws.cons.CODE_NO_DATA
+                    rs.code = ws.cons.CODE_USERID_NOT_EXIST
                     rs.msg = '사용자아이디가 없습니다.'
                     resolve(rs)
                     return
@@ -48,7 +48,7 @@ module.exports = {
                         pwdToCompare = ws.util.decrypt(data[0].PWD, nodeConfig.crypto.key)
                     }
                     if (pwd != pwdToCompare) {
-                        rs.code = ws.cons.CODE_ERR
+                        rs.code = ws.cons.CODE_PWD_MISMATCH
                         rs.msg = '비번이 다릅니다.'
                         resolve(rs)
                         return
@@ -57,7 +57,7 @@ module.exports = {
                 if (autologin == 'Y' || webAuthenticated) { //앱자동로그인 또는 웹인증OK시 
                     if (autologin == 'Y') {
                         if (autokey_app != data[0].AUTOKEY_APP) {
-                            rs.code = ws.cons.CODE_ERR
+                            rs.code = ws.cons.CODE_AUTOLOGIN_CANCEL
                             rs.msg = '(자동로그인 해제) 수동로그인이 필요합니다.'
                             return
                         }
