@@ -737,8 +737,24 @@ Here are some ideas to get you started:
 
    ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_interface_3.png)   
       
-   * 이제 사내 ERP 웹페이지에서 위 소스의 interfaceToDept()와 interfaceToUser()를 각각 실행하면<br/>
+   * 이제 사내 ERP 웹페이지에 붙여진 소스인 interfaceToDept()와 interfaceToUser()를 각각 실행하면<br/>
      1차로 MySql 테이블 Z_INTORG_TBL과 Z_INTUSER_TBL에 인터페이스용 데이터가 저장됩니다.
+     - 여기서는 웹페이지에서 버튼으로 실행하는 것을 전제로 설명하는데
+     - 웹페이지에서 호출하는 경우 요청을 받는 서버에서는 CORS 이슈가 있을 수 있으므로
+     - 아래 소스와 같이 config.js내 CORS 이슈를 통과하는 호스트명을 추가해야 합니다.<br/>
+       (corsRestful 배열에 추가)
+
+```
+   app : {
+		nodeConfig : process.env.NODE_CONFIG,
+		corsRestful : ['https://hushsbay.com', 'https://yyyydev.xxxxx.co.kr', 'https://yyyy.xxxxx.co.kr'], //Array type (Same origin이 없어도 됨)
+		corsSocket : 'https://hushsbay.com', //Non-array type (Same origin이 들어 있어야 함)
+		ipAccess : ['222.108.25.252'], //현재는 interfaceToDept.js, interfaceToUser.js에만 사용 : 테스트로 My PC
+		logPath : process.env.LOG_PATH,
+		mainserver : process.env.MAIN_SERVER,
+		uploadPath : process.env.UPLOAD_PATH
+	}
+```
 
    * 그리고, 바로 위 그림(admin.html)의 '조직연동'과 '사용자연동'을 누르면<br/> 
      2차로 MySql 테이블 Z_INTORG_TBL과 Z_INTUSER_TBL을 읽어서<br>
