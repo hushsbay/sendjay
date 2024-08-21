@@ -44,7 +44,7 @@ router.post('/', async function(req, res) {
 					const _enc = await pwdModule.getFromRepository(userid)
 					if (_enc == null) throw new Error('암호화된 비번 가져오기(0) 실패입니다 : ' + userid)
 					await wsmysql.query(conn, sql, [
-						data1[0].USER_NM, data1[0].ORG_CD, data1[0].ORG_NM, data1[0].TOP_ORG_CD, data1[0].TOP_ORG_NM, data1[0].JOB, data1[0].TEL_NO, data1[0].AB_CD, data1[0].AB_NM, _userid
+						_enc, data1[0].USER_NM, data1[0].ORG_CD, data1[0].ORG_NM, data1[0].TOP_ORG_CD, data1[0].TOP_ORG_NM, data1[0].JOB, data1[0].TEL_NO, data1[0].AB_CD, data1[0].AB_NM, _userid
 					])	
 				} else {
 					sql = "DELETE FROM Z_USER_TBL WHERE USER_ID = ? AND IS_SYNC = 'Y' "
