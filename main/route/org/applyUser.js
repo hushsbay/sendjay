@@ -57,24 +57,20 @@ router.post('/', async function(req, res) {
 			sql = "SELECT ORG_NM FROM Z_ORG_TBL WHERE ORG_CD = ? "
 			const data2 = await wsmysql.query(conn, sql, [org_cd])
 			sql = "UPDATE Z_USER_TBL SET ORG_NM = ? WHERE USER_ID = ? "
-			if (data2.length == 0 && !org_nm.includes('(구)')) {
-				await wsmysql.query(conn, sql, ['(구)' + org_nm, uid])	
+			if (data2.length == 0) {
+				if (!org_nm.includes('(구)')) await wsmysql.query(conn, sql, ['(구)' + org_nm, uid])
 			} else {
-				if (org_nm != data2[0].ORG_NM) {
-					await wsmysql.query(conn, sql, [data2[0].ORG_NM, uid])	
-				}
+				if (org_nm != data2[0].ORG_NM) await wsmysql.query(conn, sql, [data2[0].ORG_NM, uid])	
 			}
 			const top_org_cd = data[i].TOP_ORG_CD
 			const top_org_nm = data[i].TOP_ORG_NM
 			sql = "SELECT ORG_NM FROM Z_ORG_TBL WHERE ORG_CD = ? "
 			const data3 = await wsmysql.query(conn, sql, [top_org_cd])
 			sql = "UPDATE Z_USER_TBL SET TOP_ORG_NM = ? WHERE USER_ID = ? "
-			if (data3.length == 0 && !top_org_nm.includes('(구)')) {
-				await wsmysql.query(conn, sql, ['(구)' + top_org_nm, uid])	
+			if (data3.length == 0) {
+				if (!top_org_nm.includes('(구)')) await wsmysql.query(conn, sql, ['(구)' + top_org_nm, uid])	
 			} else {
-				if (top_org_nm != data3[0].ORG_NM) {
-					await wsmysql.query(conn, sql, [data3[0].ORG_NM, uid])	
-				}
+				if (top_org_nm != data3[0].ORG_NM) await wsmysql.query(conn, sql, [data3[0].ORG_NM, uid])	
 			}
 		}
 		//2. Z_INTORG에 있는데 Z_ORG_TBL에 없으면 신규(추가)분이므로 넣기
