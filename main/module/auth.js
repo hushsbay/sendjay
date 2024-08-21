@@ -57,7 +57,6 @@ module.exports = {
                             return
                         }                        
                     } else { //외부시스템 인터페이스인 경우
-                        console.log(userid, pwd, autologin, "=======")
                         const rsPwd = await pwdModule.verify(userid, pwd, autologin)
                         if (rsPwd.code != ws.cons.CODE_OK) {
                             rs.code = rsPwd.code
