@@ -20,8 +20,8 @@ router.post('/', async function(req, res) {
 		if (!userid) {
 			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
 			return
-		}
-		sql =  "SELECT USER_ID, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, NICK_NM, JOB, AB_CD, AB_NM, NOTI_OFF, "
+		} //PWD 없음을 유의
+		sql =  "SELECT USER_ID, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, NICK_NM, JOB, AB_CD, AB_NM, NOTI_OFF, "
 		sql += "       BODY_OFF, SENDER_OFF, TM_FR, TM_TO "
 		sql += "  FROM Z_USER_TBL "
 		sql += " WHERE USER_ID = ? "

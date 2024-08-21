@@ -5,8 +5,8 @@ const wsmysql = require(nodeConfig.app.wsmysql)
 
 module.exports = {
 	login : (uid, pwd, autologin, autokey_app, kind, req, res) => { //req, res는 web에서만 사용
-		return new Promise(async (resolve, reject) => { //module.exports 사용시 Promise로 구현해야 호출하는 곳에서 정상적으로 원하는 값을 리턴 받을 수 있음
-			let conn, sql, data, len, userid, webAuthenticated
+		return new Promise(async (resolve, reject) => {
+			let conn, sql, data, len, userid, webAuthenticated, encryptedPwd
             const rs = ws.http.resInit()
 			try { //console.log('auth.login', uid, pwd, autologin, autokey_app, kind) //나중에 막기
                 conn = await wsmysql.getConnFromPool(global.pool)
@@ -27,8 +27,8 @@ module.exports = {
                 } else { //앱은 pwd가 항상 넘어와 아래에서 체크
                     userid = uid
                 }		
-                sql =  "SELECT USER_ID, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, NICK_NM, JOB, AB_CD, AB_NM, NOTI_OFF, "
-                sql += "       BODY_OFF, SENDER_OFF, TM_FR, TM_TO, AUTOKEY_APP "
+                sql =  "SELECT USER_ID, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, NICK_NM, JOB, AB_CD, AB_NM, "
+                sql += "       NOTI_OFF, BODY_OFF, SENDER_OFF, TM_FR, TM_TO, AUTOKEY_APP, IS_SYNC "
                 sql += "  FROM Z_USER_TBL "
                 sql += " WHERE USER_ID = ? "
                 data = await wsmysql.query(conn, sql, [userid])
@@ -41,17 +41,30 @@ module.exports = {
                 if (webAuthenticated) {
                     //위 토큰 인증을 신뢰하고 진행함
                 } else {
-                    let pwdToCompare
-                    if (autologin == 'Y') { //pwd는 앱에 저장된 암호화된 상태의 값이므로 pwdToCompare도 암호화된 값 그대로 비교 필요
-                        pwdToCompare = data[0].PWD
-                    } else { //pwd는 암호화되지 않은 사용자 입력분 그대로이므로 pwdToCompare도 디코딩 필요
-                        pwdToCompare = ws.util.decrypt(data[0].PWD, nodeConfig.crypto.key)
-                    }
-                    if (pwd != pwdToCompare) {
-                        rs.code = ws.cons.CODE_PWD_MISMATCH
-                        rs.msg = '비번이 다릅니다.'
-                        resolve(rs)
-                        return
+                    if (data[0].IS_SYNC != 'Y') { //수동으로 아이디/비번을 만든 경우
+                        encryptedPwd = data[0].PWD
+                        let pwdToCompare
+                        if (autologin == 'Y') { //pwd는 앱에 저장된 암호화된 상태의 값이므로 pwdToCompare도 암호화된 값 그대로 비교 필요
+                            pwdToCompare = encryptedPwd
+                        } else { //pwd는 암호화되지 않은 사용자 입력분 그대로이므로 pwdToCompare도 디코딩 필요
+                            pwdToCompare = ws.util.decrypt(encryptedPwd, nodeConfig.crypto.key)
+                        }
+                        if (pwd != pwdToCompare) {
+                            rs.code = ws.cons.CODE_PWD_MISMATCH
+                            rs.msg = '비번이 다릅니다.'
+                            resolve(rs)
+                            return
+                        }                        
+                    } else { //외부시스템 인터페이스인 경우
+                        const pwdModule = require('./pwd') //pwdModule은 여기 auth.js에서 코딩해도 문제없는데 굳이 별도의 pwd.js 파일로 분리한 이유는 pwd.js 파일내 주석(설명) 참조 요망
+                        const rsPwd = await pwdModule.verify(userid, pwd, 'Y')
+                        if (rsPwd.code != ws.cons.CODE_OK) {
+                            rs.code = rsPwd.code
+                            rs.msg = rsPwd.msg
+                            resolve(rs)
+                            return
+                        }
+                        encryptedPwd = rsPwd.PWD
                     }
                 }
                 if (autologin == 'Y' || webAuthenticated) { //앱자동로그인 또는 웹인증OK시 
@@ -74,7 +87,7 @@ module.exports = {
                     data[0].AUTOKEY_APP = autokey_app //순전히 앱에서 코딩이 불편해서 처리한 것임 //AUTOKEY_WEB은 관리안함
                 }
                 Object.assign(rs, data[0])
-                if (kind == 'web') delete rs['PWD'] //웹에서는 브라우저에서 비번저장하지 않음 (암호화된 비번도 내리지도 말기)
+                if (kind == 'app') rs.PWD = encryptedPwd //앱에서는 암호화된 비번으로 자동로그인 처리
                 rs.userid = userid
                 resolve(rs)
 			} catch (ex) {
