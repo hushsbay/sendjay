@@ -993,13 +993,146 @@ CREATE UNIQUE INDEX A_CHANDTL_IDX0 ON jay.A_CHANDTL_TBL (MSGID, RECEIVERID) ;
    * 백엔드에서 알림 전송 : SMS/LMS처럼 문자보내기 대신 소켓통신하는 단방향채널 구현
    * 팀공용아이디, admin, organ 아이디로 백엔드 전송 및 채팅   
    * 이모티콘 채팅 지원
+   * ChatGPT 인터페이스 적용 검토
    
 
 # ver 1.0 아쉬운 점
 
    * 안드로이드 포어그라운드 서비스 아이콘 제거 못함
-   * 안드로이드앱과 웹뷰간의 쿠키로 공유안하고 Content Provider 사용함
-   * 더 정제된 코딩 필요 (socket.io, Kotlin 등..)   
+   * 앱과 웹뷰간 쿠키 공유 포기하고 Content Provider로 대체
+   * 더 정제된 코딩 필요 (socket.io, Kotlin 등)   
    * Vue or React로 도전하지 못한 부분
 
 끝.
+
+
+<table border="1" cellspacing="0" cellpadding="0" style="word-break: break-all; width: 766px; font-size: 12pt; border: 1px none rgb(0, 0, 0); border-collapse: collapse;">
+	<tbody>
+		<tr>
+			<td rowspan="2" style="border: 1px solid rgb(0, 0, 0); width: 90.5156px; height: 48px;">
+				<p style="text-align: center; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">항목</p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 124.078px; height: 48px;" rowspan="2">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">111</p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 396.812px; height: 23px;" colspan="3">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 150.594px; height: 48px;" rowspan="2">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">555</p>
+			</td>
+		</tr>
+		<tr>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 135.953px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">222</p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 125.922px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">333</p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 132.938px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">444</p>
+			</td>
+		</tr>
+		<tr>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 90.5156px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 124.078px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">a</p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 135.953px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">b</p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 125.922px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">c</p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 132.938px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">d</p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 150.594px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">e</p>
+			</td>
+		</tr>
+		<tr>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 90.5156px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 124.078px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">aa</p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 135.953px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">bb</p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 125.922px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">cc</p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 132.938px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">dd</p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 150.594px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">ee</p>
+			</td>
+		</tr>
+		<tr>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 90.5156px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 124.078px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 135.953px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 125.922px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 132.938px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 150.594px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+		</tr>
+		<tr>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 90.5156px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 124.078px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 135.953px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 125.922px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 132.938px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 150.594px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+		</tr>
+		<tr>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 90.5156px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 124.078px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 135.953px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 125.922px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 132.938px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 150.594px; height: 23px;">
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
