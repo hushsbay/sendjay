@@ -2,6 +2,7 @@ const config = require('../config')
 const nodeConfig = require(config.app.nodeConfig)
 const ws = require(nodeConfig.app.ws)
 const wsmysql = require(nodeConfig.app.wsmysql)
+const pwdModule = require('./pwd') //pwdModule은 여기 auth.js에서 코딩해도 문제없는데 굳이 별도의 pwd.js 파일로 분리한 이유는 pwd.js 파일내 주석(설명) 참조 요망
 
 module.exports = {
 	login : (uid, pwd, autologin, autokey_app, kind, req, res) => { //req, res는 web에서만 사용
@@ -56,7 +57,6 @@ module.exports = {
                             return
                         }                        
                     } else { //외부시스템 인터페이스인 경우
-                        const pwdModule = require('./pwd') //pwdModule은 여기 auth.js에서 코딩해도 문제없는데 굳이 별도의 pwd.js 파일로 분리한 이유는 pwd.js 파일내 주석(설명) 참조 요망
                         const rsPwd = await pwdModule.verify(userid, pwd, 'Y')
                         if (rsPwd.code != ws.cons.CODE_OK) {
                             rs.code = rsPwd.code
