@@ -41,6 +41,7 @@ router.post('/', async function(req, res) {
 					sql = "UPDATE Z_USER_TBL "
 					sql += "  SET PWD = ?, USER_NM = ?, ORG_CD = ?, ORG_NM = ?, TOP_ORG_CD = ?, TOP_ORG_NM = ?, JOB  = ?, TEL_NO = ?, AB_CD  = ?, AB_NM = ? "
 					sql += "WHERE USER_ID = ? AND IS_SYNC = 'Y' "
+					console.log(uid, "########")					
 					const _enc = await pwdModule.getFromRepository(uid)
 					if (_enc == null) throw new Error('암호화된 비번 가져오기(0) 실패입니다 : ' + uid)
 					await wsmysql.query(conn, sql, [

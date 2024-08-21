@@ -22,6 +22,7 @@ module.exports = {
                 sql = "SELECT PWD FROM Z_USER_TBL WHERE USER_ID = ? "
                 data = await wsmysql.query(conn, sql, [userid])
                 if (data.length == 0) throw new Error()
+                    console.log(userid, "$$$$")
                 resolve(data[0].PWD) //암호화된 비번
 			} catch (ex) {
 				reject(null)
