@@ -1013,24 +1013,24 @@ CREATE UNIQUE INDEX A_CHANDTL_IDX0 ON jay.A_CHANDTL_TBL (MSGID, RECEIVERID) ;
 				<p style="text-align: center; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">항목</p>
 			</td>
 			<td style="border: 1px solid rgb(0, 0, 0); width: 124.078px; height: 48px;" rowspan="2">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">111</p>
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">hushsbay.com</p><p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">에서 테스트</p>
 			</td>
 			<td style="border: 1px solid rgb(0, 0, 0); width: 396.812px; height: 23px;" colspan="3">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">소스 내려받아 환경구성후</p>
 			</td>
 			<td style="border: 1px solid rgb(0, 0, 0); width: 150.594px; height: 48px;" rowspan="2">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">555</p>
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">각 기업의&nbsp;</p><p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">사내시스템</p><p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">(ERP, GW 등)</p>
 			</td>
 		</tr>
 		<tr>
 			<td style="border: 1px solid rgb(0, 0, 0); width: 135.953px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">222</p>
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">소스 그대로 사용</p>
 			</td>
 			<td style="border: 1px solid rgb(0, 0, 0); width: 125.922px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">333</p>
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;"><span style="font-size: 12pt; font-family: &quot;맑은 고딕&quot;; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">조직/사용자만</span></p><p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">연동하고 나머지</p><p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">소스는 그대로</p><p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">사용해 운영</p>
 			</td>
 			<td style="border: 1px solid rgb(0, 0, 0); width: 132.938px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">444</p>
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">기업에 맞게</p><p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">커스터마이징</p><p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">(소스 대폭 수정)</p>
 			</td>
 		</tr>
 		<tr>
