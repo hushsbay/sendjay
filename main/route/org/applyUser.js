@@ -4,7 +4,7 @@ const ws = require(nodeConfig.app.ws)
 const wsmysql = require(nodeConfig.app.wsmysql)
 const express = require('express')
 const router = express.Router()
-const pwdModule = require('./auth/pwd') //pwdModule은 여기 auth.js에서 코딩해도 문제없는데 굳이 별도의 pwd.js 파일로 분리한 이유는 pwd.js 파일내 주석(설명) 참조 요망
+//const pwdModule = require('./auth/pwd') //pwdModule은 여기 auth.js에서 코딩해도 문제없는데 굳이 별도의 pwd.js 파일로 분리한 이유는 pwd.js 파일내 주석(설명) 참조 요망
 
 router.use(function(req, res, next) {
 	req.title = 'applyUser'
@@ -41,8 +41,8 @@ router.post('/', async function(req, res) {
 					sql = "UPDATE Z_USER_TBL "
 					sql += "  SET PWD = ?, USER_NM = ?, ORG_CD = ?, ORG_NM = ?, TOP_ORG_CD = ?, TOP_ORG_NM = ?, JOB  = ?, TEL_NO = ?, AB_CD  = ?, AB_NM = ? "
 					sql += "WHERE USER_ID = ? AND IS_SYNC = 'Y' "
-					const _enc = await pwdModule.getFromRepository(userid)
-					if (_enc == null) throw new Error('암호화된 비번 가져오기(0) 실패입니다 : ' + userid)
+					//const _enc = await pwdModule.getFromRepository(userid)
+					//if (_enc == null) throw new Error('암호화된 비번 가져오기(0) 실패입니다 : ' + userid)
 					await wsmysql.query(conn, sql, [
 						data1[0].USER_NM, data1[0].ORG_CD, data1[0].ORG_NM, data1[0].TOP_ORG_CD, data1[0].TOP_ORG_NM, data1[0].JOB, data1[0].TEL_NO, data1[0].AB_CD, data1[0].AB_NM, _userid
 					])	
@@ -89,7 +89,7 @@ router.post('/', async function(req, res) {
 				sql = "INSERT INTO Z_USER_TBL (USER_ID, ID_KIND, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM, IS_SYNC, ISUDT) "
 				sql += " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
 				//const _enc = ws.util.encrypt(_userid, nodeConfig.crypto.key)
-				const _enc = await pwdModule.getEncrypt(userid)
+				//const _enc = await pwdModule.getEncrypt(userid)
 				if (_enc == null) throw new Error('암호화된 비번 가져오기(1) 실패입니다 : ' + userid)
 				await wsmysql.query(conn, sql, [
 					_userid, 'U', _enc, data[i].USER_NM, data[i].ORG_CD, data[i].ORG_NM, data[i].TOP_ORG_CD, data[i].TOP_ORG_NM, 
