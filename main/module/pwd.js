@@ -19,7 +19,7 @@ module.exports = {
 			let conn, sql, data, len
 			try {
                 conn = await wsmysql.getConnFromPool(global.pool)
-                sql =  "SELECT PWD FROM Z_USER_TBL WHERE USER_ID = ? "
+                sql = "SELECT PWD FROM Z_USER_TBL WHERE USER_ID = ? "
                 data = await wsmysql.query(conn, sql, [userid])
                 if (data.length == 0) throw new Error()
                 resolve(data[0].PWD) //암호화된 비번
@@ -36,7 +36,7 @@ module.exports = {
             const rs = ws.http.resInit()
 			try {
                 conn = await wsmysql.getConnFromPool(global.pool)
-                sql =  "SELECT PWD FROM Z_USER_TBL WHERE USER_ID = ? "
+                sql = "SELECT PWD FROM Z_USER_TBL WHERE USER_ID = ? "
                 data = await wsmysql.query(conn, sql, [userid])
                 if (data.length == 0) {
                     rs.code = ws.cons.CODE_USERID_NOT_EXIST
