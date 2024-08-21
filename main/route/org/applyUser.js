@@ -32,23 +32,23 @@ router.post('/', async function(req, res) {
 		data = await wsmysql.query(conn, sql, null)
 		len = data.length
 		for (let i = 0; i < len; i++) {
-			const _userid = data[i].USER_ID
+			const uid = data[i].USER_ID
 			//1) Z_INTORG_TBL에 있으면 가져와 업데이트하고 없으면 아이디 제거해야 함
 			if (data[i].IS_SYNC == 'Y') {
 				sql = "SELECT * FROM Z_INTUSER_TBL WHERE DTKEY = ? AND USER_ID = ? "
-				const data1 = await wsmysql.query(conn, sql, [dtkey, _userid])
+				const data1 = await wsmysql.query(conn, sql, [dtkey, uid])
 				if (data1.length > 0) {
 					sql = "UPDATE Z_USER_TBL "
 					sql += "  SET PWD = ?, USER_NM = ?, ORG_CD = ?, ORG_NM = ?, TOP_ORG_CD = ?, TOP_ORG_NM = ?, JOB  = ?, TEL_NO = ?, AB_CD  = ?, AB_NM = ? "
 					sql += "WHERE USER_ID = ? AND IS_SYNC = 'Y' "
-					const _enc = await pwdModule.getFromRepository(userid)
-					if (_enc == null) throw new Error('암호화된 비번 가져오기(0) 실패입니다 : ' + userid)
+					const _enc = await pwdModule.getFromRepository(uid)
+					if (_enc == null) throw new Error('암호화된 비번 가져오기(0) 실패입니다 : ' + uid)
 					await wsmysql.query(conn, sql, [
-						_enc, data1[0].USER_NM, data1[0].ORG_CD, data1[0].ORG_NM, data1[0].TOP_ORG_CD, data1[0].TOP_ORG_NM, data1[0].JOB, data1[0].TEL_NO, data1[0].AB_CD, data1[0].AB_NM, _userid
+						_enc, data1[0].USER_NM, data1[0].ORG_CD, data1[0].ORG_NM, data1[0].TOP_ORG_CD, data1[0].TOP_ORG_NM, data1[0].JOB, data1[0].TEL_NO, data1[0].AB_CD, data1[0].AB_NM, uid
 					])	
 				} else {
 					sql = "DELETE FROM Z_USER_TBL WHERE USER_ID = ? AND IS_SYNC = 'Y' "
-					await wsmysql.query(conn, sql, [_userid])
+					await wsmysql.query(conn, sql, [uid])
 				}
 			}
 			//2) 조직개편후 없어진 부서와 회사를 아직도 가지고 있는 사용자정보에 (구)부서,(구)회사 표시하고 코드는 같은데 이름이 다르면 이름 업데이트 하기 (수동/동기화 모두 해당)
@@ -58,10 +58,10 @@ router.post('/', async function(req, res) {
 			const data2 = await wsmysql.query(conn, sql, [org_cd])
 			sql = "UPDATE Z_USER_TBL SET ORG_NM = ? WHERE USER_ID = ? "
 			if (data2.length == 0 && !org_nm.includes('(구)')) {
-				await wsmysql.query(conn, sql, ['(구)' + org_nm, _userid])	
+				await wsmysql.query(conn, sql, ['(구)' + org_nm, uid])	
 			} else {
 				if (org_nm != data2[0].ORG_NM) {
-					await wsmysql.query(conn, sql, [data2[0].ORG_NM, _userid])	
+					await wsmysql.query(conn, sql, [data2[0].ORG_NM, uid])	
 				}
 			}
 			const top_org_cd = data[i].TOP_ORG_CD
@@ -70,10 +70,10 @@ router.post('/', async function(req, res) {
 			const data3 = await wsmysql.query(conn, sql, [top_org_cd])
 			sql = "UPDATE Z_USER_TBL SET TOP_ORG_NM = ? WHERE USER_ID = ? "
 			if (data3.length == 0 && !top_org_nm.includes('(구)')) {
-				await wsmysql.query(conn, sql, ['(구)' + top_org_nm, _userid])	
+				await wsmysql.query(conn, sql, ['(구)' + top_org_nm, uid])	
 			} else {
 				if (top_org_nm != data3[0].ORG_NM) {
-					await wsmysql.query(conn, sql, [data3[0].ORG_NM, _userid])	
+					await wsmysql.query(conn, sql, [data3[0].ORG_NM, uid])	
 				}
 			}
 		}
@@ -82,17 +82,17 @@ router.post('/', async function(req, res) {
 		data = await wsmysql.query(conn, sql, [dtkey])
 		len = data.length
 		for (let i = 0; i < len; i++) {
-			const _userid = data[i].USER_ID
+			const uid = data[i].USER_ID
 			sql = "SELECT * FROM Z_USER_TBL WHERE USER_ID = ? "
-			const data1 = await wsmysql.query(conn, sql, [_userid])
+			const data1 = await wsmysql.query(conn, sql, [uid])
 			if (data1.length == 0) {
 				sql = "INSERT INTO Z_USER_TBL (USER_ID, ID_KIND, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM, IS_SYNC, ISUDT) "
 				sql += " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
-				//const _enc = ws.util.encrypt(_userid, nodeConfig.crypto.key)
-				const _enc = await pwdModule.getEncrypt(userid)
-				if (_enc == null) throw new Error('암호화된 비번 가져오기(1) 실패입니다 : ' + userid)
+				//const _enc = ws.util.encrypt(uid, nodeConfig.crypto.key)
+				const _enc = await pwdModule.getEncrypt(uid)
+				if (_enc == null) throw new Error('암호화된 비번 가져오기(1) 실패입니다 : ' + uid)
 				await wsmysql.query(conn, sql, [
-					_userid, 'U', _enc, data[i].USER_NM, data[i].ORG_CD, data[i].ORG_NM, data[i].TOP_ORG_CD, data[i].TOP_ORG_NM, 
+					uid, 'U', _enc, data[i].USER_NM, data[i].ORG_CD, data[i].ORG_NM, data[i].TOP_ORG_CD, data[i].TOP_ORG_NM, 
 					data[i].JOB, data[i].TEL_NO, data[i].AB_CD, data[i].AB_NM, 'Y'
 				])
 			} else {

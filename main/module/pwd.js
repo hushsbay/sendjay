@@ -50,7 +50,7 @@ module.exports = {
                 } else { //pwd는 암호화되지 않은 사용자 입력분 그대로이므로 pwdToCompare도 디코딩 필요
                     pwdToCompare = ws.util.decrypt(data[0].PWD, nodeConfig.crypto.key)
                 }
-                console.log(pwd, pwdToCompare, autologin)
+                console.log(userid, pwd, pwdToCompare, autologin)
                 if (pwd != pwdToCompare) { //pwd는 요청값인데 평문일 수도 암호화된 값일 수도 있음
                     rs.code = ws.cons.CODE_PWD_MISMATCH
                     rs.msg = '비번이 다릅니다.'
