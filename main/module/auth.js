@@ -11,7 +11,7 @@ module.exports = {
 			try { //console.log('auth.login', uid, pwd, autologin, autokey_app, kind) //나중에 막기
                 conn = await wsmysql.getConnFromPool(global.pool)
                 if (kind == 'web') { //웹에서는 맨 처음 로그인시 uid,pwd가 넘어 오거나 이미 로그인 상태에서 쿠키(token,userid)가 넘어와 체크하면 됨
-                    if (!uid) {
+                    if (!uid) { //아이디가 없으므로 토큰 검증
                         const objToken = await ws.jwt.chkToken(req, res, conn) //res : 오류시 바로 클라이언트로 응답. conn : 사용자 조직정보 위변조체크
                         userid = objToken.userid
                         if (!userid) {
@@ -74,6 +74,7 @@ module.exports = {
                     data[0].AUTOKEY_APP = autokey_app //순전히 앱에서 코딩이 불편해서 처리한 것임 //AUTOKEY_WEB은 관리안함
                 }
                 Object.assign(rs, data[0])
+                if (kind == 'web') delete rs['PWD'] //웹에서는 브라우저에서 비번저장하지 않음 (암호화된 비번도 내리지도 말기)
                 rs.userid = userid
                 resolve(rs)
 			} catch (ex) {
