@@ -104,112 +104,13 @@ Here are some ideas to get you started:
    + 포트를 PC와 모바일로 나눈 것은 단순히 멀티소켓서버 테스트 편의를 위한 구분입니다.
    + 웹은 HTML5, jQuery가 쓰였으며 Android 앱은 Kotlin입니다.
    + iOS 앱은 아직 개발되지 않았습니다.
-
-   * Sendjay 소스는 아래와 같습니다.
+   * sendjay 소스는 아래와 같습니다.
       - 서버 & 웹 클라이언트 : https://github.com/hushsbay/sendjay
       - Android 클라이언트 : https://github.com/hushsbay/sendjay_aos
-   
-   * Sendjay는 https://hushsbay.com 에서 Full Test 가능합니다.
-   
-   ### 서버 환경
-
-   1) MySql (ver 8.0.32) : 테이블 명세는 맨 아래 있습니다.
-
-   2) Redis (ver 3.0.504)
-
-   3) Node.js (ver 20.10.0)
-
-   ```
-   - 적용된 npm list는 아래와 같습니다. (package.json)
-
-   {
-      "dependencies": {
-         "@socket.io/redis-adapter": "^8.2.1",
-         "cookie-parser": "^1.4.6",
-         "cors": "^2.8.5",
-         "crypto": "^1.0.1",
-         "express": "^4.18.2",
-         "fluent-ffmpeg": "^2.1.2",
-         "fs-extra": "^11.2.0",
-         "ioredis": "^5.3.2",
-         "jsonwebtoken": "^9.0.2",
-         "mime": "^3.0.0",
-         "multer": "^1.4.0",
-         "mysql2": "^3.9.0",
-         "open-graph-scraper": "^4.7.1",
-         "request-ip": "^3.3.0",
-         "socket.io": "^4.7.3",
-         "winston": "^3.11.0",
-         "winston-daily-rotate-file": "^4.7.1"
-      }
-   }
-   
-   - start.bat (PC 브라우저에서 호출되는 Node.js서버)
-
-   set NODE_CONFIG=c:/nodeops/nodeconfig.js
-   set MYSQL_SCHEMA=jay
-   set HTTP_METHOD=http
-   set HTTP_PORT=80
-   set SOCK_NAMESPACE=jay
-   set SOCK_PORT=3050
-   set REDIS_DB=0
-   set MAIN_SERVER=Y
-   set LOG_PATH=c:/nodeops/log/sendjay
-   set UPLOAD_PATH=c:/nodeops/upload/sendjay
-   node app
-
-   - start1.bat (모바일앱에서 호출되는 Node.js서버)
-   
-   set NODE_CONFIG=c:/nodeops/nodeconfig.js
-   set MYSQL_SCHEMA=jay
-   set HTTP_METHOD=http
-   set HTTP_PORT=81
-   set SOCK_NAMESPACE=jay
-   set SOCK_PORT=3051
-   set REDIS_DB=0
-   set MAIN_SERVER=N
-   set LOG_PATH=c:/nodeops/log/sendjay
-   set UPLOAD_PATH=c:/nodeops/upload/sendjay
-   node app
-      
-   - nodeConfig.js (Node.js 전체 환경 설정)
-   
-   module.exports = {
-      "mysql" : {   
-        	"host" : "localhost",
-        	"poolsize" : 50,
-        	"port" : 3306,
-        	"user" : "xxx",
-        	"pwd" : "xxx"
-      },
-      "redis" : {
-         "host" : "127.0.0.1",
-         "port" : 6379,
-         "pwd" : "xxx"
-      },
-      "jwt" : {
-         "algo" : "xxx",
-         "key" : "xxx", //32bytes
-         "expiry" : "365 days" //"4h" //for web and mobile //"59s", "365 days"
-      },
-      "crypto" : {
-         "key" : "xxx" //32bytes
-      },
-      "app" : {
-         "ws" : "c:/nodeops/sendjay/common/wscommon.js",
-         "wsmysql" : "c:/nodeops/sendjay/common/wsmysql.js",
-         "wslogger" : "c:/nodeops/sendjay/common/wslogger.js"
-      },
-      "path" : {
-         "ffmpeg" : "c:/ffmpeg/bin/ffmpeg.exe"
-      }
-   }
-   ```
-
-   * Node.js 관련해 전체적으로 설정할 환경은 nodeConfig.js에 두었습니다. (위 소스 참조)
-   * nodeConfig.js 파일의 위치는 어디에 두든지 상관없이 node app을 실행하기 전에 지정하면 됩니다.
-   * sendjay에서는 편의상 PM2 등의 모듈을 사용하지 않고 node app으로 단순 구동했습니다.
-   * jwt expiry는 변경되어 현재 1h 또는 4h로 설정되어 있습니다.
+   * sendjay는 https://hushsbay.com 에서 Full Test 가능합니다.
+   * MySql (ver 8.0.32) : 테이블 명세는 맨 아래 있습니다.
+   * Redis (ver 3.0.504)
+   * Node.js (ver 20.10.0)
 
 
 # 주요 특징 (메시징 관점에서)
@@ -637,11 +538,11 @@ Here are some ideas to get you started:
 
    * sendjay 소스로 사내시스템(ERP, GW 등)내 메시징 서버/웹/앱 구축(OnPremise)이 가능합니다.
    * 아래는 구축 방식 비교표입니다.
-   * sendjay 소스는 hushsbay.com에서 그대로 적용되어 있는데 이는 테스트 사이트이므로<br/>
+   * sendjay 소스는 hushsbay.com에 그대로 적용되어 있는데 이는 테스트 사이트이므로<br/>
      누구나 아이디를 등록(가입)할 수 있는 등 사내 시스템과는 다른 정책으로 되어 있습니다.<br/>
-   * 따라서, 표 (1) '조직/사용자만 연동하고 소스는 그대로 사용'하는 방식으로 구축하려면<br/>
+   * 따라서, 아래 표 (1) '조직/사용자만 연동하고 소스는 그대로 사용'하는 방식으로 구축하려면<br/>
       + (A)~(F)에 해당하는 소스를 변경해 사내 시스템에 맞게 운영되도록 해야 합니다.<br/>
-      + MySql, NodeJS, Redis 설치 등 환경 구성은 각각 사내시스템에 맞게 진행합니다.
+      + 물론 그전에 MySql, NodeJS, Redis 설치 등 환경 구성은 각각 사내시스템에 맞게 진행합니다.
 
 <table border="1" cellspacing="0" cellpadding="0" style="word-break: break-all; width: 731px; border: 1px none rgb(0, 0, 0); border-collapse: collapse;">
 	<tbody>
@@ -737,7 +638,124 @@ Here are some ideas to get you started:
 </table>
 <p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
 
-   ### 조직/사용자 데이터 연동 (인터페이스)
+   ### (A) 환경 설정
+
+```
+   - 적용된 npm list는 아래와 같습니다. (package.json)
+
+   {
+      "dependencies": {
+         "@socket.io/redis-adapter": "^8.2.1",
+         "cookie-parser": "^1.4.6",
+         "cors": "^2.8.5",
+         "crypto": "^1.0.1",
+         "express": "^4.18.2",
+         "fluent-ffmpeg": "^2.1.2",
+         "fs-extra": "^11.2.0",
+         "ioredis": "^5.3.2",
+         "jsonwebtoken": "^9.0.2",
+         "mime": "^3.0.0",
+         "multer": "^1.4.0",
+         "mysql2": "^3.9.0",
+         "open-graph-scraper": "^4.7.1",
+         "request-ip": "^3.3.0",
+         "socket.io": "^4.7.3",
+         "winston": "^3.11.0",
+         "winston-daily-rotate-file": "^4.7.1"
+      }
+   }
+   
+   - start.bat (PC 브라우저에서 호출되는 Node.js서버)
+
+   set NODE_CONFIG=c:/nodeops/nodeconfig.js
+   set MYSQL_SCHEMA=jay
+   set HTTP_METHOD=http
+   set HTTP_PORT=80
+   set SOCK_NAMESPACE=jay
+   set SOCK_PORT=3050
+   set REDIS_DB=0
+   set MAIN_SERVER=Y
+   set LOG_PATH=c:/nodeops/log/sendjay
+   set UPLOAD_PATH=c:/nodeops/upload/sendjay
+   node app
+
+   - start1.bat (모바일앱에서 호출되는 Node.js서버)
+   
+   set NODE_CONFIG=c:/nodeops/nodeconfig.js
+   set MYSQL_SCHEMA=jay
+   set HTTP_METHOD=http
+   set HTTP_PORT=81
+   set SOCK_NAMESPACE=jay
+   set SOCK_PORT=3051
+   set REDIS_DB=0
+   set MAIN_SERVER=N
+   set LOG_PATH=c:/nodeops/log/sendjay
+   set UPLOAD_PATH=c:/nodeops/upload/sendjay
+   node app
+      
+   - nodeConfig.js (Node.js 전체 환경 설정)
+   
+   module.exports = {
+      "mysql" : {   
+        	"host" : "localhost",
+        	"poolsize" : 50,
+        	"port" : 3306,
+        	"user" : "xxx",
+        	"pwd" : "xxx"
+      },
+      "redis" : {
+         "host" : "127.0.0.1",
+         "port" : 6379,
+         "pwd" : "xxx"
+      },
+      "jwt" : {
+         "algo" : "xxx",
+         "key" : "xxx", //32bytes
+         "expiry" : "365 days" //"4h" //for web and mobile //"59s", "365 days"
+      },
+      "crypto" : {
+         "key" : "xxx" //32bytes
+      },
+      "app" : {
+         "ws" : "c:/nodeops/sendjay/common/wscommon.js",
+         "wsmysql" : "c:/nodeops/sendjay/common/wsmysql.js",
+         "wslogger" : "c:/nodeops/sendjay/common/wslogger.js"
+      },
+      "path" : {
+         "ffmpeg" : "c:/ffmpeg/bin/ffmpeg.exe"
+      }
+   }
+```
+
+   * Node.js 관련해 전체적으로 설정할 환경은 nodeConfig.js에 두었습니다. (위 소스 참조)
+   * nodeConfig.js 파일의 위치는 어디에 두든지 상관없이 node app을 실행하기 전에 지정하면 됩니다.
+   * sendjay에서는 편의상 PM2 등의 모듈을 사용하지 않고 node app으로 단순 구동했습니다.
+   * jwt expiry는 변경되어 현재 1h 또는 4h로 설정되어 있습니다.
+
+   ### (B) CORS 적용
+
+```
+   app : {
+		nodeConfig : process.env.NODE_CONFIG,
+		corsRestful : ['https://hushsbay.com', 'https://yyyydev.xxxxx.co.kr', 'https://yyyy.xxxxx.co.kr'], //Array type (Same origin이 없어도 됨)
+		corsSocket : 'https://hushsbay.com', //Non-array type (Same origin이 들어 있어야 함)
+		ipAccess : ['222.108.25.252'], //현재는 interfaceToDept.js, interfaceToUser.js에만 사용 : 테스트로 My PC
+		logPath : process.env.LOG_PATH,
+		mainserver : process.env.MAIN_SERVER,
+		uploadPath : process.env.UPLOAD_PATH
+	}
+```
+
+   * 조직/사용자 데이터 연동은 편의상 웹페이지에서 버튼으로 실행하는 것을 전제로 설명하는데
+   * 웹페이지에서 호출하는 경우 요청을 받는 서버에서는 CORS 이슈가 있으므로
+   * 위 소스와 같이 config.js내 CORS 이슈를 통과하는 호스트명을 추가해야 합니다.
+
+   ### (C) 타겟 호스트명 변경 
+
+   * 모바일소스 (https://github.com/hushsbay/sendjay_aos) Const.kt내에서
+     const val URL_HOST = "https://hushsbay.com"를 알맞은 호스트명으로 변경이 필요합니다.
+
+   ### (D) 조직/사용자 데이터 연동 (인터페이스)
 
    sendjay를 사내 시스템에 적용시 조직/사용자 데이터를 다음과 같이 택일해 적용/운영 가능합니다.<br/>
    
@@ -758,7 +776,6 @@ Here are some ideas to get you started:
       - 아래 화면은 수동으로 아이디를 만드는 페이지입니다.
       - 사용자정보와 연동해 자동으로 동기화된 아이디는 아래 화면에서는 조회되지 않으며<br>
         수동으로 등록한 아이디만 조회됩니다.<br/>
-
    
    ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_interface_1.png)
 
@@ -863,22 +880,6 @@ Here are some ideas to get you started:
       
    * 이제 사내 ERP 웹페이지에 붙여진 소스인 interfaceToDept()와 interfaceToUser()를 각각 실행하면<br/>
      1차로 MySql 테이블 Z_INTORG_TBL과 Z_INTUSER_TBL에 인터페이스용 데이터가 저장됩니다.
-     - 여기서는 웹페이지에서 버튼으로 실행하는 것을 전제로 설명하는데
-     - 웹페이지에서 호출하는 경우 요청을 받는 서버에서는 CORS 이슈가 있을 수 있으므로
-     - 아래 소스와 같이 config.js내 CORS 이슈를 통과하는 호스트명을 추가해야 합니다.<br/>
-       (corsRestful 배열에 추가)
-
-```
-   app : {
-		nodeConfig : process.env.NODE_CONFIG,
-		corsRestful : ['https://hushsbay.com', 'https://yyyydev.xxxxx.co.kr', 'https://yyyy.xxxxx.co.kr'], //Array type (Same origin이 없어도 됨)
-		corsSocket : 'https://hushsbay.com', //Non-array type (Same origin이 들어 있어야 함)
-		ipAccess : ['222.108.25.252'], //현재는 interfaceToDept.js, interfaceToUser.js에만 사용 : 테스트로 My PC
-		logPath : process.env.LOG_PATH,
-		mainserver : process.env.MAIN_SERVER,
-		uploadPath : process.env.UPLOAD_PATH
-	}
-```
 
    * 그리고, 바로 위 그림(admin.html)의 '조직연동'과 '사용자연동'을 누르면<br/> 
      2차로 MySql 테이블 Z_INTORG_TBL과 Z_INTUSER_TBL을 읽어서<br>
@@ -893,6 +894,120 @@ Here are some ideas to get you started:
      + 팀공용 아이디, 가상 아이디 등..
      + hushsbay.com에서는 테스트 가능한 사이트이므로 로그인하지 않고도 아이디를 간단히 만들어<br/>
        사용할 수 있습니다만 실제 사내 ERP에서는 관리자만 가능하도록 해야 할 것입니다.
+
+   ### (E) 비번 검증시 사내 시스템에 안전하게 보관된 비번 참조
+
+   * 아래 소스인 pwd.js의 주석으로 설명을 대체함
+
+```
+const config = require('../config')
+const nodeConfig = require(config.app.nodeConfig)
+const ws = require(nodeConfig.app.ws)
+const wsmysql = require(nodeConfig.app.wsmysql)
+
+//굳이 별도의 pwd.js 파일로 분리한 이유는 각 기업의 사내 ERP등으로부터 인터페이스를 통해 조직/사용자 데이터 연동시
+//각종 사용자 정보를 내려서 Z_USER_TBL에 담으면 되지만 암호화된 비번을 가져 와서 저장,관리하는 것은 보안상 부담스러움
+
+//Z_USER_TBL에 있는 사용자정보중에 IS_SYNC=Y값은 데이터 연동되어 가져온 데이터이고 그 외는 수동으로 입력한 데이터임
+//- 수동 입력 데이터는 사내 ERP등과 연동하지 않으므로 자체 암호화된 비번을 저장하고 있음
+
+//따라서, Github 소스를 내려 받아서 사내 ERP와 연동하지 않고 테스트 용도 등으로 그냥 사용한다면 아래 소스는 그대로 두면 되나
+//사내 ERP등으로부터 인터페이스를 통해 조직/사용자 데이터 연동한다면 아래 2가지를 진행해야 함
+
+//1. applyUser.js에 있는 아래 2가지 메소드 getEncrypt()와 getFromRepository()을 제거하고 그 값을 받는 PWD 필드값은 빈값으로 채우고
+//2. 그 아래 메소드인 verify()를, 현재 Z_USER_TBL을 읽어서 비번을 검증하는 것을 사내 ERP 인증 모듈을 호출해서 인증결과 및 암호화된 비번을 받는 루틴으로 변경하면 
+//결론적으로, 비번을 Z_USER_TBL에 저장하지 않고 원본 Repository에 두고 핸들링이 가능해진다고 보여짐
+
+module.exports = {
+    getEncrypt : (userid) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const _enc = ws.util.encrypt(userid, nodeConfig.crypto.key)
+                resolve(_enc)
+            } catch (ex) {
+				reject(null)
+			}
+        })
+    },
+    getFromRepository : (userid) => {
+		return new Promise(async (resolve, reject) => {
+			let conn, sql, data, len
+			try {
+                conn = await wsmysql.getConnFromPool(global.pool)
+                sql = "SELECT PWD FROM Z_USER_TBL WHERE USER_ID = ? "
+                data = await wsmysql.query(conn, sql, [userid])
+                if (data.length == 0) throw new Error()
+                resolve(data[0].PWD) //암호화된 비번
+			} catch (ex) {
+				reject(null)
+			} finally {
+                wsmysql.closeConn(conn, 'pwd.getFromRepository')
+            }
+		})
+	},
+	verify : (userid, pwd, autologin) => {
+		return new Promise(async (resolve, reject) => {
+			let conn, sql, data, len
+            const rs = ws.http.resInit()
+			try {
+                conn = await wsmysql.getConnFromPool(global.pool)
+                sql = "SELECT PWD FROM Z_USER_TBL WHERE USER_ID = ? "
+                data = await wsmysql.query(conn, sql, [userid])
+                if (data.length == 0) {
+                    rs.code = ws.cons.CODE_USERID_NOT_EXIST
+                    rs.msg = '사용자아이디가 없습니다.'
+                    resolve(rs)
+                    return
+                }
+                let pwdToCompare
+                if (autologin == 'Y') { //pwd는 앱에 저장된 암호화된 상태의 값이므로 pwdToCompare도 암호화된 값 그대로 비교 필요
+                    pwdToCompare = data[0].PWD
+                } else { //pwd는 암호화되지 않은 사용자 입력분 그대로이므로 pwdToCompare도 디코딩 필요
+                    pwdToCompare = ws.util.decrypt(data[0].PWD, nodeConfig.crypto.key)
+                } //console.log(userid, pwd, pwdToCompare, autologin)
+                if (pwd != pwdToCompare) { //pwd는 요청값인데 평문일 수도 암호화된 값일 수도 있음
+                    rs.code = ws.cons.CODE_PWD_MISMATCH
+                    rs.msg = '비번이 다릅니다.'
+                    resolve(rs)
+                    return
+                }
+                rs.PWD = data[0].PWD //암호화된 비번
+                resolve(rs)
+			} catch (ex) {
+                rs.code = ws.cons.CODE_ERR
+                rs.msg = ex.message
+				reject(rs)
+			} finally {
+                wsmysql.closeConn(conn, 'pwd.verify')
+            }
+		})
+	}
+}
+```
+
+   ### (F) 일부 아이디 수동입력 허용시 관리자만 가능하도록 함
+
+   * 아래 소스인 setuser.js에서 변경전->변경후로 소스 수정하면 됨
+
+```
+   //변경전
+   if (id == 'admin') {
+      //맨처음 로그인없이 누구나 admin 아이디 만들 수 있어야 함
+   } else if (userid != 'admin') {
+      //ws.http.resWarn(res, 'admin만 가능한 작업입니다.')
+      if (_kind != 'U') {
+         ws.http.resWarn(res, 'admin이 아니면 일반 사용자ID만 처리 가능합니다.')
+         return
+      }
+   }
+
+   //변경후 
+   if (id == 'admin') {
+      //맨처음 로그인없이 누구나 admin 아이디 만들 수 있어야 함
+   } else if (userid != 'admin') {
+      ws.http.resWarn(res, 'admin만 가능한 작업입니다.')
+   }
+```
 
 
 # Table 명세 (MySql)
