@@ -1004,9 +1004,10 @@ CREATE UNIQUE INDEX A_CHANDTL_IDX0 ON jay.A_CHANDTL_TBL (MSGID, RECEIVERID) ;
    * Vue or React로 도전하지 못한 부분
 
 
-# 사내시스템(ERP, GW 등)내 sendjay 소스로 메시징 서버/웹/앱 구축을 위한 가이드
+# 사내시스템내 sendjay 메시징 서버/웹/앱 구축하기
 
-   * 아래는 구축(OnPremise)방식 비교표입니다.
+   * 사내시스템(ERP, GW 등)내 sendjay 소스로 메시징 서버/웹/앱 구축이 가능합니다.
+   * 아래는 구축(OnPremise) 방식 비교표입니다.
    * 결론적으로 아패 표 (1) '조직/사용자만 연동하고 소스는 그대로 사용'하려면<br/>
       + (A)~(D)에 해당하는 소스만 변경하면 가능합니다.
       + 물론, MySql, NodeJS, Redis 등의 설치는 각자 별도로 진행합니다.
