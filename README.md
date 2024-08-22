@@ -32,7 +32,7 @@ Here are some ideas to get you started:
 5. Sendjay는 소스를 내려 받아 사내 ERP등의 조직/사용자 데이터와 연동해 구축/운영할 수 있습니다.<br/>
 
 6. Sendjay는 소스만 제공하는 것뿐만 아니라 누구나 자유롭게 실제로 사용해 볼 수 있도록 사이트를 제공합니다.<br/>
-   => https://hushsbay.com 
+   => https://hushsbay.com <br/>
    개인 사이트이므로 대용량 파일 업로드에 용량 제한이 있으며 성능 문제가 있을 수 있음을 양해바랍니다.<br/>
    
 
