@@ -5,7 +5,7 @@
     "webview_main_version" : "1.1", 
     "webview_chat_version" : "1.1",
     "webview_popup_version" : "1.0",
-    "etc" : { "gapsec" : 1000, "zvoid_screenoff" : 10000, "zvoid_screenon" : 3000 },
+    "etc" : { "gapsec" : 1000 },
     "code" : "0",
     "msg" : ""
 }
