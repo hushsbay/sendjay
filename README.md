@@ -547,17 +547,12 @@ Here are some ideas to get you started:
 <table border="1" cellspacing="0" cellpadding="0" style="word-break: break-all; width: 731px; border: 1px none rgb(0, 0, 0); border-collapse: collapse;">
 	<tbody>
 		<tr>
-			<td rowspan="2" style="border: 1px solid rgb(0, 0, 0); width: 89.7812px; height: 96px;">
-				<p style="text-align: center; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">항목</span></p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 89.7812px; height: 96px;">
+				<p style="text-align: center; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><span style="font-size: 16px; text-align: center; font-family: &quot;맑은 고딕&quot;; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">항목</span></p>
 			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 143.438px; height: 96px;" rowspan="2">
-				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">hushsbay.com에서</span></p><p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">테스트만 수행</span></p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 143.438px; height: 96px;">
+				<p style="line-height: 24px; font-size: 12pt; text-align: center; font-family: &quot;맑은 고딕&quot;; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><span style="font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-weight: 400;">hushsbay.com에서</span></p><p style="line-height: 24px; font-size: 12pt; text-align: center; font-family: &quot;맑은 고딕&quot;; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><span style="font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-weight: 400;">테스트만 수행</span></p>
 			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 494.781px; height: 23px;" colspan="2">
-				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">소스 내려받아 환경구성후</span></p>
-			</td>
-		</tr>
-		<tr>
 			<td style="border: 1px solid rgb(0, 0, 0); width: 308.453px; height: 71px;">
 				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; text-align: center; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; font-weight: 400;"><strong><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; font-weight: 700;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 700;">조직/사용자만&nbsp;</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; font-weight: 700;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 700;">연동하고</span></span></strong></p><p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; text-align: center; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; font-weight: 400;"><strong><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; font-weight: 700;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 700;">소스&nbsp;</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; font-weight: 700;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 700;">그대로&nbsp;</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; font-weight: 700;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 700;">사용 (1)</span></span></strong></p>
 			</td>
@@ -567,13 +562,13 @@ Here are some ideas to get you started:
 		</tr>
 		<tr>
 			<td style="border: 1px solid rgb(0, 0, 0); width: 89.7812px; height: 44px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">nodeConfig</p>
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">환경 설정</p>
 			</td>
 			<td style="border: 1px solid rgb(0, 0, 0); width: 143.438px; height: 44px;">
 				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">- 그대로 사용</p>
 			</td>
 			<td style="border: 1px solid rgb(0, 0, 0); width: 494.781px; height: 44px;" colspan="2">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><span style="font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-weight: 400;">- nodeConfig.js 내 설정 변경 필요</span>&nbsp;<strong><span style="font-size: 12pt; font-family: &quot;맑은 고딕&quot;; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 700;">(A)</span></strong></p>
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><span style="font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-weight: 400;">- nodeConfig.js, start.bat, start1.bat 내 설정 변경 필요</span>&nbsp;<strong><span style="font-size: 12pt; font-family: &quot;맑은 고딕&quot;; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 700;">(A)</span></strong></p>
 			</td>
 		</tr>
 		<tr>
@@ -589,13 +584,13 @@ Here are some ideas to get you started:
 		</tr>
 		<tr>
 			<td style="border: 1px solid rgb(0, 0, 0); width: 89.7812px; height: 71px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">호출 Url</p>
+				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">서버 호출</p>
 			</td>
 			<td style="border: 1px solid rgb(0, 0, 0); width: 143.438px; height: 71px;">
 				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">- 그대로 사용</p>
 			</td>
 			<td style="border: 1px solid rgb(0, 0, 0); width: 494.781px; height: 71px;" colspan="2">
-				<p style="line-height: 24px; font-size: 12pt; font-family: &quot;맑은 고딕&quot;; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">- 모바일소스 (<span style="font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-weight: 400;">https://github.com/hushsbay/sendjay_aos)</span></p><p style="line-height: 24px; font-size: 12pt; font-family: &quot;맑은 고딕&quot;; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><span style="font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-weight: 400;">&nbsp; Const.kt내&nbsp;</span><span style="font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-weight: 400;">const val URL_HOST = "https://hushsbay.com"를</span></p><p style="line-height: 24px; font-size: 12pt; font-family: &quot;맑은 고딕&quot;; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><span style="font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-weight: 400;">&nbsp; 알맞은 호스트명으로 변경 필요 <strong>(C)</strong></span></p>
+				<p style="line-height: 24px; font-size: 12pt; font-family: &quot;맑은 고딕&quot;; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">- 앱에서&nbsp;<span style="font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-weight: 400;">"https://hushsbay.com" 대체할&nbsp;</span><span style="font-size: 12pt; font-family: &quot;맑은 고딕&quot;; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">호스트명 필요 </span><strong style="font-size: 12pt;">(C)</strong></p>
 			</td>
 		</tr>
 		<tr>
