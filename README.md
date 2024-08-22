@@ -34,9 +34,25 @@ Here are some ideas to get you started:
 6. Sendjay는 소스만 제공하는 것뿐만 아니라 누구나 자유롭게 실제로 사용해 볼 수 있도록 사이트를 제공합니다.<br/>
    다만, 개인이 만든 사이트이므로 대용량 파일 업로드에 용량 제한이 있으며 서버 성능 문제를 겪을 수도 있음을<br/>
    양해해 주시기 바랍니다.<br/>
+   
+
+# 환경 구성 
+
+![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_env.png)
+
+   + 포트를 PC와 모바일로 나눈 것은 단순히 멀티소켓서버 테스트 편의를 위한 구분입니다.
+   + 웹은 HTML5, jQuery가 쓰였으며 Android 앱은 Kotlin입니다.
+   + iOS 앱은 아직 개발되지 않았습니다.
+   * sendjay 소스는 아래와 같습니다.
+      - 서버 & 웹 클라이언트 : https://github.com/hushsbay/sendjay
+      - Android 클라이언트 : https://github.com/hushsbay/sendjay_aos
+   * sendjay는 https://hushsbay.com 에서 Full Test 가능합니다.
+   * MySql (ver 8.0.32) : 테이블 명세는 맨 아래 있습니다.
+   * Redis (ver 3.0.504)
+   * Node.js (ver 20.10.0)
 
 
-# 구현 기능 (메시징 관점에서)
+# 주요 기능 (사용자 관점)
 
    아래와 같은 항목들이 (크롬 브라우저 및 안드로이드 14에서만) 테스트되었습니다.
 
@@ -94,28 +110,11 @@ Here are some ideas to get you started:
       + 파일/이미지만 검색
       + 검색결과 보기
       + 검색모드 취소
-   
-
-# 환경 구성 
-  - https://hushsbay.com
-
-![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_env.png)
-
-   + 포트를 PC와 모바일로 나눈 것은 단순히 멀티소켓서버 테스트 편의를 위한 구분입니다.
-   + 웹은 HTML5, jQuery가 쓰였으며 Android 앱은 Kotlin입니다.
-   + iOS 앱은 아직 개발되지 않았습니다.
-   * sendjay 소스는 아래와 같습니다.
-      - 서버 & 웹 클라이언트 : https://github.com/hushsbay/sendjay
-      - Android 클라이언트 : https://github.com/hushsbay/sendjay_aos
-   * sendjay는 https://hushsbay.com 에서 Full Test 가능합니다.
-   * MySql (ver 8.0.32) : 테이블 명세는 맨 아래 있습니다.
-   * Redis (ver 3.0.504)
-   * Node.js (ver 20.10.0)
 
 
-# 주요 특징 (메시징 관점에서)
+# 주요 특징 (프로그래밍 관점)
 
-   ### (웹/모바일) 소켓 Connect/Reconnect
+   ### 소켓 Connect/Reconnect
 
    웹이든 모바일이든 소켓연결 및 재연결시 사용자가 불편함을 느끼지 않도록 자연스럽게 (자동) 처리하는 것이<br/>
    핵심입니다. 특히, 메신저는 모든 직원이 항상 (웹 관점으로 보면 사내ERP에 들어와 있는 상태에서는 항상)<br/>
@@ -183,7 +182,7 @@ Here are some ideas to get you started:
    - 네트워크가 끊어진 경우는 ChatService의 데몬이 돌면서 상태를 체크해 다시 연결될 때 그동안 도착한 톡이<br/>
      있으면 바로 알려 줍니다.<br/>
 
-   ### 기기별 소켓 관리, 앱 자동로그인 및 분실처리
+   ### 기기별 소켓 관리 / 앱 자동로그인 / 분실처리
 
    * Sendjay에서는 사용자별로 웹과 앱 각각 하나씩 소켓을 배정할 수 있도록 했습니다.
       - 크롬 브라우저에서 연결되어 있는 상태에서 엣지 브라우저에서 웹메신저를 실행하면<br/>
@@ -205,8 +204,7 @@ Here are some ideas to get you started:
      - 이 때, 해당 Sendjay가 연결이 되어 있을 수도 있고 잠시동안 연결이 끊긴 상태일 수 있으니<br/>
        다시 연결되는 경우도 해제가 가능하도록 합니다.
    
-
-   ### 인증 토큰 관리
+   ### 인증 토큰 관리 (JWT : Json Web Token)
 
    * Sendjay에서는 인증을 세션이 아닌 토큰(JWT)으로 관리하고 있습니다. 특히, 기업 사이트는 각각의 보안정책을<br/>
      기반으로 운영되고 있을 것이므로 Sendjay에서 굳이 보안강화를 위해 2차인증 등을 구현하지는 않았습니다.<br/>
@@ -232,40 +230,14 @@ Here are some ideas to get you started:
 
    * 결론적으로, jwt 만기는 토큰 갱신 주기(앱은 없음)가 10분으로 되어 있으므로 적어도 1시간 정도이상으로<br/>
      설정하는 것이 좋아 보입니다. 정상적인 상황이면 주기적으로 갱신하므로 토큰 만기가 뜨면 안됩니다.<br/>
-   
-   
-   ### (웹/모바일) 유지보수 효율의 극대화를 위해 최대한 웹으로 구현
-
-   Sendjay는 일반적으로 추구하는 유지보수 효율성을 목적으로 두고<br/>
-   모바일에서, 앱으로 반드시 구현해야 할 소켓통신/알림/앱버전업데이트 등은 앱으로 개발하고<br/>
-   UI(화면) 관련은 대부분 웹뷰를 통해 기존에 개발된 웹모듈을 재사용하고자 했습니다.<br/>
-
-   아래는 안드로이드에서 캡쳐한 이미지인데 PC 브라우저에서도 동일한 화면으로 만날 수 있습니다.<br/>
-   
-   <table>
-      <tr>
-         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_chat_1.jpg" style="width:276px;height:600px"/></td>
-         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_chat_2.jpg" style="width:276px;height:600px"/></td>
-      </tr>
-      <tr>
-         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_talklist.jpg" style="width:276px;height:600px"/></td>
-         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_option_1.jpg" style="width:276px;height:600px"/></td>
-      </tr>
-      <tr>
-         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_team.jpg" style="width:276px;height:600px"/></td>
-         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_treeview.jpg" style="width:276px;height:600px"/></td>
-      </tr>
-   </table>
-
-
-   ### (웹/모바일) 소켓 메시지 플로우
+      
+   ### 소켓 메시지 플로우
 
    ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_socket_web.png)
 
    ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_socket_aos.png)
 
-
-   ### (모바일) 소켓 버퍼링 / 로컬 DB
+   ### 소켓 버퍼링 / 로컬 DB
 
    socket.io docs에 보면 "연결이 끊어진(offline) 상태에서 emit된 이벤트는 기본적으로<br/> 
    재연결때까지 buffered된다"라고 되어 있습니다.<br/>
@@ -488,7 +460,7 @@ Here are some ideas to get you started:
    }
    ```
 
-   ### (웹/모바일) Notification
+   ### 알림 (Notification)
 
    Notification(톡 도착 알림)과 관련하여 웹만 또는 앱만 사용시는 일반적인 사안이지만 웹과 앱 동시에<br/>
    사용하는 경우 Noti가 둘 다 동시에 오면 사용자가 불편하게 됩니다. 둘 다 Noti를 표시했다가 한쪽에서<br/>
@@ -516,13 +488,36 @@ Here are some ideas to get you started:
    + 앱에서는 사용자에 의한 앱의 강제종료 및 사용자의 의도와 관련없이 네트워크 재연결이 자주 발생할 수도<br/>
      있는데 이 경우, 그 시간동안 새로운 톡 도착을 (안읽은 톡이라고 표시하면서) 알려주도록 했습니다.<br/>
 
+   ### 최대한 웹으로 구현 (유지보수 효율성)
+
+   Sendjay는 일반적으로 추구하는 유지보수 효율성을 목적으로 두고<br/>
+   모바일에서, 앱으로 반드시 구현해야 할 소켓통신/알림/앱버전업데이트 등은 앱으로 개발하고<br/>
+   UI(화면) 관련은 대부분 웹뷰를 통해 기존에 개발된 웹모듈을 재사용하고자 했습니다.<br/>
+
+   아래는 안드로이드에서 캡쳐한 이미지인데 PC 브라우저에서도 동일한 화면으로 만날 수 있습니다.<br/>
+   
+   <table>
+      <tr>
+         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_chat_1.jpg" style="width:276px;height:600px"/></td>
+         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_chat_2.jpg" style="width:276px;height:600px"/></td>
+      </tr>
+      <tr>
+         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_talklist.jpg" style="width:276px;height:600px"/></td>
+         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_option_1.jpg" style="width:276px;height:600px"/></td>
+      </tr>
+      <tr>
+         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_team.jpg" style="width:276px;height:600px"/></td>
+         <td><img src="https://github.com/hushsbay/sendjay/blob/master/sendjay_treeview.jpg" style="width:276px;height:600px"/></td>
+      </tr>
+   </table>
+
 
 # 향후 주요 개발 예정 항목 (ver 2.0)
 
    * iOS 디바이스 지원
-   * 백엔드에서 알림 전송 : SMS/LMS처럼 문자보내기 대신 소켓통신하는 단방향채널 구현
-   * 팀공용아이디, admin, organ 아이디로 백엔드 전송 및 채팅   
-   * 이모티콘 채팅 지원
+   * 백엔드에서 알림 전송 : 문자보내기(SMS/LMS) 대신 소켓으로 전송하는 단방향채널 구현
+   * 팀공용아이디, admin, organ 아이디로 백엔드 전송 및 (사용자와의) 채팅
+   * 이모티콘 전송 지원
    * ChatGPT 인터페이스 적용 검토
    
 
@@ -531,7 +526,7 @@ Here are some ideas to get you started:
    * 안드로이드 포어그라운드 서비스 아이콘 제거 못함
    * 앱과 웹뷰간 쿠키 공유 포기하고 Content Provider로 대체
    * 더 정제된 코딩 필요 (socket.io, Kotlin 등)   
-   * Vue or React로 도전하지 못한 부분
+   * Vue or React로 도전하지 못함
 
 
 # 사내시스템내 sendjay 메시징 서버/웹/앱 구축하기
@@ -631,7 +626,6 @@ Here are some ideas to get you started:
 		</tr>
 	</tbody>
 </table>
-<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
 
    ### (A) 환경 설정
 
@@ -706,7 +700,7 @@ Here are some ideas to get you started:
       "jwt" : {
          "algo" : "xxx",
          "key" : "xxx", //32bytes
-         "expiry" : "365 days" //"4h" //for web and mobile //"59s", "365 days"
+         "expiry" : "4h" //"4h" //for web and mobile //"59s", "1h", "365 days"
       },
       "crypto" : {
          "key" : "xxx" //32bytes
@@ -723,10 +717,8 @@ Here are some ideas to get you started:
 ```
 
    * Node.js 관련해 전체적으로 설정할 환경은 nodeConfig.js에 두었습니다. (위 소스 참조)
-   * nodeConfig.js 파일의 위치는 어디에 두든지 상관없이 node app을 실행하기 전에 지정하면 됩니다.
-   * sendjay에서는 편의상 PM2 등의 모듈을 사용하지 않고 node app으로 단순 구동했습니다.
-   * jwt expiry는 변경되어 현재 1h 또는 4h로 설정되어 있습니다.
-
+   * 편의상 PM2 등의 모듈을 사용하지 않고 node app으로 단순 구동했습니다.
+   
    ### (B) CORS 적용
 
 ```
@@ -747,8 +739,8 @@ Here are some ideas to get you started:
 
    ### (C) 호출 서버 변경 
 
-   * 모바일소스 (https://github.com/hushsbay/sendjay_aos) Const.kt내에서
-     const val URL_HOST = "https://hushsbay.com"를 알맞은 호스트명으로 변경이 필요합니다.
+   * 모바일소스 (https://github.com/hushsbay/sendjay_aos) Const.kt에서<br/>
+     const val URL_HOST = "https://hushsbay.com"에 있는 호스트명이 변경되어야 합니다.
 
    ### (D) 조직/사용자 데이터 연동 (인터페이스)
 
@@ -758,13 +750,13 @@ Here are some ideas to get you started:
       - 특히, Z_ORG_TBL(조직)과 Z_USER_TBL(사용자) 대신 사내 운영되는 테이블로 교체하면 될 것입니다.
    
    2. 내려받은 GitHub 소스를 수정하지 않고 그대로 운영하기 (패키지 형태)
-      - 아래는 이 경우에 대하여 어떻게 연동시키는지 설명하고 있습니다.
+      - 아래는 이 경우에 대하여 조직/사용자 데이터를 어떻게 연동시키는지 설명하고 있습니다.
       - 위 표 (1) '조직/사용자만 연동하고 소스는 그대로 사용'하는 구축 방식입니다.
       - 조직/사용자 데이터 연동은 시스템마다 (인증 등) 특성이 있을텐데 편의상 여기서는<br/>
         웹페이지에서 수동으로 버튼을 눌러 연동하는 방식으로 진행하며<br/>
         시스템내 배치, 데몬 등의 적용은 사내ERP환경에 맞게 구성하면 될 것입니다.<br/>
      
-   * 먼저, 아래 화면에서 '간편등록' 버튼을 눌러 'admin'이라는 아이디를 만듭니다.
+   * 사내시스템에서 환경 구성후 먼저, '간편등록' 버튼을 눌러 'admin'이라는 아이디를 만듭니다.
       - 아이디를 admin으로 입력하고 이름/비번만 저장하고 회사/부서 등은 입력하지 않습니다. 
       - admin으로 로그인하여 organ이라는 아이디도 만듭니다. (조직/사용자 데이터 연동용 아이디) 
       - 아이디를 organ으로 입력하고 이름/비번만 저장하고 회사/부서 등은 입력하지 않습니다.
@@ -867,28 +859,22 @@ Here are some ideas to get you started:
 
    * 위 소스내 _token은 인증토큰 값을 복사해서 붙인 것인데, organ으로 로그인후</br>
      '간편등록' 옆에 보이는 '관리자'라는 메뉴를 클릭하면 팝업이 열립니다.</br>
-
-     + '토큰복사'를 누르면 클립보드에 값이 복사되고 위 소스의 _token에 붙여 넣습니다.
-     + 복사된 토큰은 만기가 있습니다. (서버의 nodeConfig.js 내 jwt expiry 값 참조)
+     + '토큰복사'를 눌러 클립보드에 값을 복사한 후 위 소스로 가서 _token에 붙여 넣습니다.
+     + 참고로, 복사된 토큰은 만기가 있는데 만기가 되면 다시 로그인해서 붙이면 됩니다.<br/>
+       (서버의 nodeConfig.js 내 jwt expiry 값 참조)
 
    ![image](https://github.com/hushsbay/sendjay/blob/master/sendjay_interface_3.png)   
       
-   * 이제 사내 ERP 웹페이지에 붙여진 소스인 interfaceToDept()와 interfaceToUser()를 각각 실행하면<br/>
+   * 이제 사내 ERP 웹페이지에 붙여진 위 소스 interfaceToDept()와 interfaceToUser()를 각각 실행하면<br/>
      1차로 MySql 테이블 Z_INTORG_TBL과 Z_INTUSER_TBL에 인터페이스용 데이터가 저장됩니다.
 
    * 그리고, 바로 위 그림(admin.html)의 '조직연동'과 '사용자연동'을 누르면<br/> 
      2차로 MySql 테이블 Z_INTORG_TBL과 Z_INTUSER_TBL을 읽어서<br>
      Z_ORG_TBL과 Z_USER_TBL에 데이터가 최종 저장되어 실제 적용됩니다.<br>
-     - hushsbay.com에서는 새 아이디의 비번은 아이디와 동일하게 설정되어 있습니다.<br>
-
+     
    * 위에서 설명된 내용은, 이해를 돕기 위해 웹페이지에서 버튼을 누르는 방식으로 구현한 것인데<br/>
      실제 환경에서는 거의 모두 자동화되어 돌아가야 하는 것들일 것입니다. 자동화시키는 것은<br/>
      사내 ERP 환경이 각각 다르기 때문에 각사에서 알아서 구현해야 할 사안일 것입니다.<br/>
-
-   * 필요하면 간편등록에서 수동으로도 아이디를 만들 수 있습니다.<br/>
-     + 팀공용 아이디, 가상 아이디 등..
-     + hushsbay.com에서는 테스트 가능한 사이트이므로 로그인하지 않고도 아이디를 간단히 만들어<br/>
-       사용할 수 있습니다만 실제 사내 ERP에서는 관리자만 가능하도록 해야 할 것입니다.
 
    ### (E) 비번 검증시 사내 시스템에 안전하게 보관된 비번 참조
 
@@ -901,17 +887,17 @@ const ws = require(nodeConfig.app.ws)
 const wsmysql = require(nodeConfig.app.wsmysql)
 
 //굳이 별도의 pwd.js 파일로 분리한 이유는 각 기업의 사내 ERP등으로부터 인터페이스를 통해 조직/사용자 데이터 연동시
-//각종 사용자 정보를 내려서 Z_USER_TBL에 담으면 되지만 암호화된 비번을 가져 와서 저장,관리하는 것은 보안상 부담스러움
+//각종 사용자 정보를 내려서 Z_USER_TBL에 담으면 되지만 암호화된 비번을 가져와서 저장,관리하는 것은 보안상 부담스러움
 
 //Z_USER_TBL에 있는 사용자정보중에 IS_SYNC=Y값은 데이터 연동되어 가져온 데이터이고 그 외는 수동으로 입력한 데이터임
 //- 수동 입력 데이터는 사내 ERP등과 연동하지 않으므로 자체 암호화된 비번을 저장하고 있음
 
 //따라서, Github 소스를 내려 받아서 사내 ERP와 연동하지 않고 테스트 용도 등으로 그냥 사용한다면 아래 소스는 그대로 두면 되나
-//사내 ERP등으로부터 인터페이스를 통해 조직/사용자 데이터 연동한다면 아래 2가지를 진행해야 함
+//사내 ERP등으로부터 인터페이스를 통해 조직/사용자 데이터 연동한다면 아래를 진행해야 함
 
 //1. applyUser.js에 있는 아래 2가지 메소드 getEncrypt()와 getFromRepository()을 제거하고 그 값을 받는 PWD 필드값은 빈값으로 채우고
-//2. 그 아래 메소드인 verify()를, 현재 Z_USER_TBL을 읽어서 비번을 검증하는 것을 사내 ERP 인증 모듈을 호출해서 인증결과 및 암호화된 비번을 받는 루틴으로 변경하면 
-//결론적으로, 비번을 Z_USER_TBL에 저장하지 않고 원본 Repository에 두고 핸들링이 가능해진다고 보여짐
+//2. 그 아래 verify()에서, 현재 Z_USER_TBL을 읽어서 비번을 검증하는 것을 사내 ERP 인증 모듈을 호출해서 인증결과 및 암호화된 비번을 받는 
+//   루틴으로 변경하면 결론적으로, 비번을 Z_USER_TBL에 저장하지 않고 원본 Repository에 두고 핸들링이 가능해짐
 
 module.exports = {
     getEncrypt : (userid) => {
@@ -980,9 +966,9 @@ module.exports = {
 }
 ```
 
-   ### (F) 일부 아이디 수동입력 허용시 관리자만 가능하도록 함
+   ### (F) 아이디 수동입력도 허용시 관리자만 가능하도록 함
 
-   * 아래 소스인 setuser.js에서 변경전->변경후로 소스 수정하면 됨
+   * 아래 소스인 setuser.js에서 있는 소스를 변경전->변경후로 수정하면 됨
 
 ```
    //변경전
