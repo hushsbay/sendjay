@@ -23,6 +23,10 @@ router.post('/', async function(req, res) {
 			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
 			return
 		}
+		if (userid != 'admin') {
+			ws.http.resWarn(res, 'admin만 가능한 작업입니다.')
+			return
+	   	}
 		await wsmysql.txBegin(conn)
 		sql = "SELECT COUNT(*) CNT FROM Z_INTUSER_TBL WHERE DTKEY = ? "
 		data = await wsmysql.query(conn, sql, [dtkey])

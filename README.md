@@ -1003,136 +1003,98 @@ CREATE UNIQUE INDEX A_CHANDTL_IDX0 ON jay.A_CHANDTL_TBL (MSGID, RECEIVERID) ;
    * 더 정제된 코딩 필요 (socket.io, Kotlin 등)   
    * Vue or React로 도전하지 못한 부분
 
-끝.
 
+# 사내시스템(ERP, GW 등)내 sendjay 소스로 메시징 서버/웹/앱 구축을 위한 가이드
 
-<table border="1" cellspacing="0" cellpadding="0" style="word-break: break-all; width: 766px; font-size: 12pt; border: 1px none rgb(0, 0, 0); border-collapse: collapse;">
+   * 아래는 구축(OnPremise)방식 비교표입니다.
+   * 결론적으로 아패 표 (1) '조직/사용자만 연동하고 소스는 그대로 사용'하려면<br/>
+      + (A)~(D)에 해당하는 소스만 변경하면 가능합니다.
+      + 물론, MySql, NodeJS, Redis 등의 설치는 각자 별도로 진행합니다.
+
+<table border="1" cellspacing="0" cellpadding="0" style="word-break: break-all; width: 743px; border: 1px none rgb(0, 0, 0); border-collapse: collapse;">
 	<tbody>
 		<tr>
-			<td rowspan="2" style="border: 1px solid rgb(0, 0, 0); width: 90.5156px; height: 48px;">
-				<p style="text-align: center; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">항목</p>
+			<td rowspan="2" style="border: 1px solid rgb(0, 0, 0); width: 95.0938px; height: 90px;">
+				<p style="text-align: center; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">항목</span></p>
 			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 124.078px; height: 48px;" rowspan="2">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">hushsbay.com</p><p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">에서 테스트</p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 137.234px; height: 90px;" rowspan="2">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">hushsbay.com</span></p><p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">에서 테스트</span></p>
 			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 396.812px; height: 23px;" colspan="3">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">소스 내려받아 환경구성후</p>
-			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 150.594px; height: 48px;" rowspan="2">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">각 기업의&nbsp;</p><p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">사내시스템</p><p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">(ERP, GW 등)</p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 507.672px; height: 23px;" colspan="2">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">소스 내려받아 환경구성후</span></p>
 			</td>
 		</tr>
 		<tr>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 135.953px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">소스 그대로 사용</p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 287.344px; height: 65px;">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; text-align: center; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; font-weight: 400;"><strong><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; font-weight: 700;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 700;">조직/사용자만&nbsp;</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; font-weight: 700;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 700;">연동하고</span></span></strong></p><p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; text-align: center; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; font-weight: 400;"><strong><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; font-weight: 700;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 700;">소스&nbsp;</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; font-weight: 700;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 700;">그대로&nbsp;</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; font-weight: 700;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 700;">사용 (1)</span></span></strong></p>
 			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 125.922px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;"><span style="font-size: 12pt; font-family: &quot;맑은 고딕&quot;; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">조직/사용자만</span></p><p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">연동하고 나머지</p><p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">소스는 그대로</p><p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">사용해 운영</p>
-			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 132.938px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">기업에 맞게</p><p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">커스터마이징</p><p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center;">(소스 대폭 수정)</p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 219.328px; height: 65px;">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">기업에 맞게&nbsp;</span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">커스터마이징</span></span></p><p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; text-align: center; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">- 소스 대폭 수정 (2)</span></p>
 			</td>
 		</tr>
 		<tr>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 90.5156px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 95.0938px; height: 191px;">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">아이디/비번</span></p>
 			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 124.078px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">a</p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 137.234px; height: 191px;">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">-&nbsp;</span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">MySql 저장</span></span></p>
 			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 135.953px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">b</p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 287.344px; height: 191px;">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">- 사용자 연동&nbsp;</span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">데이터는&nbsp;</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">MySql 저장</span></span></p><p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">- 비번 관리</span></span></p><p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">&nbsp; 1) 수동</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">&nbsp;입력된 아이디의&nbsp;</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">비번은&nbsp;</span></span></p><p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">&nbsp; &nbsp; &nbsp;MySql 저장</span></span></p><p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">&nbsp; 2) 연동 아이디&nbsp;</span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">비번은&nbsp;</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">저장&nbsp;</span></span></p><p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">&nbsp; &nbsp; &nbsp;안되도록&nbsp;</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">하고&nbsp;</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">검증도&nbsp;</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">사내</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">&nbsp;</span></span></p><p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">&nbsp; &nbsp; &nbsp;시스템&nbsp;</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">비번</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">&nbsp;</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">비교하도록 변경 필요</span></span></p><p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">&nbsp; &nbsp; &nbsp;(아래 설명 참조) (A)</span></span></p>
 			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 125.922px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">c</p>
-			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 132.938px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">d</p>
-			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 150.594px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">e</p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 219.328px; height: 307px;" rowspan="3">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">- 기업 정책에 따름</span></p>
 			</td>
 		</tr>
 		<tr>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 90.5156px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 95.0938px; height: 23px;">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">인증 관리</span></p>
 			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 124.078px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">aa</p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 137.234px; height: 23px;">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">- JWT</span></p>
 			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 135.953px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">bb</p>
-			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 125.922px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">cc</p>
-			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 132.938px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">dd</p>
-			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 150.594px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">ee</p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 287.344px; height: 23px;">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">- JWT</span></p>
 			</td>
 		</tr>
 		<tr>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 90.5156px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 95.0938px; height: 89px;">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">아이디&nbsp;</span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">등록</span></span></p>
 			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 124.078px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 137.234px; height: 89px;">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">- 누구나 아이디</span></p><p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">&nbsp; 등록(가입) 가능</span></p>
 			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 135.953px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
-			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 125.922px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
-			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 132.938px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
-			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 150.594px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 287.344px; height: 89px;">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">- 아이디 수동</span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">&nbsp;입력은</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">&nbsp;관리자만&nbsp;</span></span></p><p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">&nbsp; 가능하도록</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">&nbsp;변경 필요</span></span></p><p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">&nbsp; (아래 설명 참조) (B)</span></span></p>
 			</td>
 		</tr>
 		<tr>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 90.5156px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 95.0938px; height: 25px;">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">CORS</span></p>
 			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 124.078px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 137.234px; height: 25px;">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">- 그대로 사용</span></p>
 			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 135.953px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
-			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 125.922px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
-			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 132.938px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
-			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 150.594px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 507.672px; height: 25px;" colspan="2">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">- config.js내&nbsp;</span><span style="background-color: rgb(255, 255, 255); white-space: pre; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">corsRestful, </span></span><span style="background-color: rgb(255, 255, 255); white-space: pre; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">corsSocket</span></span><span style="background-color: rgb(255, 255, 255); white-space: pre; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"> 값 변경 필요 (C)</span></span></p>
 			</td>
 		</tr>
 		<tr>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 90.5156px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 95.0938px; height: 23px;">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">nodeConfig</span></p>
 			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 124.078px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 137.234px; height: 23px;">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">- 그대로 사용</span></p>
 			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 135.953px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
-			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 125.922px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
-			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 132.938px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
-			</td>
-			<td style="border: 1px solid rgb(0, 0, 0); width: 150.594px; height: 23px;">
-				<p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+			<td style="border: 1px solid rgb(0, 0, 0); width: 507.672px; height: 23px;" colspan="2">
+				<p style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400; font-family: &quot;맑은 고딕&quot;; font-size: 12pt;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">- nodeConfig.js 내 설정 변경 필요</span><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">&nbsp;</span></span><span style="line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-family: &quot;맑은 고딕&quot;; font-size: 12pt; font-weight: 400;"><span style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;">(위 소스 참조) (D)</span></span></p>
 			</td>
 		</tr>
 	</tbody>
 </table>
 <p style="font-family: &quot;맑은 고딕&quot;; font-size: 12pt; line-height: 24px; margin-top: 0px; margin-bottom: 0px; font-weight: 400;"><br></p>
+
+
+끝.
+
+
