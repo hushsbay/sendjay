@@ -11,7 +11,7 @@ Here are some ideas to get you started:
 - ⚡ Fun fact: ...
 -->
 
-현재 99% 개발완료된 상태이며 최종 테스트 계획중입니다.<br/>
+현재 ver 1.0 개발완료된 상태이며 최종 테스트/수정/보완중입니다.<br/>
 
 
 # sendjay 소개
