@@ -513,7 +513,7 @@ Here are some ideas to get you started:
    * iOS 디바이스 지원
    * 백엔드에서 알림 전송 : 문자보내기(SMS/LMS) 대신 소켓으로 전송하는 단방향채널 구현
    * 팀공용아이디, admin, organ 아이디로 백엔드 전송 및 (사용자와의) 채팅
-   * 이모티콘 전송 지원
+   * 이모티콘(공감 포함) 지원
    * ChatGPT 인터페이스 적용 검토
    
 
