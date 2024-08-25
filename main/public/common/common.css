@@ -7,8 +7,7 @@
 html, body { 
     width: 100%; height: 100%; margin: 0; 
     overscroll-behavior: contain; /* disable pull_to_refresh 화면 끌어 내리면 새로고침되는 것 막음. iOS는 안됨. 크롬/삼성브라우저 OK */
-    -webkit-text-size-adjust : none;  /* 크롬, 사파리, 오페라 신버전 */
-    -moz-text-size-adjust : none;  /* 파이어폭스 */
+    /*-webkit-text-size-adjust : none;  / 크롬, 사파리, 오페라 신버전 */
 }
 
 /* 1) 모바일 크롬에서 탭하면 하단에 '검색결과를 보려면 탭하세요'라고 뜨는 것 방지 
@@ -16,6 +15,7 @@ html, body {
 div, span, img {
     -moz-user-select: none;
     -webkit-user-select: none; /* Safari */    
+    -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
 }
 
@@ -99,8 +99,8 @@ button { margin-left: 5px }
 @media screen and (max-device-width: 500px) { 
     .coLogin { padding-top: 50px; display: flex; flex-direction: column; justify-content: flex-start; } /* login.html : 모바일인 경우 키보드 올라오는 경우 대비해 상단 배치 */
     .coTitle { font-size:10px }
-    .coText { font-size:11px }
-    .coText1 { font-size:11px }
+    .coText { font-size:10px }
+    .coText1 { font-size:10px }
     .coMenuBtn>img { display: none } /* 모바일중에 가로가 작은 것은 이미지 제외하고 표시 (>의 앞뒤는 붙여야 함을 유의) */    
     .coImgMenu { display: none }
     input::placeholder { font-size:10px;color:lightgray }
