@@ -125,6 +125,7 @@ alert(JSON.stringify(rs))
                     if (!hush.webview.on) {
                         previewImage()
                     } else {
+                        alert("111")
                         setTimeout(function() {
                             AndroidPopup.procAfterOpenPopup()
                         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
