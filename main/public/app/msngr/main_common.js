@@ -644,7 +644,7 @@ const getPortalList = async (obj) => {
             _html += "                  <span class=coText style='color:darkgray;margin-left:10px'>" + _memcnt + "</span>"
             _html += "              </div>"
             _html += "          </div>"
-            _html += "          <div style='width:100%;height:50%;display:flex;align-items:center;margin:2px 0px'>"
+            _html += "          <div style='width:100%;height:50%;display:flex;align-items:center;margin-bottom:2px'>"
             _html += "              <span id=body_" + _roomid + " class='coDotDot coText' style='line-height:100%;flex:1;min-width:0;color:darkgray'>" + _lastmsg + "</span>"
             _html += "              <span id=udt_" + _roomid + " class=coText style='width:100px;color:darkgray;text-align:right'>" + _lastdt + "</span>"
             _html += "          </div>"
