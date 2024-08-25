@@ -72,9 +72,6 @@
                 } else if (g_type == "image" || g_type == "ext_image") {
                     previewImage()
                 }
-                setTimeout(function() {
-                    AndroidPopup.toggleSaveVisible(true)
-                }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
             } catch (ex) {
                 hush.util.showEx(ex)
             }
@@ -161,6 +158,6 @@
         <video id=videoTab height=100% width=100% controls style="display:none"></video>
         <div id=imgbody style="display:none"><img id=img></div>
     </div>
-    <img id=btn_save src="/img/download.png" class=save style="display:none" />    
+    <img id=btn_save src="/img/download.png" class=save />    
 </body>
 </html>
