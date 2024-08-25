@@ -72,6 +72,9 @@
                 } else if (g_type == "image" || g_type == "ext_image") {
                     previewImage()
                 }
+                setTimeout(function() {
+                    AndroidPopup.toggleSaveVisible(true)
+                }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
             } catch (ex) {
                 hush.util.showEx(ex)
             }
@@ -141,7 +144,6 @@
                 })
                 $("#main_pg").on("click", function() {
                     if (hush.webview.and) {
-                        alert("1111")
                         toggleSaveVisible = toggleSaveVisible ? false : true
                         AndroidPopup.toggleSaveVisible(toggleSaveVisible)
                     }
