@@ -473,6 +473,9 @@
                             if (g_memWin && !g_memWin.closed) g_memWin.close()
                         }
                     }
+                    $("#btn_logo").on("click", function() {
+                        AndroidMain.appInfo()
+                    })
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }
@@ -485,7 +488,7 @@
         <div id=main_pg class=coMainPage>
             <div id=fr_header_bar style="height:50px;display:flex;justify-content:space-between;margin:0px 5px">
                 <div style="width:80%;display:flex;align-items:center">
-                    <img src="/img/hushsbay.png" style="width:40px;height:40px;margin-left:10px"/> 
+                    <img id=btn_logo src="/img/hushsbay.png" style="width:40px;height:40px;margin-left:10px"/> 
                     <div id=header_title class="coDotDot coTitle" style="font-weight:bold;color:#005192;margin-left:10px">Sendjay</div>
                 </div>
                 <div style="display:flex;align-items:center;justify-content:flex-end;margin-right:8px">
