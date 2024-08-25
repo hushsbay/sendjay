@@ -61,23 +61,20 @@
 
         ////////////////////////////////////////////////////////////////////////mobile webview
         const startFromWebView = (from, obj, rs, startFromResume) => {
-            //setTimeout(function() { //디버깅용
-                try {
-                    if (!hush.http.chkOnline()) return
-                    hush.auth.setCookieForUser(obj, true)
-                    hush.auth.setUser(obj.token)
-                    g_added = rs
-alert(JSON.stringify(rs))
-                    if (startFromResume) return //예) 안드로이드 onResume(그것도 onCreate 다음이 아닌 평소대의 onResume)인 경우는 갱신된 토큰만 받고 멈추면 됨
-                    if (g_type == "play") {
-                        play()
-                    } else if (g_type == "image" || g_type == "ext_image") {
-                        previewImage()
-                    }
-                } catch (ex) {
-                    hush.util.showEx(ex)
+            try {
+                if (!hush.http.chkOnline()) return
+                hush.auth.setCookieForUser(obj, true)
+                hush.auth.setUser(obj.token)
+                g_added = rs
+                if (startFromResume) return //예) 안드로이드 onResume(그것도 onCreate 다음이 아닌 평소대의 onResume)인 경우는 갱신된 토큰만 받고 멈추면 됨
+                if (g_type == "play") {
+                    play()
+                } else if (g_type == "image" || g_type == "ext_image") {
+                    previewImage()
                 }
-            //}, 3000)
+            } catch (ex) {
+                hush.util.showEx(ex)
+            }
         }
 
         const resumeWebView = (from, obj, rs) => {
@@ -123,9 +120,10 @@ alert(JSON.stringify(rs))
                 } else if (g_type == "image" || g_type == "ext_image") { //for mobile only
                     g_body = param.get("body")
                     if (!hush.webview.on) {
+                        alert("111")
                         previewImage()
                     } else {
-                        alert("111")
+                        alert("222")
                         setTimeout(function() {
                             AndroidPopup.procAfterOpenPopup()
                         }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
@@ -138,7 +136,7 @@ alert(JSON.stringify(rs))
                     if (g_type == "image") {
                         hush.http.fileDownload("imagetofile", g_msgid)
                     } else {
-                        const arr = g_added.split(hush.cons.deli)
+                        const arr = g_added.added.split(hush.cons.deli)
                         if (arr.length != 2) throw new Error("fileDownload Error : " + arr.length)
                         hush.http.fileDownload(arr[0], arr[1])
                     }
