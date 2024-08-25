@@ -36,11 +36,11 @@ module.exports = (function() {
 			CODE_AUTH_ERR_ON_CONNECT : '-89', //소켓연결시 인증 문제 발생
 			auth_err_prefix : '-8',			
 			toast_prefix : '##$$', //클라이언트와 동일해야 함
-			deli : '##',
+			deli : '~~', //##은 쓰지 말기 (location param 가져올 때 # 포함시 북마크?로 인지되므로 오류 발생)
 			subdeli : '$$',
 			indeli : "','", //sql where in clause
 			easydeli : ';',
-			memdeli : '/', //
+			memdeli : '/',
 			keydeli : KEYDELI, 
 			title : 'sendjay',
 			w_key : 'W' + KEYDELI, //Web userkey

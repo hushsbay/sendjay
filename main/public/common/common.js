@@ -36,11 +36,11 @@
             w_key : 'W__', //Web userkey
             m_key : 'M__', //Mobile userkey
             prefix : '$$', //for redis, socket
-            deli : "##",
+            deli : "~~", //##은 쓰지 말기 (location param 가져올 때 # 포함시 북마크?로 인지되므로 오류 발생)
             subdeli : "$$",
             indeli : "','", //use this for sql where in clause
             easydeli : ";", //use this for absolutely safe place
-            memdeli : "/", //" / "
+            memdeli : "/",
             deli_key : "__", //for setUser()
             idb_tbl : "msngr", //indexedDB
             sock_ev_connect : 'connect', //connect로 써야 함 (socket.io event) : 안드로이드에서는 Socket.EVENT_CONNECT
