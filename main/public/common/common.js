@@ -1148,7 +1148,7 @@
             screenHeightOnLoad : null, //모바일 키보드 올라오면서 높이 조정
             chk : (param) => { //const param = new URLSearchParams(location.search)
                 const _os = param.get("webview")
-                alert(_os+"*****")
+                alert(_os+"*****"+type+"*****"+type+"*****"+msgid+"*****"+body)
                 if (_os == "and" || _os == "ios") {
                     hush.webview.on = true
                     if (_os == "ios") {
