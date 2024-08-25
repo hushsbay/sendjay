@@ -61,13 +61,13 @@
 
         ////////////////////////////////////////////////////////////////////////mobile webview
         const startFromWebView = (from, obj, rs, startFromResume) => {
-            setTimeout(function() { //디버깅용
+            //setTimeout(function() { //디버깅용
                 try {
-                    debugger
                     if (!hush.http.chkOnline()) return
                     hush.auth.setCookieForUser(obj, true)
                     hush.auth.setUser(obj.token)
                     g_added = rs
+alert(JSON.stringify(rs))
                     if (startFromResume) return //예) 안드로이드 onResume(그것도 onCreate 다음이 아닌 평소대의 onResume)인 경우는 갱신된 토큰만 받고 멈추면 됨
                     if (g_type == "play") {
                         play()
@@ -77,7 +77,7 @@
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }
-            }, 3000)
+            //}, 3000)
         }
 
         const resumeWebView = (from, obj, rs) => {
@@ -134,7 +134,6 @@
                 $("#btn_save").on("click", function() { //called from mobile app
                     if (!hush.http.chkOnline()) return
                     hush.util.animBgColor($(this))
-                    debugger
                     if (g_type == "image") {
                         hush.http.fileDownload("imagetofile", g_msgid)
                     } else {
