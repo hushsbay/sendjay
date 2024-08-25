@@ -119,7 +119,7 @@
                     }
                 } else if (g_type == "image" || g_type == "ext_image") { //for mobile only
                     g_body = param.get("body")
-                    if (!hush.webview.on) {
+                    if (!hush.webview.on) { //모바일에서도 
                         alert("111")
                         previewImage()
                     } else {
