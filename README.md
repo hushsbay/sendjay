@@ -1224,14 +1224,6 @@ CREATE UNIQUE INDEX A_CHANDTL_IDX0 ON jay.A_CHANDTL_TBL (MSGID, RECEIVERID) ;
 
 ```
 
-# 향후 주요 개발 예정 항목 (ver 2.0)
-   
-   * 백엔드에서 알림 전송 : 문자보내기(SMS/LMS) 대신 소켓으로 전송하는 단방향채널 구현
-   * 팀공용아이디, admin, organ 아이디로 백엔드 전송 및 (사용자와의) 채팅
-   * 이모티콘(공감 포함) 지원
-   * Llama 등 AI 오픈소스 적용한 AI UX 제공
-   * iOS 디바이스 지원 (요청)   
-
 
 # ver 1.0 아쉬운 점
 
@@ -1241,6 +1233,14 @@ CREATE UNIQUE INDEX A_CHANDTL_IDX0 ON jay.A_CHANDTL_TBL (MSGID, RECEIVERID) ;
    * 더 정제된 코딩 필요 (socket.io, Kotlin 등)   
    * Vue or React로 도전하지 못함
 
+
+# 향후 주요 개발 예정 항목 (ver 2.0)
+   
+   * iOS 디바이스 지원
+   * 백엔드에서 알림 전송 : 문자보내기(SMS/LMS) 대신 소켓으로 전송하는 단방향채널 구현
+   * 팀공용아이디, admin 아이디로 사용자와의 채팅 지원 (팀공용아이디의 권한 이슈 해결)
+   * 이모티콘(공감 포함) 지원 검토
+   * Llama 등 AI 오픈소스 적용한 AI UX 제공 검토   
 
 끝.
 
