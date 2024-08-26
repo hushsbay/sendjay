@@ -508,24 +508,6 @@ Here are some ideas to get you started:
    </table>
 
 
-# 향후 주요 개발 예정 항목 (ver 2.0)
-   
-   * 백엔드에서 알림 전송 : 문자보내기(SMS/LMS) 대신 소켓으로 전송하는 단방향채널 구현
-   * 팀공용아이디, admin, organ 아이디로 백엔드 전송 및 (사용자와의) 채팅
-   * 이모티콘(공감 포함) 지원
-   * Llama 등 AI 오픈소스 적용한 AI UX 제공
-   * iOS 디바이스 지원 (요청)   
-
-
-# ver 1.0 아쉬운 점
-
-   * 안드로이드 포어그라운드 서비스 아이콘 제거 못함 (사용자 불편)
-   * 안드로이드 각종 앱 관련 권한 허용시 한번에 매끄럽게 허용해야 했음 (사용자 불편)
-   * 앱과 웹뷰간 쿠키 공유안하고 Content Provider로 대체
-   * 더 정제된 코딩 필요 (socket.io, Kotlin 등)   
-   * Vue or React로 도전하지 못함
-
-
 # 사내시스템내 sendjay 메시징 서버/웹/앱 구축하기
 
    * sendjay 소스로 사내시스템(ERP, GW 등)내 메시징 서버/웹/앱 구축(OnPremise)이 가능합니다.
@@ -1218,6 +1200,7 @@ CREATE UNIQUE INDEX Z_ACTLOG_IDX0 ON jay.Z_ACTLOG_TBL (ISUDT, USER_ID, WORK) ;
 
 
 -- 아래 2개의 테이블은 Sendjay ver2.0에서 구현될 내용 (ver1.0에서는 미사용)
+-- 백엔드에서 알림 전송 : 문자보내기(SMS/LMS) 대신 소켓으로 전송하는 단방향채널 구현 관련
 
 drop table if exists jay.A_CHANMST_TBL;
 CREATE TABLE jay.A_CHANMST_TBL (
@@ -1241,6 +1224,22 @@ CREATE UNIQUE INDEX A_CHANDTL_IDX0 ON jay.A_CHANDTL_TBL (MSGID, RECEIVERID) ;
 
 ```
 
+# 향후 주요 개발 예정 항목 (ver 2.0)
+   
+   * 백엔드에서 알림 전송 : 문자보내기(SMS/LMS) 대신 소켓으로 전송하는 단방향채널 구현
+   * 팀공용아이디, admin, organ 아이디로 백엔드 전송 및 (사용자와의) 채팅
+   * 이모티콘(공감 포함) 지원
+   * Llama 등 AI 오픈소스 적용한 AI UX 제공
+   * iOS 디바이스 지원 (요청)   
+
+
+# ver 1.0 아쉬운 점
+
+   * 안드로이드 포어그라운드 서비스 아이콘 제거 못함 (사용자 불편)
+   * 안드로이드 각종 앱 관련 권한 허용시 한번에 매끄럽게 허용해야 했음 (사용자 불편)
+   * 앱과 웹뷰간 쿠키 공유안하고 Content Provider로 대체
+   * 더 정제된 코딩 필요 (socket.io, Kotlin 등)   
+   * Vue or React로 도전하지 못함
 
 
 끝.
