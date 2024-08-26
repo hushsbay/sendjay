@@ -989,7 +989,7 @@ module.exports = {
 
    ### sendjay 앱 (Android) 버전 업데이트
 
-   * 아래 build.gradle.kts (:app)에서 versionName = "1.0" -> "1.1"로 수정합니다.
+   * 아래 build.gradle.kts (:app)에서 versionName = "1.0" -> "1.1"과 같이 수정합니다.
 
 ```
    defaultConfig {
@@ -1007,9 +1007,9 @@ module.exports = {
 ```
 
    * 안드로이드스튜디오 메뉴 Build > Generate Signed Bundle / APK > apk 선택해 sendjay.apk를 만듭니다.
-   * 사내 사이트내 프로젝트 main/public/download 폴더에 sendjay.apk를 복사합니다.
-   * 아래 main/public/download/applist.json에서 sendjay_aos : { version : "1.1" }로 변경해<br/>
-     github 소스에 올리고 사내 사이트내 프로젝트에서 github 소스를 내리는 식으로 applist.json을 업데이트합니다.
+   * 서버 main/public/download 폴더에 sendjay.apk를 복사합니다.
+   * 소스를 올리든 직접 수정하든 아래 그림처럼 서버 main/public/applist.json에서<br/>
+     sendjay_aos : { version : "1.1" }로 변경합니다<br/>
 
 ```
    { 
@@ -1025,7 +1025,7 @@ module.exports = {
    }
 ```
 
-   * 그리고, sendjay 앱을 실행하면 앱이 업데이트를 시작합니다.
+   * 그리고 나서, sendjay 앱이 실행되면 앱 업데이트가 시작됩니다.
 
 # Table 명세 (MySql)
 
