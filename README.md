@@ -1228,9 +1228,7 @@ CREATE UNIQUE INDEX A_CHANDTL_IDX0 ON jay.A_CHANDTL_TBL (MSGID, RECEIVERID) ;
 # 프로젝트 결과 아쉬운 점
 
    * 안드로이드 포어그라운드 서비스 아이콘 제거 못함 (사용자 불편)
-   * 안드로이드 각종 앱 관련 권한 허용시 한번에 매끄럽게 허용해야 했음 (사용자 불편)
    * 앱과 웹뷰간 쿠키 공유안하고 Content Provider로 대체
-   * 더 정제된 코딩 필요 (socket.io, Kotlin 등)   
    
 
 # 향후 주요 개발 예정 항목
