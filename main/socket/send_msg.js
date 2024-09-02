@@ -111,10 +111,9 @@ module.exports = async function(socket, param) {
 					_sql = "UPDATE A_ROOMDTL_TBL SET STATE = '' WHERE ROOMID = '" + _roomid + "' AND STATE = '2' "
 					await wsmysql.query(conn, _sql, null)
 				}
-				let bodyForInsert
-				bodyForInsert = obj.body
+				if (obj.body.includes("\\x")) throw new Error('이모지는 현재 지원되지 않습니다')
 				let iqry = "INSERT INTO A_MSGMST_TBL (MSGID, ROOMID, SENDERID, SENDERNM, BODY, REPLY, TYP, CDT, FILESTATE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) "
-				await wsmysql.query(conn, iqry, [obj.msgid, _roomid, useridToProc, obj.sendernm, bodyForInsert, obj.reply, obj.type, param.data.cdt, obj.filestate])
+				await wsmysql.query(conn, iqry, [obj.msgid, _roomid, useridToProc, obj.sendernm, obj.body, obj.reply, obj.type, param.data.cdt, obj.filestate])
 				const _state = (obj.type == 'leave') ? 'R' : '' //Inserting R to 'STATE' field in advance for 'leave' message gives good sql performance in qry_unread.js
 				const _len = param.data.receiverid.length //should not be obj but param.data since 'leave' exclude himself
 				for (let i = 0; i < _len; i++) {
