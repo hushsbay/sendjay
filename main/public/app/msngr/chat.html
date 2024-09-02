@@ -1217,6 +1217,10 @@
                         rq.type = "talk"
                         let _body = g_in_chat.val() //while (_body.endsWith(_body, "\n")) { const _len = _body.length; _body = _body.substring(0, _len - 1) } //infinite loop when _len is 0
                         if (_body.trim() == "") return
+                        if (_body.includes("\\x")) {
+                            hush.msg.toast("이모지는 현재 지원되지 않습니다.")
+                            return
+                        }
                         if (hush.util.strLen(_body) > hush.cons.max_msg_len) {
                             hush.msg.toast("최대 : " + hush.cons.max_msg_len + " 바이트<br>현재 : " + hush.util.strLen(_body) + " 바이트")
                             return
