@@ -46,7 +46,6 @@ Here are some ideas to get you started:
    * sendjay 소스는 아래와 같습니다.
       - 서버 & 웹 클라이언트 : https://github.com/hushsbay/sendjay
       - Android 클라이언트 : https://github.com/hushsbay/sendjay_aos
-   <br/>
    * MySql (ver 8.0.32) : 테이블 명세는 맨 아래 있습니다.
    * Redis (ver 3.0.504)
    * Node.js (ver 20.10.0)

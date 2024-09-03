@@ -13,7 +13,7 @@ const DIR_PUBSUB = './pubsub/', DIR_SOCKET = './socket/'
 const PING_TIMEOUT = 5000, PING_INTERVAL = 25000 //default
 
 global.logger = wslogger //global이므로 global.을 빼고 사용해도 되나 편의상 모두 명시적으로 붙여서 사용하기로 함
-global.pool = wsmysql.createPool(config.mysql.schema, true)
+global.pool = wsmysql.createPool(config.mysql.schema, 'utf8mb4', true)
 
 console.log('version:', process.version)
 console.log('projPath:', __dirname)					

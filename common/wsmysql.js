@@ -7,16 +7,23 @@ module.exports = (function() {
 
 	let wsmysql = {
 
-		createPool : (_scheme, _verbose) => {
+		createPool : (_scheme, _charset, _verbose) => {
 			if (_verbose) {
                 console.log('mysql pool created', nodeConfig.mysql.host, nodeConfig.mysql.port, nodeConfig.mysql.user, _scheme, nodeConfig.mysql.poolsize)
 			} else {
 				console.log('mysql pool created')
 			}
 		 	return mysql.createPool({ 
-				host: nodeConfig.mysql.host, port: nodeConfig.mysql.port, user: nodeConfig.mysql.user, password: nodeConfig.mysql.pwd, 
-				database: _scheme, connectionLimit: nodeConfig.mysql.poolsize, queueLimit: 0, waitForConnections: true, 
-				dateStrings : 'date' 
+				host: nodeConfig.mysql.host, 
+				port: nodeConfig.mysql.port, 
+				user: nodeConfig.mysql.user, 
+				password: nodeConfig.mysql.pwd, 
+				database: _scheme, 
+				connectionLimit: nodeConfig.mysql.poolsize, 
+				queueLimit: 0, 
+				waitForConnections: true, 
+				dateStrings : 'date',
+				charset  : _charset ? _charset : 'utf8' 
 			})
 		} 
 
