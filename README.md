@@ -1126,7 +1126,7 @@ CREATE INDEX A_ROOMDTL_IDX1 ON jay.A_ROOMDTL_TBL (ROOMID, STATE) ;
 drop table if exists jay.A_ROOMMEM_TBL;
 CREATE TABLE jay.A_ROOMMEM_TBL (
 ROOMID VARCHAR(40) NOT NULL COMMENT '채팅방아이디', 
-MEMBERS VARCHAR(1000) NOT NULL DEFAULT '' COMMENT '멤버',
+MEMBERS VARCHAR(760) NOT NULL DEFAULT '' COMMENT '멤버',
 CDT CHAR(26) NOT NULL DEFAULT '' COMMENT '작성시각' );
 CREATE UNIQUE INDEX A_ROOMMEM_IDX0 ON jay.A_ROOMMEM_TBL (ROOMID) ;
 CREATE INDEX A_ROOMMEM_IDX1 ON jay.A_ROOMMEM_TBL (MEMBERS) ;
@@ -1197,9 +1197,7 @@ UDT CHAR(26) NOT NULL DEFAULT '' COMMENT '수정시각 등',
 ISUDT CHAR(26) NOT NULL DEFAULT '' COMMENT '서버시각 기준' ) ;
 CREATE UNIQUE INDEX Z_ACTLOG_IDX0 ON jay.Z_ACTLOG_TBL (ISUDT, USER_ID, WORK) ;
 
-
 -- 아래 2개의 테이블은 Sendjay ver2.0에서 구현될 내용 (ver1.0에서는 미사용)
--- 백엔드에서 알림 전송 : 문자보내기(SMS/LMS) 대신 소켓으로 전송하는 단방향채널 구현 관련
 
 drop table if exists jay.A_CHANMST_TBL;
 CREATE TABLE jay.A_CHANMST_TBL (
@@ -1211,7 +1209,6 @@ BODY VARCHAR(4000) NOT NULL COMMENT '본문',
 CDT CHAR(26) NOT NULL DEFAULT '' COMMENT '등록시각' );
 CREATE UNIQUE INDEX A_CHANMST_IDX0 ON jay.A_CHANMST_TBL (MSGID) ;
 
-
 drop table if exists jay.A_CHANDTL_TBL;
 CREATE TABLE jay.A_CHANDTL_TBL (
 MSGID VARCHAR(40) NOT NULL COMMENT '메시지아이디',
@@ -1221,6 +1218,25 @@ STATE CHAR(1) NOT NULL DEFAULT '' COMMENT '상태. D(deleted)/R(read)',
 UDT CHAR(26) NOT NULL DEFAULT '' COMMENT '수정(읽음/삭제시각)' );
 CREATE UNIQUE INDEX A_CHANDTL_IDX0 ON jay.A_CHANDTL_TBL (MSGID, RECEIVERID) ;
 
+-- 아래는 이모지를 위한 utf8mb4 변환 스크립트
+
+ALTER DATABASE jay CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+ALTER TABLE jay.z_actlog_tbl CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE jay.a_roommst_tbl CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE jay.a_roommem_tbl CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE jay.a_roomdtl_tbl CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE jay.a_msgmst_tbl CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE jay.a_msgdtl_tbl CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE jay.a_filelog_tbl CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE jay.z_intuser_tbl CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE jay.z_intorg_tbl CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE jay.z_org_tbl CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE jay.z_user_tbl CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE jay.a_chanmst_tbl CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE jay.a_chandtl_tbl CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+ALTER TABLE jay.a_msgmst_tbl CHANGE body body VARCHAR(4000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 
