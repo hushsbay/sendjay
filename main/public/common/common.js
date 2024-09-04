@@ -79,7 +79,7 @@
             max_picture_size : 5242880, //5MB
             max_nicknm_len : 100, //same as server's
             max_msg_len : 4000, //bytes. check body field length same as server's
-            max_size_to_sublink : 5242880, //5MB. same as server's
+            max_size_to_sublink : 5242880 * 2, //5MB x 2. same as server's
             unread_max_check : 1000,
             max_add_count : 100, //when connect after disconnect
             send_timeout_sec : 5,
