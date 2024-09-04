@@ -1071,7 +1071,7 @@
                     }
                 }
                 scrollToTarget()
-                g_in_chat.val("")
+                g_in_chat.html("")
                 $("#fr_byte").html("")
                 if (_focused) g_in_chat.focus()
                 //아래는 네트워크가 끊어지거나 불안정하거나 서버가 다운되는 등의 경우 각 type마다 실패된 전송을 어찌 처리하는지에 대한 코딩임
@@ -1215,7 +1215,7 @@
                         procSendAndAppend(rq)
                     } else {
                         rq.type = "talk"
-                        let _body = g_in_chat.val() //while (_body.endsWith(_body, "\n")) { const _len = _body.length; _body = _body.substring(0, _len - 1) } //infinite loop when _len is 0
+                        let _body = g_in_chat.html() //while (_body.endsWith(_body, "\n")) { const _len = _body.length; _body = _body.substring(0, _len - 1) } //infinite loop when _len is 0
                         if (_body.trim() == "") return  
                         //const emojiRegex = /\p{Emoji}/u; if (emojiRegex.test(_body)) { hush.msg.toast("이모지 지원X"); return; }
                         if (hush.util.strLen(_body) > hush.cons.max_msg_len) {
@@ -1662,7 +1662,7 @@
             }
 
             const chkTyping = () => {
-                const curTyping = g_in_chat.val().trim()
+                const curTyping = g_in_chat.html().trim()
                 const disp = $("#typing_" + g_userid).css("display")
                 let rq
                 if (disp == "none") {
@@ -1683,7 +1683,7 @@
             }
 
             const calcBytes = () => {
-                const cnt = hush.util.strLen(g_in_chat.val())
+                const cnt = hush.util.strLen(g_in_chat.html())
                 $("#fr_byte").html(cnt + "/" + hush.cons.max_msg_len)
                 if (cnt >= hush.cons.max_msg_len) {
                     if ($("#fr_byte").css("color") != "red") $("#fr_byte").css("color", "red")
@@ -2034,7 +2034,7 @@
                             hush.msg.alert("no text data to send")
                             return
                         }
-                        g_in_chat.val(rs.BODY)
+                        g_in_chat.html(rs.BODY)
                     }
                 },
                 [hush.cons.sock_ev_revoke_msgcell] : (data) => {
@@ -2242,7 +2242,7 @@
                         procScrollEvent()
                         callPeriodic()
                     }
-                    if (localStorage[g_roomid]) g_in_chat.val(localStorage[g_roomid])
+                    if (localStorage[g_roomid]) g_in_chat.html(localStorage[g_roomid])
                     hush.webview.ready = true
                     $("#in_search").keyup(function(e) {                    
                         if (e.keyCode == 13 && !e.shiftKey) $("#btn_search").click()
@@ -2323,8 +2323,8 @@
                                 clipboardItem.getAsString(function(str) {
                                     const _arr = str.split(hush.cons.deli)
                                     if (_arr[0] == "btn_copy_cell") { //e.preventDefault() here has no effect                                    
-                                        g_in_chat.val(g_in_chat.val().replace(str, ""))
-                                        if (g_in_chat.val().trim() != "") {
+                                        g_in_chat.html(g_in_chat.html().replace(str, ""))
+                                        if (g_in_chat.html().trim() != "") {
                                             alert("이미 작성중인 데이터가 있습니다.")
                                             return
                                         }                                                        
@@ -2472,7 +2472,7 @@
                                 if (!_data || _data == "") return
                                 const _arr = _data.split(hush.cons.deli)
                                 if (_arr[1] == g_roomid) return //dragging on same room does no action
-                                if (g_in_chat.val().trim() != "") {
+                                if (g_in_chat.html().trim() != "") {
                                     await hush.msg.alert("이미 작성중인 톡이 있습니다.")
                                     return
                                 }
@@ -2500,8 +2500,8 @@
                         if (event.persisted) { //브라우저가 캐시하려고 시도하는 중 (bfcache = back/forward cache = 네트워크 타지 않음)
                             alert("웹에서는 새페이지, 앱에서는 nocache로 열기 때문에 여기서는 bfcache 이슈 없어야 함")
                         } else {
-                            if (g_in_chat.val().trim() != "") {
-                                localStorage[g_roomid] = g_in_chat.val().trim()
+                            if (g_in_chat.html().trim() != "") {
+                                localStorage[g_roomid] = g_in_chat.html().trim()
                             } else {
                                 if (localStorage[g_roomid]) delete localStorage[g_roomid]
                             }
@@ -2570,7 +2570,8 @@
                 <div id=btn_file_m style="width:45px;height:100%;display:none;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
                     <img src="/img/white_upload.png" style="width:24px;height:24px" />
                 </div>
-                <textarea id=in_chat spellcheck=false style="width:100%;height:100%;resize:none;border:1px solid lightsteelblue;border-radius:5px"></textarea>
+                <!-- <textarea id=in_chat spellcheck=false style="width:100%;height:100%;resize:none;border:1px solid lightsteelblue;border-radius:5px"></textarea> -->
+                <div id=in_chat contenteditable=true spellcheck=false style="width:100%;height:100%;resize:none;border:1px solid lightsteelblue;border-radius:5px"></div>
                 <div id=btn_send_m style="width:45px;height:100%;display:none;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
                     <img src="/img/white_send.png" style="width:24px;height:24px" />
                 </div>
