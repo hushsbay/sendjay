@@ -35,7 +35,7 @@ router.post('/', async function(req, res) {
 			rs.list = _arr
 			ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
 		} else {
-			sql = "SELECT TYP TYPE, BUFFER, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END BODY, SENDERNM "
+			sql = "SELECT TYP TYPE, BUFFER, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END BODY, SENDERNM, FILESTATE "
 			sql += " FROM A_MSGMST_TBL WHERE MSGID = ? "
 			data = await wsmysql.query(conn, sql, [msgid])
 			if (data.length == 0) {
@@ -47,7 +47,7 @@ router.post('/', async function(req, res) {
 				if (ret != '') throw new Error(ret)
 				rs.list = data
 				ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
-			} else if (kind != 'reply' && data[0].TYPE == 'file' || data[0].TYPE == 'flink') { //almost same as get_sublink.js 
+			} else if (kind != 'reply' && data[0].FILESTATE != ws.cons.file_expired && (data[0].TYPE == 'file' || data[0].TYPE == 'flink')) { //almost same as get_sublink.js 
 				//reply일 경우 file은 일반텍스트만 받으므로 여기로 들어오지 않음
 				let fileToProc
 				const _fileStr = body.split(ws.cons.deli)
