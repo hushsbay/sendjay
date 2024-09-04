@@ -1362,6 +1362,7 @@
 
             const handleFileUpload = async (files) => {		
                 try {
+                    alert("33333333333")
                     const _len = files.length
                     if (_len > hush.cons.max_filecount) {
                         await hush.msg.alert("최대 " + hush.cons.max_filecount + "개 파일까지 한번에 전송 가능합니다.")
