@@ -2356,6 +2356,9 @@
                         $("#file_upload").val("") //btn_file_m : see webview setting
                         $("#file_upload").trigger("click")
                     })
+                    $("#file_upload_1").change(function() {
+                        alert("@@@@@@@@@@@@@@@@")
+                    })
                     $("#file_upload").change(function() {
                         handleFileUpload(this.files)		    	   	
                     })
@@ -2593,6 +2596,7 @@
                     <span id=cnt_sel>1</span> selected
                 </div>
             </div>
+            <input id=file_upload_1 type=file multiple style="display:none">
             <input id=file_upload type=file multiple style="display:none">
         </div>    
     </body>
