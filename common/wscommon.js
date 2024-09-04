@@ -84,7 +84,7 @@ module.exports = (function() {
 			max_msg_len : 4000, //same as client's
 			max_filesize : 5000000000, //10MB //max_filesize : 10485760, //10MB
 			max_filecount : 50, //per user
-			max_size_to_sublink : 5242880, //5MB. same as client's
+			max_size_to_sublink : 5242880 * 2, //5MB x 2. same as client's
 			cell_revoked : 'message cancelled',
 			file_expired : 'expired', //Used in daemon and client too
 			sublink_ext_image : 'png,gif,jpg,jpeg,ico',
