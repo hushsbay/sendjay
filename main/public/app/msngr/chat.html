@@ -1798,7 +1798,7 @@
                     }
                 },
                 [hush.cons.sock_ev_open_room] : (data) => { //from=after,create,dupchk,portal,noti,rename_room,hush.cons.sock_ev_show_on
-                    setTimeout(function() { //for debugging
+                    //setTimeout(function() { //for debugging
                         sockConnected = true //for mobile only
                         if (data.from == hush.cons.sock_ev_show_on) return
                         setMembers(data) //console.log(JSON.stringify(data)+"===")
@@ -1812,7 +1812,7 @@
                             if (rs.kind != "onsuccess") return //common.js의 idb ##32 참조
                             getMsgList()
                         })
-                    }, 20000)
+                    //}, 20000)
                 },
                 [hush.cons.sock_ev_set_env] : async (data) => {
                     toggleDispMem(data.value)
