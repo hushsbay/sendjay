@@ -39,15 +39,16 @@
             if (rs.code == hush.cons.CODE_OK) {
                 image.attr("src", hush.blob.getBlobUrlForImage(rs.list[0].BUFFER.data)) //image.attr("src", hush.blob.getBlobUrlForImage(rs.buffer.data)) //image.attr("src", hush.http.addPrefixForBlobUrl() + rs.bufferStr)
                 image.on("load", function() {
-                    if (this.naturalWidth > screen.width || this.naturalHeight > screen.height) {
-                        if (this.naturalWidth > this.naturalHeight) {
-                            image.width(screen.width)
-                            image.height(this.naturalHeight * screen.width / this.naturalWidth)
-                        } else {
-                            image.height(screen.height)
-                            image.width(this.naturalWidth * screen.height / this.naturalHeight)
-                        }
-                    }
+                    hush.msg.toast("111111111")
+                    // if (this.naturalWidth > screen.width || this.naturalHeight > screen.height) {
+                    //     if (this.naturalWidth > this.naturalHeight) {
+                    //         image.width(screen.width)
+                    //         image.height(this.naturalHeight * screen.width / this.naturalWidth)
+                    //     } else {
+                    //         image.height(screen.height)
+                    //         image.width(this.naturalWidth * screen.height / this.naturalHeight)
+                    //     }
+                    // }
                 })
             } else {
                 imageBody.html("Error: " + rs.msg + " (" + rs.code + ")")
