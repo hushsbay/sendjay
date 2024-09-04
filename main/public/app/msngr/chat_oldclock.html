@@ -1,0 +1,2598 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Expires" content="-1">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />    
+        <title>Chat::Sendjay</title>
+        <link id=favicon href="/img/hushsbay.png" rel="shortcut icon" type="image/x-icon"/>  
+        <link rel="stylesheet" href="/plugin/jquery-ui-smoothness-1.12.1.min.css">
+        <link rel="stylesheet" href="/common/common.css">
+        <style>            
+            .mem { display:flex;flex-direction:column;background:#fdf5f6;border:1px solid lightgray;overflow:auto;margin:4px 4px 0px 4px }
+            .menuBtn { display:flex;align-items:center;background:#0082AD;color:white;border:1px solid lightgray;border-radius:5px;overflow:hidden;padding:10px 5px;margin:15px 4px 0px 4px }
+            .menuBtnCell { display:flex;align-items:center;background:steelblue;color:white;border:1px solid lightgray;border-radius:5px;overflow:hidden;padding:10px 5px;margin:15px 4px 0px 4px }
+            .result { display:flex;flex-direction:column;background:#fdf5f6;border:1px solid lightgray;overflow:auto;margin:4px 4px 0px 4px }
+            .unread { color:#FD760B;cursor:pointer }
+            .failure { font-size:10px;color:red;cursor:pointer }
+        </style>
+        <script src="/plugin/jquery-3.4.1.min.js"></script>
+        <script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
+        <script src="/plugin/jquery.cookie.js"></script>
+        <script src="/plugin/lodash.min.js"></script><!--for debounce (scroll event)-->
+        <script src="/plugin/moment.min.js"></script>
+        <script src="/plugin/moment-timezone-with-data-1970-2030.min.js"></script>
+        <script src="/common/common.js"></script><!--await $.getScript()로 읽으면 var funcSockEv()내 hush가 읽히지 않아 문제가 됨-->
+        <script>
+            var g_type, g_roomid, g_origin, g_userkey, g_userid, g_usernm //var => also referred in child window popup
+            let g_list_msg, g_in_chat, g_year, g_self = this
+            let g_masterid, g_title, g_socket, g_inviteWin
+            let g_page, g_cdt, g_imgPromiseArr, g_stopAutoScrollDown
+            let g_msgUnread = [], g_focus_for_webview, g_show_list_people = "X", sockConnected = false
+            const FIRST_QUERIED = "9999", BELOWS_ARE_UNREAD = "아래는 읽지 않은 톡입니다."
+            let g_retry_small, g_delete_small
+
+            const resetEnvForScroll = () => {
+                g_cdt = FIRST_QUERIED //FIRST_QUERIED(default). YYYYMMDD~ : when scrolled all the way down to the bottom, previous page shown and g_cdt gets YYYYMMDD~ value
+            }
+
+            const procScrollEvent = () => {
+                resetEnvForScroll()
+                g_list_msg.scroll(_.debounce(function() { //_.debounce => lodash.min.js
+                    setTimeout(() => procQueryUnread(), 1) //스크롤이 맨 아래로 오면 txt_msg_added 있을 때 클릭한 효과와 동일해야 함
+                    //const _lastTag = $($(".talk").last()[0]); if (_lastTag.position().top + _lastTag.height() + 1 <= g_list_msg.height()) {
+                    if (g_list_msg.prop("scrollHeight") - parseInt(g_list_msg.height()) - g_list_msg.scrollTop() <= 100) {	
+                        const _tag = $("#txt_msg_added")
+                        if (_tag.css("display") != "none") _tag.click()
+                    } else {                    
+                        if (g_stopAutoScrollDown == null) g_stopAutoScrollDown = true
+                    }        
+                    const getMore = $("#getmore")
+                    if (!getMore || getMore.length == 0) return
+                    if (getMore.position().top + getMore.height() > 0) { //g_list_msg position should be relative for checking position().top
+                        if (getMore.attr("getting") == "Y") return
+                        getMore.attr("getting", "Y")
+                        setTimeout(() => getMsgList(), 100)
+                    }
+                }, 150))
+            }
+
+            const scrollToTarget = (_target) => {
+                if (_target == 0) { //scroll to top
+                    g_list_msg.scrollTop(0)
+                } else if (_target) { //ie) ".more"
+                    if ($(_target).length > 0) g_list_msg.scrollTop($(_target).position().top)
+                } else { //scroll to bottom
+                    g_list_msg.scrollTop(g_list_msg.prop("scrollHeight"))
+                }
+            }
+
+            const showImgMenu = (show) => {
+                if (!hush.webview.on) {
+                    if (show) {
+                        $("#imgplate").show()
+                        $(".chat").hide()
+                        $(".img").show()                
+                        $(".cell").hide()                
+                    } else {
+                        $("#imgplate").hide()
+                        $("#imgplate").empty()
+                        $(".chat").show()    
+                        $(".img").hide()
+                        $(".cell").hide()
+                    }
+                } else {
+                    if (show) {
+                        $("#btn_paste, #btn_cancel_paste").hide()
+                        $("#imgplate, #btn_send_img_m, #btn_cancel_img_m").show()
+                    } else {
+                        $("#imgplate, #btn_send_img_m, #btn_cancel_img_m").hide() 
+                        $("#btn_paste, #btn_cancel_paste").show()
+                        $("#imgplate").empty()
+                    }
+                }
+            }
+
+            const showCellIcon = (show, obj) => {
+                if (show) {				
+                    $("#cellmenu_" + obj.msgid).show()
+                    if (obj.filestate == hush.cons.file_expired || $("#body_" + obj.msgid).text() == hush.cons.cell_revoked) return
+                    $("#reply_" + obj.msgid).show()
+                    if (obj.type != "file" && obj.type != "flink" && obj.type != "image") return
+                    $("#save_" + obj.msgid).show()
+                } else {
+                    $("#reply_" + obj.msgid).hide()
+                    $("#cellmenu_" + obj.msgid).hide()
+                    $("#save_" + obj.msgid).hide()
+                }
+            }
+
+            const showCellMenu = (show, obj) => {
+                $(".chkboxSel").prop("checked", false)
+                if (show) {
+                    $(".chat").hide()
+                    $(".img").hide()
+                    $(".cell").show()
+                    $(".chkboxSel").show()
+                    $("#sel_" + obj.msgid).prop("checked", true)
+                    $("#sel_info").show()
+                    const len = $(".chkboxSel:checked").length
+                    $("#cnt_sel").html(len)
+                    showRoomMenu(true)        
+                } else {
+                    $(".chat").show()
+                    $(".img").hide()
+                    $(".cell").hide()
+                    $(".chkboxSel").hide()
+                    $("#sel_info").hide()
+                    showRoomMenu(false)
+                }
+            }
+
+            const updateAllUnreads = (first_queried) => { //first_queried is dummy for prevent two times call of read_msg(query) event in 'updateall' and scroll event.
+                if (!hush.http.chkOnline("none")) return
+                const rq = { type : "updateall", senderkey : g_userkey, roomid : g_roomid, first_queried : first_queried }
+                if (hush.webview.ios) { 
+                } else if (hush.webview.and) {
+                    setTimeout(function() {
+                        AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, "parent", false)
+                    }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                } else {
+                    hush.sock.send(g_socket, hush.cons.sock_ev_read_msg, rq, g_roomid, "parent")
+                }
+            }
+
+            const setMembers = async (data) => {            
+                try {
+                    if (!hush.http.chkOnline("none")) return //여길 await하면 아래는 말그대로 await되면서 async되므로 setMembers보다 밑에 있는 다른 곳의 함수가 먼저 수행되어 에상치 못한 결과를 가져옴
+                    g_masterid = data.masterid
+                    g_title = hush.sock.getRoomName(data.nicknm, data.mainnm, data.roomnm)
+                    document.title = g_title + " - " + hush.cons.title
+                    const list = $("#people_sub")
+                    list.empty()                
+                    const rq = { type : "userids", keyword : data.receiverid.join(hush.cons.indeli) }
+                    const rs = await hush.http.ajax("/msngr/qry_userlist", rq, true)
+                    if (!hush.util.chkAjaxCode(rs, true)) return
+                    const _len = rs.list.length
+                    for (let i = 0; i < _len; i++) {
+                        const row = rs.list[i]
+                        const _userid = row.USER_ID
+                        const w_userkey = hush.cons.w_key + _userid
+                        const m_userkey = hush.cons.m_key + _userid            
+                        const _nm = row.USER_NM
+                        const _tel = row.TEL_NO
+                        const _job = row.JOB
+                        const _org = row.ORG_NM + "/" + row.TOP_ORG_NM
+                        const _abcd = row.AB_CD.toLowerCase()
+                        const _abnm = row.AB_NM
+                        const _nicknm = row.NICK_NM
+                        let _html = "<div id=div_" + _userid + " class=mem data-nm='" + encodeURIComponent(_nm) + "' data-usernm='" + encodeURIComponent(row.USER_NM) + "' "
+                        _html += "                                         data-abcd='" + _abcd + "' data-abnm='" + encodeURIComponent(_abnm) + "' style='cursor:pointer'>"
+                        _html += "      <div style='height:18px;display:flex;align-items:center;margin:3px 0 0 3px'>"
+                        _html += "          <div style='display:flex;justify-content:left;align-items:center;white-space:nowrap;overflow:hidden'>"
+                        _html += "              <span id=w_" + w_userkey + " class='state coStateOff'>W</span>"
+                        _html += "              <span id=m_" + m_userkey + " class='state coStateOff' style='margin-left:3px'>M</span>"
+                        _html += "              <span id=abcd_" + _userid + " class=coStateOut style='display:none;margin-left:3px'>" + _abcd + "</span>"
+                        _html += "              <span id=typing_" + _userid + " style='display:none;font-size:9px;color:red;margin-left:3px'>typing</span>"
+                        _html += "          </div>"
+                        _html += "      </div>"
+                        const _master = (g_masterid == _userid) ? ";font-weight:bold" : ""
+                        _html += "      <div class='coDotDot coText' style='height:20px;display:flex;justify-content:left;align-items:center;color:#005192;margin:0px 0 3px 3px" + _master + "'>" + _nm + "</div>"
+                        _html += "   </div>"
+                        list.append(_html)
+                        if (_abcd) $("#abcd_" + _userid).show()
+                        $("#div_" + _userid).off("click").on("click", function() {
+                            hush.util.animBgColor($(this))
+                            let _str = "이름 : " + _nm + "<br>부서 : " + _org + "<br>직무 : " + _job + "<br>전화 : <a href='tel:" + _tel + "'>" + _tel + "</a>"
+                            _str += "<br>" + _nicknm + "<br>" + _abcd + " " + _abnm //main_common.js에도 있음. <a hre='tel:~'>은 웹뷰 설정 필요
+                            let _html = "<div style='display:flex;flex-direction:column;align-items:center'>"
+                            _html += "  <img id=img_userid src='/img/noperson.png' style='width:64px;height:64px'>"
+                            _html += "  <div style='padding-left:10px'>"
+                            _html += "<br>" + _str
+                            _html += "  </div>"
+                            _html += "</div>"
+                            hush.msg.dialogMultiButton(_html, { 
+                                "채팅보기": function() { 
+                                    hush.msg.dialogClose()
+                                    g_list_msg.empty()
+                                    $("#btn_close_search").show()
+                                    resetEnvForScroll() //getMsgList()보다 먼저 실행되어야 함                    
+                                    getMsgList("onlyone", _userid)
+                                }, "강제퇴장": async function() {
+                                    if (g_masterid != g_userid) {
+                                        await hush.msg.alert("방장인 경우만 처리 가능합니다.")
+                                        return
+                                    }
+                                    if (_userid == g_userid) {
+                                        await hush.msg.alert("본인을 강제퇴장처리할 수 없습니다.")
+                                        return
+                                    }
+                                    if ($("#people_cnt").text() == "2") {
+                                        await hush.msg.alert("인원이 2명인 경우는 처리 불가능합니다.")
+                                        return
+                                    }
+                                    const ret = await hush.msg.confirm("강제퇴장처리를 계속 진행할까요?")
+                                    if (!ret) return
+                                    hush.msg.dialogClose()
+                                    if (!hush.http.chkOnline()) return
+                                    const rq = initMsg()
+                                    rq.type = "leave"
+                                    rq.reply = _userid
+                                    rq.body = _nm + " " + hush.cons.left //+ " by force"
+                                    if (hush.webview.ios) {
+                                    } else if (hush.webview.and) {
+                                        setTimeout(function() {
+                                            AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true)
+                                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                                    } else {
+                                        hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
+                                    }
+                                }, "닫기": function() { 
+                                    hush.msg.dialogClose()
+                                } 
+                            }, "Info", 320)
+                            hush.http.getUserPic(_userid, "img_userid")
+                        })
+                    }                
+                    $("#people_cnt").html(_len)
+                    if (!data.userkeys) return
+                    chkAlive(data.userkeys)
+                } catch (ex) {
+                    hush.util.showEx(ex)
+                }
+            }
+
+            const chkAlive = (userkeyArr) => {
+                const dataObj = { userkeys : userkeyArr }
+                if (hush.webview.ios) {
+                } else if (hush.webview.and) {
+                    setTimeout(function() {
+                        AndroidCom.send(hush.cons.sock_ev_chk_alive, JSON.stringify(dataObj), g_roomid, null, false)
+                    }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                } else {
+                    hush.sock.send(g_socket, hush.cons.sock_ev_chk_alive, dataObj, g_roomid)
+                }
+            }
+            
+            const callPeriodic = () => { //원래 타이머로 chkTyping()만 실행했는데 최초 페이지 열릴 때 모바일에서
+                //(네트워크 문제인지 아닌지 모르는 문제로) ON/OFF 표시가 안되는 문제가 드물게 나타나 일단 그 보완재로서 타이머에 chkAlive()도 같이 추가해 돌리게 됨 (idb.connect 문제였을 것임 - 해결)
+                if (sockConnected && hush.http.chkOnline("none")) {
+                    const userkeyArr = []
+                    $(".state").each(function(idx, item) {
+                        userkeyArr.push(this.id.substring(2))
+                    }).promise().done(function() {
+                        chkAlive(userkeyArr)
+                    })
+                    chkTyping()
+                }
+                setTimeout(() => callPeriodic(), 5000)
+            }
+
+            const setResult = (data) => {            
+                try {
+                    const list = $("#result_sub")
+                    list.append("<div id=getprev class=coText1 style='display:none;text-align:center;background-color:#005192;color:white;cursor:pointer;padding:2px 0px;margin:4px 4px 0px 4px'>이전톡보기</div>")
+                    const _len = data.list.length
+                    for (let i = 0; i < _len; i++) {
+                        const row = data.list[i]
+                        const msgid = row.MSGID
+                        const cdt = row.CDT
+                        const cdt1 = cdt.substring(2, 2 + 14) //cdt.substr(2, 14)
+                        const type = row.TYPE
+                        let body
+                        if (type == "image") {
+                            body = type
+                        } else if (type == "file" || type == "flink") {
+                            const _fileStr = row.BODY.split(hush.cons.deli)
+                            const _filepath = _fileStr[0].split("/")
+                            const _filenameLong = _filepath[_filepath.length - 1]
+                            const _brr = _filenameLong.split(hush.cons.subdeli) //original_filename_body + hush.cons.subdeli + 20191016081710239944.mp4
+                            const _crr = (_brr.length == 1) ? _brr[0].split(".") : _brr[1].split(".")
+                            body = (_crr.length > 1) ? _brr[0] + "." + _crr[1] : _brr[0] //original_filename_body.mp4                    
+                        } else  {
+                            body = row.BODY
+                        }
+                        const _top = (i == 0) ? "Y" : ""
+                        let _html = "<div id=res_" + msgid + " class=result data-top='" + _top + "' data-cdt='" + cdt + "' title='" + body + "' style='cursor:pointer'>"
+                        _html += "      <div style='height:18px;font-size:8px;display:flex;align-items:center;margin-left:3px'>" + cdt1 + "</div>"
+                        _html += "      <div class='coDotDot coText1' style='height:20px;color:#005192;margin-left:3px'>" + (i + 1).toString() + ") " + body + "</div>"
+                        _html += "  </div>"
+                        list.append(_html)
+                    }
+                    $("#result_cnt").html(_len) 
+                    list.scrollTop(list.prop("scrollHeight")) 
+                    $(".result").off("click").on("click", function(e) { 
+                        procHighlight($(this))    
+                        $(this).css("background", hush.cons.result_highlight)
+                        const start = $(this).data("cdt")
+                        if (start >= g_cdt) {
+                            const _id = this.id.substring(4)
+                            const _cellTop = $("#msg_" + _id).position().top
+                            if (_cellTop >= 0 && _cellTop <= g_list_msg.height() - 40) {
+                                //cell positioned within g_list_msg box
+                            } else {
+                                const _scrollTop = g_list_msg.scrollTop()
+                                g_list_msg.scrollTop(_scrollTop + $("#msg_" + _id).position().top)
+                            }
+                            procHighlight($("#high_" + _id))
+                            return
+                        }
+                        const end = g_cdt
+                        getMsgList("result", null, start, end)
+                        if ($(this).data("top") == "Y") {
+                            $("#getprev").data("cdt", $(this).data("cdt"))
+                            setTimeout(() => $("#getprev").show(), 500)
+                        }
+                    })
+                    $("#res_" + data.list[_len - 1].MSGID).click()
+                    $("#getprev").off("click").on("click", function(e) { //검색결과는 한번에 조회해서 이전 페이지 추가 표시하는 기능 등이 없음
+                        //따라서, 여기 getPrev는 검색결과중 제일 오래된(처음) 톡보다 이전 내용을 보고자 할 때 누르면 그 내용을 보여 주는 기능임
+                        hush.util.animBgColor($(this))
+                        g_cdt = $(this).data("cdt")
+                        getMsgList()
+                        setTimeout(function() {
+                            scrollToTarget("#getprev")
+                            $("#getprev").hide()
+                        }, 500)
+                    })
+                } catch (ex) {
+                    hush.util.showEx(ex)
+                }
+            }
+
+            const imgPromise = (_img) => new Promise((resolve, reject) => { //display is none before image or openGraph loaded
+                let max_cnt = 0
+                function chkImgLoad(_img) {
+                    if (_img.css("display") != "none") {
+                        resolve()
+                    } else {
+                        if (max_cnt <= 10) { //5 seconds timeout for checking image load
+                            max_cnt += 1
+                            setTimeout(function() { chkImgLoad(_img) }, 500)
+                        } else {
+                            resolve() //resolve even if it's timeout since promise.all used (eg: no opengraph for invalid http(s) url -> have to resolve(skip))
+                        }
+                    }
+                }
+                chkImgLoad(_img)
+            })
+
+            const procQueryUnread = () => {
+                try {
+                    const len = $(".needCheckUnread").length
+                    if (len == 0) return
+                    if (len > hush.cons.unread_max_check) {
+                        $("#btn_qry_etc").hide()
+                        $("#txt_unread_notice").show()
+                        return
+                    }
+                    $("#txt_unread_notice").hide()  
+                    $("#btn_qry_etc").show() 
+                    const arr = []
+                    const list_height = g_list_msg.height()
+                    for (let i = len - 1; i >= 0; i--) {
+                        const obj = $(".needCheckUnread").eq(i)
+                        const top = obj.position().top
+                        if (top > list_height) {
+                            //continue
+                        } else if (top >= -100 && top <= list_height) {
+                            arr.push(obj.attr("id").substring(4)) //msg_ removed 
+                        } else {
+                            break
+                        }
+                    }
+                    if (arr.length == 0) return
+                    if (!hush.http.chkOnline("none")) return //가끔(특히, 앱 설치하자마자 방 열면) ..가 남아 있는 때가 있는데 
+                    //테스트해보니 이 procQueryUnread() 함수를 여러번 호출하고 있음 (아래 read_msg 여러번 호출하고 있음)
+                    //원래는 read_msg(updateall)만 호출하면 되는데 특히, 앱 설치하자마자 방 열면 procScrollEvent가 2번, updateall이 2번 실행되고
+                    //includes가 undefined때문에 안된다고 나와서 결국 오류로 멈춰서 ..가 남아 있게 된 것임. 살펴 보니 getMsgList()가 두번 호출됨
+                    //결국, 문제는 hush.idb.connect()이었음. common.js의 idb ##32 참조
+                    const rq = { type : "query", msgidArr : arr }                
+                    if (hush.webview.ios) {
+                    } else if (hush.webview.and) {
+                        setTimeout(function() {
+                            AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, null, false)
+                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                    } else {
+                        hush.sock.send(g_socket, hush.cons.sock_ev_read_msg, rq, g_roomid)
+                    }
+                } catch (ex) {
+                    hush.util.showEx(ex)
+                }
+            }
+
+            const addRow = (obj, kind) => {
+                if (!kind) resetEnvForScroll()
+                let _dt = (obj.cnt == -1) ? obj.cdt : hush.util.tzDateTime(obj.cdt) //cnt=-1 means local data
+                _dt = hush.util.formatMsgDt(_dt, g_year) //if (obj.type == "file") debugger
+                if (obj.type == "invite" || obj.type == "leave") {
+                    let _desc                
+                    if (obj.type == "invite") {
+                        const _arr = obj.body.split(hush.cons.deli)
+                        _desc = "<span class=coText1>초대 : " + _arr[0] + " by " + _arr[2] + "<br>at " + _dt + "</span>"
+                    } else {
+                        _desc = "<span class=coText1>" + obj.body + "<br>at " + _dt + "</span>"
+                    }
+                    const _html = "<div id=msg_" + obj.msgid + " style='text-align:center;background:lightgray;border:1px solid lightgray;border-radius:8px;padding:3px 5px;margin:10px auto'>" + _desc + "</div>"
+                    if (kind) {
+                        if (kind == "after") {
+                            g_list_msg.append(_html)
+                        } else {
+                            g_list_msg.prepend(_html)
+                        }                    
+                    } else {                    
+                        g_list_msg.append(_html)
+                    }
+                } else {
+                    let cnt, needCheckUnread, handlingDisp, unreadDisp
+                    if (obj.cnt == 0) {
+                        cnt = ""
+                        needCheckUnread = "" //css class
+                        handlingDisp = " style='display:none'"
+                        unreadDisp = " style='display:none'"
+                    } else {
+                        cnt = !hush.util.isvoid(obj.cnt) ? obj.cnt : $(".mem").length //cnt = "+" + hush.cons.max_unread_cnt
+                        needCheckUnread = " needCheckUnread" //css class
+                        handlingDisp = ""
+                        unreadDisp = ""
+                    }
+                    let _body, _backcolor, _boderpx = "1px", _sublink //_sublink can be 1) opengraph for url 2) image for .png/jpg/.. 3) image for mp4
+                    const _submargin = (obj.senderid == g_userid) ? "margin:4px 4px 1px 1px" : "margin:4px 1px 1px 4px"
+                    let _replied = obj.reply || ""
+                    const _dispReplied = obj.reply ? "" : "display:none;"
+                    //응답이 있을 경우만 해당
+                    if (_replied && _replied.length == 26) { //로컬에 msgidForReply가 있는 경우는 로컬에서 가져오면 되나 
+                        //이미지의 경우 어차피 비동기(hush.blob.get)로 가져와야 하는 것이라서 차라리 그냥 모든 경우를 서버에서 가져오려 함
+                        const msgidForReply = _replied
+                        $("#replied_" + obj.msgid).css("border-bottom", "1px solid dimgray")
+                        hush.http.ajaxCall("/msngr/get_msginfo", { msgid : msgidForReply, kind : "reply" }, function(rs) {
+                            const row = rs.list[0]
+                            if (row.TYPE == "image") {
+                                if (row.BUFFER) {
+                                    const uInt8Array = new Uint8Array(row.BUFFER.data)
+                                    const blob = new Blob([uInt8Array], { type: "image/png" })
+                                    const blobUrl = URL.createObjectURL(blob)
+                                    $("#replied_" + obj.msgid).html("<span class=coText>re: " + row.SENDERNM + ") </span><img src=" + blobUrl + " style='width:24px;height:24px'>")
+                                    $("#replied_" + obj.msgid).off("click").on("click", function(e) { 
+                                        let urlStr = "/app/msngr/popup.html?type=" + row.TYPE + "&msgid=" + msgidForReply // + "&body=" + row.BODY
+                                        if (!hush.webview.on) {
+                                            hush.util.openWinPop(urlStr)
+                                        } else {
+                                            if (hush.webview.ios) {
+                                            } else if (hush.webview.and) {
+                                                urlStr += "&" + hush.cons.param_webview_and
+                                                AndroidRoom.openPopup(urlStr, "")
+                                            }
+                                        }
+                                    })
+                                }
+                            } else if (row.TYPE == "file" || row.TYPE == "flink") {
+                                const _file = hush.util.extractFileFromTalkBody(row.BODY)
+                                $("#replied_" + obj.msgid).html("<span class=coText1>re: " + row.SENDERNM + ", File) " + _file + "</span>")
+                                $("#replied_" + obj.msgid).off("click").on("click", async function(e) { await hush.msg.alert(_file) })
+                            } else {
+                                $("#replied_" + obj.msgid).html("<span class=coText1>re: " + row.SENDERNM + ") " + row.BODY + "</span>")
+                                $("#replied_" + obj.msgid).off("click").on("click", async function(e) { await hush.msg.alert(row.BODY) })
+                            }
+                        })
+                    } //응답이 있을 경우 처리 종료
+                    if (obj.type == "image" && obj.body != hush.cons.cell_revoked) {
+                        if (obj.body == hush.cons.cell_revoked) {
+                            _body = obj.body
+                            obj.bufferStr = null //obj.buffer = null
+                        } else {
+                            _body = "<img id=img_" + obj.msgid + " style='display:none;max-width:150px;max-height:150px;cursor:pointer;margin-top:4px'>"
+                        }
+                        _boderpx = "0px"
+                    } else if (obj.type == "file" || obj.type == "flink") {
+                        if (obj.body == hush.cons.cell_revoked) {
+                            _body = obj.body
+                        } else { 
+                            const _fileStr = obj.body.split(hush.cons.deli)                
+                            const _filelink = procFileLinkIfExists(obj, kind)
+                            const _filesize = hush.util.formatBytes(parseInt(_fileStr[1]))
+                            const _expiry = hush.util.getExpiryWithTZ(obj.filestate, g_year)
+                            const _color = obj.filestate == hush.cons.file_expired ? "darkgray" : "#005192"
+                            _body = "<span id=filelink_" + obj.msgid + " class=coText1 style='color:" + _color + ";cursor:default'>" + _filelink + "</span><br>"
+                            _body += "<span class=coText1 style='color:darkgray;cursor:default'>" + ((obj.type == "flink") ? "Filelink" : "File") + "</span> "
+                            _body += "<span class=coText1 style='color:#005192;cursor:default'>" + _filesize + "</span> "
+                            _body += "<span class=coText1 id=expiry_" + obj.msgid + " style='color:darkgreen;cursor:default'>" + _expiry + "</span>"
+                            _body += "<span class=coText1 id=abort_" + obj.msgid + " style='display:none;color:darkgray;cursor:pointer;margin-left:4px'>Abort</span>"
+                            _body += "<progress id=pb_" + obj.msgid + " value=0 max=100 style='display:none;width:100%;height:6px;cursor:default;margin-bottom:3px'></progress>"
+                            if (obj.filestate != hush.cons.file_expired) {
+                                const _submax = (obj.senderid == g_userid) ? "" : ";max-width:150px;max-height:150px"
+                                _sublink = "<div style='position:relative;cursor:pointer" + _submax + "'>"
+                                _sublink += "   <img id=img_" + obj.msgid + " style='display:none;max-width:150px;max-height:150px;" + _submargin + "'/>"
+                                _sublink += "   <img id=play_" + obj.msgid + " src='/img/play.png' style='z-index:1;display:none;position:absolute;width:32px;height:32px;left:0;right:0;top:0;bottom:0;margin:auto' />"
+                                _sublink += "</div>"
+                            }
+                        }
+                    } else {
+                        _body = obj.body
+                        const _pattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi //two more bytes parameter not working
+                        const _http = _pattern.exec(_body) //const _pattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9가-힣+&@#\/%?=~_|!:,.;]*[-A-Z0-9가-힣+&@#\/%=~_|])/gi
+                        if (_http != null) { //##00 opengraph : get first item
+                            _body = _body.replace(_pattern, "<a href='javascript:openLink(\"$1\")' style='color:#005192'>$1</a>")				
+                            _sublink = "<div style='clear:both'></div>"
+                            _sublink = "<div id=openGraph" + obj.msgid + " og=" + _http[0] + " style='display:none;cursor:pointer;width:150px;height:150px;border:1px solid lightgray;" + _submargin + "'>"
+                            _sublink += "   <div style='width:100%;text-align:center'><img id=ogImg" + obj.msgid + " style='max-width:150px;max-height:150px' /></div>"
+                            _sublink += "   <div id=ogTitle" + obj.msgid + " class=coText1 style='width:100%;height:20px;color:darkgreen;font-weight:bold;text-align:left;vertical-align:middle;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;margin-left:3px'></div>"
+                            _sublink += "   <div id=ogDesc" + obj.msgid + " class=coText1 style='width:100%;height:20px;text-align:left;vertical-align:middle;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;margin-left:3px'></div>"
+                            _sublink += "</div>"
+                        }
+                    }
+                    let _html
+                    if (obj.senderid == g_userid) { //sent
+                        _backcolor = (obj.type == "image" && obj.body != hush.cons.cell_revoked) ? "white" : "lightyellow"
+                        _html = "<div id=msg_" + obj.msgid + " class='talk" + needCheckUnread + "' style='display:flex;flex-direction:column;align-items:flex-end;cursor:pointer;margin:20px 0px 10px 0px'>"
+                        _html += "  <div style='height:20px;display:flex;align-items:center;justify-content:flex-end;margin-right:4px;margin-bottom:4px'>"
+                        _html += "      <img id=save_" + obj.msgid + " src='/img/download.png' class=coImg20 style='display:none;margin:0px 8px 0px 0px'>"
+                        _html += "      <img id=reply_" + obj.msgid + " src='/img/reply.png' class=coImg20 style='display:none;margin:0px 8px 0px 0px'>"            
+                        _html += "      <img id=cellmenu_" + obj.msgid + " src='/img/menu.png' class=coImg20 style='display:none;margin:0px 8px 0px 0px'>"
+                        _html += "      <span id=handling_" + obj.msgid + " class=coText1 class=unread" + handlingDisp + ">" + hush.cons.handling + "</span>"    
+                        _html += "      <span id=unread_" + obj.msgid + " class='unread coText1' " + unreadDisp + ">" + cnt + "</span>"
+                        _html += "      <span id=dt_" + obj.msgid + " class=coText1 style='color:darkgray;cursor:default;margin-left:6px'>" + _dt + "</span>"
+                        _html += "  </div>"
+                        _html += "  <div style='width:100%;display:flex;align-items:center;justify-content:space-between'>"
+                        _html += "      <div style='width:10%'>"
+                        _html += "          <input type=checkbox id=sel_" + obj.msgid + " class=chkboxSel style='display:none;margin-left:10px' />"
+                        _html += "      </div>"
+                        _html += "      <div id=high_" + obj.msgid + " style='max-width:80%;background-color:" + _backcolor + ";border:" + _boderpx + " solid lightgray;border-radius:8px;padding:3px;margin-right:4px'>"
+                        _html += "	        <div id=replied_" + obj.msgid + " class=coText1 style='" + _dispReplied + "color:darkgray;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;cursor:default'>" + _replied + "</div>"
+                        _html += "	        <div id=body_" + obj.msgid + " class=coText1 style='text-align:left;white-space:pre-wrap;word-break:break-all'>" + _body + "</div>"
+                        _html += "      </div>"
+                        _html += "  </div>"
+                        if (_sublink) _html += _sublink
+                        _html += "</div>"
+                    } else { //received
+                        _backcolor = (obj.type == "image") ? "white" : "mintcream"
+                        _html = "<div id=msg_" + obj.msgid + " class='talk" + needCheckUnread + "' style='display:flex;flex-direction:column;cursor:pointer;margin:20px 0px 10px 0px'>"
+                        _html += "  <div style='height:20px;display:flex;align-items:center;margin-bottom:4px;margin-left:4px'>"
+                        _html += "      <span class=coText1 style='line-height:20px;color:#063470;cursor:default;margin-right:6px'>" + obj.sendernm + "</span>"
+                        _html += "      <span class=coText1 style='color:darkgray;cursor:default;margin-right:4px'>" + _dt + "</span>"
+                        _html += "      <span id=unread_" + obj.msgid + " class='unread" + unreadDisp + " coText1'>" + cnt + "</span>"
+                        _html += "      <span id=handling_" + obj.msgid + " class='unread coText1' " + handlingDisp + ">" + hush.cons.handling + "</span>"   
+                        _html += "      <img id=cellmenu_" + obj.msgid + " src='/img/menu.png' class=coImg20 style='display:none;margin:0px 0px 0px 8px'>"
+                        _html += "      <img id=reply_" + obj.msgid + " src='/img/reply.png' class=coImg20 style='display:none;margin:0px 0px 0px 8px'>"
+                        _html += "      <img id=save_" + obj.msgid + " src='/img/download.png' class=coImg20 style='display:none;margin:0px 0px 0px 8px'>" 
+                        _html += "  </div>"
+                        _html += "  <div style='width:100%;display:flex;align-items:center;justify-content:space-between'>"
+                        _html += "      <div id=high_" + obj.msgid + " style='max-width:80%;background-color:" + _backcolor + ";border:" + _boderpx + " solid lightgray;border-radius:8px;padding:3px;margin-left:4px'>"
+                        _html += "	        <div id=replied_" + obj.msgid + " class=coText1 style='" + _dispReplied + "color:darkgray;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;cursor:default'>" + _replied + "</div>"
+                        _html += "	        <div id=body_" + obj.msgid + " type='" + obj.type + "' class=coText1 style='white-space:pre-wrap;word-break:break-all'>" + _body + "</div>"
+                        _html += "      </div>"
+                        _html += "      <div style='width:10%;text-align:right'>"
+                        _html += "          <input type=checkbox id=sel_" + obj.msgid + " class=chkboxSel style='display:none;margin-right:10px' />"
+                        _html += "      </div>"
+                        _html += "  </div>"
+                        if (_sublink) _html += _sublink
+                        _html += "</div>"
+                    }
+                    if (kind) {
+                        if (kind == "after" || obj.cnt == -1) { //-1 means from local IndexedDB
+                            g_list_msg.append(_html)
+                        } else {
+                            g_list_msg.prepend(_html)
+                        }
+                        if ($("#img_" + obj.msgid).length > 0) {
+                            g_imgPromiseArr.push(imgPromise($("#img_" + obj.msgid)))
+                        } else if ($("#openGraph" + obj.msgid).length > 0) {
+                            g_imgPromiseArr.push(imgPromise($("#openGraph" + obj.msgid)))
+                        }
+                    } else {
+                        g_list_msg.append(_html)
+                    }
+                    if (obj.bufferStr != null) { //only for image
+                        hush.http.ajaxCall("/msngr/get_msginfo", { msgid : obj.msgid, body : obj.body }, function(rsPic) {
+                            // if (rsPic.buffer) {
+                            //     const blobUrl = hush.blob.getBlobUrlForImage(rsPic.buffer.data)
+                            //     imageSrcEvent(blobUrl, obj.msgid, kind, obj.type, obj.body) //$("#~").attr("src", "data:image/png;base64," + data)
+                            // }
+                            if (rsPic.list[0].BUFFER) {
+                                const blobUrl = hush.blob.getBlobUrlForImage(rsPic.list[0].BUFFER.data)
+                                imageSrcEvent(blobUrl, obj.msgid, kind, obj.type, obj.body) //$("#~").attr("src", "data:image/png;base64," + data)
+                            }
+                        })
+                    }
+                    if (obj.type == "talk" && _sublink) procOpengraph(obj.msgid, kind)
+                    $("#unread_" + obj.msgid).off("click").on("click", function() {
+                        hush.util.animBgColor($(this))
+                        const rq = { type : "getmembers", msgid : obj.msgid }
+                        if (hush.webview.ios) { 
+                        } else if (hush.webview.and) {
+                            setTimeout(function() {
+                                AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, null, true)
+                            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                        } else {
+                            hush.sock.send(g_socket, hush.cons.sock_ev_read_msg, rq, g_roomid)
+                        }
+                    })
+                    $("#msg_" + obj.msgid).off("mouseenter").on("mouseenter", function(e) {	
+                        showCellIcon(true, obj)					
+                    })
+                    $("#msg_" + obj.msgid).off("mouseleave").on("mouseleave", function(e) {
+                        showCellIcon(false, obj) 
+                    })
+                    $("#reply_" + obj.msgid).off("click").on("click", function() {
+                        hush.util.animBgColor($(this))
+                        if (obj.filestate == hush.cons.file_expired || $("#body_" + obj.msgid).text() == hush.cons.cell_revoked) return
+                        let _msg = obj.sendernm + " - " + hush.util.displayTalkBodyCustom(obj.type, obj.body)
+                        let _html = "<span id=cancelreply class=coText1 style='background:#005192;color:white;border-radius:8px;cursor:pointer;padding:3px'>취소</span> "
+                        _html += "<span id=msgtoreply msgid='" + obj.msgid + "' class=coText1 style='color:#005192;cursor:default;margin-left:4px'>re) " + _msg + "</span> "
+                        $("#fr_tip").html(_html)
+                        $("#cancelreply").off("click").on("click", function() {
+                            setTitleToFrTip()
+                        })
+                    })
+                    $("#save_" + obj.msgid).off("click").on("click", function() {
+                        hush.util.animBgColor($(this))
+                        if (obj.filestate == hush.cons.file_expired || $("#body_" + obj.msgid).text() == hush.cons.cell_revoked) return
+                        if (obj.type == "image") {
+                            hush.http.fileDownload("imagetofile", obj.msgid)
+                        } else {
+                            hush.http.fileDownload($("#ahref_" + obj.msgid).attr("param1"), $("#ahref_" + obj.msgid).attr("param2"))
+                        }
+                    })
+                }
+            }
+
+            const procForCell = (obj) => {
+                if (obj.type == "invite" || obj.type == "leave") return
+                // $("#msg_" + obj.msgid).off("click").on("click", function(e) { 
+                //     if ($(e.target).is("input:checkbox")) return //checkbox를 클릭하면 event가 먹히도록 함
+                // }) //체크박스 하나 제거시 메뉴도 안보이게 + 이펙트 금지 테스트 => 잘안됨
+                $(".chkboxSel").off("click").on("click", function(e) { 
+                    const len = $(".chkboxSel:checked").length
+                    $("#cnt_sel").html(len)
+                    if (len == 0) {
+                        showCellMenu(false)
+                        showCellIcon(false, obj) //for mobile
+                    } else if (len == 1) {
+                        if ($("#btn_delete_cell").css("display") == "none") $(".single").show()                    
+                    } else {
+                        $(".single").hide()
+                    }
+                })
+                $("#btn_delete_cell, #btn_delete_cell_m").off("click").on("click", async function(e) { 
+                    hush.util.animBgColor($(this))
+                    const checked = $(".chkboxSel:checked")
+                    const len = checked.length
+                    if (len == 0) {
+                        hush.msg.toast(hush.cons.MSG_NO_DATA)
+                        return
+                    }
+                    const ret = await hush.msg.confirm("삭제를 진행할까요? (" + len + "개)") 
+                    showCellMenu(false)
+                    if (!ret) return
+                    if (!hush.http.chkOnline()) return
+                    const msgidArr = []
+                    for (let i  = 0; i < len; i++) msgidArr.push(checked[i].id.substring(4)) //sel_2019~
+                    const rq = { msgidArr : msgidArr, type : "", roomid : g_roomid }
+                    if (hush.webview.ios) {
+                    } else if (hush.webview.and) {
+                        setTimeout(function() {
+                            AndroidCom.send(hush.cons.sock_ev_delete_msg, JSON.stringify(rq), g_roomid, "parent", true)
+                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                    } else {
+                        hush.sock.send(g_socket, hush.cons.sock_ev_delete_msg, rq, g_roomid, "parent")
+                    }
+                })
+                $("#btn_cancel_cell, #btn_cancel_cell_m").off("click").on("click", function(e) { 
+                    hush.util.animBgColor($(this))
+                    showCellMenu(false) 
+                })
+                if (!hush.webview.on) $("#msg_" + obj.msgid).on("contextmenu", function(e) { $("#menu_" + obj.msgid).click() })
+                $("#msg_" + obj.msgid).off("dragstart").on("dragstart", function(e) { 
+                    if (obj.type == "" || !hush.cons.chat_handled.includes(obj.type)) return
+                    e.originalEvent.dataTransfer.setData("text", obj.type + hush.cons.deli + g_roomid + hush.cons.deli + obj.msgid)
+                    e.originalEvent.dataTransfer.effectAllowed = "copy"
+                })
+                $("#menu_" + obj.msgid + ", #cellmenu_" + obj.msgid).off("click").on("click", function(e) { 
+                    hush.util.animBgColor($(this))
+                    if ($("#btn_delete_cell").css("display") == "none") {
+                        showCellMenu(true, obj)
+                        $("#btn_copy_cell, #btn_copy_cell_m").off("click").on("click", function(e) { 
+                            hush.util.animBgColor($(this))
+                            if (obj.type == "" || !hush.cons.chat_handled.includes(obj.type)) return 
+                            if ($("#body_" + obj.msgid).text() == hush.cons.cell_revoked) {
+                                hush.msg.toast(hush.cons.cell_revoked)
+                                return
+                            }
+                            if (obj.filestate == hush.cons.file_expired) {
+                                hush.msg.toast(hush.cons.file_expired)
+                                return
+                            }
+                            const _id = this.id
+                            if (_id == "btn_copy_cell") {
+                                showCellMenu(false)
+                                const _text = _id + hush.cons.deli + obj.type + hush.cons.deli + g_roomid + hush.cons.deli + obj.msgid
+                                navigator.clipboard.writeText(_text).then(function() {
+                                    hush.msg.toast("복사 완료. Ctrl+V로 붙이면 됩니다. (" + obj.type + ")", 2) //image, file, flink will be ok too
+                                }).catch(async function() {
+                                    await hush.msg.alert("오류: " + err)
+                                })
+                            } else { //mobile
+                                localStorage.msgidCopied = obj.msgid //AndroidRoom.copy(obj.msgid) //$$66 in MainActivity.kt 참조
+                                hush.msg.toast("복사 완료") //image, file, flink will be ok too
+                                $("#fr_tip").hide()
+                                $("#fr_sendcopy").css("display", "flex")
+                            }
+                            showCellMenu(false)
+                        })
+                        $("#btn_revoke_cell, #btn_revoke_cell_m").off("click").on("click", async function(e) {   
+                            hush.util.animBgColor($(this)) 
+                            if (obj.type == "" || !hush.cons.chat_handled.includes(obj.type)) return 
+                            if ($("#body_" + obj.msgid).text() == hush.cons.cell_revoked) {
+                                hush.msg.toast(hush.cons.cell_revoked)
+                                return
+                            }
+                            if (obj.filestate == hush.cons.file_expired) {
+                                hush.msg.toast(hush.cons.file_expired)
+                                return
+                            }
+                            if (obj.senderid != g_userid) {
+                                hush.msg.toast("받은 메시지는 처리할 수 없습니다.")
+                                return
+                            }
+                            const ret = await hush.msg.confirm("이미 보낸 메시지를 삭제(취소)합니다. 계속할까요?")
+                            showCellMenu(false)
+                            if (!ret) return
+                            if (!hush.http.chkOnline()) return
+                            const rq = { msgid : obj.msgid, type : obj.type, roomid : g_roomid }
+                            if (hush.webview.ios) {
+                            } else if (hush.webview.and) {
+                                setTimeout(function() {
+                                    AndroidCom.send(hush.cons.sock_ev_revoke_msgcell, JSON.stringify(rq), g_roomid, "parent", true)
+                                }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작    
+                            } else {
+                                hush.sock.send(g_socket, hush.cons.sock_ev_revoke_msgcell, rq, g_roomid, "parent")
+                            } 
+                        })
+                    } else {
+                        showCellMenu(false)
+                    }
+                })
+            }
+
+            const getMsgList = async (type, keyword, start, end) => {    
+                try {
+                    if (!hush.http.chkOnline()) return
+                    g_year = (new Date()).getFullYear().toString()
+                    let rq, noToast = false, notShowMsgIfNoData = false, includeInviteOrLeave = false
+                    if (type == "search") { //fetch_cnt_oneshot은 페이징 없이 한번에 가져오는 Max Count. 그 이상 가져와도 의미없을 정도로 크게 할 것임 
+                        //오래된 톡은 삭제되므로 페이징은 더 이상 의미없음
+                        //검색시 왼쪽 톡 목록이 나오는 것이 아닌 오른쪽에 그 결과가 나오며 그 결과셀 하나를 클릭하면 그 톡 이후가 다 나옴
+                        rq = { type : type, roomid : g_roomid, keyword : keyword, cnt : hush.cons.fetch_cnt_oneshot }
+                    } else if (type == "etc") {
+                        rq = { type : type, roomid : g_roomid, cnt : hush.cons.fetch_cnt_oneshot }
+                    } else if (type == "result") {
+                        rq = { type : type, roomid : g_roomid, dt : g_cdt, start : start, end : end }
+                    } else if (type == "onlyone") {
+                        rq = { type : type, roomid : g_roomid, senderid : keyword, dt : g_cdt, cnt : hush.cons.fetch_cnt_oneshot }
+                    } else if (type == "after") { //after reconnect : 재연결후엔 그전에 들어온 메시지 가져와야 함
+                        rq = { type : type, roomid : g_roomid, keyword : keyword } //keyword=msgid (after msgid)
+                        noToast = true
+                        notShowMsgIfNoData = true
+                    } else {                    
+                        const cnt = (g_cdt == FIRST_QUERIED) ? hush.cons.fetch_first_cnt : hush.cons.fetch_cnt
+                        rq = { type : "normal", roomid : g_roomid, dt : g_cdt, cnt : cnt }
+                    }
+                    const rs = await hush.http.ajax("/msngr/qry_msglist", rq, noToast)
+                    if ($("#getmore").length > 0) $("#getmore").remove()
+                    if (!hush.util.chkAjaxCode(rs, notShowMsgIfNoData)) return        
+                    const _len = rs.list.length
+                    if (rq.type == "search" || rq.type == "etc") {
+                        if (_len == 0) {
+                            hush.msg.toast(hush.cons.MSG_NO_DATA)
+                            $("#result_cnt").html(_len) 
+                            return
+                        }
+                        setResult(rs)
+                    } else {
+                        if (_len == 0) {
+                            if (rq.type == "after") {
+                                procQueryUnread()
+                                return
+                            } 
+                            if ($("#getmore").length > 0) $("#getmore").remove()
+                            if (g_cdt == FIRST_QUERIED) {
+                                hush.msg.toast(hush.cons.MSG_NO_DATA)
+                            } else {
+                                hush.msg.toast(hush.cons.msg.MSG_NO_MORE_DATA)
+                            }
+                            return
+                        } else if (rq.type == "after" && _len > hush.cons.max_add_count) { //in case of large add, you'd better refresh(open_room)
+                            resetEnvForScroll()
+                            g_list_msg.empty()
+                            openRoomWithMobile() //for updating data
+                            return
+                        }
+                        g_imgPromiseArr = []
+                        g_stopAutoScrollDown = null
+                        if (rq.type == "normal") {
+                            if (rq.dt != FIRST_QUERIED) { //$(".more").remove() //const _html = drawLine("more", "more above")
+                                const _html = drawLine("more", "page " + (g_page + 1) + " (below)")
+                                g_page += 1
+                                g_list_msg.prepend(_html)  
+                            } else {
+                                g_page = 0
+                            }
+                        }
+                        let _first_msgid = "", _prev_read = "R"
+                        for (let i = 0; i < _len; i++) {
+                            const obj = {} //send_msg때의 obj로 만들어야 렌더링때 문제없음
+                            const row = rs.list[i]
+                            obj.msgid = row.MSGID
+                            obj.cdt = row.CDT
+                            g_cdt = obj.cdt //should be set before scrollToTarget()
+                            obj.senderid = row.SENDERID
+                            obj.sendernm = row.SENDERNM
+                            obj.body = row.BODY
+                            obj.buffer = row.BUFFER
+                            obj.bufferStr = row.BUFFERSTR
+                            obj.reply = row.REPLY
+                            obj.type = row.TYPE
+                            obj.state = row.STATE
+                            obj.filestate = row.FILESTATE
+                            obj.cnt = row.CNT
+                            if (rq.type == "after") {
+                                if (obj.body == hush.cons.cell_revoked) {
+                                    updateAsRevoked(obj.msgid)
+                                } else {
+                                    addRow(obj, rq.type)
+                                    if (obj.type == "invite" || obj.type == "leave") includeInviteOrLeave = true
+                                }
+                            } else {
+                                addRow(obj, rq.type) //addRow(obj, "fromList") => if data.type defined, it is called from getMsgList
+                                if (_prev_read == "" && obj.state == "R") {
+                                    const _html = drawLine("markUnread", BELOWS_ARE_UNREAD)
+                                    $(_html).insertAfter("#msg_" + obj.msgid)
+                                }
+                            }
+                            procForCell(obj)
+                            if (rq.type == "normal") {
+                                if (g_page == 0 && _len < hush.cons.fetch_first_cnt) {
+                                    //이전페이지에서 가져올 데이터가 없으므로 #getmore가 필요없음
+                                } else {
+                                    if (i == _len - 1 && _first_msgid != "") {
+                                        //if ($("#getmore").length > 0) $("#getmore").remove()
+                                        const _first = $("#msg_" + _first_msgid) //not appended but prepended
+                                        if (_first && _first.length > 0) {  //console.log(_first.position().top + _first.height() + 1, "=====", g_list_msg.height())
+                                            //hush.cons.fetch_cnt가 너무 작은 값이면 아래 'if'에 안걸릴 수도 있음 (이미지다운로드가 비동기인 것도 감안)
+                                            if (_first.position().top + _first.height() + 100 > g_list_msg.height()) { //g_list_msg position should be relative for checking position().top
+                                                const _html = "<div id=getmore style='display:flex;align-items:center;justify-content:center;background:steelblue;color:white'>데이터 가져오는 중..</div>"
+                                                g_list_msg.prepend(_html)
+                                            }
+                                        }
+                                    } else if (i == 0) {
+                                        _first_msgid = obj.msgid
+                                    }
+                                }                    
+                            }
+                            _prev_read = obj.state
+                        }
+                        if (rq.type == "result") {
+                            const msgid = rs.list[rs.list.length - 1].MSGID
+                            procHighlight($("#high_" + msgid))
+                            scrollToTarget(0)
+                            procQueryUnread()
+                        } else if (rq.dt == FIRST_QUERIED || $("#getmore").length == 0) {
+                            scrollToTarget()
+                            updateAllUnreads("Y") //procQueryUnread() //바로 위 updateAll~콜백에서 처리됨
+                        } else if (rq.type == "after") {
+                            scrollToTarget()
+                        } else {
+                            scrollToTarget(".more")
+                        }                    
+                        if (g_imgPromiseArr.length > 0) {
+                            Promise.all(g_imgPromiseArr).then(function() { 
+                                g_stopAutoScrollDown = false
+                            })
+                        } else {
+                            g_stopAutoScrollDown = false
+                        }
+                        if (includeInviteOrLeave) { //mobile only : in order to refresh members => setMembers()
+                            const rq = { from : "after" }
+                            if (hush.webview.ios) { 
+                            } else if (hush.webview.and) {
+                                setTimeout(function() {
+                                    AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, true)
+                                }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                            }
+                        }
+                        if (!hush.webview.on) g_in_chat.focus()
+                        if (rq.type == "normal" && g_page == 0) {
+                            const _arr = []
+                            let _brr
+                            const iObj = hush.idb.setTxOs("readonly")
+                            if (iObj == null) return
+                            //로컬에서 어떤 것들이 저장되어서 여기서 읽어 와야 하는지는 ##8 참조하기
+                            const index = iObj.os.index("roomid") //let req = os.openCursor() //req = os.count(); req.onsuccess = function(evt) { console.log("====" + evt.target.result) }
+                            let req = index.openCursor(IDBKeyRange.only(g_roomid)) //1)
+                            req.onsuccess = async function(evt) { //2)
+                                const cursor = evt.target.result //3)
+                                if (cursor) { //cursor.key = cursor.value.roomid in this case //console.log("cursor:", cursor) 
+                                    //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 
+                                    //(정상적이지 않은 경우만 로컬에 있을 것임) 따라서, 아래 담기는 건 전송 실패건만임 
+                                    //indexedDB는 일반적인 형식의 데이터 읽어오기와는 다름. 복수의 데이터를 읽어오는 것은 아래 순서대로 읽어옴
+                                    //1) -> 2) -> 3)까지 한개의 데이터를 읽음. 그 다음 데이터는 다시 1) -> 2) -> 3)을 거치고 더 이상 없으면 아래의 4)를 지나 5)로 넘어가서 종료하게 됨
+                                    _arr.push(cursor.value.msgid)
+                                    cursor.continue()                               
+                                } else { //4) console.log("No more entries")
+                                    if (_arr.length == 0) return 
+                                    const rs = await hush.http.ajax("/msngr/get_msginfo", { msgids : _arr, kind : "check" }, true)
+                                    if (!hush.util.chkAjaxCode(rs)) return
+                                    const _len = rs.list.length //서버에 없는 것(sending failure 실패난 것)만 내려옴
+                                    if (_len == 0) return
+                                    _brr = rs.list
+                                    const iObj1 = hush.idb.setTxOs("readonly")
+                                    if (iObj1 == null) return
+                                    for (let i = 0; i < _len; i++) {
+                                        const _msgid = _brr[i] //If _msgid is undefined, 'The transaction has finished' error occurs for 'os.get(_msgid).onsuccess' below.
+                                        hush.idb.getRec(iObj1.os, _msgid, function(rec) {
+                                            if (!rec) return
+                                            const obj = initMsgForRetrySending(rec.msgid, rec.type, rec.body, rec.reply, rec.cdt)
+                                            addRow(obj, rq.type) //normal
+                                            retrySending(obj)
+                                        })
+                                    }
+                                    iObj1.tx.oncomplete = function() { //5)
+                                        scrollToTarget()
+                                        if (_arr.length > 0) {
+                                            const _crr = _arr.filter(x => !_brr.includes(x)) //_arr - _brr(서버에서 실패난 것 제외) = _crr (발송 성공은 제거해야 함)
+                                            for (msgid of _crr) deleteLocalMsg(msgid)
+                                        }
+                                    }
+                                }
+                            }            
+                        }
+                    }
+                } catch (ex) {
+                    hush.util.showEx(ex)
+                }
+            }
+
+            const procFailure = (rq, dtDetails) => { //Request already sent. Retry(resending) might not be needed in most cases since error already occurred.
+                //if ($("#unread_" + rq.msgid).html() == htmlRetryDelete) return 
+                $("#msg_" + rq.msgid).removeClass("needCheckUnread")
+                $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("$$")
+                const objUnread = $("#unread_" + rq.msgid)
+                const htmlRetryDelete = "<img src='" + g_delete_small + "' style='width:16px;height:16px;margin-top:5px'>"
+                objUnread.html(htmlRetryDelete)
+                objUnread.removeClass("unread").addClass("failure")
+                objUnread.show()
+                objUnread.off("click").on("click", async function() { 
+                    hush.util.animBgColor($(this))
+                    const _details = dtDetails ? dtDetails + "<br>" : ""
+                    const ret = await hush.msg.confirm(_details + "확인을 누르면 메시지가 제거됩니다.")
+                    if (!ret) return 
+                    $("#msg_" + rq.msgid).remove()
+                })
+            }
+
+            const deleteLocalMsg = (msgid) => {
+                const iObj = hush.idb.setTxOs("readwrite") //밖으로 빼는 게 좋은데 일단 그대로 둠
+                if (iObj == null) return
+                hush.idb.getRec(iObj.os, msgid, function(rec) {
+                    if (!rec) return
+                    iObj.os.delete(msgid)
+                })
+            }
+
+            const retrySending = (rq) => {
+                $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("##")
+                $("#msg_" + rq.msgid).removeClass("needCheckUnread")
+                const objUnread = $("#unread_" + rq.msgid)
+                const htmlRetryDelete = "<img src='" + g_retry_small + "' style='width:16px;height:16px;margin-top:5px;margin-right:2px'><img src='" + g_delete_small + "' style='width:16px;height:16px;margin-top:5px'>"
+                objUnread.html(htmlRetryDelete)
+                objUnread.removeClass("unread").addClass("failure")
+                objUnread.show()
+                objUnread.off("click").on("click", function() {
+                    hush.util.animBgColor($(this))
+                    hush.msg.dialogMultiButton("전송 실패.", {
+                        "재전송": function() { 
+                            if (!hush.http.chkOnline()) return
+                            deleteLocalMsg(rq.msgid)
+                            $("#msg_" + rq.msgid).remove()
+                            const rq1 = initMsg()
+                            rq1.type = "talk"
+                            rq1.body = rq.body
+                            procSendAndAppend(rq1)                            
+                            hush.msg.dialogClose()
+                        }, "삭제": function() { 
+                            deleteLocalMsg(rq.msgid)
+                            $("#msg_" + rq.msgid).remove()                            
+                            hush.msg.dialogClose()
+                        }, "닫기": function() { 
+                            hush.msg.dialogClose() 
+                        } 
+                    }, "재전송/삭제")
+                })
+            }
+
+            const prepareForNoResponse = (rq) => {
+                setTimeout(() => {
+                    if ($("#handling_" + rq.msgid).css("display") == "none") return        
+                    $("#handling_" + rq.msgid).hide() //$("#handling_" + rq.msgid).html("^^")
+                    $("#msg_" + rq.msgid).removeClass("needCheckUnread")
+                    const objUnread = $("#unread_" + rq.msgid)
+                    const htmlRetryDelete = "<img src='" + g_retry_small + "' style='width:16px;height:16px;margin-top:5px;margin-right:2px'><img src='" + g_delete_small + "' style='width:16px;height:16px;margin-top:5px'>"
+                    objUnread.html(htmlRetryDelete)
+                    objUnread.removeClass("unread").addClass("failure")
+                    objUnread.show()
+                    objUnread.off("click").on("click", async function() {
+                        hush.util.animBgColor($(this))
+                        hush.msg.dialogMultiButton("전송 실패.", {
+                            "전송확인": function() { 
+                                if (!hush.http.chkOnline()) return
+                                $("#handling_" + rq.msgid).show()                        
+                                objUnread.hide() 
+                                const rqCheck = initMsg()
+                                rqCheck.type = "check"
+                                rqCheck.prevmsgid = rq.msgid
+                                if (hush.webview.ios) {
+                                } else if (hush.webview.and) {
+                                    setTimeout(function() {
+                                        AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rqCheck), g_roomid, null, true)
+                                    }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                                } else {
+                                    hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqCheck, g_roomid)
+                                }
+                                prepareForNoResponse(rq)
+                                hush.msg.dialogClose()
+                            }, "삭제": function() { 
+                                deleteLocalMsg(rq.msgid)
+                                $("#msg_" + rq.msgid).remove()                                
+                                hush.msg.dialogClose()
+                            }, "닫기": function() { 
+                                hush.msg.dialogClose() 
+                            } 
+                        }, "전송확인/삭제")
+                    })
+                }, hush.cons.send_timeout_sec * 1000)
+            }
+
+            const procSendAndAppend = (rq, blobUrl) => {
+                const _focused = hush.webview.screenHeightOnLoad == $(window).height() ? false : true //g_in_chat.is(":focus") ? true : false
+                addRow(rq)
+                if (rq.type == "image") { //sent by ajax and should be noticed to all members
+                    showImgMenu(false)
+                    imageSrcEvent(blobUrl, rq.msgid) //Image needs to be shown when starting sending for sender
+                } else if (rq.type == "file") { //skip
+                } else {
+                    if (hush.webview.ios) {
+                    } else if (hush.webview.and) {
+                        setTimeout(function() {
+                            AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true)
+                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                    } else {
+                        hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
+                    }
+                }
+                scrollToTarget()
+                g_in_chat.val("")
+                $("#fr_byte").html("")
+                if (_focused) g_in_chat.focus()
+                //아래는 네트워크가 끊어지거나 불안정하거나 서버가 다운되는 등의 경우 각 type마다 실패된 전송을 어찌 처리하는지에 대한 코딩임
+                //image, file는 chat.html에서 구분값으로 넘기나 결국은 서버에 넘길 때는 notice로 type이 넘어가므로 서버에서는 미사용 (실데이터는 ajax로 처리)
+                //그래서 결국 type은 leave, invite, check, notice, flink, talk인데
+                //talk은 사용자 타이핑이 많은 경우 전송실패후 휘발성으로 날아가버리면 사용자 입장에서는 매우 불편하므로 재전송할 건지 옵션을 주기로 함
+                //flink는 talk과 같은 방식으로 retry sending하지 않고 바로 procFailure시킴. 그 이유는 initMsgForRetrySending()에 flink 관련 설정하기도 힘들고 
+                //사용자가 타이핑하는 것이 아닌 파일 선택해 복사하는 액션이므로 재연결시에 크게 불편하지 않으므로 다시 선택하라고 가이드하는 것임 
+                //나머지 4가지 type은 사용자가 선택할 사항이 아닌 반드시 서버로 전달되어야 하는 후속처리성이기 때문에 재연결시에 무조건
+                //전송시키기 위해 서버소켓으로 연결되면 즉시 전송하는 소켓고유의 기능인 버퍼링을 그대로 활용함 (현재에도 default로 되어 있는데
+                //네트워크 연결이 안되어 있거나 소켓이 연결되어 있지 않으면 안보내도록 되어있는 것을 4가지 type에 대해서만 예외로 체크하지 말고
+                //통과시키면 버퍼링되어 재연결시 즉시 서버로 전송될 것임. 관련 행에 $$9 참조 붙이기)
+                //위 4가지중 하나인 notice type은 file, image를 ajax로 보낸 후 notice로 send_msg처리하는 것인데 
+                //image 및 file은 ajax전송시 네트워크 끊어지는 등의 오류시 오류 핸들링으로 처리하도록 했음
+                if (rq.type == "talk") { //##8
+                    const iObj = hush.idb.setTxOs("readwrite")
+                    if (iObj == null) return
+                    const os_req = iObj.os.get(rq.msgid)
+                    os_req.onsuccess = function(e) {
+                        if (os_req.result) return //const rec = os_req.result
+                        //일단, 로컬에 추가했다가 sock_ev_send_msg 서버처리 결과에서 보면 정상적으로 처리된 것이므로 다시 제거 : deleteLocalMsg(data.msgid)
+                        //결국, 정상적이지 않은 경우만 로컬에 있을 것임
+                        iObj.os.add({
+                            roomid : g_roomid, msgid : rq.msgid, type : rq.type, body : rq.body, reply : rq.reply, 
+                            cdt : hush.util.getCurDateTimeStr(true) 
+                        })
+                    }
+                    setTimeout(() => { //타이머 지나고 찾았을 때 아직 남아 있으면 전송실패인 것임
+                        const iObj1 = hush.idb.setTxOs("readonly")
+                        if (iObj1 == null) return
+                        hush.idb.getRec(iObj1.os, rq.msgid, function(rec) {
+                            if (!rec) return
+                            const obj = initMsgForRetrySending(rec.msgid, rec.type, rec.body, rec.reply, rec.cdt)
+                            retrySending(obj)
+                        })
+                    }, hush.cons.send_timeout_sec * 1000)
+                } else if (rq.type == "flink") {
+                    setTimeout(() => { //타이머 지나고 찾았을 때 아직 남아 있으면 전송실패인 것임
+                        const objHandling = $("#handling_" + rq.msgid)
+                        if (objHandling.css("display") != "none") {
+                            procFailure(rq, "전송 실패.")
+                        }
+                    }, hush.cons.send_timeout_sec * 1000)
+                }
+            }
+
+            const initMsg = () => {
+                const memberidArr = [ ], membernmArr = [ ]
+                const mem = $(".mem")
+                if (mem.length > 0) {
+                    for (let item of mem) {
+                        memberidArr.push(item.id.substring(4))
+                        membernmArr.push(decodeURIComponent($(item).data("usernm")))
+                    }
+                }
+                const _msgid = hush.util.createId()
+                const _curdt = hush.util.getCurDateTimeStr(true) //local backup in a sense
+                return { //senderid는 서버에서 socket.userid로 바로 받아 사용하므로 미사용이나 로컬에서 쓸 수도 있는 생각에 그냥 둠
+                    msgid : _msgid, senderkey : g_userkey, senderid : g_userid, sendernm : g_usernm, cdt : _curdt,
+                    filestate : "", body : "", buffer : null, reply : "", type : "", receiverid : memberidArr, receivernm : membernmArr,
+                    prevmsgid : "", roomid : g_roomid, roomnm : "", 
+                    bufferStr : null, state : "", unread : mem.length, line : "" //여기 4개는 web과는 다르게 모바일에서 필요
+                } 
+            }
+
+            const initMsgForRetrySending = (msgid, type, body, reply, cdt) => { //send_msg시 talk type에만 정상 동작하도록 설정됨
+                const obj = {}
+                obj.msgid = msgid
+                obj.type = type
+                obj.body = body
+                obj.reply = reply
+                obj.cdt = cdt
+                obj.senderid = g_userid
+                obj.sendernm = g_usernm                
+                obj.buffer = null
+                obj.bufferStr = null
+                obj.state = ""
+                obj.filestate = ""
+                obj.cnt = -1 //-1 means from local IndexedDB
+                return obj
+            }
+
+            const getMsgidToReply = () => {
+                const msgid = ($("#msgtoreply").length > 0) ? $("#msgtoreply").attr("msgid") : ""
+                if (msgid) setTitleToFrTip()
+                return msgid
+            }
+
+            const sendMsg = (type, blobUrlOrBody, blobOrFilestate) => {
+                try {
+                    if (!hush.http.chkOnline()) return
+                    const rq = initMsg()
+                    if (type == "image") { //ajax used. arraybuffer sent with blank on socket.io-redis npm. download (through socket) is ok                    
+                        rq.type = type
+                        procSendAndAppend(rq, blobUrlOrBody)
+                        const fd = new FormData()
+                        fd.append("msgid", rq.msgid)
+                        fd.append("roomid", g_roomid)
+                        fd.append("senderid", rq.senderid)
+                        fd.append("sendernm", rq.sendernm)
+                        fd.append("receiverid", rq.receiverid.join(hush.cons.easydeli))
+                        fd.append("receivernm", rq.receivernm.join(hush.cons.easydeli))
+                        fd.append("type", rq.type)
+                        fd.append("reply", getMsgidToReply())
+                        fd.append("file", blobOrFilestate)
+                        hush.http.ajaxFormData("/msngr/proc_image", fd, (rs) => {
+                            if (rs.code == hush.cons.CODE_OK) {
+                                const rqNotice = initMsg()
+                                rqNotice.type = "notice"
+                                rqNotice.body = rq.type
+                                rqNotice.prevmsgid = rq.msgid
+                                if (hush.webview.ios) { 
+                                } else if (hush.webview.and) {
+                                    setTimeout(function() {
+                                        AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rqNotice), g_roomid, "parent", true)
+                                    }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                                } else {
+                                    hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqNotice, g_roomid, "parent")
+                                }
+                            } else {
+                                procFailure(rq, rs.msg)
+                            }
+                        }, (msg) => {
+                            //1) 서버를 죽이면 여기 오류로 덜어지는데 이때 msg는 timeout이 나옴 (timeout 설정했을 때이며 미설정시는 GATEWAY~TIMEOUT으로 나왔음)
+                            //   어쨋든 이 경우는 소켓버퍼링처럼 ajax도 버퍼링?이 되어 웹뷰를 닫고 새로 열어도 바이너리 데이터를 가지고 있는 것 같음
+                            //   왜냐면, 다시 들어오면 실제로 전송이 성공한 결과를 보여주기 때문임 (왜 그런지 어디서 옵션을 가지는지는 아직 미파악)
+                            //2) 네트워크가 끊어지면 timeout없이 여기 오류로 즉시 떨어지는데 이때는 msg가 없고 ajax 버퍼링?이 없이 전송이 실패로 끝남
+                            //   그러나, 사실 바로 앞단에서 네트워크 연결여부를 체크하므로 2) 경우가 발생할 일은 매우 낮음
+                            //따라서, 1) 경우와 나머지 경우(챗방을 닫고 열면 해당 데이터는 사라짐)가 사용자에게 주는 가이드가 달라야 함
+                            if (msg.toLowerCase().includes("timeout")) { //응답없으니 재연결시엔 (이미 버퍼링된 데이터가 업로드되었을테니) 클릭해서
+                                prepareForNoResponse(rq) //서버에 데이터가 있으면 그걸로 대체하고 없으면 procFailure()로 안내하기
+                            } else { //실패해서 서버에 데이터도 없으므로 UI상으로 해당 셀만 제거하는 방법말고는 없음
+                                procFailure(rq, msg)
+                            }
+                        })
+                    } else if (type == "flink") {
+                        rq.type = type
+                        rq.body = blobUrlOrBody
+                        rq.reply = getMsgidToReply()
+                        rq.filestate = blobOrFilestate
+                        procSendAndAppend(rq)
+                    } else {
+                        rq.type = "talk"
+                        let _body = g_in_chat.val() //while (_body.endsWith(_body, "\n")) { const _len = _body.length; _body = _body.substring(0, _len - 1) } //infinite loop when _len is 0
+                        if (_body.trim() == "") return  
+                        //const emojiRegex = /\p{Emoji}/u; if (emojiRegex.test(_body)) { hush.msg.toast("이모지 지원X"); return; }
+                        if (hush.util.strLen(_body) > hush.cons.max_msg_len) {
+                            hush.msg.toast("최대 : " + hush.cons.max_msg_len + " 바이트<br>현재 : " + hush.util.strLen(_body) + " 바이트")
+                            return
+                        }
+                        rq.body = _body
+                        rq.reply = getMsgidToReply()
+                        procSendAndAppend(rq)
+                    }
+                    if ($("#cancelreply").length > 0) $("#cancelreply").click()
+                } catch (ex) {
+                    hush.util.showEx(ex)
+                }
+            }
+
+            const imageSrcEvent = (blobUrl, msgid, kind, type, body) => {
+                const _img = $("#img_" + msgid)
+                console.log("msgid:"+msgid)
+                _img.attr("src", blobUrl)
+                if (kind == "result") {
+                    console.log("msgid1:"+msgid)
+                    _img.on("load", () => { 
+                        _img.show()
+                        scrollToTarget(0)
+                    })
+                } else if ($(".more").length > 0) {
+                    console.log("msgid2:"+msgid)
+                    _img.on("load", () => { 
+                        _img.show() //scrollToTarget(".more") //never call here. call at hush.cons.sock_ev_qry_msglist instead
+                    })
+                } else { //equals to if (data.dt == FIRST_QUERIED)
+                    console.log("msgid3:"+msgid)
+                    _img.on("load", () => { 
+                        _img.show()
+                        if (!g_stopAutoScrollDown) scrollToTarget()
+                    })
+                }
+                _img.on("click", function(e) {
+                    if (!hush.http.chkOnline()) return
+                    let fileInfoForMobile = $("#ahref_" + msgid).attr("param1") + hush.cons.deli + $("#ahref_" + msgid).attr("param2")
+                    if (type == "ext_video") {
+                        const _arr = body.split(hush.cons.deli)
+                        const _path = _arr[0]
+                        let _witdh, _height
+                        if (_arr.length >= 4) {
+                            _witdh = parseInt(_arr[2])
+                            _height = parseInt(_arr[3])
+                        } else {
+                            _witdh = 500
+                            _height = 500
+                        }
+                        let urlStr = "/app/msngr/popup.html?type=play&msgid=" + msgid + "&path=" + encodeURIComponent(_path)
+                        if (hush.webview.ios) {
+                        } else if (hush.webview.and) {
+                            urlStr += "&" + hush.cons.param_webview_and
+                            AndroidRoom.openPopup(urlStr, fileInfoForMobile)
+                        } else {
+                            hush.util.openWinPop(urlStr, _witdh, _height)
+                        }
+                    } else {
+                        let _type
+                        if (type == "ext_image") {
+                            _type = type
+                        } else {
+                            _type = "image"
+                            fileInfoForMobile = ""
+                        }
+                        let urlStr = "/app/msngr/popup.html?type=" + _type + "&msgid=" + msgid + "&body=" + body
+                        if (!hush.webview.on) {
+                            hush.util.openWinPop(urlStr)
+                        } else {
+                            if (hush.webview.ios) {
+                            } else if (hush.webview.and) {
+                                urlStr += "&" + hush.cons.param_webview_and
+                                AndroidRoom.openPopup(urlStr, fileInfoForMobile)
+                            }
+                        }
+                    }
+                    e.stopPropagation()
+                })
+                $("#play_" + msgid).on("click", function(e) {
+                    $("#img_" + msgid).click()
+                })
+                if (type == "ext_video") $("#play_" + msgid).show()
+            }
+
+            const procOpengraph = async (msgid, kind) => {
+                try {
+                    if (!hush.http.chkOnline()) return
+                    const _url = $("#openGraph" + msgid).attr("og")
+                    if (!_url) return
+                    const rs = await hush.http.ajax("/msngr/get_opengraph", { msgid : msgid, url : _url }, true) 
+                    const ret = rs.result
+                    if (!ret.ogTitle) {
+                        $("#ogTitle" + ret.msgid).hide()
+                    } else {
+                        $("#ogTitle" + ret.msgid).html(ret.ogTitle)
+                    }
+                    if (!ret.ogDesc) {
+                        $("#ogDesc" + ret.msgid).hide()
+                    } else {
+                        $("#ogDesc" + ret.msgid).html(ret.ogDesc)
+                    }
+                    if (!ret.ogImg) {
+                        $("#ogImg" + ret.msgid).hide()
+                    } else {	
+                        $("#openGraph" + ret.msgid).show() //show() let promise resolve() for image load when qry_msglist()				
+                        $("#ogImg" + ret.msgid).attr("src", ret.ogImg)                        
+                        $("#ogImg" + ret.msgid).on("load", function() { //##02
+                            $("#openGraph" + ret.msgid).show()
+                            const _h_title = (ret.ogTitle) ? $("#ogTitle" + ret.msgid).height() : 0
+                            const _h_desc = (ret.ogDesc) ? $("#ogDesc" + ret.msgid).height() : 0
+                            const _h_img = $("#ogImg" + ret.msgid).height()
+                            $("#openGraph" + ret.msgid).height(_h_title + _h_desc + _h_img)
+                            if (kind == "result") {
+                                scrollToTarget(0)
+                            } else if ($(".more").length > 0) {
+                                //scrollToTarget(".more") //never call here. call at [hush.cons.sock_ev_qry_msglist] instead
+                            } else {
+                                if (!g_stopAutoScrollDown) scrollToTarget() //equals to if (data.dt == FIRST_QUERIED)
+                            }                              
+                        })
+                    }
+                    if (ret.ogImg || ret.ogTitle || ret.ogDesc) {
+                        $("#openGraph" + ret.msgid).click(function() { openLink(ret.url) })
+                        if (!ret.ogImg) {
+                            const _h_title = (ret.ogTitle) ? $("#ogTitle" + ret.msgid).height() : 0
+                            const _h_desc = (ret.ogDesc) ? $("#ogDesc" + ret.msgid).height() : 0
+                            $("#openGraph" + ret.msgid).height(_h_title + _h_desc)	
+                            if (kind == "result") {
+                                scrollToTarget(0)
+                            } else if ($(".more").length > 0) {
+                                //scrollToTarget(".more") //never call here. call at [hush.cons.sock_ev_qry_msglist] instead
+                            } else {
+                                if (!g_stopAutoScrollDown) scrollToTarget() //equals to if (data.dt == FIRST_QUERIED)
+                            }
+                        }
+                    }
+                } catch (ex) { 
+                    hush.util.showEx(ex)
+                }
+            }
+
+            const handleFileUpload = async (files) => {		
+                try {
+                    const _len = files.length
+                    if (_len > hush.cons.max_filecount) {
+                        await hush.msg.alert("최대 " + hush.cons.max_filecount + "개 파일까지 한번에 전송 가능합니다.")
+                        return
+                    }
+                    let _list = ""
+                    for (let i = 0; i < _len; i++) {
+                        if (files[i].size > hush.cons.max_filesize) _list += files[i].name + " (" + hush.util.formatBytes(files[i].size) + ") "  
+                    }
+                    if (_list != "") {
+                        hush.msg.alert("파일 크기는 최대 " + hush.util.formatBytes(hush.cons.max_filesize) + "입니다.<br>" + _list)
+                        return
+                    }
+                    for (let i = 0; i < _len; i++) {
+                        const rq = initMsg()
+                        rq.type = "file"
+                        rq.body = files[i].name + hush.cons.deli + files[i].size
+                        procSendAndAppend(rq)
+                        $("#pb_" + rq.msgid).show()
+                        const fd = new FormData()
+                        fd.append("msgid", rq.msgid)
+                        fd.append("roomid", g_roomid)
+                        fd.append("senderid", rq.senderid)
+                        fd.append("sendernm", rq.sendernm)
+                        fd.append("receiverid", rq.receiverid.join(hush.cons.easydeli))
+                        fd.append("receivernm", rq.receivernm.join(hush.cons.easydeli))
+                        fd.append("body", files[i].size)
+                        fd.append("type", rq.type)
+                        fd.append("reply", getMsgidToReply())
+                        fd.append("file", files[i])
+                        const ajaxObj = $.ajax({
+                            url: "/msngr/proc_file",
+                            data : fd,
+                            processData : false,
+                            enctype : "multipart/form-data",
+                            contentType : false,
+                            cache : false,
+                            timeout : 60000 * 60, //### timeout없이 서버(proc_file.js)에서 POST가 두번 동일 호출되어 문제 발생 (구글링하면 ECONNRESET도 발생한다고 함) => 추가해도 여전히 오류 => proc_file.js의 ### 방안 참조
+                            type : "POST",
+                            xhr: function() { //XMLHttpRequest redefine
+                                const xhr = $.ajaxSettings.xhr()
+                                let _started = false
+                                xhr.upload.onprogress = function(e) {
+                                    //파일업로드시 1) 네트워크 끊어지면 바로 삭제/재전송 아이콘이 보이는데 
+                                    //2) 서버가 죽으면 (아래 if 없을 경우 100%까지 가고 (timeout이 리턴되면서) prepareForNoResponse() 보이게 됨
+                                    //   이 경우, 파일이 아주 크면 사용자는 100%까지 잘되나보다라고 착각할 수도 있어서 아래 if와 같이 체크하면
+                                    //   서버 죽은 경우나 네트워크 불안정해 타임아웃 걸려 100% 진행되면서도 오류를 보여주므로 사용자혼란을 줄여줌
+                                    //3) 그런데 아직 파일 재전송 코딩이 어려워 1) 2) 경우는 삭제만 가능하며 웹뷰이므로 채팅방을 나가는 순간 제거됨
+                                    //4) 파일이 작은 것은 ajax buffering?인지 잘 모르겠는데 서버가 살아날 경우 자동으로 보냄 (아직 옵션 등 미파악)
+                                    if (!sockConnected || !hush.http.chkOnline("none")) {
+                                        prepareForNoResponse(rq)
+                                    } else {
+                                        const percent = e.loaded * 100 / e.total
+                                        $("#pb_" + rq.msgid).val(percent)
+                                        const _percent = parseInt(percent)
+                                        $("#expiry_" + rq.msgid).html(_percent.toString() + "%")
+                                        if (!_started) {
+                                            _started = true
+                                            $("#abort_" + rq.msgid).show()
+                                            $("#sel_" + rq.msgid).removeClass("chkboxSel")
+                                        } else {
+                                            if (_percent >= 98) $("#abort_" + rq.msgid).html("<span class=coText1 style='color:red'>완료중</span>")
+                                        }
+                                    }
+                                }
+                                return xhr
+                            },
+                            success : function(rs) {
+                                $("#abort_" + rq.msgid).hide()
+                                if (!$("#sel_" + rq.msgid).hasClass("chkboxSel")) $("#sel_" + rq.msgid).addClass("chkboxSel")
+                                if (rs.code == hush.cons.CODE_OK) {
+                                    const rqNotice = initMsg()
+                                    rqNotice.type = "notice"
+                                    rqNotice.body = rq.type
+                                    rqNotice.prevmsgid = rq.msgid
+                                    if (hush.webview.ios) { 
+                                    } else if (hush.webview.and) {
+                                        setTimeout(function() {
+                                            AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rqNotice), g_roomid, "parent", true)
+                                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                                    } else {
+                                        hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rqNotice, g_roomid, "parent")
+                                    }
+                                } else {
+                                    procFailure(rq, rs.msg)
+                                }
+                            },
+                            error : function(xhr, status, error) { 
+                                $("#abort_" + rq.msgid).hide()
+                                const msg = (typeof error == "string") ? error : error.toString()
+                                if (msg.includes("timeout")) { //proc_image()의 설명 참조
+                                    prepareForNoResponse(rq) 
+                                } else { 
+                                    procFailure(rq, msg)
+                                }
+                            }
+                        })
+                        $("#abort_" + rq.msgid).off("click").on("click", async function() {
+                            hush.util.animBgColor($(this))
+                            if ($(this).text() != "Abort") {
+                                await hush.msg.alert("업로드 완료중이므로 처리불가능합니다.")
+                                return
+                            }
+                            if (ajaxObj) ajaxObj.abort()
+                            setTimeout(() => { $("#msg_" + rq.msgid).remove() }, 1000)
+                            //원래 전송중취소시 생긴 파일도 삭제해야 하나 브라우저창 닫기로 인한 가비지는 데몬으로 처리하기로 함
+                        })
+                    }
+                } catch (ex) { 
+                    hush.util.showEx(ex)
+                }
+            }
+
+            const openLink = (url) => { //window.open(url, "_blank", "width=800,height=800,menubar=yes,status=yes,toolbar=yes,resizable=yes,location=yes");
+                window.open(url, "_blank") //popup not worked for 'going back' navigation
+            }
+
+            const procFileLinkIfExists = (obj, kind) => {
+                const _fileStr = obj.body.split(hush.cons.deli)
+                const _filepath = _fileStr[0].split("/")
+                const _filenameLong = _filepath[_filepath.length - 1]
+                const _brr = _filenameLong.split(hush.cons.subdeli) //original_filename_body + hush.cons.subdeli + 20191016081710239944.mp4
+                let _filelink, _sublink_request, _extension
+                if (_brr.length > 1) { //if not, it's from sender of client
+                    const _crr = _brr[1].split(".")
+                    const _filename = (_crr.length > 1) ? _brr[0] + "." + _crr[1] : _brr[0] //original_filename_body.mp4                    
+                    if (obj.filestate == hush.cons.file_expired) {
+                        _filelink = _filename
+                    } else {
+                        let _dir_prefix = ""
+                        for (let i = 0; i < _filepath.length - 1; i++) _dir_prefix += _filepath[i] + "/"
+                        const _attr = "target='_self' style='text-decoration:none;color:#005192;cursor:pointer'"
+                        const _path = _dir_prefix + encodeURIComponent(_filenameLong)
+                        _filelink = "<a id=ahref_" + obj.msgid + " href='' onclick='return false;' class=coText1 param1='" + _path + "' param2='" + obj.msgid + "' " + _attr + ">" + _filename + "</a>"
+                    }
+                    _sublink_request = obj.body //_fileStr[0]
+                    _extension = _crr[1]
+                } else { //from sender of client
+                    _filelink = _filenameLong //temporary file path when being uploaded
+                }
+                if (_sublink_request) { //request sublink image for file uploaded : data table for file might not be inserted yet.
+                    if (hush.cons.sublink_ext_image.includes(_extension) || hush.cons.sublink_ext_video.includes(_extension)) {
+                        const _type = hush.cons.sublink_ext_image.includes(_extension) ? "ext_image" : "ext_video"
+                        hush.http.ajaxCall("/msngr/get_msginfo", { msgid : obj.msgid, body : _sublink_request }, function(rsPic) {
+                            // if (rsPic && rsPic.buffer) {
+                            //     const blobUrl = hush.blob.getBlobUrlForImage(rsPic.buffer.data)
+                            //     imageSrcEvent(blobUrl, obj.msgid, kind, _type, _sublink_request) //$("#~").attr("src", "data:image/png;base64," + data)
+                            // }
+                            if (rsPic && rsPic.list && rsPic.list.length >= 0 && rsPic.list[0].BUFFER) { //연속 2회 호출되면서 결과가 다른 경우 있음
+                                //위 if에 객체 하나식 체크하지 않으면 웹뷰에서 rsPic.list가 undefined인 경우가 있으므로 문제가 됨
+                                const blobUrl = hush.blob.getBlobUrlForImage(rsPic.list[0].BUFFER.data)
+                                imageSrcEvent(blobUrl, obj.msgid, kind, _type, _sublink_request) //$("#~").attr("src", "data:image/png;base64," + data)
+                            }
+                        })
+                    }
+                }
+                return _filelink
+            }
+
+            const procHighlight = (obj) => {
+                obj.css("background", hush.cons.result_bgcolor)
+                obj.effect("highlight", { color: hush.cons.result_highlight }, 2000)
+            }
+
+            const drawLine = (_class, _str, _id) => {
+                if ($("." + _class).length > 0) $("." + _class).remove() //there'll be problems if not removed when auto scrolling
+                const _idHtml = (_id) ? "id=" + _id + " " : ""
+                return "<div class='" + _class + "' " + _idHtml + "style='clear:both;font-size:12px;color:maroon;padding:5px;margin:3px 3px 0px 3px;text-align:center;border-top:1px solid peru'>" + _str + "</div>"
+            }
+
+            const toggleResult = (show) => {
+                $("#result_sub").empty()
+                g_list_msg.empty()
+                resetEnvForScroll() //should be preceded getMsgList()
+                if (show) {
+                    $("#btn_close_search").show() //search or etc mode              
+                    $("#result_sub").show()
+                    $("#result_cnt").show()
+                    $("#people_sub").hide()
+                    $("#people_cnt").hide()
+                    toggleDispMem("", true)
+                } else {
+                    $("#btn_close_search").hide()
+                    $("#result_sub").hide()
+                    $("#result_cnt").hide()
+                    $("#people_sub").show()
+                    $("#people_cnt").show()
+                    $("#txt_msg_added").hide()
+                    $("#in_search").val("")
+                    if (g_show_list_people == "X") toggleDispMem("X", true)
+                }
+            }
+
+            const dialogRoomRename = (_type) => {
+                const _header = (_type == "all") ? "모두적용" : "본인적용"
+                hush.msg.dialogInputBox("새로운 방명 입력.<br>기존 방명 지우기 : 빈칸 입력.", g_title, { 
+                    "확인": async function() {                             
+                        const _newName = hush.msg.dialogGetInput().trim()
+                        if (!await hush.util.chkFieldVal(_newName, "방명", 0, 100)) return
+                        if (!hush.http.chkOnline()) return
+                        const rq = { type : _type, roomname : _newName, roomid : g_roomid } //roomid needed since
+                        if (hush.webview.ios) { 
+                        } else if (hush.webview.and) {
+                            setTimeout(function() {
+                                AndroidCom.send(hush.cons.sock_ev_rename_room, JSON.stringify(rq), g_roomid, "parent", true)
+                            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작    
+                        } else {
+                            hush.sock.send(g_socket, hush.cons.sock_ev_rename_room, rq, g_roomid, "parent") //it should be transferred to parent
+                        }
+                        hush.msg.dialogClose()
+                        if (hush.webview.on) showRoomMenu(false)
+                    }, "취소": function() { 
+                        hush.msg.dialogClose()
+                        if (hush.webview.on) showRoomMenu(false)
+                    } 
+                }, _header, 320)
+            }
+
+            function procInvite(useridArr, usernmArr) { //invoked from main.html (invite) popup or mobile //from onActivityResult() in MainActivity.kt
+                try {
+                    if (useridArr.length == 0) return
+                    if (!hush.http.chkOnline()) return
+                    const rq = { userids : useridArr, usernms : usernmArr, sendernm : g_usernm }
+                    if (hush.webview.ios) { //alert(JSON.stringify(rq))
+                    } else if (hush.webview.and) { //await hush.webview.callAppFunc(AndroidCom.send) //callAppFunc()에 설명 달아 놓았음
+                        setTimeout(function() {
+                            AndroidCom.send(hush.cons.sock_ev_invite_user, JSON.stringify(rq), g_roomid, null, true)
+                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작                     
+                    } else {
+                        hush.sock.send(g_socket, hush.cons.sock_ev_invite_user, rq, g_roomid)
+                    }
+                } catch (ex) {
+                    hush.util.showEx(ex)
+                }
+            }
+
+            const procUnreadCount = (msgid, unread_cnt) => {
+                if (unread_cnt == -1) return //no record 
+                const objHandling = $("#handling_" + msgid)
+                if (objHandling.css("display") != "none") objHandling.hide() 
+                const objUnread = $("#unread_" + msgid)
+                if (objUnread.css("display") == "none") objUnread.show()
+                const unreadStr = objUnread.text()
+                const cnt_ori = parseInt(unreadStr) //unreadStr.startsWith("+") ? hush.cons.max_unread_cnt + 1 : parseInt(unreadStr)
+                const cnt = parseInt(unread_cnt)                    
+                if (cnt >= cnt_ori) return //unreads count should not be bigger than old one
+                if (objUnread.hasClass("failure")) objUnread.removeClass("resend")
+                let cntStr = (cnt == 0 ? "" : cnt)
+                objUnread.html(cntStr)
+                if (cnt == 0) $("#msg_" + msgid).removeClass("needCheckUnread")
+            }
+
+            const chkStickyNeeded = () => {
+                const _isBottom = g_list_msg.prop("scrollHeight") - g_list_msg.height() - g_list_msg.scrollTop()
+                if ((_isBottom >= -10 && _isBottom <= 10) && $("#btn_close_search").css("display") == "none") {
+                    return false //with alpha consider with browser zooming. not search mode but normal
+                } else {
+                    return true
+                }
+            }
+
+            const setTitleToFrTip = () => {
+                const frTip = $("#fr_tip")
+                if (frTip.length > 0) {
+                    const _html = frTip.html()
+                    if (_html == "" || _html.includes("방명 :") || _html.includes("cancelreply")) {
+                        frTip.html("<span class=coText>방명 : " + g_title + "</span>")
+                    }
+                }
+            }
+
+            const showRoomMenu = (show) => { //for mobile only
+                if (!hush.webview.on) return
+                const people_m = $("#btn_people_m")
+                const menu = $("#list_menu_m")
+                const people = $("#list_people")
+                if (show) {
+                    people_m.hide()
+                    people.hide()
+                    menu.show()
+                } else {
+                    people_m.show()
+                    if (g_show_list_people == "") people.show()
+                    menu.hide()
+                }
+            }
+
+            const toggleDispMem = (value, notRecall) => { //show = "" or "X"
+                if (value == "" || !hush.webview.on) {
+                    $("#list_people").show()
+                    $("#list_msg").css("margin-right", "2px") //$(".plate").css("margin-right", "2px")
+                } else { //"X"
+                    $("#list_people").hide()
+                    $("#list_msg").css("margin-right", "0px") //$(".plate").css("margin-right", "0px")
+                }
+                if (!notRecall) g_show_list_people = value
+                setTitleToFrTip()
+            }
+
+            const chkTyping = () => {
+                const curTyping = g_in_chat.val().trim()
+                const disp = $("#typing_" + g_userid).css("display")
+                let rq
+                if (disp == "none") {
+                    if (curTyping) rq = { typing : true, userid : g_userid }
+                } else {
+                    if (!curTyping) rq = { typing : false, userid : g_userid }
+                }
+                if (rq) {
+                    if (hush.webview.ios) {
+                    } else if (hush.webview.and) {
+                        setTimeout(function() {
+                            AndroidCom.send(hush.cons.sock_ev_chk_typing, JSON.stringify(rq), g_roomid, null, false)
+                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                    } else {
+                        hush.sock.send(g_socket, hush.cons.sock_ev_chk_typing, rq, g_roomid)
+                    }
+                }
+            }
+
+            const calcBytes = () => {
+                const cnt = hush.util.strLen(g_in_chat.val())
+                $("#fr_byte").html(cnt + "/" + hush.cons.max_msg_len)
+                if (cnt >= hush.cons.max_msg_len) {
+                    if ($("#fr_byte").css("color") != "red") $("#fr_byte").css("color", "red")
+                } else {
+                    if ($("#fr_byte").css("color") != "black") $("#fr_byte").css("color", "black")
+                }
+            }
+
+            const updateAsRevoked = (msgid) => {
+                $("#body_" + msgid).html(hush.cons.cell_revoked)
+                $("#img_" + msgid).remove()
+                $("#play_" + msgid).remove()
+                $("#openGraph" + msgid).remove()
+            }
+
+            const openRoomWithMobile = () => {
+                if (g_type == "open") {
+                    const rq = { from : g_origin }
+                    if (hush.webview.ios) {
+                    } else if (hush.webview.and) {
+                        setTimeout(function() {
+                            AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, true)
+                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작 
+                    }
+                } else {
+                    hush.msg.alert("Please close this chat room and open again.")
+                }
+            }
+
+            function OnSearch(input) {
+                if (input.value == "") {
+                    $("#btn_close_search").click()
+                }
+            }
+
+            var funcSockEv = { //needs to be public //console.log(JSON.stringify(data))
+                [hush.cons.sock_ev_refresh_token] : (data) => { //모바일앱(웹뷰) 전용
+                    if (!hush.webview.on) return
+                    if (!data.token) return //app.js->ChatService.kt로부터 내려옴
+                    try {
+                        hush.auth.isTokenRefreshing = false
+                        hush.auth.refreshTokenFrom(data.token)
+                        sockConnected = true
+                        toggleDisconnIcon(false)
+                        const userkeyArr = []
+                        $(".state").each(function(idx, item) {
+                            userkeyArr.push(this.id.substring(2))
+                        }).promise().done(function() {
+                            chkAlive(userkeyArr)
+                        })
+                        const arr = $(".talk").last()
+                        if (arr.length == 0) return
+                        getMsgList("after", $(arr[0]).attr("id").substring(4)) //msgid. after = after reconnect
+                        if (hush.webview.ios) {
+                        } else if (hush.webview.and) {
+                            setTimeout(function() {
+                                AndroidCom.reconnectDone()
+                            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                        }
+                    } catch (ex) {
+                        hush.util.showEx(ex)
+                    }
+                },
+                [hush.cons.sock_ev_chk_alive] : (data) => { //[...]
+                    if (data.token) return //app.js->ChatService.kt로부터 내려온 것으로 return하지 않으면 data is not Iterable 오류 발생
+                    for (let item of data) hush.util.displayOnOff(item, true)
+                    if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.funcSockEv[hush.cons.sock_ev_chk_alive].call(null, data)
+                },
+                [hush.cons.sock_ev_show_off] : (userkey) => { 
+                    hush.util.displayOnOff(userkey, false)
+                    if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.funcSockEv[hush.cons.sock_ev_show_off].call(null, userkey)
+                },
+                [hush.cons.sock_ev_show_on] : (userkey) => { 
+                    //A사용자 채팅창이 이미 열려 있고 B(같은 방 멤버)가 이제 막 연결된 경우 room_join이 필요.
+                    const rq = { from : hush.cons.sock_ev_show_on }                 
+                    if (hush.webview.ios) {
+                    } else if (hush.webview.and) {
+                        setTimeout(function() {
+                            AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, false)
+                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                    } else {
+                        hush.sock.send(g_socket, hush.cons.sock_ev_open_room, rq, g_roomid)
+                    }
+                    hush.util.displayOnOff(userkey, true)
+                    if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.funcSockEv[hush.cons.sock_ev_show_on].call(null, userkey) 
+                },
+                [hush.cons.sock_ev_create_room] : (data) => {
+                    let rq
+                    if (data.from == "dupchk") { //기존 동일한 멤버방이 있으므로 그 방을 열어야 함
+                        g_roomid = data.roomid
+                        const rqPut = { type : "set_roomid", roomid : g_roomid }
+                        if (hush.webview.ios) {
+                        } else if (hush.webview.and) {
+                            setTimeout(function() {
+                                AndroidRoom.putData(JSON.stringify(rqPut))
+                            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                        } else {
+                            delete opener.hush.sock.rooms[data.prevroomid]
+                            opener.hush.sock.rooms[g_roomid] = g_self //this window object
+                        }
+                        rq = { from : data.from }
+                    } else {
+                        rq = { from : "create" }
+                    }
+                    if (hush.webview.ios) {
+                    } else if (hush.webview.and) {
+                        setTimeout(function() {
+                            AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, true)
+                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                    } else {
+                        hush.sock.send(g_socket, hush.cons.sock_ev_open_room, rq, g_roomid)
+                    }
+                },
+                [hush.cons.sock_ev_open_room] : (data) => { //from=after,create,dupchk,portal,noti,rename_room,hush.cons.sock_ev_show_on
+                    //setTimeout(function() { //for debugging
+                        sockConnected = true //for mobile only
+                        if (data.from == hush.cons.sock_ev_show_on) return
+                        setMembers(data) //console.log(JSON.stringify(data)+"===")
+                        toggleDispMem(data.dispmem)
+                        if (data.from == "rename_room" || data.from == "after") return
+                        hush.idb.connect((rs) => {
+                            if (rs.code != hush.cons.result_ok) {
+                                hush.msg.alert(rs.msg)
+                                return
+                            }
+                            if (rs.kind != "onsuccess") return //common.js의 idb ##32 참조
+                            getMsgList()
+                        })
+                    //}, 20000)
+                },
+                [hush.cons.sock_ev_set_env] : async (data) => {
+                    toggleDispMem(data.value)
+                },
+                [hush.cons.sock_ev_send_msg] : (data) => {
+                    if (data.roomid != g_roomid) {
+                        hush.msg.alert("Different RoomID : " + data.roomid + "/" + g_roomid) //개발자오류
+                        return
+                    }
+                    if (data.senderkey == g_userkey) deleteLocalMsg(data.msgid)
+                    let _isStickyNeeded
+                    if (data.senderkey && data.senderkey != g_userkey) { 
+                        _isStickyNeeded = chkStickyNeeded()                   
+                        if (_isStickyNeeded) {
+                            g_msgUnread.push(data)
+                            const _tag = $("#txt_msg_added")                        
+                            _tag.html(g_msgUnread.length + " 개의 톡이 도착했습니다")
+                            if (g_msgUnread.length == 1) {
+                                _tag.show()
+                                _tag.off("click").on("click", function() {
+                                    $(this).hide()
+                                    if ($("#btn_close_search").css("display") != "none") {
+                                        $("#btn_close_search").click()
+                                    } else {
+                                        $(".markUnread").remove()
+                                        const _html = drawLine("markUnread", BELOWS_ARE_UNREAD)
+                                        $(_html).insertBefore("#msg_" + g_msgUnread[0].msgid)
+                                        g_msgUnread = []
+                                        scrollToTarget()
+                                        updateAllUnreads()
+                                    }
+                                })
+                            }
+                            if ($("#btn_close_search").css("display") != "none") return //mode : search or etc or result
+                        } else {
+                            g_msgUnread = []
+                        }
+                    }
+                    let _dt = hush.util.tzDateTime(data.cdt)
+                    _dt = hush.util.formatMsgDt(_dt, g_year)
+                    if (data.type == "check") { //from socket.emit (not room broadcast) //전송여부 단순 확인
+                        if (data.errcd == hush.cons.CODE_ERR) {
+                            procFailure(data, data.errmsg)
+                            return
+                        }
+                        if (data.body == 0) {
+                            procFailure(data, "전송 실패.")
+                            return
+                        } else {
+                            $("#msg_" + data.msgid).addClass("needCheckUnread")
+                            $("#dt_" + data.msgid).html(_dt)
+                            $("#unread_" + data.msgid).removeClass("failure").addClass("unread")
+                            const rq = { type : "update", msgid : data.msgid }
+                            if (hush.webview.ios) { 
+                            } else if (hush.webview.and) {
+                                setTimeout(function() {
+                                    AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, null, false)
+                                }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                            } else {
+                                hush.sock.send(g_socket, hush.cons.sock_ev_read_msg, rq, g_roomid)
+                            }
+                        }
+                    } else if (data.type == "invite") {
+                        if (data.errcd == hush.cons.CODE_ERR) {
+                            procFailure(data, data.errmsg)
+                            return
+                        }
+                        setMembers(data)
+                        setTitleToFrTip()
+                        addRow(data)
+                        if (!_isStickyNeeded) scrollToTarget()
+                    } else if (data.type == "leave") {                    
+                        if (data.errcd == hush.cons.CODE_ERR) {
+                            procFailure(data, data.errmsg)
+                            return
+                        }
+                        if (data.reply) {
+                            if (data.reply == g_userid) { //강제퇴장 (make leave)
+                                if (hush.webview.ios) {
+                                } else if (hush.webview.and) {
+                                    setTimeout(function() {
+                                        AndroidRoom.closeRoom()
+                                    }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                                } else {
+                                    window.close()
+                                }
+                            } else {
+                                setMembers(data)
+                                setTitleToFrTip()
+                                addRow(data)
+                                if (!_isStickyNeeded) scrollToTarget()
+                            }
+                        } else {
+                            if (data.senderid == g_userid) { //퇴장 (leave)
+                                if (hush.webview.ios) {
+                                } else if (hush.webview.and) {
+                                    setTimeout(function() {
+                                        AndroidRoom.closeRoom()
+                                    }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                                } else {
+                                    window.close()
+                                }
+                            } else {
+                                setMembers(data)
+                                setTitleToFrTip()
+                                addRow(data)
+                                if (!_isStickyNeeded) scrollToTarget()
+                            }
+                        }
+                    } else {
+                        if (data.errcd == hush.cons.CODE_ERR) {
+                            procFailure(data, data.errmsg)
+                            return
+                        }
+                        let _msgArrived = false
+                        if (data.senderkey != g_userkey) {
+                            addRow(data)
+                            procForCell(data)
+                            if (!_isStickyNeeded) scrollToTarget()
+                            _msgArrived = true
+                        } else {
+                            if ($("#dt_" + data.msgid).length > 0) {
+                                $("#dt_" + data.msgid).html(_dt)
+                                if (data.type == "file" || data.type == "flink") {
+                                    const _filelink = procFileLinkIfExists(data)
+                                    $("#filelink_" + data.msgid).html(_filelink)
+                                    $("#pb_" + data.msgid).hide()
+                                    const _expiry = hush.util.getExpiryWithTZ(data.filestate, g_year)
+                                    $("#expiry_" + data.msgid).html(_expiry) //data.filestate == hush.cons.file_expired ? data.filestate : "until " + data.filestate) //expiry comes from server
+                                }
+                                procForCell(data)
+                                _msgArrived = true
+                            }
+                        }
+                        if (!_isStickyNeeded && _msgArrived && (document.hasFocus() || g_focus_for_webview)) { //type = update or query
+                            const rq = { type : "update", roomid : g_roomid, msgid : data.msgid }
+                            if (hush.webview.ios) { 
+                            } else if (hush.webview.and) { 
+                                setTimeout(function() {
+                                    AndroidCom.send(hush.cons.sock_ev_read_msg, JSON.stringify(rq), g_roomid, "parent", false)
+                                }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작   
+                            } else {
+                                hush.sock.send(g_socket, hush.cons.sock_ev_read_msg, rq, g_roomid, "parent")
+                            }
+                        }
+                    }
+                },
+                [hush.cons.sock_ev_read_msg] : (data) => {
+                    if (data.type == "updateall") {
+                        procQueryUnread() //updateall후엔 본인도 다시 읽어야 최신의 정보를 갖고 올 것임 (아무것도 안하면 본인 것 최초시엔 ..이 보일 것임)
+                    } else if (data.type == "getmembers") { //socket.emit
+                        const len = data.unread_list.length
+                        if (len == 0) return
+                        let arrUnreads = []
+                        for (let i = 0; i < len; i++) arrUnreads.push(data.unread_list[i].RECEIVERNM)
+                        hush.msg.alert(arrUnreads.join(hush.cons.memdeli), null, "people unread")
+                    } else if (data.type == "update") {
+                        procUnreadCount(data.msgid, data.unread_cnt)
+                    } else { //query
+                        for (let i = 0; i < data.msgidArr.length; i++) {
+                            procUnreadCount(data.msgidArr[i], data.unreadArr[i])
+                        }
+                    }
+                },
+                [hush.cons.sock_ev_qry_msgcell] : async (data) => { //when drag & drop
+                    if (data.result.length == 0) {
+                        hush.msg.alert("no data for " + data.msgid)
+                        return
+                    }                 
+                    const rs = data.result[0] //console.log(g_roomid+"==="+rs.ROOMID) //hush.msg.toast("pasting " + rs.TYPE + "..") 
+                    if (rs.TYPE == "image") {
+                        if (rs.BUFFER == null) {
+                            hush.msg.alert("no image data to send")
+                            return
+                        }
+                        if (hush.webview.ios) {
+                        } else if (hush.webview.and) { //rs.BUFFER not good since it is transmitted through Android App->WebView.
+                            hush.http.ajaxCall("/msngr/get_msginfo", { msgid : data.msgid }, function(rsPic) {
+                                if (rsPic.list[0].BUFFER) { //if (rsPic.buffer) {
+                                    const uInt8Array = new Uint8Array(rsPic.list[0].BUFFER.data) //new Uint8Array(rsPic.buffer.data)
+                                    const blob = new Blob([uInt8Array], { type: "image/png" })
+                                    const blobUrl = URL.createObjectURL(blob)
+                                    $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
+                                    showImgMenu(true)
+                                    $("#btn_send_img_m").off("click").on("click", function(e) { 
+                                        hush.util.animBgColor($(this))
+                                        sendMsg("image", blobUrl, blob) 
+                                        $("#fr_sendcopy").hide()
+                                    })
+                                    $("#btn_cancel_img_m").off("click").on("click", function(e) { 
+                                        hush.util.animBgColor($(this))
+                                        showImgMenu(false) 
+                                        $("#fr_sendcopy").hide()
+                                    })
+                                }
+                            })
+                        } else { 
+                            const uInt8Array = new Uint8Array(rs.BUFFER)
+                            const blob = new Blob([uInt8Array], { type: "image/png" })
+                            const blobUrl = URL.createObjectURL(blob)
+                            $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
+                            showImgMenu(true)
+                            $("#btn_send_img").off("click").on("click", function(e) { 
+                                hush.util.animBgColor($(this))
+                                sendMsg("image", blobUrl, blob) 
+                            })
+                            $("#btn_cancel_img").off("click").on("click", function(e) { 
+                                hush.util.animBgColor($(this))
+                                showImgMenu(false) 
+                            })
+                        }                    
+                    } else if (rs.TYPE == "file" || rs.TYPE == "flink") {
+                        const ret = await hush.msg.confirm("파일을 전송할까요? " + hush.util.extractFileFromTalkBody(rs.BODY))
+                        if (!ret) return
+                        sendMsg("flink", rs.BODY, rs.FILESTATE)
+                        $("#fr_sendcopy").hide()
+                    } else {
+                        if (rs.BODY.trim() == "") {
+                            hush.msg.alert("no text data to send")
+                            return
+                        }
+                        g_in_chat.val(rs.BODY)
+                    }
+                },
+                [hush.cons.sock_ev_revoke_msgcell] : (data) => {
+                    updateAsRevoked(data.msgid)
+                },
+                [hush.cons.sock_ev_delete_msg] : (data) => {
+                    if (data.type == "all") {
+                        hush.msg.toast("모든 메시지가 삭제되었습니다.")
+                        g_list_msg.empty()                    
+                    } else {
+                        const _msgidArr = data.msgidArr
+                        const _len = _msgidArr.length
+                        for (let i  = 0; i < _len; i++) $("#msg_" + _msgidArr[i]).remove()
+                        showCellMenu(false)                    
+                    }
+                },
+                [hush.cons.sock_ev_invite_user] : (data) => {
+                    try {
+                        if (data.invitedUserids.length == 0) {
+                            hush.msg.toast("초대된 멤버가 없거나 이미 초대된 멤버입니다.", 3)
+                            return
+                        } //여기서는 네트워크 연결 체크. 소켓연결체크 하지 말기 : 그 앞단에서 하고 여기까지 왔다는 것은 반드시 아래 메시지가 상대방에게 전달되어야 하므로 volatile로 가면 안됨
+                        const rq = initMsg()
+                        rq.type = "invite"
+                        rq.body = data.invitedUsernms.join(hush.cons.memdeli) + hush.cons.deli + data.invitedUserids.join(hush.cons.memdeli) + hush.cons.deli + data.sendernm
+                        rq.receiverid = data.receiverid
+                        rq.receivernm = data.receivernm
+                        rq.userkeys = data.userkeys
+                        rq.roomnm = data.roomnm
+                        if (hush.webview.ios) {
+                        } else if (hush.webview.and) {
+                            setTimeout(function() {
+                                AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true)
+                            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                        } else {
+                            hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
+                        }
+                    } catch (ex) {
+                        hush.util.showEx(ex)
+                    }
+                },
+                [hush.cons.sock_ev_rename_room] : (data) => {
+                    const rq = { from : "rename_room" }
+                    if (hush.webview.ios) {
+                    } else if (hush.webview.and) {
+                        setTimeout(function() {
+                            AndroidCom.send(hush.cons.sock_ev_open_room, JSON.stringify(rq), g_roomid, null, true)
+                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작    
+                    } else {
+                        hush.sock.send(g_socket, hush.cons.sock_ev_open_room, rq, g_roomid)
+                    }
+                },
+                [hush.cons.sock_ev_chk_typing] : (data) => {
+                    if (data.typing) {
+                        $("#typing_" + data.userid).show()
+                        $("#abcd_" + data.userid).hide()
+                    } else {
+                        $("#typing_" + data.userid).hide()
+                        if ($("#abcd_" + data.userid).html() != "") $("#abcd_" + data.userid).show()
+                    }
+                },
+                [hush.cons.sock_ev_disconnect] : (data) => { //mobile only
+                    sockConnected = false
+                    toggleDisconnIcon(true)
+                },
+                [hush.cons.sock_ev_mark_as_connect] : (data) => { //mobile only
+                    toggleDisconnIcon(false) //Util.kt의 connectSockWithCallback() 설명 참조
+                },
+            }
+
+            function toggleDisconnIcon(show) {
+                if (show) {
+                    $("#img_disconn").show()
+                    $("#btn_people_m").hide()
+                    $("#btn_menu_m").hide()
+                } else {
+                    $("#img_disconn").hide()
+                    $("#btn_people_m").show()
+                    $("#btn_menu_m").show()
+                }
+            }
+
+            ////////////////////////////////////////////////////////////////////////mobile webview
+            const startFromWebView = (from, obj, rs, startFromResume) => {
+                try {
+                    if (!hush.http.chkOnline()) return
+                    hush.auth.setCookieForUser(obj, true)
+                    hush.auth.setUser(obj.token)
+                    g_userkey = hush.user.key 
+                    g_userid = hush.user.id
+                    g_usernm = hush.user.nm
+                    g_orgcd = hush.user.orgcd
+                    g_role = hush.user.role
+                    if (localStorage.msgidCopied) { //if (rs && rs.msgidCopied) { //$$66 in MainActivity.kt 참조
+                        $("#fr_tip").hide()
+                        $("#fr_sendcopy").css("display", "flex")
+                    }
+                    if (startFromResume) return //예) 안드로이드 onResume(그것도 onCreate 다음이 아닌 평소대의 onResume)인 경우는 갱신된 토큰만 받고 멈추면 됨
+                    if (g_type == "newFromMain") {
+                        if (hush.webview.ios) { 
+                        } else if (hush.webview.and) { 
+                            setTimeout(function() {
+                                AndroidCom.send(hush.cons.sock_ev_create_room, JSON.stringify(rs), g_roomid, null, true)
+                            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                        }
+                    } else if (g_type == "newFromPopup") {
+                        //see btn_new in chat.html
+                    } else if (g_type == "me") {    
+                        //see btn_me in chat.html
+                    } else if (g_type == "open") {
+                        openRoomWithMobile(g_type)
+                    }
+                    procScrollEvent()
+                    callPeriodic()
+                    hush.auth.refreshToken("chat_app") //chat-web은 main.html에 연동되므로 별도로 호출할 필요없음
+                } catch (ex) {
+                    hush.util.showEx(ex)
+                }
+            }
+
+            const resumeWebView = (from, obj, rs) => {
+                startFromWebView(from, obj, rs, true)
+            }
+
+            const getFromWebViewSocket = (from, json) => {
+                try {
+                    if (!funcSockEv || !funcSockEv[json.ev]) return //Every event data object comes here even if it is not defined in this page. 
+                    funcSockEv[json.ev].call(null, json.data)
+                } catch (ex) {
+                    hush.util.showEx(ex)
+                }
+            }
+
+            const setFocusFromWebView = async (from, focus) => {
+                g_focus_for_webview = focus //when first loaded in webview, document.hasFocus() not working for read_msg(update). g_focus_for_webview is solution for that.
+            }
+
+            const updateAllUnreadsFromWebView = (from, first_queried) => {
+                updateAllUnreads(first_queried)
+            }
+
+            const scrollToBottomFromWebView = (from) => {
+                scrollToTarget()
+            }
+
+            const invite = (from, obj) => {                 
+                procInvite(obj.userids.split(hush.cons.deli), obj.usernms.split(hush.cons.deli))
+            }
+
+            $.when($.ready).done(async function() {
+                try {
+                    document.oncontextmenu = new Function("return false") //for context menu (prevent mouse right click for pc web only)
+                    const param = new URLSearchParams(location.search)
+                    hush.webview.chk(param)
+                    g_type = param.get("type")
+                    g_roomid = param.get("roomid")
+                    g_origin = param.get("origin")
+                    g_in_chat = $("#in_chat")
+                    g_list_msg = $("#list_msg")
+                    if (hush.webview.on) {
+                        g_focus_for_webview = true
+                        $("#fr_menu_top_right_m").css("display", "flex")
+                        $("#btn_send").hide()
+                        $("#btn_file").hide()
+                        $("#btn_file_m").css("display", "flex")
+                        $("#btn_send_m").css("display", "flex")
+                        setTimeout(function() {
+                            AndroidRoom.procAfterOpenRoom()
+                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                        hush.blob.getBase64FromImage("/img/retry_small.png", function(dataUrl) { g_retry_small = dataUrl }) //오프라인에서 이미지 핸들링하기 위해 미리 내림
+                        hush.blob.getBase64FromImage("/img/delete_small.png", function(dataUrl) { g_delete_small = dataUrl }) //상동
+                    } else {                        
+                        g_focus_for_webview = false
+                        $("#fr_main").height("calc(100% - 190px)")
+                        g_in_chat.attr("placeholder", "줄바꿈 (Shift+Enter)")
+                        $("#fr_menu_bottom").css("display", "flex")
+                        g_socket = opener.hush.socket
+                        g_userkey = opener.hush.user.key 
+                        g_userid = opener.hush.user.id
+                        g_usernm = opener.hush.user.nm
+                        g_orgcd = opener.hush.user.orgcd
+                        g_role = opener.hush.user.role
+                        if (g_type == "newFromMain") {
+                            const mem = $(".mem", opener.document)
+                            const useridArr = []
+                            for (let item of mem) {
+                                const id = $(item).attr("id") //add_xxx
+                                useridArr.push(id.substring(4)) //xxx
+                            }
+                            if (useridArr.indexOf(g_userid) == -1) useridArr.push(g_userid) //me included   
+                            const rq = { masterid : g_userid, masternm : g_usernm, userids : useridArr }
+                            hush.sock.send(g_socket, hush.cons.sock_ev_create_room, rq, g_roomid)               
+                        } else if (g_type == "newFromPopup") {
+                            if (opener.g_useridArr.indexOf(g_userid) == -1) opener.g_useridArr.push(g_userid) //me included
+                            const rq = { masterid : g_userid, masternm : g_usernm, userids : opener.g_useridArr }
+                            hush.sock.send(g_socket, hush.cons.sock_ev_create_room, rq, g_roomid)
+                        } else if (g_type == "me") {    
+                            const rq = { masterid : g_userid, masternm : g_usernm, userids : [g_userid] }
+                            hush.sock.send(g_socket, hush.cons.sock_ev_create_room, rq, g_roomid)
+                        } else if (g_type == "open") { //노티에서 오픈되는 것도 포함
+                            if (opener.procUnreadTitle) opener.procUnreadTitle(g_roomid)
+                            const rq = { from : param.from }
+                            hush.sock.send(g_socket, hush.cons.sock_ev_open_room, rq, g_roomid)
+                        }
+                        procScrollEvent()
+                        callPeriodic()
+                    }
+                    if (localStorage[g_roomid]) g_in_chat.val(localStorage[g_roomid])
+                    hush.webview.ready = true
+                    $("#in_search").keyup(function(e) {                    
+                        if (e.keyCode == 13 && !e.shiftKey) $("#btn_search").click()
+                    })
+                    $("#btn_search").on("click", function() {
+                        hush.util.animBgColor($(this))
+                        const _keyword = $("#in_search").val().trim()
+                        if (_keyword == "") return
+                        toggleResult(true)
+                        getMsgList("search", _keyword)
+                        setTimeout(() => $("#in_search").blur(), 500)
+                    })
+                    $("#btn_close_search").on("click", function() { //main.html처럼 onSearch()만 사용하기엔 무리가 있어 btn_close_search를 두기로 함
+                        hush.util.animBgColor($(this))
+                        $("#txt_msg_added").hide()
+                        toggleResult(false)
+                        getMsgList()
+                        $("#in_search").val("")
+                        setTimeout(() => $("#in_search").blur(), 500)
+                    })
+                    $("#btn_qry_etc").on("click", function() { 
+                        hush.util.animBgColor($(this))
+                        toggleResult(true)
+                        getMsgList("etc")
+                    })
+                    $("#btn_people_m").on("click", function() { 
+                        hush.util.animBgColor($(this))
+                        const _toggle = (g_show_list_people == "") ? "X" : ""
+                        const rq = { kind : "dispmem", value : _toggle, roomid : g_roomid }
+                        if (hush.webview.ios) {
+                        } else if (hush.webview.and) {
+                            setTimeout(function() {
+                                AndroidCom.send(hush.cons.sock_ev_set_env, JSON.stringify(rq), g_roomid, null, true)
+                            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                        }
+                    })
+                    $("#btn_menu_m").on("click", function() {
+                        hush.util.animBgColor($(this))
+                        if ($("#list_menu_m").css("display") == "none") {
+                            showCellMenu(false)
+                            showRoomMenu(true)
+                        } else {
+                            showRoomMenu(false)
+                        }
+                    })
+                    $("#btn_cancel_room_m").on("click", function(e) { 
+                        hush.util.animBgColor($(this))
+                        showCellMenu(false) 
+                    })
+                    g_in_chat.keyup(function(e) {
+                        if (!hush.webview.on && e.keyCode == 13 && !e.shiftKey) {
+                            sendMsg()
+                        } else {
+                            calcBytes()
+                        }
+                    }) //sendMsg() if it's not new line
+                    g_in_chat.on("paste", function(e) { //Only Web (not Mobile)
+                        try {
+                            const pastedData = e.originalEvent.clipboardData.items
+                            if (pastedData.length == 0) return
+                            const clipboardItem = pastedData[0]
+                            if (clipboardItem.type.includes("image")) {
+                                const blob = clipboardItem.getAsFile()
+                                if (blob.size > hush.cons.max_size_to_sublink) { //see get_sublink.js
+                                    hush.msg.toast("이미지가 너무 큽니다 : " + blob.size + "<br>max : " + hush.util.formatBytes(hush.cons.max_size_to_sublink) + "(" + hush.cons.max_size_to_sublink + "bytes)")
+                                    return
+                                }
+                                const blobUrl = URL.createObjectURL(blob)
+                                $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
+                                // $("#imgbody").on("load", function() { //fit the image to real width and height
+                                //     $("#imgbody").width(this.naturalWidth)
+                                //     $("#imgbody").height(this.naturalHeight)
+                                // })
+                                showImgMenu(true)
+                                $("#btn_send_img").off("click").on("click", function(e) { sendMsg("image", blobUrl, blob) })
+                                $("#btn_cancel_img").off("click").on("click", function(e) { showImgMenu(false) })
+                            } else if (clipboardItem.type.includes("text")) {
+                                clipboardItem.getAsString(function(str) {
+                                    const _arr = str.split(hush.cons.deli)
+                                    if (_arr[0] == "btn_copy_cell") { //e.preventDefault() here has no effect                                    
+                                        g_in_chat.val(g_in_chat.val().replace(str, ""))
+                                        if (g_in_chat.val().trim() != "") {
+                                            alert("이미 작성중인 데이터가 있습니다.")
+                                            return
+                                        }                                                        
+                                        const rq = { msgid : _arr[3] }
+                                        if (hush.webview.ios) { 
+                                        } else if (hush.webview.and) { //it's text
+                                            setTimeout(function() {
+                                                AndroidCom.send(hush.cons.sock_ev_qry_msgcell, JSON.stringify(rq), g_roomid, null, true)
+                                            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                                        } else {
+                                            hush.sock.send(g_socket, hush.cons.sock_ev_qry_msgcell, rq, g_roomid)
+                                        }
+                                    } else {
+                                        calcBytes()
+                                    }
+                                })
+                            }                        
+                        } catch (ex) { 
+                            hush.util.showEx(ex)
+                        }
+                    })
+                    $("#btn_send, #btn_send_m").on("click", function() { 
+                        hush.util.animBgColor($(this))
+                        sendMsg() 
+                    })
+                    $("#btn_file, #btn_file_m").on("click", function() {
+                        if (!hush.http.chkOnline()) return
+                        hush.util.animBgColor($(this))
+                        $("#file_upload").val("") //btn_file_m : see webview setting
+                        $("#file_upload").trigger("click")
+                    })
+                    $("#file_upload").change(function() {
+                        handleFileUpload(this.files)		    	   	
+                    })
+                    $("#btn_invite, #btn_invite_m").on("click", function() {
+                        try {
+                            if (!hush.http.chkOnline()) return
+                            hush.util.animBgColor($(this))
+                            let urlStr = "/app/msngr/main.html?type=invite" 
+                            if (!hush.webview.on) { 
+                                g_inviteWin = hush.util.openWinPop(urlStr, 740, 650)
+                            } else {                            
+                                if (hush.webview.ios) { 
+                                } else if (hush.webview.and) {
+                                    urlStr += "&" + hush.cons.param_webview_and
+                                    AndroidRoom.openPopup(urlStr, "") //PopupActivity.kt를 열어 그 안에서 main.html을 load하는 것임
+                                    setTimeout(() => showCellMenu(false), 200)
+                                }
+                            }
+                        } catch (ex) { 
+                            hush.util.showEx(ex)
+                        }
+                    })
+                    $("#btn_delete_all, #btn_delete_all_m").on("click", async function() { 
+                        hush.util.animBgColor($(this))
+                        const ret = await hush.msg.confirm("모든 메시지를 삭제합니다. 계속할까요?")
+                        if (!hush.http.chkOnline()) return
+                        showCellMenu(false)
+                        if (!ret) return
+                        const rq = { type : "all", roomid : g_roomid }
+                        if (hush.webview.ios) {
+                        } else if (hush.webview.and) {
+                            setTimeout(function() {
+                                AndroidCom.send(hush.cons.sock_ev_delete_msg, JSON.stringify(rq), g_roomid, "parent", true)
+                            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                        } else {
+                            hush.sock.send(g_socket, hush.cons.sock_ev_delete_msg, rq, g_roomid, "parent")
+                        }                        
+                    })
+                    $("#btn_rename, #btn_rename_m").on("click", function() {
+                        hush.util.animBgColor($(this))
+                        if (g_masterid == g_userid) {
+                            hush.msg.dialogMultiButton("이 방의 관리자입니다.<br>방명 변경 범위를 선택하시기 바랍니다.", { 
+                                "모두 적용": function() { 
+                                    if (!hush.http.chkOnline()) return
+                                    hush.msg.dialogClose()
+                                    dialogRoomRename("all")
+                                }, "본인 적용": function() { 
+                                    if (!hush.http.chkOnline()) return
+                                    hush.msg.dialogClose()
+                                    dialogRoomRename("one")
+                                }, "취소": function() { 
+                                    hush.msg.dialogClose()
+                                    if (hush.webview.on) showRoomMenu(false)
+                                } 
+                            }, "방명 변경", 320)
+                        } else {
+                            dialogRoomRename("one")
+                        }
+                    })
+                    $("#btn_exit, #btn_exit_m").on("click", async function() { 
+                        hush.util.animBgColor($(this))
+                        if (hush.webview.on) showRoomMenu(false)
+                        const ret = await hush.msg.confirm("퇴장시 모든 메시지가 삭제됩니다. 계속할까요?")
+                        if (!ret) return
+                        if (!hush.http.chkOnline()) return
+                        const rq = initMsg(g_roomid)
+                        rq.type = "leave"
+                        rq.body = g_usernm + " " + hush.cons.left //when 3 people above
+                        if (hush.webview.ios) {
+                        } else if (hush.webview.and) {
+                            setTimeout(function() {
+                                AndroidCom.send(hush.cons.sock_ev_send_msg, JSON.stringify(rq), g_roomid, "parent", true)
+                            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                        } else {
+                            hush.sock.send(g_socket, hush.cons.sock_ev_send_msg, rq, g_roomid, "parent")
+                        }
+                    })
+                    $("#btn_paste").on("click", function() {
+                        if (!hush.http.chkOnline()) return
+                        hush.util.animBgColor($(this))
+                        const rq = { msgid : localStorage.msgidCopied }
+                        if (hush.webview.ios) {
+                        } else if (hush.webview.and) { //it's text
+                            setTimeout(function() {
+                                AndroidCom.send(hush.cons.sock_ev_qry_msgcell, JSON.stringify(rq), g_roomid, null, true)
+                            }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                        }
+                        localStorage.msgidCopied = "" 
+                    })
+                    $("#btn_cancel_paste").on("click", function() {
+                        hush.util.animBgColor($(this))
+                        $("#fr_tip").show()
+                        $("#fr_sendcopy").hide()
+                        localStorage.msgidCopied = "" 
+                    })
+                    $("#main_pg").on("dragenter", function(e) {
+                        e.stopPropagation()
+                        e.preventDefault()
+                    })
+                    $("#main_pg").on("dragover", function(e) {
+                        e.originalEvent.dataTransfer.dropEffect = "copy"
+                        e.stopPropagation()
+                        e.preventDefault()
+                    })
+                    $("#main_pg").on("drop", async function(e) {
+                        e.preventDefault()
+                        if (!hush.http.chkOnline()) return
+                        try {
+                            const _data = e.originalEvent.dataTransfer.getData("text") //"image##2023021015343534000076787542LOrtKxoR##20230223151253235000695133ZOwDPVZr1w"
+                            const _files = e.originalEvent.dataTransfer.files
+                            if (!_data.includes("image##") && _files.length > 0) { //파일탐색기로부터 drop도 지원. image도 fileList 객체에 담겨 오므로 if로 제외시켜 순수 파일만 받아야 함
+                                handleFileUpload(_files)
+                            } else { //text, text/plain, image
+                                if (!_data || _data == "") return
+                                const _arr = _data.split(hush.cons.deli)
+                                if (_arr[1] == g_roomid) return //dragging on same room does no action
+                                if (g_in_chat.val().trim() != "") {
+                                    await hush.msg.alert("이미 작성중인 톡이 있습니다.")
+                                    return
+                                }
+                                const rq = { msgid : _arr[2] }
+                                if (hush.webview.ios) { 
+                                } else if (hush.webview.and) { //it's text
+                                    setTimeout(function() {
+                                        AndroidCom.send(hush.cons.sock_ev_qry_msgcell, JSON.stringify(rq), g_roomid, null, true)
+                                    }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                                } else {
+                                    hush.sock.send(g_socket, hush.cons.sock_ev_qry_msgcell, rq, g_roomid)
+                                }
+                            }
+                        } catch (ex) {
+                            hush.util.showEx(ex)
+                        }
+                    })
+                    $(document).keyup(function(e) {
+                        if (e.keyCode === 27) window.close() //escape key for web
+                    })
+                    $(window).focus(function() { ///This focus event is not triggered when window newly opened.
+                        if ($("#txt_msg_added").css("display") == "none") updateAllUnreads()                    
+                    })
+                    window.onpagehide = (event) => {
+                        if (event.persisted) { //브라우저가 캐시하려고 시도하는 중 (bfcache = back/forward cache = 네트워크 타지 않음)
+                            alert("웹에서는 새페이지, 앱에서는 nocache로 열기 때문에 여기서는 bfcache 이슈 없어야 함")
+                        } else {
+                            if (g_in_chat.val().trim() != "") {
+                                localStorage[g_roomid] = g_in_chat.val().trim()
+                            } else {
+                                if (localStorage[g_roomid]) delete localStorage[g_roomid]
+                            }
+                            if (opener && g_roomid) delete opener.hush.sock.rooms[g_roomid]
+                            if (g_inviteWin && !g_inviteWin.closed) g_inviteWin.close()
+                        }
+                    }
+                } catch (ex) {
+                    hush.util.showEx(ex)
+                }
+            }).fail(function(ex) {
+                hush.util.showEx(ex, hush.cons.failOnLoad)
+            })            
+        </script>
+    </head>
+    <body>
+        <div id=main_pg style="width:100%;height:100%;display:flex;flex-direction:column;background-color:#eaeaea">
+            <div id=fr_menu_top style="height:45px;display:flex;justify-content:space-between;margin:0px 3px">    
+                <div style="display:flex;align-items:center">
+                    <input id=in_search type=search spellcheck=false onsearch="OnSearch(this)" />
+                    <div id=btn_search class=coImgBtn><img src="/img/white_search.png" class=coImg24 /></div>
+                    <div id=btn_close_search class=coMenuFlat style="display:none"><img src="/img/close.png" class=coImg16 /></div>
+                    <div id=btn_qry_etc class='coMenuFlat coText'>파일/이미지!</div>
+                    <span id=txt_unread_notice style="display:none;color:red;cursor:pointer;margin-left:10px">안읽은톡이 너무 많습니다.</span>
+                </div>
+                <div id=fr_menu_top_right_m style="display:none;align-items:center;margin-right:8px">
+                    <img id=img_disconn src="/img/disconnected.png" class=coImg24 style="display:none;margin-top:5px" />
+                    <img id=btn_people_m src="/img/meeting.png" class=coImg24 style="margin-left:8px" />
+                    <img id=btn_menu_m src="/img/menu.png" class=coImg24 style="margin-left:8px" />
+                </div>
+            </div>
+            <div id=fr_main style="position:relative;height:calc(100% - 145px);display:flex;align-items:stretch;margin:0px 3px"><!--88px-->
+                <div id=list_msg style="width:calc(100% - 98px);flex-grow:1;position:relative;display:flex;flex-direction:column;background-color:white;border:1px solid darkgray;overflow:auto;margin-right:2px"></div> <!-- <div id=list_msg class=plate></div> -->
+                <div id=imgplate style="position:absolute;display:none;left:0;bottom:0;width:200px;height:200px;background-color:white;border:1px solid darkgray"></div>
+                <span id=txt_msg_added style="position:absolute;display:none;left:0;bottom:0;height:32px;line-height:32px;cursor:pointer;background:steelblue;color:white;border-top:1px solid darkgray;padding:0px 5px"></span>
+                <div id=list_people style="display:none;width:98px;overflow:hidden;background-color:white;border:1px solid darkgray;margin-left:auto">
+                    <div style="height:24px;display:flex;align-items:center;color:darkgray;border-bottom:1px solid lightgray;padding-left:3px">
+                        <span class=coText style="margin-right:5px">count :</span><span id=people_cnt class=coText>0</span><span id=result_cnt class=coText style="display:none">0</span>
+                    </div>
+                    <div id=people_sub style="height:calc(100% - 24px);overflow:auto"></div>
+                    <div id=result_sub style="display:none;height:calc(100% - 24px);overflow:auto"></div>
+                </div>
+                <div id=list_menu_m style="display:none;width:98px;overflow:hidden;background-color:white;border:1px solid darkgray;margin-left:auto">
+                    <div id=btn_invite_m class="menuBtn chat"><img src="/img/white_invite.png" class=coImgMenu14 /><span class=coText>초대</span></div>
+                    <div id=btn_delete_all_m class="menuBtn chat"><img src="/img/white_trash.png" class=coImgMenu14 /><span class=coText>모두삭제</span></div>
+                    <div id=btn_rename_m class="menuBtn chat"><img src="/img/white_tag.png" class=coImgMenu14 /><span class=coText>방명</span></div>
+                    <div id=btn_exit_m class="menuBtn chat"><img src="/img/white_exit.png" class=coImgMenu14 /><span class=coText>퇴장</span></div>
+                    <div id=btn_cancel_room_m class="menuBtn chat"><img src="/img/white_no.png" class=coImgMenu14 /><span class=coText>취소</span></div>
+                    <div id=btn_copy_cell_m class="menuBtnCell cell"><img src="/img/white_copy.png" class=coImgMenu14 /><span class=coText>복사</span></div>
+                    <div id=btn_revoke_cell_m class="menuBtnCell cell"><img src="/img/white_revoke.png" class=coImgMenu14 /><span class=coText>전송취소</span></div>
+                    <div id=btn_delete_cell_m class="menuBtnCell cell"><img src="/img/white_trash.png" class=coImgMenu14 /><span class=coText>삭제</span></div>
+                    <div id=btn_cancel_cell_m class="menuBtnCell cell"><img src="/img/white_no.png" class=coImgMenu14 /><span class=coText>취소</span></div>
+                </div>
+            </div>
+            <div style="width:calc(100% - 10px);height:20px;display:flex;align-items:center;justify-content:space-between;margin:3px 5px">
+                <div id=fr_tip class=coDotDot style="height:100%;width:calc(100% - 80px);display:flex;align-items:center"></div>
+                <div id=fr_sendcopy style="display:none;width:100%;align-items:center;justify-content:center">
+                    <span id=btn_paste class=coText style='background:#005192;color:white;border-radius:5px;padding:2px'>붙이기</span><!--이미지복사후-->
+                    <span id=btn_cancel_paste class=coText style='background:#005192;color:white;border-radius:5px;padding:2px;margin-left:3px'>취소</span><!--이미지복사후-->
+                    <span id=btn_send_img_m class=coText style='display:none;background:#005192;color:white;border-radius:5px;padding:2px'>전송</span><!--이미지붙인후-->
+                    <span id=btn_cancel_img_m class=coText style='display:none;background:#005192;color:white;border-radius:5px;padding:2px;margin-left:3px'>취소</span><!--이미지붙인후-->
+                </div>
+                <div id=fr_byte class=coText></div>
+            </div>
+            <div id=fr_in style="height:65px;display:flex;align-items:center;justify-content:space-between;margin:0px 3px">
+                <div id=btn_file_m style="width:45px;height:100%;display:none;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
+                    <img src="/img/white_upload.png" style="width:24px;height:24px" />
+                </div>
+                <textarea id=in_chat spellcheck=false style="width:100%;height:100%;resize:none;border:1px solid lightsteelblue;border-radius:5px"></textarea>
+                <div id=btn_send_m style="width:45px;height:100%;display:none;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
+                    <img src="/img/white_send.png" style="width:24px;height:24px" />
+                </div>
+            </div>
+            <div id=fr_menu_bottom style="position:relative;height:45px;display:none;align-items:center;margin:3px 3px 0px 3px">
+                <div id=btn_send class="coMenuBtn chat" style="margin-left:3px"><img src="/img/white_send.png" class=coImgMenu /><span>전송</span></div>
+                <div id=btn_file class="coMenuBtn chat"><img src="/img/white_upload.png" class=coImgMenu /><span>파일</span></div>
+                <div id=btn_invite class="coMenuBtn chat"><img src="/img/white_invite.png" class=coImgMenu /><span>초대</span></div>
+                <div id=btn_delete_all class="coMenuBtn chat"><img src="/img/white_trash.png" class=coImgMenu /><span>모두삭제</span></div>
+                <div id=btn_rename class="coMenuBtn chat"><img src="/img/white_tag.png" class=coImgMenu /><span>방명</span></div>
+                <div id=btn_exit class="coMenuBtn chat"><img src="/img/white_exit.png" class=coImgMenu /><span>퇴장</span></div>
+                <div id=btn_send_img class="coSubMenuBtn img" style="display:none"><img src="/img/white_yes.png" class=coImgMenu /><span>보내기</span></div>
+                <div id=btn_cancel_img class="coSubMenuBtn img" style="display:none"><img src="/img/white_no.png" class=coImgMenu /><span>취소</span></div>
+                <div id=btn_copy_cell class="coSubMenuBtn cell single" style="display:none"><img src="/img/white_copy.png" class=coImgMenu /><span>복사</span></div>
+                <div id=btn_revoke_cell class="coSubMenuBtn cell single" style="display:none"><img src="/img/white_revoke.png" class=coImgMenu /><span>전송취소</span></div>
+                <div id=btn_delete_cell class="coSubMenuBtn cell" style="display:none"><img src="/img/white_trash.png" class=coImgMenu /><span>삭제</span></div>
+                <div id=btn_cancel_cell class="coSubMenuBtn cell" style="display:none"><img src="/img/white_no.png" class=coImgMenu /><span>취소</span></div>
+                <div id=sel_info style="display:none;font-weight:bold;color:darkgreen;margin-left:10px">
+                    <span id=cnt_sel>1</span> selected
+                </div>
+            </div>
+            <input id=file_upload type=file multiple style="display:none">
+        </div>    
+    </body>
+</html>

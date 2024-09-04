@@ -687,7 +687,7 @@
                 noti.msgid = obj.msgid
                 hush.noti.notis[roomid] = noti
                 noti.onclick = function () {
-                    hush.sock.openRoom("/app/msngr/chat.html", roomid, "noti")                   
+                    hush.sock.openRoom(roomid, "noti")                   
                     noti.close()
                     delete hush.noti.notis[roomid] //3) 따라서, 여기와 closeNoti()에서 delete해야 함
                 } //2) noti.onclose = function () { delete hush.noti.notis[roomid] }
@@ -730,7 +730,9 @@
                     resolve(socket)
                 })
             }),
-            createRoom : (_url, _type) => { //newFromMain, newFromPopup, me
+            createRoom : (_type) => { //newFromMain, newFromPopup, me
+                //const _url = "/app/msngr/chat.html" 아래는 임시 테스트용
+                const _url = (hush.http.getCookie("USER_ID") == "oldclock") ? "/app/msngr/chat_oldclock.html" : "/app/msngr/chat.html"
                 const roomid = hush.util.createId()
                 const _newwin = hush.util.openWinPop(_url + "?type=" + _type + "&roomid=" + roomid)
                 hush.sock.rooms[roomid] = _newwin
@@ -777,7 +779,9 @@
                 })
                 socket.off(hush.cons.sock_ev_common).on(hush.cons.sock_ev_common, (rs) => { callback(rs) })
             },
-            openRoom : (_url, roomid, origin) => { //origin=""(new),portal,noti
+            openRoom : (roomid, origin) => { //origin=""(new),portal,noti
+                //const _url = "/app/msngr/chat.html" 아래는 임시 테스트용
+                const _url = (hush.http.getCookie("USER_ID") == "oldclock") ? "/app/msngr/chat_oldclock.html" : "/app/msngr/chat.html"
                 const _win = hush.sock.rooms[roomid]
                 if (_win) {
                     if (!_win.closed) {

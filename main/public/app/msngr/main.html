@@ -119,7 +119,7 @@
                                     return
                                 }
                                 if (!hush.webview.on) {
-                                    hush.sock.createRoom("/app/msngr/chat.html", "newFromMain")
+                                    hush.sock.createRoom("newFromMain")
                                 } else {
                                     const useridArr = []
                                     for (let item of mem) {
@@ -147,7 +147,7 @@
                             if (!hush.http.chkOnline()) return
                             hush.util.animBgColor($(this))
                             if (!hush.webview.on) {
-                                hush.sock.createRoom("/app/msngr/chat.html", "me")
+                                hush.sock.createRoom("me")
                             } else {
                                 const new_roomid = hush.util.createId()
                                 const rq = { masterid : g_userid, masternm : g_usernm, userids : [g_userid] }
