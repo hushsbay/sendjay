@@ -731,8 +731,8 @@
                 })
             }),
             createRoom : (_type) => { //newFromMain, newFromPopup, me
-                //const _url = "/app/msngr/chat.html" 아래는 임시 테스트용
-                const _url = (hush.http.getCookie("userid") == "oldclock") ? "/app/msngr/chat_oldclock.html" : "/app/msngr/chat.html"
+                const _url = "/app/msngr/chat.html" //아래는 임시 테스트용
+                //const _url = (hush.http.getCookie("userid") == "oldclock") ? "/app/msngr/chat_oldclock.html" : "/app/msngr/chat.html"
                 const roomid = hush.util.createId()
                 const _newwin = hush.util.openWinPop(_url + "?type=" + _type + "&roomid=" + roomid)
                 hush.sock.rooms[roomid] = _newwin
@@ -780,8 +780,8 @@
                 socket.off(hush.cons.sock_ev_common).on(hush.cons.sock_ev_common, (rs) => { callback(rs) })
             },
             openRoom : (roomid, origin) => { //origin=""(new),portal,noti
-                //const _url = "/app/msngr/chat.html" 아래는 임시 테스트용
-                const _url = (hush.http.getCookie("userid") == "oldclock") ? "/app/msngr/chat_oldclock.html" : "/app/msngr/chat.html"
+                const _url = "/app/msngr/chat.html" //아래는 임시 테스트용
+                //const _url = (hush.http.getCookie("userid") == "oldclock") ? "/app/msngr/chat_oldclock.html" : "/app/msngr/chat.html"
                 const _win = hush.sock.rooms[roomid]
                 if (_win) {
                     if (!_win.closed) {
