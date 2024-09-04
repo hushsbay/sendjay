@@ -1234,17 +1234,21 @@
 
             const imageSrcEvent = (blobUrl, msgid, kind, type, body) => {
                 const _img = $("#img_" + msgid)
+                console.log("msgid:"+msgid)
                 _img.attr("src", blobUrl)
                 if (kind == "result") {
+                    console.log("msgid1:"+msgid)
                     _img.on("load", () => { 
                         _img.show()
                         scrollToTarget(0)
                     })
                 } else if ($(".more").length > 0) {
+                    console.log("msgid2:"+msgid)
                     _img.on("load", () => { 
                         _img.show() //scrollToTarget(".more") //never call here. call at hush.cons.sock_ev_qry_msglist instead
                     })
                 } else { //equals to if (data.dt == FIRST_QUERIED)
+                    console.log("msgid3:"+msgid)
                     _img.on("load", () => { 
                         _img.show()
                         if (!g_stopAutoScrollDown) scrollToTarget()
@@ -1808,7 +1812,7 @@
                             if (rs.kind != "onsuccess") return //common.js의 idb ##32 참조
                             getMsgList()
                         })
-                    }, 3000)
+                    }, 20000)
                 },
                 [hush.cons.sock_ev_set_env] : async (data) => {
                     toggleDispMem(data.value)

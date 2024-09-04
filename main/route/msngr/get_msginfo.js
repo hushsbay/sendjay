@@ -66,16 +66,22 @@ router.post('/', async function(req, res) {
 				const _filepath = config.app.uploadPath + '/' + fileToProc
 				fs.stat(_filepath, function(err, stat) {
 					if (err) {
+						console.log('msginfo', err.toString(), msgid)
 						rs.list = data
 						ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
 					} else {
 						if (stat && stat.isFile() && stat.size <= ws.cons.max_size_to_sublink) { 
 							fs.readFile(_filepath, function(err1, result) {
-								if (!err1) data[0].BUFFER = result									
+								if (err1) {
+									console.log('msginfo2', err1.toString(), msgid)
+								} else {
+									data[0].BUFFER = result
+								}
 								rs.list = data
 								ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
 							})
 						} else {
+							console.log('msginfo1', msgid)
 							rs.list = data
 							ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
 						}
