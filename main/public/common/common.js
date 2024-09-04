@@ -16,7 +16,7 @@
             ///////////////////////////////////위는 서버와 동일
             erp_portal : "index.html",
             failOnLoad : "failOnLoad",
-            restful_timeout : 2000, //앱의 상수값과 동일하게 설정함
+            restful_timeout : 5000, //앱의 상수값과 동일하게 설정함
             pattern : /^[A-Za-z0-9!@#$=]*$/, //들어있는 항목 이외는 사용 금지
             color_fadein : "#b2e2f8",
             ext_image : "png,gif,jpg,jpeg,ico",
@@ -833,16 +833,17 @@
             },
             showEx : (ex, title, _msgType, _sec) => {
                 hush.msg.toastEnd() //예외 발생시므로 혹시나 모를 토스트 메시지 제거
-                if (ex.message.includes(hush.cons.NETWORK_UNAVAILABLE)) { //hush.http.ajax() 참조
+                const _ex = (typeof ex == "string") ? ex : ex.message
+                if (_ex.includes(hush.cons.NETWORK_UNAVAILABLE)) { //hush.http.ajax() 참조
                     hush.msg.toast(hush.cons.NETWORK_UNAVAILABLE)
                     return
                 }
                 //ajax 타임아웃 : 1) 서버다운 경우 2) 네트워크는 연결되어 있는데 원할치 못해 연결되지 않은 경우
                 //socket의 경우, PC 웹브라우저에서는 네트워크가 특별한 경우가 아니면 항상 연결되어 있는 상태이고 연결이 끊어지면 바로 웹브라우저탭에서 포털로 replace되도록 되어 있음
                 //그러나, 앱에서는 (웹뷰 포함) 네이티브(예: 안드로이드 코틀린)가 socket 통신을 처리하므로 웹뷰 클릭시 소켓이 끊어진 상태라면 오류 핸들링이 섬세하게 필요함
-                if (ex.message.includes("timeout")) {
+                if (_ex.includes("timeout")) {
                     if (title == "alert") {
-                        hush.msg.alert(_msg)
+                        hush.msg.alert(_ex)
                     } else if (title == "none") {
                         //반복적으로 ajax 호출인 경우 timeout시 아무런 오류메시지 안보여줘야 할 때가 있을 때 사용 (예: chk_redis)
                     } else {
