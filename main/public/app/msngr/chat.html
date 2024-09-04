@@ -2463,6 +2463,7 @@
                     $("#main_pg").on("drop", async function(e) {
                         e.preventDefault()
                         if (!hush.http.chkOnline()) return
+                        alert("11111111")
                         try {
                             const _data = e.originalEvent.dataTransfer.getData("text") //"image##2023021015343534000076787542LOrtKxoR##20230223151253235000695133ZOwDPVZr1w"
                             const _files = e.originalEvent.dataTransfer.files
