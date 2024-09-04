@@ -7,6 +7,7 @@ const mime = require('mime')
 const express = require('express')
 const router = express.Router()
 //1) Image downloading 2) Checking sending failure 3) 이미지를 파일로 만들어 다운로드
+//restful_timeout이 너무 짧거나 이미지 사이즈가 너무 크면 안내려오는 경우 발생함
 
 router.use(function(req, res, next) {
 	req.title = 'get_msginfo'
