@@ -520,10 +520,10 @@
                             _sublink += "   <div id=ogTitle" + obj.msgid + " class=coText1 style='width:100%;height:20px;color:darkgreen;font-weight:bold;text-align:left;vertical-align:middle;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;margin-left:3px'></div>"
                             _sublink += "   <div id=ogDesc" + obj.msgid + " class=coText1 style='width:100%;height:20px;text-align:left;vertical-align:middle;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;margin-left:3px'></div>"
                             _sublink += "</div>"
-                        }
-                        const emojiRegex = /\p{Emoji}/u; 
-                        if (emojiRegex.test(_body)) _body += "@" + _body.length
+                        }                        
                     }
+                    const emojiRegex = /\p{Emoji}/u; 
+                    const emoji_zoom = (emojiRegex.test(_body) && _body.length == 2) ? "zoom:5.0;" : ""
                     let _html
                     if (obj.senderid == g_userid) { //sent
                         _backcolor = (obj.type == "image" && obj.body != hush.cons.cell_revoked) ? "white" : "lightyellow"
@@ -542,7 +542,7 @@
                         _html += "      </div>"
                         _html += "      <div id=high_" + obj.msgid + " style='max-width:80%;background-color:" + _backcolor + ";border:" + _boderpx + " solid lightgray;border-radius:8px;padding:3px;margin-right:4px'>"
                         _html += "	        <div id=replied_" + obj.msgid + " class=coText1 style='" + _dispReplied + "color:darkgray;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;cursor:default'>" + _replied + "</div>"
-                        _html += "	        <div id=body_" + obj.msgid + " class=coText1 style='text-align:left;white-space:pre-wrap;word-break:break-all'>" + _body + "</div>"
+                        _html += "	        <div id=body_" + obj.msgid + " class=coText1 style='" + emoji_zoom + "text-align:left;white-space:pre-wrap;word-break:break-all'>" + _body + "</div>"
                         _html += "      </div>"
                         _html += "  </div>"
                         if (_sublink) _html += _sublink
@@ -562,7 +562,7 @@
                         _html += "  <div style='width:100%;display:flex;align-items:center;justify-content:space-between'>"
                         _html += "      <div id=high_" + obj.msgid + " style='max-width:80%;background-color:" + _backcolor + ";border:" + _boderpx + " solid lightgray;border-radius:8px;padding:3px;margin-left:4px'>"
                         _html += "	        <div id=replied_" + obj.msgid + " class=coText1 style='" + _dispReplied + "color:darkgray;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;cursor:default'>" + _replied + "</div>"
-                        _html += "	        <div id=body_" + obj.msgid + " type='" + obj.type + "' class=coText1 style='white-space:pre-wrap;word-break:break-all'>" + _body + "</div>"
+                        _html += "	        <div id=body_" + obj.msgid + " type='" + obj.type + "' class=coText1 style='" + emoji_zoom + "white-space:pre-wrap;word-break:break-all'>" + _body + "</div>"
                         _html += "      </div>"
                         _html += "      <div style='width:10%;text-align:right'>"
                         _html += "          <input type=checkbox id=sel_" + obj.msgid + " class=chkboxSel style='display:none;margin-right:10px' />"
