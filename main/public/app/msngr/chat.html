@@ -522,7 +522,7 @@
                             _sublink += "</div>"
                         }
                         const emojiRegex = /\p{Emoji}/u; 
-                        if (emojiRegex.test(_body)) _body += "@"
+                        if (emojiRegex.test(_body)) _body += "@" + _body.length
                     }
                     let _html
                     if (obj.senderid == g_userid) { //sent
