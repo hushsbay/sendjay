@@ -2463,6 +2463,7 @@
                         e.preventDefault()
                     })
                     $("#main_pg").on("drop", async function(e) { //PC에서 animated gif를 Window+Dot(.)을 키보드에서 누르면 여기로 캐치됨 (안드로이드 키보드에서는 안됨)
+                        alert("1111")
                         e.preventDefault()
                         if (!hush.http.chkOnline()) return
                         try {
