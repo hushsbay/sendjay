@@ -2186,10 +2186,11 @@
                 procInvite(obj.userids.split(hush.cons.deli), obj.usernms.split(hush.cons.deli))
             }
 
-            const getImageUri = (from, uriStr) => {
+            const getImageUri = (from, uriObj) => {
                 debugger
-                g_in_chat.val(uriStr)
-                hush.msg.toast("1111")
+                g_in_chat.val(uriObj.uri)
+                
+                hush.msg.toast("2222")
             }
 
             ////////////////////////////////////////////////////////////////////////end of mobile webview
