@@ -2186,6 +2186,13 @@
                 procInvite(obj.userids.split(hush.cons.deli), obj.usernms.split(hush.cons.deli))
             }
 
+            const getImageUri = (uriStr) => {
+                g_in_chat.val(uriStr)
+                hush.msg.toast("1111")
+            }
+
+            ////////////////////////////////////////////////////////////////////////end of mobile webview
+
             $.when($.ready).done(async function() {
                 try {
                     document.oncontextmenu = new Function("return false") //for context menu (prevent mouse right click for pc web only)
