@@ -2271,10 +2271,7 @@
                         getMsgList("etc")
                     })
                     $("#btn_people_m").on("click", function() { 
-                        alert("2222")
-                        setTimeout(function() {
-                            AndroidRoom.setFocusToEmojiField() 
-                        }, hush.cons.sec_for_webview_func) //비동기로 호출해야 동작
+                        AndroidRoom.setFocusToEmojiField() 
                         return
                         hush.util.animBgColor($(this))
                         const _toggle = (g_show_list_people == "") ? "X" : ""
