@@ -2187,6 +2187,7 @@
             }
 
             const getImageUri = async (byteArrayString, fileName, mimeType) => { //ContentReceiver in MainActivity.kt
+                debugger
                 const blob = await byteArrayString.blob()
                 const blobUrl = hush.blob.getBlobUrlForImage(blob, mimeType)
                 //const blobUrl = hush.blob.getDataUrl(byteArrayString, mimeType)
