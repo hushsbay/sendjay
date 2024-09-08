@@ -2214,7 +2214,7 @@
                         $("#fr_menu_top_right_m").css("display", "flex")
                         $("#btn_send").hide()
                         $("#btn_file").hide()
-                        $("#btn_file_m").css("display", "flex")
+                        $("#div_sel_m").css("display", "flex")
                         $("#btn_send_m").css("display", "flex")
                         setTimeout(function() {
                             AndroidRoom.procAfterOpenRoom()
@@ -2584,9 +2584,17 @@
                 <div id=fr_byte class=coText></div>
             </div>
             <div id=fr_in style="height:65px;display:flex;align-items:center;justify-content:space-between;margin:0px 3px">
-                <div id=btn_file_m style="width:45px;height:100%;display:none;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
-                    <img src="/img/white_upload.png" style="width:24px;height:24px" />
+                <div id=div_sel_m style="width:45px;height:100%;display:none;flex-direction:column">
+                    <div id=btn_file_m style="width:45px;height:50%;display:flex;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
+                        <img src="/img/white_upload.png" style="width:24px;height:24px" />
+                    </div>
+                    <div id=btn_gif_m style="width:45px;height:50%;display:flex;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px"></div>
+                        <img src="/img/white_upload.png" style="width:24px;height:24px" />
+                    </div>
                 </div>
+                <!-- <div id=btn_file_m style="width:45px;height:100%;display:none;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
+                    <img src="/img/white_upload.png" style="width:24px;height:24px" />
+                </div> -->
                 <textarea id=in_chat spellcheck=false style="width:100%;height:100%;resize:none;border:1px solid lightsteelblue;border-radius:5px"></textarea>
                 <div id=btn_send_m style="width:45px;height:100%;display:none;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
                     <img src="/img/white_send.png" style="width:24px;height:24px" />
