@@ -4,7 +4,7 @@ const ws = require(nodeConfig.app.ws)
 const wsmysql = require(nodeConfig.app.wsmysql)
 
 module.exports = async function(socket, param) {
-	const _logTitle = param.ev
+	const _logTitle = param.ev, _roomid = param.returnTo
 	let conn, sql, data, len
 	try { //ws.sock.warn(null, socket, _logTitle, com.cons.rq + JSON.stringify(param), _roomid)
 		const _msgid = param.data.msgid
