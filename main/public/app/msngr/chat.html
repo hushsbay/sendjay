@@ -2198,8 +2198,11 @@
                 //const blob = await hush.blob.get(ublobUrlrl)
                 $("#imgplate").html("<img id=imgbody src=" + url + " style='width:100%;height:100%'>") 
                 showImgMenu(true)
-                $("#btn_send_img").off("click").on("click", function(e) { sendMsg("image", blobUrl, blob) })
-                $("#btn_cancel_img").off("click").on("click", function(e) { showImgMenu(false) })
+                $("#btn_send_img_m").off("click").on("click", function(e) { 
+                    debugger
+                    sendMsg("image", blobUrl, blob) 
+                })
+                $("#btn_cancel_img_m").off("click").on("click", function(e) { showImgMenu(false) })
 
                 $("#fr_tip").hide()
                 $("#fr_sendcopy").css("display", "flex")
