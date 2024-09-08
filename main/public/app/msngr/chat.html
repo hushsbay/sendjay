@@ -2283,9 +2283,7 @@
                         toggleResult(true)
                         getMsgList("etc")
                     })
-                    $("#btn_people_m").on("click", function() { 
-                        AndroidRoom.setFocusToEmojiField() 
-                        return
+                    $("#btn_people_m").on("click", function() {                        
                         hush.util.animBgColor($(this))
                         const _toggle = (g_show_list_people == "") ? "X" : ""
                         const rq = { kind : "dispmem", value : _toggle, roomid : g_roomid }
@@ -2375,6 +2373,11 @@
                     })
                     $("#file_upload").change(function() {
                         handleFileUpload(this.files)		    	   	
+                    })
+                    $("#btn_gif_m").on("click", function() {
+                        hush.util.animBgColor($(this))
+                        AndroidRoom.setFocusToEmojiField() 
+                        return
                     })
                     $("#btn_invite, #btn_invite_m").on("click", function() {
                         try {
@@ -2586,15 +2589,12 @@
             <div id=fr_in style="height:65px;display:flex;align-items:center;justify-content:space-between;margin:0px 3px">
                 <div id=div_sel_m style="width:45px;height:100%;display:none;flex-direction:column">
                     <div id=btn_file_m style="width:45px;height:50%;display:flex;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
-                        <img src="/img/white_upload.png" style="width:24px;height:24px" />
+                        <img src="/img/white_upload.png" style="width:22px;height:22px" />
                     </div>
                     <div id=btn_gif_m style="width:45px;height:50%;display:flex;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
-                        <img src="/img/white_upload.png" style="width:24px;height:24px" />
+                        <img src="/img/white_gif.png" style="width:22px;height:22px" />
                     </div>
                 </div>
-                <!-- <div id=btn_file_m style="width:45px;height:100%;display:none;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
-                    <img src="/img/white_upload.png" style="width:24px;height:24px" />
-                </div> -->
                 <textarea id=in_chat spellcheck=false style="width:100%;height:100%;resize:none;border:1px solid lightsteelblue;border-radius:5px"></textarea>
                 <div id=btn_send_m style="width:45px;height:100%;display:none;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
                     <img src="/img/white_send.png" style="width:24px;height:24px" />
