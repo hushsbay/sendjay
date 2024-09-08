@@ -2188,8 +2188,8 @@
 
             const getImageUri = async (byteArrayString, fileName, mimeType) => { //ContentReceiver in MainActivity.kt
                 debugger
-                const url = hush.blob.getDataUrl(byteArrayString, mimeType)
-                const blob = await url.blob()
+                //const url = hush.blob.getDataUrl(byteArrayString, mimeType)
+                const blob = hush.blob.base64ToBlob(byteArrayString, mimeType)
                 const blobUrl = hush.blob.getBlobUrlForImage(blob, mimeType)
                 //const blobUrl = hush.blob.getDataUrl(byteArrayString, mimeType)
                 //const uInt8Array = new Uint8Array(byteArrayString) //new Uint8Array(rsPic.buffer.data)
