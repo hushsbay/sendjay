@@ -275,15 +275,23 @@
                 return _ret
             },
             base64ToBlob(b64Data, contentType = 'image/png', sliceSize = 512) {
-                const image_data = atob(b64Data.split(',')[1]) // data:image/gif;base64 필요없으니 떼주고, base64 인코딩을 풀어준다
-                const arraybuffer = new ArrayBuffer(image_data.length)
-                const view = new Uint8Array(arraybuffer)             
-                for (let i = 0; i < image_data.length; i++) {
-                   view[i] = image_data.charCodeAt(i) & 0xff
-                   // charCodeAt() 메서드는 주어진 인덱스에 대한 UTF-16 코드를 나타내는 0부터 65535 사이의 정수를 반환
-                   // 비트연산자 & 와 0xff(255) 값은 숫자를 양수로 표현하기 위한 설정
-                }             
-                return new Blob([arraybuffer], { type: contentType })
+                const byteCharacters = atob(b64Data);
+                const byteArrays = [];
+
+                for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+                    const byteNumbers = new Array(slice.length);
+                    for (let i = 0; i < slice.length; i += 1) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                    }
+
+                    const byteArray = new Uint8Array(byteNumbers);
+                    byteArrays.push(byteArray);
+                }
+
+                const blob = new Blob(byteArrays, { type: contentType });
+                return blob;
              }
         },
         http : {
