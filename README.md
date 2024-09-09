@@ -82,7 +82,8 @@ Here are some ideas to get you started:
       + 전송된 이미지 파일로 변환 다운로드
       + mp4 동영상 스트리밍 
       + 파일 저장 만기 설정
-      + GBoard 등과 연동된 Emoji, Animated GIF 전송 
+      + Emoji 전송
+      + 카카오톡 생태계처럼 구글GBoard/삼성키보드의 Animated GIF 연동해 움짤 전송 (PC에서도 가능)
       
    * 읽음 처리 (안읽은 멤버 보여주기)
 
