@@ -2039,38 +2039,12 @@
                                     const uInt8Array = new Uint8Array(rsPic.list[0].BUFFER.data) //new Uint8Array(rsPic.buffer.data)
                                     const blob = new Blob([uInt8Array], { type: "image/png" })
                                     setImagePlate(blob, 'M')
-                                    /*const blobUrl = URL.createObjectURL(blob)
-                                    $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
-                                    showImgMenu(true)
-                                    showFrTip(false)
-                                    $("#btn_send_img_m").off("click").on("click", function(e) { 
-                                        hush.util.animBgColor($(this))
-                                        sendMsg("image", blobUrl, blob) 
-                                        showImgMenu(false)
-                                        showFrTip(true)
-                                    })
-                                    $("#btn_cancel_img_m").off("click").on("click", function(e) { 
-                                        hush.util.animBgColor($(this))
-                                        showImgMenu(false) 
-                                        showFrTip(true)
-                                    })*/
                                 }
                             })
                         } else { 
                             const uInt8Array = new Uint8Array(rs.BUFFER)
                             const blob = new Blob([uInt8Array], { type: "image/png" })
                             setImagePlate(blob, 'W')
-                            /*const blobUrl = URL.createObjectURL(blob)
-                            $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
-                            showImgMenu(true)
-                            $("#btn_send_img").off("click").on("click", function(e) { 
-                                hush.util.animBgColor($(this))
-                                sendMsg("image", blobUrl, blob) 
-                            })
-                            $("#btn_cancel_img").off("click").on("click", function(e) { 
-                                hush.util.animBgColor($(this))
-                                showImgMenu(false) 
-                            })*/
                         }                    
                     } else if (rs.TYPE == "file" || rs.TYPE == "flink") {
                         const ret = await hush.msg.confirm("파일을 전송할까요? " + hush.util.extractFileFromTalkBody(rs.BODY))
@@ -2235,19 +2209,6 @@
             const getImageUri = async (byteArrayString, fileName, mimeType) => { //ContentReceiver in MainActivity.kt
                 const blob = hush.blob.base64ToBlob(byteArrayString, mimeType)
                 setImagePlate(blob, 'M')
-                /*const blobUrl = URL.createObjectURL(blob)
-                $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
-                showImgMenu(true)
-                showFrTip(false)
-                $("#btn_send_img_m").off("click").on("click", function(e) { 
-                    sendMsg("image", blobUrl, blob)
-                    showImgMenu(false) 
-                    showFrTip(true)
-                })
-                $("#btn_cancel_img_m").off("click").on("click", function(e) { 
-                    showImgMenu(false) 
-                    showFrTip(true)
-                })*/
             }
 
             ////////////////////////////////////////////////////////////////////////end of mobile webview
@@ -2379,11 +2340,6 @@
                                     return
                                 }
                                 setImagePlate(blob, 'W')
-                                /*const blobUrl = URL.createObjectURL(blob)
-                                $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
-                                showImgMenu(true)
-                                $("#btn_send_img").off("click").on("click", function(e) { sendMsg("image", blobUrl, blob) })
-                                $("#btn_cancel_img").off("click").on("click", function(e) { showImgMenu(false) })*/
                             } else if (clipboardItem.type.includes("text")) {
                                 clipboardItem.getAsString(function(str) {
                                     const _arr = str.split(hush.cons.deli)
