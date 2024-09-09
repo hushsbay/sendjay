@@ -2374,11 +2374,12 @@
                     $("#file_upload").change(function() {
                         handleFileUpload(this.files)		    	   	
                     })
+                    /* 안드로이드 MyWebview class로 대체해 더 편리하게 사용 $$88
                     $("#btn_gif_m").on("click", function() {
                         hush.util.animBgColor($(this))
                         AndroidRoom.setFocusToGifAnimField() 
                         hush.msg.toast("키보드에 있는 GIF를 선택하시기 바랍니다.")
-                    })
+                    })*/
                     $("#btn_invite, #btn_invite_m").on("click", function() {
                         try {
                             if (!hush.http.chkOnline()) return
@@ -2588,12 +2589,13 @@
             </div>
             <div id=fr_in style="height:65px;display:flex;align-items:center;justify-content:space-between;margin:0px 3px">
                 <div id=div_sel_m style="width:45px;height:100%;display:none;flex-direction:column">
-                    <div id=btn_file_m style="width:45px;height:50%;display:flex;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
-                        <img src="/img/white_upload.png" style="width:20px;height:20px" />
+                    <div id=btn_file_m style="width:45px;height:100%;display:flex;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
+                        <img src="/img/white_upload.png" style="width:24px;height:24px" />
                     </div>
+                    <!-- 안드로이드 MyWebview class로 대체해 더 편리하게 사용 $$88
                     <div id=btn_gif_m style="width:45px;height:50%;display:flex;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
                         <img src="/img/white_gif.png" style="width:20px;height:20px" />
-                    </div>
+                    </div> -->
                 </div>
                 <textarea id=in_chat spellcheck=false style="width:100%;height:100%;resize:none;border:1px solid lightsteelblue;border-radius:5px"></textarea>
                 <div id=btn_send_m style="width:45px;height:100%;display:none;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
