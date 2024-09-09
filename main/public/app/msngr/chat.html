@@ -2488,12 +2488,12 @@
                     })
                     $("#main_pg").on("drop", async function(e) { //PC에서 animated gif를 Window+Dot(.)을 키보드에서 누르면 여기로 캐치됨 (안드로이드 키보드에서는 안됨)
                         e.preventDefault()
-                        debugger
                         if (!hush.http.chkOnline()) return
                         try {
                             const _data = e.originalEvent.dataTransfer.getData("text") //"image##2023021015343534000076787542LOrtKxoR##20230223151253235000695133ZOwDPVZr1w"
                             const _files = e.originalEvent.dataTransfer.files
                             if (!_data.includes("image##") && _files.length > 0) { //파일탐색기로부터 drop도 지원. image도 fileList 객체에 담겨 오므로 if로 제외시켜 순수 파일만 받아야 함
+                                debugger
                                 handleFileUpload(_files)
                             } else { //text, text/plain, image
                                 if (!_data || _data == "") return

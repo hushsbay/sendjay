@@ -209,6 +209,14 @@
                     })
                 }
             },
+            getBlobFromFile : (file, callback) => { //바로 위 함수에서 blob만 가져오는 것을 추출한 것에 불과함
+                const reader = new FileReader()
+                reader.onload = function(e) {
+                    const blob = new Blob([new Uint8Array(e.target.result)], {type: file.type })
+                    callback(blob)
+                }
+                reader.readAsArrayBuffer(file)
+            },
             get : async (url) => { //get(getPromise)도 <img>의 src url이 blob이든 base64든 관계없이 blob 데이터 리턴해서 서버로 보낼 준비를 함
                 try {
                     const rs = await hush.blob.getPromise(url)               
