@@ -2193,9 +2193,12 @@
                 showImgMenu(true)
                 $("#btn_send_img_m").off("click").on("click", function(e) { 
                     sendMsg("image", blobUrl, blob)
-                    showImgMenu(false)
+                    $("#fr_sendcopy").hide()
                 })
-                $("#btn_cancel_img_m").off("click").on("click", function(e) { showImgMenu(false) })
+                $("#btn_cancel_img_m").off("click").on("click", function(e) { 
+                    showImgMenu(false) 
+                    $("#fr_sendcopy").hide()
+                })
                 $("#fr_tip").hide()
                 $("#fr_sendcopy").css("display", "flex")
             }
