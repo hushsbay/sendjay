@@ -2494,7 +2494,11 @@
                             const _files = e.originalEvent.dataTransfer.files
                             if (!_data.includes("image##") && _files.length > 0) { //파일탐색기로부터 drop도 지원. image도 fileList 객체에 담겨 오므로 if로 제외시켜 순수 파일만 받아야 함
                                 debugger
-                                handleFileUpload(_files)
+                                if (_files.length == 1 && _files[0].type == "image/gif") {
+                                    hush.blob.getBlobFromFile(_files[0], (blob) => setImagePlate(blob, "W"))
+                                } else {
+                                    handleFileUpload(_files)
+                                }
                             } else { //text, text/plain, image
                                 if (!_data || _data == "") return
                                 const _arr = _data.split(hush.cons.deli)
