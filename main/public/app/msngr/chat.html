@@ -74,7 +74,7 @@
                         $("#imgplate").show()
                         $(".chat").hide()
                         $(".img").show()                
-                        $(".cell").hide()                
+                        $(".cell").hide()
                     } else {
                         $("#imgplate").hide()
                         $("#imgplate").empty()
@@ -2191,7 +2191,10 @@
                 const blobUrl = URL.createObjectURL(blob)
                 $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
                 showImgMenu(true)
-                $("#btn_send_img_m").off("click").on("click", function(e) { sendMsg("image", blobUrl, blob) })
+                $("#btn_send_img_m").off("click").on("click", function(e) { 
+                    sendMsg("image", blobUrl, blob)
+                    showImgMenu(false)
+                })
                 $("#btn_cancel_img_m").off("click").on("click", function(e) { showImgMenu(false) })
                 $("#fr_tip").hide()
                 $("#fr_sendcopy").css("display", "flex")
