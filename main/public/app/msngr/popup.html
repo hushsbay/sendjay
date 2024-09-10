@@ -110,7 +110,6 @@
                 g_type = param.get("type")
                 g_path = encodeURIComponent(param.get("path"))
                 g_msgid = param.get("msgid")
-                hush.msg.toast("2222222222")
                 if (g_type == "play") { //for pc web and mobile
                     g_videoTab = $("#videoTab")
                     g_videoTab.show()
@@ -167,6 +166,6 @@
         <video id=videoTab height=100% width=100% controls style="display:none"></video>
         <div id=imgbody style="display:none"><img id=img></div>
     </div>
-    <!-- <img id=btn_save src="/img/download.png" class=save style="display:none"/> 여기선 미사용. 앱에서 save()를 바로 호출 -->
+    <img id=btn_save src="/img/download.png" class=save style="display:none"/> <!--앱에서 btn_save를 바로 호출하므로 막으면 안됨 -->
 </body>
 </html>
