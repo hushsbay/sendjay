@@ -140,6 +140,15 @@ const corsOptions = { //for Rest
 	}
 }
 
+///////////////////////////////////////////////////////// test for vue
+const corsTest = {
+	origin : function (origin, callback) { //무조건 통과
+		callback(null, true)
+	}
+}
+app.use('/user/userlist_test', cors(corsTest), require('./route/user/userlist_test'))
+/////////////////////////////////////////////////////////
+
 let rt = ['login', 'refresh_token']
 for (let i = 0; i < rt.length; i++) app.use('/auth/' + rt[i], require('./route/auth/' + rt[i]))
 

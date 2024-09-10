@@ -15,7 +15,7 @@ module.exports = {
 	},
 	app : {
 		nodeConfig : process.env.NODE_CONFIG,
-		corsRestful : ['https://hushsbay.com', 'localhost:5173', 'https://yyyydev.xxxxx.co.kr', 'https://yyyy.xxxxx.co.kr'], //Array type (Same origin이 없어도 됨)
+		corsRestful : ['https://hushsbay.com', 'https://yyyydev.xxxxx.co.kr', 'https://yyyy.xxxxx.co.kr'], //Array type (Same origin이 없어도 됨)
 		corsSocket : 'https://hushsbay.com', //Non-array type (Same origin이 들어 있어야 함)
 		ipAccess : ['222.108.25.252'], //현재는 interfaceToDept.js, interfaceToUser.js에만 사용 : 테스트로 My PC
 		logPath : process.env.LOG_PATH,
