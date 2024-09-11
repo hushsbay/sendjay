@@ -15,6 +15,7 @@ router.post('/', async function(req, res) {
 	try {
 		const rs = ws.http.resInit()
 		const { keyword, sort } = req.body
+		console.log(keyword, sort, "===========")
 		conn = await wsmysql.getConnFromPool(global.pool) //의도적으로 인증체크하지 않음
 		sql =  "SELECT ID_KIND, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, USER_ID, USER_NM, NICK_NM, JOB, TEL_NO, AB_CD, AB_NM "
 		sql += "  FROM Z_USER_TBL "
