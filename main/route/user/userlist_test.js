@@ -14,9 +14,9 @@ router.post('/', async function(req, res) {
 	let conn, sql, sqlCnt, sqlWhere, data, len
 	try {
 		const rs = ws.http.resInit()
-		const { keyword, sort, paging } = req.body
-		const rowStart = (parseInt(paging.curPage) - 1) * parseInt(paging.rowPerPage)
-		console.log(keyword, "====", sort, "====", paging.curPage, "====", paging.rowPerPage, "====", rowStart)
+		const { keyword, sort, pageRq } = req.body
+		const rowStart = (parseInt(pageRq.curPage) - 1) * parseInt(pageRq.rowPerPage)
+		console.log(keyword, "====", sort, "====", pageRq.curPage, "====", pageRq.rowPerPage, "====", rowStart)
 		conn = await wsmysql.getConnFromPool(global.pool) //의도적으로 인증체크하지 않음
 		sql =  "SELECT ID_KIND, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, USER_ID, USER_NM, NICK_NM, JOB, TEL_NO, AB_CD, AB_NM "
 		sql += "  FROM Z_USER_TBL "
@@ -30,7 +30,7 @@ router.post('/', async function(req, res) {
 		} else {
 			sql += " ORDER BY TOP_ORG_NM, ORG_NM, USER_NM, USER_ID "
 		}
-		sql += " LIMIT " + rowStart + ", " + parseInt(paging.rowPerPage)
+		sql += " LIMIT " + rowStart + ", " + parseInt(pageRq.rowPerPage)
 		data = await wsmysql.query(conn, sql, null)
         if (data.length == 0) {
 			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA) //true=toast
