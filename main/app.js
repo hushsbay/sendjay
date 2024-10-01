@@ -146,7 +146,8 @@ const corsTest = {
 		callback(null, true)
 	}
 }
-app.use('/user/userlist_test', cors(corsTest), require('./route/user/userlist_test'))
+app.use('/user/userlist_vuetest_paging', cors(corsTest), require('./route/user/userlist_vuetest_paging'))
+app.use('/user/userlist_vuetest_scrolling', cors(corsTest), require('./route/user/userlist_vuetest_scrolling'))
 /////////////////////////////////////////////////////////
 
 let rt = ['login', 'refresh_token']
