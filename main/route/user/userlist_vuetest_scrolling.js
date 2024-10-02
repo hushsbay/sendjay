@@ -30,6 +30,7 @@ router.post('/', async function(req, res) {
 		sql += " LIMIT " + rowStart + ", " + parseInt(scrollingRq.rowPerPage)
 		data = await wsmysql.query(conn, sql, null)
         if (data.length == 0) {
+			console.log("@@@@@nodata")
 			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA) //true=toast
 			return
 		}
