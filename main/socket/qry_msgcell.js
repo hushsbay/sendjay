@@ -9,6 +9,7 @@ module.exports = async function(socket, param) {
 	try { //ws.sock.warn(null, socket, _logTitle, com.cons.rq + JSON.stringify(param), _roomid)
 		const _msgid = param.data.msgid
 		conn = await wsmysql.getConnFromPool(global.pool)
+		console.log(_msgid, _roomid, "####")
 		const ret = await ws.util.chkAccessUserWithTarget(conn, socket.userid, _msgid, '')
 		if (ret != '') throw new Error(ret)
 		sql = "SELECT MSGID, ROOMID, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END BODY, BUFFER, TYP TYPE, STATE, FILESTATE "

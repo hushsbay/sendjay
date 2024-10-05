@@ -68,13 +68,56 @@
                 }
             }
 
+            const setImagePlate = (blob, kind) => { //kind = M(Mobile), W(Web)
+                const blobUrl = URL.createObjectURL(blob)
+                $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>")
+                // $("#imgbody").on("load", function() { //fit the image to real width and height
+                //     $("#imgbody").width(this.naturalWidth)
+                //     $("#imgbody").height(this.naturalHeight)
+                // })
+                showImgMenu(true)
+                if (kind == 'M') {
+                    showFrTip(false)
+                    $("#btn_send_img_m").off("click").on("click", function(e) { 
+                        hush.util.animBgColor($(this))
+                        sendMsg("image", blobUrl, blob) 
+                        showImgMenu(false)
+                        showFrTip(true)
+                    })
+                    $("#btn_cancel_img_m").off("click").on("click", function(e) { 
+                        hush.util.animBgColor($(this))
+                        showImgMenu(false) 
+                        showFrTip(true)
+                    })
+                } else { //W
+                    $("#btn_send_img").off("click").on("click", function(e) { 
+                        hush.util.animBgColor($(this))
+                        sendMsg("image", blobUrl, blob) 
+                    })
+                    $("#btn_cancel_img").off("click").on("click", function(e) { 
+                        hush.util.animBgColor($(this))
+                        showImgMenu(false) 
+                    })
+                }
+            }
+
+            const showFrTip = (show) => {
+                if (show) {
+                    $("#fr_tip").show()
+                    $("#fr_sendcopy").hide()
+                } else {
+                    $("#fr_tip").hide()
+                    $("#fr_sendcopy").css("display", "flex")
+                }                
+            }
+
             const showImgMenu = (show) => {
                 if (!hush.webview.on) {
                     if (show) {
                         $("#imgplate").show()
                         $(".chat").hide()
                         $(".img").show()                
-                        $(".cell").hide()                
+                        $(".cell").hide()
                     } else {
                         $("#imgplate").hide()
                         $("#imgplate").empty()
@@ -717,8 +760,7 @@
                             } else { //mobile
                                 localStorage.msgidCopied = obj.msgid //AndroidRoom.copy(obj.msgid) //$$66 in MainActivity.kt 참조
                                 hush.msg.toast("복사 완료") //image, file, flink will be ok too
-                                $("#fr_tip").hide()
-                                $("#fr_sendcopy").css("display", "flex")
+                                showFrTip(false)
                             }
                             showCellMenu(false)
                         })
@@ -1996,41 +2038,20 @@
                                 if (rsPic.list[0].BUFFER) { //if (rsPic.buffer) {
                                     const uInt8Array = new Uint8Array(rsPic.list[0].BUFFER.data) //new Uint8Array(rsPic.buffer.data)
                                     const blob = new Blob([uInt8Array], { type: "image/png" })
-                                    const blobUrl = URL.createObjectURL(blob)
-                                    $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
-                                    showImgMenu(true)
-                                    $("#btn_send_img_m").off("click").on("click", function(e) { 
-                                        hush.util.animBgColor($(this))
-                                        sendMsg("image", blobUrl, blob) 
-                                        $("#fr_sendcopy").hide()
-                                    })
-                                    $("#btn_cancel_img_m").off("click").on("click", function(e) { 
-                                        hush.util.animBgColor($(this))
-                                        showImgMenu(false) 
-                                        $("#fr_sendcopy").hide()
-                                    })
+                                    setImagePlate(blob, 'M')
                                 }
                             })
                         } else { 
                             const uInt8Array = new Uint8Array(rs.BUFFER)
                             const blob = new Blob([uInt8Array], { type: "image/png" })
-                            const blobUrl = URL.createObjectURL(blob)
-                            $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
-                            showImgMenu(true)
-                            $("#btn_send_img").off("click").on("click", function(e) { 
-                                hush.util.animBgColor($(this))
-                                sendMsg("image", blobUrl, blob) 
-                            })
-                            $("#btn_cancel_img").off("click").on("click", function(e) { 
-                                hush.util.animBgColor($(this))
-                                showImgMenu(false) 
-                            })
+                            setImagePlate(blob, 'W')
                         }                    
                     } else if (rs.TYPE == "file" || rs.TYPE == "flink") {
                         const ret = await hush.msg.confirm("파일을 전송할까요? " + hush.util.extractFileFromTalkBody(rs.BODY))
                         if (!ret) return
                         sendMsg("flink", rs.BODY, rs.FILESTATE)
-                        $("#fr_sendcopy").hide()
+                        showImgMenu(false)
+                        showFrTip(true)
                     } else {
                         if (rs.BODY.trim() == "") {
                             hush.msg.alert("no text data to send")
@@ -2131,8 +2152,7 @@
                     g_orgcd = hush.user.orgcd
                     g_role = hush.user.role
                     if (localStorage.msgidCopied) { //if (rs && rs.msgidCopied) { //$$66 in MainActivity.kt 참조
-                        $("#fr_tip").hide()
-                        $("#fr_sendcopy").css("display", "flex")
+                        showFrTip(false)
                     }
                     if (startFromResume) return //예) 안드로이드 onResume(그것도 onCreate 다음이 아닌 평소대의 onResume)인 경우는 갱신된 토큰만 받고 멈추면 됨
                     if (g_type == "newFromMain") {
@@ -2188,13 +2208,7 @@
 
             const getImageUri = async (byteArrayString, fileName, mimeType) => { //ContentReceiver in MainActivity.kt
                 const blob = hush.blob.base64ToBlob(byteArrayString, mimeType)
-                const blobUrl = URL.createObjectURL(blob)
-                $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
-                showImgMenu(true)
-                $("#btn_send_img_m").off("click").on("click", function(e) { sendMsg("image", blobUrl, blob) })
-                $("#btn_cancel_img_m").off("click").on("click", function(e) { showImgMenu(false) })
-                $("#fr_tip").hide()
-                $("#fr_sendcopy").css("display", "flex")
+                setImagePlate(blob, 'M')
             }
 
             ////////////////////////////////////////////////////////////////////////end of mobile webview
@@ -2325,15 +2339,7 @@
                                     hush.msg.toast("이미지가 너무 큽니다 : " + blob.size + "<br>max : " + hush.util.formatBytes(hush.cons.max_size_to_sublink) + "(" + hush.cons.max_size_to_sublink + "bytes)")
                                     return
                                 }
-                                const blobUrl = URL.createObjectURL(blob)
-                                $("#imgplate").html("<img id=imgbody src=" + blobUrl + " style='width:100%;height:100%'>") 
-                                // $("#imgbody").on("load", function() { //fit the image to real width and height
-                                //     $("#imgbody").width(this.naturalWidth)
-                                //     $("#imgbody").height(this.naturalHeight)
-                                // })
-                                showImgMenu(true)
-                                $("#btn_send_img").off("click").on("click", function(e) { sendMsg("image", blobUrl, blob) })
-                                $("#btn_cancel_img").off("click").on("click", function(e) { showImgMenu(false) })
+                                setImagePlate(blob, 'W')
                             } else if (clipboardItem.type.includes("text")) {
                                 clipboardItem.getAsString(function(str) {
                                     const _arr = str.split(hush.cons.deli)
@@ -2374,11 +2380,12 @@
                     $("#file_upload").change(function() {
                         handleFileUpload(this.files)		    	   	
                     })
+                    /* 안드로이드 MyWebview class로 대체해 더 편리하게 사용 $$88
                     $("#btn_gif_m").on("click", function() {
                         hush.util.animBgColor($(this))
                         AndroidRoom.setFocusToGifAnimField() 
                         hush.msg.toast("키보드에 있는 GIF를 선택하시기 바랍니다.")
-                    })
+                    })*/
                     $("#btn_invite, #btn_invite_m").on("click", function() {
                         try {
                             if (!hush.http.chkOnline()) return
@@ -2467,8 +2474,7 @@
                     })
                     $("#btn_cancel_paste").on("click", function() {
                         hush.util.animBgColor($(this))
-                        $("#fr_tip").show()
-                        $("#fr_sendcopy").hide()
+                        showFrTip(true)
                         localStorage.msgidCopied = "" 
                     })
                     $("#main_pg").on("dragenter", function(e) {
@@ -2480,14 +2486,20 @@
                         e.stopPropagation()
                         e.preventDefault()
                     })
-                    $("#main_pg").on("drop", async function(e) { //PC에서 animated gif를 Window+Dot(.)을 키보드에서 누르면 여기로 캐치됨 (안드로이드 키보드에서는 안됨)
+                    $("#main_pg").on("drop", async function(e) { //PC에서 animated gif를 Window+Dot(.)을 키보드에서 누르면 여기로 캐치됨
                         e.preventDefault()
                         if (!hush.http.chkOnline()) return
                         try {
                             const _data = e.originalEvent.dataTransfer.getData("text") //"image##2023021015343534000076787542LOrtKxoR##20230223151253235000695133ZOwDPVZr1w"
                             const _files = e.originalEvent.dataTransfer.files
                             if (!_data.includes("image##") && _files.length > 0) { //파일탐색기로부터 drop도 지원. image도 fileList 객체에 담겨 오므로 if로 제외시켜 순수 파일만 받아야 함
-                                handleFileUpload(_files)
+                                if (_files.length == 1 && _files[0].type == "image/gif") {
+                                    //Window+Dot(.)으로 선택한 animated gif는 원래 파일로 업로드되는 것을 일반적으로 드롭한 것과 구분할 방법이 없어
+                                    //gif 파일 한개일 경우만 drop인 경우에 한해서 이미지로 핸들링하면 모바일과 동일한 UI/UX로 사용자에게 지원하는 것이므로 그 효율성을 위해 코딩한 것임
+                                    hush.blob.getBlobFromFile(_files[0], (blob) => setImagePlate(blob, 'W'))
+                                } else {
+                                    handleFileUpload(_files)
+                                }
                             } else { //text, text/plain, image
                                 if (!_data || _data == "") return
                                 const _arr = _data.split(hush.cons.deli)
@@ -2588,12 +2600,13 @@
             </div>
             <div id=fr_in style="height:65px;display:flex;align-items:center;justify-content:space-between;margin:0px 3px">
                 <div id=div_sel_m style="width:45px;height:100%;display:none;flex-direction:column">
-                    <div id=btn_file_m style="width:45px;height:50%;display:flex;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
-                        <img src="/img/white_upload.png" style="width:20px;height:20px" />
+                    <div id=btn_file_m style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
+                        <img src="/img/white_upload.png" style="width:24px;height:24px" />
                     </div>
+                    <!-- 안드로이드 MyWebview class로 대체해 더 편리하게 사용 $$88
                     <div id=btn_gif_m style="width:45px;height:50%;display:flex;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">
                         <img src="/img/white_gif.png" style="width:20px;height:20px" />
-                    </div>
+                    </div> -->
                 </div>
                 <textarea id=in_chat spellcheck=false style="width:100%;height:100%;resize:none;border:1px solid lightsteelblue;border-radius:5px"></textarea>
                 <div id=btn_send_m style="width:45px;height:100%;display:none;align-items:center;justify-content:center;background-color:#0082AD;border:1px solid lightsteelblue;border-radius:5px">

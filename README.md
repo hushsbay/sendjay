@@ -82,6 +82,8 @@ Here are some ideas to get you started:
       + 전송된 이미지 파일로 변환 다운로드
       + mp4 동영상 스트리밍 
       + 파일 저장 만기 설정
+      + Emoji 전송
+      + 카카오톡 생태계처럼 구글GBoard/삼성키보드의 Animated GIF 연동해 움짤 전송 (PC에서도 가능)
       
    * 읽음 처리 (안읽은 멤버 보여주기)
 
@@ -1243,17 +1245,17 @@ ALTER TABLE jay.a_msgmst_tbl CHANGE body body VARCHAR(4000) CHARACTER SET utf8mb
 # 프로젝트 결과 아쉬운 점
 
    * 안드로이드 포어그라운드 서비스 아이콘 제거 못함 (사용자 불편)
-   * 앱과 웹뷰간 쿠키 공유안하고 Content Provider로 대체
+   * 앱과 웹뷰간 쿠키 공유하지 않고 Content Provider로 대체
    
 
 # 향후 주요 개발 예정 항목
    
    * 백엔드에서 알림 전송 : 문자보내기(SMS/LMS) 대신 소켓으로 전송하는 단방향채널 구현
    * 팀공용아이디, admin 아이디로 사용자와의 채팅 지원 (팀공용아이디의 권한 이슈 해결)
-   * Vue 프레임워크를 이용한 개발   
+   * Vue 프레임워크를 이용한 개발
    * iOS 앱 개발 (타 개발자에게 요청)
-   * 이모티콘(공감 포함) 지원 검토
-   * Llama 등 AI 오픈소스 적용한 AI UX 제공 검토   
+   * LLaMA 등 AI 오픈소스 적용한 AI UX 제공 검토
+
 
 끝.
 
