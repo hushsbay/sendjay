@@ -1038,11 +1038,10 @@
                 for (i = 0; bytes >= 1024 && i < 4; i++) bytes /= 1024
                 return bytes.toFixed(2) + units[i]
             },
-            strLen : function(s, b, i, c) { //https://programmingsummaries.tistory.com/239
+            strLen : function(s) { //https://programmingsummaries.tistory.com/239
                 // for (b = i = 0; i < s.length; i++) {
                 //     c = s.charCodeAt(i)
-                //     //b += c >> 11 ? 3 : c >> 7 ? 2 : 1 //(2048(2^11)로 나눌 때 몫이 있으면 2048보다 큰 유니코드이므로 3바이트를 할당.. 128(2^7)로 나눌 땐 ..)
-                //     b += c >> 11 ? 2 : c >> 7 ? 2 : 1
+                //     //b += c >> 11 ? 3 : c >> 7 ? 2 : 1 //(2048(2^11)로 나눌 때 몫이 있으면 2048보다 큰 유니코드 (3바이트), 128(2^7)로 나눌 땐 ..
                 // }
                 // return b
                 return s.length //mySql 필드인 경우에는 한글이 1바이트로 계산되어 입력되고 있으므로 그냥 .length를 사용하고 있음 (다른 DB는 체크 필요)
