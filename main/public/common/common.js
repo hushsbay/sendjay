@@ -854,7 +854,7 @@
                 if (hush.tz == hush.cons.tz_seoul) return true
                 return false
             },
-            isvoid : (obj) => {
+            isvoid : (obj) => { //대신 a ?? b로 사용하기 (a가 null도 아니고 undefined도 아니면 a 반환. a가 0이거나 false라도 a를 반환)
                 if (typeof obj == "undefined" || obj == null) return true
                 return false
             },
