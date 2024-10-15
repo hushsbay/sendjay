@@ -551,6 +551,7 @@ module.exports = (function() {
 				return server
 			},
 			isvoid : (obj) => { //"0", 0, 등의 경우는 유효할 경우도 고려해야 하므로 아래 2가지 경우만 체크하는 함수임
+				//대신 a ?? b로 사용하기 (a가 null도 아니고 undefined도 아니면 a 반환. a가 0이거나 false라도 a를 반환)
                 if (typeof obj == 'undefined' || obj == null) return true
                 return false
             },
