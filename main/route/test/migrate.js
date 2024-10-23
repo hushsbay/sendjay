@@ -17,7 +17,7 @@ router.post('/', async function(req, res) {
 		const rs = ws.http.resInit()
 		const _file = xlsx.readFile('c:/temp/dealer1000.xlsx')
 		const sheet = _file.Sheets[_file.SheetNames[0]]
-		const cell = sheet['D4']
+		const cell = sheet['C4']
 		const _val = cell ? cell.w.trim() : 'none'
 		console.log(_val,"@@@@@")
 		// conn = await wsmysql.getConnFromPool(global.pool)
