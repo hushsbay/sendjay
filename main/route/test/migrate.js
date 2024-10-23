@@ -15,7 +15,7 @@ router.post('/', async function(req, res) {
 	let conn, sql, data, len
 	try {
 		const rs = ws.http.resInit()
-		const _file = xlsx.readFile('c:/temp/dealer10.xlsx')
+		const _file = xlsx.readFile('c:/temp/dealer1000.xlsx')
 		const sheet = _file.Sheets[_file.SheetNames[0]]
 		const cell = sheet['D4']
 		const _val = cell ? cell.w.trim() : 'none'
