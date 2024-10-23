@@ -15,15 +15,26 @@ router.post('/', async function(req, res) {
 	let conn, sql, data, len
 	try {
 		const rs = ws.http.resInit()
+		conn = await wsmysql.getConnFromPool(global.pool)
 		const _file = xlsx.readFile('c:/temp/dealer1000.xlsx')
 		const sheet = _file.Sheets[_file.SheetNames[0]]
-		const cell = sheet['C4']
-		const _val = cell ? cell.w.trim() : 'none'
-		console.log(_val,"@@@@@")
-		// conn = await wsmysql.getConnFromPool(global.pool)
-		// sql = "INSERT INTO Z_USER_TBL (USER_ID, ID_KIND, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, PICTURE, MIMETYPE, NICK_NM, IS_SYNC, ISUDT) "
-		// sql += "                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
-		// await wsmysql.query(conn, sql, [id, _kind, _enc, nm, orgcd, orgnm, toporgcd, toporgnm, buf, mimetype, alias, 'N'])
+		for (let i = 2; i <= 1136; i++) {
+			cellA = sheet['A' + i.toString()]
+			cellB = sheet['B' + i.toString()]
+			cellC = sheet['C' + i.toString()]
+			cellD = sheet['D' + i.toString()]
+			cellE = sheet['E' + i.toString()]
+			cellF = sheet['F' + i.toString()]
+			cellG = sheet['G' + i.toString()]
+			cellH = sheet['H' + i.toString()]
+			cellI = sheet['I' + i.toString()]
+			cellJ = sheet['J' + i.toString()]
+			sql = "INSERT INTO Z_DEALER_TBL (ERN, TAX_TYP, DEAL_CO_NM, RPST_NM, TEL_NO, ZIP_CD, BASE_ADDR, DTL_ADDR, CO_ITEM_NM, CRTE_DT) "
+			sql += "                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+			await wsmysql.query(conn, sql, [cellA.w.trim(), cellB.w.trim(), cellC.w.trim(), cellD.w.trim(), cellE.w.trim(), cellF.w.trim(), cellG.w.trim(), cellH.w.trim(), cellI.w.trim(), cellJ.w.trim()])
+			console.log(i.toString(), "##############")
+		}
+		console.log(i.toString(), "!!!!!!!!!")
 		ws.http.resJson(res, rs)
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
