@@ -148,6 +148,7 @@ const corsTest = {
 }
 app.use('/user/userlist_vuetest_paging', cors(corsTest), require('./route/user/userlist_vuetest_paging'))
 app.use('/user/userlist_vuetest_scrolling', cors(corsTest), require('./route/user/userlist_vuetest_scrolling'))
+//app.use('/test/migrate', require('./route/test/migrate'))
 /////////////////////////////////////////////////////////
 
 let rt = ['login', 'refresh_token']
@@ -166,8 +167,6 @@ rt = [
 	'proc_file', 'proc_image', 'get_msginfo', 'get_opengraph', 'proc_env', 'proc_picture'
 ] 
 for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/msngr/' + rt[i])) 
-
-//app.use('/test/migrate', require('./route/test/migrate'))
 
 if (config.app.mainserver == 'Y') {
 	const worker = new Worker('./thread/worker.js')
