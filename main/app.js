@@ -167,7 +167,7 @@ rt = [
 ] 
 for (let i = 0; i < rt.length; i++) app.use('/msngr/' + rt[i], require('./route/msngr/' + rt[i])) 
 
-app.use('/test/migrate', require('./route/test/migrate'))
+//app.use('/test/migrate', require('./route/test/migrate'))
 
 if (config.app.mainserver == 'Y') {
 	const worker = new Worker('./thread/worker.js')
