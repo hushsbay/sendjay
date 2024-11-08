@@ -21,13 +21,18 @@ router.post('/', async function(req, res) {
 		conn = await wsmysql.getConnFromPool(global.pool) //의도적으로 인증체크하지 않음
 		sql =  "SELECT ERN, TAX_TYP, DEAL_CO_NM, RPST_NM, TEL_NO, FAX_NO, ZIP_CD, BASE_ADDR, DTL_ADDR, CO_ITEM_NM, CRTE_DT "
 		sql += "  FROM Z_DEALER_TBL "
-		//sql += " WHERE IS_SYNC <> 'Y' "
-        //if (keyword) sqlWhere += " AND USER_ID LIKE '%" + keyword + "%' OR USER_NM LIKE '%" + keyword + "%' OR ORG_NM LIKE '%" + keyword + "%' "
-		// if (sort == 'N') {
-		// 	sql += " ORDER BY USER_NM, USER_ID "
-		// } else {
-		// 	sql += " ORDER BY TOP_ORG_NM, ORG_NM, USER_NM, USER_ID "
-		// }
+        if (kind == '01' || kind == 'etc') {
+		    sql += " WHERE TAX_TYP = '" + kind + "' "
+        } else {
+            sql += " WHERE BASE_ADDR = '" + kind + "%' "
+        }
+		if (sort == 'N') {
+		 	sql += " ORDER BY DEAL_CO_NM "
+        } else if (sort == 'I') {
+		 	sql += " ORDER BY CO_ITEM_NM "
+        } else {
+            sql += " ORDER BY BASE_ADDR "
+        }
 		// sql += " LIMIT " + rowStart + ", " + parseInt(pageRq.rowPerPage)
 		data = await wsmysql.query(conn, sql, null)
         if (data.length == 0) {
