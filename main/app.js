@@ -146,9 +146,10 @@ const corsTest = {
 		callback(null, true)
 	}
 }
+//app.use('/test/migrate', require('./route/test/migrate'))
+app.use('/test/get_dealer', cors(corsTest), require('./route/test/get_dealer'))
 app.use('/user/userlist_vuetest_paging', cors(corsTest), require('./route/user/userlist_vuetest_paging'))
 app.use('/user/userlist_vuetest_scrolling', cors(corsTest), require('./route/user/userlist_vuetest_scrolling'))
-//app.use('/test/migrate', require('./route/test/migrate'))
 /////////////////////////////////////////////////////////
 
 let rt = ['login', 'refresh_token']
