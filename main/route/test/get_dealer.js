@@ -21,8 +21,10 @@ router.post('/', async function(req, res) {
 		conn = await wsmysql.getConnFromPool(global.pool) //의도적으로 인증체크하지 않음
 		sql = "SELECT ERN, TAX_TYP, DEAL_CO_NM, RPST_NM, TEL_NO, FAX_NO, ZIP_CD, BASE_ADDR, DTL_ADDR, CO_ITEM_NM, CRTE_DT "
 		sql += " FROM Z_DEALER_TBL "
-        if (kind == '01' || kind == 'etc') {
-		    sql += " WHERE TAX_TYP = '" + kind + "' "
+        if (kind == '01') {
+		    sql += " WHERE TAX_TYP = '01' "
+        } else if (kind == 'etc') {
+		    sql += " WHERE TAX_TYP <> '01' "
         } else {
             sql += " WHERE BASE_ADDR = '" + kind + "%' "
         }
@@ -33,7 +35,6 @@ router.post('/', async function(req, res) {
         } else {
             sql += " ORDER BY BASE_ADDR "
         }
-        console.log(sql)
 		// sql += " LIMIT " + rowStart + ", " + parseInt(pageRq.rowPerPage)
 		data = await wsmysql.query(conn, sql, null)
         if (data.length == 0) {
