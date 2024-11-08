@@ -26,7 +26,7 @@ router.post('/', async function(req, res) {
         } else if (kind == 'etc') {
 		    sql += " WHERE TAX_TYP <> '01' "
         } else {
-            sql += " WHERE BASE_ADDR = '" + kind + "%' "
+            sql += " WHERE BASE_ADDR = '서울%' "
         }
 		if (sort == 'N') {
 		 	sql += " ORDER BY DEAL_CO_NM "
