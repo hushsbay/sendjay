@@ -14,10 +14,10 @@ router.post('/', async function(req, res) {
 	let conn, sql, sqlCnt, sqlWhere, data, len
 	try {
 		const rs = ws.http.resInit()
-		const { kind, sort, pageRq } = req.body
+		const { kind, sort, search, pageRq } = req.body
 		//const rowStart = (parseInt(pageRq.curPage) - 1) * parseInt(pageRq.rowPerPage)
 		//console.log(kind, "====", sort, "====", pageRq.curPage, "====", pageRq.rowPerPage, "====", rowStart)
-        console.log(kind, "====", sort)
+        console.log(kind, "====", sort, "====", search)
 		conn = await wsmysql.getConnFromPool(global.pool) //의도적으로 인증체크하지 않음
 		sql = "SELECT ERN, TAX_TYP, DEAL_CO_NM, RPST_NM, TEL_NO, FAX_NO, ZIP_CD, BASE_ADDR, DTL_ADDR, CO_ITEM_NM, CRTE_DT "
 		sql += " FROM Z_DEALER_TBL "
@@ -28,6 +28,7 @@ router.post('/', async function(req, res) {
         } else {
             sql += " WHERE BASE_ADDR LIKE '서울%' "
         }
+        if (search != '') sql += " AND (ERN LIKE '%" + search + "%' OR DEAL_CO_NM LIKE '%" + search + "%' OR CO_ITEM_NM LIKE '%" + search + "%' OR BASE_ADDR LIKE '%" + search + "%') "
 		if (sort == 'N') {
 		 	sql += " ORDER BY DEAL_CO_NM "
         } else if (sort == 'I') {
