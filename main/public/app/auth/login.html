@@ -80,7 +80,7 @@
 							if (!await hush.util.chkFieldVal(_pwd, "비번", 1)) return
 							//const rs = await hush.http.ajax("/auth/login", { uid : _userid, pwd : _pwd, kind : "web" }, true)
                             debugger
-                            const rs = await hush.http.ajax("https://hushsbay.com:466/auth/login", { uid : _userid, pwd : _pwd, kind : "web" }, true)
+                            const rs = await hush.http.ajax("https://hushsbay.com:446/auth/login", { uid : _userid, pwd : _pwd, kind : "web" }, true)
 							if (!hush.util.chkAjaxCode(rs)) return
 							hush.auth.setCookieForUser(rs, $("#chk_save").prop("checked"))
 							if (opener && opener.showLogout) opener.showLogout(true) //포털(index.html) 
