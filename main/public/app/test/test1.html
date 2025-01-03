@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    	<meta http-equiv="Expires" content="-1">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+        <title>Test</title>
+        <link id=favicon href="/img/hushsbay.png" rel="shortcut icon" type="image/x-icon"/>
+		<link rel="stylesheet" href="/plugin/jquery-ui-smoothness-1.12.1.min.css">
+        <link rel="stylesheet" href="/common/common.css">
+		<link rel="stylesheet" href="/app/org/orgtree.css">	
+        <style>
+            .items { overflow:scroll; }
+            .item { width:300px;height:200px;border:1px solid red }
+            .itemx { width:300px;height:100px;border:1px solid darkgreen }
+        </style>
+        <script src="/plugin/jquery-3.4.1.min.js"></script>
+		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
+		<script src="/plugin/jquery.cookie.js"></script>
+        <script>
+            $.when($.ready).done(async function() {
+                try {
+                    await $.getScript("/common/common.js")
+					
+                } catch (ex) {
+                    hush.util.showEx(ex)
+                }                
+            }).fail(function(ex) {
+                hush.util.showEx(ex, hush.cons.failOnLoad)
+            })
+        </script>
+    </head>
+    <body>
+        <div class="items" style="height:700px;display:flex;flex-direction:column;" >
+            <button @click="xx" style="border:1px solid green">0000000000000000</button>
+            <div>
+                <div class="itemx item1" draggable="true">01</div>
+                <div class="itemx item2" draggable="true">02</div>
+            </div>
+            <div>
+                <div class="item item1" draggable="true">01</div>
+                <div class="item item2" draggable="true">02</div>
+                <div class="item item3" draggable="true">03</div>
+                <div class="item item4" draggable="true">04</div>
+                <div class="item item5" draggable="true">05</div>
+                <div class="item item6" draggable="true">06</div>
+                <div class="item item7" draggable="true">07</div>
+                <div class="item item8" draggable="true">08</div>
+                <div class="item item9" draggable="true">09</div>
+                <div class="item item10" draggable="true">10</div>
+                <div class="item item11" draggable="true">11</div>
+                <div class="item item12" draggable="true">12</div>
+                <div class="item item13" draggable="true">13</div>
+                <div class="item item14" draggable="true">14</div>
+                <div class="item item15" draggable="true">15</div>
+                <div class="item item16" draggable="true">16</div>
+                <div class="item item17" draggable="true">17</div>
+                <div class="item item18" draggable="true">18</div>
+                <div class="item item19" draggable="true">19</div>
+                <div class="item item20" draggable="true">20</div>
+                <div class="item item21" draggable="true">21</div>
+                <div class="item item22" draggable="true">22</div>
+                <div class="item item23" draggable="true">23</div>
+                <div class="item item24" draggable="true">24</div>
+                <div class="item item25" draggable="true">25</div>
+            </div>
+        </div>
+    </body>
+</html>
