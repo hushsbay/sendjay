@@ -19,10 +19,26 @@
 		<script src="/plugin/jquery-ui-smoothness-1.12.1.min.js"></script>
 		<script src="/plugin/jquery.cookie.js"></script>
         <script>
+            let item 
+
             $.when($.ready).done(async function() {
                 try {
                     await $.getScript("/common/common.js")
-					
+					item = document.querySelector('.item')
+                    item.addEventListener('dragstart', (e) => {
+                        //e.preventDefault();
+                        e.dataTransfer.setData('text/plain', "I am dragging");
+                        item.style.cursor = 'move';
+                    })
+                    item.addEventListener('dragend', (e) => {
+                        //e.preventDefault();
+                        item.style.cursor = 'default';
+                    })
+                    // item.addEventListener('dragover', (e) => {
+                    //     e.dataTransfer.setData('text/plain', "I am dragging");
+                    //     item.style.cursor = 'pointer';
+                        
+                    // })
                 } catch (ex) {
                     hush.util.showEx(ex)
                 }                
