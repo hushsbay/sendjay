@@ -1090,11 +1090,10 @@ const startMsngr = async (launch, winid) => { //웹 전용
     }
     worker.onmessage = async function(e) {
         try {     
-            debugger       
-            if (e.data.code == "idb_connected") { //if (e.data.code == "idb_upgraded" || e.data.code == "idb_connected") { //worker.js의 ##31 참조
+            if (e.data.code == "idb_connected") { //처음 코딩. if (e.data.code == "idb_upgraded" || e.data.code == "idb_connected") { //worker.js의 ##31 참조
                 worker.postMessage({ code : launch, msg : winid })
-            } else if (e.data.code == "idb_upgraded") {
-                alert("HTML5 indexedDB가 업그레이드 되었습니다. 버튼을 누르면 재시작합니다..")
+            } else if (e.data.code == "idb_upgraded") { //worker.js의 ##31 참조
+                //alert("HTML5 indexedDB가 업그레이드 되었습니다. 확인을 누르면 재시작합니다.")
                 location.reload()
             } else if (e.data.code == "winner") { 
                 const _token = hush.http.getCookie("token")
