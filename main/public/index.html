@@ -118,6 +118,9 @@
                     $("#btn_admin").on("click", function() {
                         hush.util.openWinPop("/app/auth/admin.html", 510, 530)
                     })
+                    $("#btn_intro").on("click", function() {
+                        hush.util.openWinPop("/app/intro.html", 550)
+                    })
                     $("#btn_guide").on("click", function() {
                         hush.util.openWinTab("https://github.com/hushsbay/sendjay")
                     })
@@ -167,6 +170,7 @@
                 </div>
                 <div class="topRight">
                     <div class="topRightItem coActive" id="btn_admin" style="display:none">관리자</div>
+                    <div class="topRightItem coActive" id="btn_intro">소개</div>
                     <div class="topRightItem coActive" id="btn_guide">안내</div>
                     <div class="topRightItem coActive" id="btn_user">간편등록</div>
                     <div class="topRightItem coActive" id="btn_login">로그인</div>
