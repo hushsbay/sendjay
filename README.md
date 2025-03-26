@@ -1252,10 +1252,7 @@ ALTER TABLE jay.a_msgmst_tbl CHANGE body body VARCHAR(4000) CHARACTER SET utf8mb
    
    * 백엔드에서 알림 전송 : 문자보내기(SMS/LMS) 대신 소켓으로 전송하는 단방향채널 구현
    * 팀공용아이디, admin 아이디로 사용자와의 채팅 지원 (팀공용아이디의 권한 이슈 해결)
-   * Vue 프레임워크를 이용한 개발
-   * iOS 앱 개발 (타 개발자에게 요청)
-   * LLaMA 등 AI 오픈소스 적용한 AI UX 제공 검토
-
+   * iOS 앱 개발도 필요하나 이 부분은 향후 개발 및 유지보수 효율성 고려해 Flutter 등으로 검토해 볼 생각임
 
 끝.
 
