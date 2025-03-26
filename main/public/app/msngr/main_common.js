@@ -1089,9 +1089,13 @@ const startMsngr = async (launch, winid) => { //웹 전용
         hush.util.showEx(err)
     }
     worker.onmessage = async function(e) {
-        try {            
+        try {     
+            debugger       
             if (e.data.code == "idb_connected") { //if (e.data.code == "idb_upgraded" || e.data.code == "idb_connected") { //worker.js의 ##31 참조
                 worker.postMessage({ code : launch, msg : winid })
+            } else if (e.data.code == "idb_upgraded") {
+                alert("HTML5 indexedDB가 업그레이드 되었습니다. 버튼을 누르면 재시작합니다..")
+                location.reload()
             } else if (e.data.code == "winner") { 
                 const _token = hush.http.getCookie("token")
                 if (!_token) { //메신저가 임베디드되어 있지 않은 웹페이지(탭)에서 로그아웃시키면 임베디드된 페이지에서도 메신저가 종료되게 함 : disconnect보다 아예 포털페이지로 replace함
@@ -1130,7 +1134,7 @@ const startMsngr = async (launch, winid) => { //웹 전용
                 console.log(e.data.msg) //skip
             } else { //오류 발생
                 worker.terminate()
-                console.log(e.data.code + "===" + e.data.msg)
+                console.log(e.data.code + "@@@" + e.data.msg)
             }
         } catch (ex) {
             worker.terminate()
