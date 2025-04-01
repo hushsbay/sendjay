@@ -2323,6 +2323,7 @@
                     })
                     g_in_chat.keyup(function(e) {
                         if (!hush.webview.on && e.keyCode == 13 && !e.shiftKey) {
+                            debugger
                             sendMsg()
                         } else {
                             calcBytes()
