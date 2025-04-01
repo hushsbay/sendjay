@@ -2331,6 +2331,7 @@
                     // }) //sendMsg() if it's not new line
                     g_in_chat.keyup(function(e) {
                         if (!hush.webview.on && e.keyCode == 13 && !e.shiftKey) {
+                            e.preventDefault()
                             sendMsg()
                         } else {
                             calcBytes()
