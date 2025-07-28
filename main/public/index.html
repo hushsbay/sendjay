@@ -122,7 +122,7 @@
                     //     hush.util.openWinPop("/intro.html", 760, 830)
                     // })
                     $("#btn_guide").on("click", function() {
-                        hush.util.openWinTab("https://github.com/hushsbay")
+                        window.open("https://github.com/hushsbay")
                     })
                     $("#btn_user").on("click", function() {
                         hush.util.openWinPop("/app/user/userlist.html", 600)
@@ -154,7 +154,7 @@
                         hush.util.openWinPop("/app/org/orgtree.html?" + $.param(obj))
                     })*/
                     $("#btn_slackclone").on("click", function() {
-                        hush.util.openWinTab("https://hushsbay.com:446/login")
+                        window.open("https://hushsbay.com:446/login")
                     })
                 } catch (ex) {
                     hush.util.showEx(ex)
