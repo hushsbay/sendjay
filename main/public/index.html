@@ -146,12 +146,15 @@
                     $("#btn_msngr_web").on("click", function() {
                         hush.util.openWinTab("/app/msngr/main.html")
                     })
-                    $("#btn_orgtree").on("click", function() {
+                    /*$("#btn_orgtree").on("click", function() {
                         const obj = { //파라미터 설명은 orgtree.html 참조
                             from : this.id, nodeToGet : "U", comp : "ALL", expandTo : 99, expandAllDept : "", 
                             singleSelect : "", selectOnlyChildDept : "", getImage : "Y"
                         }
                         hush.util.openWinPop("/app/org/orgtree.html?" + $.param(obj))
+                    })*/
+                    $("#btn_slackclone").on("click", function() {
+                        hush.util.openWinTab("https://hushsbay.com:446/login")
                     })
                 } catch (ex) {
                     hush.util.showEx(ex)
@@ -187,9 +190,13 @@
                         <img class="coImg32" src="/img/white_chat.png"/>
                         <div class="menuItemText">웹메신저</div>
                     </div>
-                    <div class="menuItem coActive" id="btn_orgtree">
+                    <!-- <div class="menuItem coActive" id="btn_orgtree">
                         <img class="coImg32" src="/img/white_company.png"/>
                         <div class="menuItemText">조직도</div>
+                    </div> -->
+                    <div class="menuItem coActive" id="btn_slackclone">
+                        <img class="coImg32" src="/img/white_channel.png"/>
+                        <div class="menuItemText">슬랙(Clone)</div>
                     </div>
             </div>
         </div>
