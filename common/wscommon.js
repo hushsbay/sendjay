@@ -82,7 +82,7 @@ module.exports = (function() {
 			max_hours_to_endure_upload : -4, //worker.js 파일업로드 사작후 4시간이 지나도 완료되지 않으면 가비지로 간주하고 제거
 			max_nicknm_len : 100, //same as client's
 			max_msg_len : 4000, //same as client's
-			max_filesize : 5000000000, //10MB //max_filesize : 10485760, //10MB
+			max_filesize : 13107200, //100MB
 			max_filecount : 50, //per user
 			max_size_to_sublink : 5242880 * 2, //5MB x 2. same as client's
 			cell_revoked : 'message cancelled',
