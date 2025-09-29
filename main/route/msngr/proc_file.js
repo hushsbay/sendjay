@@ -166,6 +166,7 @@ router.get('/*', async (req, res) => { //asterisk(*) needed
         const _arr = _filename.split('/')
         const _brr = _arr[_arr.length - 1].split(ws.cons.subdeli)
         const newName = _brr[0] + fileStrObj.extDot
+		console.log("11111111111111111111")
 		res.download(_filename, newName)
 	} catch (ex) {
 		ws.http.resException(req, res, ex)
