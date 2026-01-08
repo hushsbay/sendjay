@@ -20,16 +20,16 @@ async function proc() {
         //1) 특정 기간 (예: 1년) 지나면 논리적인 삭제 처리 - 향후 물리적인 삭제 또는 백업(이동) 등은 정책적으로 결정해 처리하는 것으로 진행하면 됨
         //UDT에는 원래 삭제여부를 표시 (한번에 처리하니 UDT에 모두 D로 들어가서 부득이하게 아래처럼 나눔). 하루에 한번만 처리해도 되는 루틴이라 부하시 별도 분리 처리하는 것이 좋을 것임
         const sqlWhere = "WHERE STATE IN ('', 'R') AND CDT < DATE_ADD(sysdate(), INTERVAL " + ws.cons.max_days_to_fetch + " DAY) "
-        sql = "UPDATE A_MSGDTL_TBL SET UDT = STATE " + sqlWhere //일종의 필드 백업
+        sql = "UPDATE a_msgdtl_tbl SET UDT = STATE " + sqlWhere //일종의 필드 백업
         await wsmysql.query(conn, sql, null)
-        sql = "UPDATE A_MSGDTL_TBL SET STATE = 'D' " + sqlWhere
+        sql = "UPDATE a_msgdtl_tbl SET STATE = 'D' " + sqlWhere
         await wsmysql.query(conn, sql, null)
         sql = "UPDATE A_MSGMST_TBL SET UDT = STATE " + sqlWhere //일종의 필드 백업
         await wsmysql.query(conn, sql, null)
         sql = "UPDATE A_MSGMST_TBL SET STATE = 'D' " + sqlWhere
         await wsmysql.query(conn, sql, null)
         //2) MSGDTL 테이블에 모두 D(삭제)인 메시지아이디의 MSGMST 테이블에도 D로 업데이트 (1년 이전 데이터만 해당)
-        sql = "UPDATE A_MSGMST_TBL A SET STATE = 'D' WHERE STATE = '' AND (SELECT COUNT(*) FROM A_MSGDTL_TBL WHERE MSGID = A.MSGID AND ROOMID = A.ROOMID AND STATE <> 'D') = 0 "
+        sql = "UPDATE A_MSGMST_TBL A SET STATE = 'D' WHERE STATE = '' AND (SELECT COUNT(*) FROM a_msgdtl_tbl WHERE MSGID = A.MSGID AND ROOMID = A.ROOMID AND STATE <> 'D') = 0 "
         await wsmysql.query(conn, sql, null)
         //3) 파일 삭제
         sql = "SELECT MSGID, ROOMID, BODY, TYP "
