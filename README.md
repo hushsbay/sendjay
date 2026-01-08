@@ -32,7 +32,7 @@ Here are some ideas to get you started:
 5. sendjay는 내려 받은 소스 그대로 사내 ERP등의 조직/사용자 데이터와 연동해 실제 구축/운영할 수 있습니다.<br/>
 
 6. sendjay는 소스만 제공하는 것뿐만 아니라 누구나 자유롭게 실제로 사용해 볼 수 있도록 사이트를 제공합니다.<br/>
-   => https://hushsbay.com <br/>
+   => https://albahero.com:547 <br/>
    개인 사이트이므로 대용량 파일 업로드에 용량 제한이 있으며 성능 문제가 있을 수 있음을 양해바랍니다.<br/>
    
 
@@ -704,8 +704,8 @@ Here are some ideas to get you started:
 ```
    app : {
 		nodeConfig : process.env.NODE_CONFIG,
-		corsRestful : ['https://hushsbay.com', 'https://yyyydev.xxxxx.co.kr', 'https://yyyy.xxxxx.co.kr'], //Array type (Same origin이 없어도 됨)
-		corsSocket : 'https://hushsbay.com', //Non-array type (Same origin이 들어 있어야 함)
+		corsRestful : ['https://albahero.com:547'], //Array type (Same origin이 없어도 됨)
+		corsSocket : 'https://albahero.com:547', //Non-array type (Same origin이 들어 있어야 함)
 		ipAccess : ['222.108.25.252'], //현재는 interfaceToDept.js, interfaceToUser.js에만 사용 : 테스트로 My PC
 		logPath : process.env.LOG_PATH,
 		mainserver : process.env.MAIN_SERVER,
@@ -720,7 +720,7 @@ Here are some ideas to get you started:
    ### (C) 호출 서버 변경 
 
    * 모바일소스 (https://github.com/hushsbay/sendjay_aos) Const.kt에서<br/>
-     const val URL_HOST = "https://hushsbay.com"에 있는 호스트명이 변경되어야 합니다.
+     const val URL_HOST = "https://albahero.com"에 있는 호스트명이 변경되어야 합니다.
 
    ### (D) 조직/사용자 데이터 연동 (인터페이스)
 
@@ -787,7 +787,7 @@ Here are some ideas to get you started:
             { DTKEY : dt, ORG_CD : "Dept_C22", ORG_NM : "팀_C22", SEQ : "C22", LVL : 2 },
             { DTKEY : dt, ORG_CD : "Dept_C23", ORG_NM : "팀_C23", SEQ : "C23", LVL : 2 },
          ]				
-         const _urlDept = "https://hushsbay.com/org/interfaceToDept"
+         const _urlDept = "https://albahero.com:547/org/interfaceToDept"
          $.ajax({
             dataType : "json" //response data type
             ,contentType : "application/x-www-form-urlencoded;charset=utf-8" //request mime type => application/json은 CORS 안먹힘
@@ -815,7 +815,7 @@ Here are some ideas to get you started:
             { DTKEY : dt, USER_ID : "A000003", USER_NM : "경대승", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", TOP_ORG_NM : "삼성디스플레이", JOB : "예산담당", TEL_NO : "01043565279", AB_CD : "", AB_NM : "" },
             { DTKEY : dt, USER_ID : "A000004", USER_NM : "이의민", ORG_CD : "Dept_C11", ORG_NM : "팀_C11", TOP_ORG_CD : "Company_C", TOP_ORG_NM : "삼성디스플레이", JOB : "자금담당", TEL_NO : "01097826494", AB_CD : "biztrip", AB_NM : "20241025-20241028" },
          ]			
-         const _urlUser = "https://hushsbay.com/org/interfaceToUser"
+         const _urlUser = "https://albahero.com:547/org/interfaceToUser"
          $.ajax({
             dataType : "json" //response data type
             ,contentType : "application/x-www-form-urlencoded;charset=utf-8" //request mime type => application/json은 CORS 안먹힘
