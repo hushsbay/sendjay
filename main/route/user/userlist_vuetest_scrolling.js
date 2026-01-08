@@ -19,7 +19,7 @@ router.post('/', async function(req, res) {
 		//console.log(keyword, "====", sort, "====", scrollingRq.curPage, "====", scrollingRq.rowPerPage, "====", rowStart)
 		conn = await wsmysql.getConnFromPool(global.pool) //의도적으로 인증체크하지 않음
 		sql =  "SELECT ID_KIND, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, USER_ID, USER_NM, NICK_NM, JOB, TEL_NO, AB_CD, AB_NM "
-		sql += "  FROM Z_USER_TBL "
+		sql += "  FROM z_user_tbl "
 		sql += " WHERE IS_SYNC <> 'Y' "
         if (keyword) sql += " AND USER_ID LIKE '%" + keyword + "%' OR USER_NM LIKE '%" + keyword + "%' OR ORG_NM LIKE '%" + keyword + "%' "
 		if (sort == 'N') {

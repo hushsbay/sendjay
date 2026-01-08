@@ -19,11 +19,11 @@ const proc = (req) => {
 			const ret = await ws.util.chkAccessUserWithTarget(conn, req.body.senderid, req.body.roomid, 'room')
 			if (ret != '') throw new Error(ret)
 			await wsmysql.txBegin(conn)
-			sql = "INSERT INTO A_MSGMST_TBL (MSGID, ROOMID, SENDERID, SENDERNM, BODY, BUFFER, REPLY, TYP, CDT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
+			sql = "INSERT INTO a_msgmst_tbl (MSGID, ROOMID, SENDERID, SENDERNM, BODY, BUFFER, REPLY, TYP, CDT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
 			await wsmysql.query(conn, sql, [req.body.msgid, req.body.roomid, req.body.senderid, req.body.sendernm, '', buf, req.body.reply, req.body.type])
 			len = ridArr.length
 			for (let i = 0; i < len; i++) {
-				sql = "INSERT INTO A_MSGDTL_TBL (MSGID, ROOMID, SENDERID, RECEIVERID, RECEIVERNM, CDT) VALUES (?, ?, ?, ?, ?, sysdate(6)) "
+				sql = "INSERT INTO a_msgdtl_tbl (MSGID, ROOMID, SENDERID, RECEIVERID, RECEIVERNM, CDT) VALUES (?, ?, ?, ?, ?, sysdate(6)) "
 				await wsmysql.query(conn, sql, [req.body.msgid, req.body.roomid, req.body.senderid, ridArr[i], rnmArr[i]])
 			}
 			await wsmysql.txCommit(conn)

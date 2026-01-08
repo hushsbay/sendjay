@@ -27,15 +27,15 @@ router.post('/', async function(req, res) {
 		if (user.length == 0) throw new Error('배열의 길이가 0입니다.')
 		await wsmysql.txBegin(conn)
 		let dtkey = user[0].DTKEY ? user[0].DTKEY : ws.util.getCurDateTimeStr()
-		sql = "SELECT COUNT(*) CNT FROM Z_INTUSER_TBL WHERE DTKEY = ? "
+		sql = "SELECT COUNT(*) CNT FROM z_intuser_tbl WHERE DTKEY = ? "
 		data = await wsmysql.query(conn, sql, [dtkey])
 		if (data[0].CNT > 0) {
-			sql = "DELETE FROM Z_INTUSER_TBL WHERE DTKEY = ? "
+			sql = "DELETE FROM z_intuser_tbl WHERE DTKEY = ? "
 			await wsmysql.query(conn, sql, [dtkey])
 		}
 		len = user.length
 		for (let i = 0; i < len; i++) {			
-			sql = "INSERT INTO Z_INTUSER_TBL (DTKEY, USER_ID, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM) "
+			sql = "INSERT INTO z_intuser_tbl (DTKEY, USER_ID, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM) "
 			sql += " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
 			await wsmysql.query(conn, sql, [
 				dtkey, user[i].USER_ID, user[i].USER_NM, user[i].ORG_CD, user[i].ORG_NM, user[i].TOP_ORG_CD, user[i].TOP_ORG_NM, 

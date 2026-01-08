@@ -20,7 +20,7 @@ const proc = (req) => {
 				return
 			}
 			if (req.body.type == 'R') { //검색해서 발견 못함 (체크해보기 - getUser에서 처리)
-				sql = "SELECT PICTURE, MIMETYPE FROM Z_USER_TBL WHERE USER_ID = ? "
+				sql = "SELECT PICTURE, MIMETYPE FROM z_user_tbl WHERE USER_ID = ? "
 				data = await wsmysql.query(conn, sql, [userid])
 				if (data.length == 0) throw new Error(ws.cons.MSG_NO_DATA)
 				rs.picture = data[0].PICTURE //rs.picture = data[0].PICTURE ? Buffer.from(data[0].PICTURE, 'binary').toString('base64') : null
@@ -29,7 +29,7 @@ const proc = (req) => {
 				//MIMETYPE 필드 : 파일이 아닌 BLOB으로 저장후 꺼내 쓸 때 mimetype을 얻으려면 현재는 파일로 변환해 구해야 하는데 차라리 최초 저장시 필드값으로 저장해 사용하는 것이 효율적인 것으로 판단
 				const buf = (req.body.type == 'U') ? Buffer.from(new Uint8Array(req.files[0].buffer)) : null //null when req.body.type == 'D'
                 const _mime = (req.body.type == 'U') ? req.body.mimetype : ""
-				const uqry = "UPDATE Z_USER_TBL SET PICTURE = ?, MIMETYPE = ?, MODR = ?, MODDT = sysdate(6) WHERE USER_ID = ? "
+				const uqry = "UPDATE z_user_tbl SET PICTURE = ?, MIMETYPE = ?, MODR = ?, MODDT = sysdate(6) WHERE USER_ID = ? "
 				await wsmysql.query(conn, uqry, [buf, _mime, userid, userid])
 			}			
 			resolve(rs)

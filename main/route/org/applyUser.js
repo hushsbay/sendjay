@@ -28,21 +28,21 @@ router.post('/', async function(req, res) {
 			return
 	   	}
 		await wsmysql.txBegin(conn)
-		sql = "SELECT COUNT(*) CNT FROM Z_INTUSER_TBL WHERE DTKEY = ? "
+		sql = "SELECT COUNT(*) CNT FROM z_intuser_tbl WHERE DTKEY = ? "
 		data = await wsmysql.query(conn, sql, [dtkey])
 		if (data[0].CNT == 0) throw new Error('해당 키가 테이블에 없습니다 : ' + dtkey)
 		//1. (동기화 아이디만을 대상으로 해서) Z_ORG_TBL 루프 돌면서 
-		sql = "SELECT * FROM Z_USER_TBL WHERE ID_KIND NOT IN ('A', 'O') " //admin(A), organ(O) 제외
+		sql = "SELECT * FROM z_user_tbl WHERE ID_KIND NOT IN ('A', 'O') " //admin(A), organ(O) 제외
 		data = await wsmysql.query(conn, sql, null)
 		len = data.length
 		for (let i = 0; i < len; i++) {
 			const uid = data[i].USER_ID
 			//1) Z_INTORG_TBL에 있으면 가져와 업데이트하고 없으면 아이디 제거해야 함
 			if (data[i].IS_SYNC == 'Y') {
-				sql = "SELECT * FROM Z_INTUSER_TBL WHERE DTKEY = ? AND USER_ID = ? "
+				sql = "SELECT * FROM z_intuser_tbl WHERE DTKEY = ? AND USER_ID = ? "
 				const data1 = await wsmysql.query(conn, sql, [dtkey, uid])
 				if (data1.length > 0) {
-					sql = "UPDATE Z_USER_TBL "
+					sql = "UPDATE z_user_tbl "
 					sql += "  SET PWD = ?, USER_NM = ?, ORG_CD = ?, ORG_NM = ?, TOP_ORG_CD = ?, TOP_ORG_NM = ?, JOB  = ?, TEL_NO = ?, AB_CD  = ?, AB_NM = ? "
 					sql += "WHERE USER_ID = ? AND IS_SYNC = 'Y' "
 					const _enc = await pwdModule.getFromRepository(uid)
@@ -51,16 +51,16 @@ router.post('/', async function(req, res) {
 						_enc, data1[0].USER_NM, data1[0].ORG_CD, data1[0].ORG_NM, data1[0].TOP_ORG_CD, data1[0].TOP_ORG_NM, data1[0].JOB, data1[0].TEL_NO, data1[0].AB_CD, data1[0].AB_NM, uid
 					])	
 				} else {
-					sql = "DELETE FROM Z_USER_TBL WHERE USER_ID = ? AND IS_SYNC = 'Y' "
+					sql = "DELETE FROM z_user_tbl WHERE USER_ID = ? AND IS_SYNC = 'Y' "
 					await wsmysql.query(conn, sql, [uid])
 				}
 			}
 			//2) 조직개편후 없어진 부서와 회사를 아직도 가지고 있는 사용자정보에 (구)부서,(구)회사 표시하고 코드는 같은데 이름이 다르면 이름 업데이트 하기 (수동/동기화 모두 해당)
 			const org_cd = data[i].ORG_CD
 			const org_nm = data[i].ORG_NM
-			sql = "SELECT ORG_NM FROM Z_ORG_TBL WHERE ORG_CD = ? "
+			sql = "SELECT ORG_NM FROM z_org_tbl WHERE ORG_CD = ? "
 			const data2 = await wsmysql.query(conn, sql, [org_cd])
-			sql = "UPDATE Z_USER_TBL SET ORG_NM = ? WHERE USER_ID = ? "
+			sql = "UPDATE z_user_tbl SET ORG_NM = ? WHERE USER_ID = ? "
 			if (data2.length == 0) {
 				if (!org_nm.includes('(구)')) await wsmysql.query(conn, sql, ['(구)' + org_nm, uid])
 			} else {
@@ -68,9 +68,9 @@ router.post('/', async function(req, res) {
 			}
 			const top_org_cd = data[i].TOP_ORG_CD
 			const top_org_nm = data[i].TOP_ORG_NM
-			sql = "SELECT ORG_NM FROM Z_ORG_TBL WHERE ORG_CD = ? "
+			sql = "SELECT ORG_NM FROM z_org_tbl WHERE ORG_CD = ? "
 			const data3 = await wsmysql.query(conn, sql, [top_org_cd])
-			sql = "UPDATE Z_USER_TBL SET TOP_ORG_NM = ? WHERE USER_ID = ? "
+			sql = "UPDATE z_user_tbl SET TOP_ORG_NM = ? WHERE USER_ID = ? "
 			if (data3.length == 0) {
 				if (!top_org_nm.includes('(구)')) await wsmysql.query(conn, sql, ['(구)' + top_org_nm, uid])	
 			} else {
@@ -78,15 +78,15 @@ router.post('/', async function(req, res) {
 			}
 		}
 		//2. Z_INTORG에 있는데 Z_ORG_TBL에 없으면 신규(추가)분이므로 넣기
-		sql = "SELECT * FROM Z_INTUSER_TBL WHERE DTKEY = ? "
+		sql = "SELECT * FROM z_intuser_tbl WHERE DTKEY = ? "
 		data = await wsmysql.query(conn, sql, [dtkey])
 		len = data.length
 		for (let i = 0; i < len; i++) {
 			const uid = data[i].USER_ID
-			sql = "SELECT * FROM Z_USER_TBL WHERE USER_ID = ? "
+			sql = "SELECT * FROM z_user_tbl WHERE USER_ID = ? "
 			const data1 = await wsmysql.query(conn, sql, [uid])
 			if (data1.length == 0) {
-				sql = "INSERT INTO Z_USER_TBL (USER_ID, ID_KIND, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM, IS_SYNC, ISUDT) "
+				sql = "INSERT INTO z_user_tbl (USER_ID, ID_KIND, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, JOB, TEL_NO, AB_CD, AB_NM, IS_SYNC, ISUDT) "
 				sql += " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
 				const _enc = await pwdModule.getEncrypt(uid)
 				if (_enc == null) throw new Error('암호화된 비번 가져오기(1) 실패입니다 : ' + uid)

@@ -24,7 +24,7 @@ router.post('/', async function(req, res) {
 			return
 		}
 		sql = "SELECT USER_ID, USER_NM, NICK_NM, ORG_CD, JOB, TEL_NO, AB_CD, AB_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM "
-		sql += " FROM Z_USER_TBL "
+		sql += " FROM z_user_tbl "
 		if (type == 'list') { //qry += "WHERE TOP_ORG_NM NOT LIKE 'COMPANY%' "
 			sql += "ORDER BY TOP_ORG_NM, ORG_NM, USER_NM, USER_ID "
 		} else if (type == 'userid') {

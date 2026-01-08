@@ -30,7 +30,7 @@ module.exports = {
                 }		
                 sql =  "SELECT USER_ID, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, NICK_NM, JOB, AB_CD, AB_NM, "
                 sql += "       NOTI_OFF, BODY_OFF, SENDER_OFF, TM_FR, TM_TO, AUTOKEY_APP, IS_SYNC "
-                sql += "  FROM Z_USER_TBL "
+                sql += "  FROM z_user_tbl "
                 sql += " WHERE USER_ID = ? "
                 data = await wsmysql.query(conn, sql, [userid])
                 if (data.length == 0) {
@@ -81,7 +81,7 @@ module.exports = {
                     if (kind == 'web') {
                         //AUTOKEY_WEB은 관리안함
                     } else {
-                        sql = "UPDATE Z_USER_TBL SET AUTOKEY_APP = '" + autokey_app + "' WHERE USER_ID = ? "		
+                        sql = "UPDATE z_user_tbl SET AUTOKEY_APP = '" + autokey_app + "' WHERE USER_ID = ? "		
                     }
                     await wsmysql.query(conn, sql, [userid])
                     data[0].AUTOKEY_APP = autokey_app //순전히 앱에서 코딩이 불편해서 처리한 것임 //AUTOKEY_WEB은 관리안함

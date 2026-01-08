@@ -19,7 +19,7 @@ module.exports = async function(socket, param) {
 		const ret = await ws.util.chkAccessUserWithTarget(conn, userid, roomid, "room")
 		if (ret != "") throw new Error(ret)		
 		sql = "SELECT A.NICKNM MAINNM, B.NICKNM NICKNM, A.ROOMNM, B.NOTI "
-		sql += " FROM A_ROOMMST_TBL A, A_ROOMDTL_TBL B "
+		sql += " FROM a_roommst_tbl A, a_roomdtl_tbl B "
 		sql += "WHERE A.ROOMID = B.ROOMID "
 		sql += "  AND A.ROOMID = ? AND B.USERID = ? "
 		data = await wsmysql.query(conn, sql, [roomid, userid])

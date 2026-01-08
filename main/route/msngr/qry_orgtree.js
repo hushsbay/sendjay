@@ -22,7 +22,7 @@ router.post('/', async function(req, res) {
 			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
 			return
 		}
-		sql = "SELECT ORG_CD, ORG_NM, LVL, (SELECT COUNT(*) FROM Z_USER_TBL WHERE ORG_CD = A.ORG_CD) MEMCNT FROM Z_ORG_TBL A "		
+		sql = "SELECT ORG_CD, ORG_NM, LVL, (SELECT COUNT(*) FROM z_user_tbl WHERE ORG_CD = A.ORG_CD) MEMCNT FROM z_org_tbl A "		
         if (_keyword) sql += "AND ORG_CD = '" + _keyword + "' "
 		sql += "ORDER BY SEQ "
 		data = await wsmysql.query(conn, sql, null)

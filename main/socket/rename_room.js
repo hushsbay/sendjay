@@ -13,12 +13,12 @@ module.exports = async function(socket, param) {
 		conn = await wsmysql.getConnFromPool(global.pool)
 		const ret = await ws.util.chkAccessUserWithTarget(conn, userid, _roomid, 'room')
 		if (ret != '') throw new Error(ret)
-		sql = "UPDATE A_ROOMDTL_TBL SET UDT = sysdate(6), NICKNM = ? WHERE ROOMID = ? AND USERID = ? "		
-		data = await wsmysql.query(conn, "SELECT MASTERID, ROOMNM FROM A_ROOMMST_TBL WHERE ROOMID = ? ", [_roomid])
+		sql = "UPDATE a_roomdtl_tbl SET UDT = sysdate(6), NICKNM = ? WHERE ROOMID = ? AND USERID = ? "		
+		data = await wsmysql.query(conn, "SELECT MASTERID, ROOMNM FROM a_roommst_tbl WHERE ROOMID = ? ", [_roomid])
 		if (_type == 'all') {			
 			if (data[0].MASTERID == userid) {
 				await wsmysql.query(conn, sql, [_roomname, _roomid, userid])
-				await wsmysql.query(conn, "UPDATE A_ROOMMST_TBL SET UDT = sysdate(6), NICKNM = ? WHERE ROOMID = ? ", [_roomname, _roomid]) 
+				await wsmysql.query(conn, "UPDATE a_roommst_tbl SET UDT = sysdate(6), NICKNM = ? WHERE ROOMID = ? ", [_roomname, _roomid]) 
 				ws.sock.sendToRoom(socket, _roomid, param)
 			} else {
 				throw new Error('방맴버 전체에게 적용되는 방명 변경은 방장만 가능합니다.')
@@ -26,7 +26,7 @@ module.exports = async function(socket, param) {
 		} else {
 			await wsmysql.query(conn, sql, [_roomname, _roomid, userid])
 			if (data[0].MASTERID == userid) {
-				await wsmysql.query(conn, "UPDATE A_ROOMMST_TBL SET UDT = sysdate(6), NICKNM = '' WHERE ROOMID = ? ", [_roomid]) 
+				await wsmysql.query(conn, "UPDATE a_roommst_tbl SET UDT = sysdate(6), NICKNM = '' WHERE ROOMID = ? ", [_roomid]) 
 				ws.sock.sendToRoom(socket, _roomid, param) //모두에게 보냄
 			} else { //나에게만 보냄
 				socket.emit(ws.cons.sock_ev_common, param)

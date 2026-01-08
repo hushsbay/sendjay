@@ -23,7 +23,7 @@ router.post('/', async function(req, res) {
 		} //PWD 없음을 유의
 		sql =  "SELECT USER_ID, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, NICK_NM, JOB, AB_CD, AB_NM, NOTI_OFF, "
 		sql += "       BODY_OFF, SENDER_OFF, TM_FR, TM_TO "
-		sql += "  FROM Z_USER_TBL "
+		sql += "  FROM z_user_tbl "
 		sql += " WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [userid])
 		if (data.length == 0) {

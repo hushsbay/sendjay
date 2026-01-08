@@ -29,7 +29,7 @@ router.post('/', async function(req, res) {
 		if (kind == 'check') {
 			const _arr = []
 			for (let _msgid of msgids) {
-				sql = "SELECT COUNT(*) CNT FROM A_MSGMST_TBL WHERE MSGID = ? "
+				sql = "SELECT COUNT(*) CNT FROM a_msgmst_tbl WHERE MSGID = ? "
 				data = await wsmysql.query(conn, sql, [_msgid])
 				if (data[0].CNT == 0) _arr.push(_msgid) //sending failure 실패난 것만 클라이언트로 내림
 			}
@@ -37,7 +37,7 @@ router.post('/', async function(req, res) {
 			ws.http.resJson(res, rs) //세번째 인자가 있으면 token 생성(갱신)해 내림
 		} else {
 			sql = "SELECT TYP TYPE, BUFFER, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END BODY, SENDERNM, FILESTATE "
-			sql += " FROM A_MSGMST_TBL WHERE MSGID = ? "
+			sql += " FROM a_msgmst_tbl WHERE MSGID = ? "
 			data = await wsmysql.query(conn, sql, [msgid])
 			if (data.length == 0) {
 				ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA) //true=toast
@@ -114,7 +114,7 @@ router.get('/', async function(req, res) { //chat.html의 hush.http.fileDownload
 			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
 			return
 		}
-		sql = "SELECT TYP TYPE, BUFFER, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END BODY FROM A_MSGMST_TBL WHERE MSGID = ? "
+		sql = "SELECT TYP TYPE, BUFFER, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END BODY FROM a_msgmst_tbl WHERE MSGID = ? "
 		data = await wsmysql.query(conn, sql, [msgid])
 		if (data.length == 0) {
 			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA) //true=toast

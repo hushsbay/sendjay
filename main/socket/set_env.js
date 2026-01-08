@@ -15,11 +15,11 @@ module.exports = async function(socket, param) {
 			const _value = param.data.value
 			const _roomid = param.data.roomid
 			if (_kind == 'noti') {
-				await wsmysql.query(conn, "UPDATE A_ROOMDTL_TBL SET NOTI = ? WHERE ROOMID = ? AND USERID = ? ", [_value, _roomid, userid]) 
+				await wsmysql.query(conn, "UPDATE a_roomdtl_tbl SET NOTI = ? WHERE ROOMID = ? AND USERID = ? ", [_value, _roomid, userid]) 
 				socket.emit(ws.cons.sock_ev_common, param)	
 				ws.sock.sendToMyOtherSocket(socket, param)
 			} else { //mobile only
-				await wsmysql.query(conn, "UPDATE A_ROOMDTL_TBL SET DISPMEM = ? WHERE ROOMID = ? AND USERID = ? ", [_value, _roomid, userid])
+				await wsmysql.query(conn, "UPDATE a_roomdtl_tbl SET DISPMEM = ? WHERE ROOMID = ? AND USERID = ? ", [_value, _roomid, userid])
 				socket.emit(ws.cons.sock_ev_common, param)	 
 			}					
 		} else if (_kind == 'userinfo') {

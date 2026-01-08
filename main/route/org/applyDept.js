@@ -27,17 +27,17 @@ router.post('/', async function(req, res) {
 			return
 	   	}
 		await wsmysql.txBegin(conn)
-		sql = "SELECT COUNT(*) CNT FROM Z_INTORG_TBL WHERE DTKEY = ? "
+		sql = "SELECT COUNT(*) CNT FROM z_intorg_tbl WHERE DTKEY = ? "
 		data = await wsmysql.query(conn, sql, [dtkey])
 		if (data[0].CNT == 0) throw new Error('해당 키가 테이블에 없습니다 : ' + dtkey)
-		sql = "SELECT COUNT(*) CNT FROM Z_ORG_TBL "
+		sql = "SELECT COUNT(*) CNT FROM z_org_tbl "
 		data = await wsmysql.query(conn, sql, null)
 		if (data[0].CNT > 0) {
-			sql = "DELETE FROM Z_ORG_TBL "
+			sql = "DELETE FROM z_org_tbl "
 			data = await wsmysql.query(conn, sql, null)
 		}
-		sql = "INSERT INTO Z_ORG_TBL (ORG_CD, ORG_NM, SEQ, LVL) "
-		sql += " SELECT ORG_CD, ORG_NM, SEQ, LVL FROM Z_INTORG_TBL WHERE DTKEY = ? "
+		sql = "INSERT INTO z_org_tbl (ORG_CD, ORG_NM, SEQ, LVL) "
+		sql += " SELECT ORG_CD, ORG_NM, SEQ, LVL FROM z_intorg_tbl WHERE DTKEY = ? "
 		await wsmysql.query(conn, sql, [dtkey])
 		await wsmysql.txCommit(conn)
 		ws.http.resJson(res, rs, userid) //세번째 인자(userid) 있으면 token 갱신

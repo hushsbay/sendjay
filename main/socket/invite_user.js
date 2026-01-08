@@ -15,16 +15,16 @@ module.exports = async function(socket, param) {
 		if (ret != "") throw new Error(ret)
 		await wsmysql.txBegin(conn)		
 		for (let i = 0; i < _useridArr.length; i++) {
-			sql = "SELECT USERID, USERNM, STATE FROM A_ROOMDTL_TBL WHERE ROOMID = ? AND USERID = ? "
+			sql = "SELECT USERID, USERNM, STATE FROM a_roomdtl_tbl WHERE ROOMID = ? AND USERID = ? "
 			data = await wsmysql.query(conn, sql, [_roomid, _useridArr[i]])
 			if (data.length == 0) {
-				sql = "INSERT INTO A_ROOMDTL_TBL (ROOMID, USERID, USERNM, CDT) VALUES (?, ?, ?, sysdate(6)) "
+				sql = "INSERT INTO a_roomdtl_tbl (ROOMID, USERID, USERNM, CDT) VALUES (?, ?, ?, sysdate(6)) "
 				await wsmysql.query(conn, sql, [_roomid, _useridArr[i], _usernmArr[i]])
 				invitedUseridArr.push(_useridArr[i])
 				invitedUsernmArr.push(_usernmArr[i])				
 			} else {
 				if (data[0].STATE == 'L') {
-					sql = "UPDATE A_ROOMDTL_TBL SET STATE = '', UDT = sysdate(6) WHERE ROOMID = ? AND USERID = ? "
+					sql = "UPDATE a_roomdtl_tbl SET STATE = '', UDT = sysdate(6) WHERE ROOMID = ? AND USERID = ? "
 					await wsmysql.query(conn, sql, [_roomid, _useridArr[i]])
 					invitedUseridArr.push(_useridArr[i])
 					invitedUsernmArr.push(_usernmArr[i])	
@@ -33,7 +33,7 @@ module.exports = async function(socket, param) {
 		}
 		let useridBrr = [], userkeyArr = [], userkeySocketArr = [], arrUseridSortedByUsernm = [], arrUsernmSortedByUsernm = []
 		if (invitedUseridArr.length > 0) {
-			sql = "SELECT USERID, USERNM FROM A_ROOMDTL_TBL WHERE ROOMID = ? AND STATE <> 'L' ORDER BY USERNM "
+			sql = "SELECT USERID, USERNM FROM a_roomdtl_tbl WHERE ROOMID = ? AND STATE <> 'L' ORDER BY USERNM "
 			data = await wsmysql.query(conn, sql, [_roomid])
 			const roomnmObj = ws.sock.setRoomnmWithUsernm(data, 'USERNM', 'USERID')
 			len = data.length
@@ -55,9 +55,9 @@ module.exports = async function(socket, param) {
 			useridBrr.sort((a, b) => { return (a > b) ? 1 : (b > a) ? -1 : 0 })
 			const _chkSameMembers = useridBrr.length <= ws.cons.max_check_same_members ? true : false
 			const _useridJoinedEasy = useridBrr.join(ws.cons.easydeli)
-			await wsmysql.query(conn, "UPDATE A_ROOMMST_TBL SET MEMCNT = ?, ROOMNM = ?, UDT = sysdate(6) WHERE ROOMID = ? ", [len, JSON.stringify(roomnmObj), _roomid])
-			await wsmysql.query(conn, "DELETE FROM A_ROOMMEM_TBL WHERE ROOMID = ? ", [_roomid]) //should be deleted since it might be multi records			
-			if (_chkSameMembers) await wsmysql.query(conn, "INSERT INTO A_ROOMMEM_TBL (ROOMID, MEMBERS, CDT) VALUES (?, ?, sysdate(6)) ", [_roomid, _useridJoinedEasy])
+			await wsmysql.query(conn, "UPDATE a_roommst_tbl SET MEMCNT = ?, ROOMNM = ?, UDT = sysdate(6) WHERE ROOMID = ? ", [len, JSON.stringify(roomnmObj), _roomid])
+			await wsmysql.query(conn, "DELETE FROM a_roommem_tbl WHERE ROOMID = ? ", [_roomid]) //should be deleted since it might be multi records			
+			if (_chkSameMembers) await wsmysql.query(conn, "INSERT INTO a_roommem_tbl (ROOMID, MEMBERS, CDT) VALUES (?, ?, sysdate(6)) ", [_roomid, _useridJoinedEasy])
 			await wsmysql.txCommit(conn)
 			await ws.sock.joinRoomWithUserkeySocketArr(userkeySocketArr, _roomid)
 			param.data.roomnm = JSON.stringify(roomnmObj)

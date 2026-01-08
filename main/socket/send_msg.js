@@ -19,7 +19,7 @@ module.exports = async function(socket, param) {
 		await wsmysql.txBegin(conn)
 		let useridToProc = obj.senderid
 		if (obj.type == 'check') { //전송여부 단순 확인
-			data = await wsmysql.query(conn, "SELECT CDT, COUNT(*) CNT FROM A_MSGMST_TBL WHERE MSGID = ? GROUP BY CDT ", [obj.prevmsgid])
+			data = await wsmysql.query(conn, "SELECT CDT, COUNT(*) CNT FROM a_msgmst_tbl WHERE MSGID = ? GROUP BY CDT ", [obj.prevmsgid])
 			param.data.msgid = obj.prevmsgid
 			if (data.length == 0) {				
 				param.data.body = 0 //전송실패표시
@@ -32,7 +32,7 @@ module.exports = async function(socket, param) {
 		} else if (obj.type == 'notice') { //이미지, 파일 전송후 notice
 			const kind = obj.body
 			if (kind == 'image') { //get image which was uploaded with ajax. arraybuffer sent with blank on socket.io-redis npm
-				data = await wsmysql.query(conn, "SELECT CDT, BUFFER FROM A_MSGMST_TBL WHERE MSGID = ? ", [obj.prevmsgid])
+				data = await wsmysql.query(conn, "SELECT CDT, BUFFER FROM a_msgmst_tbl WHERE MSGID = ? ", [obj.prevmsgid])
 				if (data.length == 0) throw new Error(ws.cons.MSG_NO_DATA + ' : ' + obj.prevmsgid)
 				param.data.msgid = obj.prevmsgid
 				param.data.cdt = data[0].CDT
@@ -40,7 +40,7 @@ module.exports = async function(socket, param) {
 				param.data.bufferStr = (data[0].BUFFER) ? 'Y' : null //(data[0].BUFFER) ? Buffer.from(data[0].BUFFER, 'binary').toString('base64') : null //see get_sublink.js
 				param.data.type = kind
 			} else if (kind == 'file') { //get image which was uploaded with ajax. arraybuffer sent with blank on socket.io-redis npm
-				data = await wsmysql.query(conn, "SELECT CDT, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END BODY, FILESTATE FROM A_MSGMST_TBL WHERE MSGID = ? ", [obj.prevmsgid])
+				data = await wsmysql.query(conn, "SELECT CDT, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END BODY, FILESTATE FROM a_msgmst_tbl WHERE MSGID = ? ", [obj.prevmsgid])
 				if (data.length == 0) throw new Error(ws.cons.MSG_NO_DATA + ' : ' + obj.prevmsgid)
 				param.data.msgid = obj.prevmsgid
 				param.data.cdt = data[0].CDT
@@ -58,26 +58,26 @@ module.exports = async function(socket, param) {
 			await wsmysql.txCommit(conn)
 			ws.sock.sendToRoom(socket, _roomid, param) //global.jay.to(_roomid).emit(ws.cons.sock_ev_common, param)
 		} else { //type = talk,flink,invite,leave
-			data = await wsmysql.query(conn, "SELECT COUNT(*) CNT, sysdate(6) CURDT FROM A_ROOMDTL_TBL WHERE ROOMID = ? ", [_roomid])
+			data = await wsmysql.query(conn, "SELECT COUNT(*) CNT, sysdate(6) CURDT FROM a_roomdtl_tbl WHERE ROOMID = ? ", [_roomid])
 			_cnt = data[0].CNT
 			param.data.cdt = data[0].CURDT //dateStrings:'date' in mysql npm //? data[0].CURDT : ws.util.getCurDateTimeStr(true) //for timezone
 			let _sql
 			if (obj.type == 'leave') {				
 				if (obj.reply && obj.reply != obj.senderid) { //강제퇴장
 					useridToProc = obj.reply
-                    await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM Z_USER_TBL WHERE USER_ID = ? ", [useridToProc])
+                    await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM z_user_tbl WHERE USER_ID = ? ", [useridToProc])
 				}
 				if (_cnt == 2) { //챗방에 2명인 경우는 한명이 나가도 퇴장 표시 안함
-					_sql = "UPDATE A_ROOMDTL_TBL SET STATE = '2' WHERE ROOMID = '" + _roomid + "' AND USERID = '" + useridToProc + "' "
+					_sql = "UPDATE a_roomdtl_tbl SET STATE = '2' WHERE ROOMID = '" + _roomid + "' AND USERID = '" + useridToProc + "' "
 				} else {
-					_sql = "UPDATE A_ROOMDTL_TBL SET STATE = 'L', UDT = ? WHERE ROOMID = '" + _roomid + "' AND USERID = '" + useridToProc + "' "
+					_sql = "UPDATE a_roomdtl_tbl SET STATE = 'L', UDT = ? WHERE ROOMID = '" + _roomid + "' AND USERID = '" + useridToProc + "' "
 				}
 				await wsmysql.query(conn, _sql, [param.data.cdt])
-				const uqry = "UPDATE A_MSGDTL_TBL SET STATE = 'D', UDT = ? WHERE ROOMID = ? AND RECEIVERID = ? "
+				const uqry = "UPDATE a_msgdtl_tbl SET STATE = 'D', UDT = ? WHERE ROOMID = ? AND RECEIVERID = ? "
 				await wsmysql.query(conn, uqry, [param.data.cdt, _roomid, useridToProc])
 				if (_cnt != 2) {
 					let userkeyArr = [ ], arrUseridSortedByUsernm = [], arrUsernmSortedByUsernm = []
-					const qry = "SELECT USERID, USERNM FROM A_ROOMDTL_TBL WHERE ROOMID = ? AND STATE <> 'L' ORDER BY USERNM "
+					const qry = "SELECT USERID, USERNM FROM a_roomdtl_tbl WHERE ROOMID = ? AND STATE <> 'L' ORDER BY USERNM "
 					const dataDtl = await wsmysql.query(conn, qry, [_roomid])
 					const roomnmObj = ws.sock.setRoomnmWithUsernm(dataDtl, 'USERNM', 'USERID')
 					const len = dataDtl.length
@@ -91,11 +91,11 @@ module.exports = async function(socket, param) {
 						userkeyArr.push(m_userkey)
 					}
 					const _chkSameMembers = len <= ws.cons.max_check_same_members ? true : false
-					await wsmysql.query(conn, "UPDATE A_ROOMMST_TBL SET MEMCNT = ?, ROOMNM = ?, UDT = ? WHERE ROOMID = ? ", [len, JSON.stringify(roomnmObj), param.data.cdt, _roomid])
-					await wsmysql.query(conn, "DELETE FROM A_ROOMMEM_TBL WHERE ROOMID = ? ", [_roomid]) //should be deleted since it might be multi records			
-					const qryMem = "SELECT GROUP_CONCAT(USERID separator '" + ws.cons.easydeli + "') USERIDS FROM A_ROOMDTL_TBL WHERE ROOMID = ? AND STATE <> 'L' ORDER BY USERID "
+					await wsmysql.query(conn, "UPDATE a_roommst_tbl SET MEMCNT = ?, ROOMNM = ?, UDT = ? WHERE ROOMID = ? ", [len, JSON.stringify(roomnmObj), param.data.cdt, _roomid])
+					await wsmysql.query(conn, "DELETE FROM a_roommem_tbl WHERE ROOMID = ? ", [_roomid]) //should be deleted since it might be multi records			
+					const qryMem = "SELECT GROUP_CONCAT(USERID separator '" + ws.cons.easydeli + "') USERIDS FROM a_roomdtl_tbl WHERE ROOMID = ? AND STATE <> 'L' ORDER BY USERID "
 					const dataMem = await wsmysql.query(conn, qryMem, [_roomid]) //dataMem[0].USERIDS이 null이면 나 혼자만의 방에서 내가 퇴장하고 아무도 없다는 의미가 되므로 체크해야 함
-					if (_chkSameMembers && dataMem[0].USERIDS) await wsmysql.query(conn, "INSERT INTO A_ROOMMEM_TBL (ROOMID, MEMBERS, CDT) VALUES (?, ?, ?) ", [_roomid, dataMem[0].USERIDS, param.data.cdt])
+					if (_chkSameMembers && dataMem[0].USERIDS) await wsmysql.query(conn, "INSERT INTO a_roommem_tbl (ROOMID, MEMBERS, CDT) VALUES (?, ?, ?) ", [_roomid, dataMem[0].USERIDS, param.data.cdt])
 					param.data.roomnm = JSON.stringify(roomnmObj)
 					param.data.receiverid = arrUseridSortedByUsernm
 					param.data.receivernm = arrUsernmSortedByUsernm
@@ -108,15 +108,15 @@ module.exports = async function(socket, param) {
 				ws.sock.sendToMyOtherSocket(socket, param)
 			} else {
 				if (obj.type != 'leave' && _cnt <= 2) {
-					_sql = "UPDATE A_ROOMDTL_TBL SET STATE = '' WHERE ROOMID = '" + _roomid + "' AND STATE = '2' "
+					_sql = "UPDATE a_roomdtl_tbl SET STATE = '' WHERE ROOMID = '" + _roomid + "' AND STATE = '2' "
 					await wsmysql.query(conn, _sql, null)
 				}
-				let iqry = "INSERT INTO A_MSGMST_TBL (MSGID, ROOMID, SENDERID, SENDERNM, BODY, REPLY, TYP, CDT, FILESTATE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) "
+				let iqry = "INSERT INTO a_msgmst_tbl (MSGID, ROOMID, SENDERID, SENDERNM, BODY, REPLY, TYP, CDT, FILESTATE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) "
 				await wsmysql.query(conn, iqry, [obj.msgid, _roomid, useridToProc, obj.sendernm, obj.body, obj.reply, obj.type, param.data.cdt, obj.filestate])
 				const _state = (obj.type == 'leave') ? 'R' : '' //Inserting R to 'STATE' field in advance for 'leave' message gives good sql performance in qry_unread.js
 				const _len = param.data.receiverid.length //should not be obj but param.data since 'leave' exclude himself
 				for (let i = 0; i < _len; i++) {
-					iqry = "INSERT INTO A_MSGDTL_TBL (MSGID, ROOMID, SENDERID, RECEIVERID, RECEIVERNM, CDT, STATE) VALUES (?, ?, ?, ?, ?, ?, ?) "
+					iqry = "INSERT INTO a_msgdtl_tbl (MSGID, ROOMID, SENDERID, RECEIVERID, RECEIVERNM, CDT, STATE) VALUES (?, ?, ?, ?, ?, ?, ?) "
 					await wsmysql.query(conn, iqry, [obj.msgid, _roomid, useridToProc, param.data.receiverid[i], param.data.receivernm[i], param.data.cdt, _state])
 					userkeyBrr.push(ws.cons.w_key + param.data.receiverid[i])
 					userkeyCrr.push(ws.cons.m_key + param.data.receiverid[i])

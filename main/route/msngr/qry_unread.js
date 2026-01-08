@@ -26,22 +26,22 @@ router.post('/', async function(req, res) {
 		if (roomid) {
 			if (msgid) { //from mobile (before noti)
 				sql = "SELECT COUNT(*) UNREAD "
-				sql += " FROM A_MSGDTL_TBL "
+				sql += " FROM a_msgdtl_tbl "
 				sql += "WHERE MSGID = ? AND ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND RECEIVERID <> SENDERID "
 				rs.list = await wsmysql.query(conn, sql, [msgid, roomid, userid])
 			} else { //no unread display in case of invite/leave msg
 				sql = "SELECT COUNT(*) UNREAD "
-				sql += " FROM A_MSGDTL_TBL A "
+				sql += " FROM a_msgdtl_tbl A "
 				sql += "WHERE ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? AND RECEIVERID <> SENDERID "
-				sql += "  AND (SELECT TYP FROM A_MSGMST_TBL WHERE MSGID = A.MSGID) NOT IN ('invite', 'leave') "
+				sql += "  AND (SELECT TYP FROM a_msgmst_tbl WHERE MSGID = A.MSGID) NOT IN ('invite', 'leave') "
 				rs.list = await wsmysql.query(conn, sql, [roomid, userid, dateFr])
 			}
 		} else if (type == 'U') { //모바일에서만 호출. from ChatService.kt. LASTCHKDT 필드는 재연결시만 사용
-			await wsmysql.query(conn, "UPDATE Z_USER_TBL SET LASTCHKDT = sysdate(6) WHERE USER_ID = ? ", [userid])
+			await wsmysql.query(conn, "UPDATE z_user_tbl SET LASTCHKDT = sysdate(6) WHERE USER_ID = ? ", [userid])
 		} else {
 			if (type == 'R') { //모바일에서만 호출. from ChatService.kt. LASTCHKDT 필드는 재연결시만 사용
 				//웹뷰가 아닌 앱에서의 재연결시 알림을 목적으로 하는 루틴은 사용자가 한번 알림을 보고 나서는 그 다음엔 다시 재연결해도 새로 알림을 표시하지 않아야 성가시지 않음
-				data = await wsmysql.query(conn, "SELECT LASTCHKDT FROM Z_USER_TBL WHERE USER_ID = ? ", [userid])
+				data = await wsmysql.query(conn, "SELECT LASTCHKDT FROM z_user_tbl WHERE USER_ID = ? ", [userid])
 				if (data.length > 0 && data[0].LASTCHKDT != null) dateFr = data[0].LASTCHKDT
 				//const dt = (data.length > 0 && data[0].LASTCHKDT != null) ? data[0].LASTCHKDT : dateFr
 			} else { 
@@ -50,8 +50,8 @@ router.post('/', async function(req, res) {
 			}
 			sql = "SELECT ROOMID, COUNT(*) UNREAD, " //ADDINFO = for mobile only
 			sql += "	  (SELECT CONCAT(MSGID, '" + ws.cons.deli + "', CONCAT(CDT, '" + ws.cons.deli + "', CONCAT(TYP, '" + ws.cons.deli + "', CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END))) " 
-			sql += "	     FROM A_MSGMST_TBL WHERE ROOMID = A.ROOMID AND CDT >= '" + dateFr + "' AND STATE = '' ORDER BY CDT DESC LIMIT 1) ADDINFO "
-			sql += " FROM A_MSGDTL_TBL A "
+			sql += "	     FROM a_msgmst_tbl WHERE ROOMID = A.ROOMID AND CDT >= '" + dateFr + "' AND STATE = '' ORDER BY CDT DESC LIMIT 1) ADDINFO "
+			sql += " FROM a_msgdtl_tbl A "
 			sql += "WHERE RECEIVERID = ? AND CDT >= ? AND STATE = '' AND RECEIVERID <> SENDERID "
 			sql += "GROUP BY ROOMID "
 			rs.list = await wsmysql.query(conn, sql, [userid, dateFr]) //console.log(rs.list.length+"====qry_unread====reconnect")

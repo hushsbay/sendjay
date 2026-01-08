@@ -23,7 +23,7 @@ router.post('/', async function(req, res) {
 			return
 		}
 		sql = "SELECT A.NICKNM MAINNM, B.NICKNM NICKNM, A.ROOMNM, B.NOTI "
-		sql += " FROM A_ROOMMST_TBL A, A_ROOMDTL_TBL B "
+		sql += " FROM a_roommst_tbl A, a_roomdtl_tbl B "
 		sql += "WHERE A.ROOMID = B.ROOMID "
 		sql += "  AND A.ROOMID = '" + roomid + "' AND B.USERID = '" + userid + "' "
 		data = await wsmysql.query(conn, sql, null)

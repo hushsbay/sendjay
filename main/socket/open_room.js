@@ -13,8 +13,8 @@ module.exports = async function(socket, param) {
 		const ret = await ws.util.chkAccessUserWithTarget(conn, userid, _roomid, "room")
 		if (ret != "") throw new Error(ret)
 		sql = "SELECT B.USERID, B.USERNM, B.NICKNM, A.ROOMNM, A.NICKNM MAINNM, A.MASTERID "
-		sql += " FROM A_ROOMDTL_TBL B "
-		sql += "INNER JOIN A_ROOMMST_TBL A ON B.ROOMID = A.ROOMID AND B.STATE <> 'L' "
+		sql += " FROM a_roomdtl_tbl B "
+		sql += "INNER JOIN a_roommst_tbl A ON B.ROOMID = A.ROOMID AND B.STATE <> 'L' "
 		sql += "WHERE B.ROOMID = ? "
 		sql += "ORDER BY B.USERNM, USERID "
 		data = await wsmysql.query(conn, sql, [_roomid])
@@ -37,7 +37,7 @@ module.exports = async function(socket, param) {
 			if (brr.length > 0) userkeySocketArr = userkeySocketArr.concat(brr)
 		}
 		if (param.data.from != 'dupchk') await ws.sock.joinRoomWithUserkeySocketArr(userkeySocketArr, _roomid) //Overwriting joining ok
-		const dataR = await wsmysql.query(conn, "SELECT DISPMEM FROM A_ROOMDTL_TBL WHERE ROOMID = ? AND USERID = ? ", [_roomid, userid]) 
+		const dataR = await wsmysql.query(conn, "SELECT DISPMEM FROM a_roomdtl_tbl WHERE ROOMID = ? AND USERID = ? ", [_roomid, userid]) 
 		if (dataR.length == 0) throw new Error(ws.cons.MSG_NO_DATA + ' (roomid, userid)')
 		param.data.dispmem = dataR[0].DISPMEM
 		param.data.roomid = _roomid

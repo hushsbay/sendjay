@@ -22,7 +22,7 @@ router.post('/', async function(req, res) {
 			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
 			return
 		}
-		sql = "INSERT Z_ACTLOG_TBL (USER_ID, DEVICE, WORK, STATE, KIND, DUR, CDT, UDT, ISUDT) values (?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
+		sql = "INSERT z_actlog_tbl (USER_ID, DEVICE, WORK, STATE, KIND, DUR, CDT, UDT, ISUDT) values (?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
 		await wsmysql.query(conn, sql, [userid, device, work, state, kind, dur, cdt, udt])
 		ws.http.resJson(res, rs) //세번째 인자(userid) 있으면 token 갱신
 	} catch (ex) {

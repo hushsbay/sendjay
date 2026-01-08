@@ -226,7 +226,7 @@ module.exports = (function() {
 					return rs
 				}				
 				if (conn && userid != 'admin' && userid != 'organ') { //userid뿐만 아니라 부서정보 등 위변조도 체크 필요 (문제 발생시 로깅. 겸직 코딩은 제외되어 있음)
-					const sql = "SELECT ORG_CD, TOP_ORG_CD FROM Z_USER_TBL WHERE USER_ID = ? "
+					const sql = "SELECT ORG_CD, TOP_ORG_CD FROM z_user_tbl WHERE USER_ID = ? "
 					const data = await wsmysql.query(conn, sql, [tokenInfo.userid])
 					if (data.length == 0) {
 						const msg = ws.cons.CODE_USERID_NOT_EXIST + '/' + tokenInfo.userid + '/사용자아이디가 없습니다.' 
@@ -703,10 +703,10 @@ module.exports = (function() {
 			chkAccessUserWithTarget : async (conn, userid, uid, type, target) => { //for socket or rest
 				let ret = '대상에 대한 권한이 없습니다. '
 				if (type == 'file' || type == '') { //'' means general type for msgid
-					const data = await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND RECEIVERID = ? ", [uid, userid])
+					const data = await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM a_msgdtl_tbl WHERE MSGID = ? AND RECEIVERID = ? ", [uid, userid])
 					if (data[0].CNT > 0) {
 						if (type == 'file') {
-							const sqlM = "SELECT TYP TYPE, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END BODY FROM A_MSGMST_TBL WHERE MSGID = ? "
+							const sqlM = "SELECT TYP TYPE, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END BODY FROM a_msgmst_tbl WHERE MSGID = ? "
 							const dataM = await wsmysql.query(conn, sqlM, [uid])
 							if (dataM.length > 0) {
 								const _file = dataM[0].BODY.split(ws.cons.deli)[0] //console.log(_file, dataM[0].TYPE, target, "===")
@@ -718,12 +718,12 @@ module.exports = (function() {
 							ret = ''
 						}
 					} else {
-						//const dataM = await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM A_MSGMST_TBL WHERE MSGID = ? ", [uid])
+						//const dataM = await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM a_msgmst_tbl WHERE MSGID = ? ", [uid])
 						//if (dataM[0].CNT == 0) ret = ''
 						ret += uid
 					}
 				} else if (type == 'room') { //예를 들어, 해당 채팅방의 멤버가 아닐 때는 그 사용자는 권한이 없어야 함
-					const data = await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM A_ROOMDTL_TBL WHERE ROOMID = ? AND USERID = ? ", [uid, userid])
+					const data = await wsmysql.query(conn, "SELECT COUNT(*) CNT FROM a_roomdtl_tbl WHERE ROOMID = ? AND USERID = ? ", [uid, userid])
 					if (data[0].CNT > 0) {
 						ret = ''
 					} else {

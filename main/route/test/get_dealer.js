@@ -19,8 +19,8 @@ router.post('/', async function(req, res) {
         console.log(kind, "====", sort, "====", search, "@@@@", pageRq.curPage, "@@@@", pageRq.rowPerPage, "@@@@", rowStart)
 		conn = await wsmysql.getConnFromPool(global.pool) //의도적으로 인증체크하지 않음
 		sql = "SELECT ERN, TAX_TYP, DEAL_CO_NM, RPST_NM, TEL_NO, FAX_NO, ZIP_CD, BASE_ADDR, DTL_ADDR, CO_ITEM_NM, CRTE_DT "
-		sql += " FROM Z_DEALER_TBL "
-        sqlCnt = "SELECT COUNT(*) CNT FROM Z_DEALER_TBL " //sqlCnt
+		sql += " FROM z_dealer_tbl "
+        sqlCnt = "SELECT COUNT(*) CNT FROM z_dealer_tbl " //sqlCnt
         if (kind == '01') {
 		    sqlWhere = " WHERE TAX_TYP = '01' "
         } else if (kind == 'etc') {

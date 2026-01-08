@@ -68,10 +68,10 @@ const upload = multer({ storage: multer.diskStorage({ //order : destination -> f
 			const ret = await ws.util.chkAccessUserWithTarget(conn, req.body.senderid, req.body.roomid, 'room')
 			if (ret != '') throw new Error(ret)
 			if (req.body.body > ws.cons.max_filesize) throw new Error('파일크기 초과 (최대:' + ws.cons.max_filesize + ', 현재:' + req.body.body + ')')
-			sql = "SELECT COUNT(*) CNT FROM A_MSGMST_TBL WHERE TYP = 'file' AND FILESTATE >= sysdate() AND FILESTATE <> ? AND SENDERID = ? "
+			sql = "SELECT COUNT(*) CNT FROM a_msgmst_tbl WHERE TYP = 'file' AND FILESTATE >= sysdate() AND FILESTATE <> ? AND SENDERID = ? "
 			data = await wsmysql.query(conn, sql, [ws.cons.file_expired, req.body.senderid])
 			if (data[0].CNT >= ws.cons.max_filecount) throw new Error('최대 ' + ws.cons.max_filecount + '개 파일까지 한번에 전송 가능합니다.')
-			sql = "INSERT INTO A_FILELOG_TBL (MSGID, ROOMID, SENDERID, BODY, CDT) VALUES (?, ?, ?, ?, sysdate(6)) "
+			sql = "INSERT INTO a_filelog_tbl (MSGID, ROOMID, SENDERID, BODY, CDT) VALUES (?, ?, ?, ?, sysdate(6)) "
 			await wsmysql.query(conn, sql, [req.body.msgid, req.body.roomid, req.body.senderid, req.filename])
 			cb(null, req.filename)
 		} catch (ex) {
@@ -97,11 +97,11 @@ const procMulter = (req) => {
 			fileInfo = fileInfo.replace(config.app.uploadPath + '/', '') //hide parent folder for file upload
 			conn = await wsmysql.getConnFromPool(global.pool)			
 			await wsmysql.txBegin(conn)
-			sql = "INSERT INTO A_MSGMST_TBL (MSGID, ROOMID, SENDERID, SENDERNM, BODY, REPLY, TYP, FILESTATE, CDT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
+			sql = "INSERT INTO a_msgmst_tbl (MSGID, ROOMID, SENDERID, SENDERNM, BODY, REPLY, TYP, FILESTATE, CDT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
 			await wsmysql.query(conn, sql, [req.body.msgid, req.body.roomid, req.body.senderid, req.body.sendernm, fileInfo, req.body.reply, req.body.type, expiry])
 			len = ridArr.length
 			for (let i = 0; i < len; i++) {
-				sql = "INSERT INTO A_MSGDTL_TBL (MSGID, ROOMID, SENDERID, RECEIVERID, RECEIVERNM, CDT) VALUES (?, ?, ?, ?, ?, sysdate(6)) "
+				sql = "INSERT INTO a_msgdtl_tbl (MSGID, ROOMID, SENDERID, RECEIVERID, RECEIVERNM, CDT) VALUES (?, ?, ?, ?, ?, sysdate(6)) "
 				await wsmysql.query(conn, sql, [req.body.msgid, req.body.roomid, req.body.senderid, ridArr[i], rnmArr[i]])
 			}
 			const objFileStr = ws.util.getFileNameAndExtension(req.filename)
@@ -109,7 +109,7 @@ const procMulter = (req) => {
 				const meta = await procScreenShot(req, req.filename, filepath, filedir)
 				if (meta) {
 					const _added = ws.cons.deli + meta.streams[0].width + ws.cons.deli + meta.streams[0].height 
-					sql = "UPDATE A_MSGMST_TBL SET BODY = CONCAT(BODY, ?) WHERE MSGID = ? AND ROOMID = ? "
+					sql = "UPDATE a_msgmst_tbl SET BODY = CONCAT(BODY, ?) WHERE MSGID = ? AND ROOMID = ? "
 					await wsmysql.query(conn, sql, [_added, req.body.msgid, req.body.roomid])
 				}
 			}

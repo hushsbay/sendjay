@@ -11,7 +11,7 @@ module.exports = async function(socket, param) {
 		const userid = socket.userid
 		conn = await wsmysql.getConnFromPool(global.pool)
 		if (socket.userkey.startsWith(ws.cons.w_key)) { //웹 -> 서버 -> 앱 (분실된 디바이스의 기존 연결된 소켓) 
-			sql = "UPDATE Z_USER_TBL SET AUTOKEY_APP = ? WHERE USER_ID = ? "
+			sql = "UPDATE z_user_tbl SET AUTOKEY_APP = ? WHERE USER_ID = ? "
 			await wsmysql.query(conn, sql, [autokey_app, userid]) //모바일기기 자동로그인 나중에 들어오는 것도 해제시킴
 			ws.sock.sendToMyOtherSocket(socket, param) //모바일기기 자동로그인 리얼타임으로 해제시킴
 			socket.emit(ws.cons.sock_ev_common, param) //단순 통지

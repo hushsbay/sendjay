@@ -21,7 +21,7 @@ router.post('/', async function(req, res) {
 			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
 			return
 		}
-		sql = "SELECT COUNT(*) CNT FROM Z_USER_TBL WHERE USER_ID = ? "
+		sql = "SELECT COUNT(*) CNT FROM z_user_tbl WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [userid])
 		if (data.length == 0) {
 			ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA)
@@ -36,7 +36,7 @@ router.post('/', async function(req, res) {
 		const _to = req.body.to
 		const _bodyoff = req.body.bodyoff
 		const _senderoff = req.body.senderoff
-		sql = "UPDATE Z_USER_TBL "
+		sql = "UPDATE z_user_tbl "
 		sql += "  SET NICK_NM = ?, JOB = ?, AB_CD = ?, AB_NM = ?, NOTI_OFF = ?, " 
 		sql += "      BODY_OFF = ?, SENDER_OFF = ?, TM_FR = ?, TM_TO = ?, MODR = ?, MODDT = sysdate(6) "
 		sql += "WHERE USER_ID = ? "

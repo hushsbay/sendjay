@@ -25,16 +25,16 @@ router.post('/', async function(req, res) {
 			ws.http.resWarn(res, objToken.msg, false, objToken.code, req.title)
 			return
 		}
-		const subqry = "(SELECT CDT FROM A_MSGDTL_TBL WHERE ROOMID = A.ROOMID AND RECEIVERID = '" + userid + "' AND STATE IN ('', 'R') ORDER BY CDT DESC LIMIT 1) "
+		const subqry = "(SELECT CDT FROM a_msgdtl_tbl WHERE ROOMID = A.ROOMID AND RECEIVERID = '" + userid + "' AND STATE IN ('', 'R') ORDER BY CDT DESC LIMIT 1) "
 		sql = "SELECT ROOMID, ROOMNM, MASTERID, MASTERNM, MEMCNT, MAINNM, NOTI, STATE, NICKNM, LASTMSG, LASTDT "
 		sql += "	 FROM ("
 		sql += "   SELECT A.ROOMID, A.ROOMNM, A.MASTERID, A.MASTERNM, A.MEMCNT, A.NICKNM MAINNM, B.NOTI, B.STATE, B.NICKNM, "
 		sql += "		  (SELECT CONCAT(TYP, '" + ws.cons.subdeli + "', CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE BODY END) "
-		sql += "		     FROM A_MSGMST_TBL WHERE MSGID = (SELECT MSGID FROM A_MSGDTL_TBL "
+		sql += "		     FROM a_msgmst_tbl WHERE MSGID = (SELECT MSGID FROM a_msgdtl_tbl "
 		sql += "		     							       WHERE ROOMID = A.ROOMID AND RECEIVERID = '" + userid + "' AND STATE IN ('', 'R') " 
 		sql += "		     							       ORDER BY CDT DESC LIMIT 1)) LASTMSG, "
-		sql += "		  IF(" + subqry + " IS NULL, (SELECT CDT FROM A_MSGMST_TBL WHERE ROOMID = A.ROOMID ORDER BY CDT DESC LIMIT 1), " + subqry + ") LASTDT " //Consider in case all mesaages deleted since it's order is important.
-		sql += "     FROM A_ROOMMST_TBL A, A_ROOMDTL_TBL B "
+		sql += "		  IF(" + subqry + " IS NULL, (SELECT CDT FROM a_msgmst_tbl WHERE ROOMID = A.ROOMID ORDER BY CDT DESC LIMIT 1), " + subqry + ") LASTDT " //Consider in case all mesaages deleted since it's order is important.
+		sql += "     FROM a_roommst_tbl A, a_roomdtl_tbl B "
 		sql += "    WHERE A.ROOMID = B.ROOMID "
 		if (type == 'search') {
 			sql += "  AND B.USERID = '" + userid + "' AND B.STATE = '' "

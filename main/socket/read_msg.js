@@ -16,11 +16,11 @@ module.exports = async function(socket, param) {
 		const dateFr = ws.util.setDateAdd(new Date(), ws.cons.max_days_to_fetch)	
 		await wsmysql.txBegin(conn)		
 		if (obj.type == 'updateall') { //모두 읽은 것으로 하기
-			sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
+			sql = "SELECT COUNT(*) CNT FROM a_msgdtl_tbl WHERE ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
 			data = await wsmysql.query(conn, sql, [_roomid, userid, dateFr])
 			const cntUnread = data[0].CNT //console.log(_roomid, userid, dateFr, cntUnread, "######")
 			if (cntUnread > 0) {
-				data = "UPDATE A_MSGDTL_TBL SET STATE = 'R' WHERE ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
+				data = "UPDATE a_msgdtl_tbl SET STATE = 'R' WHERE ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
 				await wsmysql.query(conn, data, [_roomid, userid, dateFr]) //update all
 			}
 			await wsmysql.txCommit(conn) //console.log(_roomid, userid, dateFr, cntUnread, "*******")
@@ -31,20 +31,20 @@ module.exports = async function(socket, param) {
 				ws.sock.sendToMyOtherSocket(socket, param)
 			}
 		} else if (obj.type == 'getmembers') {
-			sql = "SELECT RECEIVERNM FROM A_MSGDTL_TBL WHERE MSGID = ? AND ROOMID = ? AND STATE = '' AND CDT >= ? ORDER BY RECEIVERNM "
+			sql = "SELECT RECEIVERNM FROM a_msgdtl_tbl WHERE MSGID = ? AND ROOMID = ? AND STATE = '' AND CDT >= ? ORDER BY RECEIVERNM "
 			const data = await wsmysql.query(conn, sql, [obj.msgid, _roomid, dateFr])
 			param.data.unread_list = data
 			await wsmysql.txCommit(conn)
 			socket.emit(ws.cons.sock_ev_common, param)
 		} else if (obj.type == 'update') { //해당 msgid만 읽은 것으로 하기
-			sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND ROOMID = ? AND CDT >= ? "
+			sql = "SELECT COUNT(*) CNT FROM a_msgdtl_tbl WHERE MSGID = ? AND ROOMID = ? AND CDT >= ? "
 			data = await wsmysql.query(conn, sql, [obj.msgid, _roomid, dateFr]) //console.log(obj.msgid, _roomid, dateFr, data[0].CNT, "========")
 			if (data[0].CNT == 0) {
 				param.data.unread_cnt = -1
 			} else {
-				data = "UPDATE A_MSGDTL_TBL SET STATE = 'R' WHERE MSGID = ? AND ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
+				data = "UPDATE a_msgdtl_tbl SET STATE = 'R' WHERE MSGID = ? AND ROOMID = ? AND RECEIVERID = ? AND STATE = '' AND CDT >= ? "
 				await wsmysql.query(conn, data, [obj.msgid, _roomid, userid, dateFr])
-				sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND ROOMID = ? AND STATE = '' AND CDT >= ? "
+				sql = "SELECT COUNT(*) CNT FROM a_msgdtl_tbl WHERE MSGID = ? AND ROOMID = ? AND STATE = '' AND CDT >= ? "
 				data = await wsmysql.query(conn, sql, [obj.msgid, _roomid, dateFr])
 				param.data.unread_cnt = data[0].CNT
 			}
@@ -53,12 +53,12 @@ module.exports = async function(socket, param) {
 		} else if (obj.type == 'query') {
 			let unreadArr = []
 			for (let msgid of obj.msgidArr) {
-				sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND ROOMID = ? AND CDT >= ? "
+				sql = "SELECT COUNT(*) CNT FROM a_msgdtl_tbl WHERE MSGID = ? AND ROOMID = ? AND CDT >= ? "
 				data = await wsmysql.query(conn, sql, [msgid, _roomid, dateFr]) //console.log(msgid, _roomid, dateFr, data[0].CNT, "--------")
 				if (data[0].CNT == 0) {
 					unreadArr.push(-1)
 				} else {
-					sql = "SELECT COUNT(*) CNT FROM A_MSGDTL_TBL WHERE MSGID = ? AND ROOMID = ? AND STATE = '' AND CDT >= ? "
+					sql = "SELECT COUNT(*) CNT FROM a_msgdtl_tbl WHERE MSGID = ? AND ROOMID = ? AND STATE = '' AND CDT >= ? "
 					data = await wsmysql.query(conn, sql, [msgid, _roomid, dateFr])
 					unreadArr.push(data[0].CNT)
 				}

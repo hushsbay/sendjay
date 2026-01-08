@@ -28,7 +28,7 @@ router.post('/', async function(req, res) {
 		const ret = await ws.util.chkAccessUserWithTarget(conn, userid, roomid, 'room')
 		if (ret != '') throw new Error(ret)
 		if (type == 'after') {
-			sql = "SELECT CDT FROM A_MSGMST_TBL WHERE MSGID = ? AND ROOMID = ? "
+			sql = "SELECT CDT FROM a_msgmst_tbl WHERE MSGID = ? AND ROOMID = ? "
 			data = await wsmysql.query(conn, sql, [keyword, roomid])
 			if (data.length == 0) {
 				ws.http.resWarn(res, ws.cons.MSG_NO_DATA, true, ws.cons.CODE_NO_DATA)
@@ -39,9 +39,9 @@ router.post('/', async function(req, res) {
 		let arg //console.log(dateFr, type, userid, roomid, keyword, dt, start, end, senderid, cnt)
 		sql = "SELECT A.MSGID, A.CDT, A.SENDERID, A.SENDERNM, B.RECEIVERID, CASE WHEN STATE2 = 'C' THEN '" + ws.cons.cell_revoked + "' ELSE A.BODY END BODY, "
 		sql += "      A.BUFFER, A.REPLY, A.TYP TYPE, B.STATE, A.FILESTATE, CASE WHEN A.BUFFER IS NULL THEN NULL ELSE 'Y' END BUFFERSTR, " 
-		sql += "      (SELECT COUNT(*) FROM A_MSGDTL_TBL WHERE MSGID = B.MSGID AND ROOMID = B.ROOMID AND STATE = '') CNT "
-		sql += " FROM A_MSGDTL_TBL B "
-		sql += " LEFT OUTER JOIN A_MSGMST_TBL A ON B.MSGID = A.MSGID "
+		sql += "      (SELECT COUNT(*) FROM a_msgdtl_tbl WHERE MSGID = B.MSGID AND ROOMID = B.ROOMID AND STATE = '') CNT "
+		sql += " FROM a_msgdtl_tbl B "
+		sql += " LEFT OUTER JOIN a_msgmst_tbl A ON B.MSGID = A.MSGID "
 		sql += "WHERE B.ROOMID = ? AND B.RECEIVERID = ? AND B.STATE IN ('', 'R') AND A.CDT >= ? "
 		if (type == 'search') {
 			sql += "  AND A.BODY LIKE '%" + keyword + "%' "

@@ -29,7 +29,7 @@ router.post('/', upload.any(), async function(req, res) {
 			const objToken = await ws.jwt.chkToken(req, res)
 			userid = objToken.userid
 		}
-		sql =  "SELECT COUNT(*) CNT, PWD FROM Z_USER_TBL WHERE USER_ID = ? "
+		sql =  "SELECT COUNT(*) CNT, PWD FROM z_user_tbl WHERE USER_ID = ? "
 		data = await wsmysql.query(conn, sql, [id])
 		if (id == 'admin') {
  			//맨처음 로그인없이 누구나 admin 아이디 만들 수 있어야 함
@@ -47,7 +47,7 @@ router.post('/', upload.any(), async function(req, res) {
 			}
 			const _enc = ws.util.encrypt(pwd_1, nodeConfig.crypto.key)
 			//MIMETYPE 필드 : 파일이 아닌 BLOB으로 저장후 꺼내 쓸 때 mimetype을 얻으려면 현재는 파일로 변환해 구해야 하는데 차라리 최초 저장시 필드값으로 저장해 사용하는 것이 효율적인 것으로 판단
-			sql = "INSERT INTO Z_USER_TBL (USER_ID, ID_KIND, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, PICTURE, MIMETYPE, NICK_NM, IS_SYNC, ISUDT) "
+			sql = "INSERT INTO z_user_tbl (USER_ID, ID_KIND, PWD, USER_NM, ORG_CD, ORG_NM, TOP_ORG_CD, TOP_ORG_NM, PICTURE, MIMETYPE, NICK_NM, IS_SYNC, ISUDT) "
 			sql += "                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, sysdate(6)) "
 			await wsmysql.query(conn, sql, [id, _kind, _enc, nm, orgcd, orgnm, toporgcd, toporgnm, buf, mimetype, alias, 'N'])
 		} else {
@@ -63,7 +63,7 @@ router.post('/', upload.any(), async function(req, res) {
 				}
 			}
 			if (type == 'D') { //삭제
-				sql = "DELETE FROM Z_USER_TBL WHERE USER_ID = ? "
+				sql = "DELETE FROM z_user_tbl WHERE USER_ID = ? "
 				await wsmysql.query(conn, sql, [id])
 			} else { //U(Update)
 				if (pwd_1 == "") { //비번변경 X
@@ -73,7 +73,7 @@ router.post('/', upload.any(), async function(req, res) {
 					_str = "'" + _enc + "'"
 				}
 				//MIMETYPE 필드 : 파일이 아닌 BLOB으로 저장후 꺼내 쓸 때 mimetype을 얻으려면 현재는 파일로 변환해 구해야 하는데 차라리 최초 저장시 필드값으로 저장해 사용하는 것이 효율적인 것으로 판단				
-				sql =  "UPDATE Z_USER_TBL "
+				sql =  "UPDATE z_user_tbl "
 				sql += "   SET ID_KIND = ?, USER_NM = ?, PWD = " + _str + ", ORG_CD = ?, ORG_NM = ?, TOP_ORG_CD = ?, TOP_ORG_NM = ?, PICTURE = ?, MIMETYPE = ?, NICK_NM = ? "
 				sql += " WHERE USER_ID = ? "
 				await wsmysql.query(conn, sql, [_kind, nm, orgcd, orgnm, toporgcd, toporgnm, buf, mimetype, alias, id])
