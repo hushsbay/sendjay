@@ -24,16 +24,16 @@ async function proc() {
         await wsmysql.query(conn, sql, null)
         sql = "UPDATE a_msgdtl_tbl SET STATE = 'D' " + sqlWhere
         await wsmysql.query(conn, sql, null)
-        sql = "UPDATE A_MSGMST_TBL SET UDT = STATE " + sqlWhere //일종의 필드 백업
+        sql = "UPDATE a_msgmst_tbl SET UDT = STATE " + sqlWhere //일종의 필드 백업
         await wsmysql.query(conn, sql, null)
-        sql = "UPDATE A_MSGMST_TBL SET STATE = 'D' " + sqlWhere
+        sql = "UPDATE a_msgmst_tbl SET STATE = 'D' " + sqlWhere
         await wsmysql.query(conn, sql, null)
         //2) MSGDTL 테이블에 모두 D(삭제)인 메시지아이디의 MSGMST 테이블에도 D로 업데이트 (1년 이전 데이터만 해당)
-        sql = "UPDATE A_MSGMST_TBL A SET STATE = 'D' WHERE STATE = '' AND (SELECT COUNT(*) FROM a_msgdtl_tbl WHERE MSGID = A.MSGID AND ROOMID = A.ROOMID AND STATE <> 'D') = 0 "
+        sql = "UPDATE a_msgmst_tbl A SET STATE = 'D' WHERE STATE = '' AND (SELECT COUNT(*) FROM a_msgdtl_tbl WHERE MSGID = A.MSGID AND ROOMID = A.ROOMID AND STATE <> 'D') = 0 "
         await wsmysql.query(conn, sql, null)
         //3) 파일 삭제
         sql = "SELECT MSGID, ROOMID, BODY, TYP "
-        sql += " FROM A_MSGMST_TBL "
+        sql += " FROM a_msgmst_tbl "
         sql += "WHERE TYP in ('file', 'flink') "
         sql += "  AND FILESTATE <> ? "
         sql += "  AND (FILESTATE < sysdate() OR STATE = 'D' OR STATE2 = 'C') " //만료되었거나 메시지가 삭제/전송취소된 것의 파일을 물리적 삭제 => 모두 만료로 표시        
@@ -46,12 +46,12 @@ async function proc() {
             const _body = data[i].BODY //예) 20240210071920474000999934t0-cYE8g_E/oldclock/7인의 부활_wise banner$$20240527214223680240.jpg##37786
             const _filename = _body.split(ws.cons.deli)[0] //예) 20240210071920474000999934t0-cYE8g_E/oldclock/7인의 부활_wise banner$$20240527214223680240.jpg
             const _path = config.app.uploadPath + '/' + _filename
-            await wsmysql.query(conn, "UPDATE A_MSGMST_TBL SET FILESTATE = ? WHERE MSGID = ? AND ROOMID = ? ", [ws.cons.file_expired, _msgid, _roomid]) 
+            await wsmysql.query(conn, "UPDATE a_msgmst_tbl SET FILESTATE = ? WHERE MSGID = ? AND ROOMID = ? ", [ws.cons.file_expired, _msgid, _roomid]) 
             if (_type == 'file') deleteFileAndRemoveEmptyFolderFromChild(_path, _filename, 'expiry') //flink는 말그대로 file의 링크이므로 실제 파일은 없음
         } 
         //4) 가비지 파일 삭제 (파일업로드중 브라우저 닫기 등)
-        //A_FILELOG_TBL에 insert하는 것은 proc_file.js인데 아래 로직에서 MSGMST에 있다는 것은 정상적으로 파일이 업로드되었다는 의미임
-        sql = "SELECT MSGID, ROOMID, SENDERID, BODY FROM A_FILELOG_TBL WHERE UDT = '' AND CDT < DATE_ADD(sysdate(), INTERVAL ? HOUR) " //몇시간이 지나도 업로드완료 안된 것은 가비지로 간주
+        //a_filelog_tbl에 insert하는 것은 proc_file.js인데 아래 로직에서 MSGMST에 있다는 것은 정상적으로 파일이 업로드되었다는 의미임
+        sql = "SELECT MSGID, ROOMID, SENDERID, BODY FROM a_filelog_tbl WHERE UDT = '' AND CDT < DATE_ADD(sysdate(), INTERVAL ? HOUR) " //몇시간이 지나도 업로드완료 안된 것은 가비지로 간주
         data = await wsmysql.query(conn, sql, [ws.cons.max_hours_to_endure_upload])
         _len = data.length
         for (let i = 0; i < _len; i++) {
@@ -60,9 +60,9 @@ async function proc() {
             const _senderid= data[i].SENDERID
             const _filename = data[i].BODY
             const _path = config.app.uploadPath + '/' + _roomid + '/' + _senderid + "/" + _filename
-            const sql2 = "SELECT COUNT(*) CNT FROM A_MSGMST_TBL WHERE MSGID = ? AND ROOMID = ? AND BODY LIKE '%" + _filename + "%' "
+            const sql2 = "SELECT COUNT(*) CNT FROM a_msgmst_tbl WHERE MSGID = ? AND ROOMID = ? AND BODY LIKE '%" + _filename + "%' "
             const data2 = await wsmysql.query(conn, sql2, [_msgid, _roomid])
-            await wsmysql.query(conn, "UPDATE A_FILELOG_TBL SET UDT = sysdate() WHERE MSGID = ? AND ROOMID = ? ", [_msgid, _roomid]) 
+            await wsmysql.query(conn, "UPDATE a_filelog_tbl SET UDT = sysdate() WHERE MSGID = ? AND ROOMID = ? ", [_msgid, _roomid]) 
             if (data2[0].CNT >= 1) {
                 //no garbage
             } else { //garbage이므로 제거해야 함
