@@ -32,7 +32,8 @@
             app : "/app/msngr/main.html", //web messenger's location.pathname
             logo_darkblue : "/img/hushsbay.png",
             img_noperson : "/img/noperson.png",
-            socket_url : location.hostname + ':3050/jay', //jay는 socket.io namespace
+            //socket_url : location.hostname + ':3050/jay', //jay는 socket.io namespace
+            socket_url : 'wss://' + location.hostname + ':547/jay', //jay는 socket.io namespace
             w_key : 'W__', //Web userkey
             m_key : 'M__', //Mobile userkey
             prefix : '$$', //for redis, socket
