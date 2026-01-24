@@ -200,7 +200,7 @@
                     reader.onload = function(e) {
                         const blob = new Blob([new Uint8Array(e.target.result)], {type: file.type })
                         const blobUrl = URL.createObjectURL(blob)
-                        callback(blobUrl) //blob:https://hushsbay.com/512bc969-441c-4019-8ba9-478a478b2cfd
+                        callback(blobUrl) //blob:https://albahero.com:547/512bc969-441c-4019-8ba9-478a478b2cfd
                     }
                     reader.readAsArrayBuffer(file)
                 } else { //base64 인코딩된 스트링 데이터로 리턴
@@ -246,7 +246,7 @@
                 const uInt8Array = new Uint8Array(buffer)
                 const blob = new Blob([uInt8Array], { type: _mimetype })
                 const blobUrl = URL.createObjectURL(blob)
-                return blobUrl //blob:https://hushsbay.com/f4cb83ea-5d46-40b7-8baa-ba62dca2ffca
+                return blobUrl //blob:https://albahero.com:547/f4cb83ea-5d46-40b7-8baa-ba62dca2ffca
             },
             //2) base64인코딩스트링
             getDataUrl : (base64, mimetype) => { //base64는 노드 서버에서 Buffer.from(data[0].PICTURE, 'binary').toString('base64')로 처리된 것을 전제로 함
